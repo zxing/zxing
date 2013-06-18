@@ -25,21 +25,30 @@ import java.util.Arrays;
  */
 public final class CodaBarWriter extends OneDimensionalCodeWriter {
 
-  private static final char[] START_CHARS = {'A', 'B', 'C', 'D'};
-  private static final char[] END_CHARS = {'T', 'N', '*', 'E'};
+  private static final char[] START_END_CHARS = {'A', 'B', 'C', 'D'};
+  private static final char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
 
   @Override
   public boolean[] encode(String contents) {
 
+    if (contents.length() < 2) {
+      throw new IllegalArgumentException("Codabar should start/end with start/stop symbols");
+    }
     // Verify input and calculate decoded length.
-    if (!CodaBarReader.arrayContains(START_CHARS, Character.toUpperCase(contents.charAt(0)))) {
+    char firstChar = Character.toUpperCase(contents.charAt(0));
+    char lastChar = Character.toUpperCase(contents.charAt(contents.length() - 1));
+    boolean startsEndsNormal = 
+        CodaBarReader.arrayContains(START_END_CHARS, firstChar) && 
+        CodaBarReader.arrayContains(START_END_CHARS, lastChar);
+    boolean startsEndsAlt = 
+        CodaBarReader.arrayContains(ALT_START_END_CHARS, firstChar) && 
+        CodaBarReader.arrayContains(ALT_START_END_CHARS, lastChar);
+    if (!(startsEndsNormal || startsEndsAlt)) {
       throw new IllegalArgumentException(
-          "Codabar should start with one of the following: " + Arrays.toString(START_CHARS));
+          "Codabar should start/end with " + Arrays.toString(START_END_CHARS) + 
+          ", or start/end with " + Arrays.toString(ALT_START_END_CHARS));
     }
-    if (!CodaBarReader.arrayContains(END_CHARS, Character.toUpperCase(contents.charAt(contents.length() - 1)))) {
-      throw new IllegalArgumentException(
-          "Codabar should end with one of the following: " + Arrays.toString(END_CHARS));
-    }
+
     // The start character and the end character are decoded to 10 length each.
     int resultLength = 20;
     char[] charsWhichAreTenLengthEachAfterDecoded = {'/', ':', '+', '.'};
