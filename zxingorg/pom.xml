@@ -224,7 +224,7 @@
                  <artifactItem>
                    <groupId>com.google.zxing</groupId>
                    <artifactId>core</artifactId>
-                   <version>2.2-SNAPSHOT</version>
+                   <version>2.3-SNAPSHOT</version>
                    <type>javadoc</type>                   
                  </artifactItem>
                </artifactItems>
