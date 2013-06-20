@@ -16,7 +16,7 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="4.4 beta 3"
+          android:versionName="4.4 beta 1"
           android:versionCode="89"
           android:installLocation="auto">
 
