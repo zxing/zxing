@@ -172,7 +172,7 @@ final class DecodeHintManager {
       if (hintType.getValueType().equals(int[].class)) {
         // An integer array. Used to specify valid lengths.
         // Strip a trailing comma as in Java style array initialisers.
-        if (parameterText.length() > 0 && parameterText.charAt(parameterText.length() - 1) == ',') {
+        if (!parameterText.isEmpty() && parameterText.charAt(parameterText.length() - 1) == ',') {
           parameterText = parameterText.substring(0, parameterText.length() - 1);
         }
         String[] values = COMMA.split(parameterText);

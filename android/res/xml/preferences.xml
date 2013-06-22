@@ -102,7 +102,8 @@
      -->
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_try_bsplus">
-    <Preference android:title="@string/preferences_try_bsplus" >
+    <Preference android:title="@string/preferences_try_bsplus"
+                android:summary="@string/preferences_try_bsplus_summary">
       <intent android:action="android.intent.action.VIEW" android:data="market://details?id=com.srowen.bs.android" />
     </Preference>
   </PreferenceCategory>

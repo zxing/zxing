@@ -98,7 +98,7 @@ public final class ShareActivity extends Activity {
     public boolean onKey(View view, int keyCode, KeyEvent event) {
       if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
         String text = ((TextView) view).getText().toString();
-        if (text != null && text.length() > 0) {
+        if (text != null && !text.isEmpty()) {
           launchSearch(text);
         }
         return true;
