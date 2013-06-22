@@ -132,9 +132,9 @@ public class IntentIntegrator {
   
   public static final List<String> TARGET_BARCODE_SCANNER_ONLY = Collections.singletonList(BS_PACKAGE);
   public static final List<String> TARGET_ALL_KNOWN = list(
-          BS_PACKAGE, // Barcode Scanner
-          BSPLUS_PACKAGE, // Barcode Scanner+
-          BSPLUS_PACKAGE + ".simple" // Barcode Scanner+ Simple
+          BSPLUS_PACKAGE,             // Barcode Scanner+
+          BSPLUS_PACKAGE + ".simple", // Barcode Scanner+ Simple
+          BS_PACKAGE                  // Barcode Scanner          
           // What else supports this intent?
       );
   
@@ -272,8 +272,7 @@ public class IntentIntegrator {
   }
 
   /**
-   * Start an activity.<br>
-   * This method is defined to allow different methods of activity starting for
+   * Start an activity. This method is defined to allow different methods of activity starting for
    * newer versions of Android and for compatibility library.
    *
    * @param intent Intent to start.
@@ -289,14 +288,23 @@ public class IntentIntegrator {
     PackageManager pm = activity.getPackageManager();
     List<ResolveInfo> availableApps = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
     if (availableApps != null) {
-      for (ResolveInfo availableApp : availableApps) {
-        String packageName = availableApp.activityInfo.packageName;
-        if (targetApplications.contains(packageName)) {
-          return packageName;
+      for (String targetApp : targetApplications) {
+        if (contains(availableApps, targetApp)) {
+          return targetApp;
         }
       }
     }
     return null;
+  }
+  
+  private static boolean contains(Iterable<ResolveInfo> availableApps, String targetApp) {
+    for (ResolveInfo availableApp : availableApps) {
+      String packageName = availableApp.activityInfo.packageName;
+      if (targetApp.equals(packageName)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private AlertDialog showDownloadDialog() {
