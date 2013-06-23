@@ -14,37 +14,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:orientation="vertical">
-
-  <WebView android:id="@+id/help_contents"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:layout_weight="1"/>
-
-  <LinearLayout
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="0"
-      android:orientation="horizontal"
-      android:gravity="center"
-      android:paddingTop="@dimen/half_padding"
-      android:weightSum="1">
-
-    <Button android:id="@+id/back_button"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/button_back"/>
-
-    <Button android:id="@+id/done_button"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/button_done"/>
-
-  </LinearLayout>
-
-</LinearLayout>
+<WebView xmlns:android="http://schemas.android.com/apk/res/android"
+         android:id="@+id/help_contents"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:layout_weight="1"/>

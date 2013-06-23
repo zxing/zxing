@@ -53,8 +53,6 @@ public final class PreferencesActivity extends PreferenceActivity
   public static final String KEY_DISABLE_CONTINUOUS_FOCUS = "preferences_disable_continuous_focus";
   //public static final String KEY_DISABLE_EXPOSURE = "preferences_disable_exposure";
 
-  public static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
-
   private CheckBoxPreference decode1D;
   private CheckBoxPreference decodeQR;
   private CheckBoxPreference decodeDataMatrix;

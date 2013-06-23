@@ -1,9 +1,27 @@
 body {
-  font-family:sans-serif;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+img {
+  margin: 3px;
+}
+li {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-left: -3px;
 }
 ul.touchable li {
-  padding-top:8px;
-  padding-bottom:8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+a:link {
+  color: #FFFFFF;
+}
+a:visited {
+  color: #C0C0C0;
+}
+td {
+  vertical-align: top;
 }
 p.imgcenter {
   text-align:center;
