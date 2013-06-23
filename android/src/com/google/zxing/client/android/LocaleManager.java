@@ -65,6 +65,7 @@ public final class LocaleManager {
     GOOGLE_COUNTRY_TLD.put("NL", "nl"); // NETHERLANDS
     GOOGLE_COUNTRY_TLD.put("PL", "pl"); // POLAND
     GOOGLE_COUNTRY_TLD.put("PT", "pt"); // PORTUGAL
+    GOOGLE_COUNTRY_TLD.put("RO", "ro"); // ROMANIA    
     GOOGLE_COUNTRY_TLD.put("RU", "ru"); // RUSSIA
     GOOGLE_COUNTRY_TLD.put("SK", "sk"); // SLOVAK REPUBLIC
     GOOGLE_COUNTRY_TLD.put("SI", "si"); // SLOVENIA
