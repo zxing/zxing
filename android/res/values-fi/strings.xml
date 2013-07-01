@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Tulokset</string>
   <string name="msg_sbc_searching_book">Haetaan kirjaa\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Kappaletta ei saatavilla</string>
-  <string name="msg_sbc_unknown_page">Tuntematon sivu</string>
   <string name="msg_share_explanation">Voit jakaa dataa näyttämällä viivakoodin laitteesi näytöllä ja lukemalla sen toisella laitteella.</string>
   <string name="msg_share_subject_line">Tässä on viivakoodin skannattu sisältö</string>
   <string name="msg_share_text">Tai kirjoita tekstiä</string>

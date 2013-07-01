@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Resultats</string>
   <string name="msg_sbc_searching_book">S\'està cercant el llibre\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Fragment no disponible</string>
-  <string name="msg_sbc_unknown_page">Pàgina desconeguda</string>
   <string name="msg_share_explanation">Podeu compartir dades mostrant un codi de barres a la pantalla i escanejant-lo amb un altre dispositiu.</string>
   <string name="msg_share_subject_line">Aquí hi ha el contingut d\'un codi de barres que he escanejat</string>
   <string name="msg_share_text">O escriviu un text i pitgeu Retorn</string>

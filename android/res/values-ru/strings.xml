@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Результаты</string>
   <string name="msg_sbc_searching_book">Поиск книги\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Фрагмент недоступен</string>
-  <string name="msg_sbc_unknown_page">Неизвестная страница</string>
   <string name="msg_share_explanation">Вы можете поделиться данными, сканируя штрих-код с вашего экрана другим телефоном.</string>
   <string name="msg_share_subject_line">Данные отсканированных Вами штрих-кодов</string>
   <string name="msg_share_text">Или введите текст</string>

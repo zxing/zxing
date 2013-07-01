@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Emaitzak</string>
   <string name="msg_sbc_searching_book">Liburua arakatzen\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Lagina ez dago eskuragarri</string>
-  <string name="msg_sbc_unknown_page">Orri ezezaguna</string>
   <string name="msg_share_explanation">Datuak parteka ditzakezu zure pantailan barra-kode bat bistaratu eta beste telefono batekin eskaneatuz.</string>
   <string name="msg_share_subject_line">Hemen daude eskaneatu dudan barra-kodearen edukiak</string>
   <string name="msg_share_text">Edo idatzi zerbait eta sakatu Enter</string>

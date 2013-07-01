@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Резултати</string>
   <string name="msg_sbc_searching_book">Търсене на книга\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Изрезката не е достъпна</string>
-  <string name="msg_sbc_unknown_page">Непозната страница</string>
   <string name="msg_share_explanation">Можете да споделяте информация като покажете баркод на екрана, и го сканирате от друг телефон.</string>
   <string name="msg_share_subject_line">Ето съдържанието на един баркод, който сканирах</string>
   <string name="msg_share_text">Или въведете някакъв текст</string>

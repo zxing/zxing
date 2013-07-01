@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Resultat</string>
   <string name="msg_sbc_searching_book">Söker bok\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Utdrag ej tillgängligt</string>
-  <string name="msg_sbc_unknown_page">Okänd sida</string>
   <string name="msg_share_explanation">Du kan dela information genom att visa en streckkod på din skärm och sedan skanna in den med en annan telefon.</string>
   <string name="msg_share_subject_line">Här är innehållet i en streckkod som jag har skannat in</string>
   <string name="msg_share_text">Eller skriv in text och tryck Enter</string>

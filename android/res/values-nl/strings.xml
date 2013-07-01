@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Resultaten</string>
   <string name="msg_sbc_searching_book">Boek doorzoeken\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Fragment niet beschikbaar</string>
-  <string name="msg_sbc_unknown_page">Onbekende pagina</string>
   <string name="msg_share_explanation">Je kunt gegevens delen door een barcode op je scherm te laten zien en deze met een andere telefoon te scannen.</string>
   <string name="msg_share_subject_line">Hier is de inhoud van een barcode die ik heb gescand</string>
   <string name="msg_share_text">Of typ wat tekst en druk op Enter</string>

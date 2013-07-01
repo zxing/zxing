@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Rezultate</string>
   <string name="msg_sbc_searching_book">Caută cartea\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Fragment indisponibil</string>
-  <string name="msg_sbc_unknown_page">Pagină necunoscută</string>
   <string name="msg_share_explanation">Poți distribui datele afișând codul pe ecran și scanându-l cu alt aparat</string>
   <string name="msg_share_subject_line">Conținutul codului de bare scanat</string>
   <string name="msg_share_text">Sau introdu textul și tastează Enter</string>

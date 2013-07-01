@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">結果</string>
   <string name="msg_sbc_searching_book">書籍を検索中</string>
   <string name="msg_sbc_snippet_unavailable">要約文はありません</string>
-  <string name="msg_sbc_unknown_page">不明なページ</string>
   <string name="msg_share_explanation">画面にQRコードを表示させて別の端末でスキャンすれば、データを共有することができます。</string>
   <string name="msg_share_subject_line">スキャンしたQRコードの内容を送信します。</string>
   <string name="msg_share_text">またはテキストを入力してください</string>

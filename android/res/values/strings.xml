@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Results</string>
   <string name="msg_sbc_searching_book">Searching book\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Snippet not available</string>
-  <string name="msg_sbc_unknown_page">Unknown page</string>
   <string name="msg_share_explanation">You can share data by displaying a barcode on your screen and scanning it with another phone.</string>
   <string name="msg_share_subject_line">Here are the contents of a barcode I scanned</string>
   <string name="msg_share_text">Or type some text and press Enter</string>

@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Αποτελέσματα</string>
   <string name="msg_sbc_searching_book">Άναζήτηση βιβλίου\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Απόσπασμα μη διαθέσιμο</string>
-  <string name="msg_sbc_unknown_page">Άγνωστη σελίδα</string>
   <string name="msg_share_explanation">Μπορείς να μοιραστείς δεδομένα εμφανίζοντας ένα barcode στην οθόνη σου και σκανάροντάς το με ένα άλλο κινητό.</string>
   <string name="msg_share_subject_line">Αυτά είναι τα περιεχόμενα ενός barcode που σκάναρα</string>
   <string name="msg_share_text">Ή πληκτολογήστε εδώ κείμενο και πατήστε Enter</string>

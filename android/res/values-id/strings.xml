@@ -85,7 +85,6 @@
   <string name="msg_sbc_results">Hasil</string>
   <string name="msg_sbc_searching_book">Mencari buku\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Snippet tidak tersedia</string>
-  <string name="msg_sbc_unknown_page">Halaman tidak dikenal</string>
   <string name="msg_share_explanation">Anda dapat berbagi data dengan menampilkan barcode di layar Anda dan dapat dipindai oleh phone lain.</string>
   <string name="msg_share_subject_line">Ini adalah isi barcode yang saya pindai</string>
   <string name="msg_share_text">Atau masukkan beberapa kata dan tekan Enter</string>
