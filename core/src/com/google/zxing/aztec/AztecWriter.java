@@ -16,9 +16,6 @@
 
 package com.google.zxing.aztec;
 
-import java.nio.charset.Charset;
-import java.util.Map;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
@@ -26,37 +23,39 @@ import com.google.zxing.aztec.encoder.AztecCode;
 import com.google.zxing.aztec.encoder.Encoder;
 import com.google.zxing.common.BitMatrix;
 
+import java.nio.charset.Charset;
+import java.util.Map;
+
 public final class AztecWriter implements Writer {
   
   private static final Charset DEFAULT_CHARSET = Charset.forName("ISO-8859-1");
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
-    return encode(contents, format, width, height, DEFAULT_CHARSET, Encoder.DEFAULT_EC_PERCENT);
+    return encode(contents, format, width, height, null);
   }
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType,?> hints) {
     String charset = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
     Number eccPercent = hints == null ? null : (Number) hints.get(EncodeHintType.ERROR_CORRECTION);
+    Integer layers = hints == null ? null : (Integer)hints.get(EncodeHintType.AZTEC_LAYERS);
     return encode(contents, 
                   format, 
                   width,
                   height,
                   charset == null ? DEFAULT_CHARSET : Charset.forName(charset),
-                  eccPercent == null ? Encoder.DEFAULT_EC_PERCENT : eccPercent.intValue());
+                  eccPercent == null ? Encoder.DEFAULT_EC_PERCENT : eccPercent.intValue(),
+                  layers == null ? Encoder.DEFAULT_AZTEC_LAYERS : layers.intValue());
   }
 
-  private static BitMatrix encode(String contents,
-                                  BarcodeFormat format,
-                                  int width,
-                                  int height,
-                                  Charset charset,
-                                  int eccPercent) {
+  private static BitMatrix encode(String contents, BarcodeFormat format,
+                                  int width, int height,
+                                  Charset charset, int eccPercent, int layers) {
     if (format != BarcodeFormat.AZTEC) {
       throw new IllegalArgumentException("Can only encode AZTEC, but got " + format);
     }
-    AztecCode aztec = Encoder.encode(contents.getBytes(charset), eccPercent);
+    AztecCode aztec = Encoder.encode(contents.getBytes(charset), eccPercent, layers);
     return renderResult(aztec, width, height);
   }
 
@@ -84,8 +83,6 @@ public final class AztecWriter implements Writer {
         }
       }
     }
-
     return output;
   }
-
 }

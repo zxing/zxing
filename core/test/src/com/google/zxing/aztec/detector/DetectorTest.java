@@ -18,19 +18,22 @@ package com.google.zxing.aztec.detector;
 
 import com.google.zxing.NotFoundException;
 import com.google.zxing.aztec.AztecDetectorResult;
+import com.google.zxing.aztec.decoder.Decoder;
 import com.google.zxing.aztec.detector.Detector.Point;
 import com.google.zxing.aztec.encoder.AztecCode;
 import com.google.zxing.aztec.encoder.Encoder;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.DecoderResult;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Tests for the Detector
@@ -61,30 +64,46 @@ public final class DetectorTest extends Assert {
 
   // Test that we can tolerate errors in the parameter locator bits
   private static void testErrorInParameterLocator(String data) throws Exception {
-    AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1), 25);
+    AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1), 25, Encoder.DEFAULT_AZTEC_LAYERS);
+    Random random = new Random(aztec.getMatrix().hashCode());   // pseudo-random, but deterministic
     int layers = aztec.getLayers();
     boolean compact = aztec.isCompact();
     List<Point> orientationPoints = getOrientationPoints(aztec);
-    Random random = new Random(aztec.getMatrix().hashCode());   // random, but repeatable
-    for (BitMatrix matrix : getRotations(aztec.getMatrix())) {
-      // Each time through this loop, we reshuffle the corners, to get a different set of errors
-      Collections.shuffle(orientationPoints, random);
-      for (int errors = 1; errors <= 3; errors++) {
-        // Add another error to one of the parameter locator bits
-        matrix.flip(orientationPoints.get(errors).getX(), orientationPoints.get(errors).getY());
-        try {
-          // The detector can't yet deal with bitmaps in which each square is only 1x1 pixel.
-          // We zoom it larger.
-          AztecDetectorResult r = new Detector(makeLarger(matrix, 3)).detect();
-          if (errors < 3) {
+    for (boolean isMirror : new boolean[] { false, true }) {
+      for (BitMatrix matrix : getRotations(aztec.getMatrix())) {
+        // Systematically try every possible 1- and 2-bit error.
+        for (int error1 = 0; error1 < orientationPoints.size(); error1++) {
+          for (int error2 = error1; error2 < orientationPoints.size(); error2++) {
+            BitMatrix copy = isMirror ? transpose(matrix) : clone(matrix);
+            copy.flip(orientationPoints.get(error1).getX(), orientationPoints.get(error1).getY());
+            if (error2 > error1) {
+              // if error2 == error1, we only test a single error
+              copy.flip(orientationPoints.get(error2).getX(), orientationPoints.get(error2).getY());
+            }
+            // The detector doesn't seem to work when matrix bits are only 1x1.  So magnify.
+            AztecDetectorResult r = new Detector(makeLarger(copy, 3)).detect(isMirror);
             assertNotNull(r);
             assertEquals(r.getNbLayers(), layers);
             assertEquals(r.isCompact(), compact);
-          } else {
-            fail("Should not succeed with more than two errors");
+            DecoderResult res = new Decoder().decode(r);
+            assertEquals(data, res.getText());
           }
-        } catch (NotFoundException e) {
-          assertEquals("Should only fail with three errors", 3, errors);
+        }
+        // Try a few random three-bit errors;
+        for (int i = 0; i < 5; i++) {
+          BitMatrix copy = clone(matrix);
+          Set<Integer> errors = new TreeSet<Integer>();
+          while (errors.size() < 3) {
+            // Quick and dirty way of getting three distinct integers between 1 and n.
+            errors.add(random.nextInt(orientationPoints.size()));
+          }
+          for (int error : errors) {
+            copy.flip(orientationPoints.get(error).getX(), orientationPoints.get(error).getY());
+          }
+          try {
+            new Detector(makeLarger(copy, 3)).detect(false);
+            fail("Should not reach here");
+          } catch (NotFoundException expected) { }
         }
       }
     }
@@ -104,25 +123,55 @@ public final class DetectorTest extends Assert {
     return output;
   }
 
-  // Returns a list of the four rotations of the BitMatrix.  The identity rotation is
-  // explicitly a copy, so that it can be modified without affecting the original matrix.
+  // Returns a list of the four rotations of the BitMatrix.
   private static List<BitMatrix> getRotations(BitMatrix input) {
+    BitMatrix matrix0 = input;
+    BitMatrix matrix90 = rotateRight(input);
+    BitMatrix matrix180 = rotateRight(matrix90);
+    BitMatrix matrix270 = rotateRight(matrix180);
+    return Arrays.asList(matrix0, matrix90, matrix180, matrix270);
+  }
+
+  // Rotates a square BitMatrix to the right by 90 degrees
+  private static BitMatrix rotateRight(BitMatrix input) {
     int width = input.getWidth();
-    BitMatrix matrix0 = new BitMatrix(width);
-    BitMatrix matrix90 = new BitMatrix(width);
-    BitMatrix matrix180 = new BitMatrix(width);
-    BitMatrix matrix270 = new BitMatrix(width);
+    BitMatrix result = new BitMatrix(width);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < width; y++) {
-        if (input.get(x, y)) {
-          matrix0.set(x, y);
-          matrix90.set(y, width - x - 1);
-          matrix180.set(width - x - 1, width - y - 1);
-          matrix270.set(width - y - 1, x);
+        if (input.get(x,y)) {
+          result.set(y, width - x - 1);
         }
       }
     }
-    return Arrays.asList(matrix0, matrix90, matrix180, matrix270);
+    return result;
+  }
+
+  // Returns the transpose of a bit matrix, which is equivalent to rotating the
+  // matrix to the right, and then flipping it left-to-right
+  private static BitMatrix transpose(BitMatrix input) {
+    int width = input.getWidth();
+    BitMatrix result = new BitMatrix(width);
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < width; y++) {
+        if (input.get(x, y)) {
+          result.set(y, x);
+        }
+      }
+    }
+    return result;
+  }
+
+  private static BitMatrix clone(BitMatrix input)  {
+    int width = input.getWidth();
+    BitMatrix result = new BitMatrix(width);
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < width; y++) {
+        if (input.get(x,y)) {
+          result.set(x,y);
+        }
+      }
+    }
+    return result;
   }
 
   private static List<Point> getOrientationPoints(AztecCode code) {

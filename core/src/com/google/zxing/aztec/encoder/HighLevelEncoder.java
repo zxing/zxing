@@ -130,7 +130,7 @@ public final class HighLevelEncoder {
     }
   }
 
-  // A map showing the available shift coodes.  (The shifts to BINARY are not
+  // A map showing the available shift codes.  (The shifts to BINARY are not
   // shown
   static final int[][] SHIFT_TABLE = new int[6][6]; // mode shift codes, per table
   static {

@@ -26,9 +26,9 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
-import com.google.zxing.common.DecoderResult;
 import com.google.zxing.aztec.decoder.Decoder;
 import com.google.zxing.aztec.detector.Detector;
+import com.google.zxing.common.DecoderResult;
 
 import java.util.List;
 import java.util.Map;
@@ -57,8 +57,44 @@ public final class AztecReader implements Reader {
   public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, FormatException {
 
-    AztecDetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect();
-    ResultPoint[] points = detectorResult.getPoints();
+    NotFoundException notFoundException = null;
+    FormatException formatException = null;
+    Detector detector = new Detector(image.getBlackMatrix());
+    ResultPoint[] points = null;
+    DecoderResult decoderResult = null;
+    try {
+      AztecDetectorResult detectorResult = detector.detect(false);
+      points = detectorResult.getPoints();
+      decoderResult = new Decoder().decode(detectorResult);
+    } catch (NotFoundException e) {
+      notFoundException = e;
+    } catch (FormatException e) {
+      formatException = e;
+    }
+    if (decoderResult == null) {
+      try {
+        AztecDetectorResult detectorResult = detector.detect(true);
+        points = detectorResult.getPoints();
+        decoderResult = new Decoder().decode(detectorResult);
+      } catch (NotFoundException e) {
+        if (notFoundException != null) {
+          throw notFoundException;
+        }
+        if (formatException != null) {
+          throw formatException;
+        }
+        throw e;
+      } catch (FormatException e) {
+        // throw the exception from the non-mirror case, instead
+        if (notFoundException != null) {
+          throw notFoundException;
+        }
+        if (formatException != null) {
+          throw formatException;
+        }
+        throw e;
+      }
+    }
 
     if (hints != null) {
       ResultPointCallback rpcb = (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
@@ -68,8 +104,6 @@ public final class AztecReader implements Reader {
         }
       }
     }
-
-    DecoderResult decoderResult = new Decoder().decode(detectorResult);
 
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.AZTEC);
     

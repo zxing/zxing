@@ -20,31 +20,25 @@ import com.google.zxing.common.BitArray;
 
 abstract class Token {
   
-  static final Token EMPTY = new SimpleToken(null, 0, 0, 0);
+  static final Token EMPTY = new SimpleToken(null, 0, 0);
   
   private final Token previous;
-  private final int totalBitCount; // For debugging purposes, only
   
-  Token(Token previous, int totalBitCount) {
+  Token(Token previous) {
     this.previous = previous;
-    this.totalBitCount = totalBitCount;
   }
   
   final Token getPrevious() {
     return previous;
   }
 
-  final int getTotalBitCount() {
-    return totalBitCount;
-  }
-
   final Token add(int value, int bitCount) {
-    return new SimpleToken(this, this.totalBitCount + bitCount, value, bitCount);
+    return new SimpleToken(this, value, bitCount);
    }
 
   final Token addBinaryShift(int start, int byteCount) {
     int bitCount = (byteCount * 8) + (byteCount <= 31 ? 10 : byteCount <= 62 ? 20 : 21);
-    return new BinaryShiftToken(this, this.totalBitCount + bitCount, start, byteCount);
+    return new BinaryShiftToken(this, start, byteCount);
   }
 
   abstract void appendTo(BitArray bitArray, byte[] text);

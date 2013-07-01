@@ -48,13 +48,17 @@ public final class Detector {
     this.image = image;
   }
 
+  public AztecDetectorResult detect() throws NotFoundException {
+    return detect(false);
+  }
+
   /**
    * Detects an Aztec Code in an image.
    *
    * @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
    * @throws NotFoundException if no Aztec Code can be found
    */
-  public AztecDetectorResult detect() throws NotFoundException {
+   public AztecDetectorResult detect(boolean isMirror) throws NotFoundException {
 
     // 1. Get the center of the aztec matrix
     Point pCenter = getMatrixCenter();
@@ -62,6 +66,12 @@ public final class Detector {
     // 2. Get the center points of the four diagonal points just outside the bull's eye
     //  [topRight, bottomRight, bottomLeft, topLeft]
     ResultPoint[] bullsEyeCorners = getBullsEyeCorners(pCenter);
+
+    if (isMirror) {
+      ResultPoint temp = bullsEyeCorners[0];
+      bullsEyeCorners[0] = bullsEyeCorners[2];
+      bullsEyeCorners[2] = temp;
+    }
 
     // 3. Get the size of the matrix and other parameters from the bull's eye
     extractParameters(bullsEyeCorners);
@@ -135,14 +145,14 @@ public final class Detector {
     }
   }
 
-  private int[] expectedCornerBits = {
+  private static final int[] EXPECTED_CORNER_BITS = {
       0xee0,  // 07340  XXX .XX X.. ...
       0x1dc,  // 00734  ... XXX .XX X..
       0x83b,  // 04073  X.. ... XXX .XX
       0x707,  // 03407 .XX X.. ... XXX
   };
 
-  private int getRotation(int[] sides, int length) throws NotFoundException {
+  private static int getRotation(int[] sides, int length) throws NotFoundException {
     // In a normal pattern, we expect to See
     //   **    .*             D       A
     //   *      *
@@ -166,7 +176,7 @@ public final class Detector {
     // corner. Since the four rotation values have a Hamming distance of 8, we
     // can easily tolerate two errors.
     for (int shift = 0; shift < 4; shift++) {
-      if (Integer.bitCount(cornerBits ^ expectedCornerBits[shift]) <= 2) {
+      if (Integer.bitCount(cornerBits ^ EXPECTED_CORNER_BITS[shift]) <= 2) {
         return shift;
       }
     }
@@ -343,7 +353,6 @@ public final class Detector {
    *
    * @param bullsEyeCorners the array of bull's eye corners
    * @return the array of aztec code corners
-   * @throws NotFoundException if the corner points do not fit in the image
    */
   private ResultPoint[] getMatrixCornerPoints(ResultPoint[] bullsEyeCorners) {
     return expandSquare(bullsEyeCorners, 2 * nbCenterLayers, getDimension());

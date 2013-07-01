@@ -24,8 +24,8 @@ final class SimpleToken extends Token {
   private final short value;
   private final short bitCount;
 
-  SimpleToken(Token previous, int totalBitCount, int value, int bitCount)  {
-    super(previous, totalBitCount);
+  SimpleToken(Token previous, int value, int bitCount)  {
+    super(previous);
     this.value = (short) value;
     this.bitCount = (short) bitCount;
   }

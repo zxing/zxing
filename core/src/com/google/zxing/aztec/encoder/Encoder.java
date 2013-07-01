@@ -29,7 +29,9 @@ import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 public final class Encoder {
 
   public static final int DEFAULT_EC_PERCENT = 33; // default minimal percentage of error check words
+  public static final int DEFAULT_AZTEC_LAYERS = 0;
   private static final int MAX_NB_BITS = 32;
+  private static final int MAX_NB_BITS_COMPACT = 4;
 
   private static final int[] WORD_SIZE = {
     4, 6, 6, 8, 8, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
@@ -46,7 +48,7 @@ public final class Encoder {
    * @return Aztec symbol matrix with metadata
    */
   public static AztecCode encode(byte[] data) {
-    return encode(data, DEFAULT_EC_PERCENT);
+    return encode(data, DEFAULT_EC_PERCENT, DEFAULT_AZTEC_LAYERS);
   }
   
   /**
@@ -55,10 +57,10 @@ public final class Encoder {
    * @param data input data string
    * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
    *                      a minimum of 23% + 3 words is recommended)
+   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
    * @return Aztec symbol matrix with metadata
    */
-  public static AztecCode encode(byte[] data, int minECCPercent) {
-    
+  public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers) {
     // High-level encode
     BitArray bits = new HighLevelEncoder(data).encode();
     
@@ -68,50 +70,62 @@ public final class Encoder {
     boolean compact;
     int layers;
     int totalBitsInLayer;
-    int wordSize = 0;
-    BitArray stuffedBits = null;
-    // We look at the possible table sizes in the order Compact1, Compact2, Compact3,
-    // Compact4, Normal4,...  Normal(i) for i < 4 isn't typically used since Compact(i+1)
-    // is the same size, but has more data.
-    for (int i = 0; ; i++) {
-      if (i > MAX_NB_BITS) {
-        throw new IllegalArgumentException("Data too large for an Aztec code");
+    int wordSize;
+    BitArray stuffedBits;
+    if (userSpecifiedLayers != DEFAULT_AZTEC_LAYERS) {
+      compact = userSpecifiedLayers < 0;
+      layers = Math.abs(userSpecifiedLayers);
+      if (layers > (compact ? MAX_NB_BITS_COMPACT : MAX_NB_BITS)) {
+        throw new IllegalArgumentException(
+            String.format("Illegal value %s for layers", userSpecifiedLayers));
       }
-      compact = i <= 3;
-      layers = compact ? i + 1 : i;
       totalBitsInLayer = totalBitsInLayer(layers, compact);
-      if (totalSizeBits > totalBitsInLayer) {
-        continue;
-      }
-      // [Re]stuff the bits if this is the first opportunity, or if the
-      // wordSize has changed
-      if (wordSize != WORD_SIZE[layers]) {
-        wordSize = WORD_SIZE[layers];
-        stuffedBits = stuffBits(bits, wordSize);
-      }
+      wordSize = WORD_SIZE[layers];
       int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
-      if (stuffedBits.getSize() + eccBits <= usableBitsInLayers) {
-        break;
+      stuffedBits = stuffBits(bits, wordSize);
+      if (stuffedBits.getSize() + eccBits > usableBitsInLayers) {
+        throw new IllegalArgumentException("Data to large for user specified layer");
+      }
+      if (compact && stuffedBits.getSize() > wordSize * 64) {
+        // Compact format only allows 64 data words, though C4 can hold more words than that
+        throw new IllegalArgumentException("Data to large for user specified layer");
+      }
+    } else {
+      wordSize = 0;
+      stuffedBits = null;
+      // We look at the possible table sizes in the order Compact1, Compact2, Compact3,
+      // Compact4, Normal4,...  Normal(i) for i < 4 isn't typically used since Compact(i+1)
+      // is the same size, but has more data.
+      for (int i = 0; ; i++) {
+        if (i > MAX_NB_BITS) {
+          throw new IllegalArgumentException("Data too large for an Aztec code");
+        }
+        compact = i <= 3;
+        layers = compact ? i + 1 : i;
+        totalBitsInLayer = totalBitsInLayer(layers, compact);
+        if (totalSizeBits > totalBitsInLayer) {
+          continue;
+        }
+        // [Re]stuff the bits if this is the first opportunity, or if the
+        // wordSize has changed
+        if (wordSize != WORD_SIZE[layers]) {
+          wordSize = WORD_SIZE[layers];
+          stuffedBits = stuffBits(bits, wordSize);
+        }
+        int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
+        if (compact && stuffedBits.getSize() > wordSize * 64) {
+          // Compact format only allows 64 data words, though C4 can hold more words than that
+          continue;
+        }
+        if (stuffedBits.getSize() + eccBits <= usableBitsInLayers) {
+          break;
+        }
       }
     }
-
-    int messageSizeInWords = stuffedBits.getSize() / wordSize;
-
-    // generate check words
-    ReedSolomonEncoder rs = new ReedSolomonEncoder(getGF(wordSize));
-    int totalWordsInLayer = totalBitsInLayer / wordSize;
-    int[] messageWords = bitsToWords(stuffedBits, wordSize, totalWordsInLayer);
-    rs.encode(messageWords, totalWordsInLayer - messageSizeInWords);
-    
-    // convert to bit array and pad in the beginning
-    int startPad = totalBitsInLayer % wordSize;
-    BitArray messageBits = new BitArray();
-    messageBits.appendBits(0, startPad);
-    for (int messageWord : messageWords) {
-      messageBits.appendBits(messageWord, wordSize);
-    }
+    BitArray messageBits = generateCheckWords(stuffedBits, totalBitsInLayer, wordSize);
     
     // generate mode message
+    int messageSizeInWords = stuffedBits.getSize() / wordSize;
     BitArray modeMessage = generateModeMessage(compact, layers, messageSizeInWords);
 
     // allocate symbol
@@ -254,12 +268,13 @@ public final class Encoder {
     }
   }
   
-  private static BitArray generateCheckWords(BitArray stuffedBits, int totalBits, int wordSize) {
-    // stuffedBits is guaranteed to be a multiple of the wordSize, so no padding needed
-    int messageSizeInWords = stuffedBits.getSize() / wordSize;
+  private static BitArray generateCheckWords(BitArray bitArray, int totalBits, int wordSize) {
+    assert bitArray.getSize() % wordSize == 0;
+    // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
+    int messageSizeInWords = bitArray.getSize() / wordSize;
     ReedSolomonEncoder rs = new ReedSolomonEncoder(getGF(wordSize));
     int totalWords = totalBits / wordSize;
-    int[] messageWords = bitsToWords(stuffedBits, wordSize, totalWords);
+    int[] messageWords = bitsToWords(bitArray, wordSize, totalWords);
     rs.encode(messageWords, totalWords - messageSizeInWords);
     int startPad = totalBits % wordSize;
     BitArray messageBits = new BitArray();
@@ -304,7 +319,6 @@ public final class Encoder {
   static BitArray stuffBits(BitArray bits, int wordSize) {
     BitArray out = new BitArray();
 
-    // 1. stuff the bits
     int n = bits.getSize();
     int mask = (1 << wordSize) - 2;
     for (int i = 0; i < n; i += wordSize) {
