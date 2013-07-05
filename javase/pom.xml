@@ -226,6 +226,9 @@
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <keyname>Sean Owen (ZXing) &lt;srowen@gmail.com&gt;</keyname>
+            </configuration>
           </plugin>
         </plugins>
       </build>
