@@ -38,6 +38,7 @@ public final class URIParsedResultTestCase extends Assert {
   @Test
   public void testURI() {
     doTest("google.com", "http://google.com", null);
+    doTest("123.com", "http://123.com", null);
     doTest("http://google.com", "http://google.com", null);
     doTest("https://google.com", "https://google.com", null);
     doTest("google.com:443", "http://google.com:443", null);
@@ -58,6 +59,8 @@ public final class URIParsedResultTestCase extends Assert {
     doTestNotUri(":80/");
     doTestNotUri("ABC,20.3,AB,AD");
     doTestNotUri("http://google.com?q=foo bar");
+    doTestNotUri("12756.501");
+    doTestNotUri("google.50");
   }
 
   @Test

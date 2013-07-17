@@ -28,10 +28,9 @@ import java.util.regex.Pattern;
  */
 public final class URIResultParser extends ResultParser {
 
-  private static final String ALPHANUM_PART = "[a-zA-Z0-9\\-]";
   private static final Pattern URL_WITH_PROTOCOL_PATTERN = Pattern.compile("[a-zA-Z0-9]{2,}:");
   private static final Pattern URL_WITHOUT_PROTOCOL_PATTERN = Pattern.compile(
-      '(' + ALPHANUM_PART + "+\\.)+" + ALPHANUM_PART + "{2,}" + // host name elements
+      "([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}" + // host name elements
       "(:\\d{1,5})?" + // maybe port
       "(/|\\?|$)"); // query, path or nothing
 
