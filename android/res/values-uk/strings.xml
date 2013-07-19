@@ -75,7 +75,7 @@
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Search</string>
   <string name="msg_google_shopper_missing">Програма Google Shopper не встановлена</string>
-  <string name="msg_install_google_shopper">Програма Google Shopper об'єднує сканування штрих-кодів з online-пошуком товарів, цін, відгуків і т.п., не відкриваючи браузер. Хочете спробувати?</string>
+  <string name="msg_install_google_shopper">Програма Google Shopper об\'єднує сканування штрих-кодів з online-пошуком товарів, цін, відгуків і т.п., не відкриваючи браузер. Хочете спробувати?</string>
   <string name="msg_intent_failed">Нажаль, неможливо запустити дану програму. Можливо, вміст штрих-коду пошкоджено.</string>
   <string name="msg_redirect">Переслати</string>
   <string name="msg_sbc_book_not_searchable">Нажаль, пошук книги був невдалим.</string>
@@ -115,7 +115,7 @@
   <string name="preferences_name">Налаштування</string>
   <string name="preferences_play_beep_title">Пищати</string>
   <string name="preferences_remember_duplicates_summary">Зберігати результати сканування однакових штрих-кодів</string>
-  <string name="preferences_remember_duplicates_title">Запом'ятовувати дублікати</string>
+  <string name="preferences_remember_duplicates_title">Запом\'ятовувати дублікати</string>
   <string name="preferences_result_title">Налаштування результатів</string>
   <string name="preferences_scanning_title">Під час сканування штрих-кодів\u2026</string>
   <string name="preferences_search_country">Пошук країни</string>
@@ -137,6 +137,6 @@
   <string name="result_wifi">Знайдено конфігурацію мережі</string>
   <string name="sbc_name">Пошук книг Google</string>
   <string name="wifi_changing_network">Запит підключення до мережі\u2026</string>
-  <string name="wifi_ssid_label">Ім'я мережі</string>
+  <string name="wifi_ssid_label">Ім\'я мережі</string>
   <string name="wifi_type_label">Тип</string>
 </resources>
