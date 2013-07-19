@@ -96,7 +96,6 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
   /**
    * Update the network: either create a new network or modify an existing network
    * @param config the new network configuration
-   * @return network ID of the connected network.
    */
   private static void updateNetwork(WifiManager wifiManager, WifiConfiguration config) {
     Integer foundNetworkID = findNetworkInExistingConfig(wifiManager, config.SSID);

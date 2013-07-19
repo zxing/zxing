@@ -19,6 +19,7 @@ package com.google.zxing.client.android.result;
 import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.zxing.client.android.CaptureActivity;
@@ -36,6 +37,8 @@ import com.google.zxing.client.result.WifiParsedResult;
  * @author Sean Owen
  */
 public final class WifiResultHandler extends ResultHandler {
+
+  private static final String TAG = WifiResultHandler.class.getSimpleName();
 
   private final CaptureActivity parent;
   private final AsyncTaskExecInterface taskExec;
@@ -62,6 +65,10 @@ public final class WifiResultHandler extends ResultHandler {
     if (index == 0) {
       WifiParsedResult wifiResult = (WifiParsedResult) getResult();
       WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+      if (wifiManager == null) {
+        Log.w(TAG, "No WifiManager available from device");
+        return;
+      }
       final Activity activity = getActivity();
       activity.runOnUiThread(new Runnable() {
         @Override
