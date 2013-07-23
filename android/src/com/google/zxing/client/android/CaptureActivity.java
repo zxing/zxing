@@ -468,7 +468,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       } else {
         paint.setStrokeWidth(10.0f);
         for (ResultPoint point : points) {
-          canvas.drawPoint(scaleFactor * point.getX(), scaleFactor * point.getY(), paint);
+          if (point != null) {
+            canvas.drawPoint(scaleFactor * point.getX(), scaleFactor * point.getY(), paint);
+          }
         }
       }
     }
