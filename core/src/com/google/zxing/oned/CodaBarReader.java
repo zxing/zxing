@@ -138,8 +138,10 @@ public final class CodaBarReader extends OneDReader {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    decodeRowResult.deleteCharAt(decodeRowResult.length() - 1);
-    decodeRowResult.deleteCharAt(0);
+    if (hints == null || !hints.containsKey(DecodeHintType.RETURN_CODABAR_START_END)) {
+      decodeRowResult.deleteCharAt(decodeRowResult.length() - 1);
+      decodeRowResult.deleteCharAt(0);
+    }
 
     int runningCount = 0;
     for (int i = 0; i < startOffset; i++) {

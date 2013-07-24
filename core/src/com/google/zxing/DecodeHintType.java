@@ -76,6 +76,13 @@ public enum DecodeHintType {
   ASSUME_GS1(Void.class),
 
   /**
+   * If true, return the start and end digits in a Codabar barcode instead of stripping them. They
+   * are alpha, whereas the rest are numeric. By default, they are stripped, but this causes them
+   * to not be. Doesn't matter what it maps to; use {@link Boolean#TRUE}.
+   */
+  RETURN_CODABAR_START_END(Void.class),
+
+  /**
    * The caller needs to be notified via callback when a possible {@link ResultPoint}
    * is found. Maps to a {@link ResultPointCallback}.
    */
