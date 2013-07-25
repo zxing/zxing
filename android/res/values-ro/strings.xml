@@ -17,7 +17,7 @@
 <resources>
   <string name="app_name">Barcode Scanner</string>
   <string name="app_picker_name">Aplicații</string>
-  <string name="bookmark_picker_name">Semne</string>
+  <string name="bookmark_picker_name">Nume însemnare</string>
   <string name="button_add_calendar">Adaugă în calendar</string>
   <string name="button_add_contact">Adaugă contact</string>
   <string name="button_back">Înapoi</string>
@@ -28,9 +28,9 @@
   <string name="button_done">Realizat</string>
   <string name="button_email">Trimite e-mail</string>
   <string name="button_get_directions">Descarcă indicații</string>
-  <string name="button_google_shopper">Cumpărător</string>
+  <string name="button_google_shopper">Cumpărător Google</string>
   <string name="button_mms">Trimite MMS</string>
-  <string name="button_ok">Confirmă</string>
+  <string name="button_ok">Acceptă</string>
   <string name="button_open_browser">Deschide navigator</string>
   <string name="button_product_search">Caută produs</string>
   <string name="button_search_book_contents">Caută conținut</string>
@@ -110,7 +110,7 @@
   <string name="preferences_front_light_off">Oprește</string>
   <string name="preferences_front_light_on">Pornește</string>
   <string name="preferences_general_title">Configurări generale</string>
-  <string name="preferences_invert_scan_title">Scanare inversă</string>
+  <string name="preferences_invert_scan_title">Scanare în negativ</string>
   <string name="preferences_invert_scan_summary">Scanează coduri de bară albe pe fundal negru. Indisponibil pe unele aparate.</string>  
   <string name="preferences_name">Configurări</string>
   <string name="preferences_play_beep_title">Sună</string>
