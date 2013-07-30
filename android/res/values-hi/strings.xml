@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">बुकमार्क्स</string>
   <string name="button_add_calendar">कैलेंडर के लिए जोड़ें</string>
   <string name="button_add_contact">संपर्क जोड़ें</string>
-  <string name="button_back">वापस</string>
   <string name="button_book_search">पुस्तक खोज</string>
   <string name="button_cancel">रद्द करना</string>
   <string name="button_custom_product_search">कस्टम खोज</string>
   <string name="button_dial">डायल नंबर</string>
-  <string name="button_done">ठीक है</string>
   <string name="button_email">ईमेल भेजें</string>
   <string name="button_get_directions">निर्देश प्राप्त करें</string>
   <string name="button_google_shopper">Shopper</string>

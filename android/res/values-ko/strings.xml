@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">즐겨찾기</string>
   <string name="button_add_calendar">일정에 추가하기</string>
   <string name="button_add_contact">연락처에 추가하기</string>
-  <string name="button_back">뒤로</string>
   <string name="button_book_search">책 검색</string>
   <string name="button_cancel">취소</string>
   <string name="button_custom_product_search">사용자 지정 검색</string>
   <string name="button_dial">전화 걸기</string>
-  <string name="button_done">완료</string>
   <string name="button_email">이메일 보내기</string>
   <string name="button_get_directions">방향을 찾기</string>
   <string name="button_google_shopper">Shopper</string>

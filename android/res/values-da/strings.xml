@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Bogmærker</string>
   <string name="button_add_calendar">Tilføj til kalendar</string>
   <string name="button_add_contact">Tilføj kontaktperson</string>
-  <string name="button_back">Tilbage</string>
   <string name="button_book_search">Bogsøgning</string>
   <string name="button_cancel">Annullér</string>
   <string name="button_custom_product_search">Brugerdefineret søgning</string>
   <string name="button_dial">Ring til nummeret</string>
-  <string name="button_done">Færdig</string>
   <string name="button_email">Send e-mail</string>
   <string name="button_get_directions">Få kørselsanvisninger</string>
   <string name="button_google_shopper">Shopper</string>

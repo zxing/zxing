@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">書籤</string>
   <string name="button_add_calendar">加入事件至日曆</string>
   <string name="button_add_contact">加入聯絡人</string>
-  <string name="button_back">返回</string>
   <string name="button_book_search">打開圖書搜索</string>
   <string name="button_cancel">取消</string>
   <string name="button_custom_product_search">自定義搜索</string>
   <string name="button_dial">撥號</string>
-  <string name="button_done">完成</string>
   <string name="button_email">發送電子郵件</string>
   <string name="button_get_directions">路線規劃</string>
   <string name="button_google_shopper">Google 購物</string>

@@ -51,6 +51,7 @@ public final class BenchmarkActivity extends Activity {
     @Override
     public void handleMessage(Message message) {
       if (message.what == R.id.benchmark_done) {
+        @SuppressWarnings("unchecked")
         Iterable<BenchmarkItem> items = (Iterable<BenchmarkItem>) message.obj;
         int count = 0;
         int time = 0;

@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Könyvjelzők</string>
   <string name="button_add_calendar">Hozzáadás a naptárhoz</string>
   <string name="button_add_contact">Névjegy hozzáadása</string>
-  <string name="button_back">Vissza</string>
   <string name="button_book_search">Könyv keresése</string>
   <string name="button_cancel">Mégse</string>
   <string name="button_custom_product_search">Egyedi keresés</string>
   <string name="button_dial">Telefonszám tárcsázása</string>
-  <string name="button_done">Kész</string>
   <string name="button_email">E-mail küldése</string>
   <string name="button_get_directions">Útvonaltervezés</string>
   <string name="button_google_shopper">Shopper</string>

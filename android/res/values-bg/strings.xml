@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Отметки</string>
   <string name="button_add_calendar">Добави в календар</string>
   <string name="button_add_contact">Добави контакт</string>
-  <string name="button_back">Обратно</string>
   <string name="button_book_search">Търси Книга</string>
   <string name="button_cancel">Отказ</string>
   <string name="button_custom_product_search">Потребителско търсене</string>
   <string name="button_dial">Набери телефон</string>
-  <string name="button_done">Готово</string>
   <string name="button_email">Изпрати поща</string>
   <string name="button_get_directions">Навигация</string>
   <string name="button_google_shopper">Shopper</string>

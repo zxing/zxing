@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">书签</string>
   <string name="button_add_calendar">添加事件至日历</string>
   <string name="button_add_contact">添加联系人</string>
-  <string name="button_back">返回</string>
   <string name="button_book_search">打开图书搜索</string>
   <string name="button_cancel">取消</string>
   <string name="button_custom_product_search">自定义搜索</string>
   <string name="button_dial">拨号</string>
-  <string name="button_done">完成</string>
   <string name="button_email">发送email</string>
   <string name="button_get_directions">获取地址</string>
   <string name="button_google_shopper">Google 购物</string>

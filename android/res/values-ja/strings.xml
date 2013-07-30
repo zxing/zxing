@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">ブックマーク</string>
   <string name="button_add_calendar">予定を追加</string>
   <string name="button_add_contact">連絡先を追加</string>
-  <string name="button_back">戻る</string>
   <string name="button_book_search">書籍を検索</string>
   <string name="button_cancel">キャンセル</string>
   <string name="button_custom_product_search">カスタムサーチ</string>
   <string name="button_dial">電話をかける</string>
-  <string name="button_done">完了</string>
   <string name="button_email">メールの送信</string>
   <string name="button_get_directions">経路を検索</string>
   <string name="button_google_shopper">Google Shopper</string>

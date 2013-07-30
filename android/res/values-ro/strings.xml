@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Nume însemnare</string>
   <string name="button_add_calendar">Adaugă în calendar</string>
   <string name="button_add_contact">Adaugă contact</string>
-  <string name="button_back">Înapoi</string>
   <string name="button_book_search">Caută carte</string>
   <string name="button_cancel">Renunță</string>
   <string name="button_custom_product_search">Căutare personalizată</string>
   <string name="button_dial">Telefonează la numărul</string>
-  <string name="button_done">Realizat</string>
   <string name="button_email">Trimite e-mail</string>
   <string name="button_get_directions">Descarcă indicații</string>
   <string name="button_google_shopper">Cumpărător Google</string>

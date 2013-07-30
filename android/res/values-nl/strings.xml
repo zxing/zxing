@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Bladwijzers</string>
   <string name="button_add_calendar">Toevoegen aan agenda</string>
   <string name="button_add_contact">Toevoegen aan contactpersonen</string>
-  <string name="button_back">Terug</string>
   <string name="button_book_search">Boeken zoeken</string>
   <string name="button_cancel">Annuleren</string>
   <string name="button_custom_product_search">Aangepast zoeken</string>
   <string name="button_dial">Nummer bellen</string>
-  <string name="button_done">Gereed</string>
   <string name="button_email">E-mail versturen</string>
   <string name="button_get_directions">Routebeschrijving opvragen</string>
   <string name="button_google_shopper">Shopper</string>

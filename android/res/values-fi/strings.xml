@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Kirjanmerkit</string>
   <string name="button_add_calendar">Lisää kalenteriin</string>
   <string name="button_add_contact">Lisää yhteystieto</string>
-  <string name="button_back">Takaisin</string>
   <string name="button_book_search">Kirjahaku</string>
   <string name="button_cancel">Peruuta</string>
   <string name="button_custom_product_search">Mukautettu haku</string>
   <string name="button_dial">Soita numeroon</string>
-  <string name="button_done">Valmis</string>
   <string name="button_email">Lähetä sähköpostia</string>
   <string name="button_get_directions">Hae ajo-ohjeet</string>
   <string name="button_google_shopper">Shopper</string>

@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Adreces d\'interès</string>
   <string name="button_add_calendar">Afegeix a l\'agenda</string>
   <string name="button_add_contact">Afegeix el contact</string>
-  <string name="button_back">Enrere</string>
   <string name="button_book_search">Cerca el llibre</string>
   <string name="button_cancel">Cancel·la</string>
   <string name="button_custom_product_search">Cerca personalitzada</string>
   <string name="button_dial">Marca el número</string>
-  <string name="button_done">Fet</string>
   <string name="button_email">Envia un correu electrònic</string>
   <string name="button_get_directions">Obté direccions</string>
   <string name="button_google_shopper">Shopper</string>

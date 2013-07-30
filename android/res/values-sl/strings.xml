@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Zaznamki</string>
   <string name="button_add_calendar">Dodaj v koledar</string>
   <string name="button_add_contact">Dodaj kontakt</string>
-  <string name="button_back">Nazaj</string>
   <string name="button_book_search">Išči knjigo</string>
   <string name="button_cancel">Prekliči</string>
   <string name="button_custom_product_search">Iskanje po meri</string>
   <string name="button_dial">Pokliči številko</string>
-  <string name="button_done">Končano</string>
   <string name="button_email">Pošlji e-mail</string>
   <string name="button_get_directions">Dobi smer</string>
   <string name="button_google_shopper">Shopper</string>

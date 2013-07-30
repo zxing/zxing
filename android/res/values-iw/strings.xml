@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">סימניות</string>
   <string name="button_add_calendar">הוסף ללוח שנה</string>
   <string name="button_add_contact">הוספת איש קשר</string>
-  <string name="button_back">חזרה</string>
   <string name="button_book_search">חיפוש ספר</string>
   <string name="button_cancel">ביטול</string>
   <string name="button_custom_product_search">חיפוש מותאם אישית</string>
   <string name="button_dial">חייג מספר</string>
-  <string name="button_done">סיים</string>
   <string name="button_email">שלח דואר אלקטרוני</string>
   <string name="button_get_directions">קבל הוראות הגעה</string>
   <string name="button_google_shopper">Shopper</string>

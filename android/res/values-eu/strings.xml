@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Laster-markak</string>
   <string name="button_add_calendar">Gehitu egutegian</string>
   <string name="button_add_contact">Gehitu kontaktua</string>
-  <string name="button_back">Atzera</string>
   <string name="button_book_search">Bilatu liburua</string>
   <string name="button_cancel">Utzi</string>
   <string name="button_custom_product_search">Bilaketa pertsonalizatua</string>
   <string name="button_dial">Markatu zenbakia</string>
-  <string name="button_done">Eginda</string>
   <string name="button_email">Bidali e-posta</string>
   <string name="button_get_directions">Lortu jarraibideak</string>
   <string name="button_google_shopper">Shopper</string>

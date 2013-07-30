@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Σελιδοδείκτες</string>
   <string name="button_add_calendar">Προσθήκη στο ημερολόγιο</string>
   <string name="button_add_contact">Προσθήκη στις επαφές</string>
-  <string name="button_back">Πίσω</string>
   <string name="button_book_search">Αναζήτηση βιβλίων</string>
   <string name="button_cancel">Ακύρωση</string>
   <string name="button_custom_product_search">Σύνθετη αναζήτηση</string>
   <string name="button_dial">Κλήση αριθμού</string>
-  <string name="button_done">Έγινε</string>
   <string name="button_email">Αποστολή email</string>
   <string name="button_get_directions">Λάβετε κατευθύνσεις</string>
   <string name="button_google_shopper">Shopper</string>

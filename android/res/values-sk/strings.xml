@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Záložky</string>
   <string name="button_add_calendar">Pridať do kalendára</string>
   <string name="button_add_contact">Pridať kontakt</string>
-  <string name="button_back">Späť</string>
   <string name="button_book_search">Hľadať knihu</string>
   <string name="button_cancel">Zrušiť</string>
   <string name="button_custom_product_search">Prispôsobené vyhľadávanie</string>
   <string name="button_dial">Vytočiť číslo</string>
-  <string name="button_done">Hotovo</string>
   <string name="button_email">Poslať e-mail</string>
   <string name="button_get_directions">Získať pokyny</string>
   <string name="button_google_shopper">Shopper</string>

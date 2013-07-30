@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Bookmarks</string>
   <string name="button_add_calendar">Tambah ke kalendar</string>
   <string name="button_add_contact">Tambah kontak</string>
-  <string name="button_back">Kembali</string>
   <string name="button_book_search">Cari Buku</string>
   <string name="button_cancel">Batal</string>
   <string name="button_custom_product_search">Pencarian kustom</string>
   <string name="button_dial">Panggil nomor</string>
-  <string name="button_done">Selesai</string>
   <string name="button_email">Kirim surel</string>
   <string name="button_get_directions">Dapatkan petunjuk arah</string>
   <string name="button_google_shopper">Shopper</string>

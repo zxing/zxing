@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">إشارات مرجعية</string>
   <string name="button_add_calendar">إضافة إلى التقويم</string>
   <string name="button_add_contact">إضافة جهة اتصال</string>
-  <string name="button_back">السابق</string>
   <string name="button_book_search">بحث في الكتب</string>
   <string name="button_cancel">إلغاء</string>
   <string name="button_custom_product_search">بحث مخصص</string>
   <string name="button_dial">طلب رقم</string>
-  <string name="button_done">تم</string>
   <string name="button_email">إرسال بريد</string>
   <string name="button_get_directions">معرفة الاتجاهات</string>
   <string name="button_google_shopper">Shopper</string>

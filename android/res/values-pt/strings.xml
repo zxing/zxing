@@ -20,12 +20,10 @@
   <string name="bookmark_picker_name">Favoritos</string>
   <string name="button_add_calendar">Adicionar ao calendário</string>
   <string name="button_add_contact">Adicionar contacto</string>
-  <string name="button_back">Voltar</string>
   <string name="button_book_search">Procurar livro</string>
   <string name="button_cancel">Cancelar</string>
   <string name="button_custom_product_search">Pesquisa Personalizada</string>
   <string name="button_dial">Marcar número</string>
-  <string name="button_done">Feito</string>
   <string name="button_email">Enviar e-mail</string>
   <string name="button_get_directions">Obter direcções</string>
   <string name="button_google_shopper">Shopper</string>
