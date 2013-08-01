@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2012 ZXing authors
 
@@ -85,7 +85,7 @@
   <string name="msg_sbc_snippet_unavailable">Textschnipsel nicht verfügbar.</string>
   <string name="msg_share_explanation">Sie können Daten weitergeben, indem Sie einen Barcode auf Ihrem Bilschirm erzeugen und mit einem anderen Handy einscannen.</string>
   <string name="msg_share_subject_line">Hier ist der gescannte Barcode-Inhalt</string>
-  <string name="msg_share_text">Oder geben Sie einen Text hier</string>
+  <string name="msg_share_text">Oder geben Sie hier einen Text ein</string>
   <string name="msg_sure">Sind Sie sicher?</string>
   <string name="msg_unmount_usb">Leider kann nicht auf die SD-Karte zugegriffen werden.</string>
   <string name="preferences_actions_title">Wenn ein Barcode erkannt wurde\u2026</string>
@@ -103,8 +103,8 @@
   <string name="preferences_disable_continuous_focus_title">Kein kontinuierlicher Fokus</string>
   <string name="preferences_disable_exposure_title">Keine Belichtungsmessung </string>
   <string name="preferences_front_light_auto">Automatisch</string>
-  <string name="preferences_front_light_off">Inaktiv</string>
-  <string name="preferences_front_light_on">Aktiv</string>
+  <string name="preferences_front_light_off">Ein</string>
+  <string name="preferences_front_light_on">Aus</string>
   <string name="preferences_front_light_summary">Verbessert bei einigen Mobiltelefonen das Scannen bei schwachem Licht, kann aber Überbelichtung verursachen. Funktioniert nicht mit allen Handys.</string>
   <string name="preferences_front_light_title">Foto LED einschalten</string>
   <string name="preferences_general_title">Allgemeine Einstellungen</string>
@@ -117,7 +117,7 @@
   <string name="preferences_result_title">Ergebnis-Einstellungen</string>
   <string name="preferences_scanning_title">Beim Scannen von Barcodes, dekodieren\u2026</string>
   <string name="preferences_search_country">Land für die Suche</string>
-  <string name="preferences_supplemental_summary">Erfahren Sie mehr über Barcode</string>
+  <string name="preferences_supplemental_summary">Erfahren Sie mehr über den Barcode</string>
   <string name="preferences_supplemental_title">Weitere Informationen abrufen</string>
   <string name="preferences_try_bsplus">Barcode Scanner+ testen</string>
   <string name="preferences_try_bsplus_summary">Mit mehr Funktionen und neuer Oberfläche.</string>
