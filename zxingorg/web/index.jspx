@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.2">
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1">
 <jsp:directive.page contentType="text/html" session="false"/>
 <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
 <jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>

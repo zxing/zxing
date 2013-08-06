@@ -14,7 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.2">
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1">
 <jsp:directive.page session="false"/>
 <script type="text/javascript">
   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
