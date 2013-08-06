@@ -38,6 +38,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
 
 /**
  * <p>Simple GUI frontend to the library. Right now, only decodes a local file.
@@ -61,7 +62,7 @@ public final class GUIRunner extends JFrame {
     panel.add(textArea);
     setTitle("ZXing");
     setSize(400, 400);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     setContentPane(panel);
     setLocationRelativeTo(null);
   }
