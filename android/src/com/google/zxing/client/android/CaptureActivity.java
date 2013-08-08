@@ -668,11 +668,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
   
   private void sendReplyMessage(int id, Object arg, long delayMS) {
-    Message message = Message.obtain(handler, id, arg);
-    if (delayMS > 0L) {
-      handler.sendMessageDelayed(message, delayMS);
-    } else {
-      handler.sendMessage(message);
+    if (handler != null) {
+      Message message = Message.obtain(handler, id, arg);
+      if (delayMS > 0L) {
+        handler.sendMessageDelayed(message, delayMS);
+      } else {
+        handler.sendMessage(message);
+      }
     }
   }
 
