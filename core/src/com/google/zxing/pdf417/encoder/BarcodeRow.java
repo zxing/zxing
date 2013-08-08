@@ -27,8 +27,6 @@ final class BarcodeRow {
 
   /**
    * Creates a Barcode row of the width
-   *
-   * @param width
    */
   BarcodeRow(int width) {
     this.row = new byte[width];

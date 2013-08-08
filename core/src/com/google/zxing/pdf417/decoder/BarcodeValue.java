@@ -32,7 +32,6 @@ final class BarcodeValue {
 
   /**
    * Add an occurrence of a value
-   * @param value
    */
   void setValue(int value) {
     Integer confidence = values.get(value);

@@ -546,9 +546,6 @@ public final class PDF417ScanningDecoder {
 
   /**
    * Verify that all is OK with the codeword array.
-   *
-   * @param codewords
-   * @return an index to the first data codeword.
    */
   private static void verifyCodewordCount(int[] codewords, int numECCodewords) throws FormatException {
     if (codewords.length < 4) {

@@ -34,7 +34,7 @@
           query = window.location.search.substring(1);
           if (query.length <= 0)
             return null;
-          name = name + "=";
+          name += "=";
           var head;
           head = query.indexOf(name);
           if (head < 0)

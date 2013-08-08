@@ -85,7 +85,7 @@ public final class ReedSolomonDecoder {
     }
   }
 
-  public GenericGFPoly[] runEuclideanAlgorithm(GenericGFPoly a, GenericGFPoly b, int R)
+  private GenericGFPoly[] runEuclideanAlgorithm(GenericGFPoly a, GenericGFPoly b, int R)
       throws ReedSolomonException {
     // Assume a's degree is >= b's
     if (a.getDegree() < b.getDegree()) {

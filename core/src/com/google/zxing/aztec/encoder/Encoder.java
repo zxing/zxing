@@ -269,7 +269,6 @@ public final class Encoder {
   }
   
   private static BitArray generateCheckWords(BitArray bitArray, int totalBits, int wordSize) {
-    assert bitArray.getSize() % wordSize == 0;
     // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
     int messageSizeInWords = bitArray.getSize() / wordSize;
     ReedSolomonEncoder rs = new ReedSolomonEncoder(getGF(wordSize));

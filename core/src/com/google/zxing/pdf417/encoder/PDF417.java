@@ -744,7 +744,6 @@ public final class PDF417 {
 
   /**
    * Sets compact to be true or false
-   * @param compact
    */
   public void setCompact(boolean compact) {
     this.compact = compact;

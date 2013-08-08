@@ -61,7 +61,8 @@ final class MECARDContactEncoder extends ContactEncoder {
     appendUpToUnique(newContents, newDisplayContents, "TEL", phones, Integer.MAX_VALUE, new Formatter() {
       @Override
       public String format(String source) {
-        return keepOnlyDigits(PhoneNumberUtils.formatNumber(source));
+        CharSequence s = PhoneNumberUtils.formatNumber(source);
+        return s == null ? null : NOT_DIGITS.matcher(s).replaceAll("");
       }
     });
     appendUpToUnique(newContents, newDisplayContents, "EMAIL", emails, Integer.MAX_VALUE, null);
@@ -70,12 +71,8 @@ final class MECARDContactEncoder extends ContactEncoder {
     newContents.append(';');
     return new String[] { newContents.toString(), newDisplayContents.toString() };
   }
-  
-  private static String keepOnlyDigits(CharSequence s) {
-    return s == null ? null : NOT_DIGITS.matcher(s).replaceAll("");
-  }
-  
-  private static void append(StringBuilder newContents, 
+
+  private static void append(StringBuilder newContents,
                              StringBuilder newDisplayContents,
                              String prefix, 
                              String value) {

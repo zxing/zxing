@@ -257,7 +257,6 @@ public final class Decoder {
         }
       }
     }
-    assert index == correctedBits.length;
     return correctedBits;
   }
 

@@ -37,7 +37,7 @@ abstract class Token {
    }
 
   final Token addBinaryShift(int start, int byteCount) {
-    int bitCount = (byteCount * 8) + (byteCount <= 31 ? 10 : byteCount <= 62 ? 20 : 21);
+    //int bitCount = (byteCount * 8) + (byteCount <= 31 ? 10 : byteCount <= 62 ? 20 : 21);
     return new BinaryShiftToken(this, start, byteCount);
   }
 

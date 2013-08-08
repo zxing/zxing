@@ -46,7 +46,6 @@ public final class AztecReader implements Reader {
    * @return a String representing the content encoded by the Data Matrix code
    * @throws NotFoundException if a Data Matrix code cannot be found
    * @throws FormatException if a Data Matrix code cannot be decoded
-   * @throws com.google.zxing.ChecksumException if error correction fails
    */
   @Override
   public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
