@@ -33,7 +33,6 @@ import com.google.zxing.multi.GenericMultipleBarcodeReader;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -51,6 +50,8 @@ import java.util.concurrent.Callable;
  * @see CommandLineRunner
  */
 final class DecodeWorker implements Callable<Integer> {
+
+  private static final Charset UTF8 = Charset.forName("UTF8");
 
   private final Config config;
   private final Queue<String> inputs;
@@ -115,24 +116,18 @@ final class DecodeWorker implements Callable<Integer> {
   }
 
   private static void writeStringToFile(String value, File file) throws IOException {
-    Writer out = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF8"));
-    try {
+    try (Writer out = new OutputStreamWriter(new FileOutputStream(file), UTF8)) {
       out.write(value);
-    } finally {
-      out.close();
     }
   }
 
   private static void writeResultsToFile(Result[] results, File file) throws IOException {
     String newline = System.getProperty("line.separator");
-    Writer out = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF8"));
-    try {
+    try (Writer out = new OutputStreamWriter(new FileOutputStream(file), UTF8)) {
       for (Result result : results) {
         out.write(result.getText());
         out.write(newline);
       }
-    } finally {
-      out.close();
     }
   }
 
@@ -225,7 +220,7 @@ final class DecodeWorker implements Callable<Integer> {
    * monochrome version.
    */
   private static void dumpBlackPoint(URI uri, BufferedImage image, BinaryBitmap bitmap) {
-    // TODO: Update to compare different Binarizer implementations.
+
     String inputName = uri.getPath();
     if (inputName.contains(".mono.png")) {
       return;
@@ -310,24 +305,12 @@ final class DecodeWorker implements Callable<Integer> {
       resultName = resultName.substring(0, pos);
     }
     resultName += suffix;
-    OutputStream outStream = null;
-    try {
-      outStream = new FileOutputStream(resultName);
+    try (OutputStream outStream = new FileOutputStream(resultName)) {
       if (!ImageIO.write(result, "png", outStream)) {
         System.err.println("Could not encode an image to " + resultName);
       }
-    } catch (FileNotFoundException ignored) {
-      System.err.println("Could not create " + resultName);
     } catch (IOException ignored) {
       System.err.println("Could not write to " + resultName);
-    } finally {
-      try {
-        if (outStream != null) {
-          outStream.close();
-        }
-      } catch (IOException ioe) {
-        // continue
-      }
     }
   }
 

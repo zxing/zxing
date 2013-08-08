@@ -84,6 +84,8 @@ public final class DecodeServlet extends HttpServlet {
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
+  private static final Charset UTF8 = Charset.forName("UTF-8");
+
   // No real reason to let people upload more than a 2MB image
   private static final long MAX_IMAGE_SIZE = 2000000L;
   // No real reason to deal with more than maybe 8.3 megapixels
@@ -93,10 +95,10 @@ public final class DecodeServlet extends HttpServlet {
   private static final Map<DecodeHintType,Object> HINTS_PURE;
 
   static {
-    HINTS = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+    HINTS = new EnumMap<>(DecodeHintType.class);
     HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     HINTS.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
-    HINTS_PURE = new EnumMap<DecodeHintType,Object>(HINTS);
+    HINTS_PURE = new EnumMap<>(HINTS);
     HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
   }
 
@@ -113,22 +115,15 @@ public final class DecodeServlet extends HttpServlet {
     diskFileItemFactory = new DiskFileItemFactory(1 << 16, repository);
     diskFileItemFactory.setFileCleaningTracker(fileCleaningTracker);
     
-    blockedURLSubstrings = new ArrayList<String>();
-    InputStream in = DecodeServlet.class.getResourceAsStream("/private/uri-block-substrings.txt");
-    if (in != null) {
-      try {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
-        try {
-          String line;
-          while ((line = reader.readLine()) != null) {
-            blockedURLSubstrings.add(line);
-          }
-        } finally {
-          reader.close();
-        }
-      } catch (IOException ioe) {
-        throw new ServletException(ioe);
+    blockedURLSubstrings = new ArrayList<>();
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+             DecodeServlet.class.getResourceAsStream("/private/uri-block-substrings.txt"), UTF8))) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        blockedURLSubstrings.add(line);
       }
+    } catch (IOException ioe) {
+      throw new ServletException(ioe);
     }
     log.info("Blocking URIs containing: " + blockedURLSubstrings);
   }
@@ -258,10 +253,9 @@ public final class DecodeServlet extends HttpServlet {
       while ((available = is.available()) > 0) {
         is.read(REMAINDER_BUFFER, 0, available); // don't care about value, or collision
       }
-    } catch (IOException ioe) {
+    } catch (IOException | IndexOutOfBoundsException ioe) {
+      // sun.net.www.http.ChunkedInputStream.read is throwing IndexOutOfBoundsException
       // continue
-    } catch (IndexOutOfBoundsException ioobe) {
-      // sun.net.www.http.ChunkedInputStream.read is throwing this, continue
     }
   }
 
@@ -284,11 +278,8 @@ public final class DecodeServlet extends HttpServlet {
         if (!item.isFormField()) {
           if (item.getSize() <= MAX_IMAGE_SIZE) {
             log.info("Decoding uploaded file");
-            InputStream is = item.getInputStream();
-            try {
+            try (InputStream is = item.getInputStream()) {
               processStream(is, request, response);
-            } finally {
-              is.close();
             }
           } else {
             log.info("Too large");
@@ -311,19 +302,9 @@ public final class DecodeServlet extends HttpServlet {
     BufferedImage image;
     try {
       image = ImageIO.read(is);
-    } catch (IOException ioe) {
+    } catch (IOException | CMMException | IllegalArgumentException ioe) {
       log.info(ioe.toString());
-      // Includes javax.imageio.IIOException
-      response.sendRedirect("badimage.jspx");
-      return;
-    } catch (CMMException cmme) {
-      log.info(cmme.toString());
-      // Have seen this in logs
-      response.sendRedirect("badimage.jspx");
-      return;
-    } catch (IllegalArgumentException iae) {
-      log.info(iae.toString());
-      // Have seen this in logs for some JPEGs
+      // Have seen these in some logs
       response.sendRedirect("badimage.jspx");
       return;
     }
@@ -348,7 +329,7 @@ public final class DecodeServlet extends HttpServlet {
     Reader reader = new MultiFormatReader();
     LuminanceSource source = new BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-    Collection<Result> results = new ArrayList<Result>(1);
+    Collection<Result> results = new ArrayList<>(1);
     ReaderException savedException = null;
 
     try {
@@ -417,14 +398,11 @@ public final class DecodeServlet extends HttpServlet {
     if (minimalOutput) {
       response.setContentType("text/plain");
       response.setCharacterEncoding("UTF8");
-      Writer out = new OutputStreamWriter(response.getOutputStream(), Charset.forName("UTF-8"));
-      try {
+      try (Writer out = new OutputStreamWriter(response.getOutputStream(), UTF8)) {
         for (Result result : results) {
           out.write(result.getText());
           out.write('\n');
         }
-      } finally {
-        out.close();
       }
     } else {
       request.setAttribute("results", results);

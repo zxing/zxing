@@ -18,7 +18,6 @@ package com.google.zxing;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -80,7 +79,7 @@ public final class StringsResourceTranslator {
       " limitations under the License.\n" +
       " -->\n";
 
-  private static final Map<String,String> LANGUAGE_CODE_MASSAGINGS = new HashMap<String,String>(3);
+  private static final Map<String,String> LANGUAGE_CODE_MASSAGINGS = new HashMap<>(3);
   static {
     LANGUAGE_CODE_MASSAGINGS.put("zh-rCN", "zh-cn");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rTW", "zh-tw");
@@ -130,9 +129,7 @@ public final class StringsResourceTranslator {
     resultTempFile.deleteOnExit();
 
     boolean anyChange = false;
-    Writer out = null;
-    try {
-      out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(resultTempFile), UTF8));
+    try (Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(resultTempFile), UTF8))) {
       out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
       out.write(APACHE_2_LICENSE);
       out.write("<resources>\n");
@@ -161,9 +158,6 @@ public final class StringsResourceTranslator {
 
       out.write("</resources>\n");
       out.flush();
-
-    } finally {
-      quietClose(out);
     }
 
     if (anyChange) {
@@ -216,28 +210,22 @@ public final class StringsResourceTranslator {
     URLConnection connection = translateURL.openConnection();
     connection.connect();
     StringBuilder translateResult = new StringBuilder(200);
-    Reader in = null;
-    try {
-      in = new BufferedReader(new InputStreamReader(connection.getInputStream(), UTF8));
+    try (Reader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), UTF8))) {
       char[] buffer = new char[1024];
       int charsRead;
       while ((charsRead = in.read(buffer)) > 0) {
         translateResult.append(buffer, 0, charsRead);
       }
-    } finally {
-      quietClose(in);
     }
     return translateResult;
   }
 
   private static SortedMap<String,String> readLines(File file) throws IOException {
-    SortedMap<String,String> entries = new TreeMap<String,String>();    
+    SortedMap<String,String> entries = new TreeMap<>();
     if (!file.exists()) {
       return entries;
     }
-    BufferedReader reader = null;
-    try {
-      reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), UTF8));
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), UTF8))) {
       String line;
       while ((line = reader.readLine()) != null) {
         Matcher m = ENTRY_PATTERN.matcher(line);
@@ -248,18 +236,6 @@ public final class StringsResourceTranslator {
         }
       }
       return entries;
-    } finally {
-      quietClose(reader);
-    }
-  }
-
-  private static void quietClose(Closeable closeable) {
-    if (closeable != null) {
-      try {
-        closeable.close();
-      } catch (IOException ioe) {
-        // continue
-      }
     }
   }
 

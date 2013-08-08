@@ -81,7 +81,7 @@ public final class HtmlAssetTranslator {
   }
 
   private static Collection<String> parseLanguagesToTranslate(File assetsDir, CharSequence languageArg) {
-    Collection<String> languages = new ArrayList<String>();
+    Collection<String> languages = new ArrayList<>();
     if ("all".equals(languageArg)) {
       FileFilter fileFilter = new FileFilter() {
         @Override
@@ -99,7 +99,7 @@ public final class HtmlAssetTranslator {
   }
 
   private static Collection<String> parseFileNamesToTranslate(File assetsDir, List<String> restOfArgs) {
-    Collection<String> fileNamesToTranslate = new ArrayList<String>();
+    Collection<String> fileNamesToTranslate = new ArrayList<>();
     if ("all".equals(restOfArgs.get(0))) {
       File htmlEnAssetDir = new File(assetsDir, "html-en");
       FileFilter fileFilter = new FileFilter() {
@@ -162,7 +162,7 @@ public final class HtmlAssetTranslator {
     Element rootElement = document.getDocumentElement();
     rootElement.normalize();
 
-    Queue<Node> nodes = new LinkedList<Node>();
+    Queue<Node> nodes = new LinkedList<>();
     nodes.add(rootElement);
 
     while (!nodes.isEmpty()) {
@@ -191,14 +191,10 @@ public final class HtmlAssetTranslator {
     DOMImplementationRegistry registry;
     try {
       registry = DOMImplementationRegistry.newInstance();
-    } catch (ClassNotFoundException cnfe) {
-      throw new IllegalStateException(cnfe);
-    } catch (InstantiationException ie) {
-      throw new IllegalStateException(ie);
-    } catch (IllegalAccessException iae) {
-      throw new IllegalStateException(iae);
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+      throw new IllegalStateException(e);
     }
-    
+
     DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
     LSSerializer writer = impl.createLSSerializer();
     writer.writeToURI(document, destFile.toURI().toString());

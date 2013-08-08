@@ -43,7 +43,6 @@ import java.util.regex.Pattern;
  */
 public final class CommandLineRunner {
 
-  private static final String POSSIBLE_FORMATS_ARG = "--possibleFormats=";
   private static final Pattern COMMA = Pattern.compile(",");
 
   private CommandLineRunner() {
@@ -56,53 +55,63 @@ public final class CommandLineRunner {
     }
 
     Config config = new Config();
+    Queue<String> inputs = new ConcurrentLinkedQueue<>();
 
     for (String arg : args) {
-      if ("--try_harder".equals(arg)) {
-        config.setTryHarder(true);
-      } else if ("--pure_barcode".equals(arg)) {
-        config.setPureBarcode(true);
-      } else if ("--products_only".equals(arg)) {
-        config.setProductsOnly(true);
-      } else if ("--dump_results".equals(arg)) {
-        config.setDumpResults(true);
-      } else if ("--dump_black_point".equals(arg)) {
-        config.setDumpBlackPoint(true);
-      } else if ("--multi".equals(arg)) {
-        config.setMulti(true);
-      } else if ("--brief".equals(arg)) {
-        config.setBrief(true);
-      } else if ("--recursive".equals(arg)) {
-        config.setRecursive(true);
-      } else if (arg.startsWith("--crop")) {
-        int[] crop = new int[4];
-        String[] tokens = COMMA.split(arg.substring(7));
-        for (int i = 0; i < crop.length; i++) {
-          crop[i] = Integer.parseInt(tokens[i]);
-        }
-        config.setCrop(crop);
-      } else if (arg.startsWith(POSSIBLE_FORMATS_ARG)) {
-        config.setPossibleFormats(COMMA.split(arg.substring(POSSIBLE_FORMATS_ARG.length())));
-      } else if (arg.startsWith("-")) {
-        System.err.println("Unknown command line option " + arg);
-        printUsage();
-        return;
+      String[] argValue = arg.split("=");
+      switch (argValue[0]) {
+        case "--try_harder":
+          config.setTryHarder(true);
+          break;
+        case "--pure_barcode":
+          config.setPureBarcode(true);
+          break;
+        case "--products_only":
+          config.setProductsOnly(true);
+          break;
+        case "--dump_results":
+          config.setDumpResults(true);
+          break;
+        case "--dump_black_point":
+          config.setDumpBlackPoint(true);
+          break;
+        case "--multi":
+          config.setMulti(true);
+          break;
+        case "--brief":
+          config.setBrief(true);
+          break;
+        case "--recursive":
+          config.setRecursive(true);
+          break;
+        case "--crop":
+          int[] crop = new int[4];
+          String[] tokens = COMMA.split(argValue[1]);
+          for (int i = 0; i < crop.length; i++) {
+            crop[i] = Integer.parseInt(tokens[i]);
+          }
+          config.setCrop(crop);
+          break;
+        case "--possibleFormats":
+          config.setPossibleFormats(COMMA.split(argValue[1]));
+          break;
+        default:
+          if (arg.startsWith("-")) {
+            System.err.println("Unknown command line option " + arg);
+            printUsage();
+            return;
+          }
+          addArgumentToInputs(arg, config, inputs);
+          break;
       }
     }
     config.setHints(buildHints(config));
-
-    Queue<String> inputs = new ConcurrentLinkedQueue<String>();
-    for (String arg : args) {
-      if (!arg.startsWith("--")) {
-        addArgumentToInputs(arg, config, inputs);
-      }
-    }
 
     int numThreads = Math.min(inputs.size(), Runtime.getRuntime().availableProcessors());
     int successful = 0;    
     if (numThreads > 1) {
       ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-      Collection<Future<Integer>> futures = new ArrayList<Future<Integer>>(numThreads);
+      Collection<Future<Integer>> futures = new ArrayList<>(numThreads);
       for (int x = 0; x < numThreads; x++) {
         futures.add(executor.submit(new DecodeWorker(config, inputs)));
       }
@@ -156,7 +165,7 @@ public final class CommandLineRunner {
 
   // Manually turn on all formats, even those not yet considered production quality.
   private static Map<DecodeHintType,?> buildHints(Config config) {
-    Collection<BarcodeFormat> possibleFormats = new ArrayList<BarcodeFormat>();
+    Collection<BarcodeFormat> possibleFormats = new ArrayList<>();
     String[] possibleFormatsNames = config.getPossibleFormats();
     if (possibleFormatsNames != null && possibleFormatsNames.length > 0) {
       for (String format : possibleFormatsNames) {
@@ -182,7 +191,7 @@ public final class CommandLineRunner {
         possibleFormats.add(BarcodeFormat.MAXICODE);
       }
     }
-    Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
+    Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
     hints.put(DecodeHintType.POSSIBLE_FORMATS, possibleFormats);
     if (config.isTryHarder()) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
@@ -206,8 +215,8 @@ public final class CommandLineRunner {
     System.err.println("  --brief: Only output one line per file, omitting the contents");
     System.err.println("  --recursive: Descend into subdirectories");
     System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
-    StringBuilder builder = new StringBuilder(
-        "  " + POSSIBLE_FORMATS_ARG + "barcodeFormat[,barcodeFormat2...] where barcodeFormat is any of: ");
+    StringBuilder builder = new StringBuilder();
+    builder.append("  --possibleFormats=barcodeFormat[,barcodeFormat2...] where barcodeFormat is any of: ");
     for (BarcodeFormat format : BarcodeFormat.values()) {
       builder.append(format).append(',');
     }

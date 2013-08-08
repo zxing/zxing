@@ -50,35 +50,44 @@ public final class CommandLineEncoder {
     String outFileString = DEFAULT_OUTPUT_FILE;
     int width = DEFAULT_WIDTH;
     int height = DEFAULT_HEIGHT;
+    String contents = null;
+
     for (String arg : args) {
-      if (arg.startsWith("--barcode_format")) {
-        barcodeFormat = BarcodeFormat.valueOf(arg.split("=")[1]);
-      } else if (arg.startsWith("--image_format")) {
-        imageFormat = arg.split("=")[1];
-      } else if (arg.startsWith("--output")) {
-        outFileString = arg.split("=")[1];
-      } else if (arg.startsWith("--width")) {
-        width = Integer.parseInt(arg.split("=")[1]);
-      } else if (arg.startsWith("--height")) {
-        height = Integer.parseInt(arg.split("=")[1]);
+      String[] argValue = arg.split("=");
+      switch (argValue[0]) {
+        case "--barcode_format":
+          barcodeFormat = BarcodeFormat.valueOf(argValue[1]);
+          break;
+        case "--image_format":
+          imageFormat = argValue[1];
+          break;
+        case "--output":
+          outFileString = argValue[1];
+          break;
+        case "--width":
+          width = Integer.parseInt(argValue[1]);
+          break;
+        case "--height":
+          height = Integer.parseInt(argValue[1]);
+          break;
+        default:
+          if (arg.startsWith("-")) {
+            System.err.println("Unknown command line option " + arg);
+            printUsage();
+            return;
+          }
+          contents = arg;
+          break;
       }
+    }
+
+    if (contents == null) {
+      printUsage();
+      return;
     }
     
     if (DEFAULT_OUTPUT_FILE.equals(outFileString)) {
       outFileString += '.' + imageFormat.toLowerCase(Locale.ENGLISH);
-    }
-        
-    String contents = null;
-    for (String arg : args) {
-      if (!arg.startsWith("--")) {
-        contents = arg;
-        break;
-      }
-    }
-    
-    if (contents == null) {
-      printUsage();
-      return;
     }
     
     MultiFormatWriter barcodeWriter = new MultiFormatWriter();
