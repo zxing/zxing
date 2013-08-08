@@ -131,6 +131,15 @@ final class CameraConfigurationManager {
 
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
     camera.setParameters(parameters);
+
+    Camera.Parameters afterParameters = camera.getParameters();
+    Camera.Size afterSize = afterParameters.getPreviewSize();
+    if (afterSize!= null && (cameraResolution.x != afterSize.width || cameraResolution.y != afterSize.height)) {
+      Log.w(TAG, "Camera said it supported preview size " + cameraResolution.x + 'x' + cameraResolution.y +
+                 ", but after setting it, preview size is " + afterSize.width + 'x' + afterSize.height);
+      cameraResolution.x = afterSize.width;
+      cameraResolution.y = afterSize.height;
+    }
   }
 
   Point getCameraResolution() {
