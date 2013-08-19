@@ -408,7 +408,11 @@ void LinesSampler::linesMatrixToCodewords(vector<vector<int> >& clusterNumbers,
       for (int j = 0; j < POSSIBLE_SYMBOLS; j++) {
         float error = 0.0f;
         for (int k = 0; k < BARS_IN_SYMBOL; k++) {
-          error += pow(RATIOS_TABLE[j * BARS_IN_SYMBOL + k] - cwRatios[i][k], 2);
+          float diff = RATIOS_TABLE[j * BARS_IN_SYMBOL + k] - cwRatios[i][k];
+          error += diff * diff;
+          if (error >= bestMatchError) {
+            break;
+          }
         }
         if (error < bestMatchError) {
           bestMatchError = error;
