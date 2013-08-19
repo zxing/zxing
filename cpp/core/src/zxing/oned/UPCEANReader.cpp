@@ -23,6 +23,7 @@
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/ReaderException.h>
 #include <zxing/NotFoundException.h>
+#include <zxing/FormatException.h>
 #include <zxing/ChecksumException.h>
 
 using std::vector;
@@ -31,6 +32,7 @@ using std::string;
 using zxing::Ref;
 using zxing::Result;
 using zxing::NotFoundException;
+using zxing::FormatException;
 using zxing::ChecksumException;
 using zxing::oned::UPCEANReader;
 
@@ -136,6 +138,11 @@ Ref<Result> UPCEANReader::decodeRow(int rowNumber,
   int quietEnd = end + (end - endRange[0]);
   if (quietEnd >= row->getSize() || !row->isRange(end, quietEnd, false)) {
     throw NotFoundException();
+  }
+
+  // UPC/EAN should never be less than 8 chars anyway
+  if (result.length() < 8) {
+    throw FormatException();
   }
 
   Ref<String> resultString (new String(result));

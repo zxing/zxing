@@ -176,6 +176,10 @@ public abstract class UPCEANReader extends OneDReader {
     }
 
     String resultString = result.toString();
+    // UPC/EAN should never be less than 8 chars anyway
+    if (resultString.length() < 8) {
+      throw FormatException.getFormatInstance();
+    }
     if (!checkChecksum(resultString)) {
       throw ChecksumException.getChecksumInstance();
     }
