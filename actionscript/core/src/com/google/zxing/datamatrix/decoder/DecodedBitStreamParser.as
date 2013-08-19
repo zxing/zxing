@@ -143,7 +143,7 @@ package com.google.zxing.datamatrix.decoder
 	    	        return BASE256_ENCODE;
 	            } else if (oneByte == 232) {  
 					// FNC1
-	    	        String.fromCharCode(29);// translate as ASCII 29
+	    	        result.Append(String.fromCharCode(29));// translate as ASCII 29
 	            } else if ((oneByte == 233) || (oneByte == 234)) 
 				{   // Structured Append, Reader Programming
 					// Ignore these symbols for now
