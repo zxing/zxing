@@ -128,18 +128,6 @@ public final class QRCodeWriterTestCase extends Assert {
   public void testRegressionTest() throws Exception {
     compareToGoldenFile("http://www.google.com/", ErrorCorrectionLevel.M, 99,
         "renderer-test-01.png");
-
-    compareToGoldenFile("12345", ErrorCorrectionLevel.L, 58, "renderer-test-02.png");
-
-    // Test in Katakana in Shift_JIS.
-    // TODO: this test is bogus now that byte mode has been basically fixed to assuming ISO-8859-1 encoding
-    //  The real solution is to implement Kanji mode, in which case the golden file will be wrong again
-    /*
-    compareToGoldenFile(
-        new String(new byte[] {(byte)0x83, 0x65, (byte)0x83, 0x58, (byte)0x83, 0x67}, "Shift_JIS"),
-        ErrorCorrectionLevel.H, 145,
-        "renderer-test-03.png");
-     */
   }
 
 }
