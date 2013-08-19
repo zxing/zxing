@@ -305,30 +305,17 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-// Gross, I know. But you can't use the device idiom because it's not iPad when running
-// in zoomed iphone mode but the camera still acts like an ipad.
-#if 0 && HAS_AVFF
-static bool isIPad() {
-  static int is_ipad = -1;
-  if (is_ipad < 0) {
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0); // Get size of data to be returned.
-    char *name = malloc(size);
-    sysctlbyname("hw.machine", name, &size, NULL, 0);
-    NSString *machine = [NSString stringWithCString:name encoding:NSASCIIStringEncoding];
-    free(name);
-    is_ipad = [machine hasPrefix:@"iPad"];
-  }
-  return !!is_ipad;
-}
-#endif
-    
 - (void)initCapture {
 #if HAS_AVFF
   AVCaptureDevice* inputDevice =
       [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   AVCaptureDeviceInput *captureInput =
       [AVCaptureDeviceInput deviceInputWithDevice:inputDevice error:nil];
+
+  if (!captureInput) {
+    return;
+  }
+
   AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init]; 
   captureOutput.alwaysDiscardsLateVideoFrames = YES; 
   [captureOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
@@ -339,22 +326,6 @@ static bool isIPad() {
   self.captureSession = [[[AVCaptureSession alloc] init] autorelease];
 
   NSString* preset = 0;
-
-#if 0
-  // to be deleted when verified ...
-  if (isIPad()) {
-    if (NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
-        [UIScreen mainScreen].scale > 1 &&
-        [inputDevice
-          supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
-      preset = AVCaptureSessionPresetiFrame960x540;
-    }
-    if (false && !preset &&
-        [inputDevice supportsAVCaptureSessionPreset:AVCaptureSessionPresetHigh]) {
-      preset = AVCaptureSessionPresetHigh;
-    }
-  }
-#endif
 
   if (!preset) {
     preset = AVCaptureSessionPresetMedium;
