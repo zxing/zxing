@@ -181,4 +181,39 @@ public final class BitArrayTestCase extends Assert {
     assertFalse(array.isRange(0, 64, false));
   }
 
+  @Test
+  public void reverseAlgorithmTest() {
+    int[] oldBits = {128, 256, 512, 6453324, 50934953};
+    for (int size = 1; size < 160; size++) {
+      int[] newBitsOriginal = reverseOriginal(oldBits.clone(), size);
+      BitArray newBitArray = new BitArray(oldBits.clone(), size);
+      newBitArray.reverse();
+      int[] newBitsNew = newBitArray.getBitArray();
+      assertTrue(arraysAreEqual(newBitsOriginal, newBitsNew, size / 32 + 1));
+    }
+  }
+
+  private static int[] reverseOriginal(int[] oldBits, int size) {
+    int[] newBits = new int[oldBits.length];
+    for (int i = 0; i < size; i++) {
+      if (bitSet(oldBits, size - i - 1)) {
+        newBits[i / 32] |= 1 << (i & 0x1F);
+      }
+    }
+    return newBits;
+  }
+
+  private static boolean bitSet(int[] bits, int i) {
+    return (bits[i / 32] & (1 << (i & 0x1F))) != 0;
+  }
+
+  private static boolean arraysAreEqual(int[] left, int[] right, int size) {
+    for (int i = 0; i < size; i++) {
+      if (left[i] != right[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
 }
