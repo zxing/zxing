@@ -39,7 +39,7 @@ public final class AztecWriter implements Writer {
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType,?> hints) {
     String charset = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
     Number eccPercent = hints == null ? null : (Number) hints.get(EncodeHintType.ERROR_CORRECTION);
-    Integer layers = hints == null ? null : (Integer)hints.get(EncodeHintType.AZTEC_LAYERS);
+    Number layers = hints == null ? null : (Number) hints.get(EncodeHintType.AZTEC_LAYERS);
     return encode(contents, 
                   format, 
                   width,

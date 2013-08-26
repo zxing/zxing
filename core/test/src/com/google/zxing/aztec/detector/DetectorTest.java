@@ -30,9 +30,9 @@ import org.junit.Test;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -92,7 +92,7 @@ public final class DetectorTest extends Assert {
         // Try a few random three-bit errors;
         for (int i = 0; i < 5; i++) {
           BitMatrix copy = clone(matrix);
-          Set<Integer> errors = new TreeSet<Integer>();
+          Collection<Integer> errors = new TreeSet<Integer>();
           while (errors.size() < 3) {
             // Quick and dirty way of getting three distinct integers between 1 and n.
             errors.add(random.nextInt(orientationPoints.size()));
@@ -124,9 +124,8 @@ public final class DetectorTest extends Assert {
   }
 
   // Returns a list of the four rotations of the BitMatrix.
-  private static List<BitMatrix> getRotations(BitMatrix input) {
-    BitMatrix matrix0 = input;
-    BitMatrix matrix90 = rotateRight(input);
+  private static Iterable<BitMatrix> getRotations(BitMatrix matrix0) {
+    BitMatrix matrix90 = rotateRight(matrix0);
     BitMatrix matrix180 = rotateRight(matrix90);
     BitMatrix matrix270 = rotateRight(matrix180);
     return Arrays.asList(matrix0, matrix90, matrix180, matrix270);

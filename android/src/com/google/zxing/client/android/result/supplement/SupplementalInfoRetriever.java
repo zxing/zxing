@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
 import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
@@ -75,8 +74,8 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
 
   private final WeakReference<TextView> textViewRef;
   private final WeakReference<HistoryManager> historyManagerRef;
-  private final List<Spannable> newContents;
-  private final List<String[]> newHistories;
+  private final Collection<Spannable> newContents;
+  private final Collection<String[]> newHistories;
 
   SupplementalInfoRetriever(TextView textView, HistoryManager historyManager) {
     textViewRef = new WeakReference<TextView>(textView);
@@ -99,7 +98,7 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
   protected final void onPostExecute(Object arg) {
     TextView textView = textViewRef.get();
     if (textView != null) {
-      for (Spannable content : newContents) {
+      for (CharSequence content : newContents) {
         textView.append(content);
       }
       textView.setMovementMethod(LinkMovementMethod.getInstance());

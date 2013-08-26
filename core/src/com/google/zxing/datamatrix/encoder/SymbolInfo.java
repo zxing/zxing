@@ -78,8 +78,8 @@ public class SymbolInfo {
   public final int matrixWidth;
   public final int matrixHeight;
   private final int dataRegions;
-  private int rsBlockData;
-  private int rsBlockError;
+  private final int rsBlockData;
+  private final int rsBlockError;
 
   public SymbolInfo(boolean rectangular, int dataCapacity, int errorCodewords,
                     int matrixWidth, int matrixHeight, int dataRegions) {
@@ -210,11 +210,11 @@ public class SymbolInfo {
     return dataCapacity / rsBlockData;
   }
   
-  public int getDataCapacity() {
+  public final int getDataCapacity() {
     return dataCapacity;
   }
   
-  public int getErrorCodewords() {
+  public final int getErrorCodewords() {
     return errorCodewords;
   }
 

@@ -21,7 +21,6 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 import com.google.zxing.client.result.WifiParsedResult;
@@ -170,7 +169,7 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
   }
 
   private static Integer findNetworkInExistingConfig(WifiManager wifiManager, String ssid) {
-    List<WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
+    Iterable<WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
     for (WifiConfiguration existingConfig : existingConfigs) {
       if (existingConfig.SSID.equals(ssid)) {
         return existingConfig.networkId;

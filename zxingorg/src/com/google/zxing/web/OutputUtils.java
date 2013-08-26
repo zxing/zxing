@@ -48,7 +48,7 @@ public final class OutputUtils {
     return result.toString();
   }
   
-  public static char hexChar(int value) {
+  private static char hexChar(int value) {
     if (value < 0 || value > 15) {
       throw new IllegalArgumentException();
     }

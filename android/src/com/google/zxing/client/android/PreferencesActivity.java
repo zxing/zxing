@@ -21,7 +21,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
+import android.preference.PreferenceGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,7 +62,7 @@ public final class PreferencesActivity extends PreferenceActivity
     super.onCreate(icicle);
     addPreferencesFromResource(R.xml.preferences);
 
-    PreferenceScreen preferences = getPreferenceScreen();
+    PreferenceGroup preferences = getPreferenceScreen();
     preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     decode1D = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_1D);
     decodeQR = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_QR);

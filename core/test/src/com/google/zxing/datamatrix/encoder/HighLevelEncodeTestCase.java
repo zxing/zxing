@@ -353,7 +353,7 @@ public final class HighLevelEncodeTestCase extends Assert {
    */
 
   private static String encodeHighLevel(String msg) {
-    String encoded = HighLevelEncoder.encodeHighLevel(msg);
+    CharSequence encoded = HighLevelEncoder.encodeHighLevel(msg);
     //DecodeHighLevel.decode(encoded);
     return visualize(encoded);
   }

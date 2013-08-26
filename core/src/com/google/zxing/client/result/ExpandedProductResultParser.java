@@ -157,7 +157,7 @@ public final class ExpandedProductResultParser extends ResultParser {
       return null;
     }
 
-    String rawTextAux = rawText.substring(i + 1);
+    CharSequence rawTextAux = rawText.substring(i + 1);
 
     StringBuilder buf = new StringBuilder();
     for (int index = 0; index < rawTextAux.length(); index++) {

@@ -37,7 +37,7 @@ public final class AnyAIDecoderTest extends AbstractDecoderTest {
 
   @Test
 	public void testAnyAIDecoder_1() throws Exception {
-		String data = header + numeric_10 + numeric_12 + numeric2alpha + alpha_A + alpha2numeric + numeric_12;
+		CharSequence data = header + numeric_10 + numeric_12 + numeric2alpha + alpha_A + alpha2numeric + numeric_12;
 		String expected = "(10)12A12";
 		
 		assertCorrectBinaryString(data, expected);
@@ -45,7 +45,7 @@ public final class AnyAIDecoderTest extends AbstractDecoderTest {
 
   @Test
 	public void testAnyAIDecoder_2() throws Exception {
-		String data = header + numeric_10 + numeric_12 + numeric2alpha + alpha_A + alpha2isoiec646 + i646_B;
+		CharSequence data = header + numeric_10 + numeric_12 + numeric2alpha + alpha_A + alpha2isoiec646 + i646_B;
 		String expected = "(10)12AB";
 		
 		assertCorrectBinaryString(data, expected);
@@ -53,7 +53,7 @@ public final class AnyAIDecoderTest extends AbstractDecoderTest {
 
   @Test
 	public void testAnyAIDecoder_3() throws Exception {
-		String data = header + numeric_10 + numeric2alpha + alpha2isoiec646 + i646_B + i646_C + isoiec646_2alpha + alpha_A + alpha2numeric + numeric_10;
+		CharSequence data = header + numeric_10 + numeric2alpha + alpha2isoiec646 + i646_B + i646_C + isoiec646_2alpha + alpha_A + alpha2numeric + numeric_10;
 		String expected = "(10)BCA10";
 		
 		assertCorrectBinaryString(data, expected);
@@ -61,7 +61,7 @@ public final class AnyAIDecoderTest extends AbstractDecoderTest {
 
   @Test
 	public void testAnyAIDecoder_numericFNC1_secondDigit() throws Exception {
-		String data = header + numeric_10 + numeric_1FNC1;
+		CharSequence data = header + numeric_10 + numeric_1FNC1;
 		String expected = "(10)1";
 		
 		assertCorrectBinaryString(data, expected);
@@ -69,7 +69,7 @@ public final class AnyAIDecoderTest extends AbstractDecoderTest {
 
 	@Test
 	public void testAnyAIDecoder_alphaFNC1() throws Exception {
-		String data = header + numeric_10 + numeric2alpha + alpha_A + alpha_FNC1;
+		CharSequence data = header + numeric_10 + numeric2alpha + alpha_A + alpha_FNC1;
 		String expected = "(10)A";
 		
 		assertCorrectBinaryString(data, expected);
@@ -77,7 +77,7 @@ public final class AnyAIDecoderTest extends AbstractDecoderTest {
 
   @Test
 	public void testAnyAIDecoder_646FNC1() throws Exception {
-		String data = header + numeric_10 + numeric2alpha + alpha_A + isoiec646_2alpha + i646_B + i646_FNC1;
+		CharSequence data = header + numeric_10 + numeric2alpha + alpha_A + isoiec646_2alpha + i646_B + i646_FNC1;
 		String expected = "(10)AB";
 		
 		assertCorrectBinaryString(data, expected);

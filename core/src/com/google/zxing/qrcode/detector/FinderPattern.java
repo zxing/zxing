@@ -28,7 +28,7 @@ import com.google.zxing.ResultPoint;
 public final class FinderPattern extends ResultPoint {
 
   private final float estimatedModuleSize;
-  private int count;
+  private final int count;
 
   FinderPattern(float posX, float posY, float estimatedModuleSize) {
     this(posX, posY, estimatedModuleSize, 1);
@@ -48,9 +48,11 @@ public final class FinderPattern extends ResultPoint {
     return count;
   }
 
+  /*
   void incrementCount() {
     this.count++;
   }
+   */
 
   /**
    * <p>Determines if this finder pattern "about equals" a finder pattern at the stated

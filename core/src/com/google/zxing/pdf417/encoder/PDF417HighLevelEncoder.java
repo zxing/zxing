@@ -404,8 +404,7 @@ final class PDF417HighLevelEncoder {
       String part = '1' + msg.substring(startpos + idx, startpos + idx + len);
       BigInteger bigint = new BigInteger(part);
       do {
-        BigInteger c = bigint.mod(num900);
-        tmp.append((char) c.intValue());
+        tmp.append((char) bigint.mod(num900).intValue());
         bigint = bigint.divide(num900);
       } while (!bigint.equals(num0));
 

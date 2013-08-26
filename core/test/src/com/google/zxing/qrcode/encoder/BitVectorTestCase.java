@@ -127,22 +127,22 @@ public final class BitVectorTestCase extends Assert {
 
   @Test
   public void testXOR() {
-    {
-      BitArray v1 = new BitArray();
-      v1.appendBits(0x5555aaaa, 32);
-      BitArray v2 = new BitArray();
-      v2.appendBits(0xaaaa5555, 32);
-      v1.xor(v2);
-      assertEquals(0xffffffffL, getUnsignedInt(v1, 0));
-    }
-    {
-      BitArray v1 = new BitArray();
-      v1.appendBits(0x2a, 7);  // 010 1010
-      BitArray v2 = new BitArray();
-      v2.appendBits(0x55, 7);  // 101 0101
-      v1.xor(v2);
-      assertEquals(0xfe000000L, getUnsignedInt(v1, 0));  // 1111 1110
-    }
+    BitArray v1 = new BitArray();
+    v1.appendBits(0x5555aaaa, 32);
+    BitArray v2 = new BitArray();
+    v2.appendBits(0xaaaa5555, 32);
+    v1.xor(v2);
+    assertEquals(0xffffffffL, getUnsignedInt(v1, 0));
+  }
+
+  @Test
+  public void testXOR2() {
+    BitArray v1 = new BitArray();
+    v1.appendBits(0x2a, 7);  // 010 1010
+    BitArray v2 = new BitArray();
+    v2.appendBits(0x55, 7);  // 101 0101
+    v1.xor(v2);
+    assertEquals(0xfe000000L, getUnsignedInt(v1, 0));  // 1111 1110
   }
 
   @Test

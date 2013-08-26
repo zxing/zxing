@@ -47,9 +47,11 @@ public final class BarcodeMatrix {
     matrix[y].set(x, value);
   }
 
+  /*
   void setMatrix(int x, int y, boolean black) {
     set(x, y, (byte) (black ? 1 : 0));
   }
+   */
 
   void startRow() {
     ++currentRow;
@@ -63,9 +65,11 @@ public final class BarcodeMatrix {
     return getScaledMatrix(1, 1);
   }
 
+  /*
   public byte[][] getScaledMatrix(int scale) {
     return getScaledMatrix(scale, scale);
   }
+   */
 
   public byte[][] getScaledMatrix(int xScale, int yScale) {
     byte[][] matrixOut = new byte[height * yScale][width * xScale];

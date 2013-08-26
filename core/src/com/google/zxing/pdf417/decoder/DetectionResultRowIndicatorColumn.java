@@ -82,11 +82,9 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
         maxRowHeight = Math.max(maxRowHeight, currentRowHeight);
         currentRowHeight = 1;
         barcodeRow = codeword.getRowNumber();
-      } else if (rowDifference < 0) {
-        codewords[codewordsRow] = null;
-      } else if (codeword.getRowNumber() >= barcodeMetadata.getRowCount()) {
-        codewords[codewordsRow] = null;
-      } else if (rowDifference > codewordsRow) {
+      } else if (rowDifference < 0 ||
+                 codeword.getRowNumber() >= barcodeMetadata.getRowCount() ||
+                 rowDifference > codewordsRow) {
         codewords[codewordsRow] = null;
       } else {
         int checkedRows;

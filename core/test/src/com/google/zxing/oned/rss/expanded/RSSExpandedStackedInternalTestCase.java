@@ -28,6 +28,7 @@ package com.google.zxing.oned.rss.expanded;
 
 import java.util.List;
 
+import com.google.zxing.oned.OneDReader;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -73,7 +74,7 @@ public final class RSSExpandedStackedInternalTestCase extends Assert {
 	
 	@Test
 	public void testCompleteDecode() throws Exception {
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
+    OneDReader rssExpandedReader = new RSSExpandedReader();
 
     BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap("test/data/blackbox/rssexpandedstacked-2/1000.png");
 

@@ -31,7 +31,7 @@ public final class BenchmarkActivity extends Activity {
   private static final String TAG = BenchmarkActivity.class.getSimpleName();
   private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/zxingbenchmark";
 
-  private Button runBenchmarkButton;
+  private View runBenchmarkButton;
   private TextView textView;
   private Thread benchmarkThread;
 
@@ -81,7 +81,7 @@ public final class BenchmarkActivity extends Activity {
 
     setContentView(R.layout.benchmark);
 
-    runBenchmarkButton = (Button) findViewById(R.id.benchmark_run);
+    runBenchmarkButton = findViewById(R.id.benchmark_run);
     runBenchmarkButton.setOnClickListener(runBenchmark);
     textView = (TextView) findViewById(R.id.benchmark_help);
 

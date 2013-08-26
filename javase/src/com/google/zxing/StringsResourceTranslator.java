@@ -111,7 +111,7 @@ public final class StringsResourceTranslator {
                                 File translatedFile,
                                 Collection<String> forceRetranslation) throws IOException {
 
-    SortedMap<String,String> english = readLines(englishFile);
+    Map<String, String> english = readLines(englishFile);
     SortedMap<String,String> translated = readLines(translatedFile);
     String parentName = translatedFile.getParentFile().getName();
 
@@ -226,7 +226,7 @@ public final class StringsResourceTranslator {
       return entries;
     }
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), UTF8))) {
-      String line;
+      CharSequence line;
       while ((line = reader.readLine()) != null) {
         Matcher m = ENTRY_PATTERN.matcher(line);
         if (m.find()) {

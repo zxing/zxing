@@ -40,6 +40,7 @@ abstract class AbstractErrorCorrectionTestCase extends Assert {
     }
   }
 
+  /*
   static int[] erase(int[] received, int howMany, Random random) {
     BitSet erased = new BitSet(received.length);
     int[] erasures = new int[howMany];
@@ -56,11 +57,13 @@ abstract class AbstractErrorCorrectionTestCase extends Assert {
     }
     return erasures;
   }
+   */
 
   static Random getRandom() {
     return new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
   }
 
+  /*
   static void assertArraysEqual(int[] expected,
                                 int expectedOffset,
                                 int[] actual,
@@ -70,5 +73,6 @@ abstract class AbstractErrorCorrectionTestCase extends Assert {
       assertEquals(expected[expectedOffset + i], actual[actualOffset + i]);
     }
   }
+   */
 
 }

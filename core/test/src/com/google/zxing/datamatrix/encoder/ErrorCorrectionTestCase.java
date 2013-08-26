@@ -29,7 +29,7 @@ public final class ErrorCorrectionTestCase extends Assert {
     //Sample from Annexe R in ISO/IEC 16022:2000(E)
     char[] cw = {142, 164, 186};
     SymbolInfo symbolInfo = SymbolInfo.lookup(3);
-    String s = ErrorCorrection.encodeECC200(String.valueOf(cw), symbolInfo);
+    CharSequence s = ErrorCorrection.encodeECC200(String.valueOf(cw), symbolInfo);
     assertEquals("142 164 186 114 25 5 88 102", HighLevelEncodeTestCase.visualize(s));
 
     //"A" encoded (ASCII encoding + 2 padding characters)

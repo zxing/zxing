@@ -98,7 +98,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       log.fine(String.format("Starting Image Group %s", testImageGroup.getKey()));
 
       String fileBaseName = testImageGroup.getKey();
-      String expectedText = null;
+      String expectedText;
       File expectedTextFile = new File(testBase, fileBaseName + ".txt");
       if (expectedTextFile.exists()) {
         expectedText = readFileAsString(expectedTextFile, UTF8);

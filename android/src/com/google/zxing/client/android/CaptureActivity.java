@@ -67,7 +67,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -84,13 +83,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
   private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 
-  private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
-  private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
   private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
 
   public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 
-  private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
+  private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
       EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
                  ResultMetadataType.SUGGESTED_PRICE,
                  ResultMetadataType.ERROR_CORRECTION_LEVEL,
@@ -220,8 +217,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         }
 
       } else if (dataString != null &&
-                 dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
-                 dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
+                 dataString.contains("http://www.google") &&
+                 dataString.contains("/m/products/scan")) {
 
         // Scan only products and send the result to mobile Product Search.
         source = IntentSource.PRODUCT_SEARCH_LINK;
@@ -430,9 +427,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       case NONE:
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (fromLiveScan && prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
-          String message = getResources().getString(R.string.msg_bulk_mode_scanned)
-              + " (" + rawResult.getText() + ')';
-          Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+          Toast.makeText(getApplicationContext(),
+                         getResources().getString(R.string.msg_bulk_mode_scanned) + " (" + rawResult.getText() + ')',
+                         Toast.LENGTH_SHORT).show();
           // Wait a moment or else it will scan the same barcode continuously about 3 times
           restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
         } else {
@@ -506,9 +503,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     typeTextView.setText(resultHandler.getType().toString());
 
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-    String formattedTime = formatter.format(new Date(rawResult.getTimestamp()));
     TextView timeTextView = (TextView) findViewById(R.id.time_text_view);
-    timeTextView.setText(formattedTime);
+    timeTextView.setText(formatter.format(new Date(rawResult.getTimestamp())));
 
 
     TextView metaTextView = (TextView) findViewById(R.id.meta_text_view);
@@ -630,7 +626,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
                           metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
         }
-        Integer orientation = (Integer) metadata.get(ResultMetadataType.ORIENTATION);
+        Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
         if (orientation != null) {
           intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());
         }

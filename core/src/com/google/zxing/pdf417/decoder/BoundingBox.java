@@ -131,6 +131,7 @@ final class BoundingBox {
     maxY = (int) Math.max(bottomLeft.getY(), bottomRight.getY());
   }
 
+  /*
   void setTopRight(ResultPoint topRight) {
     this.topRight = topRight;
     calculateMinMaxValues();
@@ -140,6 +141,7 @@ final class BoundingBox {
     this.bottomRight = bottomRight;
     calculateMinMaxValues();
   }
+   */
 
   int getMinX() {
     return minX;

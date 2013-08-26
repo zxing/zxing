@@ -20,7 +20,7 @@ import com.google.zxing.Result;
 
 /**
  * <p>Parses an "smtp:" URI result, whose format is not standardized but appears to be like:
- * {@code smtp(:subject(:body))}.</p>
+ * {@code smtp[:subject[:body]]}.</p>
  *
  * <p>See http://code.google.com/p/zxing/issues/detail?id=536</p>
  *

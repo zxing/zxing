@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android.encode;
 
-import android.provider.ContactsContract;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -30,11 +29,12 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitMatrix;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
@@ -61,7 +61,7 @@ final class QRCodeEncoder {
   private static final int WHITE = 0xFFFFFFFF;
   private static final int BLACK = 0xFF000000;
 
-  private final Activity activity;
+  private final Context activity;
   private String contents;
   private String displayContents;
   private String title;
@@ -69,7 +69,7 @@ final class QRCodeEncoder {
   private final int dimension;
   private final boolean useVCard;
 
-  QRCodeEncoder(Activity activity, Intent intent, int dimension, boolean useVCard) throws WriterException {
+  QRCodeEncoder(Context activity, Intent intent, int dimension, boolean useVCard) throws WriterException {
     this.activity = activity;
     this.dimension = dimension;
     this.useVCard = useVCard;
@@ -259,7 +259,7 @@ final class QRCodeEncoder {
           emails.add(bundle.getString(Contents.EMAIL_KEYS[x]));
         }
         String url = bundle.getString(Contents.URL_KEY);
-        Collection<String> urls = url == null ? null : Collections.singletonList(url);
+        Iterable<String> urls = url == null ? null : Collections.singletonList(url);
         String note = bundle.getString(Contents.NOTE_KEY);
 
         ContactEncoder mecardEncoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();

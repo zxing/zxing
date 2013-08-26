@@ -61,9 +61,11 @@ class DetectionResultColumn {
     return imageRow - boundingBox.getMinY();
   }
 
+  /*
   final int codewordIndexToImageRow(int codewordIndex) {
     return boundingBox.getMinY() + codewordIndex;
   }
+   */
 
   final void setCodeword(int imageRow, Codeword codeword) {
     codewords[imageRowToCodewordIndex(imageRow)] = codeword;

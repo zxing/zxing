@@ -158,7 +158,7 @@ public final class HighLevelEncoder {
    * Convert the text represented by this High Level Encoder into a BitArray.
    */
   public BitArray encode() {
-    List<State> states = Collections.singletonList(State.INITIAL_STATE);
+    Collection<State> states = Collections.singletonList(State.INITIAL_STATE);
     for (int index = 0; index < text.length; index++) {
       int pairCode;
       int nextChar = index + 1 < text.length ? text[index + 1] : 0;
@@ -202,7 +202,7 @@ public final class HighLevelEncoder {
   // We update a set of states for a new character by updating each state
   // for the new character, merging the results, and then removing the
   // non-optimal states.
-  private List<State> updateStateListForChar(Iterable<State> states, int index) {
+  private Collection<State> updateStateListForChar(Iterable<State> states, int index) {
     Collection<State> result = new LinkedList<State>();
     for (State state : states) {
       updateStateForChar(state, index, result);
@@ -251,7 +251,7 @@ public final class HighLevelEncoder {
     }
   }
 
-  private static List<State> updateStateListForPair(Iterable<State> states, int index, int pairCode) {
+  private static Collection<State> updateStateListForPair(Iterable<State> states, int index, int pairCode) {
     Collection<State> result = new LinkedList<State>();
     for (State state : states) {
       updateStateForPair(state, index, pairCode, result);
@@ -283,7 +283,7 @@ public final class HighLevelEncoder {
     }
   }
 
-  private static List<State> simplifyStates(Iterable<State> states) {
+  private static Collection<State> simplifyStates(Iterable<State> states) {
     List<State> result = new LinkedList<State>();
     for (State newState : states) {
       boolean add = true;

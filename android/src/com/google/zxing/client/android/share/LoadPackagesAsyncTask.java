@@ -18,6 +18,7 @@ package com.google.zxing.client.android.share;
 
 import android.app.ListActivity;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -59,8 +60,8 @@ final class LoadPackagesAsyncTask extends AsyncTask<Void,Void,List<AppInfo>> {
   protected List<AppInfo> doInBackground(Void... objects) {
     List<AppInfo> labelsPackages = new ArrayList<AppInfo>();
     PackageManager packageManager = activity.getPackageManager();
-    List<ApplicationInfo> appInfos = packageManager.getInstalledApplications(0);
-    for (ApplicationInfo appInfo : appInfos) {
+    Iterable<ApplicationInfo> appInfos = packageManager.getInstalledApplications(0);
+    for (PackageItemInfo appInfo : appInfos) {
       String packageName = appInfo.packageName;
       if (!isHidden(packageName)) {
         CharSequence label = appInfo.loadLabel(packageManager);

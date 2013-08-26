@@ -29,9 +29,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -322,19 +322,16 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     }
 
     switch(original.getType()) {
-    case BufferedImage.TYPE_BYTE_INDEXED:
-    case BufferedImage.TYPE_BYTE_BINARY:
-      BufferedImage argb = new BufferedImage(original.getWidth(),
-                                             original.getHeight(),
-                                             BufferedImage.TYPE_INT_ARGB);
-      Graphics2D g = argb.createGraphics();
-      g.drawImage(original, 0, 0, null);
-      g.dispose();
-      original = argb;
-      break;
-    default:
-      // nothing
-      break;
+      case BufferedImage.TYPE_BYTE_INDEXED:
+      case BufferedImage.TYPE_BYTE_BINARY:
+        BufferedImage argb = new BufferedImage(original.getWidth(),
+                                               original.getHeight(),
+                                               BufferedImage.TYPE_INT_ARGB);
+        Graphics g = argb.createGraphics();
+        g.drawImage(original, 0, 0, null);
+        g.dispose();
+        original = argb;
+        break;
     }
 
     double radians = Math.toRadians(degrees);
@@ -344,7 +341,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     at.rotate(radians, original.getWidth() / 2.0, original.getHeight() / 2.0);
     BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
 
-    Rectangle2D r = op.getBounds2D(original);
+    RectangularShape r = op.getBounds2D(original);
     int width = (int) Math.ceil(r.getWidth());
     int height = (int) Math.ceil(r.getHeight());
 

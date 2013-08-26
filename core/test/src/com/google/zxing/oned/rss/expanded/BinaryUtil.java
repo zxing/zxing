@@ -46,7 +46,7 @@ public final class BinaryUtil {
   * Constructs a BitArray from a String like the one returned from BitArray.toString()
   */
   public static BitArray buildBitArrayFromString(CharSequence data) {
-    String dotsAndXs = ZERO.matcher(ONE.matcher(data).replaceAll("X")).replaceAll(".");
+    CharSequence dotsAndXs = ZERO.matcher(ONE.matcher(data).replaceAll("X")).replaceAll(".");
     BitArray binary = new BitArray(SPACE.matcher(dotsAndXs).replaceAll("").length());
     int counter = 0;
 
@@ -69,7 +69,7 @@ public final class BinaryUtil {
 
   public static BitArray buildBitArrayFromStringWithoutSpaces(CharSequence data) {
     StringBuilder sb = new StringBuilder();
-    String dotsAndXs = ZERO.matcher(ONE.matcher(data).replaceAll("X")).replaceAll(".");
+    CharSequence dotsAndXs = ZERO.matcher(ONE.matcher(data).replaceAll("X")).replaceAll(".");
     int current = 0;
     while (current < dotsAndXs.length()) {
       sb.append(' ');

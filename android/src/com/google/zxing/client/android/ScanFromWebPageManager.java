@@ -31,11 +31,11 @@ import java.net.URLEncoder;
  */
 final class ScanFromWebPageManager {
 
-  private static final String CODE_PLACEHOLDER = "{CODE}";
-  private static final String RAW_CODE_PLACEHOLDER = "{RAWCODE}";
-  private static final String META_PLACEHOLDER = "{META}";
-  private static final String FORMAT_PLACEHOLDER = "{FORMAT}";
-  private static final String TYPE_PLACEHOLDER = "{TYPE}";
+  private static final CharSequence CODE_PLACEHOLDER = "{CODE}";
+  private static final CharSequence RAW_CODE_PLACEHOLDER = "{RAWCODE}";
+  private static final CharSequence META_PLACEHOLDER = "{META}";
+  private static final CharSequence FORMAT_PLACEHOLDER = "{FORMAT}";
+  private static final CharSequence TYPE_PLACEHOLDER = "{TYPE}";
 
   private static final String RETURN_URL_PARAM = "ret";
   private static final String RAW_PARAM = "raw";

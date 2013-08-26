@@ -39,6 +39,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
+import javax.swing.text.JTextComponent;
 
 /**
  * <p>Simple GUI frontend to the library. Right now, only decodes a local file.
@@ -49,7 +50,7 @@ import javax.swing.WindowConstants;
 public final class GUIRunner extends JFrame {
 
   private final JLabel imageLabel;
-  private final JTextArea textArea;
+  private final JTextComponent textArea;
 
   private GUIRunner() {
     imageLabel = new JLabel();

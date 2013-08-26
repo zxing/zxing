@@ -434,7 +434,7 @@ public class FinderPatternFinder {
     if (max <= 1) {
       return 0;
     }
-    FinderPattern firstConfirmedCenter = null;
+    ResultPoint firstConfirmedCenter = null;
     for (FinderPattern center : possibleCenters) {
       if (center.getCount() >= CENTER_QUORUM) {
         if (firstConfirmedCenter == null) {

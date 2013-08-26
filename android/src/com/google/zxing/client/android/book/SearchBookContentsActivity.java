@@ -64,10 +64,10 @@ public final class SearchBookContentsActivity extends Activity {
 
   private String isbn;
   private EditText queryTextView;
-  private Button queryButton;
+  private View queryButton;
   private ListView resultListView;
   private TextView headerView;
-  private NetworkTask networkTask;
+  private AsyncTask<String,?,?> networkTask;
   private final AsyncTaskExecInterface taskExec;
 
   public SearchBookContentsActivity() {
@@ -127,7 +127,7 @@ public final class SearchBookContentsActivity extends Activity {
     }
     queryTextView.setOnKeyListener(keyListener);
 
-    queryButton = (Button) findViewById(R.id.query_button);
+    queryButton = findViewById(R.id.query_button);
     queryButton.setOnClickListener(buttonListener);
 
     resultListView = (ListView) findViewById(R.id.result_list_view);
@@ -145,7 +145,7 @@ public final class SearchBookContentsActivity extends Activity {
 
   @Override
   protected void onPause() {
-    NetworkTask oldTask = networkTask;
+    AsyncTask<?,?,?> oldTask = networkTask;
     if (oldTask != null) {
       oldTask.cancel(true);
       networkTask = null;
@@ -156,7 +156,7 @@ public final class SearchBookContentsActivity extends Activity {
   private void launchSearch() {
     String query = queryTextView.getText().toString();
     if (query != null && !query.isEmpty()) {
-      NetworkTask oldTask = networkTask;
+      AsyncTask<?,?,?> oldTask = networkTask;
       if (oldTask != null) {
         oldTask.cancel(true);
       }

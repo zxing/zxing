@@ -140,7 +140,7 @@ public final class DecodeServlet extends HttpServlet {
     }
 
     imageURIString = imageURIString.trim();
-    for (String substring : blockedURLSubstrings) {
+    for (CharSequence substring : blockedURLSubstrings) {
       if (imageURIString.contains(substring)) {
         log.info("Disallowed URI " + imageURIString);        
         response.sendRedirect("badurl.jspx");
@@ -326,14 +326,14 @@ public final class DecodeServlet extends HttpServlet {
                                    ServletRequest request,
                                    HttpServletResponse response) throws IOException, ServletException {
 
-    Reader reader = new MultiFormatReader();
     LuminanceSource source = new BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
     Collection<Result> results = new ArrayList<>(1);
-    ReaderException savedException = null;
 
     try {
 
+      Reader reader = new MultiFormatReader();
+      ReaderException savedException = null;
       try {
         // Look for multiple barcodes
         MultipleBarcodeReader multiReader = new GenericMultipleBarcodeReader(reader);

@@ -43,7 +43,7 @@ public final class BinaryUtilTest extends Assert {
   @Test
   public void testBuildBitArrayFromString(){
 
-    String data = " ..X..X.. ..XXX... XXXXXXXX ........";
+    CharSequence data = " ..X..X.. ..XXX... XXXXXXXX ........";
     check(data);
 
     data = " XXX..X..";
@@ -66,7 +66,7 @@ public final class BinaryUtilTest extends Assert {
 
   @Test
   public void testBuildBitArrayFromStringWithoutSpaces(){
-    String data = " ..X..X.. ..XXX... XXXXXXXX ........";
+    CharSequence data = " ..X..X.. ..XXX... XXXXXXXX ........";
     checkWithoutSpaces(data);
 
     data = " XXX..X..";
@@ -83,7 +83,7 @@ public final class BinaryUtilTest extends Assert {
   }
 
   private static void checkWithoutSpaces(CharSequence data){
-    String dataWithoutSpaces = SPACE.matcher(data).replaceAll("");
+    CharSequence dataWithoutSpaces = SPACE.matcher(data).replaceAll("");
     BitArray binary = BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
     assertEquals(data, binary.toString());
   }

@@ -238,7 +238,7 @@ public final class CodaBarReader extends OneDReader {
     }
     boolean isWhite = true;
     int count = 0;
-    for (; i < end; i++) {
+    while (i < end) {
       if (row.get(i) ^ isWhite) { // that is, exactly one is true
         count++;
       } else {
@@ -246,6 +246,7 @@ public final class CodaBarReader extends OneDReader {
         count = 1;
         isWhite = !isWhite;
       }
+      i++;
     }
     counterAppend(count);
   }

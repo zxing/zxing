@@ -51,7 +51,7 @@ public final class ShareActivity extends Activity {
   private static final int PICK_CONTACT = 1;
   private static final int PICK_APP = 2;
 
-  private Button clipboardButton;
+  private View clipboardButton;
 
   private final Button.OnClickListener contactListener = new Button.OnClickListener() {
     @Override
@@ -124,7 +124,7 @@ public final class ShareActivity extends Activity {
     findViewById(R.id.share_contact_button).setOnClickListener(contactListener);
     findViewById(R.id.share_bookmark_button).setOnClickListener(bookmarkListener);
     findViewById(R.id.share_app_button).setOnClickListener(appListener);
-    clipboardButton = (Button) findViewById(R.id.share_clipboard_button);
+    clipboardButton = findViewById(R.id.share_clipboard_button);
     clipboardButton.setOnClickListener(clipboardListener);
     findViewById(R.id.share_text_view).setOnKeyListener(textListener);
   }

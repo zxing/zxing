@@ -40,7 +40,7 @@ public abstract class AbstractDecoderTest extends Assert {
 	protected static final String numeric_10                     = "..X..XX";
 	protected static final String numeric_12                     = "..X.X.X";
 	protected static final String numeric_1FNC1                  = "..XXX.X";
-	protected static final String numeric_FNC11                  = "XXX.XXX";
+	//protected static final String numeric_FNC11                  = "XXX.XXX";
 	                                                             
 	protected static final String numeric2alpha                  = "....";
 	                                                             

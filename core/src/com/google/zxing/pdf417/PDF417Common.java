@@ -29,7 +29,7 @@ public final class PDF417Common {
   public static final int MIN_ROWS_IN_BARCODE = 3;
   public static final int MAX_ROWS_IN_BARCODE = 90;
   // One left row indication column + max 30 data columns + one right row indicator column
-  public static final int MAX_CODEWORDS_IN_ROW = 32;
+  //public static final int MAX_CODEWORDS_IN_ROW = 32;
   public static final int MODULES_IN_CODEWORD = 17;
   public static final int MODULES_IN_STOP_PATTERN = 18;
   public static final int BARS_IN_MODULE = 8;

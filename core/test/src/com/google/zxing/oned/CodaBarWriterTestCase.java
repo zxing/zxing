@@ -31,7 +31,7 @@ public final class CodaBarWriterTestCase extends Assert {
   public void testEncode() throws WriterException {
     // 1001001011 0 110101001 0 101011001 0 110101001 0 101001101 0 110010101 0 1101101011 0
     // 1001001011
-    String resultStr = "0000000000" +
+    CharSequence resultStr = "0000000000" +
         "1001001011011010100101010110010110101001010100110101100101010110110101101001001011"
         + "0000000000";
     BitMatrix result = new CodaBarWriter().encode("B515-3/B", BarcodeFormat.CODABAR, resultStr.length(), 0);
