@@ -26,7 +26,6 @@
   <string name="button_dial">Pokliči številko</string>
   <string name="button_email">Pošlji e-mail</string>
   <string name="button_get_directions">Dobi smer</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Pošlji MMS</string>
   <string name="button_ok">V redu</string>
   <string name="button_open_browser">Odpri brskalnik</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Ni bilo mogoče narediti črtne kode iz podanih podatkov</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Google Shopper ni nameščen</string>
-  <string name="msg_install_google_shopper">Google Shopper kombinira branje črtnih kod s cenami lokalnih ter spletnih trgovin, ocenami izdelkov in več brez odpiranja spletnega brskalnika. Ga želite preizkusiti?</string>
   <string name="msg_intent_failed">Oprostite, zahtevana aplikacija se ne more zagnati. Lahko da gre za napačno vsebino črtne kode.</string>
   <string name="msg_redirect">Preusmeritev</string>
   <string name="msg_sbc_book_not_searchable">Oprostite, po tej knjigi se ne da iskati.</string>

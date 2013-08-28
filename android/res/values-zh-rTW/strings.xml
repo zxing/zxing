@@ -26,7 +26,6 @@
   <string name="button_dial">撥號</string>
   <string name="button_email">發送電子郵件</string>
   <string name="button_get_directions">路線規劃</string>
-  <string name="button_google_shopper">Google 購物</string>
   <string name="button_mms">發送 MMS</string>
   <string name="button_ok">確定</string>
   <string name="button_open_browser">打開瀏覽器</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">無法讀取條碼。</string>
   <string name="msg_google_books">Google 圖書</string>
   <string name="msg_google_product">Google 產品搜索</string>
-  <string name="msg_google_shopper_missing">未安裝 Google 購物</string>
-  <string name="msg_install_google_shopper">Google 購物結合條碼掃描價格，評論，無需打開瀏覽器。您想試用嗎？</string>
   <string name="msg_intent_failed">抱歉，無法打開所需軟體。條碼內容可能無效。</string>
   <string name="msg_redirect">重定向</string>
   <string name="msg_sbc_book_not_searchable">無法找到此圖書。</string>

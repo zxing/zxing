@@ -26,7 +26,6 @@
   <string name="button_dial">Slå nummer</string>
   <string name="button_email">Skicka e-post</string>
   <string name="button_get_directions">Få anvisningar</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Skicka MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Öppna webbläsare</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Det gick inte att avkoda en streckkod från den erhållna informationen.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Google Shopper är inte installerad</string>
-  <string name="msg_install_google_shopper">Google Shopper kombinerar inkodning av streckkoder med lokala priser och priser på nätet, recensioner och mycket mer utan att du behöver öppna webbläsaren. Vill du testa det?</string>
   <string name="msg_intent_failed">Den begärda applikationen kunde tyvärr inte startas. Streckkodens innehåll kan vara ogiltigt.</string>
   <string name="msg_redirect">Omdirigering</string>
   <string name="msg_sbc_book_not_searchable">Den här boken är tyvärr inte sökbar.</string>

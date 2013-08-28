@@ -26,7 +26,6 @@
   <string name="button_dial">Telefonează la numărul</string>
   <string name="button_email">Trimite e-mail</string>
   <string name="button_get_directions">Descarcă indicații</string>
-  <string name="button_google_shopper">Cumpărător Google</string>
   <string name="button_mms">Trimite MMS</string>
   <string name="button_ok">Acceptă</string>
   <string name="button_open_browser">Deschide navigator</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Codificare eșuată a codului de bare, din datele furnizate</string>
   <string name="msg_google_books">Google Cărți</string>
   <string name="msg_google_product">Google Căutare Produs</string>
-  <string name="msg_google_shopper_missing">Google Cumpărător nu e instalat</string>
-  <string name="msg_install_google_shopper">Google Cumpărător combină scanarea codurilor de bare cu prețurile online și locale, recenzii și multe altele, fără a deschide un navigator. Vrei să încerci ?</string>
   <string name="msg_intent_failed">Aplicația solicitată nu a putut fi lansată. Codul de bare poate fi incorect.</string>
   <string name="msg_redirect">Redirecționare</string>
   <string name="msg_sbc_book_not_searchable">Cartea nu poate fi căutată</string>

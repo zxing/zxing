@@ -26,7 +26,6 @@
   <string name="button_dial">Numaraya çağrı</string>
   <string name="button_email">Email gönder</string>
   <string name="button_get_directions">Yön bilgisi al</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS gönder</string>
   <string name="button_ok">Tamam</string>
   <string name="button_open_browser">Tarayıcıyı aç</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
   <string name="msg_google_books">Google Kitap Arama</string>
   <string name="msg_google_product">Google Ürün Arama</string>
-  <string name="msg_google_shopper_missing">Google Shopper yüklü değil</string>
-  <string name="msg_install_google_shopper">Google Shopper, tarayıcıyı açmanıza gerek kalmadan barkod taraması, çevrimiçi ve yerel fiyatlar ile gözden geçirme ve diğer özellikten yararlanmanızı sağlar. Denemek ister misiniz?</string>
   <string name="msg_intent_failed">Üzgünüz, istenen uygulama başlatılamadı. Barkod içeriği geçersiz olabilir.</string>
   <string name="msg_redirect">Yönlendirme</string>
   <string name="msg_sbc_book_not_searchable">Üzgünüz, bu kitapla ilgili arama yapılamıyor.</string>

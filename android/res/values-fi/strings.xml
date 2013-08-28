@@ -26,7 +26,6 @@
   <string name="button_dial">Soita numeroon</string>
   <string name="button_email">Lähetä sähköpostia</string>
   <string name="button_get_directions">Hae ajo-ohjeet</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Lähetä multimediaviesti</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Avaa selain</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Viivakoodia ei voitu muodostaa annetusta datasta.</string>
   <string name="msg_google_books">Google-kirjat</string>
   <string name="msg_google_product">Google-tuotehaku</string>
-  <string name="msg_google_shopper_missing">Google Shopperia ei ole asennettu</string>
-  <string name="msg_install_google_shopper">Google Shopper yhdistää viivakoodinlukuun tuotteiden hintatiedot verkossa ja paikallisesti, arvostelut ja muut tiedot ilman tarvetta avata selainta erikseen. Haluaisitko kokeilla sitä?</string>
   <string name="msg_intent_failed">Valitettavasti pyydettyä sovellusta ei voitu käynnistää. Viivakoodin sisältö voi olla virheellinen.</string>
   <string name="msg_redirect">Uudelleenohjaus</string>
   <string name="msg_sbc_book_not_searchable">Valitettavasti tämä kirja ei ole haettavissa.</string>

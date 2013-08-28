@@ -26,7 +26,6 @@
   <string name="button_dial">Markatu zenbakia</string>
   <string name="button_email">Bidali e-posta</string>
   <string name="button_get_directions">Lortu jarraibideak</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Bidali MMS-a</string>
   <string name="button_ok">Ados</string>
   <string name="button_open_browser">Ireki arakatzailea</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Ezin izan da barra-kode bat kodetu emandako datuetatik.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Bilaketa</string>
-  <string name="msg_google_shopper_missing">Google Shopper ez dago instalatuta</string>
-  <string name="msg_install_google_shopper">Google Shopper-ek barra-kodeak eskaneatzea eta lineako salneurriak eta salneurri lokalak, balorazioak eta abar konbinatzen ditu, arakatzailea irekitzeko beharrik gabe. Probatu nahi duzu?</string>
   <string name="msg_intent_failed">Barkatu, eskatutako aplikazioa ezin izan da abiarazi. Behar bada barra-kodearen edukiak baliogabeak dira.</string>
   <string name="msg_redirect">Berbideratu</string>
   <string name="msg_sbc_book_not_searchable">Barkatu, liburu honetan ezin da bilaketarik egin.</string>

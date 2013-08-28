@@ -26,7 +26,6 @@
   <string name="button_dial">Composer numéro</string>
   <string name="button_email">Envoyer email</string>
   <string name="button_get_directions">Itinéraire</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Envoyer MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Ouvrir le navigateur</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Impossible de créer le code-barres à partir des données fournies.</string>
   <string name="msg_google_books">Google Livres</string>
   <string name="msg_google_product">Google Shopping</string>
-  <string name="msg_google_shopper_missing">Google Shopper n\'est pas installé</string>
-  <string name="msg_install_google_shopper">Google Shopper associe la lecture de codes-barres avec des prix en ligne et en magasin, des critiques et plus encore sans ouvrir le navigateur. Désirez-vous l\'essayer maintenant ?</string>
   <string name="msg_intent_failed">Désolé, l\'application demandée n\'a pas pu être lancée. Le contenu du code-barres n\'est peut-être pas valable.</string>
   <string name="msg_redirect">Redirection</string>
   <string name="msg_sbc_book_not_searchable">Désolé, ce livre est introuvable.</string>

@@ -26,7 +26,6 @@
   <string name="button_dial">Набрать номер</string>
   <string name="button_email">Отправить e-mail</string>
   <string name="button_get_directions">Проложить маршрут</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Послать MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Открыть браузер</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Невозможно создать штрих-код из текущих данных.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Приложение Google Shopper не установлено</string>
-  <string name="msg_install_google_shopper">Приложение Google Shopper объединяет сканирование штрих-кодов с online-поиском товаров, цен, отзывов и т.д., не открывая браузер. Хотите попробовать?</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Возможно, содержимое штрих-кода повреждено.</string>
   <string name="msg_redirect">Переслать</string>
   <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>

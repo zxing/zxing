@@ -29,21 +29,16 @@ import com.google.zxing.client.result.ResultParser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.View;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Collection;
 import java.util.Locale;
 
 /**
@@ -60,13 +55,6 @@ import java.util.Locale;
 public abstract class ResultHandler {
 
   private static final String TAG = ResultHandler.class.getSimpleName();
-
-  private static final String GOOGLE_SHOPPER_PACKAGE = "com.google.android.apps.shopper";
-  private static final String GOOGLE_SHOPPER_ACTIVITY = GOOGLE_SHOPPER_PACKAGE +
-      ".results.SearchResultsActivity";
-  private static final String MARKET_URI_PREFIX = "market://details?id=";
-  private static final String MARKET_REFERRER_SUFFIX =
-      "&referrer=utm_source%3Dbarcodescanner%26utm_medium%3Dapps%26utm_campaign%3Dscan";
 
   private static final String[] EMAIL_TYPE_STRINGS = {"home", "work", "mobile"};
   private static final String[] PHONE_TYPE_STRINGS = {"home", "work", "mobile", "fax", "pager", "main"};
@@ -97,15 +85,6 @@ public abstract class ResultHandler {
   private final Result rawResult;
   private final String customProductSearch;
 
-  private final DialogInterface.OnClickListener shopperMarketListener =
-      new DialogInterface.OnClickListener() {
-    @Override
-    public void onClick(DialogInterface dialogInterface, int which) {
-      launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI_PREFIX +
-          GOOGLE_SHOPPER_PACKAGE + MARKET_REFERRER_SUFFIX)));
-    }
-  };
-
   ResultHandler(Activity activity, ParsedResult result) {
     this(activity, result, null);
   }
@@ -115,11 +94,6 @@ public abstract class ResultHandler {
     this.activity = activity;
     this.rawResult = rawResult;
     this.customProductSearch = parseCustomSearchURL();
-
-    // Make sure the Shopper button is hidden by default. Without this, scanning a product followed
-    // by a QR Code would leave the button on screen among the QR Code actions.
-    View shopperButton = activity.findViewById(R.id.shopper_button);
-    shopperButton.setVisibility(View.GONE);
   }
 
   public final ParsedResult getResult() {
@@ -165,17 +139,6 @@ public abstract class ResultHandler {
    */
   public boolean areContentsSecure() {
     return false;
-  }
-
-  /**
-   * The Google Shopper button is special and is not handled by the abstract button methods above.
-   *
-   * @param listener The on click listener to install for this button.
-   */
-  final void showGoogleShopperButton(View.OnClickListener listener) {
-    View shopperButton = activity.findViewById(R.id.shopper_button);
-    shopperButton.setVisibility(View.VISIBLE);
-    shopperButton.setOnClickListener(listener);
   }
 
   /**
@@ -452,32 +415,6 @@ public abstract class ResultHandler {
     Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
     intent.putExtra("query", query);
     launchIntent(intent);
-  }
-
-  final void openGoogleShopper(String query) {
-
-    // Construct Intent to launch Shopper
-    Intent intent = new Intent(Intent.ACTION_SEARCH);
-    intent.setClassName(GOOGLE_SHOPPER_PACKAGE, GOOGLE_SHOPPER_ACTIVITY);
-    intent.putExtra(SearchManager.QUERY, query);
-
-    // Is it available?
-    PackageManager pm = activity.getPackageManager();
-    Collection<?> availableApps = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-
-    if (availableApps != null && !availableApps.isEmpty()) {
-      // If something can handle it, start it
-      activity.startActivity(intent);
-    } else {
-      // Otherwise offer to install it from Market.
-      AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-      builder.setTitle(R.string.msg_google_shopper_missing);
-      builder.setMessage(R.string.msg_install_google_shopper);
-      builder.setIcon(R.drawable.shopper_icon);
-      builder.setPositiveButton(R.string.button_ok, shopperMarketListener);
-      builder.setNegativeButton(R.string.button_cancel, null);
-      builder.show();
-    }
   }
 
   /**

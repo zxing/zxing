@@ -26,7 +26,6 @@
   <string name="button_dial">Componi numero</string>
   <string name="button_email">Invia email</string>
   <string name="button_get_directions">Ottieni indirizzi</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Invia MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Apri browser</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Impossibile codificare un codice a barre dai dati forniti.</string>
   <string name="msg_google_books">Google Libri</string>
   <string name="msg_google_product">Google Shopping</string>
-  <string name="msg_google_shopper_missing">Google Shopper non è installato</string>
-  <string name="msg_install_google_shopper">Google Shopper combina la scansione dei codici a barre con prezzi locali e online, recensioni e altro senza dover aprire il browser. Vuoi provare?</string>
   <string name="msg_intent_failed">Spiacenti, l\'applicazione richiesta non può essere avviata. Il contenuto del codice a barre può essere non valido.</string>
   <string name="msg_redirect">Inoltra</string>
   <string name="msg_sbc_book_not_searchable">Spiacenti, questo libro non è ricercabile.</string>

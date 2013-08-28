@@ -26,7 +26,6 @@
   <string name="button_dial">電話をかける</string>
   <string name="button_email">メールの送信</string>
   <string name="button_get_directions">経路を検索</string>
-  <string name="button_google_shopper">Google Shopper</string>
   <string name="button_mms">MMSの送信</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">ブラウザで表示</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">このデータからQRコードを作成できませんでした</string>
   <string name="msg_google_books">Googleブックス</string>
   <string name="msg_google_product">Googleショッピング</string>
-  <string name="msg_google_shopper_missing">Google Shopperがインストールされていません</string>
-  <string name="msg_install_google_shopper">Google Shopperは、ブラウザを使わなくても、価格やレビューなどを見ることができます。試しますか？</string>
   <string name="msg_intent_failed">指定されたアプリケーションを起動できませんでした。QRコードの内容が無効である可能性があります。</string>
   <string name="msg_redirect">リダイレクト</string>
   <string name="msg_sbc_book_not_searchable">この書籍は検索できません</string>

@@ -26,7 +26,6 @@
   <string name="button_dial">Panggil nomor</string>
   <string name="button_email">Kirim surel</string>
   <string name="button_get_directions">Dapatkan petunjuk arah</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Kirim MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Buka browser</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Tidak dapat meng-encode barcode dari data yang diberikan.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Google Shopper belum dipasang</string>
-  <string name="msg_install_google_shopper">Google Shopper menggabungkan hasil pemindaian barcode dengan harga online dan lokal, tinjauan dan lain sebagainya tanpa harus membuka browser. Apakah Anda akan mencobanya?</string>
   <string name="msg_intent_failed">Maaf, aplikasi yang diminta tidak dapat dijalankan. Mungkin ada kesalahan isi barcode.</string>
   <string name="msg_redirect">Pengalihan</string>
   <string name="msg_sbc_book_not_searchable">Maaf, buku ini tidak dapat dicari.</string>

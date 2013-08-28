@@ -26,7 +26,6 @@
   <string name="button_dial">Zadzwoń</string>
   <string name="button_email">Wyślij email</string>
   <string name="button_get_directions">Wskazówki</string>
-  <string name="button_google_shopper">Sklep</string>
   <string name="button_mms">Wyślij MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otwórz przeglądarkę</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
   <string name="msg_google_books">Google Książki</string>
   <string name="msg_google_product">Wyszukiwarka produktów Google</string>
-  <string name="msg_google_shopper_missing">Google Shopper nie jest zainstalowany</string>
-  <string name="msg_install_google_shopper">Google Shopper łączy skanowanie kodów paskowych z cenami, recenzjami, itp. bez otwierania przeglądarki. Czy chcesz go wypróbować?</string>
   <string name="msg_intent_failed">Przepraszamy, żadana aplikacja nie może zostać uruchomiona. Zawartość kodu paskowego może być nieprawidłowa.</string>
   <string name="msg_redirect">Przekierowanie</string>
   <string name="msg_sbc_book_not_searchable">Przepraszamy, ta książka nie jest przeszukiwalna.</string>

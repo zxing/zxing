@@ -26,7 +26,6 @@
   <string name="button_dial">전화 걸기</string>
   <string name="button_email">이메일 보내기</string>
   <string name="button_get_directions">방향을 찾기</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS 보내기</string>
   <string name="button_ok">확인</string>
   <string name="button_open_browser">웹브라우저로 열기</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">주어진 데이터로 바코드를 만들지 못하였습니다.</string>
   <string name="msg_google_books">Google 도서</string>
   <string name="msg_google_product">Google 상품 검색</string>
-  <string name="msg_google_shopper_missing">Google Shopper가 설치되어 있지 않습니다.</string>
-  <string name="msg_install_google_shopper">Google Shopper는 바코드 스캐닝을 이용하여 인터넷을 열지 않고 가격, 리뷰 등을 열람하는 기능을 제공합니다. 사용해 보시겠습니까?</string>
   <string name="msg_intent_failed">죄송합니다. 어플리케이션이 실행되지 않습니다. 바코드 내용이 잘못 되었을 수도 있습니다.</string>
   <string name="msg_redirect">리디렉션</string>
   <string name="msg_sbc_book_not_searchable">죄송합니다. 이 책은 검색이 되지 않습니다.</string>

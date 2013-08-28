@@ -26,7 +26,6 @@
   <string name="button_dial">Marcar número</string>
   <string name="button_email">Enviar e-mail</string>
   <string name="button_get_directions">Obter direcções</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Enviar MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Abrir navegador</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Não foi possível codificar o código de barradas apartir dos dados fornecidos.</string>
   <string name="msg_google_books">Google Livros</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Google Shopper não está instalado.</string>
-  <string name="msg_install_google_shopper">Google Shopper combina leituras de códigos de barras com preços online e locais, análises e mais sem abrir o navegador. Gostaria de experimentar?</string>
   <string name="msg_intent_failed">Desculpe, a aplicação solicitada não pode ser iniciada. O conteúdo do código de barras poderá ser inválido.</string>
   <string name="msg_redirect">Redirecionar</string>
   <string name="msg_sbc_book_not_searchable">Desculpe, este livro não é pesquisável.</string>

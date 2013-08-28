@@ -26,7 +26,6 @@
   <string name="button_dial">Κλήση αριθμού</string>
   <string name="button_email">Αποστολή email</string>
   <string name="button_get_directions">Λάβετε κατευθύνσεις</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Αποστολή MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Άνοιγμα browser</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Δεν γίνεται να παραχθεί barcode από αυτά τα δεδομένα.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Αναζήτηση προϊόντων Google</string>
-  <string name="msg_google_shopper_missing">Το Google Shopper δεν είναι εγκατεστημένο.</string>
-  <string name="msg_install_google_shopper">Το Google Shopper συνδυάζει σκανάρισμα barcode με online και τοπικές τιμές, αξιολογήσεις και άλλα χωρίς να ανοίξετε τον browser. Θέλετε να το δοκιμάσετε;</string>
   <string name="msg_intent_failed">Συγνώμη, η ζητούμενη εφαρμογή δεν μπορεί να εκιννηθεί. Τα δεδομληνα του barcode ίσως δεν είναι έγκυρα.</string>
   <string name="msg_redirect">Ανακατεύθυνση</string>
   <string name="msg_sbc_book_not_searchable">Συγνώμη, αυτό το βιβλίο δεν βρέθηκε.</string>

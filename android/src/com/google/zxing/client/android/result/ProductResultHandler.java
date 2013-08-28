@@ -23,7 +23,6 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 
 import android.app.Activity;
-import android.view.View;
 
 /**
  * Handles generic products which are not books.
@@ -39,12 +38,6 @@ public final class ProductResultHandler extends ResultHandler {
 
   public ProductResultHandler(Activity activity, ParsedResult result, Result rawResult) {
     super(activity, result, rawResult);
-    showGoogleShopperButton(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        openGoogleShopper(getProductIDFromResult(getResult()));
-      }
-    });
   }
 
   @Override

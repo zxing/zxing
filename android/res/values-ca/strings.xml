@@ -26,7 +26,6 @@
   <string name="button_dial">Marca el número</string>
   <string name="button_email">Envia un correu electrònic</string>
   <string name="button_get_directions">Obté direccions</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Envia MMS</string>
   <string name="button_ok">D\'acord</string>
   <string name="button_open_browser">Obre el navegador</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">No es pot codificar un codi de barres amb les dades proporcionades.</string>
   <string name="msg_google_books">Google Llibres</string>
   <string name="msg_google_product">Cerca a Google Product</string>
-  <string name="msg_google_shopper_missing">Google Shopper no es troba instal·lat</string>
-  <string name="msg_install_google_shopper">Google Shopper combina l\'escaneig de codis de barres amb preus en línia i locals, comentaris de productes i molt més sense obrir el navegador. Moleu provar-lo?</string>
   <string name="msg_intent_failed">No es pot executar l\'aplicació sol·licitada. És possible que el contingut del codi de barres no sigui vàlid.</string>
   <string name="msg_redirect">Redirecciona</string>
   <string name="msg_sbc_book_not_searchable">No es pot cercar en aquest llibre.</string>

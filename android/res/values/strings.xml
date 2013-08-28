@@ -26,7 +26,6 @@
   <string name="button_dial">Dial number</string>
   <string name="button_email">Send email</string>
   <string name="button_get_directions">Get directions</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Send MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Open browser</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Google Shopper is not installed</string>
-  <string name="msg_install_google_shopper">Google Shopper combines barcode scanning with online and local prices, reviews and more without opening the browser. Would you like to try it?</string>
   <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
   <string name="msg_redirect">Redirect</string>
   <string name="msg_sbc_book_not_searchable">Sorry, this book is not searchable.</string>

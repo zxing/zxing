@@ -26,7 +26,6 @@
   <string name="button_dial">Nummer bellen</string>
   <string name="button_email">E-mail versturen</string>
   <string name="button_get_directions">Routebeschrijving opvragen</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS versturen</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Browser openen</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Kan geen barcode genereren op basis van de opgegeven gegevens.</string>
   <string name="msg_google_books">Google Boeken</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Google Shopper is niet geïnstalleerd</string>
-  <string name="msg_install_google_shopper">Google Shopper combineert het scannen van barcodes met online en lokale prijzen, recensies en meer zonder de browser te openen. Wil je dit proberen?</string>
   <string name="msg_intent_failed">Sorry, de opgevraagde applicatie kan niet worden gestart. De barcode is mogelijk ongeldig.</string>
   <string name="msg_redirect">Doorverwijzing</string>
   <string name="msg_sbc_book_not_searchable">Sorry, dit boek kan niet worden doorzocht.</string>

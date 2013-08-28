@@ -26,7 +26,6 @@
   <string name="button_dial">Číselník</string>
   <string name="button_email">Poslat emailem</string>
   <string name="button_get_directions">Získat nastavení</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Poslat přes MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otevřít prohlížeč</string>
@@ -72,8 +71,6 @@
   <string name="msg_encode_contents_failed">Nepodařilo se rozkódovat čárový kód z poskytnutých údajů.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Google Shopper není nainstalován</string>
-  <string name="msg_install_google_shopper">Google Shopper kombinuje technologie čárového kódu s cenami, recenze a více bez otevření prohlížeče. Chtěli byste to zkusit?</string>
   <string name="msg_intent_failed">Litujeme, požadovanou aplikaci nelze spustit. Čárový kód je nefunkční.</string>
   <string name="msg_redirect">Přesměrování</string>
   <string name="msg_sbc_book_not_searchable">Omlouváme se, tato kniha nelze nalézt.</string>

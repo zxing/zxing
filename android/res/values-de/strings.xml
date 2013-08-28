@@ -26,7 +26,6 @@
   <string name="button_dial">Nummer wählen</string>
   <string name="button_email">E-Mail senden</string>
   <string name="button_get_directions">Route berechnen</string>
-  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS senden</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Browser öffnen</string>
@@ -70,10 +69,8 @@
   <string name="msg_default_time">Zeit</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_contents_failed">Aus den Daten kann kein Barcode erzeugt werden.</string>
-  <string name="msg_google_books">Google Bücher</string>
-  <string name="msg_google_product">Google Shopper</string>
-  <string name="msg_google_shopper_missing">Google Shopper ist nicht installiert</string>
-  <string name="msg_install_google_shopper">Google Shopper verbindet ohne Öffnen des Browsers Barcodes mit Preisen, Testberichten und mehr. Möchten Sie es ausprobieren?</string>
+  <string name="msg_google_books">Google Books</string>
+  <string name="msg_google_product">Google Shopping</string>
   <string name="msg_intent_failed">Die gewünschte Applikation kann nicht geöffnet werden. Der Barcode könnte ungültig sein.</string>
   <string name="msg_redirect">Umleiten</string>
   <string name="msg_sbc_book_not_searchable">Dieses Buch kann nicht durchsucht werden.</string>
