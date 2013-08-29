@@ -69,8 +69,8 @@
   <string name="msg_default_time">Čas</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_contents_failed">Nie je možné zakódovať čiarový kód z poskytnutých údajov.</string>
-  <string name="msg_google_books">Google Knihy</string>
-  <string name="msg_google_product">Hľadať produkty Google</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Ospravedlňujeme sa, požadovaná aplikácia nemohla byť spustená. Obsah čiarového kódu je možno neplatný.</string>
   <string name="msg_redirect">Presmerovať</string>
   <string name="msg_sbc_book_not_searchable">Ospravedlňujeme sa, táto kniha nie je prehliadateľná.</string>

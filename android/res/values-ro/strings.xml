@@ -69,8 +69,8 @@
   <string name="msg_default_time">Ora</string>
   <string name="msg_default_type">Tip</string>
   <string name="msg_encode_contents_failed">Codificare eșuată a codului de bare, din datele furnizate</string>
-  <string name="msg_google_books">Google Cărți</string>
-  <string name="msg_google_product">Google Căutare Produs</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Aplicația solicitată nu a putut fi lansată. Codul de bare poate fi incorect.</string>
   <string name="msg_redirect">Redirecționare</string>
   <string name="msg_sbc_book_not_searchable">Cartea nu poate fi căutată</string>

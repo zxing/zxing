@@ -69,8 +69,8 @@
   <string name="msg_default_time">시간</string>
   <string name="msg_default_type">종류</string>
   <string name="msg_encode_contents_failed">주어진 데이터로 바코드를 만들지 못하였습니다.</string>
-  <string name="msg_google_books">Google 도서</string>
-  <string name="msg_google_product">Google 상품 검색</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">죄송합니다. 어플리케이션이 실행되지 않습니다. 바코드 내용이 잘못 되었을 수도 있습니다.</string>
   <string name="msg_redirect">리디렉션</string>
   <string name="msg_sbc_book_not_searchable">죄송합니다. 이 책은 검색이 되지 않습니다.</string>

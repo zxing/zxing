@@ -69,8 +69,8 @@
   <string name="msg_default_time">时间</string>
   <string name="msg_default_type">类型</string>
   <string name="msg_encode_contents_failed">无法根据已有数据生成条码。   </string>
-  <string name="msg_google_books">谷歌图书</string>
-  <string name="msg_google_product">谷歌购物</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">抱歉，无法打开所需软件。 条码内容可能无效。</string>
   <string name="msg_redirect">重定向</string>
   <string name="msg_sbc_book_not_searchable">抱歉，无法找到此图书。</string>

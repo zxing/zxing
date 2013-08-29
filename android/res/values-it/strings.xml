@@ -69,8 +69,8 @@
   <string name="msg_default_time">Tempo</string>
   <string name="msg_default_type">Tipo</string>
   <string name="msg_encode_contents_failed">Impossibile codificare un codice a barre dai dati forniti.</string>
-  <string name="msg_google_books">Google Libri</string>
-  <string name="msg_google_product">Google Shopping</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Spiacenti, l\'applicazione richiesta non può essere avviata. Il contenuto del codice a barre può essere non valido.</string>
   <string name="msg_redirect">Inoltra</string>
   <string name="msg_sbc_book_not_searchable">Spiacenti, questo libro non è ricercabile.</string>

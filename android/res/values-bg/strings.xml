@@ -69,8 +69,8 @@
   <string name="msg_default_time">Време</string>
   <string name="msg_default_type">Тип</string>
   <string name="msg_encode_contents_failed">Неуспешно кодиране на подадените данни.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Търсене на продукти</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Съжаляваме, но нужното приложение не успя да се стартира. Възможно е баркода или съдържанието му да са невалидни.</string>
   <string name="msg_redirect">Пренасочване</string>
   <string name="msg_sbc_book_not_searchable">Съжаляваме, тази книга не може да се претърсва.</string>

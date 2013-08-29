@@ -69,8 +69,8 @@
   <string name="msg_default_time">समय</string>
   <string name="msg_default_type">टाइप</string>
   <string name="msg_encode_contents_failed">उपलब्ध कराए गए आंकड़ों से एक बारकोड सांकेतिक शब्दों में बदलना नहीं कर सका.</string>
-  <string name="msg_google_books">Google पुस्तक</string>
-  <string name="msg_google_product">Google उत्पाद खोज</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">क्षमा करें, अनुरोध आवेदन शुरू नहीं किया जा सका. बारकोड सामग्री अमान्य हो सकता है.</string>
   <string name="msg_redirect">पुनर्निर्देशन</string>
   <string name="msg_sbc_book_not_searchable">क्षमा करें, इस किताब को खोजा नहीं है.</string>

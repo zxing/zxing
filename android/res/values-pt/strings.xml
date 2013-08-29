@@ -69,8 +69,8 @@
   <string name="msg_default_time">Tempo</string>
   <string name="msg_default_type">Tipo</string>
   <string name="msg_encode_contents_failed">Não foi possível codificar o código de barradas apartir dos dados fornecidos.</string>
-  <string name="msg_google_books">Google Livros</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Desculpe, a aplicação solicitada não pode ser iniciada. O conteúdo do código de barras poderá ser inválido.</string>
   <string name="msg_redirect">Redirecionar</string>
   <string name="msg_sbc_book_not_searchable">Desculpe, este livro não é pesquisável.</string>

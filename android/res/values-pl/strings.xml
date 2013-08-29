@@ -69,8 +69,8 @@
   <string name="msg_default_time">Czas</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
-  <string name="msg_google_books">Google Książki</string>
-  <string name="msg_google_product">Wyszukiwarka produktów Google</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Przepraszamy, żadana aplikacja nie może zostać uruchomiona. Zawartość kodu paskowego może być nieprawidłowa.</string>
   <string name="msg_redirect">Przekierowanie</string>
   <string name="msg_sbc_book_not_searchable">Przepraszamy, ta książka nie jest przeszukiwalna.</string>

@@ -69,8 +69,8 @@
   <string name="msg_default_time">Temps</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_contents_failed">Impossible de créer le code-barres à partir des données fournies.</string>
-  <string name="msg_google_books">Google Livres</string>
-  <string name="msg_google_product">Google Shopping</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Désolé, l\'application demandée n\'a pas pu être lancée. Le contenu du code-barres n\'est peut-être pas valable.</string>
   <string name="msg_redirect">Redirection</string>
   <string name="msg_sbc_book_not_searchable">Désolé, ce livre est introuvable.</string>

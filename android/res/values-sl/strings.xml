@@ -69,8 +69,8 @@
   <string name="msg_default_time">Čas</string>
   <string name="msg_default_type">Tip</string>
   <string name="msg_encode_contents_failed">Ni bilo mogoče narediti črtne kode iz podanih podatkov</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Oprostite, zahtevana aplikacija se ne more zagnati. Lahko da gre za napačno vsebino črtne kode.</string>
   <string name="msg_redirect">Preusmeritev</string>
   <string name="msg_sbc_book_not_searchable">Oprostite, po tej knjigi se ne da iskati.</string>

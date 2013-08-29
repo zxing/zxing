@@ -69,8 +69,8 @@
   <string name="msg_default_time">Tijd</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_contents_failed">Kan geen barcode genereren op basis van de opgegeven gegevens.</string>
-  <string name="msg_google_books">Google Boeken</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Sorry, de opgevraagde applicatie kan niet worden gestart. De barcode is mogelijk ongeldig.</string>
   <string name="msg_redirect">Doorverwijzing</string>
   <string name="msg_sbc_book_not_searchable">Sorry, dit boek kan niet worden doorzocht.</string>

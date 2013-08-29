@@ -69,8 +69,8 @@
   <string name="msg_default_time">時間</string>
   <string name="msg_default_type">類型</string>
   <string name="msg_encode_contents_failed">無法讀取條碼。</string>
-  <string name="msg_google_books">Google 圖書</string>
-  <string name="msg_google_product">Google 產品搜索</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">抱歉，無法打開所需軟體。條碼內容可能無效。</string>
   <string name="msg_redirect">重定向</string>
   <string name="msg_sbc_book_not_searchable">無法找到此圖書。</string>

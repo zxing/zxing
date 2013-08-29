@@ -69,8 +69,8 @@
   <string name="msg_default_time">Hora</string>
   <string name="msg_default_type">Tipus</string>
   <string name="msg_encode_contents_failed">No es pot codificar un codi de barres amb les dades proporcionades.</string>
-  <string name="msg_google_books">Google Llibres</string>
-  <string name="msg_google_product">Cerca a Google Product</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">No es pot executar l\'aplicació sol·licitada. És possible que el contingut del codi de barres no sigui vàlid.</string>
   <string name="msg_redirect">Redirecciona</string>
   <string name="msg_sbc_book_not_searchable">No es pot cercar en aquest llibre.</string>

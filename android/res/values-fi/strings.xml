@@ -69,8 +69,8 @@
   <string name="msg_default_time">Aika</string>
   <string name="msg_default_type">Tyyppi</string>
   <string name="msg_encode_contents_failed">Viivakoodia ei voitu muodostaa annetusta datasta.</string>
-  <string name="msg_google_books">Google-kirjat</string>
-  <string name="msg_google_product">Google-tuotehaku</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Valitettavasti pyydettyä sovellusta ei voitu käynnistää. Viivakoodin sisältö voi olla virheellinen.</string>
   <string name="msg_redirect">Uudelleenohjaus</string>
   <string name="msg_sbc_book_not_searchable">Valitettavasti tämä kirja ei ole haettavissa.</string>

@@ -69,8 +69,8 @@
   <string name="msg_default_time">Waktu</string>
   <string name="msg_default_type">Tipe</string>
   <string name="msg_encode_contents_failed">Tidak dapat meng-encode barcode dari data yang diberikan.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Maaf, aplikasi yang diminta tidak dapat dijalankan. Mungkin ada kesalahan isi barcode.</string>
   <string name="msg_redirect">Pengalihan</string>
   <string name="msg_sbc_book_not_searchable">Maaf, buku ini tidak dapat dicari.</string>

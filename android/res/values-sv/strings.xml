@@ -69,8 +69,8 @@
   <string name="msg_default_time">Tid</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_contents_failed">Det gick inte att avkoda en streckkod från den erhållna informationen.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Den begärda applikationen kunde tyvärr inte startas. Streckkodens innehåll kan vara ogiltigt.</string>
   <string name="msg_redirect">Omdirigering</string>
   <string name="msg_sbc_book_not_searchable">Den här boken är tyvärr inte sökbar.</string>

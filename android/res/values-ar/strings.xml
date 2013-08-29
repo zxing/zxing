@@ -69,8 +69,8 @@
   <string name="msg_default_time">الوقت</string>
   <string name="msg_default_type">النوع</string>
   <string name="msg_encode_contents_failed">تعذر ترميز رمز شريطي من البيانات المتوفرة.</string>
-  <string name="msg_google_books">كتب جوجل</string>
-  <string name="msg_google_product">بحث جوجل</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">عفوا، تعذر تشغيل التطبيق المطلوب. قد تكون محتويات الرمز الشريطي غير صحيحة.</string>
   <string name="msg_redirect">إعادة توجيه</string>
   <string name="msg_sbc_book_not_searchable">عفوا، لا يمكن البحث في هذا الكتاب.</string>

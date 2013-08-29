@@ -69,8 +69,8 @@
   <string name="msg_default_time">Час</string>
   <string name="msg_default_type">Тип</string>
   <string name="msg_encode_contents_failed">Неможливо створити штрих-код з наданих даних.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Нажаль, неможливо запустити дану програму. Можливо, вміст штрих-коду пошкоджено.</string>
   <string name="msg_redirect">Переслати</string>
   <string name="msg_sbc_book_not_searchable">Нажаль, пошук книги був невдалим.</string>

@@ -29,7 +29,7 @@
   <string name="button_mms">Send MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Open browser</string>
-  <string name="button_product_search">Product Search</string>
+  <string name="button_product_search">Product search</string>
   <string name="button_search_book_contents">Search contents</string>
   <string name="button_share_app">Application</string>
   <string name="button_share_bookmark">Bookmark</string>
@@ -69,8 +69,8 @@
   <string name="msg_default_time">Time</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
   <string name="msg_redirect">Redirect</string>
   <string name="msg_sbc_book_not_searchable">Sorry, this book is not searchable.</string>

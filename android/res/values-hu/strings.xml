@@ -69,8 +69,8 @@
   <string name="msg_default_time">Idő</string>
   <string name="msg_default_type">Típus</string>
   <string name="msg_encode_contents_failed">Nem sikerült létrehozni a vonalkódot a megadott adatokból.</string>
-  <string name="msg_google_books">Google Könyvek</string>
-  <string name="msg_google_product">Google Termék Kereső</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">A kért alkalmazást nem lehet elindítani. A vonalkód tartalma lehet, hogy érvénytelen.</string>
   <string name="msg_redirect">Átirányítás</string>
   <string name="msg_sbc_book_not_searchable">Ez a könyv nem kereshető.</string>

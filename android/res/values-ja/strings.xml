@@ -69,8 +69,8 @@
   <string name="msg_default_time">時間</string>
   <string name="msg_default_type">タイプ</string>
   <string name="msg_encode_contents_failed">このデータからQRコードを作成できませんでした</string>
-  <string name="msg_google_books">Googleブックス</string>
-  <string name="msg_google_product">Googleショッピング</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">指定されたアプリケーションを起動できませんでした。QRコードの内容が無効である可能性があります。</string>
   <string name="msg_redirect">リダイレクト</string>
   <string name="msg_sbc_book_not_searchable">この書籍は検索できません</string>

@@ -69,8 +69,8 @@
   <string name="msg_default_time">Čas</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_contents_failed">Nepodařilo se rozkódovat čárový kód z poskytnutých údajů.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Litujeme, požadovanou aplikaci nelze spustit. Čárový kód je nefunkční.</string>
   <string name="msg_redirect">Přesměrování</string>
   <string name="msg_sbc_book_not_searchable">Omlouváme se, tato kniha nelze nalézt.</string>

@@ -69,8 +69,8 @@
   <string name="msg_default_time">Ωρα</string>
   <string name="msg_default_type">Τύπος</string>
   <string name="msg_encode_contents_failed">Δεν γίνεται να παραχθεί barcode από αυτά τα δεδομένα.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Αναζήτηση προϊόντων Google</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Συγνώμη, η ζητούμενη εφαρμογή δεν μπορεί να εκιννηθεί. Τα δεδομληνα του barcode ίσως δεν είναι έγκυρα.</string>
   <string name="msg_redirect">Ανακατεύθυνση</string>
   <string name="msg_sbc_book_not_searchable">Συγνώμη, αυτό το βιβλίο δεν βρέθηκε.</string>

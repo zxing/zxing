@@ -69,8 +69,8 @@
   <string name="msg_default_time">Tid</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_contents_failed">Kunne ikke indkode en stregkode fra oplysningerne givet.</string>
-  <string name="msg_google_books">Google Bøger</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Beklager, den ønskede applikation kunne ikke blive startet. Stregkodeindholdet er måsket ugyldigt.</string>
   <string name="msg_redirect">Omdirigér</string>
   <string name="msg_sbc_book_not_searchable">Beklager, denne bog er ikke søgbar.</string>

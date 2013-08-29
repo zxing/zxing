@@ -69,8 +69,8 @@
   <string name="msg_default_time">זמן</string>
   <string name="msg_default_type">סוג</string>
   <string name="msg_encode_contents_failed">לא היתה אפשרות לקודד ברקוד מהנתונים שסופקו.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">סליחה, לא ניתן להפעיל את היישום המבוקש. ייתכן שתוכן הברקוד לא תקין.</string>
   <string name="msg_redirect">נתב מחדש</string>
   <string name="msg_sbc_book_not_searchable">סליחה, ספר זה אינו ניתן לחיפוש.</string>

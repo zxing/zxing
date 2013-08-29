@@ -69,8 +69,8 @@
   <string name="msg_default_time">Zeit</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_contents_failed">Aus den Daten kann kein Barcode erzeugt werden.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Shopping</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Die gewünschte Applikation kann nicht geöffnet werden. Der Barcode könnte ungültig sein.</string>
   <string name="msg_redirect">Umleiten</string>
   <string name="msg_sbc_book_not_searchable">Dieses Buch kann nicht durchsucht werden.</string>

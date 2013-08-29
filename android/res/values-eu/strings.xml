@@ -69,8 +69,8 @@
   <string name="msg_default_time">Denbora</string>
   <string name="msg_default_type">Mota</string>
   <string name="msg_encode_contents_failed">Ezin izan da barra-kode bat kodetu emandako datuetatik.</string>
-  <string name="msg_google_books">Google Books</string>
-  <string name="msg_google_product">Google Product Bilaketa</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Barkatu, eskatutako aplikazioa ezin izan da abiarazi. Behar bada barra-kodearen edukiak baliogabeak dira.</string>
   <string name="msg_redirect">Berbideratu</string>
   <string name="msg_sbc_book_not_searchable">Barkatu, liburu honetan ezin da bilaketarik egin.</string>
