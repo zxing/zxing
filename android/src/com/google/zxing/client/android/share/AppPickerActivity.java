@@ -24,23 +24,15 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.ListView;
 
-import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
-import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
-
 public final class AppPickerActivity extends ListActivity {
 
   private AsyncTask<?,?,?> backgroundTask;
-  private final AsyncTaskExecInterface taskExec;
-
-  public AppPickerActivity() {
-    taskExec = new AsyncTaskExecManager().build();
-  }
 
   @Override
   protected void onResume() {
     super.onResume();
     backgroundTask = new LoadPackagesAsyncTask(this);
-    taskExec.execute(backgroundTask);
+    backgroundTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   @Override

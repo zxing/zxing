@@ -14,9 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
   <SurfaceView android:id="@+id/preview_view"
                android:layout_width="fill_parent"
@@ -176,24 +174,16 @@
                   android:layout_height="wrap_content"
                   android:gravity="center">
 
-      <Button android:layout_width="0dip"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
+      <Button style="@style/ResultButton"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0dip"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
+      <Button style="@style/ResultButton"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0dip"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
+      <Button style="@style/ResultButton"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0dip"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
+      <Button style="@style/ResultButton"
               android:visibility="gone"/>
 
     </LinearLayout>
@@ -208,4 +198,4 @@
             android:text="@string/msg_default_status"
             android:textColor="@color/status_text"/>
 
-</FrameLayout>
+</merge>

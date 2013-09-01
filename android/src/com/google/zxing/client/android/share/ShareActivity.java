@@ -30,12 +30,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.Browser;
-import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.google.zxing.client.android.clipboard.ClipboardInterface;
 
 /**
  * Barcode Scanner can share data like contacts and bookmarks by displaying a QR Code on screen,
@@ -85,10 +85,10 @@ public final class ShareActivity extends Activity {
   private final Button.OnClickListener clipboardListener = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
-      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       // Should always be true, because we grey out the clipboard button in onResume() if it's empty
-      if (clipboard.hasText()) {
-        launchSearch(clipboard.getText().toString());
+      CharSequence text = ClipboardInterface.getText(ShareActivity.this);
+      if (text != null) {
+        launchSearch(text.toString());
       }
     }
   };
@@ -132,8 +132,7 @@ public final class ShareActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
-    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-    clipboardButton.setEnabled(clipboard.hasText());
+    clipboardButton.setEnabled(ClipboardInterface.hasText(this));
   }
 
   @Override

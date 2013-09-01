@@ -44,8 +44,6 @@ import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.HttpHelper;
 import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
-import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
 /**
  * Uses Google Book Search to find a word or phrase in the requested book.
@@ -68,11 +66,6 @@ public final class SearchBookContentsActivity extends Activity {
   private ListView resultListView;
   private TextView headerView;
   private AsyncTask<String,?,?> networkTask;
-  private final AsyncTaskExecInterface taskExec;
-
-  public SearchBookContentsActivity() {
-    taskExec = new AsyncTaskExecManager().build();
-  }
 
   private final Button.OnClickListener buttonListener = new Button.OnClickListener() {
     @Override
@@ -161,7 +154,7 @@ public final class SearchBookContentsActivity extends Activity {
         oldTask.cancel(true);
       }
       networkTask = new NetworkTask();
-      taskExec.execute(networkTask, query, isbn);
+      networkTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, query, isbn);
       headerView.setText(R.string.msg_sbc_searching_book);
       resultListView.setAdapter(null);
       queryTextView.setEnabled(false);

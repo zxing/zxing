@@ -16,14 +16,13 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.androidtest"
-          android:versionName="1.3"
+          android:versionName="1.4"
           android:versionCode="8"
           android:installLocation="auto">
 
   <uses-permission android:name="android.permission.CAMERA"/>
 
-  <uses-sdk android:minSdkVersion="10"
-            android:targetSdkVersion="18"/>
+  <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="18"/>
 
   <supports-screens android:xlargeScreens="true"
                     android:largeScreens="true"

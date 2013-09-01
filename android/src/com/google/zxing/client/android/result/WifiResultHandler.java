@@ -19,13 +19,12 @@ package com.google.zxing.client.android.result;
 import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
-import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 import com.google.zxing.client.android.wifi.WifiConfigManager;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.WifiParsedResult;
@@ -41,12 +40,10 @@ public final class WifiResultHandler extends ResultHandler {
   private static final String TAG = WifiResultHandler.class.getSimpleName();
 
   private final CaptureActivity parent;
-  private final AsyncTaskExecInterface taskExec;
 
   public WifiResultHandler(CaptureActivity activity, ParsedResult result) {
     super(activity, result);
     parent = activity;
-    taskExec = new AsyncTaskExecManager().build();
   }
 
   @Override
@@ -76,7 +73,7 @@ public final class WifiResultHandler extends ResultHandler {
           Toast.makeText(activity.getApplicationContext(), R.string.wifi_changing_network, Toast.LENGTH_SHORT).show();
         }
       });
-      taskExec.execute(new WifiConfigManager(wifiManager), wifiResult);
+      new WifiConfigManager(wifiManager).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, wifiResult);
       parent.restartPreviewAfterDelay(0L);
     }
   }

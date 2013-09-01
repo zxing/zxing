@@ -35,6 +35,7 @@
               android:inputType="text"/>
 
     <Button android:id="@+id/query_button"
+            style="@android:style/Widget.Holo.Button.Borderless.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"

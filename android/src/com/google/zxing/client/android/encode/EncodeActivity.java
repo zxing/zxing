@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.encode;
 
+import android.graphics.Point;
 import android.view.Display;
 import android.view.MenuInflater;
 import android.view.WindowManager;
@@ -186,8 +187,10 @@ public final class EncodeActivity extends Activity {
     // This assumes the view is full screen, which is a good assumption
     WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
     Display display = manager.getDefaultDisplay();
-    int width = display.getWidth();
-    int height = display.getHeight();
+    Point displaySize = new Point();
+    display.getSize(displaySize);
+    int width = displaySize.x;
+    int height = displaySize.y;
     int smallerDimension = width < height ? width : height;
     smallerDimension = smallerDimension * 7 / 8;
 

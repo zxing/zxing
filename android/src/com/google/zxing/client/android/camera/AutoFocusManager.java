@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.zxing.client.android.PreferencesActivity;
-import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
-import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
 final class AutoFocusManager implements Camera.AutoFocusCallback {
 
@@ -46,11 +44,9 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
   private final boolean useAutoFocus;
   private final Camera camera;
   private AsyncTask<?,?,?> outstandingTask;
-  private final AsyncTaskExecInterface taskExec;
 
   AutoFocusManager(Context context, Camera camera) {
     this.camera = camera;
-    taskExec = new AsyncTaskExecManager().build();
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     String currentFocusMode = camera.getParameters().getFocusMode();
     useAutoFocus =
@@ -64,7 +60,7 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
   public synchronized void onAutoFocus(boolean success, Camera theCamera) {
     if (active) {
       outstandingTask = new AutoFocusTask();
-      taskExec.execute(outstandingTask);
+      outstandingTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
   }
 

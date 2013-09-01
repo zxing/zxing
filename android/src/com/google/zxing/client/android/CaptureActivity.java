@@ -22,6 +22,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
+import com.google.zxing.client.android.clipboard.ClipboardInterface;
 import com.google.zxing.client.android.history.HistoryActivity;
 import com.google.zxing.client.android.history.HistoryItem;
 import com.google.zxing.client.android.history.HistoryManager;
@@ -44,7 +45,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -173,7 +173,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     } else {
       // Install the callback and wait for surfaceCreated() to init the camera.
       surfaceHolder.addCallback(this);
-      surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     beepManager.updatePrefs();
@@ -560,15 +559,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     if (copyToClipboard && !resultHandler.areContentsSecure()) {
-      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-      if (displayContents != null) {
-        try {
-          clipboard.setText(displayContents);
-        } catch (NullPointerException npe) {
-          // Some kind of bug inside the clipboard implementation, not due to null input
-          Log.w(TAG, "Clipboard bug", npe);
-        }
-      }
+      ClipboardInterface.setText(displayContents, this);
     }
   }
 
@@ -596,16 +587,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     if (copyToClipboard && !resultHandler.areContentsSecure()) {
-      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       CharSequence text = resultHandler.getDisplayContents();
-      if (text != null) {
-        try {
-          clipboard.setText(text);
-        } catch (NullPointerException npe) {
-          // Some kind of bug inside the clipboard implementation, not due to null input
-          Log.w(TAG, "Clipboard bug", npe);
-        }
-      }
+      ClipboardInterface.setText(text, this);
     }
 
     if (source == IntentSource.NATIVE_APP_INTENT) {

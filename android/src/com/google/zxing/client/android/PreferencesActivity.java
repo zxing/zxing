@@ -16,23 +16,16 @@
 
 package com.google.zxing.client.android;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.app.Activity;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceGroup;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * The main settings activity.
  *
  * @author dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
  */
-public final class PreferencesActivity extends PreferenceActivity
-    implements OnSharedPreferenceChangeListener {
+public final class PreferencesActivity extends Activity {
 
   public static final String KEY_DECODE_1D = "preferences_decode_1D";
   public static final String KEY_DECODE_QR = "preferences_decode_QR";
@@ -53,44 +46,11 @@ public final class PreferencesActivity extends PreferenceActivity
   public static final String KEY_DISABLE_CONTINUOUS_FOCUS = "preferences_disable_continuous_focus";
   //public static final String KEY_DISABLE_EXPOSURE = "preferences_disable_exposure";
 
-  private CheckBoxPreference decode1D;
-  private CheckBoxPreference decodeQR;
-  private CheckBoxPreference decodeDataMatrix;
-
   @Override
   protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    addPreferencesFromResource(R.xml.preferences);
+    getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferencesFragment()).commit();
 
-    PreferenceGroup preferences = getPreferenceScreen();
-    preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    decode1D = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_1D);
-    decodeQR = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_QR);
-    decodeDataMatrix = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_DATA_MATRIX);
-    disableLastCheckedPref();
-  }
-
-  @Override
-  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    disableLastCheckedPref();
-  }
-
-  private void disableLastCheckedPref() {
-    Collection<CheckBoxPreference> checked = new ArrayList<CheckBoxPreference>(3);
-    if (decode1D.isChecked()) {
-      checked.add(decode1D);
-    }
-    if (decodeQR.isChecked()) {
-      checked.add(decodeQR);
-    }
-    if (decodeDataMatrix.isChecked()) {
-      checked.add(decodeDataMatrix);
-    }
-    boolean disable = checked.size() < 2;
-    CheckBoxPreference[] checkBoxPreferences = {decode1D, decodeQR, decodeDataMatrix};
-    for (CheckBoxPreference pref : checkBoxPreferences) {
-      pref.setEnabled(!(disable && checked.contains(pref)));
-    }
   }
 
 }
