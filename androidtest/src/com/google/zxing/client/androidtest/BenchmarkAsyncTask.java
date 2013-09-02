@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 ZXing authors
+ * Copyright (C) 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ package com.google.zxing.client.androidtest;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Debug;
+import android.util.Log;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
@@ -25,61 +28,68 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
-import android.os.Debug;
-import android.os.Message;
-import android.util.Log;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-final class BenchmarkThread implements Runnable {
+public final class BenchmarkAsyncTask extends AsyncTask<Object,Object,String> {
 
-  private static final String TAG = BenchmarkThread.class.getSimpleName();
+  private static final String TAG = BenchmarkAsyncTask.class.getSimpleName();
   private static final int RUNS = 10;
 
-  private final BenchmarkActivity activity;
+  private final BenchmarkActivity benchmarkActivity;
   private final String path;
-  private MultiFormatReader multiFormatReader;
 
-  BenchmarkThread(BenchmarkActivity activity, String path) {
-    this.activity = activity;
+  BenchmarkAsyncTask(BenchmarkActivity benchmarkActivity, String path) {
+    this.benchmarkActivity = benchmarkActivity;
     this.path = path;
   }
 
   @Override
-  public void run() {
-    multiFormatReader = new MultiFormatReader();
-    multiFormatReader.setHints(null);
+  protected String doInBackground(Object... params) {
+    MultiFormatReader reader = new MultiFormatReader();
+    reader.setHints(null);
     // Try to get in a known state before starting the benchmark
     System.gc();
 
     List<BenchmarkItem> items = new ArrayList<BenchmarkItem>();
-    walkTree(path, items);
-    Message message = Message.obtain(activity.getHandler(), R.id.benchmark_done);
-    message.obj = items;
-    message.sendToTarget();
+    walkTree(reader, path, items);
+
+    int count = 0;
+    int time = 0;
+    for (BenchmarkItem item : items) {
+      if (item != null) {
+        Log.v(TAG, item.toString());
+        count++;
+        time += item.getAverageTime();
+      }
+    }
+    return "TOTAL: Decoded " + count + " images in " + time + " us";
   }
 
-  // Recurse to allow subdirectories
-  private void walkTree(String currentPath, List<BenchmarkItem> items) {
+  @Override
+  protected void onPostExecute(String totals) {
+    benchmarkActivity.onBenchmarkDone(totals);
+  }
+
+  private static void walkTree(MultiFormatReader reader, String currentPath, List<BenchmarkItem> items) {
     File file = new File(currentPath);
     if (file.isDirectory()) {
       String[] files = file.list();
       Arrays.sort(files);
       for (String fileName : files) {
-        walkTree(file.getAbsolutePath() + '/' + fileName, items);
+        walkTree(reader, file.getAbsolutePath() + '/' + fileName, items);
       }
     } else {
-      BenchmarkItem item = decode(currentPath);
+      BenchmarkItem item = decode(reader, currentPath);
       if (item != null) {
         items.add(item);
       }
     }
   }
 
-  private BenchmarkItem decode(String path) {
+  private static BenchmarkItem decode(MultiFormatReader reader, String path) {
 
     Bitmap imageBitmap = BitmapFactory.decodeFile(path);
     if (imageBitmap == null) {
@@ -103,7 +113,7 @@ final class BenchmarkThread implements Runnable {
       long now = Debug.threadCpuTimeNanos();
       try {
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        result = multiFormatReader.decodeWithState(bitmap);
+        result = reader.decodeWithState(bitmap);
         success = true;
       } catch (ReaderException ignored) {
         success = false;
@@ -117,5 +127,6 @@ final class BenchmarkThread implements Runnable {
     }
     return item;
   }
+
 
 }

@@ -253,7 +253,7 @@ public final class ZXingTestActivity extends Activity {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(title);
     builder.setMessage(message);
-    builder.setPositiveButton("OK", null);
+    builder.setPositiveButton(R.string.ok_button, null);
     builder.show();
   }
 
