@@ -66,6 +66,8 @@ package com.google.zxing.multi {
       var result:Result;
       try {
         result = delegate.decode(image, hints);
+        if( result == null)
+          return;
       } catch (re:ReaderException) {
         return;
       }
