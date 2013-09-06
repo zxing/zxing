@@ -44,6 +44,7 @@ public final class HistoryActivity extends ListActivity {
 
   private HistoryManager historyManager;
   private ArrayAdapter<HistoryItem> adapter;
+  private CharSequence originalTitle;
   
   @Override
   protected void onCreate(Bundle icicle) {
@@ -53,6 +54,7 @@ public final class HistoryActivity extends ListActivity {
     setListAdapter(adapter);
     View listview = getListView();
     registerForContextMenu(listview);
+    originalTitle = getTitle();
   }
 
   @Override
@@ -67,6 +69,7 @@ public final class HistoryActivity extends ListActivity {
     for (HistoryItem item : items) {
       adapter.add(item);
     }
+    setTitle(originalTitle + " (" + adapter.getCount() + ')');
     if (adapter.isEmpty()) {
       adapter.add(new HistoryItem(null, null, null));
     }
