@@ -95,6 +95,11 @@ public final class Code93Reader extends OneDReader {
     } while (decodedChar != '*');
     result.deleteCharAt(result.length() - 1); // remove asterisk
 
+    int lastPatternSize = 0;
+    for (int counter : theCounters) {
+      lastPatternSize += counter;
+    }
+
     // Should be at least one more black module
     if (nextStart == end || !row.get(nextStart)) {
       throw NotFoundException.getNotFoundInstance();
@@ -112,7 +117,7 @@ public final class Code93Reader extends OneDReader {
     String resultString = decodeExtended(result);
 
     float left = (float) (start[1] + start[0]) / 2.0f;
-    float right = (float) (nextStart + lastStart) / 2.0f;
+    float right = lastStart + lastPatternSize / 2.0f;
     return new Result(
         resultString,
         null,
