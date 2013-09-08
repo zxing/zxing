@@ -165,7 +165,7 @@ public final class Code39Reader extends OneDReader {
     }
 
     float left = (float) (start[1] + start[0]) / 2.0f;
-    float right = (float) (nextStart + lastStart) / 2.0f;
+    float right = lastStart + lastPatternSize / 2.0f;
     return new Result(
         resultString,
         null,
