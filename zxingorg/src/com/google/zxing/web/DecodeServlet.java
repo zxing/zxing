@@ -16,6 +16,11 @@
 
 package com.google.zxing.web;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
+import com.google.common.net.HttpHeaders;
+import com.google.common.net.MediaType;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
@@ -43,11 +48,9 @@ import org.apache.commons.io.FileCleaningTracker;
 
 import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
@@ -55,8 +58,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -84,13 +85,11 @@ public final class DecodeServlet extends HttpServlet {
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
-  private static final Charset UTF8 = Charset.forName("UTF-8");
-
-  // No real reason to let people upload more than a 2MB image
-  private static final long MAX_IMAGE_SIZE = 2000000L;
+  // No real reason to let people upload more than a 4MB image
+  private static final long MAX_IMAGE_SIZE = 4000000L;
   // No real reason to deal with more than maybe 8.3 megapixels
   private static final int MAX_PIXELS = 1 << 23;
-  private static final byte[] REMAINDER_BUFFER = new byte[8192];
+  private static final byte[] REMAINDER_BUFFER = new byte[32768];
   private static final Map<DecodeHintType,Object> HINTS;
   private static final Map<DecodeHintType,Object> HINTS_PURE;
 
@@ -103,7 +102,7 @@ public final class DecodeServlet extends HttpServlet {
   }
 
   private DiskFileItemFactory diskFileItemFactory;
-  private Collection<String> blockedURLSubstrings;
+  private Iterable<String> blockedURLSubstrings;
 
   @Override
   public void init(ServletConfig servletConfig) throws ServletException {
@@ -115,13 +114,9 @@ public final class DecodeServlet extends HttpServlet {
     diskFileItemFactory = new DiskFileItemFactory(1 << 16, repository);
     diskFileItemFactory.setFileCleaningTracker(fileCleaningTracker);
     
-    blockedURLSubstrings = new ArrayList<>();
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-             DecodeServlet.class.getResourceAsStream("/private/uri-block-substrings.txt"), UTF8))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        blockedURLSubstrings.add(line);
-      }
+    try {
+      blockedURLSubstrings =
+          Resources.readLines(Resources.getResource("/private/uri-block-substrings.txt"), Charsets.UTF_8);
     } catch (IOException ioe) {
       throw new ServletException(ioe);
     }
@@ -194,8 +189,8 @@ public final class DecodeServlet extends HttpServlet {
     connection.setAllowUserInteraction(false);
     connection.setReadTimeout(5000);
     connection.setConnectTimeout(5000);
-    connection.setRequestProperty("User-Agent", "zxing.org");
-    connection.setRequestProperty("Connection", "close");
+    connection.setRequestProperty(HttpHeaders.USER_AGENT, "zxing.org");
+    connection.setRequestProperty(HttpHeaders.CONNECTION, "close");
 
     try {
 
@@ -222,7 +217,7 @@ public final class DecodeServlet extends HttpServlet {
           response.sendRedirect("badurl.jspx");
           return;
         }
-        if (connection.getHeaderFieldInt("Content-Length", 0) > MAX_IMAGE_SIZE) {
+        if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
           log.info("Too large");
           response.sendRedirect("badimage.jspx");
           return;
@@ -314,7 +309,7 @@ public final class DecodeServlet extends HttpServlet {
     }
     if (image.getHeight() <= 1 || image.getWidth() <= 1 ||
         image.getHeight() * image.getWidth() > MAX_PIXELS) {
-      log.info("Dimensions too large: " + image.getWidth() + 'x' + image.getHeight());
+      log.info("Dimensions out of bounds: " + image.getWidth() + 'x' + image.getHeight());
       response.sendRedirect("badimage.jspx");
       return;
     }
@@ -328,7 +323,7 @@ public final class DecodeServlet extends HttpServlet {
 
     LuminanceSource source = new BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-    Collection<Result> results = new ArrayList<>(1);
+    Collection<Result> results = Lists.newArrayListWithCapacity(1);
 
     try {
 
@@ -396,9 +391,9 @@ public final class DecodeServlet extends HttpServlet {
     String fullParameter = request.getParameter("full");
     boolean minimalOutput = fullParameter != null && !Boolean.parseBoolean(fullParameter);
     if (minimalOutput) {
-      response.setContentType("text/plain");
-      response.setCharacterEncoding("UTF8");
-      try (Writer out = new OutputStreamWriter(response.getOutputStream(), UTF8)) {
+      response.setContentType(MediaType.PLAIN_TEXT_UTF_8.toString());
+      response.setCharacterEncoding(Charsets.UTF_8.name());
+      try (Writer out = new OutputStreamWriter(response.getOutputStream(), Charsets.UTF_8)) {
         for (Result result : results) {
           out.write(result.getText());
           out.write('\n');
