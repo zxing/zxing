@@ -144,6 +144,9 @@ public final class PDF417ScanningDecoder {
       return null;
     }
     int[] rowHeights = rowIndicatorColumn.getRowHeights();
+    if (rowHeights == null) {
+      return null;
+    }
     int maxRowHeight = getMax(rowHeights);
     int missingStartRows = 0;
     for (int rowHeight : rowHeights) {
