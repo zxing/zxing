@@ -96,6 +96,12 @@ Ref<Result> Code93Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
     nextStart = row->getNextSet(nextStart);
   } while (decodedChar != '*');
   result.resize(result.length() - 1); // remove asterisk
+
+  // Look for whitespace after pattern:
+  int lastPatternSize = 0;
+  for (int i = 0, e = theCounters.size(); i < e; i++) {
+    lastPatternSize += theCounters[i];
+  }
   
   // Should be at least one more black module
   if (nextStart == end || !row->get(nextStart)) {
@@ -114,7 +120,7 @@ Ref<Result> Code93Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   Ref<String> resultString = decodeExtended(result);
 
   float left = (float) (start[1] + start[0]) / 2.0f;
-  float right = (float) (nextStart + lastStart) / 2.0f;
+  float right = lastStart + lastPatternSize / 2.0f;
 
   ArrayRef< Ref<ResultPoint> > resultPoints (2);
   resultPoints[0] = 

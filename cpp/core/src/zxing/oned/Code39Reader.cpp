@@ -161,7 +161,7 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   }
 
   float left = (float) (start[1] + start[0]) / 2.0f;
-  float right = (float) (nextStart + lastStart) / 2.0f;
+  float right = lastStart + lastPatternSize / 2.0f;
 
   ArrayRef< Ref<ResultPoint> > resultPoints (2);
   resultPoints[0] = 
