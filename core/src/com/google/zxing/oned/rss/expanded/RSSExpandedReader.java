@@ -28,6 +28,7 @@ package com.google.zxing.oned.rss.expanded;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -122,7 +123,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   @Override
   public Result decodeRow(int rowNumber,
                           BitArray row,
-                          Map<DecodeHintType,?> hints) throws NotFoundException {
+                          Map<DecodeHintType,?> hints) throws NotFoundException, FormatException {
     // Rows can start with even pattern in case in prev rows there where odd number of patters.
     // So lets try twice
     this.pairs.clear();
@@ -362,7 +363,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   }
 
   // Not private for unit testing
-  static Result constructResult(List<ExpandedPair> pairs) throws NotFoundException{
+  static Result constructResult(List<ExpandedPair> pairs) throws NotFoundException, FormatException {
     BitArray binary = BitArrayBuilder.buildBitArray(pairs);
 
     AbstractExpandedDecoder decoder = AbstractExpandedDecoder.createDecoder(binary);

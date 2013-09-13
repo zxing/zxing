@@ -26,6 +26,7 @@
 
 package com.google.zxing.oned.rss.expanded.decoders;
 
+import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitArray;
 
@@ -51,7 +52,7 @@ public abstract class AbstractExpandedDecoder {
     return generalDecoder;
   }
 
-  public abstract String parseInformation() throws NotFoundException;
+  public abstract String parseInformation() throws NotFoundException, FormatException;
 
   public static AbstractExpandedDecoder createDecoder(BitArray information){
     if (information.get(1)) {

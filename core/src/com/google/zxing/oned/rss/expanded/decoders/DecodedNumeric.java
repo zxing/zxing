@@ -26,6 +26,8 @@
 
 package com.google.zxing.oned.rss.expanded.decoders;
 
+import com.google.zxing.FormatException;
+
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
@@ -37,19 +39,15 @@ final class DecodedNumeric extends DecodedObject {
 
   static final int FNC1 = 10;
 
-  DecodedNumeric(int newPosition, int firstDigit, int secondDigit){
+  DecodedNumeric(int newPosition, int firstDigit, int secondDigit) throws FormatException {
     super(newPosition);
+
+    if (firstDigit < 0 || firstDigit > 10 || secondDigit < 0 || secondDigit > 10) {
+      throw FormatException.getFormatInstance();
+    }
 
     this.firstDigit  = firstDigit;
     this.secondDigit = secondDigit;
-
-    if (this.firstDigit < 0 || this.firstDigit > 10) {
-      throw new IllegalArgumentException("Invalid firstDigit: " + firstDigit);
-    }
-
-    if (this.secondDigit < 0 || this.secondDigit > 10) {
-      throw new IllegalArgumentException("Invalid secondDigit: " + secondDigit);
-    }
   }
 
   int getFirstDigit(){
