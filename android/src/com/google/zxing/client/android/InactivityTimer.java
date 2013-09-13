@@ -36,11 +36,13 @@ final class InactivityTimer {
 
   private final Activity activity;
   private final BroadcastReceiver powerStatusReceiver;
+  private boolean registered;
   private AsyncTask<?,?,?> inactivityTask;
 
   InactivityTimer(Activity activity) {
     this.activity = activity;
     powerStatusReceiver = new PowerStatusReceiver();
+    registered = false;
     onActivity();
   }
 
@@ -50,17 +52,27 @@ final class InactivityTimer {
     inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
-  public void onPause() {
+  public synchronized void onPause() {
     cancel();
-    activity.unregisterReceiver(powerStatusReceiver);
+    if (registered) {
+      activity.unregisterReceiver(powerStatusReceiver);
+      registered = false;
+    } else {
+      Log.w(TAG, "PowerStatusReceiver was never registered?");
+    }
   }
 
-  public void onResume(){
-    activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+  public synchronized void onResume() {
+    if (registered) {
+      Log.w(TAG, "PowerStatusReceiver was already registered?");
+    } else {
+      activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+      registered = true;
+    }
     onActivity();
   }
 
-  private synchronized  void cancel() {
+  private synchronized void cancel() {
     AsyncTask<?,?,?> task = inactivityTask;
     if (task != null) {
       task.cancel(true);
