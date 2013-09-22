@@ -100,8 +100,8 @@
   <string name="preferences_disable_continuous_focus_title">Kein kontinuierlicher Fokus</string>
   <string name="preferences_disable_exposure_title">Keine Belichtungsmessung </string>
   <string name="preferences_front_light_auto">Automatisch</string>
-  <string name="preferences_front_light_off">Ein</string>
-  <string name="preferences_front_light_on">Aus</string>
+  <string name="preferences_front_light_off">Aus</string>
+  <string name="preferences_front_light_on">Ein</string>
   <string name="preferences_front_light_summary">Verbessert bei einigen Mobiltelefonen das Scannen bei schwachem Licht, kann aber Überbelichtung verursachen. Funktioniert nicht mit allen Handys.</string>
   <string name="preferences_front_light_title">Foto LED einschalten</string>
   <string name="preferences_general_title">Allgemeine Einstellungen</string>
