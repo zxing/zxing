@@ -360,12 +360,18 @@ final class PDF417HighLevelEncoder {
                                    StringBuilder sb) {
     if (count == 1 && startmode == TEXT_COMPACTION) {
       sb.append((char) SHIFT_TO_BYTE);
+    } else {
+      boolean sixpack = ((count % 6) == 0);
+      if (sixpack) {
+        sb.append((char)LATCH_TO_BYTE);
+      } else {
+        sb.append((char)LATCH_TO_BYTE_PADDED);
+      }
     }
 
     int idx = startpos;
     // Encode sixpacks
     if (count >= 6) {
-      sb.append((char) LATCH_TO_BYTE);
       char[] chars = new char[5];
       while ((startpos + count - idx) >= 6) {
         long t = 0;
@@ -384,9 +390,6 @@ final class PDF417HighLevelEncoder {
       }
     }
     //Encode rest (remaining n<5 bytes if any)
-    if (idx < startpos + count) {
-      sb.append((char) LATCH_TO_BYTE_PADDED);
-    }
     for (int i = idx; i < startpos + count; i++) {
       int ch = bytes[i] & 0xff;
       sb.append((char) ch);
