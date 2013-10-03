@@ -58,7 +58,7 @@ public final class VCardResultParser extends ResultParser {
     List<List<String>> names = matchVCardPrefixedField("FN", rawText, true, false);
     if (names == null) {
       // If no display names found, look for regular name fields and format them
-      names = matchVCardPrefixedField("N", rawText, true, false);
+      names = matchVCardPrefixedField("N", rawText, true, true);
       formatNames(names);
     }
     List<String> nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
