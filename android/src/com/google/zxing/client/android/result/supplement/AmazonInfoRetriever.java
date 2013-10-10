@@ -120,7 +120,7 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
       }
 
     } catch (XmlPullParserException xppe) {
-      throw new IOException(xppe.toString());
+      throw new IOException(xppe);
     }
     
     if (error || detailPageURL == null) {

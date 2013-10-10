@@ -200,7 +200,7 @@ public final class HttpHelper {
     } catch (NullPointerException npe) {
       // Another strange bug in Android?
       Log.w(TAG, "Bad URI? " + url);
-      throw new IOException(npe.toString());
+      throw new IOException(npe);
     }
     if (!(conn instanceof HttpURLConnection)) {
       throw new IOException();
@@ -213,31 +213,30 @@ public final class HttpHelper {
       connection.connect();
     } catch (NullPointerException npe) {
       // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
-      Log.w(TAG, "Bad URI? " + uri);
-      throw new IOException(npe.toString());
+      throw new IOException(npe);
     } catch (IllegalArgumentException iae) {
       // Also seen this in the wild, not sure what to make of it. Probably a bad URL
-      Log.w(TAG, "Bad URI? " + uri);
-      throw new IOException(iae.toString());
+      throw new IOException(iae);
     } catch (SecurityException se) {
       // due to bad VPN settings?
       Log.w(TAG, "Restricted URI? " + uri);
-      throw new IOException(se.toString());
+      throw new IOException(se);
     } catch (IndexOutOfBoundsException ioobe) {
       // Another Android problem? https://groups.google.com/forum/?fromgroups#!topic/google-admob-ads-sdk/U-WfmYa9or0
-      Log.w(TAG, "Bad URI? " + uri);
-      throw new IOException(ioobe.toString());
+      throw new IOException(ioobe);
     }
     try {
       return connection.getResponseCode();
     } catch (NullPointerException npe) {
       // this is maybe this Android bug: http://code.google.com/p/android/issues/detail?id=15554
-      Log.w(TAG, "Bad URI? " + uri);
-      throw new IOException(npe.toString());
+      throw new IOException(npe);
     } catch (IllegalArgumentException iae) {
       // Again seen this in the wild for bad header fields in the server response! or bad reads
       Log.w(TAG, "Bad server status? " + uri);
-      throw new IOException(iae.toString());
+      throw new IOException(iae);
+    } catch (StringIndexOutOfBoundsException sioobe) {
+      // Another Android bug: https://code.google.com/p/android/issues/detail?id=18856
+      throw new IOException(sioobe);
     }
   }
 

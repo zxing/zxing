@@ -88,7 +88,7 @@ final class BookResultInfoRetriever extends SupplementalInfoRetriever {
       }
 
     } catch (JSONException e) {
-      throw new IOException(e.toString());
+      throw new IOException(e);
     }
 
     Collection<String> newTexts = new ArrayList<String>();
