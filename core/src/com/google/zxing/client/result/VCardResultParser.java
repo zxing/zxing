@@ -59,7 +59,7 @@ public final class VCardResultParser extends ResultParser {
     List<List<String>> names = matchVCardPrefixedField("FN", rawText, true, false);
     if (names == null) {
       // If no display names found, look for regular name fields and format them
-      names = matchVCardPrefixedField("N", rawText, true, true);
+      names = matchVCardPrefixedField("N", rawText, true, false);
       formatNames(names);
     }
     List<String> nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
@@ -328,7 +328,7 @@ public final class VCardResultParser extends ResultParser {
         int start = 0;
         int end;
         int componentIndex = 0;
-        while (componentIndex < components.length - 1 && (end = name.indexOf(';', start)) > 0) {
+        while (componentIndex < components.length - 1 && (end = name.indexOf(';', start)) >= 0) {
           components[componentIndex] = name.substring(start, end);
           componentIndex++;
           start = end + 1;
@@ -346,8 +346,10 @@ public final class VCardResultParser extends ResultParser {
   }
 
   private static void maybeAppendComponent(String[] components, int i, StringBuilder newName) {
-    if (components[i] != null) {
-      newName.append(' ');
+    if (components[i] != null && !components[i].isEmpty()) {
+      if (newName.length() > 0) {
+        newName.append(' ');
+      }
       newName.append(components[i]);
     }
   }

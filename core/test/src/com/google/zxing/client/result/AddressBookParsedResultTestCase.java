@@ -49,6 +49,24 @@ public final class AddressBookParsedResultTestCase extends Assert {
   }
 
   @Test
+  public void testVCardFullN() {
+    doTest("BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean;T;Mr.;Esq.\r\nEND:VCARD",
+           null, new String[] {"Mr. Sean T Owen Esq."}, null, null, null, null, null, null, null, null);
+  }
+
+  @Test
+  public void testVCardFullN2() {
+    doTest("BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean;;;\r\nEND:VCARD",
+           null, new String[] {"Sean Owen"}, null, null, null, null, null, null, null, null);
+  }
+
+  @Test
+  public void testVCardFullN3() {
+    doTest("BEGIN:VCARD\r\nVERSION:2.1\r\nN:;Sean;;;\r\nEND:VCARD",
+           null, new String[] {"Sean"}, null, null, null, null, null, null, null, null);
+  }
+
+  @Test
   public void testVCardCaseInsensitive() {
     doTest("begin:vcard\r\nadr;HOME:123 Main St\r\nVersion:2.1\r\nn:Owen;Sean\r\nEND:VCARD",
            null, new String[] {"Sean Owen"}, null, new String[] {"123 Main St"}, null, null, null, null, null, null);
