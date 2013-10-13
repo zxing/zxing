@@ -20,6 +20,7 @@ import com.google.zxing.Result;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -245,13 +246,12 @@ public final class VCardResultParser extends ResultParser {
       byte[] fragmentBytes = fragmentBuffer.toByteArray();
       String fragment;
       if (charset == null) {
-        fragment = new String(fragmentBytes);
+        fragment = new String(fragmentBytes, Charset.forName("UTF-8"));
       } else {
         try {
           fragment = new String(fragmentBytes, charset);
         } catch (UnsupportedEncodingException e) {
-          // Yikes, well try anyway:
-          fragment = new String(fragmentBytes);
+          fragment = new String(fragmentBytes, Charset.forName("UTF-8"));
         }
       }
       fragmentBuffer.reset();

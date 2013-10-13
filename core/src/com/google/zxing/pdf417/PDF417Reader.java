@@ -88,9 +88,6 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
     for (ResultPoint[] points : detectorResult.getPoints()) {
       DecoderResult decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4], points[5],
           points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
-      if (decoderResult == null) {
-        throw NotFoundException.getNotFoundInstance();
-      }
       Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.PDF_417);
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel());
       PDF417ResultMetadata pdf417ResultMetadata = (PDF417ResultMetadata) decoderResult.getOther();

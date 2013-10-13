@@ -47,12 +47,7 @@ public final class ExpandedProductResultParser extends ResultParser {
       // ExtendedProductParsedResult NOT created. Not a RSS Expanded barcode
       return null;
     }
-    // Really neither of these should happen:
     String rawText = getMassagedText(result);
-    if (rawText == null) {
-      // ExtendedProductParsedResult NOT created. Input text is NULL
-      return null;
-    }
 
     String productID = null;
     String sscc = null;
