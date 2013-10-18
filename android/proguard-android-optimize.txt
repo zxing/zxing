@@ -23,16 +23,12 @@
 -dontskipnonpubliclibraryclasses
 -verbose
 
+# ADDED
+-dontobfuscate
+
 -keepattributes *Annotation*
 -keep public class com.google.vending.licensing.ILicensingService
 -keep public class com.android.vending.licensing.ILicensingService
-
-# ADDED
--keep class com.google.zxing.client.android.common.executor.**
-
-# ADDED 
--dontobfuscate
--useuniqueclassmembernames
 
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
 -keepclasseswithmembernames class * {
