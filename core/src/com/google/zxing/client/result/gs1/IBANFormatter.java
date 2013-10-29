@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 ZXing authors
+ * Copyright 2013 Melchior Rabe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.result;
+package com.google.zxing.client.result.gs1;
 
 /**
- * Represents the type of data encoded by a barcode -- from plain text, to a
- * URI, to an e-mail address, etc.
- *
- * @author Sean Owen
+ * <p>
+ * Will format an international bank account number in the future. Currently it
+ * is formatted as alphanumeric string.
+ * </p>
+ * 
+ * @author Melchior Rabe
+ * 
  */
-public enum ParsedResultType {
+public class IBANFormatter extends AlphaNumericFormatter {
 
-  ADDRESSBOOK,
-  EMAIL_ADDRESS,
-  PRODUCT,
-  URI,
-  TEXT,
-  GEO,
-  TEL,
-  SMS,
-  CALENDAR,
-  WIFI,
-  ISBN, 
-  GS1,
-
+	public IBANFormatter() {
+		super(30);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 ZXing authors
+ * Copyright 2013 Melchior Rabe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,22 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.result;
+package com.google.zxing.client.result.gs1;
 
 /**
- * Represents the type of data encoded by a barcode -- from plain text, to a
- * URI, to an e-mail address, etc.
- *
- * @author Sean Owen
+ * This interface has to be implemented by formatters that shall format indexed
+ * ais.
+ * 
+ * @author Melchior Rabe
+ * 
  */
-public enum ParsedResultType {
-
-  ADDRESSBOOK,
-  EMAIL_ADDRESS,
-  PRODUCT,
-  URI,
-  TEXT,
-  GEO,
-  TEL,
-  SMS,
-  CALENDAR,
-  WIFI,
-  ISBN, 
-  GS1,
-
+public interface IndexedAI {
+	/**
+	 * Returns the index for the given value.
+	 * 
+	 * @param value
+	 *            The value
+	 * @return The index
+	 */
+	String getIndex(String value);
 }

@@ -59,6 +59,7 @@ public abstract class ResultParser {
       new ISBNResultParser(),
       new ProductResultParser(),
       new ExpandedProductResultParser(),
+      new GS1ResultParser(),
   };
 
   private static final Pattern DIGITS = Pattern.compile("\\d*");
