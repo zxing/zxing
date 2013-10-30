@@ -319,6 +319,10 @@ public enum GS1ApplicationIdentifier {
 		return formatter.format(value);
 	}
 
+	public boolean matches(String value){
+		return formatter.matches(value);
+	}
+	
 	/**
 	 * Returns a Set of strings containing all ais.
 	 * 

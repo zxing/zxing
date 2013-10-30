@@ -14,7 +14,7 @@ import com.google.zxing.common.BitMatrix;
 public class WriteGS1Codes {
 
 	public static class GS1Builder{
-		private StringBuilder sb = new StringBuilder();
+		private StringBuilder sb = new StringBuilder().append("\u001d");
 		
 		public GS1Builder append(String ai, String value){
 			sb.append(ai);
@@ -73,9 +73,10 @@ public class WriteGS1Codes {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		writeCode("00123456789012345678", "SSCC");
-		writeCode("0112345678901234", "GTIN");
-		writeCode("011234567890123417140415", "GTIN-EXP");
+		writeCode("\u001d00123456789012345675", "SSCC");
+		writeCode("\u001d0112345678901231", "GTIN");
+		writeCode("\u001d0112345678901235", "INVALID-GTIN");
+		writeCode("\u001d011234567890123417140415", "GTIN-EXP");
 		
 		GS1Builder builder = new GS1Builder();
 		builder.append("01", "11234456789219")
