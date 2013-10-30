@@ -24,6 +24,7 @@ import android.os.Bundle;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
+ * @author Melchior Rabe
  */
 public final class PreferencesActivity extends Activity {
 
@@ -44,7 +45,13 @@ public final class PreferencesActivity extends Activity {
   public static final String KEY_SEARCH_COUNTRY = "preferences_search_country";
 
   public static final String KEY_DISABLE_CONTINUOUS_FOCUS = "preferences_disable_continuous_focus";
+  
   //public static final String KEY_DISABLE_EXPOSURE = "preferences_disable_exposure";
+
+  public static final String KEY_DECODE_GS1 = "preferences_gs1_decode";
+  public static final String KEY_GS1_AI_REPRESENTATION = "preferences_gs1_ai_presentation";
+public static final String VALUE_GS1_AI_REPRESENTATION_ONLY_VALUE = "OnlyValue";
+  
 
   @Override
   protected void onCreate(Bundle icicle) {

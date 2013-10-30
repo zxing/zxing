@@ -59,6 +59,21 @@
         android:title="@string/preferences_custom_product_search_title"
         android:summary="@string/preferences_custom_product_search_summary"/>
   </PreferenceCategory>
+  <PreferenceCategory android:title="@string/preferences_gs1_decoding">
+    <CheckBoxPreference
+        android:key="preferences_gs1_decode"
+        android:defaultValue="true"
+        android:title="@string/preferences_gs1_decode_title"
+        android:summary="@string/preferences_gs1_decode_summary"/>
+      	    
+    <ListPreference
+        android:key="preferences_gs1_ai_presentation"
+        android:defaultValue="-"
+        android:entries="@array/preferences_gs1_ai_representation_options"
+        android:entryValues="@array/preferences_gs1_ai_representation_values"
+        android:title="@string/preferences_gs1_representation"/>
+    	    
+  </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_general_title">
     <ListPreference
         android:entries="@array/preferences_front_light_options"

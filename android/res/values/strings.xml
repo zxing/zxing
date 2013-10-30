@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Barcode Scanner</string>
+  <string name="app_name">Barcode Scanner Xtra</string>
   <string name="app_picker_name">Applications</string>
   <string name="bookmark_picker_name">Bookmarks</string>
   <string name="button_add_calendar">Add to calendar</string>
@@ -119,6 +119,13 @@
   <string name="preferences_supplemental_summary">Try to retrieve more information about the barcode contents</string>
   <string name="preferences_supplemental_title">Retrieve more info</string>
   <string name="preferences_vibrate_title">Vibrate</string>
+  <string name="preferences_gs1_decoding">GS1 Settings</string>
+  <string name="preferences_gs1_decode_title">GS1 Settings</string>
+  <string name="preferences_gs1_decode_summary">Decode GS1 compliant barcodes</string>
+  <string name="preferences_gs1_representation">Change AI display mode</string>
+  <string name="preferences_gs1_only_number">Number</string>
+  <string name="preferences_gs1_only_text">Text</string>
+  <string name="preferences_gs1_number_and_text">Number and Text</string>
   <string name="result_address_book">Found contact info</string>
   <string name="result_calendar">Found calendar event</string>
   <string name="result_email_address">Found email address</string>

@@ -17,7 +17,9 @@
 package com.google.zxing.client.android.result.supplement;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -31,7 +33,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.history.HistoryManager;
+import com.google.zxing.client.android.result.supplement.GS1DisplayDeletgate.GS1Representation;
+import com.google.zxing.client.result.GS1ParsedResult;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
@@ -82,7 +87,20 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
       SupplementalInfoRetriever amazonInfoRetriever =
           new AmazonInfoRetriever(textView, "ISBN", isbn, historyManager, context);
       amazonInfoRetriever.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);      
-    }
+	} else if (result instanceof GS1ParsedResult) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean decodeGS1 = prefs.getBoolean(
+				PreferencesActivity.KEY_DECODE_GS1, false);
+		GS1ParsedResult parsedResult = (GS1ParsedResult) result;
+
+		if (decodeGS1) {
+			GS1Representation representation = GS1Representation.readPref(prefs);
+			GS1DisplayDeletgate.fillResult(textView, parsedResult, representation);
+		} else {
+			textView.setText(parsedResult.getText());
+		}
+	}
+
   }
 
   private final WeakReference<TextView> textViewRef;

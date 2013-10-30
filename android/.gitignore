@@ -3,3 +3,5 @@
 /lint.xml
 /.settings
 /bin
+/gen
+/proguard

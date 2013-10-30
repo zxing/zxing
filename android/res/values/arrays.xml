@@ -44,4 +44,14 @@
     <item>@string/preferences_front_light_auto</item>
     <item>@string/preferences_front_light_off</item>
   </string-array>
+  <string-array name="preferences_gs1_ai_representation_options">
+    <item>@string/preferences_gs1_only_number</item>
+    <item>@string/preferences_gs1_only_text</item>
+    <item>@string/preferences_gs1_number_and_text</item>
+  </string-array>
+  <string-array name="preferences_gs1_ai_representation_values">
+    <item>ValueOnly</item>
+    <item>TextOnly</item>
+    <item>ValueAndText</item>
+  </string-array>
 </resources>
