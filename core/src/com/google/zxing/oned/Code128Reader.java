@@ -240,6 +240,10 @@ public final class Code128Reader extends OneDReader {
 
     int[] startPatternInfo = findStartPattern(row);
     int startCode = startPatternInfo[2];
+
+    List<Byte> rawCodes = new ArrayList<Byte>(20);
+    rawCodes.add((byte) startCode);
+
     int codeSet;
     switch (startCode) {
       case CODE_START_A:
@@ -259,7 +263,6 @@ public final class Code128Reader extends OneDReader {
     boolean isNextShifted = false;
 
     StringBuilder result = new StringBuilder(20);
-    List<Byte> rawCodes = new ArrayList<Byte>(20);
 
     int lastStart = startPatternInfo[0];
     int nextStart = startPatternInfo[1];
