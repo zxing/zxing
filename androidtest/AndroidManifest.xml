@@ -22,7 +22,7 @@
 
   <uses-permission android:name="android.permission.CAMERA"/>
 
-  <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="18"/>
+  <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="19"/>
 
   <supports-screens android:xlargeScreens="true"
                     android:largeScreens="true"
