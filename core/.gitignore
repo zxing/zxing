@@ -1,1 +1,6 @@
 target/
+/build
+/.settings
+/.project
+*.png
+/.classpath

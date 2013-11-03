@@ -18,6 +18,7 @@ package com.google.zxing.client.result.gs1;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -32,6 +33,11 @@ import java.util.Date;
  */
 public class DateFormatter extends NumericFormatter {
 
+	private SimpleDateFormat dateFormatWithDay = new SimpleDateFormat(
+			"yyyy-MM-dd");
+	private SimpleDateFormat dateFormatWithoutDay = new SimpleDateFormat(
+			"yyyy-MM");
+
 	protected DateFormatter() {
 		super(6, true);
 	}
@@ -39,23 +45,72 @@ public class DateFormatter extends NumericFormatter {
 	@Override
 	public String format(String value) {
 		if (matches(value)) {
-			String formattedDate = value.substring(0, 2);
-			formattedDate += "-";
-			formattedDate += value.substring(2, 4);
-			if (!value.endsWith("00")) {
-				formattedDate += "-";
-				formattedDate += value.substring(4, 6);
+			SimpleDateFormat df;
+
+			if (hasDay(value)) {
+				df = dateFormatWithDay;
+			} else {
+				df = dateFormatWithoutDay;
 			}
-			return formattedDate;
+			
+			Date d = getDate(value);
+
+			return df.format(d);
 		} else {
 			return value;
 		}
 	}
 
+	/**
+	 * converts the value given into a date object
+	 * @param value
+	 * @return
+	 */
+	private Date getDate(String value) {
+		int year = Integer.parseInt(value.substring(0, 2), 10);
+		int month = Integer.parseInt(value.substring(2, 4), 10);
+		int day = Integer.parseInt(value.substring(4, 6), 10);
+		
+		// tweak the values
+		int currentYear = calculateYear(year);
+		// seat day to 1 as zero causes trouble!
+		if(day == 0){
+			day = 1;
+		}
+		Calendar c = Calendar.getInstance();
+		c.set(currentYear, month-1, day);
+		return c.getTime();
+	}
+
+	protected int calculateYear(int twoDigitYear) {
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		int currentYearInCentury = currentYear % 100;
+		// 
+		int normalizedYear = (twoDigitYear - currentYearInCentury + 100) % 100;
+		
+		// year is in the future
+		if(normalizedYear <= 50){
+			twoDigitYear = currentYear + normalizedYear;
+		}else{
+			twoDigitYear = currentYear - (100 - normalizedYear);
+		}
+		return twoDigitYear;
+	}
+
+	/**
+	 * Returns if a value for a day is encode or not. Use only with valid values
+	 * 
+	 * @param value The date string
+	 * @return
+	 */
+	private boolean hasDay(String value) {
+		return !value.endsWith("00");
+	}
+
 	@Override
 	public boolean matches(String value) {
 		if (super.matches(value)) {
-			if (value.endsWith("00")) {
+			if (!hasDay(value)) {
 				value = value.substring(0, 4) + "01";
 
 			}

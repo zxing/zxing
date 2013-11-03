@@ -30,7 +30,13 @@ import java.util.Date;
  * 
  */
 public class DateTimeFormatter extends NumericFormatter {
+	private static final SimpleDateFormat DEFAULT_FORMAT_WITHOUT_SECONDS = new SimpleDateFormat("yy-MM-dd HH:mm");
+	private static final SimpleDateFormat PARSING_FORMAT_WITHOUT_SECONDS = new SimpleDateFormat("yyMMddHHmm");
+	private static final SimpleDateFormat DEFAULT_FORMAT_WITH_SECONDS = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+	private static final SimpleDateFormat PARSING_FORMAT_WITH_SECONDS = new SimpleDateFormat("yyMMddHHmmss");
 	private final boolean hasSeconds;
+	private SimpleDateFormat formatWithoutSeconds;
+	private SimpleDateFormat formatWithSeconds;
 
 	/**
 	 * Default ctor
@@ -42,6 +48,8 @@ public class DateTimeFormatter extends NumericFormatter {
 	public DateTimeFormatter(boolean hasSeconds) {
 		super(hasSeconds ? 12 : 10, true);
 		this.hasSeconds = hasSeconds;
+		this.formatWithSeconds = DEFAULT_FORMAT_WITH_SECONDS;
+		this.formatWithoutSeconds = DEFAULT_FORMAT_WITHOUT_SECONDS;
 	}
 
 	@Override
@@ -54,11 +62,11 @@ public class DateTimeFormatter extends NumericFormatter {
 		SimpleDateFormat outFormat;
 
 		if (hasSeconds) {
-			inFormat = new SimpleDateFormat("yyMMddHHmmss");
-			outFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+			inFormat = PARSING_FORMAT_WITH_SECONDS;
+			outFormat = formatWithSeconds;
 		} else {
-			inFormat = new SimpleDateFormat("yyMMddHHmm");
-			outFormat = new SimpleDateFormat("yy-MM-dd HH:mm");
+			inFormat = PARSING_FORMAT_WITHOUT_SECONDS;
+			outFormat = formatWithoutSeconds;
 		}
 
 		try {
@@ -76,9 +84,9 @@ public class DateTimeFormatter extends NumericFormatter {
 
 		SimpleDateFormat df;
 		if (hasSeconds) {
-			df = new SimpleDateFormat("yyMMddHHmmss");
+			df = PARSING_FORMAT_WITH_SECONDS;
 		} else {
-			df = new SimpleDateFormat("yyMMddHHmm");
+			df = PARSING_FORMAT_WITHOUT_SECONDS;
 		}
 		try {
 			Date d = df.parse(value);

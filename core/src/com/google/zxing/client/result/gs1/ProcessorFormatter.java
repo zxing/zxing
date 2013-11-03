@@ -26,7 +26,7 @@ package com.google.zxing.client.result.gs1;
  */
 
 public class ProcessorFormatter extends AlphaNumericFormatter implements IndexedAI {
-	private static final IsoCountryFormatter ISO_FORMATTER = new IsoCountryFormatter(
+	private static final AbstractIsoFormatter ISO_FORMATTER = new IsoCountryFormatter(
 			1);
 
 	public ProcessorFormatter() {
@@ -37,7 +37,7 @@ public class ProcessorFormatter extends AlphaNumericFormatter implements Indexed
 	@Override
 	public String format(String value) {
 		return ISO_FORMATTER.format(getIsoCode(value))
-				+ " " + getApprovalNumber(value);
+				+ getItemSeparator() + getApprovalNumber(value);
 	}
 
 	@Override

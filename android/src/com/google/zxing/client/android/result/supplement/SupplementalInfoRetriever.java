@@ -16,6 +16,11 @@
 
 package com.google.zxing.client.android.result.supplement;
 
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -28,11 +33,6 @@ import android.text.style.URLSpan;
 import android.util.Log;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.result.supplement.GS1DisplayDeletgate.GS1Representation;
@@ -41,6 +41,8 @@ import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
+import com.google.zxing.client.result.gs1.IsoFormatter.CountryDecoding;
+import com.google.zxing.client.result.gs1.IsoFormatter.CurrencyDecoding;
 
 public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,Object> {
 
@@ -94,8 +96,14 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
 		GS1ParsedResult parsedResult = (GS1ParsedResult) result;
 
 		if (decodeGS1) {
+			prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
 			GS1Representation representation = GS1Representation.readPref(prefs);
-			GS1DisplayDeletgate.fillResult(textView, parsedResult, representation);
+			String countryPref = prefs.getString(PreferencesActivity.KEY_GS1_DECODE_COUNTRY, CountryDecoding.NoDecoding.name());
+			CountryDecoding countryDecoding = CountryDecoding.parse(countryPref);
+			String currencyPref = prefs.getString(PreferencesActivity.KEY_GS1_DECODE_CURRENCY, CurrencyDecoding.NoDecoding.name());
+			CurrencyDecoding currencyDecoding = CurrencyDecoding.parse(currencyPref);
+			GS1DisplayDeletgate.fillResult(textView, parsedResult, representation, countryDecoding, currencyDecoding);
 		} else {
 			textView.setText(parsedResult.getText());
 		}

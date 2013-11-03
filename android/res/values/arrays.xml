@@ -44,6 +44,26 @@
     <item>@string/preferences_front_light_auto</item>
     <item>@string/preferences_front_light_off</item>
   </string-array>
+  <string-array name="preferences_gs1_decode_currency_options">
+    <item>@string/preferences_gs1_no</item>
+    <item>@string/preferences_gs1_three_letter_code</item>
+  </string-array>
+  <string-array name="preferences_gs1_decode_currency_values">
+    <item>NoDecoding</item>
+    <item>LetterCode</item>
+  </string-array>
+  <string-array name="preferences_gs1_decode_country_options">
+    <item>@string/preferences_gs1_no</item>
+    <item>@string/preferences_gs1_two_letter_code</item>
+    <item>@string/preferences_gs1_three_letter_code</item>
+    <item>@string/preferences_gs1_name</item>
+  </string-array>
+  <string-array name="preferences_gs1_decode_country_values">
+    <item>NoDecoding</item>
+    <item>TwoLetterCode</item>
+    <item>ThreeLetterCode</item>
+    <item>Name</item>
+  </string-array>
   <string-array name="preferences_gs1_ai_representation_options">
     <item>@string/preferences_gs1_only_number</item>
     <item>@string/preferences_gs1_only_text</item>

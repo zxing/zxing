@@ -33,6 +33,9 @@ package com.google.zxing.client.result.gs1;
  */
 public class DecimalFormatter extends NumericFormatter implements IndexedAI {
 
+	public static final char DEFAULT_DECIMAL_SEPARATOR = '.';
+	private char decimalSeparator = DEFAULT_DECIMAL_SEPARATOR;
+	
 	/**
 	 * Constructs a decimal formatter for a number with the given amount of
 	 * digits (not including the indicator digit for the decimal separator).
@@ -63,7 +66,7 @@ public class DecimalFormatter extends NumericFormatter implements IndexedAI {
 		if (fractionPart.isEmpty()) {
 			return integerPart;
 		}
-		return integerPart + "." + fractionPart;
+		return integerPart + decimalSeparator + fractionPart;
 	}
 
 	@Override

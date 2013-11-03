@@ -33,7 +33,7 @@ public class NumericWithCheckDigitFormatter extends NumericFormatter {
 
 	@Override
 	public String format(String value) {
-		return value.substring(0, value.length() - 1) + " "
+		return value.substring(0, value.length() - 1) + getCheckDigitSeparator()
 				+ value.substring(value.length() - 1);
 	}
 

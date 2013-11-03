@@ -38,7 +38,7 @@ public class TradeItemComponentFormatter extends NumericFormatter {
 		if(!matches(value)){
 			return value;
 		}
-		return GTIN_FORMATTER.format(getGTIN(value)) + " " + getRelativeNumber(value) + " "
+		return GTIN_FORMATTER.format(getGTIN(value)) + getItemSeparator() + getRelativeNumber(value) + getItemSeparator()
 				+ getTotalNumber(value);
 	}
 

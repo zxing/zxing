@@ -44,9 +44,9 @@ public class RollProductFormatter extends NumericFormatter {
 	@Override
 	public String format(String value) {
 
-		return getSlitWidth(value) + " " + getLength(value) + " "
-				+ getCoreDiameter(value) + " " + getWindingDirection(value)
-				+ " " + getNumberOfSplices(value);
+		return getSlitWidth(value) + getItemSeparator() + getLength(value) + getItemSeparator()
+				+ getCoreDiameter(value) + getItemSeparator() + getWindingDirection(value)
+				+ getItemSeparator() + getNumberOfSplices(value);
 	}
 
 	private String getSlitWidth(String value) {

@@ -50,4 +50,23 @@ interface GS1Formatter {
 	 * @return true if the value matches, false otherwise
 	 */
 	boolean matches(String value);
+	
+	/**
+	 * Returns the character to separate a checkdigit from the rest of the value 
+	 * @return The separator
+	 */
+	char getCheckDigitSeparator();
+	
+	/**
+	 * Returns the character to separate different parts of a value (e.g. iso country code and amount in ai 391n)
+	 * @return The separator
+	 */
+	char getItemSeparator();
+
+	/**
+	 * Returns the string that indicates a malformed value.
+	 * @return The marker
+	 */
+	String getMalformedValueMarker();
+
 }

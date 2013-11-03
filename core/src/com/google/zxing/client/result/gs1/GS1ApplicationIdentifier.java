@@ -19,6 +19,8 @@ package com.google.zxing.client.result.gs1;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import com.google.zxing.client.result.gs1.IsoFormatter.CountryDecoding;
+import com.google.zxing.client.result.gs1.IsoFormatter.CurrencyDecoding;
 
 /**
  * The enum listing all the application identifiers defined by GS1.
@@ -27,7 +29,7 @@ import java.util.Set;
  * 
  */
 public enum GS1ApplicationIdentifier {
-	SSCC(0, "SSCC", false, new NumericWithCheckDigitFormatter(18)),
+	SSCC(0, "SSCC", false, new SSCCFormatter()),
 	GTIN(1, "GTIN", false, new NumericWithCheckDigitFormatter(14)),
 	CONTENT_GTIN(2, "CONTENT", false, new NumericWithCheckDigitFormatter(14)),
 	BATCH_LOT(10, "BATCH/LOT", true, new AlphaNumericFormatter(20)),
@@ -93,17 +95,26 @@ public enum GS1ApplicationIdentifier {
 	VOLUME_Y3_LOG(369, "VOLUME (y³), log", false, new DecimalFormatter(6)),
 	AMOUNT_LOCAL(390, "AMOUNT LOCAL", true, new DecimalFormatter(15, false)),
 	COUNT(37, "COUNT", true, new NumericFormatter(8, false)),
-	AMOUNT_ISO(391, "AMOUNT ISO", true, new DecimalWithIsoFormatter(15, false)),
+	AMOUNT_ISO(391, "AMOUNT ISO", true, new DecimalWithIsoCurrencyFormatter(15, false)),
 	PRICE(392, "PRICE", true, new DecimalFormatter(15, false)),
-	PRICE_ISO(393, "PRICE ISO", true, new DecimalWithIsoFormatter(15, false)),
+	PRICE_ISO(393, "PRICE ISO", true, new DecimalWithIsoCurrencyFormatter(15, false)),
 	ORDER_NUMBER(400, "ORDER NUMBER", true, new AlphaNumericFormatter(30)),
 	GINC(401, "GINC", true, new AlphaNumericFormatter(30)),
 	GSIN(402, "GSIN", true, new NumericWithCheckDigitFormatter(17)),
 	ROUTE(403, "ROUTE", true, new AlphaNumericFormatter(30)),
-	SHIP_TO_LOC(410, "SHIP TO LOC", false, new NumericWithCheckDigitFormatter(13)),
+	SHIP_TO_LOC(410, "SHIP TO LOC", false, new NumericWithCheckDigitFormatter(
+			13)),
 	BILL_TO_LOC(411, "BILL TO", false, new NumericWithCheckDigitFormatter(13)),
-	PURCHASED_FROM_LOC(412, "PURCHASE FROM", false, new NumericWithCheckDigitFormatter(13)),
-	SHIP_FOR_LOC(413, "SHIP FOR LOC", false, new NumericWithCheckDigitFormatter(13)),
+	PURCHASED_FROM_LOC(
+			412,
+			"PURCHASE FROM",
+			false,
+			new NumericWithCheckDigitFormatter(13)),
+	SHIP_FOR_LOC(
+			413,
+			"SHIP FOR LOC",
+			false,
+			new NumericWithCheckDigitFormatter(13)),
 	LOC_NO(414, "LOC No", false, new NumericWithCheckDigitFormatter(13)),
 	PAY_TO(415, "PAY TO", false, new NumericWithCheckDigitFormatter(13)),
 	SHIP_TO_POST(420, "SHIP TO POST", true, new AlphaNumericFormatter(20)),
@@ -196,6 +207,8 @@ public enum GS1ApplicationIdentifier {
 
 	;
 
+
+
 	private final int id;
 	private final boolean fnc1;
 	private final GS1Formatter formatter;
@@ -203,6 +216,11 @@ public enum GS1ApplicationIdentifier {
 
 	private static final Map<String, GS1ApplicationIdentifier> ID_MAP = new HashMap<String, GS1ApplicationIdentifier>();
 	private static int MAX_LENGTH = 0;
+	
+	private static CountryDecoding countryDecoding = CountryDecoding.NoDecoding;
+	private static CurrencyDecoding currencyDecoding = CurrencyDecoding.NoDecoding;
+
+	// build the map
 	static {
 		for (GS1ApplicationIdentifier id : GS1ApplicationIdentifier.values()) {
 			ID_MAP.put(id.getIdentifier(), id);
@@ -212,6 +230,7 @@ public enum GS1ApplicationIdentifier {
 		}
 	}
 
+	// private ctor
 	private GS1ApplicationIdentifier(int id, String dataTitle, boolean fnc1,
 			GS1Formatter formatter) {
 		this.id = id;
@@ -316,13 +335,17 @@ public enum GS1ApplicationIdentifier {
 	 * @return The formatted value.
 	 */
 	public String formatValue(String value) {
+		if(formatter instanceof IsoFormatter){
+			((IsoFormatter)formatter).setCountryDecoding(GS1ApplicationIdentifier.countryDecoding);
+			((IsoFormatter)formatter).setCurrencyDecoding(GS1ApplicationIdentifier.currencyDecoding);
+		}
 		return formatter.format(value);
 	}
 
-	public boolean matches(String value){
+	public boolean matches(String value) {
 		return formatter.matches(value);
 	}
-	
+
 	/**
 	 * Returns a Set of strings containing all ais.
 	 * 
@@ -353,4 +376,28 @@ public enum GS1ApplicationIdentifier {
 	public static GS1ApplicationIdentifier getIdentifier(String identifier) {
 		return ID_MAP.get(identifier);
 	}
+
+	public static CountryDecoding getCountryDecoding() {
+		return countryDecoding;
+	}
+
+	public static void setCountryDecoding(CountryDecoding countryDecoding) {
+		if(countryDecoding == null){
+			countryDecoding = CountryDecoding.NoDecoding;
+		}
+		GS1ApplicationIdentifier.countryDecoding = countryDecoding;
+	}
+
+	public static CurrencyDecoding getCurrencyDecoding() {
+		return currencyDecoding;
+	}
+
+	public static void setCurrencyDecoding(CurrencyDecoding currencyDecoding) {
+		if(currencyDecoding == null){
+			currencyDecoding = CurrencyDecoding.NoDecoding;
+		}
+		GS1ApplicationIdentifier.currencyDecoding = currencyDecoding;
+	}
+	
+	
 }

@@ -29,11 +29,20 @@ package com.google.zxing.client.result.gs1;
  */
 public abstract class AbstractFormatter implements GS1Formatter {
 
+	private static final char DEFAULT_CHECKDIGIT_SEPARATOR = ' ';
+	private static final String DEFAULT_MALFORMED_VALUE_MARKER = "! ";
+	private static final char DEFAULT_ITEM_SEPARATOR = ' ';
 	private final int maxLength;
+	private char checkDigitSeparator;
+	private char itemSeparator;
+	private String malformedValueMarker;
 
 	public AbstractFormatter(int maxLength) {
 		super();
 		this.maxLength = maxLength;
+		this.checkDigitSeparator = DEFAULT_CHECKDIGIT_SEPARATOR;
+		this.malformedValueMarker = DEFAULT_MALFORMED_VALUE_MARKER;
+		this.itemSeparator = DEFAULT_ITEM_SEPARATOR;
 	}
 
 	@Override
@@ -45,5 +54,24 @@ public abstract class AbstractFormatter implements GS1Formatter {
 	public boolean matches(String value) {
 		return value != null && value.length() <= maxLength;
 	}
+	
+	public void setCheckDigitSeparator(char checkDigitSeparator) {
+		this.checkDigitSeparator = checkDigitSeparator;
+	}
 
+	@Override
+	public char getCheckDigitSeparator() {
+		return checkDigitSeparator;
+	}
+
+	@Override
+	public char getItemSeparator() {
+		return itemSeparator;
+	}
+
+	@Override
+	public String getMalformedValueMarker() {
+		return malformedValueMarker;
+	}
+	
 }

@@ -16,6 +16,9 @@
 
 package com.google.zxing.client.result.gs1;
 
+import com.neovisionaries.i18n.CountryCode;
+
+
 /**
  * <p>
  * Formats an three digit ISO 3166 country code or a list of such codes.
@@ -24,9 +27,8 @@ package com.google.zxing.client.result.gs1;
  * @author Melchior Rabe
  * 
  */
-public class IsoCountryFormatter extends NumericFormatter {
+public class IsoCountryFormatter extends AbstractIsoFormatter {
 	private final int numberOfCodes;
-
 	/**
 	 * ctor.
 	 * 
@@ -39,19 +41,25 @@ public class IsoCountryFormatter extends NumericFormatter {
 	}
 
 	@Override
-	public String format(String value) {
-		if (!matches(value)) {
-			return value;
+	protected String decode(String countryCode) {
+		if (countryDecoding == CountryDecoding.NoDecoding) {
+			return countryCode;
 		}
-
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < numberOfCodes; i++) {
-			if (i > 0) {
-				sb.append(" ");
-			}
-			sb.append(value.substring(i*3, (i + 1) * 3));
+	
+		CountryCode cc = CountryCode.getByCode(Integer
+				.parseInt(countryCode, 10));
+		if (cc == null) {
+			return countryCode;
 		}
-		return sb.toString();
+		switch (countryDecoding) {
+		case ThreeLetterCode:
+			return cc.getAlpha3();
+		case TwoLetterCode:
+			return cc.getAlpha2();
+		case Name:
+			return cc.getName();
+		default:
+			return countryCode;
+		}
 	}
-
 }

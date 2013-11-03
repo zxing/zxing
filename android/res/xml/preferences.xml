@@ -60,15 +60,25 @@
         android:summary="@string/preferences_custom_product_search_summary"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_gs1_decoding">
-    <CheckBoxPreference
-        android:key="preferences_gs1_decode"
-        android:defaultValue="true"
-        android:title="@string/preferences_gs1_decode_title"
-        android:summary="@string/preferences_gs1_decode_summary"/>
+    <ListPreference
+        android:key="preferences_gs1_decode_currency"
+        android:defaultValue="@string/preferences_gs1_no"
+        android:title="@string/preferences_gs1_decode_currency"
+        android:entries="@array/preferences_gs1_decode_currency_options"
+        android:entryValues="@array/preferences_gs1_decode_currency_values"
+        android:summary="@string/preferences_gs1_decode_currency"/>
+      	    
+    <ListPreference
+        android:key="preferences_gs1_decode_country"
+        android:defaultValue="@string/preferences_gs1_no"
+        android:title="@string/preferences_gs1_decode_country"
+        android:entries="@array/preferences_gs1_decode_country_options"
+        android:entryValues="@array/preferences_gs1_decode_country_values"
+        android:summary="@string/preferences_gs1_decode_country"/>
       	    
     <ListPreference
         android:key="preferences_gs1_ai_presentation"
-        android:defaultValue="-"
+        android:defaultValue="@string/preferences_gs1_only_number"
         android:entries="@array/preferences_gs1_ai_representation_options"
         android:entryValues="@array/preferences_gs1_ai_representation_values"
         android:title="@string/preferences_gs1_representation"/>

@@ -26,9 +26,10 @@ package com.google.zxing.client.result.gs1;
  * @author Melchior Rabe
  * 
  */
-public class AlphaNumericWithIsoFormatter extends AlphaNumericFormatter {
+public class AlphaNumericWithIsoFormatter extends AlphaNumericFormatter
+		implements IsoFormatter {
 
-	private static final IsoCountryFormatter ISO_FORMATTER = new IsoCountryFormatter(
+	private static final AbstractIsoFormatter ISO_FORMATTER = new IsoCountryFormatter(
 			1);
 
 	/**
@@ -45,7 +46,7 @@ public class AlphaNumericWithIsoFormatter extends AlphaNumericFormatter {
 	@Override
 	public String format(String value) {
 		if (matches(value)) {
-			return ISO_FORMATTER.format(getIsoCode(value)) + " "
+			return ISO_FORMATTER.format(getIsoCode(value)) + getItemSeparator()
 					+ super.format(getAlphaValue(value));
 		}
 		return value;
@@ -68,5 +69,15 @@ public class AlphaNumericWithIsoFormatter extends AlphaNumericFormatter {
 
 	private String getIsoCode(String value) {
 		return value.substring(0, 3);
+	}
+
+	@Override
+	public void setCountryDecoding(CountryDecoding countryDecoding) {
+		ISO_FORMATTER.setCountryDecoding(countryDecoding);
+	}
+
+	@Override
+	public void setCurrencyDecoding(CurrencyDecoding currencyDecoding) {
+		ISO_FORMATTER.setCurrencyDecoding(currencyDecoding);
 	}
 }

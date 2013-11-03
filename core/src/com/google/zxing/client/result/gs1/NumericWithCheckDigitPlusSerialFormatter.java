@@ -38,7 +38,7 @@ public class NumericWithCheckDigitPlusSerialFormatter extends
 
 	@Override
 	public String format(String value) {
-		return super.format(value.substring(0, getMaxLength())) + " "
+		return super.format(value.substring(0, getMaxLength())) + getItemSeparator()
 				+ value.substring(getMaxLength(), value.length());
 	}
 
