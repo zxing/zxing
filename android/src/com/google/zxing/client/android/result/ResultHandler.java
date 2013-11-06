@@ -290,8 +290,7 @@ public abstract class ResultHandler {
   }
 
   final void shareByEmail(String contents) {
-    sendEmailFromUri("mailto:", null, activity.getString(R.string.msg_share_subject_line),
-        contents);
+    sendEmailFromUri("mailto:", null, null, contents);
   }
 
   final void sendEmail(String address, String subject, String body) {
@@ -311,8 +310,7 @@ public abstract class ResultHandler {
   }
 
   final void shareBySMS(String contents) {
-    sendSMSFromUri("smsto:", activity.getString(R.string.msg_share_subject_line) + ":\n" +
-        contents);
+    sendSMSFromUri("smsto:", contents);
   }
 
   final void sendSMS(String phoneNumber, String body) {

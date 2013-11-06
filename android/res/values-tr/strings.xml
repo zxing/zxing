@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Kitap aranıyor\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Parçacık yok</string>
   <string name="msg_share_explanation">Ekranınızda görüntülediğiniz barkodu başka bir telefonla tarayarak veri paylaşabilirsiniz.</string>
-  <string name="msg_share_subject_line">Taranan barkodun içeriği</string>
   <string name="msg_share_text">Veya yazın bazı metin</string>
   <string name="msg_sure">Emin misin?</string>
   <string name="msg_unmount_usb">Lütfen USB depolamayı devre dışı bırakın.</string>

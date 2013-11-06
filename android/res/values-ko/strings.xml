@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">책 검색중\u2026</string>
   <string name="msg_sbc_snippet_unavailable">내용이 열람되지 않습니다.</string>
   <string name="msg_share_explanation">해당 기기의 바코드를 다른 기기로 스캔해서 데이터를 공유할 수 있습니다.</string>
-  <string name="msg_share_subject_line">제가 스캔한 바코드 목록입니다.</string>
   <string name="msg_share_text">입력하거나 텍스트</string>
   <string name="msg_sure">계속하시겠습니까?</string>
   <string name="msg_unmount_usb">죄송합니다. SD카드를 사용할 수 없습니다.</string>

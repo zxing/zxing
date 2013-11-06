@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Könyv keresése\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Kódrészlet nem elérhető</string>
   <string name="msg_share_explanation">Meg tud osztani adatot úgy, hogy egy vonalkódot jelenít meg a képernyőjén, melyet egy másik telefon beszkennel.</string>
-  <string name="msg_share_subject_line">Itt a beolvasott vonalkód tartalma</string>
   <string name="msg_share_text">Vagy írja be a szöveget és nyomjon Enter-t</string>
   <string name="msg_sure">Biztos benne?</string>
   <string name="msg_unmount_usb">Az SD kártya nem elérhető.</string>

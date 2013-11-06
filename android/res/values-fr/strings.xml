@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Recherche du livre\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Extrait non disponible</string>
   <string name="msg_share_explanation">Vous pouvez partager des données en affichant un code-barres sur votre écran et en le scannant avec un autre téléphone.</string>
-  <string name="msg_share_subject_line">Voici le contenu d\'un code-barres que j\'ai scanné</string>
   <string name="msg_share_text">Ou tapez du texte</string>
   <string name="msg_sure">Êtes-vous sûr ?</string>
   <string name="msg_unmount_usb">Désolé, la carte SD n\'est pas accessible.</string>

@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Buscando libro\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Fragmentos no están disponibles</string>
   <string name="msg_share_explanation">Usted puede compartir los datos mostrando un código de barras en su pantalla y escanearlo con otro teléfono.</string>
-  <string name="msg_share_subject_line">Estos son los contenidos del código de barras que he escaneado</string>
   <string name="msg_share_text">O escriba algún texto y presione Enter</string>
   <string name="msg_sure">¿Está seguro?</string>
   <string name="msg_unmount_usb">Lo sentimos, la tarjeta SD no está accesible.</string>

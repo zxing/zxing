@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Iščem knjigo\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Košček ni na voljo</string>
   <string name="msg_share_explanation">Lahko delite podatke s prikazom črtne kode na vašem zaslonu in branju le-te z drugim mobilnim telefonom.</string>
-  <string name="msg_share_subject_line">Tu je vsebina prebrane črtne kode</string>
   <string name="msg_share_text">Ali vnesite nekaj besedila</string>
   <string name="msg_sure">Ali ste prepričani?</string>
   <string name="msg_unmount_usb">Oprostite, do SD kartice ni možno dostopati</string>

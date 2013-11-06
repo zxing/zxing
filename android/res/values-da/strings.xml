@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Søger bog\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Uddragsvisning ikke tilgængelig</string>
   <string name="msg_share_explanation">Du kan dele data ved at vise en stregkode på denne skærm, og derefter scanne den med en anden telefon.</string>
-  <string name="msg_share_subject_line">Her er indholdet af en stregkode, jeg har scannet.</string>
   <string name="msg_share_text">Eller skriv noget tekst</string>
   <string name="msg_sure">Er du sikker?</string>
   <string name="msg_unmount_usb">Beklager, SD-kortet er ikke tilgængelig.</string>

@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Mencari buku\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Snippet tidak tersedia</string>
   <string name="msg_share_explanation">Anda dapat berbagi data dengan menampilkan barcode di layar Anda dan dapat dipindai oleh phone lain.</string>
-  <string name="msg_share_subject_line">Ini adalah isi barcode yang saya pindai</string>
   <string name="msg_share_text">Atau masukkan beberapa kata dan tekan Enter</string>
   <string name="msg_sure">Apakah Anda yakin?</string>
   <string name="msg_unmount_usb">Maaf, SD card tidak dapat diakses.</string>

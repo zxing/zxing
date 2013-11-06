@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Hledání knihy\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Snippet není k dispozici</string>
   <string name="msg_share_explanation">Můžete sdílet čárový kód na vaší obrazovce a skenování, s jiným telefonem.</string>
-  <string name="msg_share_subject_line">Zde je obsah čárového kódu I naskenovaný</string>
   <string name="msg_share_text">Nebo zadejte nějaký text</string>
   <string name="msg_sure">Jste si jisti?</string>
   <string name="msg_unmount_usb">Omlouváme se, karta SD není přístupná.</string>

@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Przeszukiwanie książki\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Wycinek niedostępny</string>
   <string name="msg_share_explanation">Możesz udostępniać dane wyświetlając kod paskowy na swoim ekranie i skanując go innym telefonem.</string>
-  <string name="msg_share_subject_line">Oto zawartość kodu paskowego który został zeskanowany</string>
   <string name="msg_share_text">Albo wpisz tekst</string>
   <string name="msg_sure">Czy na pewno?</string>
   <string name="msg_unmount_usb">Niestety, karta SD nie jest dostępna.</string>

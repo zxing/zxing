@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Durchsuche Buch\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Textschnipsel nicht verfügbar.</string>
   <string name="msg_share_explanation">Sie können Daten weitergeben, indem Sie einen Barcode auf Ihrem Bilschirm erzeugen und mit einem anderen Handy einscannen.</string>
-  <string name="msg_share_subject_line">Hier ist der gescannte Barcode-Inhalt</string>
   <string name="msg_share_text">Oder geben Sie hier einen Text ein</string>
   <string name="msg_sure">Sind Sie sicher?</string>
   <string name="msg_unmount_usb">Leider kann nicht auf die SD-Karte zugegriffen werden.</string>

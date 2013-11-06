@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Vyhľadáva sa kniha\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Úryvok nie je k dispozícii</string>
   <string name="msg_share_explanation">Môžete zdieľať dáta zobrazením čiarového kódu na displeji vášho zariadenia a jeho zoskenovaním iným zariadením</string>
-  <string name="msg_share_subject_line">Tu je obsah naskenovaného čiarového kódu</string>
   <string name="msg_share_text">Alebo zadajte nejaký text</string>
   <string name="msg_sure">Ste si istí?</string>
   <string name="msg_unmount_usb">Ospravedlňujeme sa, SD karta nie je prístupná.</string>

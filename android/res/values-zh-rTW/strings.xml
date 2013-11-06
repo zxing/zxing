@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">搜尋圖書中\u2026</string>
   <string name="msg_sbc_snippet_unavailable">無法取得摘要</string>
   <string name="msg_share_explanation">你可以在你的手機螢幕上顯示條碼，並使用其他手機掃描此條碼藉此分享給朋友</string>
-  <string name="msg_share_subject_line">這是我所掃描的條碼的內容</string>
   <string name="msg_share_text">或輸入一些文字並按 Enter</string>
   <string name="msg_sure">你確定嗎？</string>
   <string name="msg_unmount_usb">無法讀取 SD 卡。</string>

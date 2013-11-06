@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">البحث في الكتاب</string>
   <string name="msg_sbc_snippet_unavailable">الأجزاء غير متاحة</string>
   <string name="msg_share_explanation">يمكنك مشاركة البيانات عن طريق عرض رمز شريطي على الشاشة ومسحه من خلال هاتف آخر.</string>
-  <string name="msg_share_subject_line">توجد هنا محتويات الرمز الشريطي الذي قمت بمسحه</string>
   <string name="msg_share_text">أو اكتب بعض النص</string>
   <string name="msg_sure">هل أنت متأكد؟</string>
   <string name="msg_unmount_usb">رجاء إيقاف التخزين على USB للمتابعة.</string>

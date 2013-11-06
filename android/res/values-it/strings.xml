@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Ricerca libro\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Ritaglio non disponibile</string>
   <string name="msg_share_explanation">Puoi condividere i dati mostrando un codice a barre sullo schermo e facendo la scansione con un altro telefono.</string>
-  <string name="msg_share_subject_line">Questo è il contenuto di un codice a barre di prova</string>
   <string name="msg_share_text">O digitare un testo</string>
   <string name="msg_sure">Sei sicuro?</string>
   <string name="msg_unmount_usb">Spiacenti, la scheda SD non è accessibile.</string>

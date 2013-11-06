@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">Поиск книги\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Фрагмент недоступен</string>
   <string name="msg_share_explanation">Вы можете поделиться данными, сканируя штрих-код с вашего экрана другим телефоном.</string>
-  <string name="msg_share_subject_line">Данные отсканированных Вами штрих-кодов</string>
   <string name="msg_share_text">Или введите текст</string>
   <string name="msg_sure">Вы уверены?</string>
   <string name="msg_unmount_usb">К сожалению, SD-карта не доступна.</string>

@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">खोज पुस्तक\u2026</string>
   <string name="msg_sbc_snippet_unavailable">उपलब्ध स्निपेट नहीं</string>
   <string name="msg_share_explanation">आप अपनी स्क्रीन पर प्रदर्शित बारकोड और यह अन्य फोन के साथ स्कैनिंग द्वारा डेटा साझा कर सकते हैं.</string>
-  <string name="msg_share_subject_line">यहाँ मैं एक बारकोड स्कैन की सामग्री</string>
   <string name="msg_share_text">या कुछ पाठ टाइप करें और प्रेस दर्ज करें</string>
   <string name="msg_sure">तुम्हें यकीन है?</string>
   <string name="msg_unmount_usb">क्षमा करें, एसडी कार्ड सुलभ नहीं है.</string>

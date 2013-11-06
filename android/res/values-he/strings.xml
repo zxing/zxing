@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">מחפש ספר\u2026</string>
   <string name="msg_sbc_snippet_unavailable">גזיר לא זמין</string>
   <string name="msg_share_explanation">באפשרותך לשתף נתונים על-ידי הצגת ברקוד על המסך וסריקתו עם טלפון אחר.</string>
-  <string name="msg_share_subject_line">הנה התוכן של הברקוד שסרקתי</string>
   <string name="msg_share_text">או הקלד טקסט כלשהו</string>
   <string name="msg_sure">האם אתה בטוח?</string>
   <string name="msg_unmount_usb">סליחה, כרטיס הזכרון אינו נגיש.</string>

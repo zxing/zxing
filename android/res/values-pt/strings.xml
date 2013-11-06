@@ -81,7 +81,6 @@
   <string name="msg_sbc_searching_book">A procurar livro\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Trecho não disponível</string>
   <string name="msg_share_explanation">Pode partilhar dados exibindo um código de barras no seu ecrã e lendo-o com outro telemóvel</string>
-  <string name="msg_share_subject_line">Aqui estão os conteúdos do código de barras lido</string>
   <string name="msg_share_text">Ou introduza algum texto e pressione Enter</string>
   <string name="msg_sure">Tem a certeza?</string>
   <string name="msg_unmount_usb">Desculpe, o cartão SD não está disponível.</string>
