@@ -314,7 +314,14 @@ public class IntentIntegrator {
     downloadDialog.setPositiveButton(buttonYes, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialogInterface, int i) {
-        String packageName = targetApplications.get(0);
+        String packageName;
+        if (targetApplications.contains(BS_PACKAGE)) {
+          // Prefer to suggest download of BS if it's anywhere in the list
+          packageName = BS_PACKAGE;
+        } else {
+          // Otherwise, first option:
+          packageName = targetApplications.get(0);
+        }
         Uri uri = Uri.parse("market://details?id=" + packageName);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         try {
