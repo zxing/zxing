@@ -117,6 +117,19 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
           <version>2.5</version>
+          <configuration>
+            <filesets>
+              <fileset>
+                <directory>.</directory>
+                <includes>
+                  <include>**/bin/**</include>
+                  <include>**/gen/**</include>
+                  <include>**/libs/*</include>
+                  <include>**/out/**</include>
+                </includes>
+              </fileset>
+            </filesets>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
