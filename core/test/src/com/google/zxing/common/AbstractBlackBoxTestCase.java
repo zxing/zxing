@@ -310,7 +310,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     }
     String stringContents = result.toString();
     if (stringContents.endsWith("\n")) {
-      log.warning("String contents of file " + file + " end with a newline. " +
+      log.info("String contents of file " + file + " end with a newline. " +
                   "This may not be intended and cause a test failure");
     }
     return stringContents;
