@@ -95,7 +95,7 @@
                    <type>javadoc</type>                   
                  </artifactItem>
                </artifactItems>
-               <outputDirectory>web/w/docs/javadoc</outputDirectory>
+               <outputDirectory>src/web/w/docs/javadoc</outputDirectory>
                <overWriteIfNewer>true</overWriteIfNewer>
              </configuration>
            </execution>
@@ -105,7 +105,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
-          <warSourceDirectory>web</warSourceDirectory>
+          <warSourceDirectory>src/web</warSourceDirectory>
           <warName>w</warName>
         </configuration>
       </plugin>
@@ -115,7 +115,7 @@
         <configuration>
           <filesets>
             <fileset>
-              <directory>web/w</directory>
+              <directory>src/web/w</directory>
               <includes>
                 <include>docs/**</include>
               </includes>

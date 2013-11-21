@@ -16,7 +16,7 @@
 -->
 <project name="ZXing" default="release">
 
-  <property name="version" value="2.2"/>
+  <property name="version" value="2.3.0"/>
   
   <target name="release">
     <zip file="ZXing-${version}.zip" level="9">
@@ -25,8 +25,7 @@
         <exclude name="**/.svn"/>
         <exclude name="**/*.iml"/>
         <exclude name="**/bin/**"/>        
-        <exclude name="**/build/**"/>
-        <exclude name="**/gen/**"/>        
+        <exclude name="**/gen/**"/>
         <exclude name="**/target/**"/> 
         <exclude name="**/local.properties"/>
         <include name="AUTHORS"/>
@@ -41,7 +40,7 @@
         <include name="androidtest/**"/>      
         <exclude name="androidtest/libs/**"/>
         <include name="core/**"/>
-        <exclude name="core/test/data/**"/> <!-- included separately below -->
+        <exclude name="core/src/test/resources/**"/> <!-- included separately below -->
         <include name="cpp/**"/>
         <include name="csharp/**"/>
         <include name="iphone/**"/>
@@ -51,7 +50,7 @@
         <include name="qt/**"/>
         <include name="zxing.appspot.com/**"/>
         <include name="zxingorg/**"/>
-        <exclude name="zxingorg/resources/private/**"/>
+        <exclude name="**/private/**"/>
       </zipfileset>
     </zip>
     <!-- Separate out test data files now to make download more manageable -->
@@ -59,7 +58,7 @@
       <zipfileset dir="." prefix="zxing-${version}" followsymlinks="false">
         <exclude name="**/.*"/>
         <exclude name="**/.svn"/>
-        <include name="core/test/data/**"/>
+        <include name="core/src/test/resources/**"/>
       </zipfileset>
     </zip>
   </target>
