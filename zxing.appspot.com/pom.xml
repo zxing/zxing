@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   
   <artifactId>zxing.appspot.com</artifactId>
-  <version>2.3-SNAPSHOT</version>
+  <version>2.3.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -37,20 +37,10 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>2.3-SNAPSHOT</version>
+    <version>2.3.0-SNAPSHOT</version>
   </parent>
 
   <!-- TODO use Maven GWT plugin to actually build this -->
-  
-  <build>
-    <sourceDirectory>src</sourceDirectory>
-    <outputDirectory>build</outputDirectory>
-    <resources>
-      <resource>
-        <directory>resources</directory>
-      </resource>
-    </resources>
-  </build>
 
   <name>ZXing Appspot-based encoder</name>
   <description>GWT-based encoder app hosted at zxing.appspot.com</description>
