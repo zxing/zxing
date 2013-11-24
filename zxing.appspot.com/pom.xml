@@ -26,11 +26,7 @@
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
       <version>2.5.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-incubator</artifactId>
-      <version>2.0.1</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -41,6 +37,29 @@
   </parent>
 
   <!-- TODO use Maven GWT plugin to actually build this -->
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <configuration>
+              <target>
+                <property name="build.compiler" value="extJavac"/>
+                <ant target="build"/>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
   <name>ZXing Appspot-based encoder</name>
   <description>GWT-based encoder app hosted at zxing.appspot.com</description>

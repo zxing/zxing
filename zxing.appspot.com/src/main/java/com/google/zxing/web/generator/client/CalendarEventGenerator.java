@@ -23,12 +23,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.gen2.picker.client.TimePicker;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -52,12 +52,8 @@ public final class CalendarEventGenerator implements GeneratorSource {
   private final CheckBox fullDay = new CheckBox();
   private final DatePicker datePicker1 = new DatePicker();
   private final DatePicker datePicker2 = new DatePicker();
-  private final TimePicker timePicker1 = new TimePicker(new Date(), DateTimeFormat
-      .getFormat("a"), DateTimeFormat.getFormat("hh"), DateTimeFormat
-      .getFormat("mm"), null);
-  private final TimePicker timePicker2 = new TimePicker(new Date(), DateTimeFormat
-      .getFormat("a"), DateTimeFormat.getFormat("hh"), DateTimeFormat
-      .getFormat("mm"), null);
+  private final TextBox timePicker1 = new TextBox();
+  private final TextBox timePicker2 = new TextBox();
   private final CheckBox summerTime = new CheckBox();
   private final ListBox timeZones = new ListBox();
   private Date timePicker1PreviousDate = null;
@@ -68,25 +64,36 @@ public final class CalendarEventGenerator implements GeneratorSource {
     eventName.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     eventName.addChangeHandler(handler);
     eventName.addKeyPressHandler(keyListener);
-    timePicker2.setDateTime(addMilliseconds(timePicker1.getDateTime(), ONE_HOUR));
-    timePicker1PreviousDate = timePicker1.getDateTime();
+    setDateToTextBox(timePicker1, new Date());
+    try {
+      setDateToTextBox(timePicker2, addMilliseconds(getDateFromTextBox(timePicker1), ONE_HOUR));
+      timePicker1PreviousDate = getDateFromTextBox(timePicker1);
+    } catch (GeneratorException ge) {
+      throw new IllegalStateException(ge);
+    }
 
     buildTimeZoneList();
     timeZones.setSelectedIndex(25);
     timeZones.addKeyPressHandler(keyListener);
-    timePicker1.addValueChangeHandler(new ValueChangeHandler<Date>() {
+    timePicker1.addValueChangeHandler(new ValueChangeHandler<String>() {
       @Override
-      public void onValueChange(ValueChangeEvent<Date> dateValueChangeEvent) {
+      public void onValueChange(ValueChangeEvent<String> valueChangeEvent) {
         Date time = timePicker1PreviousDate;
-        Date time1 = timePicker1.getDateTime();
-        Date time2 = timePicker2.getDateTime();
+        Date time1;
+        Date time2;
+        try {
+          time1 = getDateFromTextBox(timePicker1);
+          time2 = getDateFromTextBox(timePicker2);
+        } catch (GeneratorException e) {
+          return;
+        }
         if (time2.after(time)) {
           // keep the same time difference if the interval is valid.
           long diff = time2.getTime() - time.getTime();
-          timePicker2.setDateTime(addMilliseconds(time1, diff));
+          setDateToTextBox(timePicker2, addMilliseconds(time1, diff));
         } else {
           // otherwise erase the end date and set it to startdate + one hour.
-          timePicker2.setDateTime(addMilliseconds(time, ONE_HOUR));
+          setDateToTextBox(timePicker2, addMilliseconds(time1, ONE_HOUR));
         }
         // no need to call onChange for timePicker1, since it will be called
         // for timePicker2 when changes are made.
@@ -94,9 +101,9 @@ public final class CalendarEventGenerator implements GeneratorSource {
         timePicker1PreviousDate = time1;
       }
     });
-    timePicker2.addValueChangeHandler(new ValueChangeHandler<Date>() {
+    timePicker2.addValueChangeHandler(new ValueChangeHandler<String>() {
       @Override
-      public void onValueChange(ValueChangeEvent<Date> dateValueChangeEvent) {
+      public void onValueChange(ValueChangeEvent<String> valueChangeEvent) {
         // Hack to stitch together these old and new APIs
         ChangeEvent event = new ChangeEvent() {
           @Override
@@ -263,8 +270,8 @@ public final class CalendarEventGenerator implements GeneratorSource {
   private String getDateTimeValues() throws GeneratorException {
     Date date1 = datePicker1.getValue();
     Date date2 = datePicker2.getValue();
-    Date time1 = timePicker1.getDateTime();
-    Date time2 = timePicker2.getDateTime();
+    Date time1 = getDateFromTextBox(timePicker1);
+    Date time2 = getDateFromTextBox(timePicker2);
     if (date1 == null || date2 == null || time1 == null || time2 == null) {
       throw new GeneratorException("Start and end dates/times must be set.");
     }
@@ -311,6 +318,20 @@ public final class CalendarEventGenerator implements GeneratorSource {
 
   private static Date addMilliseconds(Date time1, long milliseconds) {
     return new Date(time1.getTime() + milliseconds);
+  }
+
+  private static Date getDateFromTextBox(HasText textBox) throws GeneratorException {
+    DateTimeFormat extractTime = DateTimeFormat.getFormat("HHmm");
+    try {
+      return extractTime.parseStrict(textBox.getText());
+    } catch (IllegalArgumentException iae) {
+      throw new GeneratorException("Invalid time");
+    }
+  }
+
+  private static void setDateToTextBox(HasText textBox, Date date) {
+    DateTimeFormat extractTime = DateTimeFormat.getFormat("HHmm");
+    textBox.setText(extractTime.format(date));
   }
 
   @Override

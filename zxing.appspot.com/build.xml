@@ -60,7 +60,7 @@ limitations under the License.
       <jvmarg value="-Xmx256M"/>
       <arg value="-strict"/>
       <arg line="-war"/>
-      <arg value="war"/>
+      <arg value="src/war"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
       <arg value="com.google.zxing.web.generator.Generator"/>
@@ -79,7 +79,7 @@ limitations under the License.
       <arg value="-startupUrl"/>
       <arg value="Generator.html"/>
       <arg line="-war"/>
-      <arg value="war"/>
+      <arg value="src/war"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
       <arg value="com.google.zxing.web.generator.Generator"/>
@@ -89,7 +89,7 @@ limitations under the License.
   <target name="build" depends="gwtc" description="Build this project" />
 
   <target name="war" depends="build" description="Create a war file">
-    <zip destfile="Generator.war" basedir="war"/>
+    <zip destfile="Generator.war" basedir="src/war"/>
   </target>
 
   <target name="clean" description="Cleans this project">
