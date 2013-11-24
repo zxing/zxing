@@ -45,6 +45,8 @@
     <module>android-integration</module>
     <module>zxing.appspot.com</module>
     <module>zxingorg</module>
+    <module>android</module>
+    <module>androidtest</module>
   </modules>
 
   <properties>
@@ -214,7 +216,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>2.3</version>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.7</version>
         </plugin>
       </plugins>
     </pluginManagement>
