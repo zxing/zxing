@@ -53,6 +53,7 @@
         <artifactId>gwt-maven-plugin</artifactId>
         <version>${gwt.version}</version>
         <configuration>
+          <runTarget>Generator.html</runTarget>
           <inplace>true</inplace>
         </configuration>
         <executions>

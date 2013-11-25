@@ -16,6 +16,7 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,7 +26,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasText;
@@ -179,7 +179,7 @@ public final class CalendarEventGenerator implements GeneratorSource {
         for (String s : FULL_DAY_ONLY_IDS) {
           Element element = DOM.getElementById(s);
           String style = cb.getValue() ? "none" : "";
-          DOM.setStyleAttribute(element, "display", style);
+          element.getStyle().setProperty("display", style);
         }
       }
     });
