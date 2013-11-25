@@ -19,13 +19,19 @@
   
   <artifactId>zxing.appspot.com</artifactId>
   <version>2.3.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <version>${gwt.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
-      <version>2.5.1</version>
+      <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -36,40 +42,29 @@
     <version>2.3.0-SNAPSHOT</version>
   </parent>
 
-  <!-- TODO use Maven GWT plugin to actually build this -->
+  <properties>
+    <gwt.version>2.5.1</gwt.version>
+  </properties>
 
-  <profiles>
-    <profile>
-      <id>gwt</id>
-      <activation>
-        <property>
-          <name>gwt.sdk</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>compile</phase>
-                <configuration>
-                  <target>
-                    <property name="build.compiler" value="extJavac"/>
-                    <ant target="build"/>
-                  </target>
-                </configuration>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>${gwt.version}</version>
+        <configuration>
+          <inplace>true</inplace>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
   <name>ZXing Appspot-based encoder</name>
   <description>GWT-based encoder app hosted at zxing.appspot.com</description>
