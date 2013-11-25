@@ -16,7 +16,6 @@
 
 package com.google.zxing.web;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import com.google.common.net.HttpHeaders;
@@ -58,6 +57,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -116,7 +116,7 @@ public final class DecodeServlet extends HttpServlet {
     
     try {
       blockedURLSubstrings =
-          Resources.readLines(Resources.getResource("/private/uri-block-substrings.txt"), Charsets.UTF_8);
+          Resources.readLines(Resources.getResource("/private/uri-block-substrings.txt"), StandardCharsets.UTF_8);
     } catch (IOException ioe) {
       throw new ServletException(ioe);
     }
@@ -392,8 +392,8 @@ public final class DecodeServlet extends HttpServlet {
     boolean minimalOutput = fullParameter != null && !Boolean.parseBoolean(fullParameter);
     if (minimalOutput) {
       response.setContentType(MediaType.PLAIN_TEXT_UTF_8.toString());
-      response.setCharacterEncoding(Charsets.UTF_8.name());
-      try (Writer out = new OutputStreamWriter(response.getOutputStream(), Charsets.UTF_8)) {
+      response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+      try (Writer out = new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8)) {
         for (Result result : results) {
           out.write(result.getText());
           out.write('\n');
