@@ -57,14 +57,14 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
 
   @Override
   void retrieveSupplementalInfo() throws IOException {
-    doRetrieveForCountry(country);
-    if (!"US".equals(country)) {
+    boolean success = doRetrieveForCountry(country);
+    if (!success && !"US".equals(country)) {
       // Also show US results to expand scope of results
       doRetrieveForCountry("US");
     }
   }
 
-  private void doRetrieveForCountry(String theCountry) throws IOException {
+  private boolean doRetrieveForCountry(String theCountry) throws IOException {
 
     CharSequence contents =  
         HttpHelper.downloadViaHttp("https://bsplus.srowen.com/ss?c=" + theCountry + "&t=" + type + "&i=" + productID,
@@ -132,7 +132,7 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
     }
     
     if (error || detailPageURL == null) {
-      return;
+      return false;
     }
 
     Collection<String> newTexts = new ArrayList<String>();
@@ -145,6 +145,7 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
     }
 
     append(productID, "Amazon " + theCountry, newTexts.toArray(new String[newTexts.size()]), detailPageURL);
+    return true;
   }
   
   private static void assertTextNext(XmlPullParser xpp) throws XmlPullParserException, IOException {
