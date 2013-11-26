@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2013 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!-- Author: Sean Owen -->
+<web-app version="3.0"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+  <distributable/>
+
+  <!--
+    Change these two to client ID / secret you generated when you set up your Glass API
+    https://developers.google.com/glass/develop/mirror/authorization#create_a_client_id_and_client_secret
+  -->
+  <context-param>
+    <param-name>CLIENT_ID</param-name>
+    <param-value>TODO</param-value>
+  </context-param>
+  <context-param>
+    <param-name>CLIENT_SECRET</param-name>
+    <param-value>TODO</param-value>
+  </context-param>
+  <!--
+    The URL base for your Mirror app
+  -->
+  <context-param>
+    <param-name>BASE_URL</param-name>
+    <param-value>http://example.org/todo</param-value>
+  </context-param>
+  <!--
+    See https://developers.google.com/glass/v1/reference/subscriptions/insert
+  -->
+  <context-param>
+    <param-name>SUBSCRIPTION_VERIFY_TOKEN</param-name>
+    <param-value>TODO</param-value>
+  </context-param>
+
+  <servlet>
+    <servlet-name>OAuth2CallbackServlet</servlet-name>
+    <servlet-class>com.google.zxing.client.glass.NewUserSetupServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>NotificationServlet</servlet-name>
+    <servlet-class>com.google.zxing.client.glass.NotificationServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>OAuth2CallbackServlet</servlet-name>
+    <url-pattern>/oauth2callback</url-pattern>
+    <url-pattern>/start</url-pattern>    
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>NotificationServlet</servlet-name>
+    <url-pattern>/notification</url-pattern>
+  </servlet-mapping>
+
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error.jspx</location>
+  </error-page>
+  <error-page>
+    <error-code>400</error-code>
+    <location>/error.jspx</location>
+  </error-page>
+  <error-page>
+    <error-code>401</error-code>
+    <location>/error.jspx</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error.jspx</location>
+  </error-page>
+  <error-page>
+    <error-code>405</error-code>
+    <location>/error.jspx</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error.jspx</location>
+  </error-page>
+  <error-page>
+    <error-code>501</error-code>
+    <location>/error.jspx</location>
+  </error-page>
+  <error-page>
+    <error-code>503</error-code>
+    <location>/error.jspx</location>
+  </error-page>
+
+</web-app>

@@ -43,6 +43,7 @@
         <exclude name="core/src/test/resources/**"/> <!-- included separately below -->
         <include name="cpp/**"/>
         <include name="csharp/**"/>
+        <include name="glass-mirror/**"/>
         <include name="iphone/**"/>
         <include name="javase/**"/>
         <include name="jruby/**"/>

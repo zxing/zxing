@@ -47,6 +47,7 @@
     <module>zxingorg</module>
     <module>android</module>
     <module>androidtest</module>
+    <module>glass-mirror</module>
   </modules>
 
   <properties>

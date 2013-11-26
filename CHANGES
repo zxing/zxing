@@ -319,10 +319,11 @@
   - Many ports of Java updates to C++ and C# ports
   - Standardize test system image processing and image format for reproducibility
 
-2.3 (XX Dec 2013)
+2.3.0 (1 Dec 2013)
 
   - Added clone of Google Chart Server QR code encoder API to zxingorg/, at endpoint /chart
   - Updated zxing.appspot.com generator to remove deprecated API usage, use latest GWT / App Engine
+  - Added skeleton Google Glass Mirror API app
   - Improve and standardize Maven build, standardize directories and version naming
   - Barcode Scanner Android up requires Android 4 and is updated to use Android 4+ APIs
   - javase/ and zxingorg/ modules now use Java 7
