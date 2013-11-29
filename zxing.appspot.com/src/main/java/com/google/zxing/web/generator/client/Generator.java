@@ -45,7 +45,7 @@ import java.util.List;
 
 public final class Generator implements EntryPoint {
 
-  private final List<GeneratorSource> generators = new ArrayList<GeneratorSource>();
+  private final List<GeneratorSource> generators = new ArrayList<>();
   private final ListBox genList = new ListBox();
   private final ListBox sizeList = new ListBox();
   private final ListBox ecLevelList = new ListBox();

@@ -43,11 +43,19 @@
   </parent>
 
   <properties>
-    <gwt.version>2.5.1</gwt.version>
+    <gwt.version>2.6.0-rc1</gwt.version>
   </properties>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>7</source>
+          <target>7</target>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
