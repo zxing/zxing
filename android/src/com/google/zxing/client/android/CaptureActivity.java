@@ -617,6 +617,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if (ecLevel != null) {
           intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
         }
+        @SuppressWarnings("unchecked")
         Iterable<byte[]> byteSegments = (Iterable<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
         if (byteSegments != null) {
           int i = 0;
