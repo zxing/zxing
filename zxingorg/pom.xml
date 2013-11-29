@@ -75,6 +75,8 @@
           <target>7</target>
         </configuration>
       </plugin>
+      <!-- Doesn't work with release: -->
+      <!--
       <plugin>
          <groupId>org.apache.maven.plugins</groupId>
          <artifactId>maven-dependency-plugin</artifactId>
@@ -99,7 +101,8 @@
              </configuration>
            </execution>
          </executions>
-       </plugin>
+      </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
