@@ -302,10 +302,6 @@
       <name>Sonatype Nexus Snapshots</name>
       <url>http://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
-    <site>
-      <id>zxing.site</id>
-      <url>http://zxing.org/w/</url>
-    </site>
   </distributionManagement>
 
   <profiles>
