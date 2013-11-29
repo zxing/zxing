@@ -45,8 +45,11 @@
     <module>android-integration</module>
     <module>zxing.appspot.com</module>
     <module>zxingorg</module>
+    <!-- Don't build yet until Android is really present in Maven -->
+    <!--
     <module>android</module>
     <module>androidtest</module>
+    -->
     <module>glass-mirror</module>
   </modules>
 
