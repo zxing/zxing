@@ -18,13 +18,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>android</artifactId>
-  <version>2.3.0</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>2.3.0</version>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
 
   <build>

@@ -16,7 +16,7 @@
 -->
 <project name="ZXing" default="release">
 
-  <property name="version" value="2.3.0"/>
+  <property name="version" value="3.0.0"/>
   
   <target name="release">
     <zip file="ZXing-${version}.zip" level="9">
