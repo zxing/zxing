@@ -175,7 +175,6 @@
                   <include>**/gwt-unitCache/**</include>
                   <include>**/webapp/generator/**</include>
                   <include>**/WEB-INF/deploy/**</include>
-                  <include>**/pom.xml.*</include>
                 </includes>
               </fileset>
             </filesets>
