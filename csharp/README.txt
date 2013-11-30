@@ -1,1 +1,0 @@
-For a port to C#, .NET and related Windows frameworks, see ZXing .NET at http://zxingnet.codeplex.com/

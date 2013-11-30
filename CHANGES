@@ -329,3 +329,7 @@
   - javase/ and zxingorg/ modules now use Java 7
   - Many small fixes and improvements
   - (Last release including cpp/ and iphone/ code)
+
+3.0.0 (??)
+
+  - iphone/, cpp/ and objc/ are retired

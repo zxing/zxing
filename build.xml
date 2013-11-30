@@ -41,14 +41,9 @@
         <exclude name="androidtest/libs/**"/>
         <include name="core/**"/>
         <exclude name="core/src/test/resources/**"/> <!-- included separately below -->
-        <include name="cpp/**"/>
-        <include name="csharp/**"/>
         <include name="glass-mirror/**"/>
-        <include name="iphone/**"/>
         <include name="javase/**"/>
         <include name="jruby/**"/>
-        <include name="objc/**"/>
-        <include name="qt/**"/>
         <include name="zxing.appspot.com/**"/>
         <include name="zxingorg/**"/>
         <exclude name="**/private/**"/>

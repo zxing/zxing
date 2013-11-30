@@ -1,2 +1,0 @@
-#!/bin/sh
-astyle --options=astyle-options --recursive --suffix=none "*.h" "*.cpp"
