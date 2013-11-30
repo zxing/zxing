@@ -28,13 +28,6 @@
       <version>4.1.1.4</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>com.google.android</groupId>
-      <artifactId>support-v4</artifactId>
-      <version>r7</version>
-      <scope>provided</scope>
-      <optional>true</optional>
-    </dependency>
   </dependencies>
 
   <parent>
@@ -49,14 +42,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <!-- By default exclude the Honeycomb and Support classes. -->
           <excludes>
             <exclude>**/IntentIntegratorV30*</exclude>
-            <exclude>**/IntentIntegratorSupportV4*</exclude>
           </excludes>
         </configuration>
         <executions>
-          <!-- Build a Honeycomb classifier and exclude the Support classes. -->
           <execution>
             <id>honeycomb</id>
             <phase>package</phase>
@@ -65,23 +55,6 @@
             </goals>
             <configuration>
               <classifier>honeycomb</classifier>
-              <excludes>
-                <exclude>**/IntentIntegratorSupportV4*</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-          <!-- Build a SupportV4 classifier and exclude the Honeycomb classes. -->
-          <execution>
-            <id>supportv4</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <classifier>supportv4</classifier>
-              <excludes>
-                <exclude>**/IntentIntegratorV30*</exclude>
-              </excludes>
             </configuration>
           </execution>
         </executions>
@@ -115,6 +88,6 @@
   </build>
 
   <name>ZXing Android Integration lib</name>
-  <description>Integration helper classes for Android applications wanting to create/scan bar codes</description>
+  <description>Integration helper classes for Android applications wanting to create/scan barcodes</description>
 
 </project>
