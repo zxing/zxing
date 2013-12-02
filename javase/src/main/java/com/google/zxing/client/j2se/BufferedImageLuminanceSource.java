@@ -38,15 +38,6 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
   private final int left;
   private final int top;
 
-  private static final boolean EXPLICIT_LUMINANCE_CONVERSION;
-  static {
-    String property = System.getProperty("explicitLuminanceConversion");
-    if (property == null) {
-      property = System.getenv("EXPLICIT_LUMINANCE_CONVERSION");
-    }
-    EXPLICIT_LUMINANCE_CONVERSION = Boolean.parseBoolean(property);
-  }
-
   public BufferedImageLuminanceSource(BufferedImage image) {
     this(image, 0, 0, image.getWidth(), image.getHeight());
   }
@@ -65,56 +56,30 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
 
       this.image = new BufferedImage(sourceWidth, sourceHeight, BufferedImage.TYPE_BYTE_GRAY);
 
-      if (EXPLICIT_LUMINANCE_CONVERSION) {
+      WritableRaster raster = this.image.getRaster();
+      int[] buffer = new int[width];
+      for (int y = top; y < top + height; y++) {
+        image.getRGB(left, y, width, 1, buffer, 0, sourceWidth);
+        for (int x = 0; x < width; x++) {
+          int pixel = buffer[x];
 
-        WritableRaster raster = this.image.getRaster();
-        int[] buffer = new int[width];
-        for (int y = top; y < top + height; y++) {
-          image.getRGB(left, y, width, 1, buffer, 0, sourceWidth);
-          for (int x = 0; x < width; x++) {
-            int pixel = buffer[x];
-
-            // see comments in implicit branch
-            if ((pixel & 0xFF000000) == 0) {
-              pixel = 0xFFFFFFFF; // = white
-            }
-
-            // .229R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC)
-            buffer[x] = 
-                (306 * ((pixel >> 16) & 0xFF) +
-                 601 * ((pixel >> 8) & 0xFF) +
-                 117 * (pixel & 0xFF) +
-                 0x200) >> 10;
+          // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
+          // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
+          // barcode image. Force any such pixel to be white:
+          if ((pixel & 0xFF000000) == 0) {
+            pixel = 0xFFFFFFFF; // = white
           }
-          raster.setPixels(left, y, width, 1, buffer);
+
+          // .229R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC)
+          buffer[x] =
+              (306 * ((pixel >> 16) & 0xFF) +
+               601 * ((pixel >> 8) & 0xFF) +
+               117 * (pixel & 0xFF) +
+               0x200) >> 10;
         }
-
-      } else {
-
-        // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
-        // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
-        // barcode image. Force any such pixel to be white:
-        if (image.getAlphaRaster() != null) {
-          int[] buffer = new int[width];
-          for (int y = top; y < top + height; y++) {
-            image.getRGB(left, y, width, 1, buffer, 0, sourceWidth);
-            boolean rowChanged = false;
-            for (int x = 0; x < width; x++) {
-              if ((buffer[x] & 0xFF000000) == 0) {
-                buffer[x] = 0xFFFFFFFF; // = white
-                rowChanged = true;
-              }
-            }
-            if (rowChanged) {
-              image.setRGB(left, y, width, 1, buffer, 0, sourceWidth);
-            }
-          }
-        }
-
-        // Create a grayscale copy, no need to calculate the luminance manually
-        this.image.getGraphics().drawImage(image, 0, 0, null);
-
+        raster.setPixels(left, y, width, 1, buffer);
       }
+
     }
     this.left = left;
     this.top = top;
