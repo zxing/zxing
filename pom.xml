@@ -242,6 +242,11 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
           <version>1.7</version>
         </plugin>
@@ -269,6 +274,12 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <name>ZXing Authors</name>
+    </developer>
+  </developers>
+
   <issueManagement>
     <system>Google Code</system>
     <url>http://code.google.com/p/zxing/issues/list</url>
