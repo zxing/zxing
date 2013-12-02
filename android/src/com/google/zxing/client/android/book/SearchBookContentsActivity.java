@@ -212,7 +212,7 @@ public final class SearchBookContentsActivity extends Activity {
         if (count > 0) {
           JSONArray results = json.getJSONArray("search_results");
           SearchBookContentsResult.setQuery(queryTextView.getText().toString());
-          List<SearchBookContentsResult> items = new ArrayList<SearchBookContentsResult>(count);
+          List<SearchBookContentsResult> items = new ArrayList<>(count);
           for (int x = 0; x < count; x++) {
             items.add(parseResult(results.getJSONObject(x)));
           }

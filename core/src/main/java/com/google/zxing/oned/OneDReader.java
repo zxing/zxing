@@ -147,7 +147,7 @@ public abstract class OneDReader implements Reader {
           // don't want to clutter with noise from every single row scan -- just the scans
           // that start on the center line.
           if (hints != null && hints.containsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
-            Map<DecodeHintType,Object> newHints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+            Map<DecodeHintType,Object> newHints = new EnumMap<>(DecodeHintType.class);
             newHints.putAll(hints);
             newHints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
             hints = newHints;

@@ -42,7 +42,7 @@ public final class ExpandedProductParsedResultTestCase extends Assert {
 
   @Test
   public void test_RSSExpanded() {
-    Map<String,String> uncommonAIs = new HashMap<String,String>();
+    Map<String,String> uncommonAIs = new HashMap<>();
     uncommonAIs.put("123", "544654");
     Result result =
         new Result("(01)66546(13)001205(3932)4455(3102)6544(123)544654", null, null, BarcodeFormat.RSS_EXPANDED);

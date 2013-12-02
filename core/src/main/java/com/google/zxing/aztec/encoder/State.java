@@ -148,7 +148,7 @@ final class State {
   BitArray toBitArray(byte[] text) {
     // Reverse the tokens, so that they are in the order that they should
     // be output
-    Deque<Token> symbols = new LinkedList<Token>();
+    Deque<Token> symbols = new LinkedList<>();
     for (Token token = endBinaryShift(text.length).token; token != null; token = token.getPrevious()) {
       symbols.addFirst(token);
     }

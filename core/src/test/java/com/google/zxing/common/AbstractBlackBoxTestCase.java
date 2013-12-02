@@ -86,7 +86,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     this.testBase = testBase;
     this.barcodeReader = barcodeReader;
     this.expectedFormat = expectedFormat;
-    testResults = new ArrayList<TestResult>();
+    testResults = new ArrayList<>();
 
     System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%6$s%n");
   }
@@ -261,7 +261,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
 
     String suffix = String.format(" (%srotation: %d)", tryHarder ? "try harder, " : "", (int) rotation);
 
-    Map<DecodeHintType,Object> hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+    Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
     if (tryHarder) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }

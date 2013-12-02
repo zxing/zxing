@@ -72,7 +72,7 @@ public final class BizcardResultParser extends AbstractDoCoMoResultParser {
   private static String[] buildPhoneNumbers(String number1,
                                             String number2,
                                             String number3) {
-    List<String> numbers = new ArrayList<String>(3);
+    List<String> numbers = new ArrayList<>(3);
     if (number1 != null) {
       numbers.add(number1);
     }

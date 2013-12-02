@@ -71,8 +71,8 @@ public final class SMSMMSResultParser extends ResultParser {
 
     int lastComma = -1;
     int comma;
-    List<String> numbers = new ArrayList<String>(1);
-    List<String> vias = new ArrayList<String>(1);
+    List<String> numbers = new ArrayList<>(1);
+    List<String> vias = new ArrayList<>(1);
     while ((comma = smsURIWithoutQuery.indexOf(',', lastComma + 1)) > lastComma) {
       String numberPart = smsURIWithoutQuery.substring(lastComma + 1, comma);
       addNumberVia(numbers, vias, numberPart);

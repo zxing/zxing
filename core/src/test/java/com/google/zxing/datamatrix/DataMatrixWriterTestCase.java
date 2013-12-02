@@ -35,7 +35,7 @@ public final class DataMatrixWriterTestCase extends Assert {
   @Test
   public void testDataMatrixImageWriter() {
 
-    Map<EncodeHintType,Object> hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
+    Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.DATA_MATRIX_SHAPE, SymbolShapeHint.FORCE_SQUARE);
 
     int bigEnough = 64;
@@ -49,7 +49,7 @@ public final class DataMatrixWriterTestCase extends Assert {
   @Test
   public void testDataMatrixWriter() {
 
-    Map<EncodeHintType,Object> hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
+    Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.DATA_MATRIX_SHAPE, SymbolShapeHint.FORCE_SQUARE);
 
     int bigEnough = 14;

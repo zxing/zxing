@@ -38,7 +38,7 @@ public final class HttpHelper {
 
   private static final String TAG = HttpHelper.class.getSimpleName();
 
-  private static final Collection<String> REDIRECTOR_DOMAINS = new HashSet<String>(Arrays.asList(
+  private static final Collection<String> REDIRECTOR_DOMAINS = new HashSet<>(Arrays.asList(
     "amzn.to", "bit.ly", "bitly.com", "fb.me", "goo.gl", "is.gd", "j.mp", "lnkd.in", "ow.ly",
     "R.BEETAGG.COM", "r.beetagg.com", "SCN.BY", "su.pr", "t.co", "tinyurl.com", "tr.im"
   ));
@@ -102,7 +102,7 @@ public final class HttpHelper {
       connection.setRequestProperty("Accept-Charset", "utf-8,*");
       connection.setRequestProperty("User-Agent", "ZXing (Android)");
       try {
-        int responseCode = safelyConnect(uri, connection);
+        int responseCode = safelyConnect(connection);
         switch (responseCode) {
           case HttpURLConnection.HTTP_OK:
             return consume(connection, maxChars);
@@ -150,10 +150,8 @@ public final class HttpHelper {
       if (in != null) {
         try {
           in.close();
-        } catch (IOException ioe) {
+        } catch (IOException | NullPointerException ioe) {
           // continue
-        } catch (NullPointerException npe) {
-          // another apparent Android / Harmony bug; continue
         }
       }
     }
@@ -171,7 +169,7 @@ public final class HttpHelper {
     connection.setRequestMethod("HEAD");
     connection.setRequestProperty("User-Agent", "ZXing (Android)");
     try {
-      int responseCode = safelyConnect(uri.toString(), connection);
+      int responseCode = safelyConnect(connection);
       switch (responseCode) {
         case HttpURLConnection.HTTP_MULT_CHOICE:
         case HttpURLConnection.HTTP_MOVED_PERM:
@@ -208,35 +206,18 @@ public final class HttpHelper {
     return (HttpURLConnection) conn;
   }
 
-  private static int safelyConnect(String uri, HttpURLConnection connection) throws IOException {
+  private static int safelyConnect(HttpURLConnection connection) throws IOException {
     try {
       connection.connect();
-    } catch (NullPointerException npe) {
+    } catch (NullPointerException | IllegalArgumentException | IndexOutOfBoundsException | SecurityException e) {
       // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
-      throw new IOException(npe);
-    } catch (IllegalArgumentException iae) {
-      // Also seen this in the wild, not sure what to make of it. Probably a bad URL
-      throw new IOException(iae);
-    } catch (SecurityException se) {
-      // due to bad VPN settings?
-      Log.w(TAG, "Restricted URI? " + uri);
-      throw new IOException(se);
-    } catch (IndexOutOfBoundsException ioobe) {
-      // Another Android problem? https://groups.google.com/forum/?fromgroups#!topic/google-admob-ads-sdk/U-WfmYa9or0
-      throw new IOException(ioobe);
+      throw new IOException(e);
     }
     try {
       return connection.getResponseCode();
-    } catch (NullPointerException npe) {
+    } catch (NullPointerException | StringIndexOutOfBoundsException | IllegalArgumentException e) {
       // this is maybe this Android bug: http://code.google.com/p/android/issues/detail?id=15554
-      throw new IOException(npe);
-    } catch (IllegalArgumentException iae) {
-      // Again seen this in the wild for bad header fields in the server response! or bad reads
-      Log.w(TAG, "Bad server status? " + uri);
-      throw new IOException(iae);
-    } catch (StringIndexOutOfBoundsException sioobe) {
-      // Another Android bug: https://code.google.com/p/android/issues/detail?id=18856
-      throw new IOException(sioobe);
+      throw new IOException(e);
     }
   }
 

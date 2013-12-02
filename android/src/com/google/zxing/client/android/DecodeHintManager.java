@@ -55,7 +55,7 @@ final class DecodeHintManager {
    * @return name-value pairs
    */
   private static Map<String,String> splitQuery(String query) {
-    Map<String,String> map = new HashMap<String,String>();
+    Map<String,String> map = new HashMap<>();
     int pos = 0;
     while (pos < query.length()) {
       if (query.charAt(pos) == '&') {
@@ -123,7 +123,7 @@ final class DecodeHintManager {
     // Extract parameters
     Map<String, String> parameters = splitQuery(query);
 
-    Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
+    Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
 
     for (DecodeHintType hintType: DecodeHintType.values()) {
 
@@ -203,7 +203,7 @@ final class DecodeHintManager {
     if (extras == null || extras.isEmpty()) {
       return null;
     }
-    Map<DecodeHintType,Object> hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+    Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
 
     for (DecodeHintType hintType: DecodeHintType.values()) {
 

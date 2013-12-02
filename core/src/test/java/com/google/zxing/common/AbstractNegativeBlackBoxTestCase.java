@@ -68,7 +68,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
   // Use the multiformat reader to evaluate all decoders in the system.
   protected AbstractNegativeBlackBoxTestCase(String testBasePathSuffix) {
     super(testBasePathSuffix, new MultiFormatReader(), null);
-    testResults = new ArrayList<TestResult>();
+    testResults = new ArrayList<>();
   }
 
   protected final void addTest(int falsePositivesAllowed, float rotation) {
@@ -143,7 +143,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     }
 
     // Try "try harder" getMode
-    Map<DecodeHintType,Object> hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+    Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
     hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     try {
       result = getReader().decode(bitmap, hints);

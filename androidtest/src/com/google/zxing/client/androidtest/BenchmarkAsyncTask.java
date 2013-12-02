@@ -53,7 +53,7 @@ public final class BenchmarkAsyncTask extends AsyncTask<Object,Object,String> {
     // Try to get in a known state before starting the benchmark
     System.gc();
 
-    List<BenchmarkItem> items = new ArrayList<BenchmarkItem>();
+    List<BenchmarkItem> items = new ArrayList<>();
     walkTree(reader, path, items);
 
     int count = 0;

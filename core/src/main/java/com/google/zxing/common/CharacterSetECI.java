@@ -58,8 +58,8 @@ public enum CharacterSetECI {
   GB18030(29, "GB2312", "EUC_CN", "GBK"),
   EUC_KR(30, "EUC-KR");
 
-  private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<Integer,CharacterSetECI>();
-  private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<String,CharacterSetECI>();
+  private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<>();
+  private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
   static {
     for (CharacterSetECI eci : values()) {
       for (int value : eci.values) {

@@ -143,7 +143,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
      * So, if the layout seems right, lets have the decoder try to decode.     
      */
 
-     List<FinderPattern[]> results = new ArrayList<FinderPattern[]>(); // holder for the results
+     List<FinderPattern[]> results = new ArrayList<>(); // holder for the results
 
     for (int i1 = 0; i1 < (size - 2); i1++) {
       FinderPattern p1 = possibleCenters.get(i1);
@@ -294,7 +294,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
       } // end if foundPatternCross
     } // for i=iSkip-1 ...
     FinderPattern[][] patternInfo = selectMutipleBestPatterns();
-    List<FinderPatternInfo> result = new ArrayList<FinderPatternInfo>();
+    List<FinderPatternInfo> result = new ArrayList<>();
     for (FinderPattern[] pattern : patternInfo) {
       ResultPoint.orderBestPatterns(pattern);
       result.add(new FinderPatternInfo(pattern));

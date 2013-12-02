@@ -203,7 +203,7 @@ public final class HighLevelEncoder {
   // for the new character, merging the results, and then removing the
   // non-optimal states.
   private Collection<State> updateStateListForChar(Iterable<State> states, int index) {
-    Collection<State> result = new LinkedList<State>();
+    Collection<State> result = new LinkedList<>();
     for (State state : states) {
       updateStateForChar(state, index, result);
     }
@@ -252,7 +252,7 @@ public final class HighLevelEncoder {
   }
 
   private static Collection<State> updateStateListForPair(Iterable<State> states, int index, int pairCode) {
-    Collection<State> result = new LinkedList<State>();
+    Collection<State> result = new LinkedList<>();
     for (State state : states) {
       updateStateForPair(state, index, pairCode, result);
     }
@@ -284,7 +284,7 @@ public final class HighLevelEncoder {
   }
 
   private static Collection<State> simplifyStates(Iterable<State> states) {
-    List<State> result = new LinkedList<State>();
+    List<State> result = new LinkedList<>();
     for (State newState : states) {
       boolean add = true;
       for (Iterator<State> iterator = result.iterator(); iterator.hasNext(); ) {

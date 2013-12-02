@@ -58,7 +58,7 @@ final class LoadPackagesAsyncTask extends AsyncTask<Void,Void,List<AppInfo>> {
 
   @Override
   protected List<AppInfo> doInBackground(Void... objects) {
-    List<AppInfo> labelsPackages = new ArrayList<AppInfo>();
+    List<AppInfo> labelsPackages = new ArrayList<>();
     PackageManager packageManager = activity.getPackageManager();
     Iterable<ApplicationInfo> appInfos = packageManager.getInstalledApplications(0);
     for (PackageItemInfo appInfo : appInfos) {

@@ -241,7 +241,7 @@ public final class Code128Reader extends OneDReader {
     int[] startPatternInfo = findStartPattern(row);
     int startCode = startPatternInfo[2];
 
-    List<Byte> rawCodes = new ArrayList<Byte>(20);
+    List<Byte> rawCodes = new ArrayList<>(20);
     rawCodes.add((byte) startCode);
 
     int codeSet;

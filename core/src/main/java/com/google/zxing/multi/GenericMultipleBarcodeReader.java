@@ -61,7 +61,7 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
   @Override
   public Result[] decodeMultiple(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException {
-    List<Result> results = new ArrayList<Result>();
+    List<Result> results = new ArrayList<>();
     doDecodeMultiple(image, hints, results, 0, 0, 0);
     if (results.isEmpty()) {
       throw NotFoundException.getNotFoundInstance();

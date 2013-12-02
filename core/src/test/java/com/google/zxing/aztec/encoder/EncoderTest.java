@@ -469,7 +469,7 @@ public final class EncoderTest extends Assert {
     // 1. Perform an encode-decode round-trip because it can be lossy.
     // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
     String expectedData = new String(data.getBytes(Charset.forName(charset)), LATIN_1);
-    Map<EncodeHintType,Object> hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
+    Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.CHARACTER_SET, charset);
     hints.put(EncodeHintType.ERROR_CORRECTION, eccPercent);
     AztecWriter writer = new AztecWriter();

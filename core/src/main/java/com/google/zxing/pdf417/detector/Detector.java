@@ -96,7 +96,7 @@ public final class Detector {
    * @return List of ResultPoint arrays containing the coordinates of found barcodes
    */
   private static List<ResultPoint[]> detect(boolean multiple, BitMatrix bitMatrix) {
-    List<ResultPoint[]> barcodeCoordinates = new ArrayList<ResultPoint[]>();
+    List<ResultPoint[]> barcodeCoordinates = new ArrayList<>();
     int row = 0;
     int column = 0;
     boolean foundBarcodeInRow = false;

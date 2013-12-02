@@ -52,7 +52,7 @@ public final class PreferencesFragment
   }
 
   private void disableLastCheckedPref() {
-    Collection<CheckBoxPreference> checked = new ArrayList<CheckBoxPreference>(3);
+    Collection<CheckBoxPreference> checked = new ArrayList<>(3);
     if (decode1D.isChecked()) {
       checked.add(decode1D);
     }

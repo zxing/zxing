@@ -92,7 +92,7 @@ public final class HistoryManager {
 
   public List<HistoryItem> buildHistoryItems() {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    List<HistoryItem> items = new ArrayList<HistoryItem>();
+    List<HistoryItem> items = new ArrayList<>();
     SQLiteDatabase db = null;
     Cursor cursor = null;
     try {

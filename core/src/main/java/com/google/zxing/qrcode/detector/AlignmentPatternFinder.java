@@ -67,7 +67,7 @@ final class AlignmentPatternFinder {
                          float moduleSize,
                          ResultPointCallback resultPointCallback) {
     this.image = image;
-    this.possibleCenters = new ArrayList<AlignmentPattern>(5);
+    this.possibleCenters = new ArrayList<>(5);
     this.startX = startX;
     this.startY = startY;
     this.width = width;

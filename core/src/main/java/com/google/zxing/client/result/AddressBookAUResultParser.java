@@ -78,7 +78,7 @@ public final class AddressBookAUResultParser extends ResultParser {
         break;
       }
       if (values == null) {
-        values = new ArrayList<String>(max); // lazy init
+        values = new ArrayList<>(max); // lazy init
       }
       values.add(value);
     }

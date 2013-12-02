@@ -85,7 +85,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
       }
     }
     
-    Collection<int[]> patterns = new ArrayList<int[]>(); // temporary storage for patterns
+    Collection<int[]> patterns = new ArrayList<>(); // temporary storage for patterns
     int checkSum = 0;
     int checkWeight = 1;
     int codeSet = 0; // selected code (CODE_CODE_B or CODE_CODE_C)

@@ -63,7 +63,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   private static final String TEST_BASE_PATH_SUFFIX = "src/test/resources/blackbox/pdf417-4";
   private final PDF417Reader barcodeReader = new PDF417Reader();
 
-  private final List<TestResult> testResults = new ArrayList<TestResult>();
+  private final List<TestResult> testResults = new ArrayList<>();
   private File testBase;
 
   public PDF417BlackBox4TestCase() {
@@ -109,7 +109,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       }
 
       for (int x = 0; x < testCount; x++) {
-        List<Result> results = new ArrayList<Result>();
+        List<Result> results = new ArrayList<>();
         for (File imageFile : testImageGroup.getValue()) {
           BufferedImage image = ImageIO.read(imageFile);
           float rotation = testResults.get(x).getRotation();
@@ -211,7 +211,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   }
 
   private Result[] decode(BinaryBitmap source, boolean tryHarder) throws ReaderException {
-    Map<DecodeHintType,Object> hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+    Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
     if (tryHarder) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }
@@ -220,13 +220,13 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   }
 
   private Map<String,List<File>> getImageFileLists() {
-    Map<String,List<File>> result = new HashMap<String,List<File>>();
+    Map<String,List<File>> result = new HashMap<>();
     for (File file : getImageFiles()) {
       String testImageFileName = file.getName();
       String fileBaseName = testImageFileName.substring(0, testImageFileName.indexOf('-'));
       List<File> files = result.get(fileBaseName);
       if (files == null) {
-        files = new ArrayList<File>();
+        files = new ArrayList<>();
         result.put(fileBaseName, files);
       }
       files.add(file);

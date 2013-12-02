@@ -171,7 +171,7 @@ public abstract class ResultParser {
     if (paramStart < 0) {
       return null;
     }
-    Map<String,String> result = new HashMap<String,String>(3);
+    Map<String,String> result = new HashMap<>(3);
     for (String keyValue : AMPERSAND.split(uri.substring(paramStart + 1))) {
       appendKeyValue(keyValue, result);
     }
@@ -224,7 +224,7 @@ public abstract class ResultParser {
         } else {
           // found a match
           if (matches == null) {
-            matches = new ArrayList<String>(3); // lazy init
+            matches = new ArrayList<>(3); // lazy init
           }
           String element = unescapeBackslash(rawText.substring(start, i));
           if (trim) {

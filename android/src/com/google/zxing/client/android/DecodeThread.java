@@ -56,7 +56,7 @@ final class DecodeThread extends Thread {
     this.activity = activity;
     handlerInitLatch = new CountDownLatch(1);
 
-    hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+    hints = new EnumMap<>(DecodeHintType.class);
     if (baseHints != null) {
       hints.putAll(baseHints);
     }

@@ -137,7 +137,7 @@ final class UPCEANExtension5Support {
     if (value == null) {
       return null;
     }
-    Map<ResultMetadataType,Object> result = new EnumMap<ResultMetadataType,Object>(ResultMetadataType.class);
+    Map<ResultMetadataType,Object> result = new EnumMap<>(ResultMetadataType.class);
     result.put(ResultMetadataType.SUGGESTED_PRICE, value);
     return result;
   }

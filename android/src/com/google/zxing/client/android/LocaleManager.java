@@ -43,7 +43,7 @@ public final class LocaleManager {
    */
   private static final Map<String,String> GOOGLE_COUNTRY_TLD;
   static {
-    GOOGLE_COUNTRY_TLD = new HashMap<String,String>();
+    GOOGLE_COUNTRY_TLD = new HashMap<>();
     GOOGLE_COUNTRY_TLD.put("AR", "com.ar"); // ARGENTINA
     GOOGLE_COUNTRY_TLD.put("AU", "com.au"); // AUSTRALIA
     GOOGLE_COUNTRY_TLD.put("BR", "com.br"); // BRAZIL
@@ -84,7 +84,7 @@ public final class LocaleManager {
    */
   private static final Map<String,String> GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD;
   static {
-    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD = new HashMap<String,String>();
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD = new HashMap<>();
     GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put("AU", "com.au"); // AUSTRALIA
     //GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.CHINA.getCountry(), "cn");
     GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.FRANCE.getCountry(), "fr");

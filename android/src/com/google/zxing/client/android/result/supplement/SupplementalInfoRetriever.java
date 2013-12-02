@@ -91,10 +91,10 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
   private final Collection<String[]> newHistories;
 
   SupplementalInfoRetriever(TextView textView, HistoryManager historyManager) {
-    textViewRef = new WeakReference<TextView>(textView);
-    historyManagerRef = new WeakReference<HistoryManager>(historyManager);
-    newContents = new ArrayList<Spannable>();
-    newHistories = new ArrayList<String[]>();
+    textViewRef = new WeakReference<>(textView);
+    historyManagerRef = new WeakReference<>(historyManager);
+    newContents = new ArrayList<>();
+    newHistories = new ArrayList<>();
   }
 
   @Override

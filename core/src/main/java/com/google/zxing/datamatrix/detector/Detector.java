@@ -65,7 +65,7 @@ public final class Detector {
     // Point A and D are across the diagonal from one another,
     // as are B and C. Figure out which are the solid black lines
     // by counting transitions
-    List<ResultPointsAndTransitions> transitions = new ArrayList<ResultPointsAndTransitions>(4);
+    List<ResultPointsAndTransitions> transitions = new ArrayList<>(4);
     transitions.add(transitionsBetween(pointA, pointB));
     transitions.add(transitionsBetween(pointA, pointC));
     transitions.add(transitionsBetween(pointB, pointD));
@@ -79,7 +79,7 @@ public final class Detector {
 
     // Figure out which point is their intersection by tallying up the number of times we see the
     // endpoints in the four endpoints. One will show up twice.
-    Map<ResultPoint,Integer> pointCount = new HashMap<ResultPoint,Integer>();
+    Map<ResultPoint,Integer> pointCount = new HashMap<>();
     increment(pointCount, lSideOne.getFrom());
     increment(pointCount, lSideOne.getTo());
     increment(pointCount, lSideTwo.getFrom());

@@ -59,7 +59,7 @@ final class DecodedBitStreamParser {
                               Map<DecodeHintType,?> hints) throws FormatException {
     BitSource bits = new BitSource(bytes);
     StringBuilder result = new StringBuilder(50);
-    List<byte[]> byteSegments = new ArrayList<byte[]>(1);
+    List<byte[]> byteSegments = new ArrayList<>(1);
     try {
       CharacterSetECI currentCharacterSetECI = null;
       boolean fc1InEffect = false;

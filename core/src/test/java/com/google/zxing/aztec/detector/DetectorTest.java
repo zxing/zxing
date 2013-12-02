@@ -92,7 +92,7 @@ public final class DetectorTest extends Assert {
         // Try a few random three-bit errors;
         for (int i = 0; i < 5; i++) {
           BitMatrix copy = clone(matrix);
-          Collection<Integer> errors = new TreeSet<Integer>();
+          Collection<Integer> errors = new TreeSet<>();
           while (errors.size() < 3) {
             // Quick and dirty way of getting three distinct integers between 1 and n.
             errors.add(random.nextInt(orientationPoints.size()));
@@ -176,7 +176,7 @@ public final class DetectorTest extends Assert {
   private static List<Point> getOrientationPoints(AztecCode code) {
     int center = code.getMatrix().getWidth() / 2;
     int offset = code.isCompact() ? 5 : 7;
-    List<Point> result = new ArrayList<Point>();
+    List<Point> result = new ArrayList<>();
     for (int xSign = -1; xSign <= 1; xSign += 2) {
       for (int ySign = -1; ySign <= 1; ySign += 2) {
         result.add(new Point(center + xSign * offset, center + ySign * offset));

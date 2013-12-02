@@ -125,17 +125,7 @@ public final class Decoder {
 
       return result;
 
-    } catch (FormatException e) {
-      // Throw the exception from the original reading
-      if (fe != null) {
-        throw fe;
-      }
-      if (ce != null) {
-        throw ce;
-      }
-      throw e;
-
-    } catch (ChecksumException e) {
+    } catch (FormatException | ChecksumException e) {
       // Throw the exception from the original reading
       if (fe != null) {
         throw fe;

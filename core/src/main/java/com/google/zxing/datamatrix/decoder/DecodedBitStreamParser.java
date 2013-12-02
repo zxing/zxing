@@ -83,7 +83,7 @@ final class DecodedBitStreamParser {
     BitSource bits = new BitSource(bytes);
     StringBuilder result = new StringBuilder(100);
     StringBuilder resultTrailer = new StringBuilder(0);
-    List<byte[]> byteSegments = new ArrayList<byte[]>(1);
+    List<byte[]> byteSegments = new ArrayList<>(1);
     Mode mode = Mode.ASCII_ENCODE;
     do {
       if (mode == Mode.ASCII_ENCODE) {

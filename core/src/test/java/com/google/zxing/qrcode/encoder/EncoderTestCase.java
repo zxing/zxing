@@ -129,7 +129,7 @@ public final class EncoderTestCase extends Assert {
 
   @Test
   public void testSimpleUTF8ECI() throws WriterException {
-    Map<EncodeHintType,Object> hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+    Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.CHARACTER_SET, "UTF8");
     QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
     String expected =

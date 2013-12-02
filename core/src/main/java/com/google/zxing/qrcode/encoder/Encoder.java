@@ -376,7 +376,7 @@ public final class Encoder {
     int maxNumEcBytes = 0;
 
     // Since, we know the number of reedsolmon blocks, we can initialize the vector with the number.
-    Collection<BlockPair> blocks = new ArrayList<BlockPair>(numRSBlocks);
+    Collection<BlockPair> blocks = new ArrayList<>(numRSBlocks);
 
     for (int i = 0; i < numRSBlocks; ++i) {
       int[] numDataBytesInBlock = new int[1];
