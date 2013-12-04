@@ -358,14 +358,9 @@ public abstract class ResultHandler {
    * Do a geo search using the address as the query.
    *
    * @param address The address to find
-   * @param title An optional title, e.g. the name of the business at this address
    */
-  final void searchMap(String address, String title) {
-    String query = address;
-    if (title != null && !title.isEmpty()) {
-      query += " (" + title + ')';
-    }
-    launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
+  final void searchMap(String address) {
+    launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(address))));
   }
 
   final void getDirections(double latitude, double longitude) {
