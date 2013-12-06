@@ -38,9 +38,9 @@ import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
 
 public final class RSSExpandedStackedInternalTestCase extends Assert {
-	
-	@Test
-	public void testDecodingRowByRow() throws Exception {
+
+  @Test
+  public void testDecodingRowByRow() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap("src/test/resources/blackbox/rssexpandedstacked-2/1000.png");
@@ -70,17 +70,17 @@ public final class RSSExpandedStackedInternalTestCase extends Assert {
 
     Result result = RSSExpandedReader.constructResult(totalPairs);
     assertEquals("(01)98898765432106(3202)012345(15)991231", result.getText());
-	}
-	
-	@Test
-	public void testCompleteDecode() throws Exception {
+  }
+
+  @Test
+  public void testCompleteDecode() throws Exception {
     OneDReader rssExpandedReader = new RSSExpandedReader();
 
     BinaryBitmap binaryMap = TestCaseUtil.getBinaryBitmap("src/test/resources/blackbox/rssexpandedstacked-2/1000.png");
 
     Result result = rssExpandedReader.decode(binaryMap);
     assertEquals("(01)98898765432106(3202)012345(15)991231", result.getText());
-	}
-	
-	
+  }
+
+
 }

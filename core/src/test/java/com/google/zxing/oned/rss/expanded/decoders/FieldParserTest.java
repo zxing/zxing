@@ -35,20 +35,20 @@ import org.junit.Test;
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 public final class FieldParserTest extends Assert {
-	
-	private static void checkFields(String expected) throws NotFoundException {
-		String field  = expected.replace("(", "").replace(")","");
-		String actual = FieldParser.parseFieldsInGeneralPurpose(field);
-		assertEquals(expected, actual);
-	}
+
+  private static void checkFields(String expected) throws NotFoundException {
+    String field  = expected.replace("(", "").replace(")","");
+    String actual = FieldParser.parseFieldsInGeneralPurpose(field);
+    assertEquals(expected, actual);
+  }
 
   @Test
-	public void testParseField() throws Exception{
-		checkFields("(15)991231(3103)001750(10)12A");
-	}
+  public void testParseField() throws Exception{
+    checkFields("(15)991231(3103)001750(10)12A");
+  }
 
   @Test
-	public void testParseField2() throws Exception{
-		checkFields("(15)991231(15)991231(3103)001750(10)12A");
-	}
+  public void testParseField2() throws Exception{
+    checkFields("(15)991231(15)991231(3103)001750(10)12A");
+  }
 }

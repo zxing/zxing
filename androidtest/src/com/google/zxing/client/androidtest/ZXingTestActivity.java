@@ -31,7 +31,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -116,7 +115,7 @@ public final class ZXingTestActivity extends Activity {
   }
   
 
-  private final Button.OnClickListener getCameraParameters = new Button.OnClickListener() {
+  private final View.OnClickListener getCameraParameters = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       String stats = collectStats();
@@ -129,7 +128,7 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener runBenchmark = new Button.OnClickListener() {
+  private final View.OnClickListener runBenchmark = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -138,7 +137,7 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener scanProduct = new Button.OnClickListener() {
+  private final View.OnClickListener scanProduct = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
@@ -150,7 +149,7 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener scanQRCode = new Button.OnClickListener() {
+  private final View.OnClickListener scanQRCode = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
@@ -158,7 +157,7 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener scanAnything = new Button.OnClickListener() {
+  private final View.OnClickListener scanAnything = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
@@ -166,7 +165,7 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener searchBookContents = new Button.OnClickListener() {
+  private final View.OnClickListener searchBookContents = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SEARCH_BOOK_CONTENTS");
@@ -176,35 +175,35 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener encodeURL = new Button.OnClickListener() {
+  private final View.OnClickListener encodeURL = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       encodeBarcode("TEXT_TYPE", "http://www.nytimes.com");
     }
   };
 
-  private final Button.OnClickListener encodeEmail = new Button.OnClickListener() {
+  private final View.OnClickListener encodeEmail = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       encodeBarcode("EMAIL_TYPE", "foo@example.com");
     }
   };
 
-  private final Button.OnClickListener encodePhone = new Button.OnClickListener() {
+  private final View.OnClickListener encodePhone = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       encodeBarcode("PHONE_TYPE", "2125551212");
     }
   };
 
-  private final Button.OnClickListener encodeSMS = new Button.OnClickListener() {
+  private final View.OnClickListener encodeSMS = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       encodeBarcode("SMS_TYPE", "2125551212");
     }
   };
 
-  private final Button.OnClickListener encodeContact = new Button.OnClickListener() {
+  private final View.OnClickListener encodeContact = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       Bundle bundle = new Bundle();
@@ -216,7 +215,7 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener encodeLocation = new Button.OnClickListener() {
+  private final View.OnClickListener encodeLocation = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       Bundle bundle = new Bundle();
@@ -226,7 +225,7 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener encodeHiddenData = new Button.OnClickListener() {
+  private final View.OnClickListener encodeHiddenData = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
@@ -235,14 +234,14 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener encodeBadData = new Button.OnClickListener() {
+  private final View.OnClickListener encodeBadData = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       encodeBarcode(null, "bar");
     }
   };
 
-  private final Button.OnClickListener shareViaBarcode = new Button.OnClickListener() {
+  private final View.OnClickListener shareViaBarcode = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       startActivity(new Intent("com.google.zxing.client.android.SHARE"));

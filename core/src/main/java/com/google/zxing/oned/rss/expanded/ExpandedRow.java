@@ -48,7 +48,7 @@ final class ExpandedRow {
   }
   
   boolean isEquivalent(List<ExpandedPair> otherPairs) {
-	  return this.pairs.equals(otherPairs);
+    return this.pairs.equals(otherPairs);
   }
   
   @Override

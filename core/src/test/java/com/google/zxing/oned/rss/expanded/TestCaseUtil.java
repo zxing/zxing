@@ -48,12 +48,12 @@ final class TestCaseUtil {
       file = new File("core", path);
     }
     return ImageIO.read(file);
-	}
-	
+  }
+
   static BinaryBitmap getBinaryBitmap(String path) throws IOException {
-		BufferedImage bufferedImage = getBufferedImage(path);
-		BufferedImageLuminanceSource luminanceSource = new BufferedImageLuminanceSource(bufferedImage);
-		return new BinaryBitmap(new GlobalHistogramBinarizer(luminanceSource));
-	}
+    BufferedImage bufferedImage = getBufferedImage(path);
+    BufferedImageLuminanceSource luminanceSource = new BufferedImageLuminanceSource(bufferedImage);
+    return new BinaryBitmap(new GlobalHistogramBinarizer(luminanceSource));
+  }
 
 }

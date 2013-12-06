@@ -74,7 +74,7 @@ public final class QRCode {
       result.append("\n matrix: null\n");
     } else {
       result.append("\n matrix:\n");
-      result.append(matrix.toString());
+      result.append(matrix);
     }
     result.append(">>\n");
     return result.toString();

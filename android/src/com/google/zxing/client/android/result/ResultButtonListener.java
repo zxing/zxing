@@ -17,7 +17,6 @@
 package com.google.zxing.client.android.result;
 
 import android.view.View;
-import android.widget.Button;
 
 /**
  * Handles the result of barcode decoding in the context of the Android platform, by dispatching the
@@ -25,7 +24,7 @@ import android.widget.Button;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class ResultButtonListener implements Button.OnClickListener {
+public final class ResultButtonListener implements View.OnClickListener {
   private final ResultHandler resultHandler;
   private final int index;
 

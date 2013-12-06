@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -67,7 +66,7 @@ public final class SearchBookContentsActivity extends Activity {
   private TextView headerView;
   private AsyncTask<String,?,?> networkTask;
 
-  private final Button.OnClickListener buttonListener = new Button.OnClickListener() {
+  private final View.OnClickListener buttonListener = new View.OnClickListener() {
     @Override
     public void onClick(View view) {
       launchSearch();

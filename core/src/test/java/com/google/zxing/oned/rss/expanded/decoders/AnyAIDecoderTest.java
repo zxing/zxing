@@ -32,54 +32,54 @@ import org.junit.Test;
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 public final class AnyAIDecoderTest extends AbstractDecoderTest {
-	
-	private static final String header           = ".....";
+
+  private static final String header           = ".....";
 
   @Test
-	public void testAnyAIDecoder_1() throws Exception {
-		CharSequence data = header + numeric_10 + numeric_12 + numeric2alpha + alpha_A + alpha2numeric + numeric_12;
-		String expected = "(10)12A12";
-		
-		assertCorrectBinaryString(data, expected);
-	}
+  public void testAnyAIDecoder_1() throws Exception {
+    CharSequence data = header + numeric_10 + numeric_12 + numeric2alpha + alpha_A + alpha2numeric + numeric_12;
+    String expected = "(10)12A12";
+
+    assertCorrectBinaryString(data, expected);
+  }
 
   @Test
-	public void testAnyAIDecoder_2() throws Exception {
-		CharSequence data = header + numeric_10 + numeric_12 + numeric2alpha + alpha_A + alpha2isoiec646 + i646_B;
-		String expected = "(10)12AB";
-		
-		assertCorrectBinaryString(data, expected);
-	}
+  public void testAnyAIDecoder_2() throws Exception {
+    CharSequence data = header + numeric_10 + numeric_12 + numeric2alpha + alpha_A + alpha2isoiec646 + i646_B;
+    String expected = "(10)12AB";
+
+    assertCorrectBinaryString(data, expected);
+  }
 
   @Test
-	public void testAnyAIDecoder_3() throws Exception {
-		CharSequence data = header + numeric_10 + numeric2alpha + alpha2isoiec646 + i646_B + i646_C + isoiec646_2alpha + alpha_A + alpha2numeric + numeric_10;
-		String expected = "(10)BCA10";
-		
-		assertCorrectBinaryString(data, expected);
-	}
+  public void testAnyAIDecoder_3() throws Exception {
+    CharSequence data = header + numeric_10 + numeric2alpha + alpha2isoiec646 + i646_B + i646_C + isoiec646_2alpha + alpha_A + alpha2numeric + numeric_10;
+    String expected = "(10)BCA10";
+
+    assertCorrectBinaryString(data, expected);
+  }
 
   @Test
-	public void testAnyAIDecoder_numericFNC1_secondDigit() throws Exception {
-		CharSequence data = header + numeric_10 + numeric_1FNC1;
-		String expected = "(10)1";
-		
-		assertCorrectBinaryString(data, expected);
-	}
+  public void testAnyAIDecoder_numericFNC1_secondDigit() throws Exception {
+    CharSequence data = header + numeric_10 + numeric_1FNC1;
+    String expected = "(10)1";
 
-	@Test
-	public void testAnyAIDecoder_alphaFNC1() throws Exception {
-		CharSequence data = header + numeric_10 + numeric2alpha + alpha_A + alpha_FNC1;
-		String expected = "(10)A";
-		
-		assertCorrectBinaryString(data, expected);
-	}
+    assertCorrectBinaryString(data, expected);
+  }
 
   @Test
-	public void testAnyAIDecoder_646FNC1() throws Exception {
-		CharSequence data = header + numeric_10 + numeric2alpha + alpha_A + isoiec646_2alpha + i646_B + i646_FNC1;
-		String expected = "(10)AB";
-		
-		assertCorrectBinaryString(data, expected);
-	}
+  public void testAnyAIDecoder_alphaFNC1() throws Exception {
+    CharSequence data = header + numeric_10 + numeric2alpha + alpha_A + alpha_FNC1;
+    String expected = "(10)A";
+
+    assertCorrectBinaryString(data, expected);
+  }
+
+  @Test
+  public void testAnyAIDecoder_646FNC1() throws Exception {
+    CharSequence data = header + numeric_10 + numeric2alpha + alpha_A + isoiec646_2alpha + i646_B + i646_FNC1;
+    String expected = "(10)AB";
+
+    assertCorrectBinaryString(data, expected);
+  }
 }

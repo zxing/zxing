@@ -107,7 +107,7 @@ public final class WifiGenerator implements GeneratorSource {
   }
   
   private String getPasswordField() throws GeneratorException {
-	return parseTextField("Password", password);
+  return parseTextField("Password", password);
   }
   
   private String getNetworkTypeField() {

@@ -359,7 +359,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
   // Only used for unit testing
   List<ExpandedRow> getRows() {
-	  return this.rows;
+    return this.rows;
   }
 
   // Not private for unit testing

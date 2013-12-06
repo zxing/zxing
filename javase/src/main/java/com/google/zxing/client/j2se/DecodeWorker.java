@@ -147,10 +147,10 @@ final class DecodeWorker implements Callable<Integer> {
       }
       Result result = new MultiFormatReader().decode(bitmap, hints);
       if (config.isBrief()) {
-        System.out.println(uri.toString() + ": Success");
+        System.out.println(uri + ": Success");
       } else {
         ParsedResult parsedResult = ResultParser.parseResult(result);
-        System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() + ", type: " +
+        System.out.println(uri + " (format: " + result.getBarcodeFormat() + ", type: " +
             parsedResult.getType() + "):\nRaw result:\n" + result.getText() + "\nParsed result:\n" +
             parsedResult.getDisplayResult());
 
@@ -165,7 +165,7 @@ final class DecodeWorker implements Callable<Integer> {
 
       return result;
     } catch (NotFoundException ignored) {
-      System.out.println(uri.toString() + ": No barcode found");
+      System.out.println(uri + ": No barcode found");
       return null;
     }
   }
@@ -191,11 +191,11 @@ final class DecodeWorker implements Callable<Integer> {
       Result[] results = reader.decodeMultiple(bitmap, hints);
 
       if (config.isBrief()) {
-        System.out.println(uri.toString() + ": Success");
+        System.out.println(uri + ": Success");
       } else {
         for (Result result : results) {
           ParsedResult parsedResult = ResultParser.parseResult(result);
-          System.out.println(uri.toString() + " (format: "
+          System.out.println(uri + " (format: "
               + result.getBarcodeFormat() + ", type: "
               + parsedResult.getType() + "):\nRaw result:\n"
               + result.getText() + "\nParsed result:\n"
@@ -209,7 +209,7 @@ final class DecodeWorker implements Callable<Integer> {
       }
       return results;
     } catch (NotFoundException ignored) {
-      System.out.println(uri.toString() + ": No barcode found");
+      System.out.println(uri + ": No barcode found");
       return null;
     }
   }

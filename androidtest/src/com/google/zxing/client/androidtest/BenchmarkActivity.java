@@ -21,7 +21,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 public final class BenchmarkActivity extends Activity {
@@ -30,7 +29,7 @@ public final class BenchmarkActivity extends Activity {
   private TextView textView;
   private AsyncTask<?,?,?> benchmarkTask;
 
-  private final Button.OnClickListener runBenchmark = new Button.OnClickListener() {
+  private final View.OnClickListener runBenchmark = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
       if (benchmarkTask == null) {

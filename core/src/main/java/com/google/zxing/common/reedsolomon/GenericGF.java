@@ -61,12 +61,12 @@ public final class GenericGF {
    *  In most cases it should be 1, but for QR code it is 0.
    */
   public GenericGF(int primitive, int size, int b) {
-  	this.primitive = primitive;
+    this.primitive = primitive;
     this.size = size;
     this.generatorBase = b;
     
     if (size <= INITIALIZATION_THRESHOLD) {
-    	initialize();
+      initialize();
     }
   }
 
@@ -92,20 +92,20 @@ public final class GenericGF {
   }
   
   private void checkInit() {
-  	if (!initialized) {
+    if (!initialized) {
       initialize();
     }
   }
   
   GenericGFPoly getZero() {
-  	checkInit();
-  	
+    checkInit();
+
     return zero;
   }
 
   GenericGFPoly getOne() {
-  	checkInit();
-  	
+    checkInit();
+
     return one;
   }
 
@@ -113,8 +113,8 @@ public final class GenericGF {
    * @return the monomial representing coefficient * x^degree
    */
   GenericGFPoly buildMonomial(int degree, int coefficient) {
-  	checkInit();
-  	
+    checkInit();
+
     if (degree < 0) {
       throw new IllegalArgumentException();
     }
@@ -139,8 +139,8 @@ public final class GenericGF {
    * @return 2 to the power of a in GF(size)
    */
   int exp(int a) {
-  	checkInit();
-  	
+    checkInit();
+
     return expTable[a];
   }
 
@@ -148,8 +148,8 @@ public final class GenericGF {
    * @return base 2 log of a in GF(size)
    */
   int log(int a) {
-  	checkInit();
-  	
+    checkInit();
+
     if (a == 0) {
       throw new IllegalArgumentException();
     }
@@ -160,8 +160,8 @@ public final class GenericGF {
    * @return multiplicative inverse of a
    */
   int inverse(int a) {
-  	checkInit();
-  	
+    checkInit();
+
     if (a == 0) {
       throw new ArithmeticException();
     }
@@ -172,7 +172,7 @@ public final class GenericGF {
    * @return product of a and b in GF(size)
    */
   int multiply(int a, int b) {
-  	checkInit();
+    checkInit();
 
     if (a == 0 || b == 0) {
       return 0;
@@ -181,7 +181,7 @@ public final class GenericGF {
   }
 
   public int getSize() {
-  	return size;
+    return size;
   }
   
   public int getGeneratorBase() {
