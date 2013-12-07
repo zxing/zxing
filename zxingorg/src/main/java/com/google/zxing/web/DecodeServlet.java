@@ -57,6 +57,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
@@ -172,6 +173,13 @@ public final class DecodeServlet extends HttpServlet {
     try {
       imageURL = imageURI.toURL();
     } catch (MalformedURLException ignored) {
+      log.info("URI was not valid: " + imageURIString);
+      response.sendRedirect("badurl.jspx");
+      return;
+    }
+
+    String protocol = imageURL.getProtocol();
+    if (!"http".equalsIgnoreCase(protocol) && !"https".equalsIgnoreCase(protocol)) {
       log.info("URI was not valid: " + imageURIString);
       response.sendRedirect("badurl.jspx");
       return;
