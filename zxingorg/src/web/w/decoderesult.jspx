@@ -16,12 +16,11 @@
  -->
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1">
 <jsp:directive.page import="
-  java.util.List,
   com.google.zxing.Result,
   com.google.zxing.client.result.ResultParser,
   com.google.zxing.client.result.ParsedResult,
   com.google.zxing.web.OutputUtils,
-  org.apache.commons.lang3.StringEscapeUtils"/>
+  com.google.common.xml.XmlEscapers"/>
 <jsp:directive.page contentType="text/html" session="false"/>
 <jsp:scriptlet>
   response.setHeader("Cache-Control", "no-cache");
@@ -42,14 +41,14 @@
     <div id="main">
     <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1></div>
     <jsp:scriptlet>
-      for (Result result : (List&lt;Result&gt;) request.getAttribute("results")) {
+      for (Result result : (Iterable&lt;Result&gt;) request.getAttribute("results")) {
         ParsedResult parsedResult = ResultParser.parseResult(result);
 
         String text = result.getText();
         if (text == null) {
           text = "(Not applicable)";
         } else {
-          text = StringEscapeUtils.escapeXml(text);
+          text = XmlEscapers.xmlContentEscaper().escape(text);
         }
 
         byte[] rawBytes = result.getRawBytes();
@@ -64,7 +63,7 @@
         if (displayResult == null) {
           displayResult = "(Not applicable)";
         } else {
-          displayResult = StringEscapeUtils.escapeXml(displayResult);
+          displayResult = XmlEscapers.xmlContentEscaper().escape(displayResult);
         }
     </jsp:scriptlet>
     <table style="width:100%">
