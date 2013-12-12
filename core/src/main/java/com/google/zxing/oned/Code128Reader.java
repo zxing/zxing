@@ -273,6 +273,8 @@ public final class Code128Reader extends OneDReader {
     int checksumTotal = startCode;
     int multiplier = 0;
     boolean lastCharacterWasPrintable = true;
+    boolean upperMode = false;
+    boolean shiftUpperMode = false;
 
     while (!done) {
 
@@ -316,9 +318,19 @@ public final class Code128Reader extends OneDReader {
 
         case CODE_CODE_A:
           if (code < 64) {
-            result.append((char) (' ' + code));
+            if (shiftUpperMode == upperMode) {
+              result.append((char) (' ' + code));
+            } else {
+              result.append((char) (' ' + code + 128));
+            }
+            shiftUpperMode = false;
           } else if (code < 96) {
-            result.append((char) (code - 64));
+            if (shiftUpperMode == upperMode) {
+              result.append((char) (code - 64));
+            } else {
+              result.append((char) (code + 64));
+            }
+            shiftUpperMode = false;
           } else {
             // Don't let CODE_STOP, which always appears, affect whether whether we think the last
             // code was printable or not.
@@ -340,8 +352,18 @@ public final class Code128Reader extends OneDReader {
                 break;
               case CODE_FNC_2:
               case CODE_FNC_3:
-              case CODE_FNC_4_A:
                 // do nothing?
+                break;
+              case CODE_FNC_4_A:
+                if (!upperMode && shiftUpperMode) {
+                  upperMode = true;
+                  shiftUpperMode = false;
+                } else if (upperMode && shiftUpperMode) {
+                  upperMode = false;
+                  shiftUpperMode = false;
+                } else {
+                  shiftUpperMode = true;
+                }
                 break;
               case CODE_SHIFT:
                 isNextShifted = true;
@@ -361,7 +383,12 @@ public final class Code128Reader extends OneDReader {
           break;
         case CODE_CODE_B:
           if (code < 96) {
-            result.append((char) (' ' + code));
+            if (shiftUpperMode == upperMode) {
+              result.append((char) (' ' + code));
+            } else {
+              result.append((char) (' ' + code + 128));
+            }
+            shiftUpperMode = false;
           } else {
             if (code != CODE_STOP) {
               lastCharacterWasPrintable = false;
@@ -381,8 +408,18 @@ public final class Code128Reader extends OneDReader {
                 break;
               case CODE_FNC_2:
               case CODE_FNC_3:
-              case CODE_FNC_4_B:
                 // do nothing?
+                break;
+              case CODE_FNC_4_B:
+                if (!upperMode && shiftUpperMode) {
+                  upperMode = true;
+                  shiftUpperMode = false;
+                } else if (upperMode && shiftUpperMode) {
+                  upperMode = false;
+                  shiftUpperMode = false;
+                } else {
+                  shiftUpperMode = true;
+                }
                 break;
               case CODE_SHIFT:
                 isNextShifted = true;
