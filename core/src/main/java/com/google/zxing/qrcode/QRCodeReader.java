@@ -93,6 +93,12 @@ public class QRCodeReader implements Reader {
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
+    if (decoderResult.hasStructuredAppend()) {
+      result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE,
+                         decoderResult.getStructuredAppendSequenceNumber());
+      result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_PARITY,
+                         decoderResult.getStructuredAppendParity());
+    }
     return result;
   }
 
