@@ -307,10 +307,12 @@ public final class ZXingTestActivity extends Activity {
     result.append("VERSION.SDK_INT=").append(Build.VERSION.SDK_INT).append('\n');
 
     CharSequence flattened = getFlattenedParams();
-    String[] params = SEMICOLON.split(flattened);
-    Arrays.sort(params);
-    for (String param : params) {
-      result.append(param).append('\n');
+    if (flattened != null) {
+      String[] params = SEMICOLON.split(flattened);
+      Arrays.sort(params);
+      for (String param : params) {
+        result.append(param).append('\n');
+      }
     }
 
     String resultString = result.toString();
