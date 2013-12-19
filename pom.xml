@@ -224,7 +224,8 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.16</version>
           <configuration>
-            <!--<parallel>classes</parallel>-->
+            <forkCount>4</forkCount>
+            <reuseForks>false</reuseForks>
             <systemPropertyVariables>
               <java.awt.headless>true</java.awt.headless>
             </systemPropertyVariables>
