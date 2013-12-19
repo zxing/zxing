@@ -127,7 +127,10 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
       concatedText.append(saResult.getText());
       rawBytesLen += saResult.getRawBytes().length;
       if (saResult.getResultMetadata().containsKey(ResultMetadataType.BYTE_SEGMENTS)) {
-        for (byte[] segment : (Iterable<byte[]>) saResult.getResultMetadata().get(ResultMetadataType.BYTE_SEGMENTS)) {
+        @SuppressWarnings("unchecked")
+        Iterable<byte[]> byteSegments =
+            (Iterable<byte[]>) saResult.getResultMetadata().get(ResultMetadataType.BYTE_SEGMENTS);
+        for (byte[] segment : byteSegments) {
           byteSegmentLength += segment.length;
         }
       }
@@ -140,7 +143,10 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
       System.arraycopy(saResult.getRawBytes(), 0, newRawBytes, newRawBytesIndex, saResult.getRawBytes().length);
       newRawBytesIndex += saResult.getRawBytes().length;
       if (saResult.getResultMetadata().containsKey(ResultMetadataType.BYTE_SEGMENTS)) {
-        for (byte[] segment : (Iterable<byte[]>) saResult.getResultMetadata().get(ResultMetadataType.BYTE_SEGMENTS)) {
+        @SuppressWarnings("unchecked")
+        Iterable<byte[]> byteSegments =
+            (Iterable<byte[]>) saResult.getResultMetadata().get(ResultMetadataType.BYTE_SEGMENTS);
+        for (byte[] segment : byteSegments) {
           System.arraycopy(segment, 0, newByteSegment, byteSegmentIndex, segment.length);
           byteSegmentIndex += segment.length;
         }
