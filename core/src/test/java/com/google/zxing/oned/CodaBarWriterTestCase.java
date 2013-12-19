@@ -24,20 +24,43 @@ import org.junit.Test;
 
 /**
  * @author dsbnatut@gmail.com (Kazuki Nishiura)
+ * @author Sean Owen
  */
 public final class CodaBarWriterTestCase extends Assert {
 
   @Test
   public void testEncode() throws WriterException {
-    // 1001001011 0 110101001 0 101011001 0 110101001 0 101001101 0 110010101 0 1101101011 0
-    // 1001001011
-    CharSequence resultStr = "0000000000" +
-        "1001001011011010100101010110010110101001010100110101100101010110110101101001001011"
-        + "0000000000";
-    BitMatrix result = new CodaBarWriter().encode("B515-3/B", BarcodeFormat.CODABAR, resultStr.length(), 0);
-    for (int i = 0; i < resultStr.length(); i++) {
-      assertEquals("Element " + i, resultStr.charAt(i) == '1', result.get(i, 0));
+    doTest("B515-3/B",
+           "00000" +
+           "1001001011" + "0110101001" + "0101011001" + "0110101001" + "0101001101" +
+           "0110010101" + "01101101011" + "01001001011" +
+           "00000");
+  }
+
+  @Test
+  public void testEncode2() throws WriterException {
+    doTest("T123T",
+           "00000" +
+           "1011001001" + "0101011001" + "0101001011" + "0110010101" + "01011001001" +
+           "00000");
+  }
+
+  @Test
+  public void testAltStartEnd() throws WriterException {
+    assertEquals(encode("T123456789-$T"), encode("A123456789-$A"));
+  }
+
+  private static void doTest(String input, CharSequence expected) throws WriterException {
+    BitMatrix result = encode(input);
+    StringBuilder actual = new StringBuilder(result.getWidth());
+    for (int i = 0; i < result.getWidth(); i++) {
+      actual.append(result.get(i, 0) ? '1' : '0');
     }
+    assertEquals(expected, actual.toString());
+  }
+
+  private static BitMatrix encode(String input) throws WriterException {
+    return new CodaBarWriter().encode(input, BarcodeFormat.CODABAR, 0, 0);
   }
 
 }

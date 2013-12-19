@@ -27,6 +27,7 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
 
   private static final char[] START_END_CHARS = {'A', 'B', 'C', 'D'};
   private static final char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
+  private static final char[] CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = {'/', ':', '+', '.'};
 
   @Override
   public boolean[] encode(String contents) {
@@ -51,13 +52,10 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
 
     // The start character and the end character are decoded to 10 length each.
     int resultLength = 20;
-    char[] charsWhichAreTenLengthEachAfterDecoded = {'/', ':', '+', '.'};
     for (int i = 1; i < contents.length() - 1; i++) {
-      if (Character.isDigit(contents.charAt(i)) || contents.charAt(i) == '-'
-          || contents.charAt(i) == '$') {
+      if (Character.isDigit(contents.charAt(i)) || contents.charAt(i) == '-' || contents.charAt(i) == '$') {
         resultLength += 9;
-      } else if (CodaBarReader.arrayContains(
-          charsWhichAreTenLengthEachAfterDecoded, contents.charAt(i))) {
+      } else if (CodaBarReader.arrayContains(CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED, contents.charAt(i))) {
         resultLength += 10;
       } else {
         throw new IllegalArgumentException("Cannot encode : '" + contents.charAt(i) + '\'');
@@ -70,8 +68,8 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
     int position = 0;
     for (int index = 0; index < contents.length(); index++) {
       char c = Character.toUpperCase(contents.charAt(index));
-      if (index == contents.length() - 1) {
-        // The end chars are not in the CodaBarReader.ALPHABET.
+      if (index == 0 || index == contents.length() - 1) {
+        // The start/end chars are not in the CodaBarReader.ALPHABET.
         switch (c) {
           case 'T':
             c = 'A';
