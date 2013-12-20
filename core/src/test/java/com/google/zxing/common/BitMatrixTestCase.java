@@ -25,6 +25,8 @@ import org.junit.Test;
  */
 public final class BitMatrixTestCase extends Assert {
 
+  private static final int[] BIT_MATRIX_POINTS = { 1, 2, 2, 0, 3, 1 };
+
   @Test
   public void testGetSet() {
     BitMatrix matrix = new BitMatrix(33);
@@ -125,6 +127,58 @@ public final class BitMatrixTestCase extends Assert {
       assertEquals(on, array2.get(x));
       assertEquals(on, array3.get(x));
     }
+  }
+
+  @Test
+  public void testRotate180Simple() {
+    BitMatrix matrix = new BitMatrix(3, 3);
+    matrix.set(0, 0);
+    matrix.set(0, 1);
+    matrix.set(1, 2);
+    matrix.set(2, 1);
+
+    matrix.rotate180();
+
+    assertTrue(matrix.get(2, 2));
+    assertTrue(matrix.get(2, 1));
+    assertTrue(matrix.get(1, 0));
+    assertTrue(matrix.get(0, 1));
+  }
+
+  @Test
+  public void testRotate180() {
+    testRotate180(7, 4);
+    testRotate180(7, 5);
+    testRotate180(8, 4);
+    testRotate180(8, 5);
+  }
+
+  private static void testRotate180(int width, int height) {
+    BitMatrix input = getInput(width, height);
+    input.rotate180();
+    BitMatrix expected = getExpected(width, height);
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        assertEquals("(" + x + ',' + y + ')', expected.get(x, y), input.get(x, y));
+      }
+    }
+  }
+
+  private static BitMatrix getExpected(int width, int height) {
+    BitMatrix result = new BitMatrix(width, height);
+    for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
+      result.set(width - 1 - BIT_MATRIX_POINTS[i], height - 1 - BIT_MATRIX_POINTS[i + 1]);
+    }
+    return result;
+  }
+
+  private static BitMatrix getInput(int width, int height) {
+    BitMatrix result = new BitMatrix(width, height);
+    for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
+      result.set(BIT_MATRIX_POINTS[i], BIT_MATRIX_POINTS[i + 1]);
+    }
+    return result;
   }
 
 }

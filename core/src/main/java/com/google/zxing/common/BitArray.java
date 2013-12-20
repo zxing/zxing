@@ -16,12 +16,14 @@
 
 package com.google.zxing.common;
 
+import java.util.Arrays;
+
 /**
  * <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>
  *
  * @author Sean Owen
  */
-public final class BitArray {
+public final class BitArray implements Cloneable {
 
   private int[] bits;
   private int size;
@@ -335,6 +337,20 @@ public final class BitArray {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof BitArray)) {
+      return false;
+    }
+    BitArray other = (BitArray) o;
+    return size == other.size && Arrays.equals(bits, other.bits);
+  }
+
+  @Override
+  public int hashCode() {
+    return 31 * size + Arrays.hashCode(bits);
+  }
+
+  @Override
   public String toString() {
     StringBuilder result = new StringBuilder(size);
     for (int i = 0; i < size; i++) {
@@ -344,6 +360,11 @@ public final class BitArray {
       result.append(get(i) ? 'X' : '.');
     }
     return result.toString();
+  }
+
+  @Override
+  public BitArray clone() {
+    return new BitArray(bits.clone(), size);
   }
 
 }

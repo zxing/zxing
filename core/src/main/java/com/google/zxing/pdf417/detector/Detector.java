@@ -20,7 +20,6 @@ import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 
 import java.util.ArrayList;
@@ -82,7 +81,8 @@ public final class Detector {
 
     List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
     if (barcodeCoordinates.isEmpty()) {
-      rotate180(bitMatrix);
+      bitMatrix = bitMatrix.clone();
+      bitMatrix.rotate180();
       barcodeCoordinates = detect(multiple, bitMatrix);
     }
     return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
@@ -139,39 +139,6 @@ public final class Detector {
       }
     }
     return barcodeCoordinates;
-  }
-
-  // The following could go to the BitMatrix class (maybe in a more efficient version using the BitMatrix internal
-  // data structures)
-  /**
-   * Rotates a bit matrix by 180 degrees.
-   * @param bitMatrix bit matrix to rotate
-   */
-  static void rotate180(BitMatrix bitMatrix) {
-    int width = bitMatrix.getWidth();
-    int height = bitMatrix.getHeight();
-    BitArray firstRowBitArray = new BitArray(width);
-    BitArray secondRowBitArray = new BitArray(width);
-    BitArray tmpBitArray = new BitArray(width);
-    for (int y = 0; y < height + 1 >> 1; y++) {
-      firstRowBitArray = bitMatrix.getRow(y, firstRowBitArray);
-      bitMatrix.setRow(y, mirror(bitMatrix.getRow(height - 1 - y, secondRowBitArray), tmpBitArray));
-      bitMatrix.setRow(height - 1 - y, mirror(firstRowBitArray, tmpBitArray));
-    }
-  }
-
-  /**
-   * Copies the bits from the input to the result BitArray in reverse order
-   */
-  static BitArray mirror(BitArray input, BitArray result) {
-    result.clear();
-    int size = input.getSize();
-    for (int i = 0; i < size; i++) {
-      if (input.get(i)) {
-        result.set(size - 1 - i);
-      }
-    }
-    return result;
   }
 
   /**

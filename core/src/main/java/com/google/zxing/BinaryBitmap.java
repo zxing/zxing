@@ -136,4 +136,13 @@ public final class BinaryBitmap {
     return new BinaryBitmap(binarizer.createBinarizer(newSource));
   }
 
+  @Override
+  public String toString() {
+    try {
+      return getBlackMatrix().toString();
+    } catch (NotFoundException e) {
+      return "";
+    }
+  }
+
 }

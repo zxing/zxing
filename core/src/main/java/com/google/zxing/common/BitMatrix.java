@@ -16,6 +16,8 @@
 
 package com.google.zxing.common;
 
+import java.util.Arrays;
+
 /**
  * <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
  * module, x is the column position, and y is the row position. The ordering is always x, y.
@@ -31,7 +33,7 @@ package com.google.zxing.common;
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class BitMatrix {
+public final class BitMatrix implements Cloneable {
 
   private final int width;
   private final int height;
@@ -51,6 +53,13 @@ public final class BitMatrix {
     this.height = height;
     this.rowSize = (width + 31) >> 5;
     bits = new int[rowSize * height];
+  }
+
+  private BitMatrix(int width, int height, int rowSize, int[] bits) {
+    this.width = width;
+    this.height = height;
+    this.rowSize = rowSize;
+    this.bits = bits;
   }
 
   /**
@@ -136,6 +145,8 @@ public final class BitMatrix {
   public BitArray getRow(int y, BitArray row) {
     if (row == null || row.getSize() < width) {
       row = new BitArray(width);
+    } else {
+      row.clear();
     }
     int offset = y * rowSize;
     for (int x = 0; x < rowSize; x++) {
@@ -153,9 +164,27 @@ public final class BitMatrix {
   }
 
   /**
+   * Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
+   */
+  public void rotate180() {
+    int width = getWidth();
+    int height = getHeight();
+    BitArray topRow = new BitArray(width);
+    BitArray bottomRow = new BitArray(width);
+    for (int i = 0; i < (height+1) / 2; i++) {
+      topRow = getRow(i, topRow);
+      bottomRow = getRow(height - 1 - i, bottomRow);
+      topRow.reverse();
+      bottomRow.reverse();
+      setRow(i, bottomRow);
+      setRow(height - 1 - i, topRow);
+    }
+  }
+
+  /**
    * This is useful in detecting the enclosing rectangle of a 'pure' barcode.
    *
-   * @return {left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
+   * @return {@code left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
    */
   public int[] getEnclosingRectangle() {
     int left = width;
@@ -208,7 +237,7 @@ public final class BitMatrix {
   /**
    * This is useful in detecting a corner of a 'pure' barcode.
    *
-   * @return {x,y} coordinate of top-left-most 1 bit, or null if it is all white
+   * @return {@code x,y} coordinate of top-left-most 1 bit, or null if it is all white
    */
   public int[] getTopLeftOnBit() {
     int bitsOffset = 0;
@@ -272,16 +301,8 @@ public final class BitMatrix {
       return false;
     }
     BitMatrix other = (BitMatrix) o;
-    if (width != other.width || height != other.height ||
-        rowSize != other.rowSize || bits.length != other.bits.length) {
-      return false;
-    }
-    for (int i = 0; i < bits.length; i++) {
-      if (bits[i] != other.bits[i]) {
-        return false;
-      }
-    }
-    return true;
+    return width == other.width && height == other.height && rowSize == other.rowSize &&
+    Arrays.equals(bits, other.bits);
   }
 
   @Override
@@ -290,9 +311,7 @@ public final class BitMatrix {
     hash = 31 * hash + width;
     hash = 31 * hash + height;
     hash = 31 * hash + rowSize;
-    for (int bit : bits) {
-      hash = 31 * hash + bit;
-    }
+     hash = 31 * hash + Arrays.hashCode(bits);
     return hash;
   }
 
@@ -306,6 +325,11 @@ public final class BitMatrix {
       result.append('\n');
     }
     return result.toString();
+  }
+
+  @Override
+  public BitMatrix clone() {
+    return new BitMatrix(width, height, rowSize, bits.clone());
   }
 
 }
