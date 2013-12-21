@@ -30,7 +30,7 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.WifiParsedResult;
 
 /**
- * Handles address book entries.
+ * Handles wifi access information.
  *
  * @author Vikram Aggarwal
  * @author Sean Owen
