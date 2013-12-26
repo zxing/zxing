@@ -27,7 +27,7 @@
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-mirror</artifactId>
-      <version>v1-rev28-1.17.0-rc</version>
+      <version>v1-rev37-1.17.0-rc</version>
       <exclusions>        
         <exclusion>
           <groupId>commons-logging</groupId>
@@ -43,7 +43,7 @@
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-oauth2</artifactId>
-      <version>v2-rev51-1.17.0-rc</version>
+      <version>v2-rev59-1.17.0-rc</version>
     </dependency>
 
     <dependency>
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.8</version>
+      <version>1.9</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -83,13 +83,12 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.3</version>
+      <version>4.3.1</version>
     </dependency>
 
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>15.0</version>
     </dependency>
 
     <dependency>
