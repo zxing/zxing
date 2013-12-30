@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">复制到剪切板</string>
   <string name="preferences_custom_product_search_summary" formatted="false">替换：％s=内容，％f=格式，％t=类型</string>
   <string name="preferences_custom_product_search_title">自定义搜索网址</string>
-  <string name="preferences_decode_1D_title">扫描 一维条码</string>
+  <string name="preferences_decode_1D_industrial_title">1D工业</string>
+  <string name="preferences_decode_1D_product_title">1D产品</string>
+  <string name="preferences_decode_Aztec_title">阿兹台克人</string>
   <string name="preferences_decode_Data_Matrix_title">扫描 DM码</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">扫描 QR码</string>
   <string name="preferences_device_bug_workarounds_title">设备问题解决办法</string>
   <string name="preferences_disable_continuous_focus_summary">只使用标准对焦模式</string>

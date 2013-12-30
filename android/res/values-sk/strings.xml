@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Kopírovať do schránky</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Nahradiť: %s = obsah, %f = formát, %t = typ</string>
   <string name="preferences_custom_product_search_title">Vlastné vyhľadávanie URL</string>
-  <string name="preferences_decode_1D_title">1D čiarové kódy</string>
+  <string name="preferences_decode_1D_industrial_title">1D priemyselné</string>
+  <string name="preferences_decode_1D_product_title">1D tovar</string>
+  <string name="preferences_decode_Aztec_title">Aztécky</string>
   <string name="preferences_decode_Data_Matrix_title">Dáta Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR kódy</string>
   <string name="preferences_device_bug_workarounds_title">Možné chyby zariadenia</string>
   <string name="preferences_disable_continuous_focus_summary">Použiť iba štandardné zaostrenie</string>

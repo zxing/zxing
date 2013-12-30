@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">क्लिपबोर्ड पर कॉपी</string>
   <string name="preferences_custom_product_search_summary" formatted="false">स्थानापन्न: %s = सामग्री, %f = प्रारूप, %t = टाइप</string>
   <string name="preferences_custom_product_search_title">कस्टम खोज यूआरएल</string>
-  <string name="preferences_decode_1D_title">1D बारकोड</string>
+  <string name="preferences_decode_1D_industrial_title">1D औद्योगिक</string>
+  <string name="preferences_decode_1D_product_title">1D उत्पाद</string>
+  <string name="preferences_decode_Aztec_title">एज़्टेक</string>
   <string name="preferences_decode_Data_Matrix_title">डाटा मैट्रिक्स</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR कोड</string>
   <string name="preferences_device_bug_workarounds_title">युक्ति बग वर्कअराउन्ड</string>
   <string name="preferences_disable_continuous_focus_summary">केवल मानक फोकस मोड का उपयोग करें</string>

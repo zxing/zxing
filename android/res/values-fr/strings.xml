@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Copier dans le presse-papier</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Remplacements : %s = contenu, %f = format, %t = type</string>
   <string name="preferences_custom_product_search_title">URL de recherche personnalisée</string>
-  <string name="preferences_decode_1D_title">Codes-barres 1D</string>
+  <string name="preferences_decode_1D_industrial_title">1D industrielle</string>
+  <string name="preferences_decode_1D_product_title">1D produit</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">Codes QR</string>
   <string name="preferences_device_bug_workarounds_title">Solutions de contournement des bugs de l\'appareil</string>
   <string name="preferences_disable_continuous_focus_summary">Utiliser uniquement le mode de mise au point standard</string>

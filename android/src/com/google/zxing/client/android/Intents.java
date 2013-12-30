@@ -65,6 +65,16 @@ public final class Intents {
     public static final String DATA_MATRIX_MODE = "DATA_MATRIX_MODE";
 
     /**
+     * Decode only Aztec.
+     */
+    public static final String AZTEC_MODE = "AZTEC_MODE";
+
+    /**
+     * Decode only PDF417.
+     */
+    public static final String PDF417_MODE = "PDF417_MODE";
+
+    /**
      * Comma-separated list of formats to scan for. The values must match the names of
      * {@link com.google.zxing.BarcodeFormat}s, e.g. {@link com.google.zxing.BarcodeFormat#EAN_13}.
      * Example: "EAN_13,EAN_8,QR_CODE". This overrides {@link #MODE}.

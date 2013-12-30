@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Kopiatu arbelera</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Ordezkapenak: %s = edukiak, %f = formatua, %t = mota</string>
   <string name="preferences_custom_product_search_title">Bilaketa URL pertsonalizatua</string>
-  <string name="preferences_decode_1D_title">1D barra-kodeak</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">1D Product</string>
+  <string name="preferences_decode_Aztec_title">Azteken</string>
   <string name="preferences_decode_Data_Matrix_title">Datu Matrizeak</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Kodeak</string>
   <string name="preferences_device_bug_workarounds_title">Gailuak Bug konponbidea</string>
   <string name="preferences_disable_continuous_focus_summary">Erabili estandarrean soilik fokuaren modua</string>

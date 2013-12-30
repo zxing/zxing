@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Kopiér til udklipsholder</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Udskiftninger: %s = indhold, %f = format, %t = type</string>
   <string name="preferences_custom_product_search_title">Brugerdefineret søge-URL</string>
-  <string name="preferences_decode_1D_title">Afkod 1D-stregkoder</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industriel</string>
+  <string name="preferences_decode_1D_product_title">1D Produkt</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
   <string name="preferences_decode_Data_Matrix_title">Afkod Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">Afkod QR-koder</string>
   <string name="preferences_device_bug_workarounds_title">Device Bug Løsninger</string>
   <string name="preferences_disable_continuous_focus_summary">Brug kun standard fokusindstilling</string>

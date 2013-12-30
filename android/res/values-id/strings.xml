@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Salin ke clipboard</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Substitusi: %s = isi, %f = format, %t = jenis</string>
   <string name="preferences_custom_product_search_title">Pencarian URL kustom</string>
-  <string name="preferences_decode_1D_title">1D barcode</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industri</string>
+  <string name="preferences_decode_1D_product_title">1D Produk</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matriks</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
   <string name="preferences_device_bug_workarounds_title">Perangkat Bug Workarounds</string>
   <string name="preferences_disable_continuous_focus_summary">Gunakan hanya modus fokus standar</string>

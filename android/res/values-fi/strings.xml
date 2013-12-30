@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Kopioi leikepöydälle</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Seuraavat korvataan: %s = sisältö, %f = formaatti, %t = tyyppi</string>
   <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
-  <string name="preferences_decode_1D_title">1D-viivakoodit</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">1D Tuote</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR-koodit</string>
   <string name="preferences_device_bug_workarounds_title">Laitteen vikojen kiertäminen</string>
   <string name="preferences_disable_continuous_focus_summary">Käytä vain vakiotarkennusta</string>

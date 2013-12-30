@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Копировать в буфер обмена</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Замены: %s = содержание, %f = формат, %t = тип</string>
   <string name="preferences_custom_product_search_title">URL пользовательского поиска</string>
-  <string name="preferences_decode_1D_title">Распознавать линейные штрих-коды</string>
-  <string name="preferences_decode_Data_Matrix_title">Распознавать Data Matrix</string>
+  <string name="preferences_decode_1D_industrial_title">1D Промышленное</string>
+  <string name="preferences_decode_1D_product_title">1D товара</string>
+  <string name="preferences_decode_Aztec_title">Ацтекский</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">Распознавать QR-коды</string>
   <string name="preferences_device_bug_workarounds_title">Исправление ошибок устройства</string>
   <string name="preferences_disable_continuous_focus_summary">Стандартный режим фокусировки</string>

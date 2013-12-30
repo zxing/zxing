@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Panoya kopyala</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Yerine Koyma: %s = içeriği, %f = biçim, %t = tip</string>
   <string name="preferences_custom_product_search_title">Özel arama adresi</string>
-  <string name="preferences_decode_1D_title">1D barkodları</string>
+  <string name="preferences_decode_1D_industrial_title">1D Sanayi</string>
+  <string name="preferences_decode_1D_product_title">1D Ürün</string>
+  <string name="preferences_decode_Aztec_title">Aztek</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR barkodları</string>
   <string name="preferences_device_bug_workarounds_title">Cihaz Hata Geçici Çözümler</string>
   <string name="preferences_disable_continuous_focus_summary">Sadece standart odaklama modunu kullanın</string>

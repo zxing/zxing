@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Копиране в клипборда</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Използвайте: %s за съдържанието,%f за форматa, %t за типа</string>
   <string name="preferences_custom_product_search_title">Потребителски адрес за търсене</string>
-  <string name="preferences_decode_1D_title">1D Баркодове</string>
+  <string name="preferences_decode_1D_industrial_title">1D Индустриална</string>
+  <string name="preferences_decode_1D_product_title">1D продукта</string>
+  <string name="preferences_decode_Aztec_title">Ацтеките</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Баркодове</string>
   <string name="preferences_device_bug_workarounds_title">Заобикаляне на проблеми</string>
   <string name="preferences_disable_continuous_focus_summary">Използване само на стандартен режим за фокусиране</string>

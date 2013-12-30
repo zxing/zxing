@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">نسخ إلى الحافظة</string>
   <string name="preferences_custom_product_search_summary" formatted="false">التبديلات : s٪ = المحتويات ،  f٪ = الشكل ، اكتب t٪ =</string>
   <string name="preferences_custom_product_search_title">عنوان بحث مخصص</string>
-  <string name="preferences_decode_1D_title">فك الرموز الشريطية 1D</string>
+  <string name="preferences_decode_1D_industrial_title">1D الصناعية</string>
+  <string name="preferences_decode_1D_product_title">1D المنتج</string>
+  <string name="preferences_decode_Aztec_title">ازتك</string>
   <string name="preferences_decode_Data_Matrix_title">فك رموز البيانات ماتريكس</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">فك رموز QR</string>
   <string name="preferences_device_bug_workarounds_title">الحلول جهاز علة</string>
   <string name="preferences_disable_continuous_focus_summary">استخدام وضع معيار التركيز فقط</string>

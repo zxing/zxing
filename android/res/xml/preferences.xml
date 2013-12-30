@@ -17,9 +17,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
   <PreferenceCategory android:title="@string/preferences_scanning_title">
     <CheckBoxPreference
-        android:key="preferences_decode_1D"
+        android:key="preferences_decode_1D_product"
         android:defaultValue="true"
-        android:title="@string/preferences_decode_1D_title"/>
+        android:title="@string/preferences_decode_1D_product_title"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_1D_industrial"
+        android:defaultValue="true"
+        android:title="@string/preferences_decode_1D_industrial_title"/>
     <CheckBoxPreference
         android:key="preferences_decode_QR"
         android:defaultValue="true"
@@ -28,6 +32,14 @@
         android:key="preferences_decode_Data_Matrix"
         android:defaultValue="true"
         android:title="@string/preferences_decode_Data_Matrix_title"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_Aztec"
+        android:defaultValue="false"
+        android:title="@string/preferences_decode_Aztec_title"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_PDF417"
+        android:defaultValue="false"
+        android:title="@string/preferences_decode_PDF417_title"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_actions_title">
     <CheckBoxPreference

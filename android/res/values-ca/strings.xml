@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Copia al porta-retalls</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Substitucions: %s = contingut, %f = format, %t = tipus</string>
   <string name="preferences_custom_product_search_title">URL de cerca personalitzat</string>
-  <string name="preferences_decode_1D_title">Codis de barres 1D</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">Producte 1D</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
   <string name="preferences_decode_Data_Matrix_title">Matriu de dades</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">Codis QR</string>
   <string name="preferences_device_bug_workarounds_title">Solucions provisionals de dispositius d\'errors</string>
   <string name="preferences_disable_continuous_focus_summary">Utilitzeu només la manera d\'enfocament estàndard</string>

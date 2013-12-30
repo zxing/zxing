@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">복사하기</string>
   <string name="preferences_custom_product_search_summary" formatted="false">자리 표시자: %s = 내용, %f = 포맷, %t = 유형</string>
   <string name="preferences_custom_product_search_title">사용자 지정 검색 주소</string>
-  <string name="preferences_decode_1D_title">1차원 바코드를 읽기</string>
+  <string name="preferences_decode_1D_industrial_title">1D 산업</string>
+  <string name="preferences_decode_1D_product_title">1D 제품</string>
+  <string name="preferences_decode_Aztec_title">아즈텍</string>
   <string name="preferences_decode_Data_Matrix_title">데이터 행렬(Data Matrix)을 해석하기</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR 코드를 읽기</string>
   <string name="preferences_device_bug_workarounds_title">장치 버그 해결</string>
   <string name="preferences_disable_continuous_focus_summary">전용 표준 초점 모드를 사용</string>

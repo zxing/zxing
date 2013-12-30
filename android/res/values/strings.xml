@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Copy to clipboard</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Substitutions: %s = contents, %f = format, %t = type</string>
   <string name="preferences_custom_product_search_title">Custom search URL</string>
-  <string name="preferences_decode_1D_title">1D barcodes</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">1D Product</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
   <string name="preferences_device_bug_workarounds_title">Device Bug Workarounds</string>
   <string name="preferences_disable_continuous_focus_summary">Use only standard focus mode</string>

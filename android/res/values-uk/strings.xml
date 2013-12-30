@@ -91,8 +91,11 @@
   <string name="preferences_copy_to_clipboard_title">Скопіювати до буферу обміну</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Заміни: %s = вміст, %f = формат, %t = тип</string>
   <string name="preferences_custom_product_search_title">URL користувацького пошуку</string>
-  <string name="preferences_decode_1D_title">Розпізнавати лінійні штрих-коди</string>
+  <string name="preferences_decode_1D_industrial_title">Промислові 1D</string>
+  <string name="preferences_decode_1D_product_title">1D продукту</string>
+  <string name="preferences_decode_Aztec_title">Ацтекскій</string>
   <string name="preferences_decode_Data_Matrix_title">Розпізнавати Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">Розпізнавати QR-коди</string>
   <string name="preferences_device_bug_workarounds_title">Виправлення помилок пристрою</string>
   <string name="preferences_disable_continuous_focus_summary">Стандартний режим фокусування</string>
