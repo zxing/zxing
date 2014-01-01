@@ -48,14 +48,6 @@ public final class HelpActivity extends Activity {
   }
 
   @Override
-  protected void onSaveInstanceState(Bundle state) {
-    String url = webView.getUrl();
-    if (url != null && !url.isEmpty()) {
-      webView.saveState(state);
-    }
-  }
-
-  @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
       webView.goBack();
