@@ -60,4 +60,9 @@
 /Users/srowen/Documents/ZXing/android/res/values-zh-rCN/strings.xml \
 /Users/srowen/Documents/ZXing/android/res/values-zh-rTW/strings.xml \
 /Users/srowen/Documents/ZXing/android/res/xml/preferences.xml \
+/Users/srowen/Documents/ZXing/android/bin/res/drawable/launcher_icon.png \
+/Users/srowen/Documents/ZXing/android/bin/res/drawable/share_via_barcode.png \
+/Users/srowen/Documents/ZXing/android/bin/res/drawable-hdpi/launcher_icon.png \
+/Users/srowen/Documents/ZXing/android/bin/res/drawable-xhdpi/launcher_icon.png \
+/Users/srowen/Documents/ZXing/android/bin/res/drawable-xxhdpi/launcher_icon.png \
 /Users/srowen/Documents/ZXing/android/bin/AndroidManifest.xml \

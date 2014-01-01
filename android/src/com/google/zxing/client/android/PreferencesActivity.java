@@ -54,7 +54,14 @@ public final class PreferencesActivity extends Activity {
   protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
     getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferencesFragment()).commit();
-
   }
+
+  // Apparently this will be necessary when targeting API 19+:
+  /*
+  @Override
+  protected boolean isValidFragment(String fragmentName) {
+    return true;
+  }
+   */
 
 }

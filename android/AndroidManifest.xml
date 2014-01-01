@@ -101,8 +101,7 @@
     </activity>
     <activity android:name=".PreferencesActivity"
               android:label="@string/preferences_name"
-              android:stateNotNeeded="true">
-    </activity>
+              android:stateNotNeeded="true"/>
     <activity android:name=".encode.EncodeActivity"
               android:stateNotNeeded="true">
       <intent-filter>
@@ -142,36 +141,16 @@
     </activity>
     <activity android:name=".history.HistoryActivity"
               android:label="@string/history_title"
-              android:stateNotNeeded="true">
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-    </activity>
+              android:stateNotNeeded="true"/>
     <activity android:name=".share.BookmarkPickerActivity"
               android:label="@string/bookmark_picker_name"
-              android:stateNotNeeded="true">
-      <intent-filter>
-        <action android:name="android.intent.action.PICK"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-    </activity>
+              android:stateNotNeeded="true"/>
     <activity android:name=".share.AppPickerActivity"
               android:label="@string/app_picker_name"
-              android:stateNotNeeded="true"
-              android:configChanges="orientation">
-      <intent-filter>
-        <action android:name="android.intent.action.PICK"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-    </activity>
+              android:stateNotNeeded="true"/>
     <activity android:name=".HelpActivity"
-              android:screenOrientation="user">
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-    </activity>
+              android:label="@string/menu_help"
+              android:screenOrientation="user"/>
   </application>
 
 </manifest>
