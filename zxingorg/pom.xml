@@ -91,7 +91,6 @@
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <warSourceDirectory>src/web</warSourceDirectory>
-          <warName>w</warName>
         </configuration>
       </plugin>
       <plugin>
