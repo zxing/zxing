@@ -43,9 +43,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -259,26 +259,22 @@ final class QRCodeEncoder {
           String name = bundle.getString(ContactsContract.Intents.Insert.NAME);
           String organization = bundle.getString(ContactsContract.Intents.Insert.COMPANY);
           String address = bundle.getString(ContactsContract.Intents.Insert.POSTAL);
-          Collection<String> phones = new ArrayList<>(Contents.PHONE_KEYS.length);
-          for (int x = 0; x < Contents.PHONE_KEYS.length; x++) {
-            phones.add(bundle.getString(Contents.PHONE_KEYS[x]));
-          }
-          Collection<String> emails = new ArrayList<>(Contents.EMAIL_KEYS.length);
-          for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
-            emails.add(bundle.getString(Contents.EMAIL_KEYS[x]));
-          }
+          List<String> phones = getAllBundleValues(bundle, Contents.PHONE_KEYS);
+          List<String> phoneTypes = getAllBundleValues(bundle, Contents.PHONE_TYPE_KEYS);
+          List<String> emails = getAllBundleValues(bundle, Contents.EMAIL_KEYS);
           String url = bundle.getString(Contents.URL_KEY);
-          Iterable<String> urls = url == null ? null : Collections.singletonList(url);
+          List<String> urls = url == null ? null : Collections.singletonList(url);
           String note = bundle.getString(Contents.NOTE_KEY);
 
-          ContactEncoder mecardEncoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
-          String[] encoded = mecardEncoder.encode(Collections.singleton(name),
-                                                  organization,
-                                                  Collections.singleton(address),
-                                                  phones,
-                                                  emails,
-                                                  urls,
-                                                  note);
+          ContactEncoder encoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
+          String[] encoded = encoder.encode(Collections.singletonList(name),
+                                            organization,
+                                            Collections.singletonList(address),
+                                            phones,
+                                            phoneTypes,
+                                            emails,
+                                            urls,
+                                            note);
           // Make sure we've encoded at least one field.
           if (!encoded[1].isEmpty()) {
             contents = encoded[0];
@@ -307,14 +303,24 @@ final class QRCodeEncoder {
     }
   }
 
+  private static List<String> getAllBundleValues(Bundle bundle, String[] keys) {
+    List<String> values = new ArrayList<>(keys.length);
+    for (String key : keys) {
+      Object value = bundle.get(key);
+      values.add(value == null ? null : value.toString());
+    }
+    return values;
+  }
+
   private void encodeQRCodeContents(AddressBookParsedResult contact) {
     ContactEncoder encoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
-    String[] encoded = encoder.encode(toIterable(contact.getNames()),
+    String[] encoded = encoder.encode(toList(contact.getNames()),
                                       contact.getOrg(),
-                                      toIterable(contact.getAddresses()),
-                                      toIterable(contact.getPhoneNumbers()),
-                                      toIterable(contact.getEmails()),
-                                      toIterable(contact.getURLs()),
+                                      toList(contact.getAddresses()),
+                                      toList(contact.getPhoneNumbers()),
+                                      null,
+                                      toList(contact.getEmails()),
+                                      toList(contact.getURLs()),
                                       null);
     // Make sure we've encoded at least one field.
     if (!encoded[1].isEmpty()) {
@@ -324,7 +330,7 @@ final class QRCodeEncoder {
     }
   }
 
-  private static Iterable<String> toIterable(String[] values) {
+  private static List<String> toList(String[] values) {
     return values == null ? null : Arrays.asList(values);
   }
 

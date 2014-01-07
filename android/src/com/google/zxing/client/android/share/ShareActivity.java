@@ -220,11 +220,14 @@ public final class ShareActivity extends Activity {
         try {
           int foundPhone = 0;
           int phonesNumberColumn = phonesCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+          int phoneTypeColumn = phonesCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
           while (phonesCursor.moveToNext() && foundPhone < Contents.PHONE_KEYS.length) {
             String number = phonesCursor.getString(phonesNumberColumn);
             if (number != null && !number.isEmpty()) {
               bundle.putString(Contents.PHONE_KEYS[foundPhone], massageContactData(number));
             }
+            int type = phonesCursor.getInt(phoneTypeColumn);
+            bundle.putInt(Contents.PHONE_TYPE_KEYS[foundPhone], type);
             foundPhone++;
           }
         } finally {
