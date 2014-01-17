@@ -21,7 +21,7 @@ library implemented in Java, with ports to other languages.
 | ------------------- | -----------
 | core                | The core image decoding library, and test code
 | javase              | JavaSE-specific client code
-| android             | Android client, [Barcode Scanner](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)                                     |
+| android             | Android client Barcode Scanner [![Barcode Scanner](http://www.android.com/images/brand/android_app_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
 | androidtest         | Android test app, ZXing Test
 | android-integration | Supports integration with Barcode Scanner via `Intent`
 | zxingorg            | The source behind `zxing.org`
@@ -70,6 +70,7 @@ on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
 
 ## Etcetera
 
+[![Build Status](https://travis-ci.org/zxing/zxing.png?branch=master)](https://travis-ci.org/zxing/zxing)
+
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
-Optimized with [http://www.ej-technologies.com/products/jprofiler/overview.html](JProfiler)
-![JProfiler](http://www.ej-technologies.com/images/banners/jprofiler_small.png)
+Optimized with [![JProfiler](http://www.ej-technologies.com/images/banners/jprofiler_small.png)](http://www.ej-technologies.com/products/jprofiler/overview.html)
