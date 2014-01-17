@@ -17,54 +17,59 @@ library implemented in Java, with ports to other languages.
 
 ### Active
 
-| *core*                | The core image decoding library, and test code
-| *javase*              | JavaSE-specific client code
-| *android*             | Android client, <a href="https://play.google.com/store/apps/details?id=com.google.zxing.client.android">Barcode Scanner</a>                                      |
-| *androidtest*         | Android test app, ZXing Test
-| *android-integration* | Supports integration with Barcode Scanner via `Intent`
-| *zxingorg*            | The source behind `zxing.org`
-| *zxing.appspot.com*   | The source behind web-based barcode generator at `zxing.appspot.com`
+| Module              | Description
+| ------------------- | -----------
+| core                | The core image decoding library, and test code
+| javase              | JavaSE-specific client code
+| android             | Android client, [Barcode Scanner](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)                                     |
+| androidtest         | Android test app, ZXing Test
+| android-integration | Supports integration with Barcode Scanner via `Intent`
+| zxingorg            | The source behind `zxing.org`
+| zxing.appspot.com   | The source behind web-based barcode generator at `zxing.appspot.com`
 
-Try the [http://zxing.appspot.com/generator web-based QR Code generator] and
-[http://zxing.org/w/ web-based barcode decoder].
+Try the [web-based QR Code generator](http://zxing.appspot.com/generator) and
+[web-based barcode decoder](http://zxing.org/w/).
 
 ### Intermittently maintained
 
 There are also additional modules which are contributed and/or intermittently maintained:
 
-| *actionscript* | partial port to Actionscript
-| *glass-mirror* | partial implementation for the Google Glass Mirror API
-| *jruby*        | JRuby wrapper
+| Module       | Description
+| ------------ | -----------
+| actionscript | partial port to Actionscript
+| glass-mirror | partial implementation for the Google Glass Mirror API
+| jruby        | JRuby wrapper
 
 
 ### Available in previous releases
 
-| *cpp*    | C++ port
-| *iphone* | iPhone client
-| *objc*   | Objective C port
+| Module | Description
+| ------ | -----------
+| cpp    | C++ port
+| iphone | iPhone client
+| objc   | Objective C port
 
 ### Related third-party open source projects
 
-| *[https://sourceforge.net/projects/qzxing QZXing]* | port to Qt framework
-| *[http://zxingnet.codeplex.com/ ZXing .NET]* | port to .NET and C#, and related Windows platform
+| Module                                             | Description
+| -------------------------------------------------- | -----------
+| [QZXing](https://sourceforge.net/projects/qzxing)  | port to Qt framework
+| [ZXing .NET](http://zxingnet.codeplex.com/)        | port to .NET and C#, and related Windows platform
 
 ### Other third-party open source projects
 
-| *[http://zbar.sourceforge.net/ ZBar]*          | Decoder in C++, especially for iPhone
-| *[http://sourceforge.net/projects/zint/ Zint]* | Barcode generator
-
+| Module                                        | Description
+| --------------------------------------------- | -----------
+| [ZBar](http://zbar.sourceforge.net/)          | Decoder in C++, especially for iPhone
+| [Zint](http://sourceforge.net/projects/zint/) | Barcode generator
 
 ## Contacting
 
-Post to the [https://groups.google.com/group/zxing discussion forum] or tag a question with `zxing`
-on [http://stackoverflow.com/questions/tagged/zxing StackOverflow].
+Post to the [discussion forum](https://groups.google.com/group/zxing) or tag a question with [`zxing`
+on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
 
 ## Etcetera
 
-_QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo._
-
-Optimized with
-<a href="http://www.ej-technologies.com/products/jprofiler/overview.html">
-<img src="http://www.ej-technologies.com/images/banners/jprofiler_small.png"/></a>
-
-<script type="text/javascript" src="http://www.ohloh.net/p/12084/widgets/project_factoids_stats.js"></script>
+QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
+Optimized with [http://www.ej-technologies.com/products/jprofiler/overview.html](JProfiler)
+![JProfiler](http://www.ej-technologies.com/images/banners/jprofiler_small.png)
