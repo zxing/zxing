@@ -59,6 +59,7 @@ public abstract class ResultParser {
       new ISBNResultParser(),
       new ProductResultParser(),
       new ExpandedProductResultParser(),
+      new VINResultParser(),
   };
 
   private static final Pattern DIGITS = Pattern.compile("\\d*");
@@ -191,7 +192,7 @@ public abstract class ResultParser {
       }
     }
   }
-  
+
   static String urlDecode(String encoded) {
     try {
       return URLDecoder.decode(encoded, "UTF-8");
