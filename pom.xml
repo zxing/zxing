@@ -276,7 +276,7 @@
 
   <name>ZXing Parent</name>
   <description>Parent Maven project for ZXing modules</description>
-  <url>http://code.google.com/p/zxing</url>
+  <url>http://github.com/zxing/zxing</url>
   <inceptionYear>2007</inceptionYear>
   <licenses>
     <license>
@@ -292,13 +292,14 @@
   </developers>
 
   <issueManagement>
-    <system>Google Code</system>
-    <url>http://code.google.com/p/zxing/issues/list</url>
+    <system>Github</system>
+    <url>https://github.com/zxing/zxing/issues</url>
   </issueManagement>
   <scm>
-    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk</developerConnection>
-    <url>http://zxing.googlecode.com/svn/trunk</url>
+    <connection>scm:git:https://github.com/zxing/zxing.git</connection>
+    <developerConnection>scm:git:https://github.com/zxing/zxing.git</developerConnection>
+    <url>scm:git:https://github.com/zxing/zxing.git</url>
+    <tag>HEAD</tag>
   </scm>
 
   <prerequisites>

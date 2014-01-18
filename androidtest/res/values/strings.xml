@@ -16,7 +16,7 @@
  -->
 <resources>
   <string name="about_menu">About</string>
-  <string name="about_message">A utility written by the ZXing Team to help with the development of Barcode Scanner. http://code.google.com/p/zxing</string>
+  <string name="about_message">A utility written by the ZXing Team to help with the development of Barcode Scanner</string>
   <string name="app_name">ZXing Test</string>
   <string name="benchmark_name">ZXing Benchmark</string>
   <string name="benchmark_help">Place images in /sdcard/zxingbenchmark, then check \"adb logcat\" for results. Turn on Airplane Mode first for more reliable results.</string>
