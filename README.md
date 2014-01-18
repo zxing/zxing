@@ -27,9 +27,6 @@ library implemented in Java, with ports to other languages.
 | zxingorg            | The source behind `zxing.org`
 | zxing.appspot.com   | The source behind web-based barcode generator at `zxing.appspot.com`
 
-Try the [web-based QR Code generator](http://zxing.appspot.com/generator) and
-[web-based barcode decoder](http://zxing.org/w/).
-
 ### Intermittently maintained
 
 There are also additional modules which are contributed and/or intermittently maintained:
@@ -63,6 +60,13 @@ There are also additional modules which are contributed and/or intermittently ma
 | [ZBar](http://zbar.sourceforge.net/)          | Decoder in C++, especially for iPhone
 | [Zint](http://sourceforge.net/projects/zint/) | Barcode generator
 
+## Links
+
+* [Online Decoder](http://zxing.org/w/decode.jspx)
+* [QR Code Generator](http://zxing.appspot.com/generator)
+* [Javadoc](http://zxing.org/w/docs/javadoc/index.html)
+* [Google+](https://plus.google.com/u/0/b/105889184633382354358/105889184633382354358/posts)
+
 ## Contacting
 
 Post to the [discussion forum](https://groups.google.com/group/zxing) or tag a question with [`zxing`
@@ -71,6 +75,5 @@ on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
 ## Etcetera
 
 [![Build Status](https://travis-ci.org/zxing/zxing.png?branch=master)](https://travis-ci.org/zxing/zxing)
-
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
 Optimized with [![JProfiler](http://www.ej-technologies.com/images/banners/jprofiler_small.png)](http://www.ej-technologies.com/products/jprofiler/overview.html)
