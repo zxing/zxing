@@ -105,6 +105,7 @@ public final class EncodeActivity extends Activity {
           return false;
         }
         intent.putExtra(USE_VCARD_KEY, !qrCodeEncoder.isUseVCard());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
         return true;

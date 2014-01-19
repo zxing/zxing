@@ -35,7 +35,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/msg_share_explanation"
-        android:paddingBottom="@dimen/standard_padding"/>
+        android:paddingBottom="@dimen/standard_padding"
+        android:textIsSelectable="false"/>
 
     <ImageView
         android:layout_width="wrap_content"

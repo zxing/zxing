@@ -27,7 +27,8 @@
       android:layout_height="wrap_content"
       android:gravity="center"
       android:text="@string/msg_share_explanation"
-      android:paddingBottom="12dip"/>
+      android:paddingBottom="12dip"
+      android:textIsSelectable="false"/>
 
   <LinearLayout
       android:layout_width="fill_parent"

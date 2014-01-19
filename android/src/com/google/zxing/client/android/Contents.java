@@ -58,10 +58,10 @@ public final class Contents {
      * Intent intent = new Intent(Intents.Encode.ACTION);
      * intent.putExtra(Intents.Encode.TYPE, CONTACT);
      * Bundle bundle = new Bundle();
-     * bundle.putString(Contacts.Intents.Insert.NAME, "Jenny");
-     * bundle.putString(Contacts.Intents.Insert.PHONE, "8675309");
-     * bundle.putString(Contacts.Intents.Insert.EMAIL, "jenny@the80s.com");
-     * bundle.putString(Contacts.Intents.Insert.POSTAL, "123 Fake St. San Francisco, CA 94102");
+     * bundle.putString(ContactsContract.Intents.Insert.NAME, "Jenny");
+     * bundle.putString(ContactsContract.Intents.Insert.PHONE, "8675309");
+     * bundle.putString(ContactsContract.Intents.Insert.EMAIL, "jenny@the80s.com");
+     * bundle.putString(ContactsContract.Intents.Insert.POSTAL, "123 Fake St. San Francisco, CA 94102");
      * intent.putExtra(Intents.Encode.DATA, bundle);
      */
     public static final String CONTACT = "CONTACT_TYPE";

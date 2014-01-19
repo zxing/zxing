@@ -41,7 +41,8 @@
               android:textColor="@color/contents_text"
               android:paddingRight="8dip"
               android:paddingTop="8dip"
-              android:paddingBottom="8dip"/>
+              android:paddingBottom="8dip"
+              android:textIsSelectable="true"/>
 
   </ScrollView>
 

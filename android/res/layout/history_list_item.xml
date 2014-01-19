@@ -11,12 +11,14 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:textIsSelectable="false"/>
 
   <TextView android:id="@+id/history_detail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:singleLine="false"/>
+            android:singleLine="false"
+            android:textIsSelectable="false"/>
 
 </LinearLayout>

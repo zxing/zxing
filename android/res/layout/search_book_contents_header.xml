@@ -20,4 +20,5 @@
           android:paddingLeft="@dimen/standard_padding"
           android:paddingBottom="@dimen/half_padding"
           android:enabled="false"
-          android:singleLine="true"/>
+          android:singleLine="true"
+          android:textIsSelectable="false"/>

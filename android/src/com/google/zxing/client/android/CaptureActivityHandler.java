@@ -79,11 +79,9 @@ public final class CaptureActivityHandler extends Handler {
   public void handleMessage(Message message) {
     switch (message.what) {
       case R.id.restart_preview:
-        Log.d(TAG, "Got restart preview message");
         restartPreviewAndDecode();
         break;
       case R.id.decode_succeeded:
-        Log.d(TAG, "Got decode succeeded message");
         state = State.SUCCESS;
         Bundle bundle = message.getData();
         Bitmap barcode = null;
@@ -105,12 +103,10 @@ public final class CaptureActivityHandler extends Handler {
         cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
         break;
       case R.id.return_scan_result:
-        Log.d(TAG, "Got return scan result message");
         activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
         activity.finish();
         break;
       case R.id.launch_product_query:
-        Log.d(TAG, "Got product query message");
         String url = (String) message.obj;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
