@@ -1,2 +1,4 @@
 target/
 *.iml
+gen/
+libs/
