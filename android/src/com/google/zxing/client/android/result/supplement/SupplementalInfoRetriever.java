@@ -59,18 +59,6 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
       SupplementalInfoRetriever productRetriever = 
           new ProductResultInfoRetriever(textView, productID, historyManager, context);
       productRetriever.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-      switch (productID.length()) {
-        case 12:
-          SupplementalInfoRetriever upcInfoRetriever = 
-              new AmazonInfoRetriever(textView, "UPC", normalizedProductID, historyManager, context);
-          upcInfoRetriever.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-          break;
-        case 13:
-          SupplementalInfoRetriever eanInfoRetriever =
-              new AmazonInfoRetriever(textView, "EAN", normalizedProductID, historyManager, context);
-          eanInfoRetriever.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-          break;
-      }
     } else if (result instanceof ISBNParsedResult) {
       String isbn = ((ISBNParsedResult) result).getISBN();
       SupplementalInfoRetriever productInfoRetriever = 
@@ -79,9 +67,6 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
       SupplementalInfoRetriever bookInfoRetriever = 
           new BookResultInfoRetriever(textView, isbn, historyManager, context);
       bookInfoRetriever.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-      SupplementalInfoRetriever amazonInfoRetriever =
-          new AmazonInfoRetriever(textView, "ISBN", isbn, historyManager, context);
-      amazonInfoRetriever.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);      
     }
   }
 
