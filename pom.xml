@@ -270,6 +270,35 @@
           <artifactId>maven-jxr-plugin</artifactId>
           <version>2.4</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <version>0.10</version>
+          <configuration>
+            <excludes>
+              <exclude>**/.*</exclude>
+              <exclude>**/.settings/**</exclude>
+              <exclude>**/*.iml</exclude>
+              <exclude>**/*.md</exclude>
+              <exclude>**/*.textile</exclude>
+              <exclude>**/*.txt</exclude>
+              <exclude>**/*.html</exclude>
+              <exclude>**/*.js</exclude>
+              <exclude>**/*.css</exclude>
+              <exclude>**/*.properties</exclude>
+              <exclude>**/*.cfg</exclude>
+              <exclude>**/*.config</exclude>
+              <exclude>**/*.yaml</exclude>
+              <exclude>**/gen/**</exclude>
+              <exclude>**/resources/**</exclude>
+              <exclude>**/target/**</exclude>
+              <exclude>**/dependency-reduced-pom.xml</exclude>
+              <exclude>private/**</exclude>
+              <exclude>CHANGES</exclude>
+              <excludeSubProjects>false</excludeSubProjects>
+            </excludes>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
