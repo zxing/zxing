@@ -97,6 +97,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <inherited>false</inherited>
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -136,18 +141,6 @@
           <version>2.9.1</version>
           <configuration>
             <javadocVersion>1.7</javadocVersion>
-            <header><![CDATA[
-            <script type="text/javascript">
-               var _gaq = _gaq || [];
-               _gaq.push(['_setAccount', 'UA-788492-5']);
-               _gaq.push(['_trackPageview']);
-               (function() {
-                 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-               })();
-            </script>
-          ]]></header>
           </configuration>
           <executions>
             <execution>
@@ -261,6 +254,22 @@
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>1.8</version>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>findbugs-maven-plugin</artifactId>
+          <version>2.5.3</version>
+          <configuration>
+            <threshold>Normal</threshold>
+            <effort>Max</effort>
+            <xmlOutput>true</xmlOutput>
+            <xmlOutputDirectory>target/site</xmlOutputDirectory>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jxr-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -269,12 +278,65 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- <report>cim</report> -->
+              <!-- <report>dependencies</report> -->
+              <report>dependency-convergence</report>
+              <report>dependency-info</report>
+              <report>dependency-management</report>
+              <report>distribution-management</report>
+              <report>index</report>
+              <report>issue-tracking</report>
+              <report>license</report>
+              <report>mailing-list</report>
+              <!-- <report>modules</report> -->
+              <!-- <report>plugin-management</report> -->
+              <!-- <report>plugins</report> -->
+              <!-- <report>project-team</report> -->
+              <report>scm</report>
+              <report>summary</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <id>aggregate</id>
+            <reports>
+              <report>aggregate</report>
+              <report>test-aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <id>aggregate</id>
+            <reports>
+              <report>aggregate</report>
+              <report>test-aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
     </plugins>
+    <excludeDefaults>true</excludeDefaults>
   </reporting>
 
-  <name>ZXing Parent</name>
+  <name>ZXing</name>
   <description>Parent Maven project for ZXing modules</description>
   <url>http://github.com/zxing/zxing</url>
   <inceptionYear>2007</inceptionYear>
@@ -295,6 +357,16 @@
     <system>Github</system>
     <url>https://github.com/zxing/zxing/issues</url>
   </issueManagement>
+  <mailingLists>
+    <mailingList>
+      <name>zxing Google Group</name>
+      <archive>https://groups.google.com/forum/?fromgroups#!forum/zxing</archive>
+    </mailingList>
+    <mailingList>
+      <name>StackOverflow tag</name>
+      <archive>http://stackoverflow.com/questions/tagged/zxing</archive>
+    </mailingList>
+  </mailingLists>
   <scm>
     <connection>scm:git:https://github.com/zxing/zxing.git</connection>
     <developerConnection>scm:git:https://github.com/zxing/zxing.git</developerConnection>
@@ -317,6 +389,11 @@
       <name>Sonatype Nexus Snapshots</name>
       <url>http://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
+    <site>
+      <id>zxing.website</id>
+      <name>ZXing documentation</name>
+      <url>http://zxing.github.io/zxing/</url>
+    </site>
   </distributionManagement>
 
   <profiles>
