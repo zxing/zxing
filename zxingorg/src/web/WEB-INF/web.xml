@@ -37,6 +37,11 @@
     <servlet-class>com.google.zxing.web.ChartServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <servlet>
+    <servlet-name>LegacyJavadocRedirectServlet</servlet-name>
+    <servlet-class>com.google.zxing.web.LegacyJavadocRedirectServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>DecodeServlet</servlet-name>
@@ -45,6 +50,10 @@
   <servlet-mapping>
     <servlet-name>ChartServlet</servlet-name>
     <url-pattern>/w/chart</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LegacyJavadocRedirectServlet</servlet-name>
+    <url-pattern>/w/docs/javadoc/*</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>
