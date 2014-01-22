@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>FinderPatternFinder xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/com/google/zxing/qrcode/detector/FinderPatternFinder.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2007 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.qrcode.detector;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.DecodeHintType;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.NotFoundException;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.ResultPoint;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.ResultPointCallback;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.common.BitMatrix;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.Serializable;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Comparator;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;This class attempts to find finder patterns in a QR Code. Finder patterns are the square</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * markers at three corners of a QR Code.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;This class is thread-safe but not reentrant. Each thread must allocate its own object.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FinderPatternFinder</a> {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CENTER_QUORUM = 2;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MIN_SKIP = 3; <em class="jxr_comment">// 1 pixel/module times 3 modules/center</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_MODULES = 57; <em class="jxr_comment">// support up to version 10 for mobile clients</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> INTEGER_MATH_SHIFT = 8;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;FinderPattern&gt; possibleCenters;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> hasSkipped;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] crossCheckStateCount;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/ResultPointCallback.html">ResultPointCallback</a> resultPointCallback;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">   * &lt;p&gt;Creates a finder that will search the image for three finder patterns.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">   * @param image image to search</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FinderPatternFinder</a>(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image) {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">this</strong>(image, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>    }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FinderPatternFinder</a>(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image, <a href="../../../../../com/google/zxing/ResultPointCallback.html">ResultPointCallback</a> resultPointCallback) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">this</strong>.image = image;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">this</strong>.possibleCenters = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">this</strong>.crossCheckStateCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[5];
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">this</strong>.resultPointCallback = resultPointCallback;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> getImage() {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">return</strong> image;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>    }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> List&lt;FinderPattern&gt; getPossibleCenters() {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">return</strong> possibleCenters;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>    <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a> find(Map&lt;DecodeHintType,?&gt; hints) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">boolean</strong> tryHarder = hints != <strong class="jxr_keyword">null</strong> &amp;&amp; hints.containsKey(DecodeHintType.TRY_HARDER);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">int</strong> maxI = image.getHeight();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <strong class="jxr_keyword">int</strong> maxJ = image.getWidth();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <em class="jxr_comment">// We are looking for black/white/black/white/black modules in</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <em class="jxr_comment">// 1:1:3:1:1 ratio; this tracks the number of such modules seen so far</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <em class="jxr_comment">// Let's assume that the maximum version QR Code we support takes up 1/4 the height of the</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <em class="jxr_comment">// image, and then account for the center being 3 modules in size. This gives the smallest</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      <em class="jxr_comment">// number of pixels the center could be, so skip this often. When trying harder, look for all</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <em class="jxr_comment">// QR versions regardless of how dense they are.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">int</strong> iSkip = (3 * maxI) / (4 * MAX_MODULES);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">if</strong> (iSkip &lt; MIN_SKIP || tryHarder) {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>        iSkip = MIN_SKIP;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      }
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">boolean</strong> done = false;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">int</strong>[] stateCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[5];
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = iSkip - 1; i &lt; maxI &amp;&amp; !done; i += iSkip) {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>        <em class="jxr_comment">// Get a row of black/white values</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>        stateCount[0] = 0;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>        stateCount[1] = 0;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>        stateCount[2] = 0;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>       stateCount[3] = 0;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>       stateCount[4] = 0;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>       <strong class="jxr_keyword">int</strong> currentState = 0;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; maxJ; j++) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">if</strong> (image.get(j, i)) {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>           <em class="jxr_comment">// Black pixel</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>           <strong class="jxr_keyword">if</strong> ((currentState &amp; 1) == 1) { <em class="jxr_comment">// Counting white pixels</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             currentState++;
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>           }
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>           stateCount[currentState]++;
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// White pixel</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>           <strong class="jxr_keyword">if</strong> ((currentState &amp; 1) == 0) { <em class="jxr_comment">// Counting black pixels</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>             <strong class="jxr_keyword">if</strong> (currentState == 4) { <em class="jxr_comment">// A winner?</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>               <strong class="jxr_keyword">if</strong> (foundPatternCross(stateCount)) { <em class="jxr_comment">// Yes</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>                 <strong class="jxr_keyword">boolean</strong> confirmed = handlePossibleCenter(stateCount, i, j);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>                 <strong class="jxr_keyword">if</strong> (confirmed) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>                   <em class="jxr_comment">// Start examining every other line. Checking each line turned out to be too</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>                   <em class="jxr_comment">// expensive and didn't improve performance.</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                   iSkip = 2;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>                   <strong class="jxr_keyword">if</strong> (hasSkipped) {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>                     done = haveMultiplyConfirmedCenters();
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>                   } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>                     <strong class="jxr_keyword">int</strong> rowSkip = findRowSkip();
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>                     <strong class="jxr_keyword">if</strong> (rowSkip &gt; stateCount[2]) {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>                       <em class="jxr_comment">// Skip rows between row of lower confirmed center</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>                       <em class="jxr_comment">// and top of presumed third confirmed center</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>                       <em class="jxr_comment">// but back up a bit to get a full chance of detecting</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>                       <em class="jxr_comment">// it, entire width of center of finder pattern</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>                       <em class="jxr_comment">// Skip by rowSkip, but back off by stateCount[2] (size of last center</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>                       <em class="jxr_comment">// of pattern we saw) to be conservative, and also back off by iSkip which</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>                       <em class="jxr_comment">// is about to be re-added</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>                       i += rowSkip - stateCount[2] - iSkip;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>                       j = maxJ - 1;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>                     }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>                   }
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>                 } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>                   stateCount[0] = stateCount[2];
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>                   stateCount[1] = stateCount[3];
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>                   stateCount[2] = stateCount[4];
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>                   stateCount[3] = 1;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>                   stateCount[4] = 0;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>                   currentState = 3;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>                   <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>                 }
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>                 <em class="jxr_comment">// Clear state to start looking again</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>                 currentState = 0;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>                 stateCount[0] = 0;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>                 stateCount[1] = 0;
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>                 stateCount[2] = 0;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>                 stateCount[3] = 0;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>                 stateCount[4] = 0;
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>               } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// No, shift counts back by two</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>                 stateCount[0] = stateCount[2];
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>                 stateCount[1] = stateCount[3];
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>                 stateCount[2] = stateCount[4];
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>                 stateCount[3] = 1;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>                 stateCount[4] = 0;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>                 currentState = 3;
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>               }
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>               stateCount[++currentState]++;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>             }
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>           } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// Counting white pixels</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>             stateCount[currentState]++;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>           }
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>         }
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>       }
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>       <strong class="jxr_keyword">if</strong> (foundPatternCross(stateCount)) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>         <strong class="jxr_keyword">boolean</strong> confirmed = handlePossibleCenter(stateCount, i, maxJ);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         <strong class="jxr_keyword">if</strong> (confirmed) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>           iSkip = stateCount[0];
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>           <strong class="jxr_keyword">if</strong> (hasSkipped) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>             <em class="jxr_comment">// Found a third one</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>             done = haveMultiplyConfirmedCenters();
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>           }
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>         }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>       }
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>     }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a>[] patternInfo = selectBestPatterns();
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     ResultPoint.orderBestPatterns(patternInfo);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a>(patternInfo);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>   }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">   * Given a count of black/white/black/white/black pixels just seen and an end position,</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">   * figures the location of the center of this run.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">float</strong> centerFromEnd(<strong class="jxr_keyword">int</strong>[] stateCount, <strong class="jxr_keyword">int</strong> end) {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">float</strong>) (end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>   }
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">   * @param stateCount count of black/white/black/white/black pixels just read</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">   * @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">   *         used by finder patterns to be considered a match</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> foundPatternCross(<strong class="jxr_keyword">int</strong>[] stateCount) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">int</strong> totalModuleSize = 0;
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 5; i++) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>       <strong class="jxr_keyword">int</strong> count = stateCount[i];
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>       <strong class="jxr_keyword">if</strong> (count == 0) {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>         <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>       }
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>       totalModuleSize += count;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     <strong class="jxr_keyword">if</strong> (totalModuleSize &lt; 7) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>       <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     }
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">int</strong> moduleSize = (totalModuleSize &lt;&lt; INTEGER_MATH_SHIFT) / 7;
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>     <strong class="jxr_keyword">int</strong> maxVariance = moduleSize / 2;
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>     <em class="jxr_comment">// Allow less than 50% variance from 1-1-3-1-1 proportions</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>     <strong class="jxr_keyword">return</strong> Math.abs(moduleSize - (stateCount[0] &lt;&lt; INTEGER_MATH_SHIFT)) &lt; maxVariance &amp;&amp;
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>         Math.abs(moduleSize - (stateCount[1] &lt;&lt; INTEGER_MATH_SHIFT)) &lt; maxVariance &amp;&amp;
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>         Math.abs(3 * moduleSize - (stateCount[2] &lt;&lt; INTEGER_MATH_SHIFT)) &lt; 3 * maxVariance &amp;&amp;
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>         Math.abs(moduleSize - (stateCount[3] &lt;&lt; INTEGER_MATH_SHIFT)) &lt; maxVariance &amp;&amp;
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>         Math.abs(moduleSize - (stateCount[4] &lt;&lt; INTEGER_MATH_SHIFT)) &lt; maxVariance;
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>   }
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong>[] getCrossCheckStateCount() {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>     crossCheckStateCount[0] = 0;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>     crossCheckStateCount[1] = 0;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     crossCheckStateCount[2] = 0;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>     crossCheckStateCount[3] = 0;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>     crossCheckStateCount[4] = 0;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>     <strong class="jxr_keyword">return</strong> crossCheckStateCount;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>   }
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">   * &lt;p&gt;After a horizontal scan finds a potential finder pattern, this method</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">   * "cross-checks" by scanning down vertically through the center of the possible</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">   * finder pattern to see if the same proportion is detected.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">   * @param startI row where a finder pattern was detected</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">   * @param centerJ center of the section that appears to cross a finder pattern</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">   * @param maxCount maximum reasonable number of modules that should be</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">   * observed in any reading state, based on the results of the horizontal scan</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">   * @return vertical center of finder pattern, or {@link Float#NaN} if not found</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> crossCheckVertical(<strong class="jxr_keyword">int</strong> startI, <strong class="jxr_keyword">int</strong> centerJ, <strong class="jxr_keyword">int</strong> maxCount,
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>       <strong class="jxr_keyword">int</strong> originalStateCountTotal) {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>     <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image = <strong class="jxr_keyword">this</strong>.image;
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>     <strong class="jxr_keyword">int</strong> maxI = image.getHeight();
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>     <strong class="jxr_keyword">int</strong>[] stateCount = getCrossCheckStateCount();
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     <em class="jxr_comment">// Start counting up from center</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <strong class="jxr_keyword">int</strong> i = startI;
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">while</strong> (i &gt;= 0 &amp;&amp; image.get(centerJ, i)) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>       stateCount[2]++;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>       i--;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     }
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>     <strong class="jxr_keyword">if</strong> (i &lt; 0) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     }
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     <strong class="jxr_keyword">while</strong> (i &gt;= 0 &amp;&amp; !image.get(centerJ, i) &amp;&amp; stateCount[1] &lt;= maxCount) {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>       stateCount[1]++;
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>       i--;
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>     }
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>     <em class="jxr_comment">// If already too many modules in this state or ran off the edge:</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>     <strong class="jxr_keyword">if</strong> (i &lt; 0 || stateCount[1] &gt; maxCount) {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>     }
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>     <strong class="jxr_keyword">while</strong> (i &gt;= 0 &amp;&amp; image.get(centerJ, i) &amp;&amp; stateCount[0] &lt;= maxCount) {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>       stateCount[0]++;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>       i--;
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>     }
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>     <strong class="jxr_keyword">if</strong> (stateCount[0] &gt; maxCount) {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     }
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <em class="jxr_comment">// Now also count down from center</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     i = startI + 1;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     <strong class="jxr_keyword">while</strong> (i &lt; maxI &amp;&amp; image.get(centerJ, i)) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>       stateCount[2]++;
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>       i++;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     }
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>     <strong class="jxr_keyword">if</strong> (i == maxI) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>     }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     <strong class="jxr_keyword">while</strong> (i &lt; maxI &amp;&amp; !image.get(centerJ, i) &amp;&amp; stateCount[3] &lt; maxCount) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>       stateCount[3]++;
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>       i++;
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>     }
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>     <strong class="jxr_keyword">if</strong> (i == maxI || stateCount[3] &gt;= maxCount) {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>     }
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>     <strong class="jxr_keyword">while</strong> (i &lt; maxI &amp;&amp; image.get(centerJ, i) &amp;&amp; stateCount[4] &lt; maxCount) {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>       stateCount[4]++;
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>       i++;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     }
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     <strong class="jxr_keyword">if</strong> (stateCount[4] &gt;= maxCount) {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     }
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>     <em class="jxr_comment">// If we found a finder-pattern-like section, but its size is more than 40% different than</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>     <em class="jxr_comment">// the original, assume it's a false positive</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>     <strong class="jxr_keyword">int</strong> stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>         stateCount[4];
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>     <strong class="jxr_keyword">if</strong> (5 * Math.abs(stateCountTotal - originalStateCountTotal) &gt;= 2 * originalStateCountTotal) {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>     }
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <strong class="jxr_keyword">return</strong> foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : Float.NaN;
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>   }
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Like {@link #crossCheckVertical(int, int, int, int)}, and in fact is basically identical,</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">   * except it reads horizontally instead of vertically. This is used to cross-cross</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">   * check a vertical cross check and locate the real center of the alignment pattern.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> crossCheckHorizontal(<strong class="jxr_keyword">int</strong> startJ, <strong class="jxr_keyword">int</strong> centerI, <strong class="jxr_keyword">int</strong> maxCount,
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>       <strong class="jxr_keyword">int</strong> originalStateCountTotal) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image = <strong class="jxr_keyword">this</strong>.image;
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>     <strong class="jxr_keyword">int</strong> maxJ = image.getWidth();
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>     <strong class="jxr_keyword">int</strong>[] stateCount = getCrossCheckStateCount();
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">int</strong> j = startJ;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">while</strong> (j &gt;= 0 &amp;&amp; image.get(j, centerI)) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>       stateCount[2]++;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>       j--;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>     }
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     <strong class="jxr_keyword">if</strong> (j &lt; 0) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     }
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     <strong class="jxr_keyword">while</strong> (j &gt;= 0 &amp;&amp; !image.get(j, centerI) &amp;&amp; stateCount[1] &lt;= maxCount) {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>       stateCount[1]++;
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>       j--;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>     }
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>     <strong class="jxr_keyword">if</strong> (j &lt; 0 || stateCount[1] &gt; maxCount) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>     }
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>     <strong class="jxr_keyword">while</strong> (j &gt;= 0 &amp;&amp; image.get(j, centerI) &amp;&amp; stateCount[0] &lt;= maxCount) {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>       stateCount[0]++;
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>       j--;
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>     }
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     <strong class="jxr_keyword">if</strong> (stateCount[0] &gt; maxCount) {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>     }
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>     j = startJ + 1;
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>     <strong class="jxr_keyword">while</strong> (j &lt; maxJ &amp;&amp; image.get(j, centerI)) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>       stateCount[2]++;
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>       j++;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>     }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>     <strong class="jxr_keyword">if</strong> (j == maxJ) {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>     }
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>     <strong class="jxr_keyword">while</strong> (j &lt; maxJ &amp;&amp; !image.get(j, centerI) &amp;&amp; stateCount[3] &lt; maxCount) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>       stateCount[3]++;
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>       j++;
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>     }
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>     <strong class="jxr_keyword">if</strong> (j == maxJ || stateCount[3] &gt;= maxCount) {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>     }
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>     <strong class="jxr_keyword">while</strong> (j &lt; maxJ &amp;&amp; image.get(j, centerI) &amp;&amp; stateCount[4] &lt; maxCount) {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>       stateCount[4]++;
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>       j++;
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>     }
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>     <strong class="jxr_keyword">if</strong> (stateCount[4] &gt;= maxCount) {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>     }
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>     <em class="jxr_comment">// If we found a finder-pattern-like section, but its size is significantly different than</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>     <em class="jxr_comment">// the original, assume it's a false positive</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>     <strong class="jxr_keyword">int</strong> stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>         stateCount[4];
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>     <strong class="jxr_keyword">if</strong> (5 * Math.abs(stateCountTotal - originalStateCountTotal) &gt;= originalStateCountTotal) {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>       <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>     }
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>     <strong class="jxr_keyword">return</strong> foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : Float.NaN;
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>   }
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">   * &lt;p&gt;This is called when a horizontal scan finds a possible alignment pattern. It will</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">   * cross check with a vertical scan, and if successful, will, ah, cross-cross-check</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">   * with another horizontal scan. This is needed primarily to locate the real horizontal</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">   * center of the pattern in cases of extreme skew.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">   * &lt;p&gt;If that succeeds the finder pattern location is added to a list that tracks</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">   * the number of times each location has been nearly-matched as a finder pattern.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">   * Each additional find is more evidence that the location is in fact a finder</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">   * pattern center</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">   * @param stateCount reading state module counts from horizontal scan</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">   * @param i row where finder pattern may be found</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">   * @param j end of possible finder pattern in row</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">   * @return true if a finder pattern candidate was found this time</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> handlePossibleCenter(<strong class="jxr_keyword">int</strong>[] stateCount, <strong class="jxr_keyword">int</strong> i, <strong class="jxr_keyword">int</strong> j) {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>     <strong class="jxr_keyword">int</strong> stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>         stateCount[4];
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>     <strong class="jxr_keyword">float</strong> centerJ = centerFromEnd(stateCount, j);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>     <strong class="jxr_keyword">float</strong> centerI = crossCheckVertical(i, (<strong class="jxr_keyword">int</strong>) centerJ, stateCount[2], stateCountTotal);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>     <strong class="jxr_keyword">if</strong> (!Float.isNaN(centerI)) {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>       <em class="jxr_comment">// Re-cross check</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>       centerJ = crossCheckHorizontal((<strong class="jxr_keyword">int</strong>) centerJ, (<strong class="jxr_keyword">int</strong>) centerI, stateCount[2], stateCountTotal);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>       <strong class="jxr_keyword">if</strong> (!Float.isNaN(centerJ)) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         <strong class="jxr_keyword">float</strong> estimatedModuleSize = (<strong class="jxr_keyword">float</strong>) stateCountTotal / 7.0f;
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>         <strong class="jxr_keyword">boolean</strong> found = false;
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> index = 0; index &lt; possibleCenters.size(); index++) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>           <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> center = possibleCenters.get(index);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>           <em class="jxr_comment">// Look for about the same center and module size:</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>           <strong class="jxr_keyword">if</strong> (center.aboutEquals(estimatedModuleSize, centerI, centerJ)) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>             possibleCenters.set(index, center.combineEstimate(centerI, centerJ, estimatedModuleSize));
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>             found = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>           }
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>         }
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>         <strong class="jxr_keyword">if</strong> (!found) {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>           <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> point = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a>(centerJ, centerI, estimatedModuleSize);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>           possibleCenters.add(point);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>           <strong class="jxr_keyword">if</strong> (resultPointCallback != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>             resultPointCallback.foundPossibleResultPoint(point);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>           }
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>         }
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>       }
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>     }
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>     <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>   }
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">   * @return number of rows we could safely skip during scanning, based on the first</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">   *         two finder patterns that have been located. In some cases their position will</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">   *         allow us to infer that the third pattern must lie below a certain point farther</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">   *         down in the image.</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> findRowSkip() {
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     <strong class="jxr_keyword">int</strong> max = possibleCenters.size();
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>     <strong class="jxr_keyword">if</strong> (max &lt;= 1) {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>       <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>     }
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>     <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> firstConfirmedCenter = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>     <strong class="jxr_keyword">for</strong> (FinderPattern center : possibleCenters) {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>       <strong class="jxr_keyword">if</strong> (center.getCount() &gt;= CENTER_QUORUM) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>         <strong class="jxr_keyword">if</strong> (firstConfirmedCenter == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>           firstConfirmedCenter = center;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>           <em class="jxr_comment">// We have two confirmed centers</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>           <em class="jxr_comment">// How far down can we skip before resuming looking for the next</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>           <em class="jxr_comment">// pattern? In the worst case, only the difference between the</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>           <em class="jxr_comment">// difference in the x / y coordinates of the two centers.</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>           <em class="jxr_comment">// This is the case where you find top left last.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>           hasSkipped = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>           <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">int</strong>) (Math.abs(firstConfirmedCenter.getX() - center.getX()) -
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>               Math.abs(firstConfirmedCenter.getY() - center.getY())) / 2;
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>         }
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>       }
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>     }
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>   }
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">   * @return true iff we have found at least 3 finder patterns that have been detected</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">   *         at least {@link #CENTER_QUORUM} times each, and, the estimated module size of the</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">   *         candidates is "pretty similar"</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> haveMultiplyConfirmedCenters() {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>     <strong class="jxr_keyword">int</strong> confirmedCount = 0;
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>     <strong class="jxr_keyword">float</strong> totalModuleSize = 0.0f;
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>     <strong class="jxr_keyword">int</strong> max = possibleCenters.size();
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>     <strong class="jxr_keyword">for</strong> (FinderPattern pattern : possibleCenters) {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>       <strong class="jxr_keyword">if</strong> (pattern.getCount() &gt;= CENTER_QUORUM) {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>         confirmedCount++;
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>         totalModuleSize += pattern.getEstimatedModuleSize();
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>       }
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>     }
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>     <strong class="jxr_keyword">if</strong> (confirmedCount &lt; 3) {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>       <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>     }
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>     <em class="jxr_comment">// OK, we have at least 3 confirmed centers, but, it's possible that one is a "false positive"</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>     <em class="jxr_comment">// and that we need to keep looking. We detect this by asking if the estimated module sizes</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>     <em class="jxr_comment">// vary too much. We arbitrarily say that when the total deviation from average exceeds</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>     <em class="jxr_comment">// 5% of the total module size estimates, it's too much.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>     <strong class="jxr_keyword">float</strong> average = totalModuleSize / (<strong class="jxr_keyword">float</strong>) max;
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>     <strong class="jxr_keyword">float</strong> totalDeviation = 0.0f;
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>     <strong class="jxr_keyword">for</strong> (FinderPattern pattern : possibleCenters) {
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>       totalDeviation += Math.abs(pattern.getEstimatedModuleSize() - average);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>     }
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>     <strong class="jxr_keyword">return</strong> totalDeviation &lt;= 0.05f * totalModuleSize;
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>   }
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">   * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">   *         those that have been detected at least {@link #CENTER_QUORUM} times, and whose module</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">   *         size differs from the average among those patterns the least</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if 3 such finder patterns do not exist</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>   <strong class="jxr_keyword">private</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a>[] selectBestPatterns() <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>     <strong class="jxr_keyword">int</strong> startSize = possibleCenters.size();
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>     <strong class="jxr_keyword">if</strong> (startSize &lt; 3) {
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>       <em class="jxr_comment">// Couldn't find enough finder patterns</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>     }
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>     <em class="jxr_comment">// Filter outlier possibilities whose module size is too different</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>     <strong class="jxr_keyword">if</strong> (startSize &gt; 3) {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>       <em class="jxr_comment">// But we can only afford to do so if we have at least 4 possibilities to choose from</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>       <strong class="jxr_keyword">float</strong> totalModuleSize = 0.0f;
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>       <strong class="jxr_keyword">float</strong> square = 0.0f;
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>       <strong class="jxr_keyword">for</strong> (FinderPattern center : possibleCenters) {
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>         <strong class="jxr_keyword">float</strong> size = center.getEstimatedModuleSize();
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>         totalModuleSize += size;
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>         square += size * size;
+<a class="jxr_linenumber" name="L510" href="#L510">510</a>       }
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>       <strong class="jxr_keyword">float</strong> average = totalModuleSize / (<strong class="jxr_keyword">float</strong>) startSize;
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>       <strong class="jxr_keyword">float</strong> stdDev = (<strong class="jxr_keyword">float</strong>) Math.sqrt(square / startSize - average * average);
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>       Collections.sort(possibleCenters, <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FurthestFromAverageComparator</a>(average));
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>       <strong class="jxr_keyword">float</strong> limit = Math.max(0.2f * average, stdDev);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; possibleCenters.size() &amp;&amp; possibleCenters.size() &gt; 3; i++) {
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>         <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> pattern = possibleCenters.get(i);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>         <strong class="jxr_keyword">if</strong> (Math.abs(pattern.getEstimatedModuleSize() - average) &gt; limit) {
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>           possibleCenters.remove(i);
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>           i--;
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>         }
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>       }
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>     }
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>     <strong class="jxr_keyword">if</strong> (possibleCenters.size() &gt; 3) {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>       <em class="jxr_comment">// Throw away all but those first size candidate points we found.</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>       <strong class="jxr_keyword">float</strong> totalModuleSize = 0.0f;
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>       <strong class="jxr_keyword">for</strong> (FinderPattern possibleCenter : possibleCenters) {
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>         totalModuleSize += possibleCenter.getEstimatedModuleSize();
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>       }
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>       <strong class="jxr_keyword">float</strong> average = totalModuleSize / (<strong class="jxr_keyword">float</strong>) possibleCenters.size();
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>       Collections.sort(possibleCenters, <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">CenterComparator</a>(average));
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>       possibleCenters.subList(3, possibleCenters.size()).clear();
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>     }
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a>[]{
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>         possibleCenters.get(0),
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>         possibleCenters.get(1),
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>         possibleCenters.get(2)
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>     };
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>   }
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Orders by furthest from average&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FurthestFromAverageComparator</a> <strong class="jxr_keyword">implements</strong> Comparator&lt;FinderPattern&gt;, Serializable {
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> average;
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FurthestFromAverageComparator</a>(<strong class="jxr_keyword">float</strong> f) {
+<a class="jxr_linenumber" name="L555" href="#L555">555</a>       average = f;
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>     }
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>     @Override
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compare(<a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> center1, <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> center2) {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>       <strong class="jxr_keyword">float</strong> dA = Math.abs(center2.getEstimatedModuleSize() - average);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>       <strong class="jxr_keyword">float</strong> dB = Math.abs(center1.getEstimatedModuleSize() - average);
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>       <strong class="jxr_keyword">return</strong> dA &lt; dB ? -1 : dA == dB ? 0 : 1;
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>     }
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>   }
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Orders by {@link FinderPattern#getCount()}, descending.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">CenterComparator</a> <strong class="jxr_keyword">implements</strong> Comparator&lt;FinderPattern&gt;, Serializable {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> average;
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">CenterComparator</a>(<strong class="jxr_keyword">float</strong> f) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>       average = f;
+<a class="jxr_linenumber" name="L572" href="#L572">572</a>     }
+<a class="jxr_linenumber" name="L573" href="#L573">573</a>     @Override
+<a class="jxr_linenumber" name="L574" href="#L574">574</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compare(<a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> center1, <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> center2) {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a>       <strong class="jxr_keyword">if</strong> (center2.getCount() == center1.getCount()) {
+<a class="jxr_linenumber" name="L576" href="#L576">576</a>         <strong class="jxr_keyword">float</strong> dA = Math.abs(center2.getEstimatedModuleSize() - average);
+<a class="jxr_linenumber" name="L577" href="#L577">577</a>         <strong class="jxr_keyword">float</strong> dB = Math.abs(center1.getEstimatedModuleSize() - average);
+<a class="jxr_linenumber" name="L578" href="#L578">578</a>         <strong class="jxr_keyword">return</strong> dA &lt; dB ? 1 : dA == dB ? 0 : -1;
+<a class="jxr_linenumber" name="L579" href="#L579">579</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L580" href="#L580">580</a>         <strong class="jxr_keyword">return</strong> center2.getCount() - center1.getCount();
+<a class="jxr_linenumber" name="L581" href="#L581">581</a>       }
+<a class="jxr_linenumber" name="L582" href="#L582">582</a>     }
+<a class="jxr_linenumber" name="L583" href="#L583">583</a>   }
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

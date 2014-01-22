@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>FormatInformationTestCase xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/com/google/zxing/qrcode/decoder/FormatInformationTestCase.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2007 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.qrcode.decoder;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.junit.Assert;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/qrcode/decoder/FormatInformationTestCase.html">FormatInformationTestCase</a> <strong class="jxr_keyword">extends</strong> Assert {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MASKED_TEST_FORMAT_INFO = 0x2BED;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>    @Test
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBitsDiffering() {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      assertEquals(0, FormatInformation.numBitsDiffering(1, 1));
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      assertEquals(1, FormatInformation.numBitsDiffering(0, 2));
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      assertEquals(2, FormatInformation.numBitsDiffering(1, 2));
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      assertEquals(32, FormatInformation.numBitsDiffering(-1, 0));
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>    }
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>    @Test
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDecode() {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <em class="jxr_comment">// Normal case</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      FormatInformation expected =
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      assertNotNull(expected);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      assertEquals((byte) 0x07, expected.getDataMask());
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      assertSame(ErrorCorrectionLevel.Q, expected.getErrorCorrectionLevel());
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <em class="jxr_comment">// where the code forgot the mask!</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      assertEquals(expected,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                   FormatInformation.decodeFormatInformation(UNMASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    @Test
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDecodeWithBitDifference() {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      FormatInformation expected =
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <em class="jxr_comment">// 1,2,3,4 bits difference</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      assertEquals(expected, FormatInformation.decodeFormatInformation(
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          MASKED_TEST_FORMAT_INFO ^ 0x01, MASKED_TEST_FORMAT_INFO ^ 0x01));
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      assertEquals(expected, FormatInformation.decodeFormatInformation(
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          MASKED_TEST_FORMAT_INFO ^ 0x03, MASKED_TEST_FORMAT_INFO ^ 0x03));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      assertEquals(expected, FormatInformation.decodeFormatInformation(
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          MASKED_TEST_FORMAT_INFO ^ 0x07, MASKED_TEST_FORMAT_INFO ^ 0x07));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      assertNull(FormatInformation.decodeFormatInformation(
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          MASKED_TEST_FORMAT_INFO ^ 0x0F, MASKED_TEST_FORMAT_INFO ^ 0x0F));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>    @Test
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDecodeWithMisread() {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      FormatInformation expected =
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      assertEquals(expected, FormatInformation.decodeFormatInformation(
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          MASKED_TEST_FORMAT_INFO ^ 0x03, MASKED_TEST_FORMAT_INFO ^ 0x0F));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>    }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

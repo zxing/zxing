@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>VINResultParser xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/com/google/zxing/client/result/VINResultParser.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2014 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.client.result;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BarcodeFormat;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.Result;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Detects a result that is likely a vehicle identification number.</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/client/result/VINResultParser.html">VINResultParser</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../com/google/zxing/client/result/ResultParser.html">ResultParser</a> {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern IOQ = Pattern.compile(<span class="jxr_string">"[IOQ]"</span>);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern AZ09 = Pattern.compile(<span class="jxr_string">"[A-Z0-9]{17}"</span>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>    @Override
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/client/result/VINParsedResult.html">VINParsedResult</a> parse(<a href="../../../../../com/google/zxing/Result.html">Result</a> result) {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">if</strong> (result.getBarcodeFormat() != BarcodeFormat.CODE_39) {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      }
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      String rawText = result.getText();
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      rawText = IOQ.matcher(rawText).replaceAll(<span class="jxr_string">""</span>).trim();
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">if</strong> (!AZ09.matcher(rawText).matches()) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      }
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">if</strong> (!checkChecksum(rawText)) {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      }
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      String wmi = rawText.substring(0, 3);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/client/result/VINParsedResult.html">VINParsedResult</a>(rawText,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                                 wmi,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                                 rawText.substring(3, 9),
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                                 rawText.substring(9, 17),
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                                 countryCode(wmi),
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                                 rawText.substring(3, 8),
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>                                 modelYear(rawText.charAt(9)),
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>                                 rawText.charAt(10),
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>                                 rawText.substring(11));
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> checkChecksum(CharSequence vin) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">int</strong> sum = 0;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; vin.length(); i++) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>        sum += vinPositionWeight(i + 1) * vinCharValue(vin.charAt(i));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">char</strong> checkChar = vin.charAt(8);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">char</strong> expectedCheckChar = checkChar(sum % 11);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">return</strong> checkChar == expectedCheckChar;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>    }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>    
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> vinCharValue(<strong class="jxr_keyword">char</strong> c) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">if</strong> (c &gt;= 'A' &amp;&amp; c &lt;= 'I') {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>        <strong class="jxr_keyword">return</strong> (c - 'A') + 1;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">if</strong> (c &gt;= 'J' &amp;&amp; c &lt;= 'R') {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>        <strong class="jxr_keyword">return</strong> (c - 'J') + 1;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">if</strong> (c &gt;= 'S' &amp;&amp; c &lt;= 'Z') {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>        <strong class="jxr_keyword">return</strong> (c - 'S') + 2;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <strong class="jxr_keyword">if</strong> (c &gt;= '0' &amp;&amp; c &lt;= '9') {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>        <strong class="jxr_keyword">return</strong> c - '0';
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>    }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>    
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> vinPositionWeight(<strong class="jxr_keyword">int</strong> position) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">if</strong> (position &gt;= 1 &amp;&amp; position &lt;= 7) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>        <strong class="jxr_keyword">return</strong> 9 - position;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">if</strong> (position == 8) {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>        <strong class="jxr_keyword">return</strong> 10;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      }
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">if</strong> (position == 9) {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>        <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">if</strong> (position &gt;= 10 &amp;&amp; position &lt;= 17) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>        <strong class="jxr_keyword">return</strong> 19 - position;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      }
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>   }
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">char</strong> checkChar(<strong class="jxr_keyword">int</strong> remainder) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">if</strong> (remainder &lt; 10) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>       <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">char</strong>) ('0' + remainder);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     }
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     <strong class="jxr_keyword">if</strong> (remainder == 10) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>       <strong class="jxr_keyword">return</strong> 'X';
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     }
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>   }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>   
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> modelYear(<strong class="jxr_keyword">char</strong> c) {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     <strong class="jxr_keyword">if</strong> (c &gt;= 'E' &amp;&amp; c &lt;= 'H') {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>       <strong class="jxr_keyword">return</strong> (c - 'E') + 1984;
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">if</strong> (c &gt;= 'J' &amp;&amp; c &lt;= 'N') {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>       <strong class="jxr_keyword">return</strong> (c - 'J') + 1988;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>     }
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     <strong class="jxr_keyword">if</strong> (c == 'P') {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>       <strong class="jxr_keyword">return</strong> 1993;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     <strong class="jxr_keyword">if</strong> (c &gt;= 'R' &amp;&amp; c &lt;= 'T') {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>       <strong class="jxr_keyword">return</strong> (c - 'R') + 1994;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     <strong class="jxr_keyword">if</strong> (c &gt;= 'V' &amp;&amp; c &lt;= 'Y') {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>       <strong class="jxr_keyword">return</strong> (c - 'V') + 1997;
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     }
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">if</strong> (c &gt;= '1' &amp;&amp; c &lt;= '9') {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>       <strong class="jxr_keyword">return</strong> (c - '1') + 2001;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     }
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     <strong class="jxr_keyword">if</strong> (c &gt;= 'A' &amp;&amp; c &lt;= 'D') {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>       <strong class="jxr_keyword">return</strong> (c - 'A') + 2010;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     }
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>   }
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String countryCode(CharSequence wmi) {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     <strong class="jxr_keyword">char</strong> c1 = wmi.charAt(0);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">char</strong> c2 = wmi.charAt(1);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     <strong class="jxr_keyword">switch</strong> (c1) {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>       <strong class="jxr_keyword">case</strong> '1':
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>       <strong class="jxr_keyword">case</strong> '4':
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>       <strong class="jxr_keyword">case</strong> '5':
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>         <strong class="jxr_keyword">return</strong> <span class="jxr_string">"US"</span>;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>       <strong class="jxr_keyword">case</strong> '2':
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>         <strong class="jxr_keyword">return</strong> <span class="jxr_string">"CA"</span>;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>       <strong class="jxr_keyword">case</strong> '3':
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'A' &amp;&amp; c2 &lt;= 'W') {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"MX"</span>;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>       <strong class="jxr_keyword">case</strong> '9':
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         <strong class="jxr_keyword">if</strong> ((c2 &gt;= 'A' &amp;&amp; c2 &lt;= 'E') || (c2 &gt;= '3' &amp;&amp; c2 &lt;= '9')) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"BR"</span>;
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         }
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>       <strong class="jxr_keyword">case</strong> 'J':
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'A' &amp;&amp; c2 &lt;= 'T') {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"JP"</span>;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         }
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>       <strong class="jxr_keyword">case</strong> 'K':
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'L' &amp;&amp; c2 &lt;= 'R') {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"KO"</span>;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>         }
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>       <strong class="jxr_keyword">case</strong> 'L':
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>         <strong class="jxr_keyword">return</strong> <span class="jxr_string">"CN"</span>;
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>       <strong class="jxr_keyword">case</strong> 'M':
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'A' &amp;&amp; c2 &lt;= 'E') {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"IN"</span>;
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>         }
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>       <strong class="jxr_keyword">case</strong> 'S':
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'A' &amp;&amp; c2 &lt;= 'M') {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"UK"</span>;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>         }
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'N' &amp;&amp; c2 &lt;= 'T') {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"DE"</span>;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>         }
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>       <strong class="jxr_keyword">case</strong> 'V':
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'F' &amp;&amp; c2 &lt;= 'R') {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"FR"</span>;
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'S' &amp;&amp; c2 &lt;= 'W') {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ES"</span>;
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>         }
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>       <strong class="jxr_keyword">case</strong> 'W':
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">return</strong> <span class="jxr_string">"DE"</span>;
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>       <strong class="jxr_keyword">case</strong> 'X':
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <strong class="jxr_keyword">if</strong> (c2 == '0' || (c2 &gt;= '3' &amp;&amp; c2 &lt;= '9')) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"RU"</span>;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>         }
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>       <strong class="jxr_keyword">case</strong> 'Z':
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>         <strong class="jxr_keyword">if</strong> (c2 &gt;= 'A' &amp;&amp; c2 &lt;= 'R') {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>           <strong class="jxr_keyword">return</strong> <span class="jxr_string">"IT"</span>;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>         }
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>     }
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>   }
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

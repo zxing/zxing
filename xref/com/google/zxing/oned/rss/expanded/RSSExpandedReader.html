@@ -1,0 +1,800 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>RSSExpandedReader xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/com/google/zxing/oned/rss/expanded/RSSExpandedReader.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright (C) 2010 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_comment"> * These authors would like to acknowledge the Spanish Ministry of Industry,</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_comment"> * Tourism and Trade, for the support in the project TSI020301-2008-2</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_comment"> * "PIRAmIDE: Personalizable Interactions with Resources on AmI-enabled</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_comment"> * Mobile Dynamic Environments", led by Treelogic</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_comment"> * ( <a href="http://www.treelogic.com/" target="alexandria_uri">http://www.treelogic.com/</a> ):</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_comment"> *   <a href="http://www.piramidepse.com" target="alexandria_uri">http://www.piramidepse.com</a>/</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.oned.rss.expanded;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BarcodeFormat;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.DecodeHintType;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.FormatException;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.NotFoundException;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.Result;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.ResultPoint;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.common.BitArray;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.oned.rss.AbstractRSSReader;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.oned.rss.DataCharacter;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.oned.rss.FinderPattern;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.oned.rss.RSSUtils;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.oned.rss.expanded.decoders.AbstractExpandedDecoder;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> java.util.Iterator;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/google/zxing/oned/rss/expanded/RSSExpandedReader.html">RSSExpandedReader</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../com/google/zxing/oned/rss/AbstractRSSReader.html">AbstractRSSReader</a> {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] SYMBOL_WIDEST = {7, 5, 4, 3, 1};
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] EVEN_TOTAL_SUBSET = {4, 20, 52, 104, 204};
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] GSUM = {0, 348, 1388, 2948, 3988};
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[][] FINDER_PATTERNS = {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      {1,8,4,1}, <em class="jxr_comment">// A</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      {3,6,4,1}, <em class="jxr_comment">// B</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      {3,4,6,1}, <em class="jxr_comment">// C</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      {3,2,8,1}, <em class="jxr_comment">// D</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      {2,6,5,1}, <em class="jxr_comment">// E</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      {2,2,9,1}  <em class="jxr_comment">// F</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>    };
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[][] WEIGHTS = {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      {  1,   3,   9,  27,  81,  32,  96,  77},
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      { 20,  60, 180, 118, 143,   7,  21,  63},
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      {189, 145,  13,  39, 117, 140, 209, 205},
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      {193, 157,  49, 147,  19,  57, 171,  91},
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      { 62, 186, 136, 197, 169,  85,  44, 132},
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      {185, 133, 188, 142,   4,  12,  36, 108},
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      {113, 128, 173,  97,  80,  29,  87,  50},
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      {150,  28,  84,  41, 123, 158,  52, 156},
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      { 46, 138, 203, 187, 139, 206, 196, 166},
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      { 76,  17,  51, 153,  37, 111, 122, 155},
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      { 43, 129, 176, 106, 107, 110, 119, 146},
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      { 16,  48, 144,  10,  30,  90,  59, 177},
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      {109, 116, 137, 200, 178, 112, 125, 164},
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      { 70, 210, 208, 202, 184, 130, 179, 115},
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      {134, 191, 151,  31,  93,  68, 204, 190},
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      {148,  22,  66, 198, 172,   94, 71,   2},
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      {  6,  18,  54, 162,  64,  192,154,  40},
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      {120, 149,  25,  75,  14,   42,126, 167},
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      { 79,  26,  78,  23,  69,  207,199, 175},
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      {103,  98,  83,  38, 114, 131, 182, 124},
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      {161,  61, 183, 127, 170,  88,  53, 159},
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      { 55, 165,  73,   8,  24,  72,   5,  15},
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      { 45, 135, 194, 160,  58, 174, 100,  89}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>    };
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> FINDER_PAT_A = 0;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> FINDER_PAT_B = 1;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> FINDER_PAT_C = 2;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> FINDER_PAT_D = 3;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> FINDER_PAT_E = 4;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> FINDER_PAT_F = 5;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[][] FINDER_PATTERN_SEQUENCES = {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     { FINDER_PAT_A, FINDER_PAT_A },
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     { FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D },
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_C },
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_F },
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D },
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E },
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>     { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>   };
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>   <em class="jxr_comment">//private static final int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.length - 1].length;</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_PAIRS = 11;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;ExpandedPair&gt; pairs = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(MAX_PAIRS);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;ExpandedRow&gt; rows = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> [] startEnd = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[2];
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>   <em class="jxr_comment">//private final int [] currentSequence = new int[LONGEST_SEQUENCE_SIZE];</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> startFromEven = false;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>   @Override
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>   <strong class="jxr_keyword">public</strong> <a href="../../../../../../com/google/zxing/Result.html">Result</a> decodeRow(<strong class="jxr_keyword">int</strong> rowNumber,
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>                           <a href="../../../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>                           Map&lt;DecodeHintType,?&gt; hints) <strong class="jxr_keyword">throws</strong> NotFoundException, FormatException {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     <em class="jxr_comment">// Rows can start with even pattern in case in prev rows there where odd number of patters.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <em class="jxr_comment">// So lets try twice</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     <strong class="jxr_keyword">this</strong>.pairs.clear();
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     <strong class="jxr_keyword">this</strong>.startFromEven = false;
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>       List&lt;ExpandedPair&gt; pairs = decodeRow2pairs(rowNumber, row);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>       <strong class="jxr_keyword">return</strong> constructResult(pairs);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     } <strong class="jxr_keyword">catch</strong> (NotFoundException e) {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>       <em class="jxr_comment">// OK</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     }
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     <strong class="jxr_keyword">this</strong>.pairs.clear();
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">this</strong>.startFromEven = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     List&lt;ExpandedPair&gt; pairs = decodeRow2pairs(rowNumber, row);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     <strong class="jxr_keyword">return</strong> constructResult(pairs);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>   }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>   @Override
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reset() {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     <strong class="jxr_keyword">this</strong>.pairs.clear();
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>     <strong class="jxr_keyword">this</strong>.rows.clear();
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>   }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>   <em class="jxr_comment">// Not private for testing</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>   List&lt;ExpandedPair&gt; decodeRow2pairs(<strong class="jxr_keyword">int</strong> rowNumber, <a href="../../../../../../com/google/zxing/common/BitArray.html">BitArray</a> row) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>       <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>){
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedPair.html">ExpandedPair</a> nextPair = retrieveNextPair(row, <strong class="jxr_keyword">this</strong>.pairs, rowNumber);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         <strong class="jxr_keyword">this</strong>.pairs.add(nextPair);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>         <em class="jxr_comment">//System.out.println(this.pairs.size()+" pairs found so far on row "+rowNumber+": "+this.pairs);</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <em class="jxr_comment">// exit this loop when retrieveNextPair() fails and throws</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>       }
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     } <strong class="jxr_keyword">catch</strong> (NotFoundException nfe) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>       <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.pairs.isEmpty()) {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         <strong class="jxr_keyword">throw</strong> nfe;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>       }
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>     }
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     <em class="jxr_comment">// TODO: verify sequence of finder patterns as in checkPairSequence()</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>     <strong class="jxr_keyword">if</strong> (checkChecksum()) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.pairs;
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     }
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>     
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">boolean</strong> tryStackedDecode = !<strong class="jxr_keyword">this</strong>.rows.isEmpty();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     <strong class="jxr_keyword">boolean</strong> wasReversed = false; <em class="jxr_comment">// TODO: deal with reversed rows</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>     storeRow(rowNumber, wasReversed);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>     <strong class="jxr_keyword">if</strong> (tryStackedDecode) {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>       <em class="jxr_comment">// When the image is 180-rotated, then rows are sorted in wrong dirrection.</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>       <em class="jxr_comment">// Try twice with both the directions.</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>       List&lt;ExpandedPair&gt; ps = checkRows(false);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>       <strong class="jxr_keyword">if</strong> (ps != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         <strong class="jxr_keyword">return</strong> ps;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>       }
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>       ps = checkRows(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>       <strong class="jxr_keyword">if</strong> (ps != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>         <strong class="jxr_keyword">return</strong> ps;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>       }
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>     }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>     
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>     <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>   }
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>   <strong class="jxr_keyword">private</strong> List&lt;ExpandedPair&gt; checkRows(<strong class="jxr_keyword">boolean</strong> reverse) {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <em class="jxr_comment">// Limit number of rows we are checking</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <em class="jxr_comment">// We use recursive algorithm with pure complexity and don't want it to take forever</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <em class="jxr_comment">// Stacked barcode can have up to 11 rows, so 25 seems resonable enough</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.rows.size() &gt; 25) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>       <strong class="jxr_keyword">this</strong>.rows.clear();  <em class="jxr_comment">// We will never have a chance to get result, so clear it</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     }
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>     <strong class="jxr_keyword">this</strong>.pairs.clear();
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     <strong class="jxr_keyword">if</strong> (reverse) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>       Collections.reverse(<strong class="jxr_keyword">this</strong>.rows);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     }
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>     List&lt;ExpandedPair&gt; ps = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>       ps = checkRows(<strong class="jxr_keyword">new</strong> ArrayList&lt;ExpandedRow&gt;(), 0);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>     } <strong class="jxr_keyword">catch</strong> (NotFoundException e) {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>       <em class="jxr_comment">// OK</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     }
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     <strong class="jxr_keyword">if</strong> (reverse) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>       Collections.reverse(<strong class="jxr_keyword">this</strong>.rows);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>     }
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>     <strong class="jxr_keyword">return</strong> ps;
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>   }
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>   <em class="jxr_comment">// Try to construct a valid rows sequence</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>   <em class="jxr_comment">// Recursion is used to implement backtracking</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>   <strong class="jxr_keyword">private</strong> List&lt;ExpandedPair&gt; checkRows(List&lt;ExpandedRow&gt; collectedRows, <strong class="jxr_keyword">int</strong> currentRow) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = currentRow; i &lt; rows.size(); i++) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>       <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedRow.html">ExpandedRow</a> row = rows.get(i);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>       <strong class="jxr_keyword">this</strong>.pairs.clear();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>       <strong class="jxr_keyword">int</strong> size = collectedRows.size();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; size; j++) {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>         <strong class="jxr_keyword">this</strong>.pairs.addAll(collectedRows.get(j).getPairs());
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>       }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>       <strong class="jxr_keyword">this</strong>.pairs.addAll(row.getPairs());
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>       <strong class="jxr_keyword">if</strong> (!isValidSequence(<strong class="jxr_keyword">this</strong>.pairs)) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>         <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>       }
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>       <strong class="jxr_keyword">if</strong> (checkChecksum()) {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.pairs;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>       }
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>       List&lt;ExpandedRow&gt; rs = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>       rs.addAll(collectedRows);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>       rs.add(row);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>       <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>         <em class="jxr_comment">// Recursion: try to add more rows</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>         <strong class="jxr_keyword">return</strong> checkRows(rs, i + 1);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>       } <strong class="jxr_keyword">catch</strong> (NotFoundException e) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>         <em class="jxr_comment">// We failed, try the next candidate</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>       }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>     }
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>   }
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>   <em class="jxr_comment">// Whether the pairs form a valid find pattern seqience,</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>   <em class="jxr_comment">// either complete or a prefix</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isValidSequence(List&lt;ExpandedPair&gt; pairs) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong>[] sequence : FINDER_PATTERN_SEQUENCES) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>       <strong class="jxr_keyword">if</strong> (pairs.size() &gt; sequence.length) {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>         <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>       }
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>       <strong class="jxr_keyword">boolean</strong> stop = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; pairs.size(); j++) {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>         <strong class="jxr_keyword">if</strong> (pairs.get(j).getFinderPattern().getValue() != sequence[j]) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>           stop = false;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>         }
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>       }
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>       <strong class="jxr_keyword">if</strong> (stop) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>       }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>     }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>   }
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> storeRow(<strong class="jxr_keyword">int</strong> rowNumber, <strong class="jxr_keyword">boolean</strong> wasReversed) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>     <em class="jxr_comment">// Discard if duplicate above or below; otherwise insert in order by row number.</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>     <strong class="jxr_keyword">int</strong> insertPos = 0;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     <strong class="jxr_keyword">boolean</strong> prevIsSame = false;
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>     <strong class="jxr_keyword">boolean</strong> nextIsSame = false;
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     <strong class="jxr_keyword">while</strong> (insertPos &lt; <strong class="jxr_keyword">this</strong>.rows.size()) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>       <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedRow.html">ExpandedRow</a> erow = <strong class="jxr_keyword">this</strong>.rows.get(insertPos);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>       <strong class="jxr_keyword">if</strong> (erow.getRowNumber() &gt; rowNumber) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>         nextIsSame = erow.isEquivalent(<strong class="jxr_keyword">this</strong>.pairs);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>       }
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>       prevIsSame = erow.isEquivalent(<strong class="jxr_keyword">this</strong>.pairs);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>       insertPos++;
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>     }
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>     <strong class="jxr_keyword">if</strong> (nextIsSame || prevIsSame) {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     }
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     <em class="jxr_comment">// When the row was partially decoded (e.g. 2 pairs found instead of 3),</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     <em class="jxr_comment">// it will prevent us from detecting the barcode.</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     <em class="jxr_comment">// Try to merge partial rows</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>     <em class="jxr_comment">// Check whether the row is part of an allready detected row</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>     <strong class="jxr_keyword">if</strong> (isPartialRow(<strong class="jxr_keyword">this</strong>.pairs, <strong class="jxr_keyword">this</strong>.rows)) {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>     }
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     <strong class="jxr_keyword">this</strong>.rows.add(insertPos, <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedRow.html">ExpandedRow</a>(<strong class="jxr_keyword">this</strong>.pairs, rowNumber, wasReversed));
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>     removePartialRows(<strong class="jxr_keyword">this</strong>.pairs, <strong class="jxr_keyword">this</strong>.rows);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>   }
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>   <em class="jxr_comment">// Remove all the rows that contains only specified pairs </em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> removePartialRows(List&lt;ExpandedPair&gt; pairs, List&lt;ExpandedRow&gt; rows) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">for</strong> (Iterator&lt;ExpandedRow&gt; iterator = rows.iterator(); iterator.hasNext(); ) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>       <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedRow.html">ExpandedRow</a> r = iterator.next();
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>       <strong class="jxr_keyword">if</strong> (r.getPairs().size() == pairs.size()) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>         <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>       }
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>       <strong class="jxr_keyword">boolean</strong> allFound = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>       <strong class="jxr_keyword">for</strong> (ExpandedPair p : r.getPairs()) {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>         <strong class="jxr_keyword">boolean</strong> found = false;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>         <strong class="jxr_keyword">for</strong> (ExpandedPair pp : pairs) {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>           <strong class="jxr_keyword">if</strong> (p.equals(pp)) {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>             found = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>           }
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>         }
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         <strong class="jxr_keyword">if</strong> (!found) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>           allFound = false;
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>         }
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>       }
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>       <strong class="jxr_keyword">if</strong> (allFound) {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>         <em class="jxr_comment">// 'pairs' contains all the pairs from the row 'r'</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>         iterator.remove();
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>       }
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>     }
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>   }
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>   <em class="jxr_comment">// Returns true when one of the rows already contains all the pairs</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPartialRow(Iterable&lt;ExpandedPair&gt; pairs, Iterable&lt;ExpandedRow&gt; rows) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>     <strong class="jxr_keyword">for</strong> (ExpandedRow r : rows) {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>       <strong class="jxr_keyword">boolean</strong> allFound = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>       <strong class="jxr_keyword">for</strong> (ExpandedPair p : pairs) {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <strong class="jxr_keyword">boolean</strong> found = false;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>         <strong class="jxr_keyword">for</strong> (ExpandedPair pp : r.getPairs()) {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>           <strong class="jxr_keyword">if</strong> (p.equals(pp)) {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>             found = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>           }
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>         }
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         <strong class="jxr_keyword">if</strong> (!found) {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>           allFound = false;
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>         }
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>       }
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>       <strong class="jxr_keyword">if</strong> (allFound) {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>         <em class="jxr_comment">// the row 'r' contain all the pairs from 'pairs'</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>       }
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>     }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>     <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>   }
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>   <em class="jxr_comment">// Only used for unit testing</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>   List&lt;ExpandedRow&gt; getRows() {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.rows;
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>   }
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>   <em class="jxr_comment">// Not private for unit testing</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>   <strong class="jxr_keyword">static</strong> <a href="../../../../../../com/google/zxing/Result.html">Result</a> constructResult(List&lt;ExpandedPair&gt; pairs) <strong class="jxr_keyword">throws</strong> NotFoundException, FormatException {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>     <a href="../../../../../../com/google/zxing/common/BitArray.html">BitArray</a> binary = BitArrayBuilder.buildBitArray(pairs);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>     <a href="../../../../../../com/google/zxing/oned/rss/expanded/decoders/AbstractExpandedDecoder.html">AbstractExpandedDecoder</a> decoder = AbstractExpandedDecoder.createDecoder(binary);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>     String resultingString = decoder.parseInformation();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>     <a href="../../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] firstPoints = pairs.get(0).getFinderPattern().getResultPoints();
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>     <a href="../../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] lastPoints  = pairs.get(pairs.size() - 1).getFinderPattern().getResultPoints();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/Result.html">Result</a>(
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>           resultingString,
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>           <strong class="jxr_keyword">null</strong>,
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>           <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[]{firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1]},
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>           BarcodeFormat.RSS_EXPANDED
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>       );
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>   }
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> checkChecksum() {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>     <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedPair.html">ExpandedPair</a> firstPair = <strong class="jxr_keyword">this</strong>.pairs.get(0);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>     <a href="../../../../../../com/google/zxing/oned/rss/DataCharacter.html">DataCharacter</a> checkCharacter = firstPair.getLeftChar();
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>     <a href="../../../../../../com/google/zxing/oned/rss/DataCharacter.html">DataCharacter</a> firstCharacter = firstPair.getRightChar();
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>     <strong class="jxr_keyword">if</strong> (firstCharacter == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>       <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>     }
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>     <strong class="jxr_keyword">int</strong> checksum = firstCharacter.getChecksumPortion();
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>     <strong class="jxr_keyword">int</strong> s = 2;
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>     <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 1; i &lt; <strong class="jxr_keyword">this</strong>.pairs.size(); ++i){
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>       <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedPair.html">ExpandedPair</a> currentPair = <strong class="jxr_keyword">this</strong>.pairs.get(i);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>       checksum += currentPair.getLeftChar().getChecksumPortion();
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>       s++;
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>       <a href="../../../../../../com/google/zxing/oned/rss/DataCharacter.html">DataCharacter</a> currentRightChar = currentPair.getRightChar();
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>       <strong class="jxr_keyword">if</strong> (currentRightChar != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>         checksum += currentRightChar.getChecksumPortion();
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         s++;
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>       }
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>     }
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>     checksum %= 211;
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <strong class="jxr_keyword">int</strong> checkCharacterValue = 211 * (s - 4) + checksum;
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>     <strong class="jxr_keyword">return</strong> checkCharacterValue == checkCharacter.getValue();
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>   }
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getNextSecondBar(<a href="../../../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, <strong class="jxr_keyword">int</strong> initialPos){
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>     <strong class="jxr_keyword">int</strong> currentPos;
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     <strong class="jxr_keyword">if</strong> (row.get(initialPos)) {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>       currentPos = row.getNextUnset(initialPos);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>       currentPos = row.getNextSet(currentPos);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>       currentPos = row.getNextSet(initialPos);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>       currentPos = row.getNextUnset(currentPos);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     }
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>     <strong class="jxr_keyword">return</strong> currentPos;
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>   }
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>   <em class="jxr_comment">// not private for testing</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>   <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedPair.html">ExpandedPair</a> retrieveNextPair(<a href="../../../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, List&lt;ExpandedPair&gt; previousPairs, <strong class="jxr_keyword">int</strong> rowNumber)
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>     <strong class="jxr_keyword">boolean</strong> isOddPattern  = previousPairs.size() % 2 == 0;
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     <strong class="jxr_keyword">if</strong> (startFromEven) {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>       isOddPattern = !isOddPattern;
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>     }
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     <a href="../../../../../../com/google/zxing/oned/rss/FinderPattern.html">FinderPattern</a> pattern;
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>     <strong class="jxr_keyword">boolean</strong> keepFinding = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>     <strong class="jxr_keyword">int</strong> forcedOffset = -1;
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>     <strong class="jxr_keyword">do</strong>{
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>       <strong class="jxr_keyword">this</strong>.findNextPair(row, previousPairs, forcedOffset);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>       pattern = parseFoundFinderPattern(row, rowNumber, isOddPattern);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>       <strong class="jxr_keyword">if</strong> (pattern == <strong class="jxr_keyword">null</strong>){
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>         forcedOffset = getNextSecondBar(row, <strong class="jxr_keyword">this</strong>.startEnd[0]);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>         keepFinding = false;
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>       }
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>     }<strong class="jxr_keyword">while</strong>(keepFinding);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>     <em class="jxr_comment">// When stacked symbol is split over multiple rows, there's no way to guess if this pair can be last or not.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>     <em class="jxr_comment">// boolean mayBeLast = checkPairSequence(previousPairs, pattern);</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>     <a href="../../../../../../com/google/zxing/oned/rss/DataCharacter.html">DataCharacter</a> leftChar  = <strong class="jxr_keyword">this</strong>.decodeDataCharacter(row, pattern, isOddPattern, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>     
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>     <strong class="jxr_keyword">if</strong> (!previousPairs.isEmpty() &amp;&amp; previousPairs.get(previousPairs.size()-1).mustBeLast()) {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     }
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>     
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>     <a href="../../../../../../com/google/zxing/oned/rss/DataCharacter.html">DataCharacter</a> rightChar;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>       rightChar = <strong class="jxr_keyword">this</strong>.decodeDataCharacter(row, pattern, isOddPattern, false);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>     } <strong class="jxr_keyword">catch</strong>(<a href="../../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> ignored) {
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>       rightChar = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>     }
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>     <strong class="jxr_keyword">boolean</strong> mayBeLast = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedPair.html">ExpandedPair</a>(leftChar, rightChar, pattern, mayBeLast);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>   }
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> findNextPair(<a href="../../../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, List&lt;ExpandedPair&gt; previousPairs, <strong class="jxr_keyword">int</strong> forcedOffset)
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>     <strong class="jxr_keyword">int</strong>[] counters = <strong class="jxr_keyword">this</strong>.getDecodeFinderCounters();
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>     counters[0] = 0;
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>     counters[1] = 0;
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>     counters[2] = 0;
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>     counters[3] = 0;
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>     <strong class="jxr_keyword">int</strong> width = row.getSize();
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>     <strong class="jxr_keyword">int</strong> rowOffset;
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>     <strong class="jxr_keyword">if</strong> (forcedOffset &gt;= 0) {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>       rowOffset = forcedOffset;
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (previousPairs.isEmpty()) {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>       rowOffset = 0;
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>     } <strong class="jxr_keyword">else</strong>{
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>       <a href="../../../../../../com/google/zxing/oned/rss/expanded/ExpandedPair.html">ExpandedPair</a> lastPair = previousPairs.get(previousPairs.size() - 1);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>       rowOffset = lastPair.getFinderPattern().getStartEnd()[1];
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>     }
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>     <strong class="jxr_keyword">boolean</strong> searchingEvenPair = previousPairs.size() % 2 != 0;
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>     <strong class="jxr_keyword">if</strong> (startFromEven) {
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>       searchingEvenPair = !searchingEvenPair;
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>     }
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>     <strong class="jxr_keyword">boolean</strong> isWhite = false;
+<a class="jxr_linenumber" name="L491" href="#L491">491</a>     <strong class="jxr_keyword">while</strong> (rowOffset &lt; width) {
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>       isWhite = !row.get(rowOffset);
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>       <strong class="jxr_keyword">if</strong> (!isWhite) {
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>       }
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>       rowOffset++;
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>     }
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>     <strong class="jxr_keyword">int</strong> counterPosition = 0;
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>     <strong class="jxr_keyword">int</strong> patternStart = rowOffset;
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = rowOffset; x &lt; width; x++) {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>       <strong class="jxr_keyword">if</strong> (row.get(x) ^ isWhite) {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>         counters[counterPosition]++;
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>         <strong class="jxr_keyword">if</strong> (counterPosition == 3) {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>           <strong class="jxr_keyword">if</strong> (searchingEvenPair) {
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>             reverseCounters(counters);
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>           }
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a>           <strong class="jxr_keyword">if</strong> (isFinderPattern(counters)){
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>             <strong class="jxr_keyword">this</strong>.startEnd[0] = patternStart;
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>             <strong class="jxr_keyword">this</strong>.startEnd[1] = x;
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>             <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>           }
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>           <strong class="jxr_keyword">if</strong> (searchingEvenPair) {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>             reverseCounters(counters);
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>           }
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>           patternStart += counters[0] + counters[1];
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>           counters[0] = counters[2];
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>           counters[1] = counters[3];
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>           counters[2] = 0;
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>           counters[3] = 0;
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>           counterPosition--;
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>           counterPosition++;
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>         }
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>         counters[counterPosition] = 1;
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>         isWhite = !isWhite;
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>       }
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>     }
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>     <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>   }
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> reverseCounters(<strong class="jxr_keyword">int</strong> [] counters){
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>     <strong class="jxr_keyword">int</strong> length = counters.length;
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>     <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; length / 2; ++i){
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>       <strong class="jxr_keyword">int</strong> tmp = counters[i];
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>       counters[i] = counters[length - i - 1];
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>       counters[length - i - 1] = tmp;
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>     }
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>   }
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>   <strong class="jxr_keyword">private</strong> <a href="../../../../../../com/google/zxing/oned/rss/FinderPattern.html">FinderPattern</a> parseFoundFinderPattern(<a href="../../../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, <strong class="jxr_keyword">int</strong> rowNumber, <strong class="jxr_keyword">boolean</strong> oddPattern) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>     <em class="jxr_comment">// Actually we found elements 2-5.</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>     <strong class="jxr_keyword">int</strong> firstCounter;
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>     <strong class="jxr_keyword">int</strong> start;
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>     <strong class="jxr_keyword">int</strong> end;
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>     <strong class="jxr_keyword">if</strong>(oddPattern){
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>       <em class="jxr_comment">// If pattern number is odd, we need to locate element 1 *before* the current block.</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>       <strong class="jxr_keyword">int</strong> firstElementStart = <strong class="jxr_keyword">this</strong>.startEnd[0] - 1;
+<a class="jxr_linenumber" name="L555" href="#L555">555</a>       <em class="jxr_comment">// Locate element 1</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>       <strong class="jxr_keyword">while</strong> (firstElementStart &gt;= 0 &amp;&amp; !row.get(firstElementStart)) {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>         firstElementStart--;
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>       }
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>       firstElementStart++;
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>       firstCounter = <strong class="jxr_keyword">this</strong>.startEnd[0] - firstElementStart;
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>       start = firstElementStart;
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>       end = <strong class="jxr_keyword">this</strong>.startEnd[1];
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>     }<strong class="jxr_keyword">else</strong>{
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>       <em class="jxr_comment">// If pattern number is even, the pattern is reversed, so we need to locate element 1 *after* the current block.</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>       start = <strong class="jxr_keyword">this</strong>.startEnd[0];
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>       end = row.getNextUnset(<strong class="jxr_keyword">this</strong>.startEnd[1] + 1);
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>       firstCounter = end - <strong class="jxr_keyword">this</strong>.startEnd[1];
+<a class="jxr_linenumber" name="L572" href="#L572">572</a>     }
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
+<a class="jxr_linenumber" name="L574" href="#L574">574</a>     <em class="jxr_comment">// Make 'counters' hold 1-4</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a>     <strong class="jxr_keyword">int</strong> [] counters = <strong class="jxr_keyword">this</strong>.getDecodeFinderCounters();
+<a class="jxr_linenumber" name="L576" href="#L576">576</a>     System.arraycopy(counters, 0, counters, 1, counters.length - 1);
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
+<a class="jxr_linenumber" name="L578" href="#L578">578</a>     counters[0] = firstCounter;
+<a class="jxr_linenumber" name="L579" href="#L579">579</a>     <strong class="jxr_keyword">int</strong> value;
+<a class="jxr_linenumber" name="L580" href="#L580">580</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L581" href="#L581">581</a>       value = parseFinderValue(counters, FINDER_PATTERNS);
+<a class="jxr_linenumber" name="L582" href="#L582">582</a>     } <strong class="jxr_keyword">catch</strong> (NotFoundException ignored) {
+<a class="jxr_linenumber" name="L583" href="#L583">583</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L584" href="#L584">584</a>     }
+<a class="jxr_linenumber" name="L585" href="#L585">585</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/oned/rss/FinderPattern.html">FinderPattern</a>(value, <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] {start, end}, start, end, rowNumber);
+<a class="jxr_linenumber" name="L586" href="#L586">586</a>   }
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 
+<a class="jxr_linenumber" name="L588" href="#L588">588</a>   <a href="../../../../../../com/google/zxing/oned/rss/DataCharacter.html">DataCharacter</a> decodeDataCharacter(<a href="../../../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
+<a class="jxr_linenumber" name="L589" href="#L589">589</a>                                     <a href="../../../../../../com/google/zxing/oned/rss/FinderPattern.html">FinderPattern</a> pattern,
+<a class="jxr_linenumber" name="L590" href="#L590">590</a>                                     <strong class="jxr_keyword">boolean</strong> isOddPattern,
+<a class="jxr_linenumber" name="L591" href="#L591">591</a>                                     <strong class="jxr_keyword">boolean</strong> leftChar) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L592" href="#L592">592</a>     <strong class="jxr_keyword">int</strong>[] counters = <strong class="jxr_keyword">this</strong>.getDataCharacterCounters();
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>     counters[0] = 0;
+<a class="jxr_linenumber" name="L594" href="#L594">594</a>     counters[1] = 0;
+<a class="jxr_linenumber" name="L595" href="#L595">595</a>     counters[2] = 0;
+<a class="jxr_linenumber" name="L596" href="#L596">596</a>     counters[3] = 0;
+<a class="jxr_linenumber" name="L597" href="#L597">597</a>     counters[4] = 0;
+<a class="jxr_linenumber" name="L598" href="#L598">598</a>     counters[5] = 0;
+<a class="jxr_linenumber" name="L599" href="#L599">599</a>     counters[6] = 0;
+<a class="jxr_linenumber" name="L600" href="#L600">600</a>     counters[7] = 0;
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>     <strong class="jxr_keyword">if</strong> (leftChar) {
+<a class="jxr_linenumber" name="L603" href="#L603">603</a>       recordPatternInReverse(row, pattern.getStartEnd()[0], counters);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>       recordPattern(row, pattern.getStartEnd()[1], counters);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>       <em class="jxr_comment">// reverse it</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = counters.length - 1; i &lt; j; i++, j--) {
+<a class="jxr_linenumber" name="L608" href="#L608">608</a>         <strong class="jxr_keyword">int</strong> temp = counters[i];
+<a class="jxr_linenumber" name="L609" href="#L609">609</a>         counters[i] = counters[j];
+<a class="jxr_linenumber" name="L610" href="#L610">610</a>         counters[j] = temp;
+<a class="jxr_linenumber" name="L611" href="#L611">611</a>       }
+<a class="jxr_linenumber" name="L612" href="#L612">612</a>     }<em class="jxr_comment">//counters[] has the pixels of the module</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
+<a class="jxr_linenumber" name="L614" href="#L614">614</a>     <strong class="jxr_keyword">int</strong> numModules = 17; <em class="jxr_comment">//left and right data characters have all the same length</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>     <strong class="jxr_keyword">float</strong> elementWidth = (<strong class="jxr_keyword">float</strong>) count(counters) / (<strong class="jxr_keyword">float</strong>) numModules;
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>     <em class="jxr_comment">// Sanity check: element width for pattern and the character should match</em>
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>     <strong class="jxr_keyword">float</strong> expectedElementWidth = (pattern.getStartEnd()[1] - pattern.getStartEnd()[0]) / 15.0f;
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>     <strong class="jxr_keyword">if</strong> (Math.abs(elementWidth - expectedElementWidth) / expectedElementWidth &gt; 0.3f) {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L621" href="#L621">621</a>     }
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
+<a class="jxr_linenumber" name="L623" href="#L623">623</a>     <strong class="jxr_keyword">int</strong>[] oddCounts = <strong class="jxr_keyword">this</strong>.getOddCounts();
+<a class="jxr_linenumber" name="L624" href="#L624">624</a>     <strong class="jxr_keyword">int</strong>[] evenCounts = <strong class="jxr_keyword">this</strong>.getEvenCounts();
+<a class="jxr_linenumber" name="L625" href="#L625">625</a>     <strong class="jxr_keyword">float</strong>[] oddRoundingErrors = <strong class="jxr_keyword">this</strong>.getOddRoundingErrors();
+<a class="jxr_linenumber" name="L626" href="#L626">626</a>     <strong class="jxr_keyword">float</strong>[] evenRoundingErrors = <strong class="jxr_keyword">this</strong>.getEvenRoundingErrors();
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 
+<a class="jxr_linenumber" name="L628" href="#L628">628</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; counters.length; i++) {
+<a class="jxr_linenumber" name="L629" href="#L629">629</a>       <strong class="jxr_keyword">float</strong> value = 1.0f * counters[i] / elementWidth;
+<a class="jxr_linenumber" name="L630" href="#L630">630</a>       <strong class="jxr_keyword">int</strong> count = (<strong class="jxr_keyword">int</strong>) (value + 0.5f); <em class="jxr_comment">// Round</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a>       <strong class="jxr_keyword">if</strong> (count &lt; 1) {
+<a class="jxr_linenumber" name="L632" href="#L632">632</a>         <strong class="jxr_keyword">if</strong> (value &lt; 0.3f) {
+<a class="jxr_linenumber" name="L633" href="#L633">633</a>           <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L634" href="#L634">634</a>         }
+<a class="jxr_linenumber" name="L635" href="#L635">635</a>         count = 1;
+<a class="jxr_linenumber" name="L636" href="#L636">636</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (count &gt; 8) {
+<a class="jxr_linenumber" name="L637" href="#L637">637</a>         <strong class="jxr_keyword">if</strong> (value &gt; 8.7f) {
+<a class="jxr_linenumber" name="L638" href="#L638">638</a>           <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L639" href="#L639">639</a>         }
+<a class="jxr_linenumber" name="L640" href="#L640">640</a>         count = 8;
+<a class="jxr_linenumber" name="L641" href="#L641">641</a>       }
+<a class="jxr_linenumber" name="L642" href="#L642">642</a>       <strong class="jxr_keyword">int</strong> offset = i &gt;&gt; 1;
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>       <strong class="jxr_keyword">if</strong> ((i &amp; 0x01) == 0) {
+<a class="jxr_linenumber" name="L644" href="#L644">644</a>         oddCounts[offset] = count;
+<a class="jxr_linenumber" name="L645" href="#L645">645</a>         oddRoundingErrors[offset] = value - count;
+<a class="jxr_linenumber" name="L646" href="#L646">646</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L647" href="#L647">647</a>         evenCounts[offset] = count;
+<a class="jxr_linenumber" name="L648" href="#L648">648</a>         evenRoundingErrors[offset] = value - count;
+<a class="jxr_linenumber" name="L649" href="#L649">649</a>       }
+<a class="jxr_linenumber" name="L650" href="#L650">650</a>     }
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 
+<a class="jxr_linenumber" name="L652" href="#L652">652</a>     adjustOddEvenCounts(numModules);
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 
+<a class="jxr_linenumber" name="L654" href="#L654">654</a>     <strong class="jxr_keyword">int</strong> weightRowNumber = 4 * pattern.getValue() + (isOddPattern?0:2) + (leftChar?0:1) - 1;
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
+<a class="jxr_linenumber" name="L656" href="#L656">656</a>     <strong class="jxr_keyword">int</strong> oddSum = 0;
+<a class="jxr_linenumber" name="L657" href="#L657">657</a>     <strong class="jxr_keyword">int</strong> oddChecksumPortion = 0;
+<a class="jxr_linenumber" name="L658" href="#L658">658</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = oddCounts.length - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L659" href="#L659">659</a>       <strong class="jxr_keyword">if</strong>(isNotA1left(pattern, isOddPattern, leftChar)){
+<a class="jxr_linenumber" name="L660" href="#L660">660</a>         <strong class="jxr_keyword">int</strong> weight = WEIGHTS[weightRowNumber][2 * i];
+<a class="jxr_linenumber" name="L661" href="#L661">661</a>         oddChecksumPortion += oddCounts[i] * weight;
+<a class="jxr_linenumber" name="L662" href="#L662">662</a>       }
+<a class="jxr_linenumber" name="L663" href="#L663">663</a>       oddSum += oddCounts[i];
+<a class="jxr_linenumber" name="L664" href="#L664">664</a>     }
+<a class="jxr_linenumber" name="L665" href="#L665">665</a>     <strong class="jxr_keyword">int</strong> evenChecksumPortion = 0;
+<a class="jxr_linenumber" name="L666" href="#L666">666</a>     <em class="jxr_comment">//int evenSum = 0;</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = evenCounts.length - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a>       <strong class="jxr_keyword">if</strong>(isNotA1left(pattern, isOddPattern, leftChar)){
+<a class="jxr_linenumber" name="L669" href="#L669">669</a>         <strong class="jxr_keyword">int</strong> weight = WEIGHTS[weightRowNumber][2 * i + 1];
+<a class="jxr_linenumber" name="L670" href="#L670">670</a>         evenChecksumPortion += evenCounts[i] * weight;
+<a class="jxr_linenumber" name="L671" href="#L671">671</a>       }
+<a class="jxr_linenumber" name="L672" href="#L672">672</a>       <em class="jxr_comment">//evenSum += evenCounts[i];</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a>     }
+<a class="jxr_linenumber" name="L674" href="#L674">674</a>     <strong class="jxr_keyword">int</strong> checksumPortion = oddChecksumPortion + evenChecksumPortion;
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
+<a class="jxr_linenumber" name="L676" href="#L676">676</a>     <strong class="jxr_keyword">if</strong> ((oddSum &amp; 0x01) != 0 || oddSum &gt; 13 || oddSum &lt; 4) {
+<a class="jxr_linenumber" name="L677" href="#L677">677</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L678" href="#L678">678</a>     }
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 
+<a class="jxr_linenumber" name="L680" href="#L680">680</a>     <strong class="jxr_keyword">int</strong> group = (13 - oddSum) / 2;
+<a class="jxr_linenumber" name="L681" href="#L681">681</a>     <strong class="jxr_keyword">int</strong> oddWidest = SYMBOL_WIDEST[group];
+<a class="jxr_linenumber" name="L682" href="#L682">682</a>     <strong class="jxr_keyword">int</strong> evenWidest = 9 - oddWidest;
+<a class="jxr_linenumber" name="L683" href="#L683">683</a>     <strong class="jxr_keyword">int</strong> vOdd = RSSUtils.getRSSvalue(oddCounts, oddWidest, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L684" href="#L684">684</a>     <strong class="jxr_keyword">int</strong> vEven = RSSUtils.getRSSvalue(evenCounts, evenWidest, false);
+<a class="jxr_linenumber" name="L685" href="#L685">685</a>     <strong class="jxr_keyword">int</strong> tEven = EVEN_TOTAL_SUBSET[group];
+<a class="jxr_linenumber" name="L686" href="#L686">686</a>     <strong class="jxr_keyword">int</strong> gSum = GSUM[group];
+<a class="jxr_linenumber" name="L687" href="#L687">687</a>     <strong class="jxr_keyword">int</strong> value = vOdd * tEven + vEven + gSum;
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 
+<a class="jxr_linenumber" name="L689" href="#L689">689</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/oned/rss/DataCharacter.html">DataCharacter</a>(value, checksumPortion);
+<a class="jxr_linenumber" name="L690" href="#L690">690</a>   }
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 
+<a class="jxr_linenumber" name="L692" href="#L692">692</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNotA1left(<a href="../../../../../../com/google/zxing/oned/rss/FinderPattern.html">FinderPattern</a> pattern, <strong class="jxr_keyword">boolean</strong> isOddPattern, <strong class="jxr_keyword">boolean</strong> leftChar) {
+<a class="jxr_linenumber" name="L693" href="#L693">693</a>     <em class="jxr_comment">// A1: pattern.getValue is 0 (A), and it's an oddPattern, and it is a left char</em>
+<a class="jxr_linenumber" name="L694" href="#L694">694</a>     <strong class="jxr_keyword">return</strong> !(pattern.getValue() == 0 &amp;&amp; isOddPattern &amp;&amp; leftChar);
+<a class="jxr_linenumber" name="L695" href="#L695">695</a>   }
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 
+<a class="jxr_linenumber" name="L697" href="#L697">697</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> adjustOddEvenCounts(<strong class="jxr_keyword">int</strong> numModules) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 
+<a class="jxr_linenumber" name="L699" href="#L699">699</a>     <strong class="jxr_keyword">int</strong> oddSum = count(<strong class="jxr_keyword">this</strong>.getOddCounts());
+<a class="jxr_linenumber" name="L700" href="#L700">700</a>     <strong class="jxr_keyword">int</strong> evenSum = count(<strong class="jxr_keyword">this</strong>.getEvenCounts());
+<a class="jxr_linenumber" name="L701" href="#L701">701</a>     <strong class="jxr_keyword">int</strong> mismatch = oddSum + evenSum - numModules;
+<a class="jxr_linenumber" name="L702" href="#L702">702</a>     <strong class="jxr_keyword">boolean</strong> oddParityBad = (oddSum &amp; 0x01) == 1;
+<a class="jxr_linenumber" name="L703" href="#L703">703</a>     <strong class="jxr_keyword">boolean</strong> evenParityBad = (evenSum &amp; 0x01) == 0;
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 
+<a class="jxr_linenumber" name="L705" href="#L705">705</a>     <strong class="jxr_keyword">boolean</strong> incrementOdd = false;
+<a class="jxr_linenumber" name="L706" href="#L706">706</a>     <strong class="jxr_keyword">boolean</strong> decrementOdd = false;
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 
+<a class="jxr_linenumber" name="L708" href="#L708">708</a>     <strong class="jxr_keyword">if</strong> (oddSum &gt; 13) {
+<a class="jxr_linenumber" name="L709" href="#L709">709</a>       decrementOdd = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L710" href="#L710">710</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (oddSum &lt; 4) {
+<a class="jxr_linenumber" name="L711" href="#L711">711</a>       incrementOdd = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L712" href="#L712">712</a>     }
+<a class="jxr_linenumber" name="L713" href="#L713">713</a>     <strong class="jxr_keyword">boolean</strong> incrementEven = false;
+<a class="jxr_linenumber" name="L714" href="#L714">714</a>     <strong class="jxr_keyword">boolean</strong> decrementEven = false;
+<a class="jxr_linenumber" name="L715" href="#L715">715</a>     <strong class="jxr_keyword">if</strong> (evenSum &gt; 13) {
+<a class="jxr_linenumber" name="L716" href="#L716">716</a>       decrementEven = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L717" href="#L717">717</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (evenSum &lt; 4) {
+<a class="jxr_linenumber" name="L718" href="#L718">718</a>       incrementEven = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L719" href="#L719">719</a>     }
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 
+<a class="jxr_linenumber" name="L721" href="#L721">721</a>     <strong class="jxr_keyword">if</strong> (mismatch == 1) {
+<a class="jxr_linenumber" name="L722" href="#L722">722</a>       <strong class="jxr_keyword">if</strong> (oddParityBad) {
+<a class="jxr_linenumber" name="L723" href="#L723">723</a>         <strong class="jxr_keyword">if</strong> (evenParityBad) {
+<a class="jxr_linenumber" name="L724" href="#L724">724</a>           <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L725" href="#L725">725</a>         }
+<a class="jxr_linenumber" name="L726" href="#L726">726</a>         decrementOdd = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L727" href="#L727">727</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L728" href="#L728">728</a>         <strong class="jxr_keyword">if</strong> (!evenParityBad) {
+<a class="jxr_linenumber" name="L729" href="#L729">729</a>           <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L730" href="#L730">730</a>         }
+<a class="jxr_linenumber" name="L731" href="#L731">731</a>         decrementEven = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L732" href="#L732">732</a>       }
+<a class="jxr_linenumber" name="L733" href="#L733">733</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mismatch == -1) {
+<a class="jxr_linenumber" name="L734" href="#L734">734</a>       <strong class="jxr_keyword">if</strong> (oddParityBad) {
+<a class="jxr_linenumber" name="L735" href="#L735">735</a>         <strong class="jxr_keyword">if</strong> (evenParityBad) {
+<a class="jxr_linenumber" name="L736" href="#L736">736</a>           <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L737" href="#L737">737</a>         }
+<a class="jxr_linenumber" name="L738" href="#L738">738</a>         incrementOdd = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L739" href="#L739">739</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L740" href="#L740">740</a>         <strong class="jxr_keyword">if</strong> (!evenParityBad) {
+<a class="jxr_linenumber" name="L741" href="#L741">741</a>           <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L742" href="#L742">742</a>         }
+<a class="jxr_linenumber" name="L743" href="#L743">743</a>         incrementEven = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L744" href="#L744">744</a>       }
+<a class="jxr_linenumber" name="L745" href="#L745">745</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mismatch == 0) {
+<a class="jxr_linenumber" name="L746" href="#L746">746</a>       <strong class="jxr_keyword">if</strong> (oddParityBad) {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a>         <strong class="jxr_keyword">if</strong> (!evenParityBad) {
+<a class="jxr_linenumber" name="L748" href="#L748">748</a>           <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L749" href="#L749">749</a>         }
+<a class="jxr_linenumber" name="L750" href="#L750">750</a>         <em class="jxr_comment">// Both bad</em>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a>         <strong class="jxr_keyword">if</strong> (oddSum &lt; evenSum) {
+<a class="jxr_linenumber" name="L752" href="#L752">752</a>           incrementOdd = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L753" href="#L753">753</a>           decrementEven = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L754" href="#L754">754</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L755" href="#L755">755</a>           decrementOdd = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L756" href="#L756">756</a>           incrementEven = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L757" href="#L757">757</a>         }
+<a class="jxr_linenumber" name="L758" href="#L758">758</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L759" href="#L759">759</a>         <strong class="jxr_keyword">if</strong> (evenParityBad) {
+<a class="jxr_linenumber" name="L760" href="#L760">760</a>           <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L761" href="#L761">761</a>         }
+<a class="jxr_linenumber" name="L762" href="#L762">762</a>         <em class="jxr_comment">// Nothing to do!</em>
+<a class="jxr_linenumber" name="L763" href="#L763">763</a>       }
+<a class="jxr_linenumber" name="L764" href="#L764">764</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L765" href="#L765">765</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L766" href="#L766">766</a>     }
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 
+<a class="jxr_linenumber" name="L768" href="#L768">768</a>     <strong class="jxr_keyword">if</strong> (incrementOdd) {
+<a class="jxr_linenumber" name="L769" href="#L769">769</a>       <strong class="jxr_keyword">if</strong> (decrementOdd) {
+<a class="jxr_linenumber" name="L770" href="#L770">770</a>         <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L771" href="#L771">771</a>       }
+<a class="jxr_linenumber" name="L772" href="#L772">772</a>       increment(<strong class="jxr_keyword">this</strong>.getOddCounts(), <strong class="jxr_keyword">this</strong>.getOddRoundingErrors());
+<a class="jxr_linenumber" name="L773" href="#L773">773</a>     }
+<a class="jxr_linenumber" name="L774" href="#L774">774</a>     <strong class="jxr_keyword">if</strong> (decrementOdd) {
+<a class="jxr_linenumber" name="L775" href="#L775">775</a>       decrement(<strong class="jxr_keyword">this</strong>.getOddCounts(), <strong class="jxr_keyword">this</strong>.getOddRoundingErrors());
+<a class="jxr_linenumber" name="L776" href="#L776">776</a>     }
+<a class="jxr_linenumber" name="L777" href="#L777">777</a>     <strong class="jxr_keyword">if</strong> (incrementEven) {
+<a class="jxr_linenumber" name="L778" href="#L778">778</a>       <strong class="jxr_keyword">if</strong> (decrementEven) {
+<a class="jxr_linenumber" name="L779" href="#L779">779</a>         <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L780" href="#L780">780</a>       }
+<a class="jxr_linenumber" name="L781" href="#L781">781</a>       increment(<strong class="jxr_keyword">this</strong>.getEvenCounts(), <strong class="jxr_keyword">this</strong>.getOddRoundingErrors());
+<a class="jxr_linenumber" name="L782" href="#L782">782</a>     }
+<a class="jxr_linenumber" name="L783" href="#L783">783</a>     <strong class="jxr_keyword">if</strong> (decrementEven) {
+<a class="jxr_linenumber" name="L784" href="#L784">784</a>       decrement(<strong class="jxr_keyword">this</strong>.getEvenCounts(), <strong class="jxr_keyword">this</strong>.getEvenRoundingErrors());
+<a class="jxr_linenumber" name="L785" href="#L785">785</a>     }
+<a class="jxr_linenumber" name="L786" href="#L786">786</a>   }
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

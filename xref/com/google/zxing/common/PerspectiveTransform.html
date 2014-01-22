@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PerspectiveTransform xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../apidocs/com/google/zxing/common/PerspectiveTransform.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2007 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.common;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;This class implements a perspective transform in two dimensions. Given four source and four</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * destination points, it will compute the transformation implied between them. The code is based</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * directly upon section 3.4.2 of George Wolberg's "Digital Image Warping"; see pages 54-56.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a11;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a12;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a13;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a21;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a22;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a23;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a31;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a32;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> a33;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a>(<strong class="jxr_keyword">float</strong> a11, <strong class="jxr_keyword">float</strong> a21, <strong class="jxr_keyword">float</strong> a31,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>                                 <strong class="jxr_keyword">float</strong> a12, <strong class="jxr_keyword">float</strong> a22, <strong class="jxr_keyword">float</strong> a32,
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>                                 <strong class="jxr_keyword">float</strong> a13, <strong class="jxr_keyword">float</strong> a23, <strong class="jxr_keyword">float</strong> a33) {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">this</strong>.a11 = a11;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">this</strong>.a12 = a12;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">this</strong>.a13 = a13;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">this</strong>.a21 = a21;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">this</strong>.a22 = a22;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">this</strong>.a23 = a23;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">this</strong>.a31 = a31;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">this</strong>.a32 = a32;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">this</strong>.a33 = a33;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>    }
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> quadrilateralToQuadrilateral(<strong class="jxr_keyword">float</strong> x0, <strong class="jxr_keyword">float</strong> y0,
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                                                                    <strong class="jxr_keyword">float</strong> x1, <strong class="jxr_keyword">float</strong> y1,
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                                                                    <strong class="jxr_keyword">float</strong> x2, <strong class="jxr_keyword">float</strong> y2,
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>                                                                    <strong class="jxr_keyword">float</strong> x3, <strong class="jxr_keyword">float</strong> y3,
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>                                                                    <strong class="jxr_keyword">float</strong> x0p, <strong class="jxr_keyword">float</strong> y0p,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>                                                                    <strong class="jxr_keyword">float</strong> x1p, <strong class="jxr_keyword">float</strong> y1p,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                                                                    <strong class="jxr_keyword">float</strong> x2p, <strong class="jxr_keyword">float</strong> y2p,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>                                                                    <strong class="jxr_keyword">float</strong> x3p, <strong class="jxr_keyword">float</strong> y3p) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> qToS = quadrilateralToSquare(x0, y0, x1, y1, x2, y2, x3, y3);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> sToQ = squareToQuadrilateral(x0p, y0p, x1p, y1p, x2p, y2p, x3p, y3p);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">return</strong> sToQ.times(qToS);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transformPoints(<strong class="jxr_keyword">float</strong>[] points) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">int</strong> max = points.length;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">float</strong> a11 = <strong class="jxr_keyword">this</strong>.a11;
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">float</strong> a12 = <strong class="jxr_keyword">this</strong>.a12;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">float</strong> a13 = <strong class="jxr_keyword">this</strong>.a13;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">float</strong> a21 = <strong class="jxr_keyword">this</strong>.a21;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">float</strong> a22 = <strong class="jxr_keyword">this</strong>.a22;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">float</strong> a23 = <strong class="jxr_keyword">this</strong>.a23;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">float</strong> a31 = <strong class="jxr_keyword">this</strong>.a31;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">float</strong> a32 = <strong class="jxr_keyword">this</strong>.a32;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">float</strong> a33 = <strong class="jxr_keyword">this</strong>.a33;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; max; i += 2) {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>        <strong class="jxr_keyword">float</strong> x = points[i];
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>        <strong class="jxr_keyword">float</strong> y = points[i + 1];
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>        <strong class="jxr_keyword">float</strong> denominator = a13 * x + a23 * y + a33;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>        points[i] = (a11 * x + a21 * y + a31) / denominator;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>        points[i + 1] = (a12 * x + a22 * y + a32) / denominator;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>    }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>    <em class="jxr_javadoccomment">/** Convenience method, not optimized for performance. */</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transformPoints(<strong class="jxr_keyword">float</strong>[] xValues, <strong class="jxr_keyword">float</strong>[] yValues) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">int</strong> n = xValues.length;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; n; i ++) {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>        <strong class="jxr_keyword">float</strong> x = xValues[i];
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>        <strong class="jxr_keyword">float</strong> y = yValues[i];
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>        <strong class="jxr_keyword">float</strong> denominator = a13 * x + a23 * y + a33;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>        xValues[i] = (a11 * x + a21 * y + a31) / denominator;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>        yValues[i] = (a12 * x + a22 * y + a32) / denominator;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>    }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> squareToQuadrilateral(<strong class="jxr_keyword">float</strong> x0, <strong class="jxr_keyword">float</strong> y0,
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>                                                             <strong class="jxr_keyword">float</strong> x1, <strong class="jxr_keyword">float</strong> y1,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>                                                            <strong class="jxr_keyword">float</strong> x2, <strong class="jxr_keyword">float</strong> y2,
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                                                            <strong class="jxr_keyword">float</strong> x3, <strong class="jxr_keyword">float</strong> y3) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">float</strong> dx3 = x0 - x1 + x2 - x3;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">float</strong> dy3 = y0 - y1 + y2 - y3;
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">if</strong> (dx3 == 0.0f &amp;&amp; dy3 == 0.0f) {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>       <em class="jxr_comment">// Affine</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a>(x1 - x0, x2 - x1, x0,
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                                       y1 - y0, y2 - y1, y0,
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>                                       0.0f,    0.0f,    1.0f);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>       <strong class="jxr_keyword">float</strong> dx1 = x1 - x2;
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>       <strong class="jxr_keyword">float</strong> dx2 = x3 - x2;
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>       <strong class="jxr_keyword">float</strong> dy1 = y1 - y2;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>       <strong class="jxr_keyword">float</strong> dy2 = y3 - y2;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>       <strong class="jxr_keyword">float</strong> denominator = dx1 * dy2 - dx2 * dy1;
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>       <strong class="jxr_keyword">float</strong> a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>       <strong class="jxr_keyword">float</strong> a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a>(x1 - x0 + a13 * x1, x3 - x0 + a23 * x3, x0,
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                                       y1 - y0 + a13 * y1, y3 - y0 + a23 * y3, y0,
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>                                       a13,                a23,                1.0f);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     }
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>   }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> quadrilateralToSquare(<strong class="jxr_keyword">float</strong> x0, <strong class="jxr_keyword">float</strong> y0,
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>                                                            <strong class="jxr_keyword">float</strong> x1, <strong class="jxr_keyword">float</strong> y1,
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>                                                            <strong class="jxr_keyword">float</strong> x2, <strong class="jxr_keyword">float</strong> y2,
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>                                                            <strong class="jxr_keyword">float</strong> x3, <strong class="jxr_keyword">float</strong> y3) {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     <em class="jxr_comment">// Here, the adjoint serves as the inverse:</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">return</strong> squareToQuadrilateral(x0, y0, x1, y1, x2, y2, x3, y3).buildAdjoint();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>   }
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>   <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> buildAdjoint() {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <em class="jxr_comment">// Adjoint is the transpose of the cofactor matrix:</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a>(a22 * a33 - a23 * a32,
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>         a23 * a31 - a21 * a33,
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         a21 * a32 - a22 * a31,
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         a13 * a32 - a12 * a33,
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         a11 * a33 - a13 * a31,
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         a12 * a31 - a11 * a32,
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>         a12 * a23 - a13 * a22,
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         a13 * a21 - a11 * a23,
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         a11 * a22 - a12 * a21);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>   }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>   <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> times(<a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> other) {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a>(a11 * other.a11 + a21 * other.a12 + a31 * other.a13,
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>         a11 * other.a21 + a21 * other.a22 + a31 * other.a23,
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         a11 * other.a31 + a21 * other.a32 + a31 * other.a33,
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         a12 * other.a11 + a22 * other.a12 + a32 * other.a13,
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         a12 * other.a21 + a22 * other.a22 + a32 * other.a23,
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         a12 * other.a31 + a22 * other.a32 + a32 * other.a33,
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         a13 * other.a11 + a23 * other.a12 + a33 * other.a13,
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         a13 * other.a21 + a23 * other.a22 + a33 * other.a23,
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         a13 * other.a31 + a23 * other.a32 + a33 * other.a33);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>   }
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

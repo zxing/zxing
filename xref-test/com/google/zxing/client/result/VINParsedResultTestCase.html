@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>VINParsedResultTestCase xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/com/google/zxing/client/result/VINParsedResultTestCase.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2014 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.client.result;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BarcodeFormat;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.Result;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.Assert;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/client/result/VINParsedResultTestCase.html">VINParsedResultTestCase</a> <strong class="jxr_keyword">extends</strong> Assert {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>    @Test
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testNotVIN() {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      Result fakeResult = <strong class="jxr_keyword">new</strong> Result(<span class="jxr_string">"1M8GDM9A1KP042788"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, BarcodeFormat.CODE_39);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      ParsedResult result = ResultParser.parseResult(fakeResult);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      assertEquals(ParsedResultType.TEXT, result.getType());
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      fakeResult = <strong class="jxr_keyword">new</strong> Result(<span class="jxr_string">"1M8GDM9AXKP042788"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, BarcodeFormat.CODE_128);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      result = ResultParser.parseResult(fakeResult);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      assertEquals(ParsedResultType.TEXT, result.getType());
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    }
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>    @Test
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testVIN() {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      doTest(<span class="jxr_string">"1M8GDM9AXKP042788"</span>, <span class="jxr_string">"1M8"</span>, <span class="jxr_string">"GDM9AX"</span>, <span class="jxr_string">"KP042788"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"GDM9A"</span>, 1989, 'P', <span class="jxr_string">"042788"</span>);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      doTest(<span class="jxr_string">"I1M8GDM9AXKP042788"</span>, <span class="jxr_string">"1M8"</span>, <span class="jxr_string">"GDM9AX"</span>, <span class="jxr_string">"KP042788"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"GDM9A"</span>, 1989, 'P', <span class="jxr_string">"042788"</span>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      doTest(<span class="jxr_string">"LJCPCBLCX11000237"</span>, <span class="jxr_string">"LJC"</span>, <span class="jxr_string">"PCBLCX"</span>, <span class="jxr_string">"11000237"</span>, <span class="jxr_string">"CN"</span>, <span class="jxr_string">"PCBLC"</span>, 2001, '1', <span class="jxr_string">"000237"</span>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>    }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doTest(String contents,
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>                               String wmi,
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>                               String vds,
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                               String vis,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                               String country,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                               String attributes,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                               <strong class="jxr_keyword">int</strong> year,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                               <strong class="jxr_keyword">char</strong> plant,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                               String sequential) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      Result fakeResult = <strong class="jxr_keyword">new</strong> Result(contents, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, BarcodeFormat.CODE_39);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      ParsedResult result = ResultParser.parseResult(fakeResult);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      assertSame(ParsedResultType.VIN, result.getType());
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      VINParsedResult vinResult = (VINParsedResult) result;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      assertEquals(wmi, vinResult.getWorldManufacturerID());
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      assertEquals(vds, vinResult.getVehicleDescriptorSection());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      assertEquals(vis, vinResult.getVehicleIdentifierSection());
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      assertEquals(country, vinResult.getCountryCode());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      assertEquals(attributes, vinResult.getVehicleAttributes());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      assertEquals(year, vinResult.getModelYear());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      assertEquals(plant, vinResult.getPlantCode());
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      assertEquals(sequential, vinResult.getSequentialNumber());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>    }
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

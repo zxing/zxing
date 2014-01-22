@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>AbstractNegativeBlackBoxTestCase xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../testapidocs/com/google/zxing/common/AbstractNegativeBlackBoxTestCase.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2008 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.common;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BinaryBitmap;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BufferedImageLuminanceSource;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.DecodeHintType;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.LuminanceSource;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.MultiFormatReader;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.ReaderException;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.Result;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> javax.imageio.ImageIO;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.awt.image.BufferedImage;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.EnumMap;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.logging.Logger;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * This abstract class looks for negative results, i.e. it only allows a certain number of false</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * positives in images which should not decode. This helps ensure that we are not too lenient.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * @author dswitkin@google.com (Daniel Switkin)</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/google/zxing/common/AbstractNegativeBlackBoxTestCase.html">AbstractNegativeBlackBoxTestCase</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../com/google/zxing/common/AbstractBlackBoxTestCase.html">AbstractBlackBoxTestCase</a> {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger log = Logger.getLogger(AbstractNegativeBlackBoxTestCase.<strong class="jxr_keyword">class</strong>.getSimpleName());
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/google/zxing/common/TestResult.html">TestResult</a> {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> falsePositivesAllowed;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> rotation;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <a href="../../../../com/google/zxing/common/TestResult.html">TestResult</a>(<strong class="jxr_keyword">int</strong> falsePositivesAllowed, <strong class="jxr_keyword">float</strong> rotation) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>        <strong class="jxr_keyword">this</strong>.falsePositivesAllowed = falsePositivesAllowed;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>        <strong class="jxr_keyword">this</strong>.rotation = rotation;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getFalsePositivesAllowed() {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>        <strong class="jxr_keyword">return</strong> falsePositivesAllowed;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">float</strong> getRotation() {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>        <strong class="jxr_keyword">return</strong> rotation;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;TestResult&gt; testResults;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>    <em class="jxr_comment">// Use the multiformat reader to evaluate all decoders in the system.</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>    <strong class="jxr_keyword">protected</strong> <a href="../../../../com/google/zxing/common/AbstractNegativeBlackBoxTestCase.html">AbstractNegativeBlackBoxTestCase</a>(String testBasePathSuffix) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">super</strong>(testBasePathSuffix, <strong class="jxr_keyword">new</strong> MultiFormatReader(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      testResults = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>    }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> addTest(<strong class="jxr_keyword">int</strong> falsePositivesAllowed, <strong class="jxr_keyword">float</strong> rotation) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      testResults.add(<strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/common/TestResult.html">TestResult</a>(falsePositivesAllowed, rotation));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>    }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>    @Override
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>    @Test
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBlackBox() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      assertFalse(testResults.isEmpty());
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      File[] imageFiles = getImageFiles();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">int</strong>[] falsePositives = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[testResults.size()];
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">for</strong> (File testImage : imageFiles) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>        log.info(String.format(<span class="jxr_string">"Starting %s"</span>, testImage.getAbsolutePath()));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>        BufferedImage image = ImageIO.read(testImage);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>        <strong class="jxr_keyword">if</strong> (image == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Could not read image: "</span> + testImage);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>        }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>        <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; testResults.size(); x++) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          <a href="../../../../com/google/zxing/common/TestResult.html">TestResult</a> testResult = testResults.get(x);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          <strong class="jxr_keyword">if</strong> (!checkForFalsePositives(image, testResult.getRotation())) {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>            falsePositives[x]++;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>        }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">int</strong> totalFalsePositives = 0;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">int</strong> totalAllowed = 0;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; testResults.size(); x++) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>       <a href="../../../../com/google/zxing/common/TestResult.html">TestResult</a> testResult = testResults.get(x);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>       totalFalsePositives += falsePositives[x];
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>       totalAllowed += testResult.getFalsePositivesAllowed();
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     <strong class="jxr_keyword">if</strong> (totalFalsePositives &lt; totalAllowed) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>       log.warning(String.format(<span class="jxr_string">"+++ Test too lax by %d images"</span>, totalAllowed - totalFalsePositives));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (totalFalsePositives &gt; totalAllowed) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>       log.warning(String.format(<span class="jxr_string">"--- Test failed by %d images"</span>, totalFalsePositives - totalAllowed));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; testResults.size(); x++) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>       <a href="../../../../com/google/zxing/common/TestResult.html">TestResult</a> testResult = testResults.get(x);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>       log.info(String.format(<span class="jxr_string">"Rotation %d degrees: %d of %d images were false positives (%d allowed)"</span>,
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>                              (<strong class="jxr_keyword">int</strong>) testResult.getRotation(), falsePositives[x], imageFiles.length,
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                              testResult.getFalsePositivesAllowed()));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>       assertTrue(<span class="jxr_string">"Rotation "</span> + testResult.getRotation() + <span class="jxr_string">" degrees: Too many false positives found"</span>,
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>                  falsePositives[x] &lt;= testResult.getFalsePositivesAllowed());
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>   }
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">   * Make sure ZXing does NOT find a barcode in the image.</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">   * @param image The image to test</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">   * @param rotationInDegrees The amount of rotation to apply</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">   * @return true if nothing found, false if a non-existant barcode was detected</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> checkForFalsePositives(BufferedImage image, <strong class="jxr_keyword">float</strong> rotationInDegrees) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     BufferedImage rotatedImage = rotateImage(image, rotationInDegrees);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     LuminanceSource source = <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/BufferedImageLuminanceSource.html">BufferedImageLuminanceSource</a>(rotatedImage);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     BinaryBitmap bitmap = <strong class="jxr_keyword">new</strong> BinaryBitmap(<strong class="jxr_keyword">new</strong> HybridBinarizer(source));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     Result result;
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>       result = getReader().decode(bitmap);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>       log.info(String.format(<span class="jxr_string">"Found false positive: '%s' with format '%s' (rotation: %d)"</span>,
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>                               result.getText(), result.getBarcodeFormat(), (<strong class="jxr_keyword">int</strong>) rotationInDegrees));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>       <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     } <strong class="jxr_keyword">catch</strong> (ReaderException re) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>       <em class="jxr_comment">// continue</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     }
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     <em class="jxr_comment">// Try "try harder" getMode</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     Map&lt;DecodeHintType,Object&gt; hints = <strong class="jxr_keyword">new</strong> EnumMap&lt;&gt;(DecodeHintType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>     hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>       result = getReader().decode(bitmap, hints);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>       log.info(String.format(<span class="jxr_string">"Try harder found false positive: '%s' with format '%s' (rotation: %d)"</span>,
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>                               result.getText(), result.getBarcodeFormat(), (<strong class="jxr_keyword">int</strong>) rotationInDegrees));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>       <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     } <strong class="jxr_keyword">catch</strong> (ReaderException re) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>       <em class="jxr_comment">// continue</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     }
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>   }
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

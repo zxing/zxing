@@ -1,0 +1,359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ParsedReaderResultTestCase xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/com/google/zxing/client/result/ParsedReaderResultTestCase.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2007 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.client.result;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BarcodeFormat;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.Result;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.junit.Assert;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Locale;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.TimeZone;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Tests {@link ParsedResult}.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @author dswitkin@google.com (Daniel Switkin)</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/client/result/ParsedReaderResultTestCase.html">ParsedReaderResultTestCase</a> <strong class="jxr_keyword">extends</strong> Assert {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>    @Before
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setUp() {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      Locale.setDefault(Locale.ENGLISH);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      TimeZone.setDefault(TimeZone.getTimeZone(<span class="jxr_string">"GMT"</span>));
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>    }
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>    @Test
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTextType() {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      doTestResult(<span class="jxr_string">""</span>, <span class="jxr_string">""</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      doTestResult(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"foo"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      doTestResult(<span class="jxr_string">"Hi."</span>, <span class="jxr_string">"Hi."</span>, ParsedResultType.TEXT);    
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      doTestResult(<span class="jxr_string">"This is a test"</span>, <span class="jxr_string">"This is a test"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      doTestResult(<span class="jxr_string">"This is a test\nwith newlines"</span>, <span class="jxr_string">"This is a test\nwith newlines"</span>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      doTestResult(<span class="jxr_string">"This: a test with lots of @ nearly-random punctuation! No? OK then."</span>,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <span class="jxr_string">"This: a test with lots of @ nearly-random punctuation! No? OK then."</span>,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    @Test
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBookmarkType() {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      doTestResult(<span class="jxr_string">"MEBKM:URL:google.com;;"</span>, <span class="jxr_string">"http://google.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      doTestResult(<span class="jxr_string">"MEBKM:URL:google.com;TITLE:Google;;"</span>, <span class="jxr_string">"Google\nhttp://google.com"</span>,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          ParsedResultType.URI);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      doTestResult(<span class="jxr_string">"MEBKM:TITLE:Google;URL:google.com;;"</span>, <span class="jxr_string">"Google\nhttp://google.com"</span>,
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          ParsedResultType.URI);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      doTestResult(<span class="jxr_string">"MEBKM:URL:http://google.com;;"</span>, <span class="jxr_string">"http://google.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      doTestResult(<span class="jxr_string">"MEBKM:URL:HTTPS://google.com;;"</span>, <span class="jxr_string">"HTTPS://google.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>    @Test
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testURLTOType() {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      doTestResult(<span class="jxr_string">"urlto:foo:bar.com"</span>, <span class="jxr_string">"foo\nhttp://bar.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      doTestResult(<span class="jxr_string">"URLTO:foo:bar.com"</span>, <span class="jxr_string">"foo\nhttp://bar.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      doTestResult(<span class="jxr_string">"URLTO::bar.com"</span>, <span class="jxr_string">"http://bar.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      doTestResult(<span class="jxr_string">"URLTO::http://bar.com"</span>, <span class="jxr_string">"http://bar.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>    }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>    @Test
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testEmailType() {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      doTestResult(<span class="jxr_string">"MATMSG:TO:srowen@example.org;;"</span>,
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <span class="jxr_string">"srowen@example.org"</span>, ParsedResultType.EMAIL_ADDRESS);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      doTestResult(<span class="jxr_string">"MATMSG:TO:srowen@example.org;SUB:Stuff;;"</span>, <span class="jxr_string">"srowen@example.org\nStuff"</span>,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          ParsedResultType.EMAIL_ADDRESS);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      doTestResult(<span class="jxr_string">"MATMSG:TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;"</span>,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <span class="jxr_string">"srowen@example.org\nStuff\nThis is some text"</span>, ParsedResultType.EMAIL_ADDRESS);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      doTestResult(<span class="jxr_string">"MATMSG:SUB:Stuff;BODY:This is some text;TO:srowen@example.org;;"</span>,
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <span class="jxr_string">"srowen@example.org\nStuff\nThis is some text"</span>, ParsedResultType.EMAIL_ADDRESS);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      doTestResult(<span class="jxr_string">"TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;"</span>,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <span class="jxr_string">"TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>    }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>    @Test
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testEmailAddressType() {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      doTestResult(<span class="jxr_string">"srowen@example.org"</span>, <span class="jxr_string">"srowen@example.org"</span>, ParsedResultType.EMAIL_ADDRESS);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      doTestResult(<span class="jxr_string">"mailto:srowen@example.org"</span>, <span class="jxr_string">"srowen@example.org"</span>, ParsedResultType.EMAIL_ADDRESS);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      doTestResult(<span class="jxr_string">"MAILTO:srowen@example.org"</span>, <span class="jxr_string">"srowen@example.org"</span>, ParsedResultType.EMAIL_ADDRESS);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      doTestResult(<span class="jxr_string">"srowen@example"</span>, <span class="jxr_string">"srowen@example"</span>, ParsedResultType.EMAIL_ADDRESS);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      doTestResult(<span class="jxr_string">"srowen"</span>, <span class="jxr_string">"srowen"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      doTestResult(<span class="jxr_string">"Let's meet @ 2"</span>, <span class="jxr_string">"Let's meet @ 2"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>    }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>    @Test
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testAddressBookType() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     doTestResult(<span class="jxr_string">"MECARD:N:Sean Owen;;"</span>, <span class="jxr_string">"Sean Owen"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     doTestResult(<span class="jxr_string">"MECARD:TEL:+12125551212;N:Sean Owen;;"</span>, <span class="jxr_string">"Sean Owen\n+12125551212"</span>,
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>         ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     doTestResult(<span class="jxr_string">"MECARD:TEL:+12125551212;N:Sean Owen;URL:google.com;;"</span>,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <span class="jxr_string">"Sean Owen\n+12125551212\ngoogle.com"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     doTestResult(<span class="jxr_string">"MECARD:TEL:+12125551212;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;"</span>,
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         <span class="jxr_string">"Sean Owen\n+12125551212\nsrowen@example.org\ngoogle.com"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     doTestResult(<span class="jxr_string">"MECARD:ADR:76 9th Ave;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;"</span>,
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         <span class="jxr_string">"Sean Owen\n76 9th Ave\nsrowen@example.org\ngoogle.com"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     doTestResult(<span class="jxr_string">"MECARD:BDAY:19760520;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;"</span>,
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         <span class="jxr_string">"Sean Owen\nsrowen@example.org\ngoogle.com\n19760520"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     doTestResult(<span class="jxr_string">"MECARD:ORG:Google;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;"</span>,
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         <span class="jxr_string">"Sean Owen\nGoogle\nsrowen@example.org\ngoogle.com"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     doTestResult(<span class="jxr_string">"MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;"</span>,
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>         <span class="jxr_string">"Sean Owen\nsrowen@example.org\ngoogle.com\nZXing Team"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     doTestResult(<span class="jxr_string">"N:Sean Owen;TEL:+12125551212;;"</span>, <span class="jxr_string">"N:Sean Owen;TEL:+12125551212;;"</span>,
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>         ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>   @Test
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testAddressBookAUType() {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     doTestResult(<span class="jxr_string">"MEMORY:\r\n"</span>, <span class="jxr_string">""</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     doTestResult(<span class="jxr_string">"MEMORY:foo\r\nNAME1:Sean\r\n"</span>, <span class="jxr_string">"Sean\nfoo"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     doTestResult(<span class="jxr_string">"TEL1:+12125551212\r\nMEMORY:\r\n"</span>, <span class="jxr_string">"+12125551212"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>   }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>   @Test
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBizcard() {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     doTestResult(<span class="jxr_string">"BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12225551212;E:srowen@example.org;"</span>,
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>         <span class="jxr_string">"Sean Owen\nGoogle\n123 Main St\n+12225551212\nsrowen@example.org"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>   }
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>   @Test
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testUPCA() {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     doTestResult(<span class="jxr_string">"123456789012"</span>, <span class="jxr_string">"123456789012"</span>, ParsedResultType.PRODUCT, BarcodeFormat.UPC_A);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     doTestResult(<span class="jxr_string">"1234567890123"</span>, <span class="jxr_string">"1234567890123"</span>, ParsedResultType.PRODUCT, BarcodeFormat.UPC_A);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     doTestResult(<span class="jxr_string">"12345678901"</span>, <span class="jxr_string">"12345678901"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>   }
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>   @Test
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testUPCE() {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     doTestResult(<span class="jxr_string">"01234565"</span>, <span class="jxr_string">"01234565"</span>, ParsedResultType.PRODUCT, BarcodeFormat.UPC_E);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>   }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>   @Test
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testEAN() {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     doTestResult(<span class="jxr_string">"00393157"</span>, <span class="jxr_string">"00393157"</span>, ParsedResultType.PRODUCT, BarcodeFormat.EAN_8);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>     doTestResult(<span class="jxr_string">"00393158"</span>, <span class="jxr_string">"00393158"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     doTestResult(<span class="jxr_string">"5051140178499"</span>, <span class="jxr_string">"5051140178499"</span>, ParsedResultType.PRODUCT, BarcodeFormat.EAN_13);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>     doTestResult(<span class="jxr_string">"5051140178490"</span>, <span class="jxr_string">"5051140178490"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>   }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>   @Test
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testISBN() {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     doTestResult(<span class="jxr_string">"9784567890123"</span>, <span class="jxr_string">"9784567890123"</span>, ParsedResultType.ISBN, BarcodeFormat.EAN_13);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     doTestResult(<span class="jxr_string">"9794567890123"</span>, <span class="jxr_string">"9794567890123"</span>, ParsedResultType.ISBN, BarcodeFormat.EAN_13);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     doTestResult(<span class="jxr_string">"97845678901"</span>, <span class="jxr_string">"97845678901"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>     doTestResult(<span class="jxr_string">"97945678901"</span>, <span class="jxr_string">"97945678901"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>   }
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>   @Test
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testURI() {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     doTestResult(<span class="jxr_string">"http://google.com"</span>, <span class="jxr_string">"http://google.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>     doTestResult(<span class="jxr_string">"google.com"</span>, <span class="jxr_string">"http://google.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     doTestResult(<span class="jxr_string">"https://google.com"</span>, <span class="jxr_string">"https://google.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     doTestResult(<span class="jxr_string">"HTTP://google.com"</span>, <span class="jxr_string">"HTTP://google.com"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>     doTestResult(<span class="jxr_string">"http://google.com/foobar"</span>, <span class="jxr_string">"http://google.com/foobar"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>     doTestResult(<span class="jxr_string">"https://google.com:443/foobar"</span>, <span class="jxr_string">"https://google.com:443/foobar"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     doTestResult(<span class="jxr_string">"google.com:443"</span>, <span class="jxr_string">"http://google.com:443"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>     doTestResult(<span class="jxr_string">"google.com:443/"</span>, <span class="jxr_string">"http://google.com:443/"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     doTestResult(<span class="jxr_string">"google.com:443/foobar"</span>, <span class="jxr_string">"http://google.com:443/foobar"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     doTestResult(<span class="jxr_string">"http://google.com:443/foobar"</span>, <span class="jxr_string">"http://google.com:443/foobar"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>     doTestResult(<span class="jxr_string">"https://google.com:443/foobar"</span>, <span class="jxr_string">"https://google.com:443/foobar"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>     doTestResult(<span class="jxr_string">"ftp://google.com/fake"</span>, <span class="jxr_string">"ftp://google.com/fake"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>     doTestResult(<span class="jxr_string">"gopher://google.com/obsolete"</span>, <span class="jxr_string">"gopher://google.com/obsolete"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>   }
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>   @Test
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGeo() {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>     doTestResult(<span class="jxr_string">"geo:1,2"</span>, <span class="jxr_string">"1.0, 2.0"</span>, ParsedResultType.GEO);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     doTestResult(<span class="jxr_string">"GEO:1,2"</span>, <span class="jxr_string">"1.0, 2.0"</span>, ParsedResultType.GEO);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     doTestResult(<span class="jxr_string">"geo:1,2,3"</span>, <span class="jxr_string">"1.0, 2.0, 3.0m"</span>, ParsedResultType.GEO);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>     doTestResult(<span class="jxr_string">"geo:80.33,-32.3344,3.35"</span>, <span class="jxr_string">"80.33, -32.3344, 3.35m"</span>, ParsedResultType.GEO);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>     doTestResult(<span class="jxr_string">"geo"</span>, <span class="jxr_string">"geo"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>     doTestResult(<span class="jxr_string">"geography"</span>, <span class="jxr_string">"geography"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>   }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>   @Test
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTel() {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>     doTestResult(<span class="jxr_string">"tel:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.TEL);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     doTestResult(<span class="jxr_string">"TEL:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.TEL);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     doTestResult(<span class="jxr_string">"tel:212 555 1212"</span>, <span class="jxr_string">"212 555 1212"</span>, ParsedResultType.TEL);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     doTestResult(<span class="jxr_string">"tel:2125551212"</span>, <span class="jxr_string">"2125551212"</span>, ParsedResultType.TEL);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     doTestResult(<span class="jxr_string">"tel:212-555-1212"</span>, <span class="jxr_string">"212-555-1212"</span>, ParsedResultType.TEL);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>     doTestResult(<span class="jxr_string">"tel"</span>, <span class="jxr_string">"tel"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>     doTestResult(<span class="jxr_string">"telephone"</span>, <span class="jxr_string">"telephone"</span>, ParsedResultType.TEXT);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>   }
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>   @Test
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testVCard() {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>     doTestResult(<span class="jxr_string">"BEGIN:VCARD\r\nEND:VCARD"</span>, <span class="jxr_string">""</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     doTestResult(<span class="jxr_string">"BEGIN:VCARD\r\nN:Owen;Sean\r\nEND:VCARD"</span>, <span class="jxr_string">"Sean Owen"</span>,
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>         ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>     doTestResult(<span class="jxr_string">"BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD"</span>, <span class="jxr_string">"Sean Owen"</span>,
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>         ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     doTestResult(<span class="jxr_string">"BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD"</span>,
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>         <span class="jxr_string">"Sean Owen\n123 Main St"</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     doTestResult(<span class="jxr_string">"BEGIN:VCARD"</span>, <span class="jxr_string">""</span>, ParsedResultType.ADDRESSBOOK);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>   }
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>   @Test
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testVEvent() {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>     <em class="jxr_comment">// UTC times</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>     doTestResult(<span class="jxr_string">"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n"</span> +
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>         <span class="jxr_string">"DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR"</span>,
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>         <span class="jxr_string">"foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM"</span>,
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>         ParsedResultType.CALENDAR);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>     doTestResult(<span class="jxr_string">"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n"</span> +
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>         <span class="jxr_string">"DTEND:20080505T234555Z\r\nEND:VEVENT"</span>, <span class="jxr_string">"foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM"</span>,
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>         ParsedResultType.CALENDAR);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <em class="jxr_comment">// Local times</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>     doTestResult(<span class="jxr_string">"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n"</span> +
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>         <span class="jxr_string">"DTEND:20080505T234555\r\nEND:VEVENT"</span>, <span class="jxr_string">"foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM"</span>,
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>         ParsedResultType.CALENDAR);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <em class="jxr_comment">// Date only (all day event)</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>     doTestResult(<span class="jxr_string">"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n"</span> +
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>         <span class="jxr_string">"DTEND:20080505\r\nEND:VEVENT"</span>, <span class="jxr_string">"foo\nMay 4, 2008\nMay 5, 2008"</span>, ParsedResultType.CALENDAR);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>     <em class="jxr_comment">// Start time only</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>     doTestResult(<span class="jxr_string">"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT"</span>,
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>         <span class="jxr_string">"foo\nMay 4, 2008 12:34:56 PM"</span>, ParsedResultType.CALENDAR);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>     doTestResult(<span class="jxr_string">"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT"</span>,
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>         <span class="jxr_string">"foo\nMay 4, 2008 12:34:56 PM"</span>, ParsedResultType.CALENDAR);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>     doTestResult(<span class="jxr_string">"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT"</span>,
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>         <span class="jxr_string">"foo\nMay 4, 2008"</span>, ParsedResultType.CALENDAR);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>     doTestResult(<span class="jxr_string">"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT"</span>,
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>         <span class="jxr_string">"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT"</span>, ParsedResultType.URI);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>     <em class="jxr_comment">// Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>     <em class="jxr_comment">// Make sure illegal entries without newlines don't crash</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>     doTestResult(
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>         <span class="jxr_string">"BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"</span>,
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>         <span class="jxr_string">"BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"</span>,
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>         ParsedResultType.URI);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>   }
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>   @Test
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSMS() {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>     doTestResult(<span class="jxr_string">"sms:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>     doTestResult(<span class="jxr_string">"SMS:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     doTestResult(<span class="jxr_string">"sms:+15551212;via=999333"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     doTestResult(<span class="jxr_string">"sms:+15551212?subject=foo&amp;body=bar"</span>, <span class="jxr_string">"+15551212\nfoo\nbar"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     doTestResult(<span class="jxr_string">"sms:+15551212,+12124440101"</span>, <span class="jxr_string">"+15551212\n+12124440101"</span>, ParsedResultType.SMS);    
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>   }
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>   @Test
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSMSTO() {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>     doTestResult(<span class="jxr_string">"SMSTO:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     doTestResult(<span class="jxr_string">"smsto:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     doTestResult(<span class="jxr_string">"smsto:+15551212:subject"</span>, <span class="jxr_string">"+15551212\nsubject"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     doTestResult(<span class="jxr_string">"smsto:+15551212:My message"</span>, <span class="jxr_string">"+15551212\nMy message"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>     <em class="jxr_comment">// Need to handle question mark in the subject</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>     doTestResult(<span class="jxr_string">"smsto:+15551212:What's up?"</span>, <span class="jxr_string">"+15551212\nWhat's up?"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>     <em class="jxr_comment">// Need to handle colon in the subject</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>     doTestResult(<span class="jxr_string">"smsto:+15551212:Directions: Do this"</span>, <span class="jxr_string">"+15551212\nDirections: Do this"</span>,
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>         ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>     doTestResult(<span class="jxr_string">"smsto:212-555-1212:Here's a longer message. Should be fine."</span>,
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>         <span class="jxr_string">"212-555-1212\nHere's a longer message. Should be fine."</span>,
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>         ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>   }
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>   @Test
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMMS() {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     doTestResult(<span class="jxr_string">"mms:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     doTestResult(<span class="jxr_string">"MMS:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     doTestResult(<span class="jxr_string">"mms:+15551212;via=999333"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     doTestResult(<span class="jxr_string">"mms:+15551212?subject=foo&amp;body=bar"</span>, <span class="jxr_string">"+15551212\nfoo\nbar"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     doTestResult(<span class="jxr_string">"mms:+15551212,+12124440101"</span>, <span class="jxr_string">"+15551212\n+12124440101"</span>, ParsedResultType.SMS);        
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>   }
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>   @Test
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMMSTO() {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     doTestResult(<span class="jxr_string">"MMSTO:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>     doTestResult(<span class="jxr_string">"mmsto:+15551212"</span>, <span class="jxr_string">"+15551212"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     doTestResult(<span class="jxr_string">"mmsto:+15551212:subject"</span>, <span class="jxr_string">"+15551212\nsubject"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>     doTestResult(<span class="jxr_string">"mmsto:+15551212:My message"</span>, <span class="jxr_string">"+15551212\nMy message"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>     doTestResult(<span class="jxr_string">"mmsto:+15551212:What's up?"</span>, <span class="jxr_string">"+15551212\nWhat's up?"</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>     doTestResult(<span class="jxr_string">"mmsto:+15551212:Directions: Do this"</span>, <span class="jxr_string">"+15551212\nDirections: Do this"</span>,
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>         ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>     doTestResult(<span class="jxr_string">"mmsto:212-555-1212:Here's a longer message. Should be fine."</span>,
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>         <span class="jxr_string">"212-555-1212\nHere's a longer message. Should be fine."</span>, ParsedResultType.SMS);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>   }
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_comment">  @Test</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_comment">  public void testNDEFText() {</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_comment">    doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_comment">                             (byte)0x02,(byte)0x65,(byte)0x6E,(byte)0x68,</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_comment">                             (byte)0x69},</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_comment">                 ParsedResultType.TEXT);</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_comment">  }</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_comment">  @Test</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_comment">  public void testNDEFURI() {</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_comment">    doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_comment">                             (byte)0x01,(byte)0x6E,(byte)0x66,(byte)0x63,</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_comment">                             (byte)0x2E,(byte)0x63,(byte)0x6F,(byte)0x6D},</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_comment">                 ParsedResultType.URI);</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_comment">  }</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_comment">  @Test</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_comment">  public void testNDEFSmartPoster() {</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_comment">    doTestResult(new byte[] {(byte)0xD1,(byte)0x02,(byte)0x2F,(byte)0x53,</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_comment">                             (byte)0x70,(byte)0x91,(byte)0x01,(byte)0x0E,</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_comment">                             (byte)0x55,(byte)0x01,(byte)0x6E,(byte)0x66,</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_comment">                             (byte)0x63,(byte)0x2D,(byte)0x66,(byte)0x6F,</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_comment">                             (byte)0x72,(byte)0x75,(byte)0x6D,(byte)0x2E,</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_comment">                             (byte)0x6F,(byte)0x72,(byte)0x67,(byte)0x11,</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_comment">                             (byte)0x03,(byte)0x01,(byte)0x61,(byte)0x63,</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_comment">                             (byte)0x74,(byte)0x00,(byte)0x51,(byte)0x01,</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_comment">                             (byte)0x12,(byte)0x54,(byte)0x05,(byte)0x65,</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_comment">                             (byte)0x6E,(byte)0x2D,(byte)0x55,(byte)0x53,</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_comment">                             (byte)0x48,(byte)0x65,(byte)0x6C,(byte)0x6C,</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_comment">                             (byte)0x6F,(byte)0x2C,(byte)0x20,(byte)0x77,</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_comment">                             (byte)0x6F,(byte)0x72,(byte)0x6C,(byte)0x64},</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_comment">                 ParsedResultType.NDEF_SMART_POSTER);</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_comment">  }</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_comment">   */</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doTestResult(String contents,
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>                                    String goldenResult,
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>                                    ParsedResultType type) {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     doTestResult(contents, goldenResult, type, BarcodeFormat.QR_CODE); <em class="jxr_comment">// QR code is arbitrary</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>   }
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doTestResult(String contents,
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>                                    String goldenResult,
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>                                    ParsedResultType type,
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>                                    BarcodeFormat format) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>     Result fakeResult = <strong class="jxr_keyword">new</strong> Result(contents, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, format);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>     ParsedResult result = ResultParser.parseResult(fakeResult);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     assertNotNull(result);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>     assertSame(type, result.getType());
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>     String displayResult = result.getDisplayResult();
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>     assertEquals(goldenResult, displayResult);
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>   }
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

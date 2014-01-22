@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>QRCodeWriterTestCase xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../testapidocs/com/google/zxing/qrcode/QRCodeWriterTestCase.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2008 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.qrcode;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BarcodeFormat;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.EncodeHintType;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.WriterException;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.common.BitMatrix;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.junit.Assert;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.imageio.ImageIO;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.awt.image.BufferedImage;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.EnumMap;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * @author satorux@google.com (Satoru Takabayashi) - creator</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * @author dswitkin@google.com (Daniel Switkin) - ported and expanded from C++</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/google/zxing/qrcode/QRCodeWriterTestCase.html">QRCodeWriterTestCase</a> <strong class="jxr_keyword">extends</strong> Assert {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BASE_IMAGE_PATH = <span class="jxr_string">"src/test/resources/golden/qrcode/"</span>;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BufferedImage loadImage(String fileName) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      File file = <strong class="jxr_keyword">new</strong> File(BASE_IMAGE_PATH + fileName);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">if</strong> (!file.exists()) {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>        <em class="jxr_comment">// try starting with 'core' since the test base is often given as the project root</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>        file = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"core/"</span> + BASE_IMAGE_PATH + fileName);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      }
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      assertTrue(<span class="jxr_string">"Please download and install test images, and run from the 'core' directory"</span>, file.exists());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">return</strong> ImageIO.read(file);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>    }
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <em class="jxr_comment">// In case the golden images are not monochromatic, convert the RGB values to greyscale.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BitMatrix createMatrixFromImage(BufferedImage image) {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">int</strong> width = image.getWidth();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">int</strong> height = image.getHeight();
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">int</strong>[] pixels = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[width * height];
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      image.getRGB(0, 0, width, height, pixels, 0, width);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      BitMatrix matrix = <strong class="jxr_keyword">new</strong> BitMatrix(width, height);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = 0; y &lt; height; y++) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>        <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; width; x++) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">int</strong> pixel = pixels[y * width + x];
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">int</strong> luminance = (306 * ((pixel &gt;&gt; 16) &amp; 0xFF) +
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>              601 * ((pixel &gt;&gt; 8) &amp; 0xFF) +
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>              117 * (pixel &amp; 0xFF)) &gt;&gt; 10;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">if</strong> (luminance &lt;= 0x7F) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>            matrix.set(x, y);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>        }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">return</strong> matrix;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>    }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>    @Test
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testQRCodeWriter() <strong class="jxr_keyword">throws</strong> WriterException {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <em class="jxr_comment">// The QR should be multiplied up to fit, with extra padding if necessary</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">int</strong> bigEnough = 256;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      QRCodeWriter writer = <strong class="jxr_keyword">new</strong> QRCodeWriter();
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      BitMatrix matrix = writer.encode(<span class="jxr_string">"http://www.google.com/"</span>, BarcodeFormat.QR_CODE, bigEnough,
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          bigEnough, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      assertNotNull(matrix);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      assertEquals(bigEnough, matrix.getWidth());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      assertEquals(bigEnough, matrix.getHeight());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <em class="jxr_comment">// The QR will not fit in this size, so the matrix should come back bigger</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      <strong class="jxr_keyword">int</strong> tooSmall = 20;
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      matrix = writer.encode(<span class="jxr_string">"http://www.google.com/"</span>, BarcodeFormat.QR_CODE, tooSmall,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          tooSmall, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      assertNotNull(matrix);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      assertTrue(tooSmall &lt; matrix.getWidth());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      assertTrue(tooSmall &lt; matrix.getHeight());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <em class="jxr_comment">// We should also be able to handle non-square requests by padding them</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">int</strong> strangeWidth = 500;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">int</strong> strangeHeight = 100;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      matrix = writer.encode(<span class="jxr_string">"http://www.google.com/"</span>, BarcodeFormat.QR_CODE, strangeWidth,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          strangeHeight, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      assertNotNull(matrix);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      assertEquals(strangeWidth, matrix.getWidth());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     assertEquals(strangeHeight, matrix.getHeight());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>   }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> compareToGoldenFile(String contents,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>                                           ErrorCorrectionLevel ecLevel,
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>                                           <strong class="jxr_keyword">int</strong> resolution,
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>                                           String fileName) <strong class="jxr_keyword">throws</strong> WriterException, IOException {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     BufferedImage image = loadImage(fileName);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     assertNotNull(image);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>     BitMatrix goldenResult = createMatrixFromImage(image);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     assertNotNull(goldenResult);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     Map&lt;EncodeHintType,Object&gt; hints = <strong class="jxr_keyword">new</strong> EnumMap&lt;&gt;(EncodeHintType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     hints.put(EncodeHintType.ERROR_CORRECTION, ecLevel);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     QRCodeWriter writer = <strong class="jxr_keyword">new</strong> QRCodeWriter();
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     BitMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>         resolution, hints);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     assertEquals(resolution, generatedResult.getWidth());
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     assertEquals(resolution, generatedResult.getHeight());
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     assertEquals(goldenResult, generatedResult);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>   }
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>   <em class="jxr_comment">// Golden images are generated with "qrcode_sample.cc". The images are checked with both eye balls</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>   <em class="jxr_comment">// and cell phones. We expect pixel-perfect results, because the error correction level is known,</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>   <em class="jxr_comment">// and the pixel dimensions matches exactly. </em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>   @Test
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testRegressionTest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     compareToGoldenFile(<span class="jxr_string">"http://www.google.com/"</span>, ErrorCorrectionLevel.M, 99,
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>         <span class="jxr_string">"renderer-test-01.png"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>   }
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>URIParsedResultTestCase xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/com/google/zxing/client/result/URIParsedResultTestCase.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2007 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.client.result;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BarcodeFormat;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.Result;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.junit.Assert;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Tests {@link URIParsedResult}.</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/client/result/URIParsedResultTestCase.html">URIParsedResultTestCase</a> <strong class="jxr_keyword">extends</strong> Assert {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>    @Test
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBookmarkDocomo() {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      doTest(<span class="jxr_string">"MEBKM:URL:google.com;;"</span>, <span class="jxr_string">"http://google.com"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      doTest(<span class="jxr_string">"MEBKM:URL:http://google.com;;"</span>, <span class="jxr_string">"http://google.com"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      doTest(<span class="jxr_string">"MEBKM:URL:google.com;TITLE:Google;"</span>, <span class="jxr_string">"http://google.com"</span>, <span class="jxr_string">"Google"</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>    }
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>    @Test
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testURI() {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      doTest(<span class="jxr_string">"google.com"</span>, <span class="jxr_string">"http://google.com"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      doTest(<span class="jxr_string">"123.com"</span>, <span class="jxr_string">"http://123.com"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      doTest(<span class="jxr_string">"http://google.com"</span>, <span class="jxr_string">"http://google.com"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      doTest(<span class="jxr_string">"https://google.com"</span>, <span class="jxr_string">"https://google.com"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      doTest(<span class="jxr_string">"google.com:443"</span>, <span class="jxr_string">"http://google.com:443"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      doTest(<span class="jxr_string">"https://www.google.com/calendar/hosted/google.com/embed?mode=AGENDA&amp;force_login=true&amp;src=google.com_726f6f6d5f6265707075@resource.calendar.google.com"</span>,
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>             <span class="jxr_string">"https://www.google.com/calendar/hosted/google.com/embed?mode=AGENDA&amp;force_login=true&amp;src=google.com_726f6f6d5f6265707075@resource.calendar.google.com"</span>,
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>             <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      doTest(<span class="jxr_string">"otpauth://remoteaccess?devaddr=00%a1b2%c3d4&amp;devname=foo&amp;key=bar"</span>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>             <span class="jxr_string">"otpauth://remoteaccess?devaddr=00%a1b2%c3d4&amp;devname=foo&amp;key=bar"</span>,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>             <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      doTest(<span class="jxr_string">"s3://amazon.com:8123"</span>, <span class="jxr_string">"s3://amazon.com:8123"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      doTest(<span class="jxr_string">"HTTP://R.BEETAGG.COM/?12345"</span>, <span class="jxr_string">"HTTP://R.BEETAGG.COM/?12345"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    @Test
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testNotURI() {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      doTestNotUri(<span class="jxr_string">"google.c"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      doTestNotUri(<span class="jxr_string">".com"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      doTestNotUri(<span class="jxr_string">":80/"</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      doTestNotUri(<span class="jxr_string">"ABC,20.3,AB,AD"</span>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      doTestNotUri(<span class="jxr_string">"http://google.com?q=foo bar"</span>);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      doTestNotUri(<span class="jxr_string">"12756.501"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      doTestNotUri(<span class="jxr_string">"google.50"</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>    @Test
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testURLTO() {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      doTest(<span class="jxr_string">"urlto::bar.com"</span>, <span class="jxr_string">"http://bar.com"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      doTest(<span class="jxr_string">"urlto::http://bar.com"</span>, <span class="jxr_string">"http://bar.com"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      doTest(<span class="jxr_string">"urlto:foo:bar.com"</span>, <span class="jxr_string">"http://bar.com"</span>, <span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>    }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>    @Test
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGarbage() {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      doTestNotUri(<span class="jxr_string">"Da65cV1g^&gt;%^f0bAbPn1CJB6lV7ZY8hs0Sm:DXU0cd]GyEeWBz8]bUHLB"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      doTestNotUri(<span class="jxr_string">"DEA\u0003\u0019M\u0006\u0000\b√•\u0000¬áHO\u0000X$\u0001\u0000\u001Fwfc\u0007!√æ¬ì¬ò"</span> +
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                   <span class="jxr_string">"\u0013\u0013¬æZ{√π√é√ù√ö¬óZ¬ß¬®+y_zb√±k\u00117¬∏\u000E¬Ü√ú\u0000\u0000\u0000\u0000"</span> +
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                   <span class="jxr_string">"\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"</span> +
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>                   <span class="jxr_string">"\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000¬£.ux"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>    }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>    @Test
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIsPossiblyMalicious() {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"http://google.com"</span>, false);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"http://google.com@evil.com"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"http://google.com:@evil.com"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"google.com:@evil.com"</span>, false);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"https://google.com:443"</span>, false);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"https://google.com:443/"</span>, false);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"https://evil@google.com:443"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"http://google.com/foo@bar"</span>, false);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      doTestIsPossiblyMalicious(<span class="jxr_string">"http://google.com/@@"</span>, false);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>    }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>    @Test
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testExotic() {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      doTest(<span class="jxr_string">"bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y"</span>, <span class="jxr_string">"bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      doTest(<span class="jxr_string">"BTCTX:-TC4TO3$ZYZTC5NC83/SYOV+YGUGK:$BSF0P8/STNTKTKS.V84+JSA$LB+EHCG+8A725.2AZ-NAVX3VBV5K4MH7UL2.2M:"</span> +
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>                 <span class="jxr_string">"F*M9HSL*$2P7T*FX.ZT80GWDRV0QZBPQ+O37WDCNZBRM3EQ0S9SZP+3BPYZG02U/LA*89C2U.V1TS.CT1VF3DIN*HN3W-O-"</span> +
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>                <span class="jxr_string">"0ZAKOAB32/.8:J501GJJTTWOA+5/6$MIYBERPZ41NJ6-WSG/*Z48ZH*LSAOEM*IXP81L:$F*W08Z60CR*C*P.JEEVI1F02J07L6+"</span> +
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                <span class="jxr_string">"W4L1G$/IC*$16GK6A+:I1-:LJ:Z-P3NW6Z6ADFB-F2AKE$2DWN23GYCYEWX9S8L+LF$VXEKH7/R48E32PU+A:9H:8O5"</span>,
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>            <span class="jxr_string">"BTCTX:-TC4TO3$ZYZTC5NC83/SYOV+YGUGK:$BSF0P8/STNTKTKS.V84+JSA$LB+EHCG+8A725.2AZ-NAVX3VBV5K4MH7UL2.2M:"</span> +
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>                <span class="jxr_string">"F*M9HSL*$2P7T*FX.ZT80GWDRV0QZBPQ+O37WDCNZBRM3EQ0S9SZP+3BPYZG02U/LA*89C2U.V1TS.CT1VF3DIN*HN3W-O-"</span> +
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>                <span class="jxr_string">"0ZAKOAB32/.8:J501GJJTTWOA+5/6$MIYBERPZ41NJ6-WSG/*Z48ZH*LSAOEM*IXP81L:$F*W08Z60CR*C*P.JEEVI1F02J07L6+"</span> +
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>                <span class="jxr_string">"W4L1G$/IC*$16GK6A+:I1-:LJ:Z-P3NW6Z6ADFB-F2AKE$2DWN23GYCYEWX9S8L+LF$VXEKH7/R48E32PU+A:9H:8O5"</span>,
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>            <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>   }
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doTest(String contents, String uri, String title) {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>     Result fakeResult = <strong class="jxr_keyword">new</strong> Result(contents, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, BarcodeFormat.QR_CODE);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     ParsedResult result = ResultParser.parseResult(fakeResult);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     assertSame(ParsedResultType.URI, result.getType());
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     URIParsedResult uriResult = (URIParsedResult) result;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     assertEquals(uri, uriResult.getURI());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     assertEquals(title, uriResult.getTitle());
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>   }
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doTestNotUri(String text) {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     Result fakeResult = <strong class="jxr_keyword">new</strong> Result(text, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, BarcodeFormat.QR_CODE);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     ParsedResult result = ResultParser.parseResult(fakeResult);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     assertSame(ParsedResultType.TEXT, result.getType());
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     assertEquals(text, result.getDisplayResult());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>   }
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doTestIsPossiblyMalicious(String uri, <strong class="jxr_keyword">boolean</strong> expected) {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     URIParsedResult result = <strong class="jxr_keyword">new</strong> URIParsedResult(uri, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     assertEquals(expected, result.isPossiblyMaliciousURI());
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>   }
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

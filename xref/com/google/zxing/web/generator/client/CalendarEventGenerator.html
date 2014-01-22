@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>CalendarEventGenerator xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/com/google/zxing/web/generator/client/CalendarEventGenerator.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright (C) 2008 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.web.generator.client;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.dom.client.Element;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.event.dom.client.ChangeEvent;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.event.dom.client.ChangeHandler;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.event.dom.client.ClickEvent;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.event.dom.client.ClickHandler;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.event.dom.client.KeyPressHandler;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.event.logical.shared.ValueChangeEvent;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.event.logical.shared.ValueChangeHandler;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.i18n.client.DateTimeFormat;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.user.client.DOM;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.user.client.ui.CheckBox;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.user.client.ui.Grid;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.user.client.ui.HasText;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.user.client.ui.ListBox;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.user.client.ui.TextBox;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.user.client.ui.Widget;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> com.google.gwt.user.datepicker.client.DatePicker;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Date;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * A Generator for calendar events.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * @author Yohann Coppel</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/google/zxing/web/generator/client/CalendarEventGenerator.html">CalendarEventGenerator</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorSource.html">GeneratorSource</a> {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[] FULL_DAY_ONLY_IDS =
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>        { <span class="jxr_string">"fullDayOnlyInfo1"</span>, <span class="jxr_string">"fullDayOnlyInfo2"</span>, <span class="jxr_string">"fullDayOnlyInfo3"</span>, <span class="jxr_string">"fullDayOnlyInfo4"</span> };
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> ONE_HOUR = 60L * 60 * 1000;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">private</strong> Grid table;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TextBox eventName = <strong class="jxr_keyword">new</strong> TextBox();
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> CheckBox fullDay = <strong class="jxr_keyword">new</strong> CheckBox();
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> DatePicker datePicker1 = <strong class="jxr_keyword">new</strong> DatePicker();
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> DatePicker datePicker2 = <strong class="jxr_keyword">new</strong> DatePicker();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TextBox timePicker1 = <strong class="jxr_keyword">new</strong> TextBox();
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TextBox timePicker2 = <strong class="jxr_keyword">new</strong> TextBox();
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> CheckBox summerTime = <strong class="jxr_keyword">new</strong> CheckBox();
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ListBox timeZones = <strong class="jxr_keyword">new</strong> ListBox();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>    <strong class="jxr_keyword">private</strong> Date timePicker1PreviousDate = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TextBox location = <strong class="jxr_keyword">new</strong> TextBox();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TextBox description = <strong class="jxr_keyword">new</strong> TextBox();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../../com/google/zxing/web/generator/client/CalendarEventGenerator.html">CalendarEventGenerator</a>(<strong class="jxr_keyword">final</strong> ChangeHandler handler, KeyPressHandler keyListener) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      eventName.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      eventName.addChangeHandler(handler);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      eventName.addKeyPressHandler(keyListener);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      setDateToTextBox(timePicker1, <strong class="jxr_keyword">new</strong> Date());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>        setDateToTextBox(timePicker2, addMilliseconds(getDateFromTextBox(timePicker1), ONE_HOUR));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>        timePicker1PreviousDate = getDateFromTextBox(timePicker1);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      } <strong class="jxr_keyword">catch</strong> (GeneratorException ge) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(ge);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      buildTimeZoneList();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      timeZones.setSelectedIndex(25);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      timeZones.addKeyPressHandler(keyListener);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      timePicker1.addValueChangeHandler(<strong class="jxr_keyword">new</strong> ValueChangeHandler&lt;String&gt;() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>        @Override
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>        <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onValueChange(ValueChangeEvent&lt;String&gt; valueChangeEvent) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          Date time = timePicker1PreviousDate;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          Date time1;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          Date time2;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>            time1 = getDateFromTextBox(timePicker1);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>            time2 = getDateFromTextBox(timePicker2);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          } <strong class="jxr_keyword">catch</strong> (GeneratorException e) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>            <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">if</strong> (time2.after(time)) {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>            <em class="jxr_comment">// keep the same time difference if the interval is valid.</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>            <strong class="jxr_keyword">long</strong> diff = time2.getTime() - time.getTime();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>            setDateToTextBox(timePicker2, addMilliseconds(time1, diff));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>            <em class="jxr_comment">// otherwise erase the end date and set it to startdate + one hour.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>            setDateToTextBox(timePicker2, addMilliseconds(time1, ONE_HOUR));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          <em class="jxr_comment">// no need to call onChange for timePicker1, since it will be called</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <em class="jxr_comment">// for timePicker2 when changes are made.</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <em class="jxr_comment">// listener.onChange(timePicker1);</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         timePicker1PreviousDate = time1;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>       }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     });
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     timePicker2.addValueChangeHandler(<strong class="jxr_keyword">new</strong> ValueChangeHandler&lt;String&gt;() {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>       @Override
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>       <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onValueChange(ValueChangeEvent&lt;String&gt; valueChangeEvent) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>         <em class="jxr_comment">// Hack to stitch together these old and new APIs</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         ChangeEvent event = <strong class="jxr_keyword">new</strong> ChangeEvent() {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>           @Override
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>           <strong class="jxr_keyword">public</strong> Object getSource() {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <strong class="jxr_keyword">return</strong> timePicker2;
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>           }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>         };
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>         handler.onChange(event);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>       }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     });
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> buildTimeZoneList() {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     <strong class="jxr_keyword">for</strong> (TimeZoneInfo info : TimeZoneList.TIMEZONES) {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>       timeZones.addItem(info.getGMTRelative() + ' ' + info.getAbreviation(),
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>                         String.valueOf(info.getGmtDiff()));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     }
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>   }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>   @Override
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>   <strong class="jxr_keyword">public</strong> String getName() {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">return</strong> <span class="jxr_string">"Calendar event"</span>;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>   }
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>   @Override
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>   <strong class="jxr_keyword">public</strong> Grid getWidget() {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     <strong class="jxr_keyword">if</strong> (table != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>       <strong class="jxr_keyword">return</strong> table;
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     }
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     datePicker1.setValue(<strong class="jxr_keyword">new</strong> Date());
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     datePicker2.setValue(<strong class="jxr_keyword">new</strong> Date());
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     table = <strong class="jxr_keyword">new</strong> Grid(10, 2);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     table.setText(0, 0, <span class="jxr_string">"All day event"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     table.setWidget(0, 1, fullDay);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     table.setText(1, 0, <span class="jxr_string">"Event title"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     table.setWidget(1, 1, eventName);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     table.setText(2, 0, <span class="jxr_string">"Start date"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>     table.setWidget(2, 1, datePicker1);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>     table.setText(3, 0, <span class="jxr_string">"Time"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     table.setWidget(3, 1, timePicker1);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     table.setText(4, 0, <span class="jxr_string">"End date"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     table.setWidget(4, 1, datePicker2);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     table.setText(5, 0, <span class="jxr_string">"Time"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     table.setWidget(5, 1, timePicker2);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>     table.setText(6, 0, <span class="jxr_string">"Time zone"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     table.setWidget(6, 1, timeZones);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>     table.setText(7, 0, <span class="jxr_string">"Daylight savings"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     table.setWidget(7, 1, summerTime);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     table.setText(8, 0, <span class="jxr_string">"Location"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     table.setWidget(8, 1, location);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>     table.setText(9, 0, <span class="jxr_string">"Description"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     table.setWidget(9, 1, description);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     table.getRowFormatter().getElement(3).setId(FULL_DAY_ONLY_IDS[0]);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     table.getRowFormatter().getElement(5).setId(FULL_DAY_ONLY_IDS[1]);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>     table.getRowFormatter().getElement(6).setId(FULL_DAY_ONLY_IDS[2]);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>     table.getRowFormatter().getElement(7).setId(FULL_DAY_ONLY_IDS[3]);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     fullDay.addClickHandler(<strong class="jxr_keyword">new</strong> ClickHandler() {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>       @Override
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>       <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onClick(ClickEvent event) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         CheckBox cb = (CheckBox) event.getSource();
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>         <strong class="jxr_keyword">for</strong> (String s : FULL_DAY_ONLY_IDS) {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>           Element element = DOM.getElementById(s);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>           String style = cb.getValue() ? <span class="jxr_string">"none"</span> : <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>           element.getStyle().setProperty(<span class="jxr_string">"display"</span>, style);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         }
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>       }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>     });
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <strong class="jxr_keyword">return</strong> table;
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>   }
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>   @Override
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>   <strong class="jxr_keyword">public</strong> String getText() <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     String eventName = getEventNameField();
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     String dates = getDateTimeFields();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>     String location = getLocationField();
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>     String description = getDescriptionField();
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     StringBuilder output = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     output.append(<span class="jxr_string">"BEGIN:VEVENT\r\n"</span>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>     output.append(eventName);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     output.append(dates);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>     output.append(location);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     output.append(description);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>     output.append(<span class="jxr_string">"END:VEVENT\r\n"</span>);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>     <strong class="jxr_keyword">return</strong> output.toString();
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>   }
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>   <strong class="jxr_keyword">private</strong> String getEventNameField() <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     String inputName = eventName.getText();
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     <strong class="jxr_keyword">if</strong> (inputName.isEmpty()) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(<span class="jxr_string">"Event name must be at least 1 character."</span>);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     }
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">if</strong> (inputName.contains(<span class="jxr_string">"\n"</span>)) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(<span class="jxr_string">"Event name should not contain &#92;&#92;n characters."</span>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>     }
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>     <strong class="jxr_keyword">return</strong> <span class="jxr_string">"SUMMARY:"</span> + inputName + <span class="jxr_string">"\r\n"</span>;
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>   }
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>   <strong class="jxr_keyword">private</strong> String getDateTimeFields() <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>     <strong class="jxr_keyword">if</strong> (fullDay.getValue()) {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>       <strong class="jxr_keyword">return</strong> getFullDayDateFields();
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>     <strong class="jxr_keyword">return</strong> getDateTimeValues();
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>   }
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>   <strong class="jxr_keyword">private</strong> String getLocationField() <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>     String locationString = location.getText();
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>     <strong class="jxr_keyword">if</strong> (locationString.isEmpty()) {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>       <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>     }
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>     <strong class="jxr_keyword">if</strong> (locationString.contains(<span class="jxr_string">"\n"</span>)) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>           <span class="jxr_string">"Location should not contain &#92;&#92;n characters."</span>);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>     }
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <strong class="jxr_keyword">return</strong> <span class="jxr_string">"LOCATION:"</span> + locationString + <span class="jxr_string">"\r\n"</span>;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>   }
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>   <strong class="jxr_keyword">private</strong> String getDescriptionField() <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>     String descriptionString = description.getText();
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>     <strong class="jxr_keyword">if</strong> (descriptionString.isEmpty()) {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>       <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     }
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>     <strong class="jxr_keyword">if</strong> (descriptionString.contains(<span class="jxr_string">"\n"</span>)) {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>           <span class="jxr_string">"Description should not contain &#92;&#92;n characters."</span>);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     }
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>     <strong class="jxr_keyword">return</strong> <span class="jxr_string">"DESCRIPTION:"</span> + descriptionString + <span class="jxr_string">"\r\n"</span>;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>   }
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>   <strong class="jxr_keyword">private</strong> String getFullDayDateFields() <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     Date date1 = datePicker1.getValue();
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     Date date2 = datePicker2.getValue();
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>     <strong class="jxr_keyword">if</strong> (date1 == <strong class="jxr_keyword">null</strong> || date2 == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(<span class="jxr_string">"Start and end dates must be set."</span>);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     }
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>     <strong class="jxr_keyword">if</strong> (date1.after(date2)) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(<span class="jxr_string">"End date cannot be before start date."</span>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     }
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     <em class="jxr_comment">// Specify end date as +1 day since it's exclusive</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     Date date2PlusDay = <strong class="jxr_keyword">new</strong> Date(date2.getTime() + 24 * 60 * 60 * 1000);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>     DateTimeFormat isoFormatter = DateTimeFormat.getFormat(<span class="jxr_string">"yyyyMMdd"</span>);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>     StringBuilder output = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>     output.append(<span class="jxr_string">"DTSTART;VALUE=DATE:"</span>);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>     output.append(isoFormatter.format(date1));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>     output.append(<span class="jxr_string">"\r\n"</span>);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>     output.append(<span class="jxr_string">"DTEND;VALUE=DATE:"</span>);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>     output.append(isoFormatter.format(date2PlusDay));
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>     output.append(<span class="jxr_string">"\r\n"</span>);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <strong class="jxr_keyword">return</strong> output.toString();
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>   }
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>   <strong class="jxr_keyword">private</strong> String getDateTimeValues() <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     Date date1 = datePicker1.getValue();
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     Date date2 = datePicker2.getValue();
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     Date time1 = getDateFromTextBox(timePicker1);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     Date time2 = getDateFromTextBox(timePicker2);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     <strong class="jxr_keyword">if</strong> (date1 == <strong class="jxr_keyword">null</strong> || date2 == <strong class="jxr_keyword">null</strong> || time1 == <strong class="jxr_keyword">null</strong> || time2 == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(<span class="jxr_string">"Start and end dates/times must be set."</span>);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>     }
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     String timezoneDelta = timeZones.getValue(timeZones.getSelectedIndex());
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>     <strong class="jxr_keyword">long</strong> diffTimeZone = Long.parseLong(timezoneDelta);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     <strong class="jxr_keyword">if</strong> (summerTime.getValue()) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>       diffTimeZone += ONE_HOUR;
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     }
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>     Date dateTime1 = addMilliseconds(mergeDateAndTime(date1, time1), -diffTimeZone);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>     Date dateTime2 = addMilliseconds(mergeDateAndTime(date2, time2), -diffTimeZone);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>     <strong class="jxr_keyword">if</strong> (dateTime1.after(dateTime2)) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(<span class="jxr_string">"Ending date/time cannot be before starting date/time."</span>);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>     }
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>     DateTimeFormat isoFormatter = DateTimeFormat.getFormat(<span class="jxr_string">"yyyyMMdd'T'HHmmss'Z'"</span>);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>     StringBuilder output = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>     output.append(<span class="jxr_string">"DTSTART:"</span>);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     output.append(isoFormatter.format(dateTime1));
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     output.append(<span class="jxr_string">"\r\n"</span>);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     output.append(<span class="jxr_string">"DTEND:"</span>);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     output.append(isoFormatter.format(dateTime2));
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     output.append(<span class="jxr_string">"\r\n"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <strong class="jxr_keyword">return</strong> output.toString();
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>   }
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Date mergeDateAndTime(Date date, Date time) {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>     <em class="jxr_comment">// Is that the only ugly way to do with GWT ? given that we don't</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>     <em class="jxr_comment">// have java.util.Calendar for instance</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     DateTimeFormat extractDate = DateTimeFormat.getFormat(<span class="jxr_string">"yyyyMMdd"</span>);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>     DateTimeFormat extractTime = DateTimeFormat.getFormat(<span class="jxr_string">"HHmm"</span>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>     DateTimeFormat merger = DateTimeFormat.getFormat(<span class="jxr_string">"yyyyMMddHHmmss"</span>);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>     String d = extractDate.format(date);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>     String t = extractTime.format(time) + <span class="jxr_string">"00"</span>;
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <strong class="jxr_keyword">return</strong> merger.parse(d + t);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>   }
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>   @Override
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(Widget widget) <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>     <strong class="jxr_keyword">if</strong> (widget == eventName) {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>       getEventNameField();
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (widget == datePicker1 || widget == timePicker1 || widget == datePicker2 || widget == timePicker2) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>       getDateTimeFields();
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     }
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>   }
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Date addMilliseconds(Date time1, <strong class="jxr_keyword">long</strong> milliseconds) {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Date(time1.getTime() + milliseconds);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>   }
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Date getDateFromTextBox(HasText textBox) <strong class="jxr_keyword">throws</strong> GeneratorException {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>     DateTimeFormat extractTime = DateTimeFormat.getFormat(<span class="jxr_string">"HHmm"</span>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>       <strong class="jxr_keyword">return</strong> extractTime.parseStrict(textBox.getText());
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException iae) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/web/generator/client/GeneratorException.html">GeneratorException</a>(<span class="jxr_string">"Invalid time"</span>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>     }
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>   }
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setDateToTextBox(HasText textBox, Date date) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>     DateTimeFormat extractTime = DateTimeFormat.getFormat(<span class="jxr_string">"HHmm"</span>);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>     textBox.setText(extractTime.format(date));
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>   }
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>   @Override
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setFocus() {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     eventName.setFocus(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>   }
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>
