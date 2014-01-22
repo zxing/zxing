@@ -15,7 +15,8 @@
  */
 
 package com.google.zxing.oned
-{
+{
+
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
