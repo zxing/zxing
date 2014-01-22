@@ -66,7 +66,8 @@ There are also additional modules which are contributed and/or intermittently ma
 
 * [Online Decoder](http://zxing.org/w/decode.jspx)
 * [QR Code Generator](http://zxing.appspot.com/generator)
-* [Javadoc](http://zxing.org/w/docs/javadoc/index.html)
+* [Javadoc](http://zxing.github.io/zxing/apidocs/)
+* [Documentation Site](http://zxing.github.io/zxing/)
 * [Google+](https://plus.google.com/u/0/b/105889184633382354358/105889184633382354358/posts)
 
 ## Contacting
@@ -77,5 +78,7 @@ on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
 ## Etcetera
 
 [![Build Status](https://travis-ci.org/zxing/zxing.png?branch=master)](https://travis-ci.org/zxing/zxing)
+
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
+
 Optimized with [![JProfiler](http://www.ej-technologies.com/images/banners/jprofiler_small.png)](http://www.ej-technologies.com/products/jprofiler/overview.html)

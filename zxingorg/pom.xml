@@ -62,49 +62,10 @@
   <build>
     <plugins>
       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-dependency-plugin</artifactId>
-         <executions>
-           <execution>
-             <id>unpack</id>
-             <phase>generate-resources</phase>
-             <goals>
-               <goal>unpack</goal>
-             </goals>
-             <configuration>
-               <artifactItems>
-                 <artifactItem>
-                   <groupId>com.google.zxing</groupId>
-                   <artifactId>core</artifactId>
-                   <version>${project.version}</version>
-                   <type>javadoc</type>                   
-                 </artifactItem>
-               </artifactItems>
-               <outputDirectory>src/web/w/docs/javadoc</outputDirectory>
-               <overWriteIfNewer>true</overWriteIfNewer>
-             </configuration>
-           </execution>
-         </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <warSourceDirectory>src/web</warSourceDirectory>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>src/web/w</directory>
-              <includes>
-                <include>docs/**</include>
-              </includes>
-            </fileset>
-          </filesets>
         </configuration>
       </plugin>
     </plugins>
