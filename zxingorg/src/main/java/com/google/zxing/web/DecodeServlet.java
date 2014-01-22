@@ -57,10 +57,10 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
@@ -114,14 +114,18 @@ public final class DecodeServlet extends HttpServlet {
     FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(context);
     diskFileItemFactory = new DiskFileItemFactory(1 << 16, repository);
     diskFileItemFactory.setFileCleaningTracker(fileCleaningTracker);
-    
-    try {
-      blockedURLSubstrings =
-          Resources.readLines(Resources.getResource("/private/uri-block-substrings.txt"), StandardCharsets.UTF_8);
-    } catch (IOException ioe) {
-      throw new ServletException(ioe);
+
+    URL blockURL = context.getClassLoader().getResource("/private/uri-block-substrings.txt");
+    if (blockURL == null) {
+      blockedURLSubstrings = Collections.emptyList();
+    } else {
+      try {
+        blockedURLSubstrings = Resources.readLines(blockURL, StandardCharsets.UTF_8);
+      } catch (IOException ioe) {
+        throw new ServletException(ioe);
+      }
+      log.info("Blocking URIs containing: " + blockedURLSubstrings);
     }
-    log.info("Blocking URIs containing: " + blockedURLSubstrings);
   }
 
   @Override
