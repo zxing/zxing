@@ -93,7 +93,6 @@
       }
     </jsp:scriptlet>
     </div>
-    <jsp:include page="analytics.jspx"/>
   </body>
 </html>
 </jsp:root>

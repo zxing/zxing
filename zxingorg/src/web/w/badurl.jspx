@@ -29,7 +29,6 @@
     <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Bad URL</h1></div>
     <p>You didn't specify a URL, or the URL was not valid, or did not return an image. Go "Back" in your browser and try again.</p>
     </div>
-    <jsp:include page="analytics.jspx"/>
   </body>
 </html>
 </jsp:root>

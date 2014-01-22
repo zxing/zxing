@@ -32,7 +32,6 @@
       with the barcode contents. Go "Back" in your browser and try another image.
     </p>
     </div>
-    <jsp:include page="analytics.jspx"/>
   </body>
 </html>
 </jsp:root>

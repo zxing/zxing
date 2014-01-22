@@ -29,7 +29,6 @@
     <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Bad Image</h1></div>
     <p>The image you uploaded could not be decoded, or was too large. Go "Back" in your browser and try another image.</p>
     </div>
-    <jsp:include page="analytics.jspx"/>
   </body>
 </html>
 </jsp:root>

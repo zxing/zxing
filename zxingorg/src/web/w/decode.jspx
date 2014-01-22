@@ -79,7 +79,6 @@
         to access the same decoding as a mobile application.</p>
       <p style="font-style:italic">Copyright 2008 and onwards ZXing authors</p>
     </div>
-    <jsp:include page="analytics.jspx"/>
   </body>
 </html>
 </jsp:root>

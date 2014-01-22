@@ -31,7 +31,6 @@
     <p>No barcode was found in this image. Either it did not contain a barcode, or did not contain one in a
       supported format, or the software was simply unable to find it. Go "Back" in your browser and try another image.</p>
     </div>
-    <jsp:include page="analytics.jspx"/>
   </body>
 </html>
 </jsp:root>
