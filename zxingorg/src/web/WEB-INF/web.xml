@@ -60,4 +60,8 @@
     <welcome-file>index.jspx</welcome-file>
   </welcome-file-list>
 
+  <error-page>
+    <location>/error.jspx</location>
+  </error-page>
+
 </web-app>
