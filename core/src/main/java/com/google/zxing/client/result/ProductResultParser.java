@@ -43,7 +43,7 @@ public final class ProductResultParser extends ResultParser {
 
     String normalizedProductID;
     // Expand UPC-E for purposes of searching
-    if (format == BarcodeFormat.UPC_E) {
+    if (format == BarcodeFormat.UPC_E && rawText.length() == 8) {
       normalizedProductID = UPCEReader.convertUPCEtoUPCA(rawText);
     } else {
       normalizedProductID = rawText;
