@@ -62,8 +62,7 @@ public abstract class ResultParser {
       new VINResultParser(),
   };
 
-  private static final Pattern DIGITS = Pattern.compile("\\d*");
-  private static final Pattern ALPHANUM = Pattern.compile("[a-zA-Z0-9]*");
+  private static final Pattern DIGITS = Pattern.compile("\\d+");
   private static final Pattern AMPERSAND = Pattern.compile("&");
   private static final Pattern EQUALS = Pattern.compile("=");
   private static final String BYTE_ORDER_MARK = "\ufeff";
@@ -148,23 +147,15 @@ public abstract class ResultParser {
   }
 
   protected static boolean isStringOfDigits(CharSequence value, int length) {
-    return value != null && length == value.length() && DIGITS.matcher(value).matches();
+    return value != null && length > 0 && length == value.length() && DIGITS.matcher(value).matches();
   }
 
   protected static boolean isSubstringOfDigits(CharSequence value, int offset, int length) {
-    if (value == null) {
+    if (value == null || length <= 0) {
       return false;
     }
     int max = offset + length;
     return value.length() >= max && DIGITS.matcher(value.subSequence(offset, max)).matches();
-  }
-
-  protected static boolean isSubstringOfAlphaNumeric(CharSequence value, int offset, int length) {
-    if (value == null) {
-      return false;
-    }
-    int max = offset + length;
-    return value.length() >= max && ALPHANUM.matcher(value.subSequence(offset, max)).matches();
   }
 
   static Map<String,String> parseNameValuePairs(String uri) {

@@ -80,19 +80,12 @@ public final class URIParsedResult extends ParsedResult {
   }
 
   private static boolean isColonFollowedByPortNumber(String uri, int protocolEnd) {
-    int nextSlash = uri.indexOf('/', protocolEnd + 1);
+    int start = protocolEnd + 1;
+    int nextSlash = uri.indexOf('/', start);
     if (nextSlash < 0) {
       nextSlash = uri.length();
     }
-    if (nextSlash <= protocolEnd + 1) {
-      return false;
-    }
-    for (int x = protocolEnd + 1; x < nextSlash; x++) {
-      if (uri.charAt(x) < '0' || uri.charAt(x) > '9') {
-        return false;
-      }
-    }
-    return true;
+    return ResultParser.isSubstringOfDigits(uri, start, nextSlash - start);
   }
 
 
