@@ -50,6 +50,7 @@ final class CameraConfigurationManager {
   //private static final float MAX_EXPOSURE_COMPENSATION = 1.5f;
   //private static final float MIN_EXPOSURE_COMPENSATION = 0.0f;
   private static final double MAX_ASPECT_DISTORTION = 0.15;
+  private static final int MIN_FPS = 5;
 
   private final Context context;
   private Point screenResolution;
@@ -91,17 +92,8 @@ final class CameraConfigurationManager {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
     initializeTorch(parameters, prefs, safeMode);
-    
-    // Required for Glass compatibility; also improves battery/CPU performance a tad
-    List<int[]> supportedPreviewFpsRanges = parameters.getSupportedPreviewFpsRange();
-    if (supportedPreviewFpsRanges != null && !supportedPreviewFpsRanges.isEmpty()) {
-      int[] currentFpsRange = new int[2];
-      parameters.getPreviewFpsRange(currentFpsRange);
-      int[] minimumPreviewFpsRange = supportedPreviewFpsRanges.get(0);
-      if (!Arrays.equals(currentFpsRange, minimumPreviewFpsRange)) {
-        parameters.setPreviewFpsRange(minimumPreviewFpsRange[0], minimumPreviewFpsRange[1]);
-      }
-    }
+
+    setBestPreviewFPS(parameters);
 
     String focusMode = null;
     if (prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true)) {
@@ -216,6 +208,32 @@ final class CameraConfigurationManager {
       }
     }
      */
+  }
+
+  private static void setBestPreviewFPS(Camera.Parameters parameters) {
+    // Required for Glass compatibility; also improves battery/CPU performance a tad
+    List<int[]> supportedPreviewFpsRanges = parameters.getSupportedPreviewFpsRange();
+    Log.i(TAG, "Supported FPS ranges: " + supportedPreviewFpsRanges);
+    if (supportedPreviewFpsRanges != null && !supportedPreviewFpsRanges.isEmpty()) {
+      int[] minimumSuitableFpsRange = null;
+      for (int[] fpsRange : supportedPreviewFpsRanges) {
+        if (fpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX] >= MIN_FPS * 1000) {
+          minimumSuitableFpsRange = fpsRange;
+          break;
+        }
+      }
+      if (minimumSuitableFpsRange == null) {
+        Log.i(TAG, "No suitable FPS range?");
+      } else {
+        int[] currentFpsRange = new int[2];
+        parameters.getPreviewFpsRange(currentFpsRange);
+        if (!Arrays.equals(currentFpsRange, minimumSuitableFpsRange)) {
+          Log.i(TAG, "Setting FPS range to " + Arrays.toString(minimumSuitableFpsRange));
+          parameters.setPreviewFpsRange(minimumSuitableFpsRange[Camera.Parameters.PREVIEW_FPS_MIN_INDEX],
+                                        minimumSuitableFpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
+        }
+      }
+    }
   }
 
   private Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
