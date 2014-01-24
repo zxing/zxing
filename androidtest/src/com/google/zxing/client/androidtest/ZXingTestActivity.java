@@ -31,6 +31,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -57,6 +60,7 @@ public final class ZXingTestActivity extends Activity {
     findViewById(R.id.scan_product).setOnClickListener(scanProduct);
     findViewById(R.id.scan_qr_code).setOnClickListener(scanQRCode);
     findViewById(R.id.scan_anything).setOnClickListener(scanAnything);
+    findViewById(R.id.bulk_scan_anything).setOnClickListener(bulkScanAnything);
     findViewById(R.id.search_book_contents).setOnClickListener(searchBookContents);
     findViewById(R.id.encode_url).setOnClickListener(encodeURL);
     findViewById(R.id.encode_email).setOnClickListener(encodeEmail);
@@ -103,14 +107,25 @@ public final class ZXingTestActivity extends Activity {
   
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-    if (result != null) {
-      String contents = result.getContents();
-      if (contents != null) {
-        showDialog(R.string.result_succeeded, result.toString());
-      } else {
-        showDialog(R.string.result_failed, getString(R.string.result_failed_why));
+    if (requestCode == IntentIntegrator.REQUEST_CODE) {
+      IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+      if (result != null) {
+        String contents = result.getContents();
+        if (contents != null) {
+          showDialog(R.string.result_succeeded, result.toString());
+        } else {
+          showDialog(R.string.result_failed, getString(R.string.result_failed_why));
+        }
       }
+    } else if (requestCode == IntentIntegrator.BULK_SCAN_REQUEST_CODE) {
+    	ArrayList<IntentResult> result = IntentIntegrator.parseActivityResultBulkScan(requestCode, resultCode, intent);
+        if (result != null) {
+          if (result.size() > 0) {
+            showDialog(R.string.result_succeeded, result.toString());
+          } else {
+            showDialog(R.string.result_failed, getString(R.string.result_failed_why));
+          }
+        }
     }
   }
   
@@ -162,6 +177,19 @@ public final class ZXingTestActivity extends Activity {
     public void onClick(View v) {
       IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
       integrator.initiateScan();
+    }
+  };
+  
+  private final View.OnClickListener bulkScanAnything = new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+    	IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
+        integrator.addExtra("RESULT_DISPLAY_DURATION_MS", 2000L);
+        integrator.addExtra("PROMPT_MESSAGE", "Bulk scanning is in progress with current limit of 5 scans.");
+        integrator.addExtra("SCAN_BULK_MODE", true);
+        integrator.addExtra("SCAN_BULK_MODE_DELAY_MS", 2000L);
+        integrator.addExtra("SCAN_BULK_MODE_LIMIT", 5);
+        integrator.initiateBulkScan();
     }
   };
 

@@ -16,12 +16,16 @@
 
 package com.google.zxing.integration.android;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -109,6 +113,7 @@ import android.util.Log;
 public class IntentIntegrator {
 
   public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
+  public static final int BULK_SCAN_REQUEST_CODE = 0x0000c1de; 
   private static final String TAG = IntentIntegrator.class.getSimpleName();
 
   public static final String DEFAULT_TITLE = "Install Barcode Scanner?";
@@ -233,6 +238,9 @@ public class IntentIntegrator {
   public final AlertDialog initiateScan() {
     return initiateScan(ALL_CODE_TYPES);
   }
+  public final AlertDialog initiateBulkScan() {
+    return initiateScan(ALL_CODE_TYPES, BULK_SCAN_REQUEST_CODE);
+  }
 
   /**
    * Initiates a scan only for a certain set of barcode types, given as strings corresponding
@@ -242,7 +250,11 @@ public class IntentIntegrator {
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
    *   if a prompt was needed, or null otherwise
    */
-  public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats) {
+  public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats){
+	  return initiateScan(desiredBarcodeFormats, REQUEST_CODE);
+  }
+  
+  public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats, int requestCode) {
     Intent intentScan = new Intent(BS_PACKAGE + ".SCAN");
     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
 
@@ -267,7 +279,7 @@ public class IntentIntegrator {
     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     attachMoreExtras(intentScan);
-    startActivityForResult(intentScan, REQUEST_CODE);
+    startActivityForResult(intentScan, requestCode);
     return null;
   }
 
@@ -368,6 +380,31 @@ public class IntentIntegrator {
     return null;
   }
 
+  public static ArrayList<IntentResult> parseActivityResultBulkScan(int requestCode, int resultCode, Intent intent) {
+    if (requestCode == BULK_SCAN_REQUEST_CODE) {
+      ArrayList<IntentResult> resultArray = new ArrayList<IntentResult>();
+      if (resultCode == Activity.RESULT_OK) {
+        ArrayList<Result> bulkScanResult = (ArrayList<Result>) intent.getExtras().get("BULK_SCAN_RESULT");
+        for (Result rawResult : bulkScanResult) {
+          Integer orientationInt = null;
+          String ecLevel = null;
+          Map<ResultMetadataType,?> metadata = rawResult.getResultMetadata();
+          if (metadata != null) {
+            Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
+            if (orientation != null) {
+              int intentOrientation = orientation.intValue();
+              orientationInt = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
+            }
+            ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
+          }
+          resultArray.add(new IntentResult(rawResult.toString(), rawResult.getBarcodeFormat().toString(), rawResult.getRawBytes(), orientationInt, ecLevel));
+        }
+      }
+      return resultArray;
+    }
+    return null;
+  }
+  
 
   /**
    * Defaults to type "TEXT_TYPE".
@@ -404,7 +441,7 @@ public class IntentIntegrator {
     return null;
   }
   
-  private static List<String> list(String... values) {
+  public static List<String> list(String... values) {
     return Collections.unmodifiableList(Arrays.asList(values));
   }
 

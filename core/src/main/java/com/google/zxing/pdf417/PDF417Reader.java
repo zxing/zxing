@@ -74,14 +74,16 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
   public Result[] decodeMultiple(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException {
     try {
       return decode(image, hints, true);
-    } catch (FormatException | ChecksumException ignored) {
+    } catch (FormatException ignored) {
       throw NotFoundException.getNotFoundInstance();
+    } catch (ChecksumException ignored) {
+        throw NotFoundException.getNotFoundInstance();
     }
   }
 
   private static Result[] decode(BinaryBitmap image, Map<DecodeHintType, ?> hints, boolean multiple) 
       throws NotFoundException, FormatException, ChecksumException {
-    List<Result> results = new ArrayList<>();
+    List<Result> results = new ArrayList();
     PDF417DetectorResult detectorResult = Detector.detect(image, hints, multiple);
     for (ResultPoint[] points : detectorResult.getPoints()) {
       DecoderResult decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4], points[5],

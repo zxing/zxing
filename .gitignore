@@ -2,3 +2,12 @@ target
 private
 .idea
 *.iml
+/core-lib
+/integration-lib
+
+/android/.classpath
+/android/.project
+/android/.settings/org.eclipse.jdt.core.prefs
+/androidtest/.classpath
+/androidtest/.project
+/androidtest/.settings/org.eclipse.jdt.core.prefs

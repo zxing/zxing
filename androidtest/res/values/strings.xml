@@ -36,6 +36,7 @@
   <string name="result_failed_why">"The user gave up and pressed Back"</string>
   <string name="result_succeeded">Found barcode</string>
   <string name="scan_anything">Scan anything</string>
+  <string name="bulk_scan_anything">Bulk Scan anything</string>
   <string name="scan_product">Scan product</string>
   <string name="scan_qr_code">Scan QR Code</string>
   <string name="search_book_contents">Search Book Contents</string>

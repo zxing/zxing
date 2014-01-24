@@ -45,6 +45,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/scan_anything"/>
+    <Button android:id="@+id/bulk_scan_anything"
+            style="@android:style/Widget.Holo.Button.Borderless"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bulk_scan_anything"/>
     <Button android:id="@+id/search_book_contents"
             style="@android:style/Widget.Holo.Button.Borderless"
             android:layout_width="fill_parent"
