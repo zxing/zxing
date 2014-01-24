@@ -48,7 +48,9 @@ public final class PreferencesActivity extends Activity {
   public static final String KEY_SEARCH_COUNTRY = "preferences_search_country";
 
   public static final String KEY_DISABLE_CONTINUOUS_FOCUS = "preferences_disable_continuous_focus";
-  //public static final String KEY_DISABLE_EXPOSURE = "preferences_disable_exposure";
+  public static final String KEY_DISABLE_EXPOSURE = "preferences_disable_exposure";
+  public static final String KEY_DISABLE_METERING = "preferences_disable_metering";
+  public static final String KEY_DISABLE_BARCODE_SCENE_MODE = "preferences_disable_barcode_scene_mode";
 
   @Override
   protected void onCreate(Bundle icicle) {

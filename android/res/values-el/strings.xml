@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
   <string name="preferences_device_bug_workarounds_title">Λύσεις Bug συσκευής</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Δεν λειτουργία σκηνής barcode</string>
   <string name="preferences_disable_continuous_focus_summary">Χρησιμοποιείτε μόνο τυπική λειτουργία εστίασης</string>
   <string name="preferences_disable_continuous_focus_title">Δεν συνεχής εστίαση</string>
   <string name="preferences_disable_exposure_title">Δεν έκθεση</string>
+  <string name="preferences_disable_metering_title">Δεν μέτρησης</string>
   <string name="preferences_front_light_auto">Αυτόματο</string>
   <string name="preferences_front_light_off">Αδρανής</string>
   <string name="preferences_front_light_on">Ενεργός</string>

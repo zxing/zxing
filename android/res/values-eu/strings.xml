@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Kodeak</string>
   <string name="preferences_device_bug_workarounds_title">Gailuak Bug konponbidea</string>
+  <string name="preferences_disable_barcode_scene_mode_title">No barra eszena modua</string>
   <string name="preferences_disable_continuous_focus_summary">Erabili estandarrean soilik fokuaren modua</string>
   <string name="preferences_disable_continuous_focus_title">Etengabeko foku No</string>
   <string name="preferences_disable_exposure_title">Esposizio No</string>
+  <string name="preferences_disable_metering_title">Neurtzeko No</string>
   <string name="preferences_front_light_auto">Automatikoa</string>
   <string name="preferences_front_light_off">Ezgaitutako</string>
   <string name="preferences_front_light_on">Aktiboak</string>

@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR 코드를 읽기</string>
   <string name="preferences_device_bug_workarounds_title">장치 버그 해결</string>
+  <string name="preferences_disable_barcode_scene_mode_title">어떤 바코드 장면 모드 없음</string>
   <string name="preferences_disable_continuous_focus_summary">전용 표준 초점 모드를 사용</string>
   <string name="preferences_disable_continuous_focus_title">아무 연속 초점 없음</string>
   <string name="preferences_disable_exposure_title">더 노출하지</string>
+  <string name="preferences_disable_metering_title">더 측광 없습니다</string>
   <string name="preferences_front_light_auto">자동적 인</string>
   <string name="preferences_front_light_off">비활성</string>
   <string name="preferences_front_light_on">활동적인</string>

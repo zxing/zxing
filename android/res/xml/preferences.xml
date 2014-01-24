@@ -106,12 +106,18 @@
         android:defaultValue="true"
         android:title="@string/preferences_disable_continuous_focus_title"
         android:summary="@string/preferences_disable_continuous_focus_summary"/>
-    <!--
     <CheckBoxPreference
         android:key="preferences_disable_exposure"
         android:defaultValue="false"
         android:title="@string/preferences_disable_exposure_title"/>
-     -->
+    <CheckBoxPreference
+        android:key="preferences_disable_metering"
+        android:defaultValue="true"
+        android:title="@string/preferences_disable_metering_title"/>
+    <CheckBoxPreference
+        android:key="preferences_disable_barcode_scene_mode"
+        android:defaultValue="true"
+        android:title="@string/preferences_disable_barcode_scene_mode_title"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_try_bsplus">
     <Preference android:title="@string/preferences_try_bsplus"

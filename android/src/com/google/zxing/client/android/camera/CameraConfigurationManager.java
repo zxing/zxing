@@ -26,6 +26,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.camera.metering.MeteringInterface;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,8 +48,8 @@ final class CameraConfigurationManager {
   // below will still select the default (presumably 320x240) size for these. This prevents
   // accidental selection of very low resolution on some devices.
   private static final int MIN_PREVIEW_PIXELS = 480 * 320; // normal screen
-  //private static final float MAX_EXPOSURE_COMPENSATION = 1.5f;
-  //private static final float MIN_EXPOSURE_COMPENSATION = 0.0f;
+  private static final float MAX_EXPOSURE_COMPENSATION = 1.5f;
+  private static final float MIN_EXPOSURE_COMPENSATION = 0.0f;
   private static final double MAX_ASPECT_DISTORTION = 0.15;
   private static final int MIN_FPS = 5;
 
@@ -117,12 +118,35 @@ final class CameraConfigurationManager {
       parameters.setFocusMode(focusMode);
     }
 
-    if (prefs.getBoolean(PreferencesActivity.KEY_INVERT_SCAN, false)) {
-      String colorMode = findSettableValue(parameters.getSupportedColorEffects(),
-                                           Camera.Parameters.EFFECT_NEGATIVE);
-      if (colorMode != null) {
-        parameters.setColorEffect(colorMode);
+    if (!safeMode) {
+      if (prefs.getBoolean(PreferencesActivity.KEY_INVERT_SCAN, false)) {
+        String colorMode = findSettableValue(parameters.getSupportedColorEffects(),
+                                             Camera.Parameters.EFFECT_NEGATIVE);
+        if (colorMode != null) {
+          parameters.setColorEffect(colorMode);
+        }
       }
+
+      if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_BARCODE_SCENE_MODE, false)) {
+        String sceneMode = findSettableValue(parameters.getSupportedSceneModes(),
+                                             Camera.Parameters.SCENE_MODE_BARCODE);
+        if (sceneMode != null) {
+          parameters.setSceneMode(sceneMode);
+        }
+      }
+
+      if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_METERING, false)) {
+        if (parameters.isVideoStabilizationSupported()) {
+          Log.i(TAG, "Enabling video stabilization...");
+          parameters.setVideoStabilization(true);
+        } else {
+          Log.i(TAG, "This device does not support video stabilization");
+        }
+
+        MeteringInterface.setFocusArea(parameters);
+        MeteringInterface.setMetering(parameters);
+      }
+
     }
 
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
@@ -184,7 +208,6 @@ final class CameraConfigurationManager {
       parameters.setFlashMode(flashMode);
     }
 
-    /*
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, false)) {
       if (!safeMode) {
@@ -207,7 +230,6 @@ final class CameraConfigurationManager {
         }
       }
     }
-     */
   }
 
   private static void setBestPreviewFPS(Camera.Parameters parameters) {
@@ -290,7 +312,7 @@ final class CameraConfigurationManager {
       double aspectRatio = (double) maybeFlippedWidth / (double) maybeFlippedHeight;
       double distortion = Math.abs(aspectRatio - screenAspectRatio);
       if (distortion > MAX_ASPECT_DISTORTION) {
-        it.remove(); 
+        it.remove();
         continue;
       }
 

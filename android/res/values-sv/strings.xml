@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Code</string>
   <string name="preferences_device_bug_workarounds_title">Bugglösningar för enhet</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Inget scenläge för streckkod</string>
   <string name="preferences_disable_continuous_focus_summary">Använd endast standardfokusläge</string>
   <string name="preferences_disable_continuous_focus_title">Ingen kontinuerlig fokus</string>
   <string name="preferences_disable_exposure_title">Ingen exponering</string>
+  <string name="preferences_disable_metering_title">Ingen mätning</string>
   <string name="preferences_front_light_auto">Automatisk</string>
   <string name="preferences_front_light_off">Inaktiv</string>
   <string name="preferences_front_light_on">Aktiv</string>

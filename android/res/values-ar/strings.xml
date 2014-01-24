@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">فك رموز QR</string>
   <string name="preferences_device_bug_workarounds_title">الحلول جهاز علة</string>
+  <string name="preferences_disable_barcode_scene_mode_title">لا توجد طريقة الباركود المشهد</string>
   <string name="preferences_disable_continuous_focus_summary">استخدام وضع معيار التركيز فقط</string>
   <string name="preferences_disable_continuous_focus_title">لا التركيز المستمر</string>
   <string name="preferences_disable_exposure_title">لا تعرض</string>
+  <string name="preferences_disable_metering_title">لا القياس</string>
   <string name="preferences_front_light_auto">أوتوماتيكي</string>
   <string name="preferences_front_light_off">غير فعال</string>
   <string name="preferences_front_light_on">نشط</string>

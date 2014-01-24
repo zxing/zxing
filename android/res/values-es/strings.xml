@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">Códigos QR</string>
   <string name="preferences_device_bug_workarounds_title">Soluciones provisionales para dispositivos con errores</string>
+  <string name="preferences_disable_barcode_scene_mode_title">No modo de la escena de código de barras</string>
   <string name="preferences_disable_continuous_focus_summary">Utilice sólo el modo de enfoque estándar</string>
   <string name="preferences_disable_continuous_focus_title">No enfoque continuo</string>
   <string name="preferences_disable_exposure_title">No exposición</string>
+  <string name="preferences_disable_metering_title">No dosificadora</string>
   <string name="preferences_front_light_auto">Automático</string>
   <string name="preferences_front_light_off">Inactivo</string>
   <string name="preferences_front_light_on">Activo</string>

@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">扫描 QR码</string>
   <string name="preferences_device_bug_workarounds_title">设备问题解决办法</string>
+  <string name="preferences_disable_barcode_scene_mode_title">没有条形码的场景模式</string>
   <string name="preferences_disable_continuous_focus_summary">只使用标准对焦模式</string>
   <string name="preferences_disable_continuous_focus_title">没有持续关注</string>
   <string name="preferences_disable_exposure_title">无曝光</string>
+  <string name="preferences_disable_metering_title">无计量</string>
   <string name="preferences_front_light_auto">自动</string>
   <string name="preferences_front_light_off">待用</string>
   <string name="preferences_front_light_on">活跃</string>

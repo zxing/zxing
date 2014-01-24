@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR kodo</string>
   <string name="preferences_device_bug_workarounds_title">Naprava Bug Rešitve</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Št črtne kode scenski način</string>
   <string name="preferences_disable_continuous_focus_summary">Uporabljajte samo standardni način ostrenja</string>
   <string name="preferences_disable_continuous_focus_title">Št stalna osredotočenost</string>
   <string name="preferences_disable_exposure_title">Nobena izpostavljenost</string>
+  <string name="preferences_disable_metering_title">Št merjenje</string>
   <string name="preferences_front_light_auto">Samodejno</string>
   <string name="preferences_front_light_off">Neaktivno</string>
   <string name="preferences_front_light_on">Aktivna</string>

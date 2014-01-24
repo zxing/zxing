@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
   <string name="preferences_device_bug_workarounds_title">Perangkat Bug Workarounds</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Tidak ada modus barcode scene</string>
   <string name="preferences_disable_continuous_focus_summary">Gunakan hanya modus fokus standar</string>
   <string name="preferences_disable_continuous_focus_title">Tidak ada fokus terus menerus</string>
   <string name="preferences_disable_exposure_title">Eksposur ada</string>
+  <string name="preferences_disable_metering_title">Metering ada</string>
   <string name="preferences_front_light_auto">Otomatis</string>
   <string name="preferences_front_light_off">Non-aktif</string>
   <string name="preferences_front_light_on">Aktif</string>

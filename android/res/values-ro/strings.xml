@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417</string>
   <string name="preferences_decode_QR_title">Coduri QR</string>
   <string name="preferences_device_bug_workarounds_title">Rezolvări rapide ale defectelor la aparat</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Nicio imagine afișată în mod vedere</string>
   <string name="preferences_disable_continuous_focus_summary">Folosește focalizarea standard</string>
   <string name="preferences_disable_continuous_focus_title">Dezactivează focalizarea continuă</string>
   <string name="preferences_disable_exposure_title">Nicio expunere</string>
+  <string name="preferences_disable_metering_title">Nicio contorizare</string>
   <string name="preferences_front_light_summary">Îmbunătățește scanarea în lumină redusă, dar poate cauza strălucire excesivă. Nu funcționează la toate aparatele.</string>
   <string name="preferences_front_light_title">Folosește lumina frontală</string>
   <string name="preferences_front_light_auto">Iluminare automată</string>

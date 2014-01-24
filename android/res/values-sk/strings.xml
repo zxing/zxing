@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR kódy</string>
   <string name="preferences_device_bug_workarounds_title">Možné chyby zariadenia</string>
-  <string name="preferences_disable_continuous_focus_summary">Použiť iba štandardné zaostrenie</string>
-  <string name="preferences_disable_continuous_focus_title">Nezaostrovať nepretržite</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Bez scénického režimu čiarového kódu</string>
+  <string name="preferences_disable_continuous_focus_summary">Použiť iba štandardné zaostrenie.</string>
+  <string name="preferences_disable_continuous_focus_title">Bez nepretržitého zaostrovania</string>
   <string name="preferences_disable_exposure_title">Bez expozície</string>
+  <string name="preferences_disable_metering_title">Bez úpravy jasu</string>
   <string name="preferences_front_light_auto">Automatický</string>
   <string name="preferences_front_light_off">Neaktívne</string>
   <string name="preferences_front_light_on">Aktívne</string>

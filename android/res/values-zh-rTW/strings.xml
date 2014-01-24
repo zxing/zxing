@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417</string>
   <string name="preferences_decode_QR_title">解碼 QR Code</string>
   <string name="preferences_device_bug_workarounds_title">設備問題解決辦法</string>
+  <string name="preferences_disable_barcode_scene_mode_title">沒有條形碼的場景模式</string>
   <string name="preferences_disable_continuous_focus_summary">只使用標準對焦模式</string>
   <string name="preferences_disable_continuous_focus_title">無連續對焦</string>
   <string name="preferences_disable_exposure_title">無曝光</string>
+  <string name="preferences_disable_metering_title">無計量</string>
   <string name="preferences_front_light_auto">自動</string>
   <string name="preferences_front_light_off">待用</string>
   <string name="preferences_front_light_on">活躍</string>

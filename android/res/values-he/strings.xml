@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">קודי QR</string>
   <string name="preferences_device_bug_workarounds_title">באג במכשיר דרכים לעקיפת הבעיה</string>
+  <string name="preferences_disable_barcode_scene_mode_title">אין מצב סצנה ברקוד</string>
   <string name="preferences_disable_continuous_focus_summary">השתמש רק במצב רגיל פוקוס</string>
   <string name="preferences_disable_continuous_focus_title">המיקוד לא רציפה</string>
   <string name="preferences_disable_exposure_title">אין חשיפה</string>
+  <string name="preferences_disable_metering_title">אין מדידה</string>
   <string name="preferences_front_light_auto">אוטומטי</string>
   <string name="preferences_front_light_off">לא פעיל</string>
   <string name="preferences_front_light_on">פעיל</string>

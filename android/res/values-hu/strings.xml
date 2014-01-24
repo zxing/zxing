@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR kódok</string>
   <string name="preferences_device_bug_workarounds_title">Eszköz Bug Lehetséges megoldások</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Nincs vonalkód motívumprogram</string>
   <string name="preferences_disable_continuous_focus_summary">Csak a normál élességállítási mód</string>
   <string name="preferences_disable_continuous_focus_title">Nincs folyamatos fókusz</string>
   <string name="preferences_disable_exposure_title">No expozíció</string>
+  <string name="preferences_disable_metering_title">No mérés</string>
   <string name="preferences_front_light_auto">Automatikus</string>
   <string name="preferences_front_light_off">Tétlen</string>
   <string name="preferences_front_light_on">Aktív</string>

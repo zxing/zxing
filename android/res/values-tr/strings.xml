@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR barkodları</string>
   <string name="preferences_device_bug_workarounds_title">Cihaz Hata Geçici Çözümler</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Hayır barkod sahne modu</string>
   <string name="preferences_disable_continuous_focus_summary">Sadece standart odaklama modunu kullanın</string>
   <string name="preferences_disable_continuous_focus_title">Hayır sürekli odak</string>
   <string name="preferences_disable_exposure_title">Maruziyet</string>
+  <string name="preferences_disable_metering_title">Hiçbir ölçüm</string>
   <string name="preferences_front_light_auto">Otomatik</string>
   <string name="preferences_front_light_off">Atıl</string>
   <string name="preferences_front_light_on">Aktif</string>

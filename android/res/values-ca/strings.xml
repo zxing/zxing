@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">Codis QR</string>
   <string name="preferences_device_bug_workarounds_title">Solucions provisionals de dispositius d\'errors</string>
+  <string name="preferences_disable_barcode_scene_mode_title">No la manera d\'escena de codi de barres</string>
   <string name="preferences_disable_continuous_focus_summary">Utilitzeu només la manera d\'enfocament estàndard</string>
   <string name="preferences_disable_continuous_focus_title">No enfocament continu</string>
   <string name="preferences_disable_exposure_title">No hi ha exposició</string>
+  <string name="preferences_disable_metering_title">No dosificadora</string>
   <string name="preferences_front_light_auto">Automàtic</string>
   <string name="preferences_front_light_off">Inactiu</string>
   <string name="preferences_front_light_on">Actiu</string>

@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Баркодове</string>
   <string name="preferences_device_bug_workarounds_title">Заобикаляне на проблеми</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Никакъв режим баркод сцена</string>
   <string name="preferences_disable_continuous_focus_summary">Използване само на стандартен режим за фокусиране</string>
   <string name="preferences_disable_continuous_focus_title">Без непрекъснат фокус</string>
   <string name="preferences_disable_exposure_title">Никоя експозиция</string>
+  <string name="preferences_disable_metering_title">Не измерване</string>
   <string name="preferences_front_light_auto">Автоматичен</string>
   <string name="preferences_front_light_off">Неактивен</string>
   <string name="preferences_front_light_on">Активен</string>

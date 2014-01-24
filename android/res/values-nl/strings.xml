@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
   <string name="preferences_device_bug_workarounds_title">Apparaat Bug Tijdelijke oplossingen</string>
-  <string name="preferences_disable_continuous_focus_summary">Gebruik alleen standaard focus modus</string>
-  <string name="preferences_disable_continuous_focus_title">Geen continue focus</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Geen barcode scènemodus</string>
+  <string name="preferences_disable_continuous_focus_summary">Alleen standaard scherpstelfunctie gebruiken</string>
+  <string name="preferences_disable_continuous_focus_title">Niet doorlopend scherpstellen</string>
   <string name="preferences_disable_exposure_title">Geen blootstelling</string>
+  <string name="preferences_disable_metering_title">Geen metingen</string>
   <string name="preferences_front_light_auto">Automatisch</string>
   <string name="preferences_front_light_off">Inactieve</string>
   <string name="preferences_front_light_on">Actief</string>

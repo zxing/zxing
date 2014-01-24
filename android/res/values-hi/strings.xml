@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR कोड</string>
   <string name="preferences_device_bug_workarounds_title">युक्ति बग वर्कअराउन्ड</string>
+  <string name="preferences_disable_barcode_scene_mode_title">कोई बारकोड दृश्य विधा</string>
   <string name="preferences_disable_continuous_focus_summary">केवल मानक फोकस मोड का उपयोग करें</string>
   <string name="preferences_disable_continuous_focus_title">कोई निरंतर ध्यान</string>
   <string name="preferences_disable_exposure_title">कोई जोखिम</string>
+  <string name="preferences_disable_metering_title">कोई पैमाइश</string>
   <string name="preferences_front_light_auto">स्वचालित</string>
   <string name="preferences_front_light_off">निष्क्रिय</string>
   <string name="preferences_front_light_on">सक्रिय</string>

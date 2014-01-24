@@ -98,9 +98,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
   <string name="preferences_device_bug_workarounds_title">Device Bug Workarounds</string>
+  <string name="preferences_disable_barcode_scene_mode_title">No barcode scene mode</string>
   <string name="preferences_disable_continuous_focus_summary">Use only standard focus mode</string>
   <string name="preferences_disable_continuous_focus_title">No continuous focus</string>
   <string name="preferences_disable_exposure_title">No exposure</string>
+  <string name="preferences_disable_metering_title">No metering</string>
   <string name="preferences_front_light_summary">Improves scanning in low light on some phones, but may cause glare. Does not work on all phones.</string>
   <string name="preferences_front_light_title">Use front light</string>
   <string name="preferences_front_light_auto">Automatic</string>
