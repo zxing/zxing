@@ -95,6 +95,13 @@ public final class Intents {
     public static final String HEIGHT = "SCAN_HEIGHT";
 
     /**
+     * Optional parameter to specify Bulk mode and delay in between each scan in bulk mode. 
+     */
+    public static final String BULK_MODE = "SCAN_BULK_MODE";
+    public static final String BULK_MODE_DELAY_MS = "SCAN_BULK_MODE_DELAY_MS";
+    public static final String BULK_MODE_LIMIT = "SCAN_BULK_MODE_LIMIT";
+    
+    /**
      * Desired duration in milliseconds for which to pause after a successful scan before
      * returning to the calling intent. Specified as a long, not an integer!
      * For example: 1000L, not 1000.
@@ -116,6 +123,7 @@ public final class Intents {
      * If the user presses Back, the result code will be {@link android.app.Activity#RESULT_CANCELED}.
      */
     public static final String RESULT = "SCAN_RESULT";
+    public static final String BULK_RESULT = "BULK_SCAN_RESULT";
 
     /**
      * Call {@link android.content.Intent#getStringExtra(String)} with {@link #RESULT_FORMAT}

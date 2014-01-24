@@ -30,8 +30,8 @@ import java.util.List;
  */
 final class EANManufacturerOrgSupport {
 
-  private final List<int[]> ranges = new ArrayList<>();
-  private final List<String> countryIdentifiers = new ArrayList<>();
+  private final List<int[]> ranges = new ArrayList();
+  private final List<String> countryIdentifiers = new ArrayList();
 
   String lookupCountryIdentifier(String productCode) {
     initIfNeeded();

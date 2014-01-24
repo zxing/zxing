@@ -37,7 +37,7 @@ public final class BenchmarkActivity extends Activity {
         benchmarkTask = new BenchmarkAsyncTask(BenchmarkActivity.this, path);
         runBenchmarkButton.setEnabled(false);
         textView.setText(R.string.benchmark_running);
-        benchmarkTask.execute(AsyncTask.THREAD_POOL_EXECUTOR);
+        benchmarkTask.execute((Runnable) AsyncTask.THREAD_POOL_EXECUTOR);
       }
     }
   };

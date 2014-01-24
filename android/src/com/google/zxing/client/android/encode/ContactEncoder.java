@@ -77,7 +77,7 @@ abstract class ContactEncoder {
       return;
     }
     int count = 0;
-    Collection<String> uniques = new HashSet<>(2);
+    Collection<String> uniques = new HashSet(2);
     for (int i = 0; i < values.size(); i++) {
       String value = values.get(i);
       String trimmed = trim(value);

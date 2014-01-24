@@ -56,7 +56,7 @@ final class DecodeFormatManager {
   }
   private static final Map<String,Set<BarcodeFormat>> FORMATS_FOR_MODE;
   static {
-    FORMATS_FOR_MODE = new HashMap<>();
+    FORMATS_FOR_MODE = new HashMap();
     FORMATS_FOR_MODE.put(Intents.Scan.ONE_D_MODE, ONE_D_FORMATS);
     FORMATS_FOR_MODE.put(Intents.Scan.PRODUCT_MODE, PRODUCT_FORMATS);
     FORMATS_FOR_MODE.put(Intents.Scan.QR_CODE_MODE, QR_CODE_FORMATS);

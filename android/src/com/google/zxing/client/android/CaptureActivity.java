@@ -63,6 +63,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -112,6 +113,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
   private AmbientLightManager ambientLightManager;
+  
+  private Integer bulkScanCount = 0;
+  private ArrayList<Result> bulkScanResultList = new ArrayList<Result>(10); 
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -196,7 +200,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       String dataString = intent.getDataString();
 
       if (Intents.Scan.ACTION.equals(action)) {
-
         // Scan the formats the intent requested, and return the result to the calling activity.
         source = IntentSource.NATIVE_APP_INTENT;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
@@ -283,8 +286,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     switch (keyCode) {
       case KeyEvent.KEYCODE_BACK:
         if (source == IntentSource.NATIVE_APP_INTENT) {
-          setResult(RESULT_CANCELED);
-          finish();
+        	if(getIntent()!=null && getIntent().getBooleanExtra(Intents.Scan.BULK_MODE, false)){
+        		handleDecodeExternallyBulkMode(bulkScanResultList);
+        	}else {
+        		setResult(RESULT_CANCELED);
+        		finish();
+        	}
           return true;
         }
         if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
@@ -413,6 +420,31 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     switch (source) {
       case NATIVE_APP_INTENT:
+    	  if(getIntent()!=null && getIntent().getBooleanExtra(Intents.Scan.BULK_MODE, false)){
+   		  
+    		  int bulkScanLimit = getIntent().getIntExtra(Intents.Scan.BULK_MODE_LIMIT, 1);
+    		  Long bulkModeDelay = getIntent().getLongExtra(Intents.Scan.BULK_MODE_DELAY_MS, BULK_MODE_SCAN_DELAY_MS);
+    		  bulkScanCount++;
+
+    		  Toast.makeText( getApplicationContext(),
+    				  getResources().getString(R.string.msg_bulk_mode_scanned) + " (" + bulkScanCount + "/" + bulkScanLimit + ")",
+    				  Toast.LENGTH_SHORT).show();
+
+    		  bulkScanResultList.add(rawResult);
+    		  if (barcode != null) {
+				  viewfinderView.drawResultBitmap(barcode);
+			  }
+    		  
+    		  if(bulkScanCount < bulkScanLimit){
+    			  restartPreviewAfterDelay(bulkModeDelay);
+    		  } else {
+    			  // send back all results
+    			  handleDecodeExternallyBulkMode(bulkScanResultList);
+    		  }
+    	  } else {
+    		  handleDecodeExternally(rawResult, resultHandler, barcode);
+    	  }
+          break;
       case PRODUCT_SEARCH_LINK:
         handleDecodeExternally(rawResult, resultHandler, barcode);
         break;
@@ -645,6 +677,26 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
       
     }
+  }
+  
+  private void handleDecodeExternallyBulkMode(ArrayList<Result> rawResult) {
+	  Log.i("haris", "in handleDecodeExternallyBulkMode rawResult="+rawResult.toString());
+
+	  long resultDurationMS = DEFAULT_INTENT_RESULT_DURATION_MS;
+	  if (getIntent() != null) {
+		  resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
+				  DEFAULT_INTENT_RESULT_DURATION_MS);
+	  }
+
+	  if (source == IntentSource.NATIVE_APP_INTENT) {
+
+		  // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
+		  // the deprecated intent is retired.
+		  Intent intent = new Intent(getIntent().getAction());
+		  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		  intent.putExtra(Intents.Scan.BULK_RESULT, bulkScanResultList);
+		  sendReplyMessage(R.id.return_scan_result, intent, resultDurationMS);
+	  } 
   }
   
   private void sendReplyMessage(int id, Object arg, long delayMS) {

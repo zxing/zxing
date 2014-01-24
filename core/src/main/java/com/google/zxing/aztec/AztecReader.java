@@ -75,7 +75,7 @@ public final class AztecReader implements Reader {
         AztecDetectorResult detectorResult = detector.detect(true);
         points = detectorResult.getPoints();
         decoderResult = new Decoder().decode(detectorResult);
-      } catch (NotFoundException | FormatException e) {
+      } catch (NotFoundException e ) {
         if (notFoundException != null) {
           throw notFoundException;
         }
@@ -83,6 +83,15 @@ public final class AztecReader implements Reader {
           throw formatException;
         }
         throw e;
+      } catch(FormatException e){
+    	  if (notFoundException != null) {
+              throw notFoundException;
+            }
+            if (formatException != null) {
+              throw formatException;
+            }
+            throw e;
+      
       }
     }
 

@@ -214,47 +214,37 @@ final class QRCodeEncoder {
   }
 
   private void encodeQRCodeContents(Intent intent, String type) {
-    switch (type) {
-      case Contents.Type.TEXT: {
-        String data = intent.getStringExtra(Intents.Encode.DATA);
-        if (data != null && !data.isEmpty()) {
+    if (Contents.Type.TEXT.equals(type)) {
+		String data = intent.getStringExtra(Intents.Encode.DATA);
+		if (data != null && !data.isEmpty()) {
           contents = data;
           displayContents = data;
           title = activity.getString(R.string.contents_text);
         }
-        break;
-      }
-      case Contents.Type.EMAIL: {
-        String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
-        if (data != null) {
+	} else if (Contents.Type.EMAIL.equals(type)) {
+		String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
+		if (data != null) {
           contents = "mailto:" + data;
           displayContents = data;
           title = activity.getString(R.string.contents_email);
         }
-        break;
-      }
-      case Contents.Type.PHONE: {
-        String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
-        if (data != null) {
+	} else if (Contents.Type.PHONE.equals(type)) {
+		String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
+		if (data != null) {
           contents = "tel:" + data;
           displayContents = PhoneNumberUtils.formatNumber(data);
           title = activity.getString(R.string.contents_phone);
         }
-        break;
-      }
-      case Contents.Type.SMS: {
-        String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
-        if (data != null) {
+	} else if (Contents.Type.SMS.equals(type)) {
+		String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
+		if (data != null) {
           contents = "sms:" + data;
           displayContents = PhoneNumberUtils.formatNumber(data);
           title = activity.getString(R.string.contents_sms);
         }
-        break;
-      }
-      case Contents.Type.CONTACT: {
-
-        Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
-        if (bundle != null) {
+	} else if (Contents.Type.CONTACT.equals(type)) {
+		Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
+		if (bundle != null) {
 
           String name = bundle.getString(ContactsContract.Intents.Insert.NAME);
           String organization = bundle.getString(ContactsContract.Intents.Insert.COMPANY);
@@ -283,12 +273,9 @@ final class QRCodeEncoder {
           }
 
         }
-
-        break;
-      }
-      case Contents.Type.LOCATION: {
-        Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
-        if (bundle != null) {
+	} else if (Contents.Type.LOCATION.equals(type)) {
+		Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
+		if (bundle != null) {
           // These must use Bundle.getFloat(), not getDouble(), it's part of the API.
           float latitude = bundle.getFloat("LAT", Float.MAX_VALUE);
           float longitude = bundle.getFloat("LONG", Float.MAX_VALUE);
@@ -298,13 +285,11 @@ final class QRCodeEncoder {
             title = activity.getString(R.string.contents_location);
           }
         }
-        break;
-      }
-    }
+	}
   }
 
   private static List<String> getAllBundleValues(Bundle bundle, String[] keys) {
-    List<String> values = new ArrayList<>(keys.length);
+    List<String> values = new ArrayList(keys.length);
     for (String key : keys) {
       Object value = bundle.get(key);
       values.add(value == null ? null : value.toString());
@@ -342,7 +327,7 @@ final class QRCodeEncoder {
     Map<EncodeHintType,Object> hints = null;
     String encoding = guessAppropriateEncoding(contentsToEncode);
     if (encoding != null) {
-      hints = new EnumMap<>(EncodeHintType.class);
+      hints = new EnumMap(EncodeHintType.class);
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
     BitMatrix result;

@@ -16,6 +16,8 @@
 
 package com.google.zxing;
 
+import java.io.Serializable;
+
 import com.google.zxing.common.detector.MathUtils;
 
 /**
@@ -24,8 +26,8 @@ import com.google.zxing.common.detector.MathUtils;
  *
  * @author Sean Owen
  */
-public class ResultPoint {
-
+public class ResultPoint  implements Serializable{
+  private static final long serialVersionUID = -678663238283785417L;
   private final float x;
   private final float y;
 
