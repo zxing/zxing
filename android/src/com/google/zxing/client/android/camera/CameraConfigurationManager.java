@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import com.google.zxing.client.android.PreferencesActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -93,8 +94,14 @@ final class CameraConfigurationManager {
     
     // Required for Glass compatibility; also improves battery/CPU performance a tad
     List<int[]> supportedPreviewFpsRanges = parameters.getSupportedPreviewFpsRange();
-    int[] minimumPreviewFpsRange = supportedPreviewFpsRanges.get(0);
-    parameters.setPreviewFpsRange(minimumPreviewFpsRange[0], minimumPreviewFpsRange[1]);
+    if (supportedPreviewFpsRanges != null && !supportedPreviewFpsRanges.isEmpty()) {
+      int[] currentFpsRange = new int[2];
+      parameters.getPreviewFpsRange(currentFpsRange);
+      int[] minimumPreviewFpsRange = supportedPreviewFpsRanges.get(0);
+      if (!Arrays.equals(currentFpsRange, minimumPreviewFpsRange)) {
+        parameters.setPreviewFpsRange(minimumPreviewFpsRange[0], minimumPreviewFpsRange[1]);
+      }
+    }
 
     String focusMode = null;
     if (prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true)) {
