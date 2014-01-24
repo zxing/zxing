@@ -239,9 +239,11 @@ final class CameraConfigurationManager {
     if (supportedPreviewFpsRanges != null && !supportedPreviewFpsRanges.isEmpty()) {
       int[] minimumSuitableFpsRange = null;
       for (int[] fpsRange : supportedPreviewFpsRanges) {
-        if (fpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX] >= MIN_FPS * 1000) {
+        int fpsMax = fpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX];
+        if (fpsMax >= MIN_FPS * 1000 &&
+            (minimumSuitableFpsRange == null ||
+             fpsMax > minimumSuitableFpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX])) {
           minimumSuitableFpsRange = fpsRange;
-          break;
         }
       }
       if (minimumSuitableFpsRange == null) {
