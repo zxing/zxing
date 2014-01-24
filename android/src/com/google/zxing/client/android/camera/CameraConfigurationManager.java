@@ -90,6 +90,11 @@ final class CameraConfigurationManager {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
     initializeTorch(parameters, prefs, safeMode);
+    
+    // Required for Glass compatibility; also improves battery/CPU performance a tad
+    List<int[]> supportedPreviewFpsRanges = parameters.getSupportedPreviewFpsRange();
+    int[] minimumPreviewFpsRange = supportedPreviewFpsRanges.get(0);
+    parameters.setPreviewFpsRange(minimumPreviewFpsRange[0], minimumPreviewFpsRange[1]);
 
     String focusMode = null;
     if (prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true)) {
