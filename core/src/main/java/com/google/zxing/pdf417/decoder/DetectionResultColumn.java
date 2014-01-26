@@ -61,12 +61,6 @@ class DetectionResultColumn {
     return imageRow - boundingBox.getMinY();
   }
 
-  /*
-  final int codewordIndexToImageRow(int codewordIndex) {
-    return boundingBox.getMinY() + codewordIndex;
-  }
-   */
-
   final void setCodeword(int imageRow, Codeword codeword) {
     codewords[imageRowToCodewordIndex(imageRow)] = codeword;
   }
@@ -89,10 +83,10 @@ class DetectionResultColumn {
     int row = 0;
     for (Codeword codeword : codewords) {
       if (codeword == null) {
-        formatter.format("%3d:    |   \n", row++);
+        formatter.format("%3d:    |   %n", row++);
         continue;
       }
-      formatter.format("%3d: %3d|%3d\n", row++, codeword.getRowNumber(), codeword.getValue());
+      formatter.format("%3d: %3d|%3d%n", row++, codeword.getRowNumber(), codeword.getValue());
     }
     String result = formatter.toString();
     formatter.close();

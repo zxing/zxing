@@ -31,6 +31,7 @@ import com.google.zxing.multi.qrcode.detector.MultiDetector;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.decoder.QRCodeDecoderMetaData;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -162,7 +163,7 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
     return newResults;
   }
 
-  private static final class SAComparator implements Comparator<Result> {
+  private static final class SAComparator implements Comparator<Result>, Serializable {
     @Override
     public int compare(Result a, Result b) {
       int aNumber = (int) (a.getResultMetadata().get(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE));
