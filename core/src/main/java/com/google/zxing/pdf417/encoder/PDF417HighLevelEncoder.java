@@ -23,6 +23,7 @@ package com.google.zxing.pdf417.encoder;
 import com.google.zxing.WriterException;
 
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 /**
@@ -108,6 +109,8 @@ final class PDF417HighLevelEncoder {
   private static final byte[] MIXED = new byte[128];
   private static final byte[] PUNCTUATION = new byte[128];
 
+  static final Charset DEFAULT_ENCODING = Charset.forName("Cp437");
+
   private PDF417HighLevelEncoder() {
   }
 
@@ -130,14 +133,14 @@ final class PDF417HighLevelEncoder {
   }
 
   /**
-   * Converts the message to a byte array using the default encoding (cp437) as defined by the
+   * Converts the message to a byte array using the default encoding (Cp437) as defined by the
    * specification
    *
    * @param msg the message
    * @return the byte array of the message
    */
   private static byte[] getBytesForMessage(String msg) {
-    return msg.getBytes();
+    return msg.getBytes(DEFAULT_ENCODING);
   }
 
   /**
