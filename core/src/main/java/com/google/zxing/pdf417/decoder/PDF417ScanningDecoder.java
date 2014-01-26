@@ -187,7 +187,7 @@ public final class PDF417ScanningDecoder {
       return rightRowIndicatorColumn == null ? null : rightRowIndicatorColumn.getBarcodeMetadata();
     }
     if (rightRowIndicatorColumn == null || rightRowIndicatorColumn.getBarcodeMetadata() == null) {
-      return leftRowIndicatorColumn == null ? null : leftRowIndicatorColumn.getBarcodeMetadata();
+      return leftRowIndicatorColumn.getBarcodeMetadata();
     }
     BarcodeMetadata leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata();
     BarcodeMetadata rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata();
@@ -612,7 +612,7 @@ public final class PDF417ScanningDecoder {
               barcodeValue.getConfidence(barcodeValue.getValue()[0]));
         }
       }
-      formatter.format("\n");
+      formatter.format("%n");
     }
     String result = formatter.toString();
     formatter.close();
