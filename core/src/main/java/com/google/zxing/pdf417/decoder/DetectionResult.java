@@ -286,7 +286,7 @@ final class DetectionResult {
         }
         formatter.format(" %3d|%3d", codeword.getRowNumber(), codeword.getValue());
       }
-      formatter.format("\n");
+      formatter.format("%n");
     }
     String result = formatter.toString();
     formatter.close();
