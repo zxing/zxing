@@ -22,6 +22,8 @@ package com.google.zxing.pdf417.encoder;
 
 import com.google.zxing.WriterException;
 
+import java.nio.charset.Charset;
+
 /**
  * Top-level class for the logic part of the PDF417 implementation.
  */
@@ -513,6 +515,7 @@ public final class PDF417 {
   private BarcodeMatrix barcodeMatrix;
   private boolean compact;
   private Compaction compaction;
+  private Charset encoding;
   private int minCols;
   private int maxCols;
   private int maxRows;
@@ -525,6 +528,7 @@ public final class PDF417 {
   public PDF417(boolean compact) {
     this.compact = compact;
     compaction = Compaction.AUTO;
+    encoding = PDF417HighLevelEncoder.DEFAULT_ENCODING;
     minCols = 2;
     maxCols = 30;
     maxRows = 30;
@@ -642,7 +646,7 @@ public final class PDF417 {
 
     //1. step: High-level encoding
     int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction);
+    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding);
     int sourceCodeWords = highLevel.length();
 
     int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords);
@@ -747,6 +751,13 @@ public final class PDF417 {
    */
   public void setCompact(boolean compact) {
     this.compact = compact;
+  }
+
+  /**
+   * Sets output encoding.
+   */
+  public void setEncoding(Charset encoding) {
+    this.encoding = encoding;
   }
 
 }

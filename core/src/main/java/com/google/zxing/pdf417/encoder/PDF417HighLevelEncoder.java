@@ -21,6 +21,7 @@
 package com.google.zxing.pdf417.encoder;
 
 import com.google.zxing.WriterException;
+import com.google.zxing.common.CharacterSetECI;
 
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -93,6 +94,21 @@ final class PDF417HighLevelEncoder {
   private static final int LATCH_TO_BYTE = 924;
 
   /**
+   * identifier for a user defined Extended Channel Interpretation (ECI)
+   */
+  private static final int ECI_USER_DEFINED = 925;
+  
+  /**
+   * identifier for a general purpose ECO format
+   */
+  private static final int ECI_GENERAL_PURPOSE = 926;
+  
+  /** 
+   * identifier for an ECI of a character set of code page
+   */
+  private static final int ECI_CHARSET = 927;
+
+  /**
    * Raw code table for text compaction Mixed sub-mode
    */
   private static final byte[] TEXT_MIXED_RAW = {
@@ -133,17 +149,6 @@ final class PDF417HighLevelEncoder {
   }
 
   /**
-   * Converts the message to a byte array using the default encoding (Cp437) as defined by the
-   * specification
-   *
-   * @param msg the message
-   * @return the byte array of the message
-   */
-  private static byte[] getBytesForMessage(String msg) {
-    return msg.getBytes(DEFAULT_ENCODING);
-  }
-
-  /**
    * Performs high-level encoding of a PDF417 message using the algorithm described in annex P
    * of ISO/IEC 15438:2001(E). If byte compaction has been selected, then only byte compaction
    * is used.
@@ -151,22 +156,29 @@ final class PDF417HighLevelEncoder {
    * @param msg the message
    * @return the encoded message (the char values range from 0 to 928)
    */
-  static String encodeHighLevel(String msg, Compaction compaction) throws WriterException {
-    byte[] bytes = null; //Fill later and only if needed
+  static String encodeHighLevel(String msg, Compaction compaction, Charset encoding) throws WriterException {
 
     //the codewords 0..928 are encoded as Unicode characters
     StringBuilder sb = new StringBuilder(msg.length());
+
+    if (!DEFAULT_ENCODING.equals(encoding)) {
+      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding.name());
+      if (eci != null) {
+        encodingECI(eci.getValue(), sb);
+      }
+    }
 
     int len = msg.length();
     int p = 0;
     int textSubMode = SUBMODE_ALPHA;
 
     // User selected encoding mode
+    byte[] bytes = null; //Fill later and only if needed
     if (compaction == Compaction.TEXT) {
       encodeText(msg, p, len, sb, textSubMode);
 
     } else if (compaction == Compaction.BYTE) {
-      bytes = getBytesForMessage(msg);
+      bytes = msg.getBytes(encoding);
       encodeBinary(bytes, p, bytes.length, BYTE_COMPACTION, sb);
 
     } else if (compaction == Compaction.NUMERIC) {
@@ -195,7 +207,7 @@ final class PDF417HighLevelEncoder {
             p += t;
           } else {
             if (bytes == null) {
-              bytes = getBytesForMessage(msg);
+              bytes = msg.getBytes(encoding);
             }
             int b = determineConsecutiveBinaryCount(msg, bytes, p);
             if (b == 0) {
@@ -562,5 +574,20 @@ final class PDF417HighLevelEncoder {
     return idx - startpos;
   }
 
+  private static void encodingECI(int eci, StringBuilder sb) throws WriterException {
+    if (eci >= 0 && eci < 900) {
+      sb.append((char) ECI_CHARSET);
+      sb.append((char) eci);
+    } else if (eci < 810900) {
+      sb.append((char) ECI_GENERAL_PURPOSE);
+      sb.append((char) (eci / 900 - 1));
+      sb.append((char) (eci % 900));
+    } else if (eci < 811800) {
+      sb.append((char) ECI_USER_DEFINED);
+      sb.append((char) (810900 - eci));
+    } else {
+      throw new WriterException("ECI number not in valid range from 0..811799, but was " + eci);
+    }
+  }
 
 }
