@@ -59,7 +59,7 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
   void retrieveSupplementalInfo() throws IOException {
 
     String encodedProductID = URLEncoder.encode(productID, "UTF-8");
-    String uri = "http://www.google." + LocaleManager.getProductSearchCountryTLD(context)
+    String uri = "https://www.google." + LocaleManager.getProductSearchCountryTLD(context)
             + "/m/products?ie=utf8&oe=utf8&scoring=p&source=zxing&q=" + encodedProductID;
     CharSequence content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.HTML);
 
