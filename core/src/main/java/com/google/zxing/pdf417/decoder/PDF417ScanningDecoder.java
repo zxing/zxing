@@ -183,14 +183,16 @@ public final class PDF417ScanningDecoder {
 
   private static BarcodeMetadata getBarcodeMetadata(DetectionResultRowIndicatorColumn leftRowIndicatorColumn,
                                                     DetectionResultRowIndicatorColumn rightRowIndicatorColumn) {
-    if (leftRowIndicatorColumn == null || leftRowIndicatorColumn.getBarcodeMetadata() == null) {
+    BarcodeMetadata leftBarcodeMetadata;
+    if (leftRowIndicatorColumn == null ||
+        (leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata()) == null) {
       return rightRowIndicatorColumn == null ? null : rightRowIndicatorColumn.getBarcodeMetadata();
     }
-    if (rightRowIndicatorColumn == null || rightRowIndicatorColumn.getBarcodeMetadata() == null) {
-      return leftRowIndicatorColumn.getBarcodeMetadata();
+    BarcodeMetadata rightBarcodeMetadata;
+    if (rightRowIndicatorColumn == null ||
+        (rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata()) == null) {
+      return leftBarcodeMetadata;
     }
-    BarcodeMetadata leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata();
-    BarcodeMetadata rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata();
 
     if (leftBarcodeMetadata.getColumnCount() != rightBarcodeMetadata.getColumnCount() &&
         leftBarcodeMetadata.getErrorCorrectionLevel() != rightBarcodeMetadata.getErrorCorrectionLevel() &&
