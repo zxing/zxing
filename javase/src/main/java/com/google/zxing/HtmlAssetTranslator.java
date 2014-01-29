@@ -33,6 +33,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -86,7 +88,12 @@ public final class HtmlAssetTranslator {
       FileFilter fileFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {
-          return file.isDirectory() && file.getName().startsWith("html-") && !"html-en".equals(file.getName());
+          Path path = file.toPath();
+          return
+              Files.isDirectory(path) &&
+              !Files.isSymbolicLink(path) &&
+              file.getName().startsWith("html-") &&
+              !"html-en".equals(file.getName());
         }
       };
       for (File languageDir : assetsDir.listFiles(fileFilter)) {

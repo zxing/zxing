@@ -17,20 +17,18 @@
 package com.google.zxing;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,7 +54,6 @@ public final class StringsResourceTranslator {
 
   private static final String API_KEY = System.getProperty("translateAPI.key");
   
-  private static final Charset UTF8 = Charset.forName("UTF-8");
   private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
   private static final Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile("values-(.+)");
   private static final Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile("translatedText\":\\s*\"([^\"]+)\"");
@@ -97,7 +94,11 @@ public final class StringsResourceTranslator {
     File[] translatedValuesDirs = resDir.listFiles(new FileFilter() {
       @Override
       public boolean accept(File file) {
-        return file.isDirectory() && VALUES_DIR_PATTERN.matcher(file.getName()).matches();
+        Path path = file.toPath();
+        return
+            Files.isDirectory(path) &&
+            !Files.isSymbolicLink(path) &&
+            VALUES_DIR_PATTERN.matcher(file.getName()).matches();
       }
     });
     for (File translatedValuesDir : translatedValuesDirs) {
@@ -129,7 +130,7 @@ public final class StringsResourceTranslator {
     resultTempFile.deleteOnExit();
 
     boolean anyChange = false;
-    try (Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(resultTempFile), UTF8))) {
+    try (Writer out = Files.newBufferedWriter(resultTempFile.toPath(), StandardCharsets.UTF_8)) {
       out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
       out.write(APACHE_2_LICENSE);
       out.write("<resources>\n");
@@ -210,7 +211,7 @@ public final class StringsResourceTranslator {
     URLConnection connection = translateURL.openConnection();
     connection.connect();
     StringBuilder translateResult = new StringBuilder(200);
-    try (Reader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), UTF8))) {
+    try (Reader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
       char[] buffer = new char[1024];
       int charsRead;
       while ((charsRead = in.read(buffer)) > 0) {
@@ -225,7 +226,7 @@ public final class StringsResourceTranslator {
     if (!file.exists()) {
       return entries;
     }
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), UTF8))) {
+    try (BufferedReader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
       CharSequence line;
       while ((line = reader.readLine()) != null) {
         Matcher m = ENTRY_PATTERN.matcher(line);
