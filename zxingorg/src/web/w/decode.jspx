@@ -64,7 +64,7 @@
         </form>
         <form action="decode" method="post" enctype="multipart/form-data">
           <tr>
-            <td style="text-align:right">Or upload a file (&amp;lt;2MB, &amp;lt;8MP):</td>
+            <td style="text-align:right">Or upload a file (&amp;lt;10MB, &amp;lt;10MP):</td>
             <td><input type="file" name="f"/></td>
             <td><input type="submit"/></td>
           </tr>
