@@ -194,13 +194,31 @@ public abstract class UPCEANReader extends OneDReader {
             new ResultPoint(right, (float) rowNumber)},
         format);
 
+    int extensionLength = 0;
+
     try {
       Result extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
       decodeResult.putMetadata(ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.getText());
       decodeResult.putAllMetadata(extensionResult.getResultMetadata());
       decodeResult.addResultPoints(extensionResult.getResultPoints());
+      extensionLength = extensionResult.getText().length();
     } catch (ReaderException re) {
       // continue
+    }
+
+    int[] allowedExtensions = hints == null ? null :
+        (int[])hints.get(DecodeHintType.ALLOWED_EAN_EXTENSIONS);
+    if(allowedExtensions != null) {
+      boolean valid = false;
+      for (int length : allowedExtensions) {
+        if(extensionLength == length) {
+          valid = true;
+          break;
+        }
+      }
+      if(!valid) {
+        throw NotFoundException.getNotFoundInstance();
+      }
     }
 
     if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
