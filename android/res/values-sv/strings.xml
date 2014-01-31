@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Sök land</string>
   <string name="preferences_supplemental_summary">Försök hämta mer information om streckkodens innehåll</string>
   <string name="preferences_supplemental_title">Hämta mer info</string>
-  <string name="preferences_try_bsplus">Prova Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Förstärkt med nya funktioner och gränssnitt</string>
   <string name="preferences_vibrate_title">Vibrera</string>
   <string name="result_address_book">Hittade kontaktinformation</string>
   <string name="result_calendar">Hittade kalenderhändelser</string>

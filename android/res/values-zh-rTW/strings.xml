@@ -120,8 +120,6 @@
   <string name="preferences_search_country">搜索國家</string>
   <string name="preferences_supplemental_summary">嘗試透過條碼搜尋更多的資訊</string>
   <string name="preferences_supplemental_title">搜尋更多資訊</string>
-  <string name="preferences_try_bsplus">嘗試條碼掃描器+</string>
-  <string name="preferences_try_bsplus_summary">增強新的功能和接口</string>
   <string name="preferences_vibrate_title">震動</string>
   <string name="result_address_book">找到聯絡人</string>
   <string name="result_calendar">找到日曆事件</string>

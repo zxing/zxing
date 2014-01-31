@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Пошук країни</string>
   <string name="preferences_supplemental_summary">Показати детальну інформацію про штрих-код</string>
   <string name="preferences_supplemental_title">Подробиці</string>
-  <string name="preferences_try_bsplus">Спробуйте Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Доступні нові функції та інтерфейс</string>
   <string name="preferences_vibrate_title">Вібрувати</string>
   <string name="result_address_book">Знайдені контактні дані</string>
   <string name="result_calendar">Знайдено подію для календаря</string>

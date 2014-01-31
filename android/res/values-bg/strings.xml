@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Държава при търсене</string>
   <string name="preferences_supplemental_summary">Опитай да получиш повече информация за баркода</string>
   <string name="preferences_supplemental_title">Търсене на разширения</string>
-  <string name="preferences_try_bsplus">Опитайте Баркод Скенер+</string>
-  <string name="preferences_try_bsplus_summary">Обогатен с нови характеристики и интерфейс</string>
   <string name="preferences_vibrate_title">Вибрация</string>
   <string name="result_address_book">Намерих информация за контакт</string>
   <string name="result_calendar">Намерих календарно събитие</string>

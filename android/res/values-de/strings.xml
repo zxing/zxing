@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Land für die Suche</string>
   <string name="preferences_supplemental_summary">Erfahren Sie mehr über den Barcode</string>
   <string name="preferences_supplemental_title">Weitere Informationen abrufen</string>
-  <string name="preferences_try_bsplus">Barcode Scanner+ testen</string>
-  <string name="preferences_try_bsplus_summary">Mit mehr Funktionen und neuer Oberfläche.</string>
   <string name="preferences_vibrate_title">Vibrieren</string>
   <string name="result_address_book">Kontakt gefunden</string>
   <string name="result_calendar">Termin gefunden</string>

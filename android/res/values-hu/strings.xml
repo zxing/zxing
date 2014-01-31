@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Ország keresése</string>
   <string name="preferences_supplemental_summary">A vonalkóddal jelzett tartalomról megpróbál több információt letölteni.</string>
   <string name="preferences_supplemental_title">További információk letöltése</string>
-  <string name="preferences_try_bsplus">Próbálja Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Továbbfejlesztett új jellemzők és interfész</string>
   <string name="preferences_vibrate_title">Rezgés</string>
   <string name="result_address_book">Névjegy találat</string>
   <string name="result_calendar">Naptár esemény találat</string>

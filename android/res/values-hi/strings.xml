@@ -120,8 +120,6 @@
   <string name="preferences_search_country">खोज देश</string>
   <string name="preferences_supplemental_summary">बारकोड सामग्री के बारे में में अधिक जानकारी पुनः प्राप्त करने की कोशिश करो</string>
   <string name="preferences_supplemental_title">अधिक जानकारी पुनर्प्राप्त</string>
-  <string name="preferences_try_bsplus">बारकोड स्कैनर की कोशिश +</string>
-  <string name="preferences_try_bsplus_summary">नई सुविधाओं और इंटरफेस के साथ बढ़ाया</string>
   <string name="preferences_vibrate_title">कांपना</string>
   <string name="result_address_book">मिला संपर्क जानकारी</string>
   <string name="result_calendar">मिला कैलेंडर घटना</string>

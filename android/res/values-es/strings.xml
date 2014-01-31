@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Buscar país</string>
   <string name="preferences_supplemental_summary">Trata de recuperar más información sobre el contenido del código de barras.</string>
   <string name="preferences_supplemental_title">Recuperar más información</string>
-  <string name="preferences_try_bsplus">Trate Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Mejorado con nuevas características y la interfaz de</string>
   <string name="preferences_vibrate_title">Vibrar</string>
   <string name="result_address_book">Información de contacto encontrada</string>
   <string name="result_calendar">Evento de calendario encontrado</string>

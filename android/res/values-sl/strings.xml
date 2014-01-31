@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Išči po državi</string>
   <string name="preferences_supplemental_summary">Poskusite pridobiti več informacij o vsebini črtne kode</string>
   <string name="preferences_supplemental_title">Naloži Več info</string>
-  <string name="preferences_try_bsplus">Poskusite Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Izboljšan z novimi funkcijami in vmesnikom</string>
   <string name="preferences_vibrate_title">Vibriraj</string>
   <string name="result_address_book">Najdene informacije o kontaktu</string>
   <string name="result_calendar">Najden koledarski dogodek</string>

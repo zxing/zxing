@@ -118,8 +118,6 @@
   <string name="preferences_result_title">Configurări rezultate</string>
   <string name="preferences_scanning_title">Când scanează coduri de bară, decodifică\u2026</string>
   <string name="preferences_search_country">Caută țara</string>
-  <string name="preferences_try_bsplus">Încearcă Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Îmbogățit cu noi funcționalități și o nouă interfață</string>
   <string name="preferences_supplemental_summary">Încearcă preluarea mai multor informații din conținutul codurilor de bară</string>
   <string name="preferences_supplemental_title">Preia mai multe informații</string>
   <string name="preferences_vibrate_title">Vibrează</string>

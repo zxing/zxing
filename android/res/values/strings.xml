@@ -118,8 +118,6 @@
   <string name="preferences_result_title">Result settings</string>
   <string name="preferences_scanning_title">When scanning for barcodes, decode\u2026</string>
   <string name="preferences_search_country">Search country</string>
-  <string name="preferences_try_bsplus">Try Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Enhanced with new features and interface</string>
   <string name="preferences_supplemental_summary">Try to retrieve more information about the barcode contents</string>
   <string name="preferences_supplemental_title">Retrieve more info</string>
   <string name="preferences_vibrate_title">Vibrate</string>

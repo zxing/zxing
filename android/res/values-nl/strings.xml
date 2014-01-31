@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Zoeken op land</string>
   <string name="preferences_supplemental_summary">Meer informatie over de inhoud van de barcode proberen op te halen</string>
   <string name="preferences_supplemental_title">Meer informatie ophalen</string>
-  <string name="preferences_try_bsplus">Probeer Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Uitgebreid met nieuwe functies en interface</string>
   <string name="preferences_vibrate_title">Trillen</string>
   <string name="result_address_book">Contactpersooninformatie gevonden</string>
   <string name="result_calendar">Agendagebeurtenis gevonden</string>

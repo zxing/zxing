@@ -120,8 +120,6 @@
   <string name="preferences_search_country">検索国コード</string>
   <string name="preferences_supplemental_summary">QRコード内容の詳細情報を取得します</string>
   <string name="preferences_supplemental_title">詳細情報を取得</string>
-  <string name="preferences_try_bsplus">QRコード+を試す</string>
-  <string name="preferences_try_bsplus_summary">新機能と強化されたインターフェース</string>
   <string name="preferences_vibrate_title">バイブレーション</string>
   <string name="result_address_book">連絡先がヒットしました</string>
   <string name="result_calendar">カレンダーの予定がヒットしました</string>

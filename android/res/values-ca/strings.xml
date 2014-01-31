@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Cerca per país</string>
   <string name="preferences_supplemental_summary">Intenta obtenir més informació sobre els continguts del codi de barres</string>
   <string name="preferences_supplemental_title">Aconsegueix més informació</string>
-  <string name="preferences_try_bsplus">Intenta Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Millorat amb noves característiques i la interfície de</string>
   <string name="preferences_vibrate_title">Vibració</string>
   <string name="result_address_book">S\'ha trobat informació de contacte</string>
   <string name="result_calendar">S\'ha trobat un esdeveniment</string>

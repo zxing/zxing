@@ -120,8 +120,6 @@
   <string name="preferences_search_country">חיפוש הארץ</string>
   <string name="preferences_supplemental_summary">נסה למצא מידע נוסף על תוכן הברקוד</string>
   <string name="preferences_supplemental_title">מצא מידע נוסף</string>
-  <string name="preferences_try_bsplus">נסה סורק ברקודים+</string>
-  <string name="preferences_try_bsplus_summary">משופר עם תכונות וממשק חדשים</string>
   <string name="preferences_vibrate_title">רטט</string>
   <string name="result_address_book">נמצא מידע של איש קשר</string>
   <string name="result_calendar">נמצא אירוע</string>

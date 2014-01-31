@@ -120,8 +120,6 @@
   <string name="preferences_search_country">ابحث عن بلد</string>
   <string name="preferences_supplemental_summary">محاولة لاسترداد مزيد من المعلومات حول محتويات الباركود</string>
   <string name="preferences_supplemental_title">استرداد مزيد من المعلومات</string>
-  <string name="preferences_try_bsplus">محاولة الباركود +</string>
-  <string name="preferences_try_bsplus_summary">معززة مع الميزات الجديدة واجهة</string>
   <string name="preferences_vibrate_title">اهتزاز</string>
   <string name="result_address_book">تم العثور على معلومات جهة الاتصال</string>
   <string name="result_calendar">تم العثور على حدث التقويم</string>

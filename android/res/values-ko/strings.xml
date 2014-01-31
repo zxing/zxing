@@ -120,8 +120,6 @@
   <string name="preferences_search_country">국가별 검색</string>
   <string name="preferences_supplemental_summary">바코드 내용에 대한 자세한 정보를 검색하려고</string>
   <string name="preferences_supplemental_title">검색 상세 정보</string>
-  <string name="preferences_try_bsplus">바코드 스캐너를 사용해보십시오 +</string>
-  <string name="preferences_try_bsplus_summary">새로운 기능 및 인터페이스 개선</string>
   <string name="preferences_vibrate_title">진동</string>
   <string name="result_address_book">연락처 정보를 찾았습니다</string>
   <string name="result_calendar">일정 이벤트를 찾았습니다</string>

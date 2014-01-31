@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Bilatu herrialdea</string>
   <string name="preferences_supplemental_summary">Saiatu barra-kodearen edukiei buruzko informazio gehiago eskuratzen</string>
   <string name="preferences_supplemental_title">Eskuratu informazio gehiago</string>
-  <string name="preferences_try_bsplus">Saiatu Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Ezaugarri berri eta interfaze indartu</string>
   <string name="preferences_vibrate_title">Bibratu</string>
   <string name="result_address_book">Kontaktu-informazioa aurkitu da</string>
   <string name="result_calendar">Egutegiko gertaera aurkitu da</string>

@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Søg efter land</string>
   <string name="preferences_supplemental_summary">Prøv at få flere oplysninger om stregkodens indhold</string>
   <string name="preferences_supplemental_title">Hent mere info</string>
-  <string name="preferences_try_bsplus">Prøv Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Forbedret med nye funktioner og grænseflade</string>
   <string name="preferences_vibrate_title">Vibrér</string>
   <string name="result_address_book">Kontaktinfo fundet</string>
   <string name="result_calendar">Kalendarbegivenhed fundet</string>

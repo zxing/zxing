@@ -120,8 +120,6 @@
   <string name="preferences_search_country">Vyhľadávať v krajine</string>
   <string name="preferences_supplemental_summary">Skúsiť získať viac informácií o obsahu čiarového kódu</string>
   <string name="preferences_supplemental_title">Získať viac informácií</string>
-  <string name="preferences_try_bsplus">Vyskúšajte Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Rozšírený o nové funkcie a prostredie</string>
   <string name="preferences_vibrate_title">Vibrovať</string>
   <string name="result_address_book">Nájdená informácia o kontakte</string>
   <string name="result_calendar">Nájdená udalosť kalendára</string>
