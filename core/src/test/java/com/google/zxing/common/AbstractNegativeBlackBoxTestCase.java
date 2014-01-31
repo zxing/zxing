@@ -27,8 +27,8 @@ import org.junit.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -80,11 +80,11 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
   public void testBlackBox() throws IOException {
     assertFalse(testResults.isEmpty());
 
-    File[] imageFiles = getImageFiles();
+    List<Path> imageFiles = getImageFiles();
     int[] falsePositives = new int[testResults.size()];
-    for (File testImage : imageFiles) {
-      log.info(String.format("Starting %s", testImage.getAbsolutePath()));
-      BufferedImage image = ImageIO.read(testImage);
+    for (Path testImage : imageFiles) {
+      log.info(String.format("Starting %s", testImage));
+      BufferedImage image = ImageIO.read(testImage.toFile());
       if (image == null) {
         throw new IOException("Could not read image: " + testImage);
       }
@@ -114,7 +114,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     for (int x = 0; x < testResults.size(); x++) {
       TestResult testResult = testResults.get(x);
       log.info(String.format("Rotation %d degrees: %d of %d images were false positives (%d allowed)",
-                             (int) testResult.getRotation(), falsePositives[x], imageFiles.length,
+                             (int) testResult.getRotation(), falsePositives[x], imageFiles.size(),
                              testResult.getFalsePositivesAllowed()));
       assertTrue("Rotation " + testResult.getRotation() + " degrees: Too many false positives found",
                  falsePositives[x] <= testResult.getFalsePositivesAllowed());

@@ -219,32 +219,27 @@ public final class DecodeServlet extends HttpServlet {
         return;
       }
 
-      InputStream is = null;
-      try {
+      try (InputStream is = connection.getInputStream()) {
+        try {
+          if (connection.getResponseCode() != HttpServletResponse.SC_OK) {
+            log.info("Unsuccessful return code: " + connection.getResponseCode());
+            response.sendRedirect("badurl.jspx");
+            return;
+          }
+          if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
+            log.info("Too large");
+            response.sendRedirect("badimage.jspx");
+            return;
+          }
 
-        is = connection.getInputStream();
+          log.info("Decoding " + imageURL);
+          processStream(is, request, response);
 
-        if (connection.getResponseCode() != HttpServletResponse.SC_OK) {
-          log.info("Unsuccessful return code: " + connection.getResponseCode());
+        } catch (IOException ioe) {
+          log.info(ioe.toString());
           response.sendRedirect("badurl.jspx");
-          return;
-        }
-        if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
-          log.info("Too large");
-          response.sendRedirect("badimage.jspx");
-          return;
-        }
-
-        log.info("Decoding " + imageURL);
-        processStream(is, request, response);
-
-      } catch (IOException ioe) {
-        log.info(ioe.toString());
-        response.sendRedirect("badurl.jspx");
-      } finally {
-        if (is != null) {
+        } finally {
           consumeRemainder(is);
-          is.close();
         }
       }
 

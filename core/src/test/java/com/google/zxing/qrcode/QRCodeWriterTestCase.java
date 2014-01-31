@@ -18,6 +18,7 @@ package com.google.zxing.qrcode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -26,8 +27,10 @@ import org.junit.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -37,16 +40,16 @@ import java.util.Map;
  */
 public final class QRCodeWriterTestCase extends Assert {
 
-  private static final String BASE_IMAGE_PATH = "src/test/resources/golden/qrcode/";
+  private static final Path BASE_IMAGE_PATH = Paths.get("src/test/resources/golden/qrcode/");
 
   private static BufferedImage loadImage(String fileName) throws IOException {
-    File file = new File(BASE_IMAGE_PATH + fileName);
-    if (!file.exists()) {
+    Path file = BASE_IMAGE_PATH.resolve(fileName);
+    if (!Files.exists(file)) {
       // try starting with 'core' since the test base is often given as the project root
-      file = new File("core/" + BASE_IMAGE_PATH + fileName);
+      file = Paths.get("core/").resolve(BASE_IMAGE_PATH).resolve(fileName);
     }
-    assertTrue("Please download and install test images, and run from the 'core' directory", file.exists());
-    return ImageIO.read(file);
+    assertTrue("Please download and install test images, and run from the 'core' directory", Files.exists(file));
+    return ImageIO.read(file.toFile());
   }
 
   // In case the golden images are not monochromatic, convert the RGB values to greyscale.
@@ -75,7 +78,7 @@ public final class QRCodeWriterTestCase extends Assert {
   public void testQRCodeWriter() throws WriterException {
     // The QR should be multiplied up to fit, with extra padding if necessary
     int bigEnough = 256;
-    QRCodeWriter writer = new QRCodeWriter();
+    Writer writer = new QRCodeWriter();
     BitMatrix matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, bigEnough,
         bigEnough, null);
     assertNotNull(matrix);
@@ -112,7 +115,7 @@ public final class QRCodeWriterTestCase extends Assert {
 
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.ERROR_CORRECTION, ecLevel);
-    QRCodeWriter writer = new QRCodeWriter();
+    Writer writer = new QRCodeWriter();
     BitMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
         resolution, hints);
 

@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.EnumMap;
 import java.util.Map;
@@ -44,7 +45,6 @@ import java.util.regex.Pattern;
  */
 public final class EncoderTest extends Assert {
 
-  private static final Charset LATIN_1 = Charset.forName("ISO-8859-1");
   private static final Pattern DOTX = Pattern.compile("[^.X]");
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
 
@@ -138,7 +138,7 @@ public final class EncoderTest extends Assert {
     String data = "In ut magna vel mauris malesuada";
     AztecWriter writer = new AztecWriter();
     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-    AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1),
+    AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1),
         Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
     BitMatrix expectedMatrix = aztec.getMatrix();
     assertEquals(matrix, expectedMatrix);
@@ -386,7 +386,7 @@ public final class EncoderTest extends Assert {
 
   @Test
   public void testUserSpecifiedLayers() throws Exception {
-    byte[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".getBytes(LATIN_1);
+    byte[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".getBytes(StandardCharsets.ISO_8859_1);
     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
     assertEquals(2, aztec.getLayers());
     assertTrue(aztec.isCompact());
@@ -413,7 +413,7 @@ public final class EncoderTest extends Assert {
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     // encodes as 26 * 5 * 4 = 520 bits of data
     String alphabet4 = alphabet + alphabet + alphabet + alphabet;
-    byte[] data = alphabet4.getBytes(LATIN_1);
+    byte[] data = alphabet4.getBytes(StandardCharsets.ISO_8859_1);
     try {
       Encoder.encode(data, 0, -4);
       fail("Encode should have failed.  Text can't fit in 1-layer compact");
@@ -426,7 +426,7 @@ public final class EncoderTest extends Assert {
 
     // But shortening the string to 100 bytes (500 bits of data), compact works fine, even if we
     // include more error checking.
-    aztecCode = Encoder.encode(alphabet4.substring(0, 100).getBytes(LATIN_1), 10, Encoder.DEFAULT_AZTEC_LAYERS);
+    aztecCode = Encoder.encode(alphabet4.substring(0, 100).getBytes(StandardCharsets.ISO_8859_1), 10, Encoder.DEFAULT_AZTEC_LAYERS);
     assertTrue(aztecCode.isCompact());
     assertEquals(4, aztecCode.getLayers());
   }
@@ -434,7 +434,7 @@ public final class EncoderTest extends Assert {
   // Helper routines
 
   private static void testEncode(String data, boolean compact, int layers, String expected) throws Exception {
-    AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1), 33, Encoder.DEFAULT_AZTEC_LAYERS);
+    AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1), 33, Encoder.DEFAULT_AZTEC_LAYERS);
     assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
     BitMatrix matrix = aztec.getMatrix();
@@ -442,7 +442,7 @@ public final class EncoderTest extends Assert {
   }
 
   private static void testEncodeDecode(String data, boolean compact, int layers) throws Exception {
-    AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1), 25, Encoder.DEFAULT_AZTEC_LAYERS);
+    AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1), 25, Encoder.DEFAULT_AZTEC_LAYERS);
     assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
     BitMatrix matrix = aztec.getMatrix();
@@ -468,7 +468,7 @@ public final class EncoderTest extends Assert {
                                  int layers) throws FormatException {
     // 1. Perform an encode-decode round-trip because it can be lossy.
     // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
-    String expectedData = new String(data.getBytes(Charset.forName(charset)), LATIN_1);
+    String expectedData = new String(data.getBytes(Charset.forName(charset)), StandardCharsets.ISO_8859_1);
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.CHARACTER_SET, charset);
     hints.put(EncodeHintType.ERROR_CORRECTION, eccPercent);
@@ -537,14 +537,14 @@ public final class EncoderTest extends Assert {
   }
 
   private static void testHighLevelEncodeString(String s, String expectedBits) {
-    BitArray bits = new HighLevelEncoder(s.getBytes(LATIN_1)).encode();
+    BitArray bits = new HighLevelEncoder(s.getBytes(StandardCharsets.ISO_8859_1)).encode();
     String receivedBits = bits.toString().replace(" ", "");
     assertEquals("highLevelEncode() failed for input string: " + s, expectedBits.replace(" ", ""), receivedBits);
     assertEquals(s, Decoder.highLevelDecode(toBooleanArray(bits)));
   }
 
   private static void testHighLevelEncodeString(String s, int expectedReceivedBits) {
-    BitArray bits = new HighLevelEncoder(s.getBytes(LATIN_1)).encode();
+    BitArray bits = new HighLevelEncoder(s.getBytes(StandardCharsets.ISO_8859_1)).encode();
     int receivedBitCount = bits.toString().replace(" ", "").length();
     assertEquals("highLevelEncode() failed for input string: " + s, 
                  expectedReceivedBits, receivedBitCount);

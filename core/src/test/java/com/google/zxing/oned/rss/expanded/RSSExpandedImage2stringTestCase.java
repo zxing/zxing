@@ -27,8 +27,10 @@
 package com.google.zxing.oned.rss.expanded;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -51,230 +53,151 @@ public final class RSSExpandedImage2stringTestCase extends Assert {
 
   @Test
   public void testDecodeRow2string_1() throws Exception {
-    String path = "src/test/resources/blackbox/rssexpanded-1/1.png";
-    String expected = "(11)100224(17)110224(3102)000100";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("1.png", "(11)100224(17)110224(3102)000100");
   }
 
   @Test
   public void testDecodeRow2string_2() throws Exception {
-    String path = "src/test/resources/blackbox/rssexpanded-1/2.png";
-    String expected = "(01)90012345678908(3103)001750";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("2.png", "(01)90012345678908(3103)001750");
   }
 
   @Test
   public void testDecodeRow2string_3() throws Exception {
-    String path = "src/test/resources/blackbox/rssexpanded-1/3.png";
-    String expected = "(10)12A";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("3.png", "(10)12A");
   }
 
   @Test
   public void testDecodeRow2string_4() throws Exception {
-    String path = "src/test/resources/blackbox/rssexpanded-1/4.png";
-    String expected = "(01)98898765432106(3202)012345(15)991231";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("4.png", "(01)98898765432106(3202)012345(15)991231");
   }
 
   @Test
   public void testDecodeRow2string_5() throws Exception {
-    String path = "src/test/resources/blackbox/rssexpanded-1/5.png";
-    String expected = "(01)90614141000015(3202)000150";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("5.png", "(01)90614141000015(3202)000150");
   }
 
   @Test
   public void testDecodeRow2string_7() throws Exception {
-    String path = "src/test/resources/blackbox/rssexpanded-1/7.png";
-    String expected = "(10)567(11)010101";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("7.png", "(10)567(11)010101");
   }
 
   @Test
   public void testDecodeRow2string_10() throws Exception {
-    String path = "src/test/resources/blackbox/rssexpanded-1/10.png";
     String expected = "(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456(423)012345678901";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("10.png", expected);
   }
 
   @Test
   public void testDecodeRow2string_11() throws Exception {
-    String expected = "(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456";
-    String path = "src/test/resources/blackbox/rssexpanded-1/11.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("11.png", "(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456");
   }
 
   @Test
   public void testDecodeRow2string_12() throws Exception {
-    String expected = "(01)98898765432106(3103)001750";
-    String path = "src/test/resources/blackbox/rssexpanded-1/12.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("12.png", "(01)98898765432106(3103)001750");
   }
 
   @Test
   public void testDecodeRow2string_13() throws Exception {
-    String expected = "(01)90012345678908(3922)795";
-    String path = "src/test/resources/blackbox/rssexpanded-1/13.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("13.png", "(01)90012345678908(3922)795");
   }
 
   @Test
   public void testDecodeRow2string_14() throws Exception {
-    String expected = "(01)90012345678908(3932)0401234";
-    String path = "src/test/resources/blackbox/rssexpanded-1/14.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("14.png", "(01)90012345678908(3932)0401234");
   }
 
   @Test
   public void testDecodeRow2string_15() throws Exception {
-    String expected = "(01)90012345678908(3102)001750(11)100312";
-    String path = "src/test/resources/blackbox/rssexpanded-1/15.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("15.png", "(01)90012345678908(3102)001750(11)100312");
   }
 
   @Test
   public void testDecodeRow2string_16() throws Exception {
-    String expected = "(01)90012345678908(3202)001750(11)100312";
-    String path = "src/test/resources/blackbox/rssexpanded-1/16.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("16.png", "(01)90012345678908(3202)001750(11)100312");
   }
 
   @Test
   public void testDecodeRow2string_17() throws Exception {
-    String expected = "(01)90012345678908(3102)001750(13)100312";
-    String path = "src/test/resources/blackbox/rssexpanded-1/17.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("17.png", "(01)90012345678908(3102)001750(13)100312");
   }
 
   @Test
   public void testDecodeRow2string_18() throws Exception {
-    String expected = "(01)90012345678908(3202)001750(13)100312";
-    String path = "src/test/resources/blackbox/rssexpanded-1/18.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("18.png", "(01)90012345678908(3202)001750(13)100312");
   }
 
   @Test
   public void testDecodeRow2string_19() throws Exception {
-    String expected = "(01)90012345678908(3102)001750(15)100312";
-    String path = "src/test/resources/blackbox/rssexpanded-1/19.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("19.png", "(01)90012345678908(3102)001750(15)100312");
   }
 
   @Test
   public void testDecodeRow2string_20() throws Exception {
-    String expected = "(01)90012345678908(3202)001750(15)100312";
-    String path = "src/test/resources/blackbox/rssexpanded-1/20.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("20.png", "(01)90012345678908(3202)001750(15)100312");
   }
 
   @Test
   public void testDecodeRow2string_21() throws Exception {
-    String expected = "(01)90012345678908(3102)001750(17)100312";
-    String path = "src/test/resources/blackbox/rssexpanded-1/21.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("21.png", "(01)90012345678908(3102)001750(17)100312");
   }
 
   @Test
   public void testDecodeRow2string_22() throws Exception {
-    String expected = "(01)90012345678908(3202)001750(17)100312";
-    String path = "src/test/resources/blackbox/rssexpanded-1/22.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("22.png", "(01)90012345678908(3202)001750(17)100312");
   }
 
   @Test
   public void testDecodeRow2string_25() throws Exception {
-    String expected = "(10)123";
-    String path = "src/test/resources/blackbox/rssexpanded-1/25.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("25.png", "(10)123");
   }
 
   @Test
   public void testDecodeRow2string_26() throws Exception {
-    String expected = "(10)5678(11)010101";
-    String path = "src/test/resources/blackbox/rssexpanded-1/26.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("26.png", "(10)5678(11)010101");
   }
 
   @Test
   public void testDecodeRow2string_27() throws Exception {
-    String expected = "(10)1098-1234";
-    String path = "src/test/resources/blackbox/rssexpanded-1/27.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("27.png", "(10)1098-1234");
   }
 
   @Test
   public void testDecodeRow2string_28() throws Exception {
-    String expected = "(10)1098/1234";
-    String path = "src/test/resources/blackbox/rssexpanded-1/28.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("28.png", "(10)1098/1234");
   }
 
   @Test
   public void testDecodeRow2string_29() throws Exception {
-    String expected = "(10)1098.1234";
-    String path = "src/test/resources/blackbox/rssexpanded-1/29.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("29.png", "(10)1098.1234");
   }
 
   @Test
   public void testDecodeRow2string_30() throws Exception {
-    String expected = "(10)1098*1234";
-    String path = "src/test/resources/blackbox/rssexpanded-1/30.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("30.png", "(10)1098*1234");
   }
 
   @Test
   public void testDecodeRow2string_31() throws Exception {
-    String expected = "(10)1098,1234";
-    String path = "src/test/resources/blackbox/rssexpanded-1/31.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("31.png", "(10)1098,1234");
   }
 
   @Test
   public void testDecodeRow2string_32() throws Exception {
-    String expected = "(15)991231(3103)001750(10)12A(422)123(21)123456(423)0123456789012";
-    String path = "src/test/resources/blackbox/rssexpanded-1/32.png";
-
-    assertCorrectImage2string(path, expected);
+    assertCorrectImage2string("32.png", "(15)991231(3103)001750(10)12A(422)123(21)123456(423)0123456789012");
   }
 
-  private static void assertCorrectImage2string(String path, String expected) throws IOException, NotFoundException {
-
-    File file = new File(path);
-    if (!file.exists()) {
+  private static void assertCorrectImage2string(String fileName, String expected)
+      throws IOException, NotFoundException {
+    Path path = Paths.get("src/test/resources/blackbox/rssexpanded-1/").resolve(fileName);
+    if (!Files.exists(path)) {
       // Support running from project root too
-      file = new File("core", path);
+      path = Paths.get("core").resolve(path);
     }
 
-    BufferedImage image = ImageIO.read(file);
-    BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
+    BufferedImage image = ImageIO.read(path.toFile());
+    BinaryBitmap binaryMap =
+        new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 

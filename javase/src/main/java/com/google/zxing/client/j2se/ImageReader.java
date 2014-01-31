@@ -20,7 +20,6 @@ import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -67,9 +66,5 @@ public final class ImageReader {
     byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64Data);
     return ImageIO.read(new ByteArrayInputStream(imageBytes));
   }
-  
-  public static BufferedImage readImage(File file) throws IOException {
-    return readImage(file.toURI());
-  }
-  
+
 }

@@ -27,8 +27,10 @@
 package com.google.zxing.oned.rss.expanded;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -42,12 +44,12 @@ final class TestCaseUtil {
   }
 
   private static BufferedImage getBufferedImage(String path) throws IOException {
-    File file = new File(path);
-    if (!file.exists()) {
+    Path file = Paths.get(path);
+    if (!Files.exists(file)) {
       // Support running from project root too
-      file = new File("core", path);
+      file = Paths.get("core").resolve(file);
     }
-    return ImageIO.read(file);
+    return ImageIO.read(file.toFile());
   }
 
   static BinaryBitmap getBinaryBitmap(String path) throws IOException {
