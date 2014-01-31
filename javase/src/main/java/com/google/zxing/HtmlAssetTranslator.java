@@ -88,8 +88,9 @@ public final class HtmlAssetTranslator {
       DirectoryStream.Filter<Path> fileFilter = new DirectoryStream.Filter<Path>() {
         @Override
         public boolean accept(Path entry) {
+          String fileName = entry.getFileName().toString();
           return Files.isDirectory(entry) && !Files.isSymbolicLink(entry) &&
-              entry.getFileName().startsWith("html-") && !"html-en".equals(entry.getFileName().toString());
+              fileName.startsWith("html-") && !"html-en".equals(fileName);
         }
       };
       try (DirectoryStream<Path> dirs = Files.newDirectoryStream(assetsDir, fileFilter)) {

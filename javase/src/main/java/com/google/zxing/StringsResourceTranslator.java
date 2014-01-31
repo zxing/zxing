@@ -16,9 +16,12 @@
 
 package com.google.zxing;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.net.URI;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
@@ -180,7 +183,7 @@ public final class StringsResourceTranslator {
         "https://www.googleapis.com/language/translate/v2?key=" + API_KEY + "&q=" +
             URLEncoder.encode(english, "UTF-8") +
             "&source=en&target=" + language);
-    CharSequence translateResult = new String(Files.readAllBytes(Paths.get(translateURI)), StandardCharsets.UTF_8);
+    CharSequence translateResult = fetch(translateURI);
     Matcher m = TRANSLATE_RESPONSE_PATTERN.matcher(translateResult);
     if (!m.find()) {
       System.err.println("No translate result");
@@ -197,6 +200,20 @@ public final class StringsResourceTranslator {
     translation = translation.replaceAll("&amp;quot;", "\"");
     translation = translation.replaceAll("&amp;#39;", "'");
     return translation;
+  }
+
+  private static CharSequence fetch(URI translateURI) throws IOException {
+    URLConnection connection = translateURI.toURL().openConnection();
+    connection.connect();
+    StringBuilder translateResult = new StringBuilder(200);
+    try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+      char[] buffer = new char[8192];
+      int charsRead;
+      while ((charsRead = in.read(buffer)) > 0) {
+        translateResult.append(buffer, 0, charsRead);
+      }
+    }
+    return translateResult;
   }
 
   private static Map<String,String> readLines(Path file) throws IOException {
