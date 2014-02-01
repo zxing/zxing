@@ -105,6 +105,7 @@ import android.util.Log;
  * @author Isaac Potoczny-Jones
  * @author Brad Drehmer
  * @author gcstang
+ * @author Dennis Schuerholz
  */
 public class IntentIntegrator {
 
@@ -119,6 +120,7 @@ public class IntentIntegrator {
 
   private static final String BS_PACKAGE = "com.google.zxing.client.android";
   private static final String BSPLUS_PACKAGE = "com.srowen.bs.android";
+  private static final String QRDROID_PACKAGE = "la.droid.qr";
 
   // supported barcode formats
   public static final Collection<String> PRODUCT_CODE_TYPES = list("UPC_A", "UPC_E", "EAN_8", "EAN_13", "RSS_14");
@@ -134,7 +136,9 @@ public class IntentIntegrator {
   public static final List<String> TARGET_ALL_KNOWN = list(
           BSPLUS_PACKAGE,             // Barcode Scanner+
           BSPLUS_PACKAGE + ".simple", // Barcode Scanner+ Simple
-          BS_PACKAGE                  // Barcode Scanner          
+          BS_PACKAGE,                 // Barcode Scanner
+          QRDROID_PACKAGE,            // QR Droid
+          QRDROID_PACKAGE + ".priva"  // QR Droid Private
           // What else supports this intent?
       );
   
@@ -209,7 +213,7 @@ public class IntentIntegrator {
   }
   
   public final void setTargetApplications(List<String> targetApplications) {
-    if (targetApplications.isEmpty()) {
+    if (targetApplications == null || targetApplications.isEmpty()) {
       throw new IllegalArgumentException("No target applications");
     }
     this.targetApplications = targetApplications;
