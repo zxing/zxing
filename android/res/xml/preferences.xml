@@ -108,7 +108,7 @@
         android:summary="@string/preferences_disable_continuous_focus_summary"/>
     <CheckBoxPreference
         android:key="preferences_disable_exposure"
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:title="@string/preferences_disable_exposure_title"/>
     <CheckBoxPreference
         android:key="preferences_disable_metering"

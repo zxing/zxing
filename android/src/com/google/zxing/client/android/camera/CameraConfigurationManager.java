@@ -98,7 +98,7 @@ final class CameraConfigurationManager {
 
     String focusMode = null;
     if (prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true)) {
-      if (safeMode || prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, false)) {
+      if (safeMode || prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true)) {
         focusMode = findSettableValue(parameters.getSupportedFocusModes(),
                                       Camera.Parameters.FOCUS_MODE_AUTO);
       } else {
@@ -127,7 +127,7 @@ final class CameraConfigurationManager {
         }
       }
 
-      if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_BARCODE_SCENE_MODE, false)) {
+      if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_BARCODE_SCENE_MODE, true)) {
         String sceneMode = findSettableValue(parameters.getSupportedSceneModes(),
                                              Camera.Parameters.SCENE_MODE_BARCODE);
         if (sceneMode != null) {
@@ -135,7 +135,7 @@ final class CameraConfigurationManager {
         }
       }
 
-      if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_METERING, false)) {
+      if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_METERING, true)) {
         if (parameters.isVideoStabilizationSupported()) {
           Log.i(TAG, "Enabling video stabilization...");
           parameters.setVideoStabilization(true);
@@ -209,7 +209,7 @@ final class CameraConfigurationManager {
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, false)) {
+    if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, true)) {
       if (!safeMode) {
         int minExposure = parameters.getMinExposureCompensation();
         int maxExposure = parameters.getMaxExposureCompensation();
