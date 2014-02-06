@@ -41,20 +41,23 @@ public final class VINResultParser extends ResultParser {
     if (!AZ09.matcher(rawText).matches()) {
       return null;
     }
-    if (!checkChecksum(rawText)) {
+    try {
+      if (!checkChecksum(rawText)) {
+        return null;
+      }
+      String wmi = rawText.substring(0, 3);
+      return new VINParsedResult(rawText,
+          wmi,
+          rawText.substring(3, 9),
+          rawText.substring(9, 17),
+          countryCode(wmi),
+          rawText.substring(3, 8),
+          modelYear(rawText.charAt(9)),
+          rawText.charAt(10),
+          rawText.substring(11));
+    } catch (IllegalArgumentException iae) {
       return null;
     }
-
-    String wmi = rawText.substring(0, 3);
-    return new VINParsedResult(rawText,
-                               wmi,
-                               rawText.substring(3, 9),
-                               rawText.substring(9, 17),
-                               countryCode(wmi),
-                               rawText.substring(3, 8),
-                               modelYear(rawText.charAt(9)),
-                               rawText.charAt(10),
-                               rawText.substring(11));
   }
 
   private static boolean checkChecksum(CharSequence vin) {
