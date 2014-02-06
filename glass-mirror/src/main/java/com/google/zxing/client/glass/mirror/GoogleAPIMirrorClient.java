@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
+@Deprecated
 final class GoogleAPIMirrorClient extends MirrorClient {
 
   @Override

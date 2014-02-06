@@ -43,6 +43,7 @@ import javax.imageio.ImageIO;
 /**
  * @author Sean Owen
  */
+@Deprecated
 final class DecodeHelper {
 
   // No real reason to deal with more than maybe 8.3 megapixels

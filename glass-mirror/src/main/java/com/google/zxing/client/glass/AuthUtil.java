@@ -51,6 +51,7 @@ import java.util.Collection;
  * @author Sean Owen
  * @author Google
  */
+@Deprecated
 final class AuthUtil {
 
   private static final Collection<String> SCOPES = 

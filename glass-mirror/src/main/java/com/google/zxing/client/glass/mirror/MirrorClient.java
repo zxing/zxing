@@ -25,6 +25,7 @@ import com.google.api.services.mirror.model.Contact;
 import com.google.api.services.mirror.model.Subscription;
 import com.google.api.services.mirror.model.TimelineItem;
 
+@Deprecated
 public abstract class MirrorClient {
   
   private static MirrorClient instance = null;

@@ -36,6 +36,7 @@ import com.google.zxing.client.glass.mirror.MirrorClient;
 /**
  * @author Sean Owen
  */
+@Deprecated
 final class NotificationCallable implements Callable<Void> {
   
   private final Credential credential;

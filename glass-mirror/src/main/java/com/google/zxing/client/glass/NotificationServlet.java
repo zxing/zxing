@@ -35,6 +35,7 @@ import com.google.api.services.mirror.model.Notification;
  * @author Sean Owen
  * @link https://developers.google.com/glass/develop/mirror/timeline
  */
+@Deprecated
 public final class NotificationServlet extends HttpServlet {
 
   private ExecutorService executor;

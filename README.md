@@ -36,9 +36,13 @@ There are also additional modules which are contributed and/or intermittently ma
 | Module       | Description
 | ------------ | -----------
 | actionscript | partial port to Actionscript
-| glass-mirror | partial implementation for the Google Glass Mirror API
 | jruby        | JRuby wrapper
 
+### Deprecated
+
+| Module       | Description
+| ------------ | -----------
+| glass-mirror | partial implementation for the Google Glass Mirror API
 
 ### Available in previous releases
 

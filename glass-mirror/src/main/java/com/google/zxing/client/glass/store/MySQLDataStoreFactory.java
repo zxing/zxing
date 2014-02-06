@@ -21,6 +21,7 @@ import com.google.api.client.util.store.DataStore;
 
 import java.io.Serializable;
 
+@Deprecated
 final class MySQLDataStoreFactory extends AbstractDataStoreFactory {
 
   @Override

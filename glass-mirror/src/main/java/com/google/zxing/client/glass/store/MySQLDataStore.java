@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
+@Deprecated
 final class MySQLDataStore<V extends Serializable> extends AbstractDataStore<V> {
 
   MySQLDataStore(DataStoreFactory dataStoreFactory, String id) {

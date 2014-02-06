@@ -62,6 +62,7 @@ import org.slf4j.LoggerFactory;
  * @author Sean Owen
  * @link https://developers.google.com/glass/develop/mirror/authorization
  */
+@Deprecated
 public final class NewUserSetupServlet extends HttpServlet {
   
   private static final Logger log = LoggerFactory.getLogger(NewUserSetupServlet.class);
