@@ -50,7 +50,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>16.0</version>
+        <version>16.0.1</version>
       </dependency>
       <dependency>
         <groupId>javax</groupId>
@@ -87,7 +87,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <slf4j.version>1.7.5</slf4j.version>
+    <slf4j.version>1.7.6</slf4j.version>
   </properties>
 
   <build>
