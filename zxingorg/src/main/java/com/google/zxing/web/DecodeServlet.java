@@ -205,44 +205,39 @@ public final class DecodeServlet extends HttpServlet {
     connection.setRequestProperty(HttpHeaders.CONNECTION, "close");
 
     try {
+      connection.connect();
+    } catch (IOException ioe) {
+      // Encompasses lots of stuff, including
+      //  java.net.SocketException, java.net.UnknownHostException,
+      //  javax.net.ssl.SSLPeerUnverifiedException,
+      //  org.apache.http.NoHttpResponseException,
+      //  org.apache.http.client.ClientProtocolException,
+      log.info(ioe.toString());
+      response.sendRedirect("badurl.jspx");
+      return;
+    }
 
+    try (InputStream is = connection.getInputStream()) {
       try {
-        connection.connect();
-      } catch (IOException ioe) {
-        // Encompasses lots of stuff, including
-        //  java.net.SocketException, java.net.UnknownHostException,
-        //  javax.net.ssl.SSLPeerUnverifiedException,
-        //  org.apache.http.NoHttpResponseException,
-        //  org.apache.http.client.ClientProtocolException,
-        log.info(ioe.toString());
-        response.sendRedirect("badurl.jspx");
-        return;
-      }
-
-      try (InputStream is = connection.getInputStream()) {
-        try {
-          if (connection.getResponseCode() != HttpServletResponse.SC_OK) {
-            log.info("Unsuccessful return code: " + connection.getResponseCode());
-            response.sendRedirect("badurl.jspx");
-            return;
-          }
-          if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
-            log.info("Too large");
-            response.sendRedirect("badimage.jspx");
-            return;
-          }
-
-          log.info("Decoding " + imageURL);
-          processStream(is, request, response);
-
-        } catch (IOException ioe) {
-          log.info(ioe.toString());
+        if (connection.getResponseCode() != HttpServletResponse.SC_OK) {
+          log.info("Unsuccessful return code: " + connection.getResponseCode());
           response.sendRedirect("badurl.jspx");
-        } finally {
-          consumeRemainder(is);
+          return;
         }
-      }
+        if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
+          log.info("Too large");
+          response.sendRedirect("badimage.jspx");
+          return;
+        }
 
+        log.info("Decoding " + imageURL);
+        processStream(is, request, response);
+      } finally {
+        consumeRemainder(is);
+      }
+    } catch (IOException ioe) {
+      log.info(ioe.toString());
+      response.sendRedirect("badurl.jspx");
     } finally {
       connection.disconnect();
     }
