@@ -32,7 +32,8 @@ import com.google.zxing.common.BitMatrix;
  */
 public final class WhiteRectangleDetector {
 
-  private static final int INIT_SIZE = 10;
+  private static final float MIN_PCNT = 0.1;
+  private static final int MIN_SIZE = 10;
   private static final int CORR = 1;
 
   private final BitMatrix image;
@@ -44,7 +45,10 @@ public final class WhiteRectangleDetector {
   private final int upInit;
 
   public WhiteRectangleDetector(BitMatrix image) throws NotFoundException {
-    this(image, INIT_SIZE, image.getWidth() / 2, image.getHeight() / 2);
+    int maxImageDimension = Math.max(image.getHeight, image.getWidth());
+    int pcntBasedInitSize = maxImageDimension * MIN_PCNT;
+    int initSize = Math.max(pcntBasedInitSize, MIN_SIZE));
+    this(image, initSize, image.getWidth() / 2, image.getHeight() / 2);
   }
 
   /**
