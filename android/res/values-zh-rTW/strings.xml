@@ -104,8 +104,8 @@
   <string name="preferences_disable_exposure_title">取消曝光</string>
   <string name="preferences_disable_metering_title">取消測光</string>
   <string name="preferences_front_light_auto">自動</string>
-  <string name="preferences_front_light_off">待用</string>
-  <string name="preferences_front_light_on">活躍</string>
+  <string name="preferences_front_light_off">關</string>
+  <string name="preferences_front_light_on">開</string>
   <string name="preferences_front_light_summary">改善在低光源的環境下掃描的成功率，但有可能造成過度曝光的現象</string>
   <string name="preferences_front_light_title">使用前光源</string>
   <string name="preferences_general_title">一般設定</string>
