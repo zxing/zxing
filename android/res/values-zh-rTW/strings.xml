@@ -95,7 +95,7 @@
   <string name="preferences_decode_1D_product_title">一維產品條碼</string>
   <string name="preferences_decode_Aztec_title">Aztec 條碼</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix 條碼</string>
-  <string name="preferences_decode_PDF417_title">PDF417</string>
+  <string name="preferences_decode_PDF417_title">PDF417 條碼</string>
   <string name="preferences_decode_QR_title">QR Code</string>
   <string name="preferences_device_bug_workarounds_title">迴避設備問題</string>
   <string name="preferences_disable_barcode_scene_mode_title">取消條碼場景模式</string>
