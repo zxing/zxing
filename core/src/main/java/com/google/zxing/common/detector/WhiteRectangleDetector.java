@@ -44,7 +44,7 @@ public final class WhiteRectangleDetector {
   private final int upInit;
 
   public WhiteRectangleDetector(BitMatrix image) throws NotFoundException {
-	this(image, INIT_SIZE, image.getWidth() / 2, image.getHeight() / 2);
+    this(image, INIT_SIZE, image.getWidth() / 2, image.getHeight() / 2);
   }
 
   /**
@@ -180,8 +180,8 @@ public final class WhiteRectangleDetector {
       if (aBlackPointFoundOnBorder) {
         atLeastOneBlackPointFoundOnBorder = true;
       }
-      
-  }
+
+    }
 
     if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder) {
 
