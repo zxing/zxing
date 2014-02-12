@@ -50,7 +50,8 @@ public final class ITFReader extends OneDReader {
   private static final int W = 3; // Pixel width of a wide line
   private static final int N = 1; // Pixed width of a narrow line
 
-  private static final int[] DEFAULT_ALLOWED_LENGTHS = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
+  /** Valid ITF lengths. Anything longer than the largest value is also allowed. */
+  private static final int[] DEFAULT_ALLOWED_LENGTHS = { 6, 8, 10, 12, 14 };
 
   // Stores the actual narrow line width of the image being decoded.
   private int narrowLineWidth = -1;
@@ -102,14 +103,21 @@ public final class ITFReader extends OneDReader {
     }
 
     // To avoid false positives with 2D barcodes (and other patterns), make
-    // an assumption that the decoded string must be 6, 10 or 14 digits.
+    // an assumption that the decoded string must be a 'standard' length if it's short
     int length = resultString.length();
     boolean lengthOK = false;
+    int maxAllowedLength = 0;
     for (int allowedLength : allowedLengths) {
       if (length == allowedLength) {
         lengthOK = true;
         break;
       }
+      if (allowedLength > maxAllowedLength) {
+        maxAllowedLength = allowedLength;
+      }
+    }
+    if (!lengthOK && length > maxAllowedLength) {
+      lengthOK = true;
     }
     if (!lengthOK) {
       throw FormatException.getFormatInstance();
