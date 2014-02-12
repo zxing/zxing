@@ -18,18 +18,18 @@
   <string name="app_name">條碼掃描器</string>
   <string name="app_picker_name">應用程式</string>
   <string name="bookmark_picker_name">書籤</string>
-  <string name="button_add_calendar">加入事件至行事曆</string>
+  <string name="button_add_calendar">加入至行事曆</string>
   <string name="button_add_contact">加入聯絡人</string>
-  <string name="button_book_search">開啟圖書搜尋</string>
+  <string name="button_book_search">圖書搜尋</string>
   <string name="button_cancel">取消</string>
   <string name="button_custom_product_search">自定義搜尋</string>
   <string name="button_dial">撥號</string>
   <string name="button_email">發送電子郵件</string>
-  <string name="button_get_directions">路線規劃</string>
+  <string name="button_get_directions">規劃路線</string>
   <string name="button_mms">發送 MMS</string>
   <string name="button_ok">確定</string>
   <string name="button_open_browser">開啟瀏覽器</string>
-  <string name="button_product_search">開啟產品搜尋</string>
+  <string name="button_product_search">產品搜尋</string>
   <string name="button_search_book_contents">搜尋圖書內容</string>
   <string name="button_share_app">應用程式</string>
   <string name="button_share_bookmark">書籤</string>
@@ -40,7 +40,7 @@
   <string name="button_show_map">顯示地圖</string>
   <string name="button_sms">發送簡訊</string>
   <string name="button_web_search">網頁搜尋</string>
-  <string name="button_wifi">連接到網路</string>
+  <string name="button_wifi">連接網路</string>
   <string name="contents_contact">聯絡人資訊</string>
   <string name="contents_email">電子郵件地址</string>
   <string name="contents_location">地理座標</string>
@@ -50,7 +50,7 @@
   <string name="history_clear_one_history_text">清除記錄</string>
   <string name="history_clear_text">清除</string>
   <string name="history_email_title">條碼掃描器記錄</string>
-  <string name="history_empty">空的</string>
+  <string name="history_empty">沒有記錄</string>
   <string name="history_empty_detail">沒有條碼掃描記錄</string>
   <string name="history_send">發送記錄</string>
   <string name="history_title">記錄</string>
@@ -95,7 +95,7 @@
   <string name="preferences_decode_1D_product_title">一維產品條碼</string>
   <string name="preferences_decode_Aztec_title">Aztec 條碼</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix 條碼</string>
-  <string name="preferences_decode_PDF417_title">PDF417 條碼</string>
+  <string name="preferences_decode_PDF417_title">PDF417 條碼（β）</string>
   <string name="preferences_decode_QR_title">QR Code</string>
   <string name="preferences_device_bug_workarounds_title">迴避設備問題</string>
   <string name="preferences_disable_barcode_scene_mode_title">取消條碼場景模式</string>
@@ -109,10 +109,10 @@
   <string name="preferences_front_light_summary">改善在低光源的環境下掃描的成功率，但有可能造成過度曝光的現象</string>
   <string name="preferences_front_light_title">使用前光源</string>
   <string name="preferences_general_title">一般設定</string>
-  <string name="preferences_invert_scan_summary">掃描黑底白字的條碼，某些設備上無法使用。</string>
+  <string name="preferences_invert_scan_summary">掃描黑底白字的條碼（某些設備上無法使用）</string>
   <string name="preferences_invert_scan_title">黑底白字掃描</string>
   <string name="preferences_name">設定</string>
-  <string name="preferences_play_beep_title">提示音</string>
+  <string name="preferences_play_beep_title">嗶一聲</string>
   <string name="preferences_remember_duplicates_summary">在記錄中重複儲存相同的條碼</string>
   <string name="preferences_remember_duplicates_title">記錄重複的條碼</string>
   <string name="preferences_result_title">結果設定</string>
@@ -133,7 +133,7 @@
   <string name="result_uri">找到 URL</string>
   <string name="result_wifi">找到無線區網設定</string>
   <string name="sbc_name">Google 圖書搜尋</string>
-  <string name="wifi_changing_network">網絡連接請求中\u2026</string>
+  <string name="wifi_changing_network">網路連接中\u2026</string>
   <string name="wifi_ssid_label">網路名稱</string>
   <string name="wifi_type_label">類型</string>
 </resources>
