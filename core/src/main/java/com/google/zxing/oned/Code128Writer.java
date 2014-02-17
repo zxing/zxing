@@ -106,8 +106,27 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
       if (newCodeSet == codeSet) {
         // Encode the current character
         if (codeSet == CODE_CODE_B) {
-          patternIndex = contents.charAt(position) - ' ';
-          position += 1;
+          switch (contents.charAt(position)) {
+            case ESCAPE_FNC_1:
+              patternIndex = CODE_FNC_1;
+              position++;
+              break;
+            case ESCAPE_FNC_2:
+              patternIndex = CODE_FNC_2;
+              position++;
+              break;
+            case ESCAPE_FNC_3:
+              patternIndex = CODE_FNC_3;
+              position++;
+              break;
+            case ESCAPE_FNC_4:
+              patternIndex = CODE_FNC_4_B; // FIXME if this ever outputs Code A
+              position++;
+              break;
+            default:
+              patternIndex = contents.charAt(position) - ' ';
+              position++;
+          }
         } else { // CODE_CODE_C
           switch (contents.charAt(position)) {
             case ESCAPE_FNC_1:
