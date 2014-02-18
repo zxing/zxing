@@ -32,7 +32,7 @@ public enum DecodeHintType {
   /**
    * Unspecified, application-specific hint. Maps to an unspecified {@link Object}.
    */
- OTHER(Object.class),
+  OTHER(Object.class),
 
   /**
    * Image is a pure monochrome image of a barcode. Doesn't matter what it maps to;
@@ -90,12 +90,13 @@ public enum DecodeHintType {
 
 
   /**
-   * Allowed extension lengths for EAN or UPC barcodes.
-   * Other formats will ignore this.
+   * Allowed extension lengths for EAN or UPC barcodes. Other formats will ignore this.
    * Maps to an {@code int[]} of the allowed extension lengths, for example [2], [5], or [2, 5].
-   * If it is optional to have an extension, do not set this hint.
+   * If it is optional to have an extension, do not set this hint. If this is set,
+   * and a UPC or EAN barcode is found but an extension is not, then no result will be returned
+   * at all.
    */
-  ALLOWED_EAN_EXTENSIONS(int[].class);
+  ALLOWED_EAN_EXTENSIONS(int[].class),
 
   // End of enumeration values.
   ;

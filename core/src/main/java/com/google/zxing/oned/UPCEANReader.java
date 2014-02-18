@@ -206,17 +206,17 @@ public abstract class UPCEANReader extends OneDReader {
       // continue
     }
 
-    int[] allowedExtensions = hints == null ? null :
-        (int[])hints.get(DecodeHintType.ALLOWED_EAN_EXTENSIONS);
-    if(allowedExtensions != null) {
+    int[] allowedExtensions =
+        hints == null ? null : (int[]) hints.get(DecodeHintType.ALLOWED_EAN_EXTENSIONS);
+    if (allowedExtensions != null) {
       boolean valid = false;
       for (int length : allowedExtensions) {
-        if(extensionLength == length) {
+        if (extensionLength == length) {
           valid = true;
           break;
         }
       }
-      if(!valid) {
+      if (!valid) {
         throw NotFoundException.getNotFoundInstance();
       }
     }
