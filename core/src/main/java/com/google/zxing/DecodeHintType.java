@@ -88,6 +88,15 @@ public enum DecodeHintType {
    */
   NEED_RESULT_POINT_CALLBACK(ResultPointCallback.class),
 
+
+  /**
+   * Allowed extension lengths for EAN or UPC barcodes.
+   * Other formats will ignore this.
+   * Maps to an {@code int[]} of the allowed extension lengths, for example [2], [5], or [2, 5].
+   * If it is optional to have an extension, do not set this hint.
+   */
+  ALLOWED_EAN_EXTENSIONS(int[].class);
+
   // End of enumeration values.
   ;
 
