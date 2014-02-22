@@ -62,6 +62,9 @@ public final class VEventResultParser extends ResultParser {
       longitude = Double.NaN;
     } else {
       int semicolon = geoString.indexOf(';');
+      if (semicolon < 0) {
+        return null;
+      }
       try {
         latitude = Double.parseDouble(geoString.substring(0, semicolon));
         longitude = Double.parseDouble(geoString.substring(semicolon + 1));

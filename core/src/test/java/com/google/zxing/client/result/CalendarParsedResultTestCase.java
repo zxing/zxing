@@ -139,6 +139,16 @@ public final class CalendarParsedResultTestCase extends Assert {
   }
 
   @Test
+  public void testBadGeo() {
+    // Not parsed as VEVENT
+    Result fakeResult = new Result("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "GEO:-12.345\r\n" +
+        "END:VEVENT\r\nEND:VCALENDAR", null, null, BarcodeFormat.QR_CODE);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
+    assertSame(ParsedResultType.URI, result.getType());
+  }
+
+  @Test
   public void testOrganizer() {
     doTest(
         "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
