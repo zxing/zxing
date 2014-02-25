@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2012 ZXing authors
+ Copyright (C) 2014 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -69,9 +69,11 @@
   <string name="msg_default_time">時間</string>
   <string name="msg_default_type">類型</string>
   <string name="msg_encode_contents_failed">無法讀取條碼。</string>
+  <string name="msg_error">錯誤</string>
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">抱歉，無法打開所需軟體，條碼內容可能不符規格。</string>
+  <string name="msg_invalid_value">值無效</string>
   <string name="msg_redirect">重定向</string>
   <string name="msg_sbc_book_not_searchable">無法找到此圖書。</string>
   <string name="msg_sbc_failed">搜尋時發生錯誤。</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2014 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -69,9 +69,11 @@
   <string name="msg_default_time">Time</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
+  <string name="msg_error">Error</string>
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
+  <string name="msg_invalid_value">Invalid value</string>
   <string name="msg_redirect">Redirect</string>
   <string name="msg_sbc_book_not_searchable">Sorry, this book is not searchable.</string>
   <string name="msg_sbc_failed">Sorry, the search encountered a problem.</string>

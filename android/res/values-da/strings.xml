@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2012 ZXing authors
+ Copyright (C) 2014 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -69,9 +69,11 @@
   <string name="msg_default_time">Tid</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_contents_failed">Kunne ikke indkode en stregkode fra oplysningerne givet.</string>
+  <string name="msg_error">Fejl</string>
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Beklager, den ønskede applikation kunne ikke blive startet. Stregkodeindholdet er måsket ugyldigt.</string>
+  <string name="msg_invalid_value">Ugyldig værdi</string>
   <string name="msg_redirect">Omdirigér</string>
   <string name="msg_sbc_book_not_searchable">Beklager, denne bog er ikke søgbar.</string>
   <string name="msg_sbc_failed">Beklager, søgningen er stødt på et problem.</string>

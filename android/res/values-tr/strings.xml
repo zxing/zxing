@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2012 ZXing authors
+ Copyright (C) 2014 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -69,9 +69,11 @@
   <string name="msg_default_time">Süre</string>
   <string name="msg_default_type">Tür</string>
   <string name="msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
+  <string name="msg_error">Hata</string>
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Üzgünüz, istenen uygulama başlatılamadı. Barkod içeriği geçersiz olabilir.</string>
+  <string name="msg_invalid_value">Geçersiz değer</string>
   <string name="msg_redirect">Yönlendirme</string>
   <string name="msg_sbc_book_not_searchable">Üzgünüz, bu kitapla ilgili arama yapılamıyor.</string>
   <string name="msg_sbc_failed">Üzgünüz, arama esnasında bir sorun oluştu.</string>

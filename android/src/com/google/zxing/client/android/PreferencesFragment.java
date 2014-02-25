@@ -16,12 +16,17 @@
 
 package com.google.zxing.client.android;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
@@ -46,6 +51,10 @@ public final class PreferencesFragment
                                     PreferencesActivity.KEY_DECODE_AZTEC,
                                     PreferencesActivity.KEY_DECODE_PDF417);
     disableLastCheckedPref();
+
+    EditTextPreference customProductSearch = (EditTextPreference)
+        preferences.findPreference(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH);
+    customProductSearch.setOnPreferenceChangeListener(new CustomSearchURLValidator());
   }
 
   private static CheckBoxPreference[] findDecodePrefs(PreferenceScreen preferences, String... keys) {
@@ -71,6 +80,40 @@ public final class PreferencesFragment
     boolean disable = checked.size() <= 1;
     for (CheckBoxPreference pref : checkBoxPrefs) {
       pref.setEnabled(!(disable && checked.contains(pref)));
+    }
+  }
+
+  private class CustomSearchURLValidator implements Preference.OnPreferenceChangeListener {
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+      if (!isValid(newValue)) {
+        AlertDialog.Builder builder =
+            new AlertDialog.Builder(PreferencesFragment.this.getActivity());
+        builder.setTitle(R.string.msg_error);
+        builder.setMessage(R.string.msg_invalid_value);
+        builder.setCancelable(true);
+        builder.show();
+        return false;
+      }
+      return true;
+    }
+
+    private boolean isValid(Object newValue) {
+      // Allow empty/null value
+      if (newValue == null) {
+        return true;
+      }
+      String valueString = newValue.toString();
+      if (valueString.isEmpty()) {
+        return true;
+      }
+      // Require a scheme otherwise:
+      try {
+        URI uri = new URI(valueString);
+        return uri.getScheme() != null;
+      } catch (URISyntaxException use) {
+        return false;
+      }
     }
   }
 

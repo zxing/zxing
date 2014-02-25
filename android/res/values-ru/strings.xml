@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2012 ZXing authors
+ Copyright (C) 2014 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -69,9 +69,11 @@
   <string name="msg_default_time">Время</string>
   <string name="msg_default_type">Тип</string>
   <string name="msg_encode_contents_failed">Невозможно создать штрих-код из текущих данных.</string>
+  <string name="msg_error">Ошибка</string>
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Возможно, содержимое штрих-кода повреждено.</string>
+  <string name="msg_invalid_value">Неверное значение</string>
   <string name="msg_redirect">Переслать</string>
   <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>
   <string name="msg_sbc_failed">К сожалению, возникла ошибка поиска.</string>

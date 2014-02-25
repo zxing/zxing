@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2012 ZXing authors
+ Copyright (C) 2014 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -69,9 +69,11 @@
   <string name="msg_default_time">الوقت</string>
   <string name="msg_default_type">النوع</string>
   <string name="msg_encode_contents_failed">تعذر ترميز رمز شريطي من البيانات المتوفرة.</string>
+  <string name="msg_error">خطأ</string>
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">عفوا، تعذر تشغيل التطبيق المطلوب. قد تكون محتويات الرمز الشريطي غير صحيحة.</string>
+  <string name="msg_invalid_value">قيمة غير صالحة</string>
   <string name="msg_redirect">إعادة توجيه</string>
   <string name="msg_sbc_book_not_searchable">عفوا، لا يمكن البحث في هذا الكتاب.</string>
   <string name="msg_sbc_failed">عفوا، حدثت مشكلة في عملية البحث.</string>

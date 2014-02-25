@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2013 ZXing authors
+ Copyright (C) 2014 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -47,8 +47,8 @@
   <string name="contents_phone">Telefon</string>
   <string name="contents_sms">Număr de SMS</string>
   <string name="contents_text">Text</string>
-  <string name="history_clear_text">Șterge istoricul</string>
   <string name="history_clear_one_history_text">Șterge</string>
+  <string name="history_clear_text">Șterge istoricul</string>
   <string name="history_email_title">Istoric Barcode Scanner</string>
   <string name="history_empty">Nicio înregistare</string>
   <string name="history_empty_detail">Nicio scanare de coduri de bară nu a fost înregistrată</string>
@@ -69,9 +69,11 @@
   <string name="msg_default_time">Ora</string>
   <string name="msg_default_type">Tip</string>
   <string name="msg_encode_contents_failed">Codificare eșuată a codului de bare, din datele furnizate</string>
+  <string name="msg_error">Eroare</string>
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">Aplicația solicitată nu a putut fi lansată. Codul de bare poate fi incorect.</string>
+  <string name="msg_invalid_value">Valoare nevalidă</string>
   <string name="msg_redirect">Redirecționare</string>
   <string name="msg_sbc_book_not_searchable">Cartea nu poate fi căutată</string>
   <string name="msg_sbc_failed">Căutarea a întâmpinat probleme</string>
@@ -103,14 +105,14 @@
   <string name="preferences_disable_continuous_focus_title">Dezactivează focalizarea continuă</string>
   <string name="preferences_disable_exposure_title">Nicio expunere</string>
   <string name="preferences_disable_metering_title">Nicio contorizare</string>
-  <string name="preferences_front_light_summary">Îmbunătățește scanarea în lumină redusă, dar poate cauza strălucire excesivă. Nu funcționează la toate aparatele.</string>
-  <string name="preferences_front_light_title">Folosește lumina frontală</string>
   <string name="preferences_front_light_auto">Iluminare automată</string>
   <string name="preferences_front_light_off">Oprește</string>
   <string name="preferences_front_light_on">Pornește</string>
+  <string name="preferences_front_light_summary">Îmbunătățește scanarea în lumină redusă, dar poate cauza strălucire excesivă. Nu funcționează la toate aparatele.</string>
+  <string name="preferences_front_light_title">Folosește lumina frontală</string>
   <string name="preferences_general_title">Configurări generale</string>
+  <string name="preferences_invert_scan_summary">Scanează coduri de bară albe pe fundal negru. Indisponibil pe unele aparate.</string>
   <string name="preferences_invert_scan_title">Scanare în negativ</string>
-  <string name="preferences_invert_scan_summary">Scanează coduri de bară albe pe fundal negru. Indisponibil pe unele aparate.</string>  
   <string name="preferences_name">Configurări</string>
   <string name="preferences_play_beep_title">Sună</string>
   <string name="preferences_remember_duplicates_summary">Înregistrează în Istoric, scanări multiple ale aceluiași cod de bare</string>
