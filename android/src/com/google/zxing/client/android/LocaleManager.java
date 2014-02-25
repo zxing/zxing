@@ -172,7 +172,7 @@ public final class LocaleManager {
 
   public static String getCountry(Context context) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    String countryOverride = prefs.getString(PreferencesActivity.KEY_SEARCH_COUNTRY, null);
+    String countryOverride = prefs.getString(PreferencesActivity.KEY_SEARCH_COUNTRY, "-");
     if (countryOverride != null && !countryOverride.isEmpty() && !"-".equals(countryOverride)) {
       return countryOverride;
     }
