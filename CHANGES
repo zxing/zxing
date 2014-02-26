@@ -330,6 +330,9 @@
   - Many small fixes and improvements
   - (Last release including cpp/ and iphone/ code)
 
-3.0.0 (??)
+3.0.0 (3 March 2014)
 
-  - iphone/, cpp/ and objc/ are retired
+  - iphone/, cpp/, objc/, and glass-mirror/ are retired
+  - Java 7 now used for all Java-based modules
+  - Project moved to github.com/zxing/zxing
+  - Many small bug fixes and improvements
