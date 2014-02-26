@@ -78,10 +78,6 @@
     <module>android</module>
     <module>androidtest</module>
     -->
-    <!-- Deprecated -->
-    <!--
-    <module>glass-mirror</module>
-    -->
   </modules>
 
   <properties>
