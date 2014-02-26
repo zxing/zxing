@@ -257,12 +257,6 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>2.5.3</version>
-          <configuration>
-            <threshold>Normal</threshold>
-            <effort>Max</effort>
-            <xmlOutput>true</xmlOutput>
-            <xmlOutputDirectory>target/site</xmlOutputDirectory>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -346,6 +340,13 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
+        <configuration>
+          <threshold>Normal</threshold>
+          <effort>Max</effort>
+          <xmlOutput>true</xmlOutput>
+          <xmlOutputDirectory>target/site</xmlOutputDirectory>
+          <excludeFilterFile>src/findbugs/excludes.xml</excludeFilterFile>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
