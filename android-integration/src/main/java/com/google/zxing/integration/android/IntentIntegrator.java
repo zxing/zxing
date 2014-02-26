@@ -332,10 +332,8 @@ public class IntentIntegrator {
         }
       }
     });
-    downloadDialog.setNegativeButton(buttonNo, new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialogInterface, int i) {}
-    });
+    downloadDialog.setNegativeButton(buttonNo, null);
+    downloadDialog.setCancelable(true);
     return downloadDialog.show();
   }
 
