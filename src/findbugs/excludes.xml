@@ -23,11 +23,6 @@
       <Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS"/>
       <Bug pattern="SE_NO_SERIALVERSIONID"/>
       <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
-
-      <Bug pattern=""/>
-      <Bug pattern=""/>
-      <Bug pattern=""/>
-
     </Or>
   </Match>
 </FindBugsFilter>
