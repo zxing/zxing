@@ -28,7 +28,7 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.MultiFormatWriter;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.common.BitMatrix;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Paths;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.Locale;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
@@ -98,23 +98,22 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>        outFileString += '.' + imageFormat.toLowerCase(Locale.ENGLISH);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      }
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <a href="../../../../../com/google/zxing/MultiFormatWriter.html">MultiFormatWriter</a> barcodeWriter = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/MultiFormatWriter.html">MultiFormatWriter</a>();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> matrix = barcodeWriter.encode(contents, barcodeFormat, width, height);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      MatrixToImageWriter.writeToFile(matrix, imageFormat, <strong class="jxr_keyword">new</strong> File(outFileString));
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>    }
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> printUsage() {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>      System.err.println(<span class="jxr_string">"Encodes barcode images using the ZXing library\n"</span>);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     System.err.println(<span class="jxr_string">"usage: CommandLineEncoder [ options ] content_to_encode"</span>);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     System.err.println(<span class="jxr_string">"  --barcode_format=format: Format to encode, from BarcodeFormat class. "</span> +
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>                            <span class="jxr_string">"Not all formats are supported. Defaults to QR_CODE."</span>);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     System.err.println(<span class="jxr_string">"  --image_format=format: image output format, such as PNG, JPG, GIF. Defaults to PNG"</span>);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     System.err.println(<span class="jxr_string">"  --output=filename: File to write to. Defaults to out.png"</span>);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     System.err.println(<span class="jxr_string">"  --width=pixels: Image width. Defaults to 300"</span>);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     System.err.println(<span class="jxr_string">"  --height=pixels: Image height. Defaults to 300"</span>);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>   }
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> }
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> matrix = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/MultiFormatWriter.html">MultiFormatWriter</a>().encode(contents, barcodeFormat, width, height);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      MatrixToImageWriter.writeToPath(matrix, imageFormat, Paths.get(outFileString));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>    }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> printUsage() {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      System.err.println(<span class="jxr_string">"Encodes barcode images using the ZXing library\n"</span>);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      System.err.println(<span class="jxr_string">"usage: CommandLineEncoder [ options ] content_to_encode"</span>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     System.err.println(<span class="jxr_string">"  --barcode_format=format: Format to encode, from BarcodeFormat class. "</span> +
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                            <span class="jxr_string">"Not all formats are supported. Defaults to QR_CODE."</span>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     System.err.println(<span class="jxr_string">"  --image_format=format: image output format, such as PNG, JPG, GIF. Defaults to PNG"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     System.err.println(<span class="jxr_string">"  --output=filename: File to write to. Defaults to out.png"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     System.err.println(<span class="jxr_string">"  --width=pixels: Image width. Defaults to 300"</span>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     System.err.println(<span class="jxr_string">"  --height=pixels: Image height. Defaults to 300"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>   }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

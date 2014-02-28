@@ -25,155 +25,155 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.io.BufferedReader;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.io.BufferedWriter;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.FileFilter;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.FileInputStream;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.FileOutputStream;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.InputStreamReader;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.io.OutputStreamWriter;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.io.Reader;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.io.Writer;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.net.URL;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.net.URLConnection;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.net.URLEncoder;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.Charset;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.Collection;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> java.util.SortedMap;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> java.util.TreeMap;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Matcher;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;A utility which auto-translates English strings in Android string resources using</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * Google Translate.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Pass the Android client res/ directory as first argument, and optionally message keys</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * who should be forced to retranslate.</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * Usage: {@code StringsResourceTranslator android/res/ [key_1 ...]}&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.InputStreamReader;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.Writer;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.net.URLConnection;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.net.URLEncoder;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.StandardCharsets;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.nio.file.DirectoryStream;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Files;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Path;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Paths;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.nio.file.StandardCopyOption;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.Collection;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.TreeMap;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Matcher;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;A utility which auto-translates English strings in Android string resources using</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * Google Translate.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Pass the Android client res/ directory as first argument, and optionally message keys</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * who should be forced to retranslate.</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * Usage: {@code StringsResourceTranslator android/res/ [key_1 ...]}&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;You must set your Google Translate API key into the environment with -DtranslateAPI.key=...&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;You must set your Google Translate API key into the environment with -DtranslateAPI.key=...&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../com/google/zxing/StringsResourceTranslator.html">StringsResourceTranslator</a> {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String API_KEY = System.getProperty(<span class="jxr_string">"translateAPI.key"</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>    
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Charset UTF8 = Charset.forName(<span class="jxr_string">"UTF-8"</span>);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern ENTRY_PATTERN = Pattern.compile(<span class="jxr_string">"&lt;string name=\&quot;([^\&quot;]+)\&quot;.*&gt;([^&lt;]+)&lt;/string&gt;"</span>);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile(<span class="jxr_string">"values-(.+)"</span>);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile(<span class="jxr_string">"translatedText\&quot;:&#92;&#92;s*\&quot;([^\&quot;]+)\&quot;"</span>);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern VALUES_DIR_PATTERN = Pattern.compile(<span class="jxr_string">"values-[a-z]{2}(-[a-zA-Z]{2,3})?"</span>);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String APACHE_2_LICENSE =
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>        <span class="jxr_string">"&lt;!--\n"</span> +
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>        <span class="jxr_string">" Copyright (C) 2013 ZXing authors\n"</span> +
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>        '\n' +
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>        <span class="jxr_string">" Licensed under the Apache License, Version 2.0 (the \&quot;License\&quot;);\n"</span> +
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>        <span class="jxr_string">" you may not use this file except in compliance with the License.\n"</span> +
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>        <span class="jxr_string">" You may obtain a copy of the License at\n"</span> +
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>        '\n' +
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>        <span class="jxr_string">"      http://www.apache.org/licenses/LICENSE-2.0\n"</span> +
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../com/google/zxing/StringsResourceTranslator.html">StringsResourceTranslator</a> {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String API_KEY = System.getProperty(<span class="jxr_string">"translateAPI.key"</span>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">if</strong> (API_KEY == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"translateAPI.key is not specified"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>    }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>    
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern ENTRY_PATTERN = Pattern.compile(<span class="jxr_string">"&lt;string name=\&quot;([^\&quot;]+)\&quot;.*&gt;([^&lt;]+)&lt;/string&gt;"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile(<span class="jxr_string">"values-(.+)"</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile(<span class="jxr_string">"translatedText\&quot;:&#92;&#92;s*\&quot;([^\&quot;]+)\&quot;"</span>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern VALUES_DIR_PATTERN = Pattern.compile(<span class="jxr_string">"values-[a-z]{2}(-[a-zA-Z]{2,3})?"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String APACHE_2_LICENSE =
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>        <span class="jxr_string">"&lt;!--\n"</span> +
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>        <span class="jxr_string">" Copyright (C) 2014 ZXing authors\n"</span> +
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>        '\n' +
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>        <span class="jxr_string">" Licensed under the Apache License, Version 2.0 (the \&quot;License\&quot;);\n"</span> +
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>        <span class="jxr_string">" you may not use this file except in compliance with the License.\n"</span> +
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>        <span class="jxr_string">" You may obtain a copy of the License at\n"</span> +
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>        '\n' +
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>        <span class="jxr_string">" Unless required by applicable law or agreed to in writing, software\n"</span> +
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>        <span class="jxr_string">" distributed under the License is distributed on an \&quot;AS IS\&quot; BASIS,\n"</span> +
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>        <span class="jxr_string">" WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n"</span> +
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>        <span class="jxr_string">" See the License for the specific language governing permissions and\n"</span> +
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>        <span class="jxr_string">" limitations under the License.\n"</span> +
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>        <span class="jxr_string">" --&gt;\n"</span>;
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,String&gt; LANGUAGE_CODE_MASSAGINGS = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(3);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>    <strong class="jxr_keyword">static</strong> {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      LANGUAGE_CODE_MASSAGINGS.put(<span class="jxr_string">"zh-rCN"</span>, <span class="jxr_string">"zh-cn"</span>);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      LANGUAGE_CODE_MASSAGINGS.put(<span class="jxr_string">"zh-rTW"</span>, <span class="jxr_string">"zh-tw"</span>);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>    }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>    <strong class="jxr_keyword">private</strong> <a href="../../../com/google/zxing/StringsResourceTranslator.html">StringsResourceTranslator</a>() {}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>        <span class="jxr_string">"      http://www.apache.org/licenses/LICENSE-2.0\n"</span> +
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>        '\n' +
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>        <span class="jxr_string">" Unless required by applicable law or agreed to in writing, software\n"</span> +
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>        <span class="jxr_string">" distributed under the License is distributed on an \&quot;AS IS\&quot; BASIS,\n"</span> +
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>        <span class="jxr_string">" WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n"</span> +
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>        <span class="jxr_string">" See the License for the specific language governing permissions and\n"</span> +
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>        <span class="jxr_string">" limitations under the License.\n"</span> +
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>        <span class="jxr_string">" --&gt;\n"</span>;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,String&gt; LANGUAGE_CODE_MASSAGINGS = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(3);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>    <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      LANGUAGE_CODE_MASSAGINGS.put(<span class="jxr_string">"zh-rCN"</span>, <span class="jxr_string">"zh-cn"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      LANGUAGE_CODE_MASSAGINGS.put(<span class="jxr_string">"zh-rTW"</span>, <span class="jxr_string">"zh-tw"</span>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>    }
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>    <strong class="jxr_keyword">private</strong> <a href="../../../com/google/zxing/StringsResourceTranslator.html">StringsResourceTranslator</a>() {}
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      File resDir = <strong class="jxr_keyword">new</strong> File(args[0]);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      File valueDir = <strong class="jxr_keyword">new</strong> File(resDir, <span class="jxr_string">"values"</span>);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      File stringsFile = <strong class="jxr_keyword">new</strong> File(valueDir, <span class="jxr_string">"strings.xml"</span>);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      Collection&lt;String&gt; forceRetranslation = Arrays.asList(args).subList(1, args.length);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      File[] translatedValuesDirs = resDir.listFiles(<strong class="jxr_keyword">new</strong> FileFilter() {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>        @Override
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>        <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(File file) {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">return</strong> file.isDirectory() &amp;&amp; VALUES_DIR_PATTERN.matcher(file.getName()).matches();
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>       }
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     });
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">for</strong> (File translatedValuesDir : translatedValuesDirs) {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>       File translatedStringsFile = <strong class="jxr_keyword">new</strong> File(translatedValuesDir, <span class="jxr_string">"strings.xml"</span>);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>       translate(stringsFile, translatedStringsFile, forceRetranslation);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>   }
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> translate(File englishFile,
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>                                 File translatedFile,
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>                                 Collection&lt;String&gt; forceRetranslation) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     Map&lt;String, String&gt; english = readLines(englishFile);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     SortedMap&lt;String,String&gt; translated = readLines(translatedFile);
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>     String parentName = translatedFile.getParentFile().getName();
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>     Matcher stringsFileNameMatcher = STRINGS_FILE_NAME_PATTERN.matcher(parentName);
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>     stringsFileNameMatcher.find();
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>     String language = stringsFileNameMatcher.group(1);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>     String massagedLanguage = LANGUAGE_CODE_MASSAGINGS.get(language);
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>     <strong class="jxr_keyword">if</strong> (massagedLanguage != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>       language = massagedLanguage;
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     }
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     System.out.println(<span class="jxr_string">"Translating "</span> + language);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      Path resDir = Paths.get(args[0]);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      Path valueDir = resDir.resolve(<span class="jxr_string">"values"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      Path stringsFile = valueDir.resolve(<span class="jxr_string">"strings.xml"</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      Collection&lt;String&gt; forceRetranslation = Arrays.asList(args).subList(1, args.length);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      DirectoryStream.Filter&lt;Path&gt; filter = <strong class="jxr_keyword">new</strong> DirectoryStream.Filter&lt;Path&gt;() {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>        @Override
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>       <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(Path entry) {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         <strong class="jxr_keyword">return</strong> Files.isDirectory(entry) &amp;&amp; !Files.isSymbolicLink(entry) &amp;&amp;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>             VALUES_DIR_PATTERN.matcher(entry.getFileName().toString()).matches();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>       }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     };
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">try</strong> (DirectoryStream&lt;Path&gt; dirs = Files.newDirectoryStream(resDir, filter)) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>       <strong class="jxr_keyword">for</strong> (Path dir : dirs) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>         translate(stringsFile, dir.resolve(<span class="jxr_string">"strings.xml"</span>), forceRetranslation);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>       }
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     }
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>   }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> translate(Path englishFile,
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>                                 Path translatedFile,
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>                                 Collection&lt;String&gt; forceRetranslation) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     Map&lt;String, String&gt; english = readLines(englishFile);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>     Map&lt;String,String&gt; translated = readLines(translatedFile);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>     String parentName = translatedFile.getParent().getFileName().toString();
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     Matcher stringsFileNameMatcher = STRINGS_FILE_NAME_PATTERN.matcher(parentName);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     stringsFileNameMatcher.find();
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     String language = stringsFileNameMatcher.group(1);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     String massagedLanguage = LANGUAGE_CODE_MASSAGINGS.get(language);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     <strong class="jxr_keyword">if</strong> (massagedLanguage != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>       language = massagedLanguage;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     }
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>     File resultTempFile = File.createTempFile(parentName, <span class="jxr_string">".xml"</span>);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>     resultTempFile.deleteOnExit();
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>     <strong class="jxr_keyword">boolean</strong> anyChange = false;
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">try</strong> (Writer out = <strong class="jxr_keyword">new</strong> BufferedWriter(<strong class="jxr_keyword">new</strong> OutputStreamWriter(<strong class="jxr_keyword">new</strong> FileOutputStream(resultTempFile), UTF8))) {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>       out.write(<span class="jxr_string">"&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;\n"</span>);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>       out.write(APACHE_2_LICENSE);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>       out.write(<span class="jxr_string">"&lt;resources&gt;\n"</span>);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>       <strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,String&gt; englishEntry : english.entrySet()) {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>         String key = englishEntry.getKey();
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>         String value = englishEntry.getValue();
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>         out.write(<span class="jxr_string">"  &lt;string name=\&quot;"</span>);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>         out.write(key);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>         out.write('&quot;');
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>         <strong class="jxr_keyword">if</strong> (value.contains(<span class="jxr_string">"%s"</span>) || value.contains(<span class="jxr_string">"%f"</span>)) {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>           <em class="jxr_comment">// Need to specify that there's a value placeholder</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>           out.write(<span class="jxr_string">" formatted=\&quot;false\&quot;"</span>);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>         }
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>         out.write('&gt;');
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>         String translatedString = translated.get(key);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>         <strong class="jxr_keyword">if</strong> (translatedString == <strong class="jxr_keyword">null</strong> || forceRetranslation.contains(key)) {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>           anyChange = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>           translatedString = translateString(value, language);
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>         }
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>         out.write(translatedString);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>         out.write(<span class="jxr_string">"&lt;/string&gt;\n"</span>);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>       }
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>       out.write(<span class="jxr_string">"&lt;/resources&gt;\n"</span>);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>       out.flush();
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     }
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     <strong class="jxr_keyword">if</strong> (anyChange) {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>       System.out.println(<span class="jxr_string">"  Writing translations"</span>);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>       translatedFile.delete();
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>       resultTempFile.renameTo(translatedFile);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     System.out.println(<span class="jxr_string">"Translating "</span> + language);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     Path resultTempFile = Files.createTempFile(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">boolean</strong> anyChange = false;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     <strong class="jxr_keyword">try</strong> (Writer out = Files.newBufferedWriter(resultTempFile, StandardCharsets.UTF_8)) {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>       out.write(<span class="jxr_string">"&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;\n"</span>);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>       out.write(APACHE_2_LICENSE);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>       out.write(<span class="jxr_string">"&lt;resources&gt;\n"</span>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>       <strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,String&gt; englishEntry : english.entrySet()) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>         String key = englishEntry.getKey();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         String value = englishEntry.getValue();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         out.write(<span class="jxr_string">"  &lt;string name=\&quot;"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>         out.write(key);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>         out.write('&quot;');
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>         <strong class="jxr_keyword">if</strong> (value.contains(<span class="jxr_string">"%s"</span>) || value.contains(<span class="jxr_string">"%f"</span>)) {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>           <em class="jxr_comment">// Need to specify that there's a value placeholder</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>           out.write(<span class="jxr_string">" formatted=\&quot;false\&quot;"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         out.write('&gt;');
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         String translatedString = translated.get(key);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         <strong class="jxr_keyword">if</strong> (translatedString == <strong class="jxr_keyword">null</strong> || forceRetranslation.contains(key)) {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>           anyChange = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>           translatedString = translateString(value, language);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         }
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         out.write(translatedString);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>         out.write(<span class="jxr_string">"&lt;/string&gt;\n"</span>);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>       }
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>       out.write(<span class="jxr_string">"&lt;/resources&gt;\n"</span>);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>       out.flush();
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     }
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     <strong class="jxr_keyword">if</strong> (anyChange) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>       System.out.println(<span class="jxr_string">"  Writing translations"</span>);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>       Files.move(resultTempFile, translatedFile, StandardCopyOption.REPLACE_EXISTING);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>       resultTempFile.delete();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>       Files.delete(resultTempFile);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a>     }
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>   }
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
@@ -187,67 +187,59 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>     }
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>     System.out.println(<span class="jxr_string">"  Need translation for "</span> + english);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>     <strong class="jxr_keyword">if</strong> (API_KEY == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"translateAPI.key is not specified"</span>);
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>     }
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>     URL translateURL = <strong class="jxr_keyword">new</strong> URL(
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>         <span class="jxr_string">"https://www.googleapis.com/language/translate/v2?key="</span> + API_KEY + <span class="jxr_string">"&amp;q="</span> +
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>         URLEncoder.encode(english, <span class="jxr_string">"UTF-8"</span>) +
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>         <span class="jxr_string">"&amp;source=en&amp;target="</span> + language);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     CharSequence translateResult = fetch(translateURL);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     Matcher m = TRANSLATE_RESPONSE_PATTERN.matcher(translateResult);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">if</strong> (!m.find()) {
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>       System.err.println(<span class="jxr_string">"No translate result"</span>);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>       System.err.println(translateResult);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>       <strong class="jxr_keyword">return</strong> english;
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>     }
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>     String translation = m.group(1);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>     System.out.println(<span class="jxr_string">"  Got translation "</span> + translation);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <em class="jxr_comment">// This is a little crude; unescape some common escapes in the raw response</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>     translation = translation.replaceAll(<span class="jxr_string">"&#92;&#92;&#92;&#92;u0026quot;"</span>, <span class="jxr_string">"\&quot;"</span>);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>     translation = translation.replaceAll(<span class="jxr_string">"&#92;&#92;&#92;&#92;u0026#39;"</span>, <span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>     translation = translation.replaceAll(<span class="jxr_string">"&#92;&#92;&#92;&#92;u200b"</span>, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>     translation = translation.replaceAll(<span class="jxr_string">"&amp;amp;quot;"</span>, <span class="jxr_string">"\&quot;"</span>);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>     translation = translation.replaceAll(<span class="jxr_string">"&amp;amp;#39;"</span>, <span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>     <strong class="jxr_keyword">return</strong> translation;
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>   }
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CharSequence fetch(URL translateURL) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>     URLConnection connection = translateURL.openConnection();
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>     connection.connect();
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>     StringBuilder translateResult = <strong class="jxr_keyword">new</strong> StringBuilder(200);
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>     <strong class="jxr_keyword">try</strong> (Reader in = <strong class="jxr_keyword">new</strong> BufferedReader(<strong class="jxr_keyword">new</strong> InputStreamReader(connection.getInputStream(), UTF8))) {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>       <strong class="jxr_keyword">char</strong>[] buffer = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[1024];
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>       <strong class="jxr_keyword">int</strong> charsRead;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>       <strong class="jxr_keyword">while</strong> ((charsRead = in.read(buffer)) &gt; 0) {
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>         translateResult.append(buffer, 0, charsRead);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>       }
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>     }
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <strong class="jxr_keyword">return</strong> translateResult;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>   }
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> SortedMap&lt;String,String&gt; readLines(File file) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>     SortedMap&lt;String,String&gt; entries = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>     <strong class="jxr_keyword">if</strong> (!file.exists()) {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>       <strong class="jxr_keyword">return</strong> entries;
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>     }
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>     <strong class="jxr_keyword">try</strong> (BufferedReader reader = <strong class="jxr_keyword">new</strong> BufferedReader(<strong class="jxr_keyword">new</strong> InputStreamReader(<strong class="jxr_keyword">new</strong> FileInputStream(file), UTF8))) {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>       CharSequence line;
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>       <strong class="jxr_keyword">while</strong> ((line = reader.readLine()) != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>         Matcher m = ENTRY_PATTERN.matcher(line);
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>         <strong class="jxr_keyword">if</strong> (m.find()) {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>           String key = m.group(1);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>           String value = m.group(2);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>           entries.put(key, value);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>         }
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>       }
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>       <strong class="jxr_keyword">return</strong> entries;
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>     }
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>   }
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> }
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>     URI translateURI = URI.create(
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <span class="jxr_string">"https://www.googleapis.com/language/translate/v2?key="</span> + API_KEY + <span class="jxr_string">"&amp;q="</span> +
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>             URLEncoder.encode(english, <span class="jxr_string">"UTF-8"</span>) +
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>             <span class="jxr_string">"&amp;source=en&amp;target="</span> + language);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>     CharSequence translateResult = fetch(translateURI);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     Matcher m = TRANSLATE_RESPONSE_PATTERN.matcher(translateResult);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">if</strong> (!m.find()) {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>       System.err.println(<span class="jxr_string">"No translate result"</span>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>       System.err.println(translateResult);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>       <strong class="jxr_keyword">return</strong> english;
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     }
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     String translation = m.group(1);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>     <em class="jxr_comment">// This is a little crude; unescape some common escapes in the raw response</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     translation = translation.replaceAll(<span class="jxr_string">"&amp;quot;"</span>, <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     translation = translation.replaceAll(<span class="jxr_string">"&amp;#39;"</span>, <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>     translation = translation.replaceAll(<span class="jxr_string">"&amp;amp;quot;"</span>, <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     translation = translation.replaceAll(<span class="jxr_string">"&amp;amp;#39;"</span>, <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     System.out.println(<span class="jxr_string">"  Got translation "</span> + translation);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>     <strong class="jxr_keyword">return</strong> translation;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>   }
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CharSequence fetch(URI translateURI) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>     URLConnection connection = translateURI.toURL().openConnection();
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     connection.connect();
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     StringBuilder translateResult = <strong class="jxr_keyword">new</strong> StringBuilder(200);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     <strong class="jxr_keyword">try</strong> (BufferedReader in = <strong class="jxr_keyword">new</strong> BufferedReader(<strong class="jxr_keyword">new</strong> InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>       <strong class="jxr_keyword">char</strong>[] buffer = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[8192];
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>       <strong class="jxr_keyword">int</strong> charsRead;
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">while</strong> ((charsRead = in.read(buffer)) &gt; 0) {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>         translateResult.append(buffer, 0, charsRead);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>       }
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>     }
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>     <strong class="jxr_keyword">return</strong> translateResult;
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>   }
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,String&gt; readLines(Path file) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <strong class="jxr_keyword">if</strong> (Files.exists(file)) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>       Map&lt;String,String&gt; entries = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>       <strong class="jxr_keyword">for</strong> (String line : Files.readAllLines(file, StandardCharsets.UTF_8)) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>         Matcher m = ENTRY_PATTERN.matcher(line);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>         <strong class="jxr_keyword">if</strong> (m.find()) {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>           entries.put(m.group(1), m.group(2));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>         }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>       }
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>       <strong class="jxr_keyword">return</strong> entries;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>       <strong class="jxr_keyword">return</strong> Collections.emptyMap();
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>     }
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>   }
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

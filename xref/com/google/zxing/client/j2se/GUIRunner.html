@@ -35,9 +35,9 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.awt.Dimension;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.awt.FlowLayout;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.awt.image.BufferedImage;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.net.MalformedURLException;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.net.MalformedURLException;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Path;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> javax.swing.Icon;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> javax.swing.ImageIcon;
@@ -85,18 +85,18 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> chooseImage() <strong class="jxr_keyword">throws</strong> MalformedURLException {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      JFileChooser fileChooser = <strong class="jxr_keyword">new</strong> JFileChooser();
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>      fileChooser.showOpenDialog(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      File file = fileChooser.getSelectedFile();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      Icon imageIcon = <strong class="jxr_keyword">new</strong> ImageIcon(file.toURI().toURL());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      Path file = fileChooser.getSelectedFile().toPath();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      Icon imageIcon = <strong class="jxr_keyword">new</strong> ImageIcon(file.toUri().toURL());
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>      setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight() + 100);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      imageLabel.setIcon(imageIcon);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      String decodeText = getDecodeText(file);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      textArea.setText(decodeText);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>    }
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getDecodeText(File file) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getDecodeText(Path file) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      BufferedImage image;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>        image = ImageReader.readImage(file);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>        image = ImageReader.readImage(file.toUri());
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      } <strong class="jxr_keyword">catch</strong> (IOException ioe) {
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>        <strong class="jxr_keyword">return</strong> ioe.toString();
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      }

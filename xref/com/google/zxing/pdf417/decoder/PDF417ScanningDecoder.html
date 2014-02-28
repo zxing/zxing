@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> merge(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> leftRowIndicatorColumn,
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>                                        <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> rightRowIndicatorColumn)
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>       <strong class="jxr_keyword">throws</strong> NotFoundException, <a href="../../../../../com/google/zxing/FormatException.html">FormatException</a> {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     <strong class="jxr_keyword">if</strong> (leftRowIndicatorColumn == <strong class="jxr_keyword">null</strong> &amp;&amp; rightRowIndicatorColumn == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>     }
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>   }
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/BoundingBox.html">BoundingBox</a> adjustBoundingBox(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> rowIndicatorColumn)
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>       <strong class="jxr_keyword">throws</strong> NotFoundException, <a href="../../../../../com/google/zxing/FormatException.html">FormatException</a> {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">if</strong> (rowIndicatorColumn == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>     }
@@ -191,443 +191,445 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeMetadata.html">BarcodeMetadata</a> getBarcodeMetadata(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> leftRowIndicatorColumn,
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>                                                     <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> rightRowIndicatorColumn) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>     <strong class="jxr_keyword">if</strong> (leftRowIndicatorColumn == <strong class="jxr_keyword">null</strong> || leftRowIndicatorColumn.getBarcodeMetadata() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>       <strong class="jxr_keyword">return</strong> rightRowIndicatorColumn == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : rightRowIndicatorColumn.getBarcodeMetadata();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>     }
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>     <strong class="jxr_keyword">if</strong> (rightRowIndicatorColumn == <strong class="jxr_keyword">null</strong> || rightRowIndicatorColumn.getBarcodeMetadata() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>       <strong class="jxr_keyword">return</strong> leftRowIndicatorColumn == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : leftRowIndicatorColumn.getBarcodeMetadata();
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     }
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeMetadata.html">BarcodeMetadata</a> leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata();
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeMetadata.html">BarcodeMetadata</a> rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata();
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>     <strong class="jxr_keyword">if</strong> (leftBarcodeMetadata.getColumnCount() != rightBarcodeMetadata.getColumnCount() &amp;&amp;
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>         leftBarcodeMetadata.getErrorCorrectionLevel() != rightBarcodeMetadata.getErrorCorrectionLevel() &amp;&amp;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>         leftBarcodeMetadata.getRowCount() != rightBarcodeMetadata.getRowCount()) {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>     }
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">return</strong> leftBarcodeMetadata;
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>   }
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> getRowIndicatorColumn(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>                                                                          <a href="../../../../../com/google/zxing/pdf417/decoder/BoundingBox.html">BoundingBox</a> boundingBox,
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>                                                                          <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> startPoint,
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>                                                                          <strong class="jxr_keyword">boolean</strong> leftToRight,
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>                                                                          <strong class="jxr_keyword">int</strong> minCodewordWidth,
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>                                                                          <strong class="jxr_keyword">int</strong> maxCodewordWidth) {
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> rowIndicatorColumn = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a>(boundingBox,
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>         leftToRight);
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 2; i++) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">int</strong> increment = i == 0 ? 1 : -1;
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>       <strong class="jxr_keyword">int</strong> startColumn = (<strong class="jxr_keyword">int</strong>) startPoint.getX();
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> imageRow = (<strong class="jxr_keyword">int</strong>) startPoint.getY(); imageRow &lt;= boundingBox.getMaxY() &amp;&amp;
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>           imageRow &gt;= boundingBox.getMinY(); imageRow += increment) {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>         <a href="../../../../../com/google/zxing/pdf417/decoder/Codeword.html">Codeword</a> codeword = detectCodeword(image, 0, image.getWidth(), leftToRight, startColumn, imageRow,
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>             minCodewordWidth, maxCodewordWidth);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>         <strong class="jxr_keyword">if</strong> (codeword != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>           rowIndicatorColumn.setCodeword(imageRow, codeword);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>           <strong class="jxr_keyword">if</strong> (leftToRight) {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>             startColumn = codeword.getStartX();
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>           } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>             startColumn = codeword.getEndX();
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>           }
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>         }
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>       }
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>     }
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>     <strong class="jxr_keyword">return</strong> rowIndicatorColumn;
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>   }
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> adjustCodewordCount(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult, <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] barcodeMatrix)
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <strong class="jxr_keyword">int</strong>[] numberOfCodewords = barcodeMatrix[0][1].getValue();
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>     <strong class="jxr_keyword">int</strong> calculatedNumberOfCodewords = detectionResult.getBarcodeColumnCount() *
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>         detectionResult.getBarcodeRowCount() -
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>         getNumberOfECCodeWords(detectionResult.getBarcodeECLevel());
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>     <strong class="jxr_keyword">if</strong> (numberOfCodewords.length == 0) {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>       <strong class="jxr_keyword">if</strong> (calculatedNumberOfCodewords &lt; 1 || calculatedNumberOfCodewords &gt; PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>         <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>       }
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>       barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (numberOfCodewords[0] != calculatedNumberOfCodewords) {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>       <em class="jxr_comment">// The calculated one is more reliable as it is derived from the row indicator columns</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>       barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>     }
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>   }
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/DecoderResult.html">DecoderResult</a> createDecoderResult(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult) <strong class="jxr_keyword">throws</strong> FormatException,
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>       ChecksumException, <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] barcodeMatrix = createBarcodeMatrix(detectionResult);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>     adjustCodewordCount(detectionResult, barcodeMatrix);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>     Collection&lt;Integer&gt; erasures = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>     <strong class="jxr_keyword">int</strong>[] codewords = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[detectionResult.getBarcodeRowCount() * detectionResult.getBarcodeColumnCount()];
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>     List&lt;<strong class="jxr_keyword">int</strong>[]&gt; ambiguousIndexValuesList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>     List&lt;Integer&gt; ambiguousIndexesList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> row = 0; row &lt; detectionResult.getBarcodeRowCount(); row++) {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> column = 0; column &lt; detectionResult.getBarcodeColumnCount(); column++) {
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>         <strong class="jxr_keyword">int</strong>[] values = barcodeMatrix[row][column + 1].getValue();
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">int</strong> codewordIndex = row * detectionResult.getBarcodeColumnCount() + column;
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>         <strong class="jxr_keyword">if</strong> (values.length == 0) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>           erasures.add(codewordIndex);
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (values.length == 1) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>           codewords[codewordIndex] = values[0];
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>           ambiguousIndexesList.add(codewordIndex);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>           ambiguousIndexValuesList.add(values);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>         }
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>       }
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>     }
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     <strong class="jxr_keyword">int</strong>[][] ambiguousIndexValues = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[ambiguousIndexValuesList.size()][];
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ambiguousIndexValues.length; i++) {
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>       ambiguousIndexValues[i] = ambiguousIndexValuesList.get(i);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>     }
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>     <strong class="jxr_keyword">return</strong> createDecoderResultFromAmbiguousValues(detectionResult.getBarcodeECLevel(), codewords,
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>         PDF417Common.toIntArray(erasures), PDF417Common.toIntArray(ambiguousIndexesList), ambiguousIndexValues);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>   }
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">   * This method deals with the fact, that the decoding process doesn't always yield a single most likely value. The</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">   * current error correction implementation doesn't deal with erasures very well, so it's better to provide a value</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">   * for these ambiguous codewords instead of treating it as an erasure. The problem is that we don't know which of</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">   * the ambiguous values to choose. We try decode using the first value, and if that fails, we use another of the</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">   * ambiguous values and try to decode again. This usually only happens on very hard to read and decode barcodes,</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">   * so decoding the normal barcodes is not affected by this. </em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">   * @param erasureArray contains the indexes of erasures</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">   * @param ambiguousIndexes array with the indexes that have more than one most likely value</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">   * @param ambiguousIndexValues two dimensional array that contains the ambiguous values. The first dimension must</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">   * be the same length as the ambiguousIndexes array</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/DecoderResult.html">DecoderResult</a> createDecoderResultFromAmbiguousValues(<strong class="jxr_keyword">int</strong> ecLevel,
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>                                                                       <strong class="jxr_keyword">int</strong>[] codewords,
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>                                                                       <strong class="jxr_keyword">int</strong>[] erasureArray,
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>                                                                       <strong class="jxr_keyword">int</strong>[] ambiguousIndexes,
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>                                                                       <strong class="jxr_keyword">int</strong>[][] ambiguousIndexValues)
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>       <strong class="jxr_keyword">throws</strong> FormatException, <a href="../../../../../com/google/zxing/ChecksumException.html">ChecksumException</a> {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>     <strong class="jxr_keyword">int</strong>[] ambiguousIndexCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[ambiguousIndexes.length];
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>     <strong class="jxr_keyword">int</strong> tries = 100;
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>     <strong class="jxr_keyword">while</strong> (tries-- &gt; 0) {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ambiguousIndexCount.length; i++) {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>         codewords[ambiguousIndexes[i]] = ambiguousIndexValues[i][ambiguousIndexCount[i]];
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>       }
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>       <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>         <strong class="jxr_keyword">return</strong> decodeCodewords(codewords, ecLevel, erasureArray);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>       } <strong class="jxr_keyword">catch</strong> (ChecksumException ignored) {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>         <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>       }
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>       <strong class="jxr_keyword">if</strong> (ambiguousIndexCount.length == 0) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>         <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>       }
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ambiguousIndexCount.length; i++) {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>         <strong class="jxr_keyword">if</strong> (ambiguousIndexCount[i] &lt; ambiguousIndexValues[i].length - 1) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>           ambiguousIndexCount[i]++;
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>           ambiguousIndexCount[i] = 0;
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>           <strong class="jxr_keyword">if</strong> (i == ambiguousIndexCount.length - 1) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>             <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>           }
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>         }
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>       }
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>     }
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>     <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>   }
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] createBarcodeMatrix(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult) {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] barcodeMatrix = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[detectionResult.getBarcodeRowCount()][detectionResult
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>         .getBarcodeColumnCount() + 2];
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> row = 0; row &lt; barcodeMatrix.length; row++) {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> column = 0; column &lt; barcodeMatrix[row].length; column++) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>         barcodeMatrix[row][column] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>();
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>       }
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>     }
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>     <strong class="jxr_keyword">int</strong> column = -1;
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>     <strong class="jxr_keyword">for</strong> (DetectionResultColumn detectionResultColumn : detectionResult.getDetectionResultColumns()) {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>       column++;
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>       <strong class="jxr_keyword">if</strong> (detectionResultColumn == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>       }
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>       <strong class="jxr_keyword">for</strong> (Codeword codeword : detectionResultColumn.getCodewords()) {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>         <strong class="jxr_keyword">if</strong> (codeword == <strong class="jxr_keyword">null</strong> || codeword.getRowNumber() == -1) {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>           <strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>         }
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>         barcodeMatrix[codeword.getRowNumber()][column].setValue(codeword.getValue());
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>       }
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>     }
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>     <strong class="jxr_keyword">return</strong> barcodeMatrix;
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>   }
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isValidBarcodeColumn(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult, <strong class="jxr_keyword">int</strong> barcodeColumn) {
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>     <strong class="jxr_keyword">return</strong> barcodeColumn &gt;= 0 &amp;&amp; barcodeColumn &lt;= detectionResult.getBarcodeColumnCount() + 1;
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>   }
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getStartColumn(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult,
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>                                     <strong class="jxr_keyword">int</strong> barcodeColumn,
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>                                     <strong class="jxr_keyword">int</strong> imageRow,
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>                                     <strong class="jxr_keyword">boolean</strong> leftToRight) {
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>     <strong class="jxr_keyword">int</strong> offset = leftToRight ? 1 : -1;
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/Codeword.html">Codeword</a> codeword = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>     <strong class="jxr_keyword">if</strong> (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>       codeword = detectionResult.getDetectionResultColumn(barcodeColumn - offset).getCodeword(imageRow);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>     }
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>     <strong class="jxr_keyword">if</strong> (codeword != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>       <strong class="jxr_keyword">return</strong> leftToRight ? codeword.getEndX() : codeword.getStartX();
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>     }
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>     codeword = detectionResult.getDetectionResultColumn(barcodeColumn).getCodewordNearby(imageRow);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>     <strong class="jxr_keyword">if</strong> (codeword != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>       <strong class="jxr_keyword">return</strong> leftToRight ? codeword.getStartX() : codeword.getEndX();
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>     }
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>     <strong class="jxr_keyword">if</strong> (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>       codeword = detectionResult.getDetectionResultColumn(barcodeColumn - offset).getCodewordNearby(imageRow);
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>     }
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>     <strong class="jxr_keyword">if</strong> (codeword != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>       <strong class="jxr_keyword">return</strong> leftToRight ? codeword.getEndX() : codeword.getStartX();
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>     }
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>     <strong class="jxr_keyword">int</strong> skippedColumns = 0;
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>     <strong class="jxr_keyword">while</strong> (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>       barcodeColumn -= offset;
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>       <strong class="jxr_keyword">for</strong> (Codeword previousRowCodeword : detectionResult.getDetectionResultColumn(barcodeColumn).getCodewords()) {
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>         <strong class="jxr_keyword">if</strong> (previousRowCodeword != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>           <strong class="jxr_keyword">return</strong> (leftToRight ? previousRowCodeword.getEndX() : previousRowCodeword.getStartX()) +
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>               offset *
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>               skippedColumns *
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>               (previousRowCodeword.getEndX() - previousRowCodeword.getStartX());
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>         }
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>       }
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>       skippedColumns++;
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>     }
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>     <strong class="jxr_keyword">return</strong> leftToRight ? detectionResult.getBoundingBox().getMinX() : detectionResult.getBoundingBox().getMaxX();
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>   }
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/Codeword.html">Codeword</a> detectCodeword(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>                                          <strong class="jxr_keyword">int</strong> minColumn,
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>                                          <strong class="jxr_keyword">int</strong> maxColumn,
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>                                          <strong class="jxr_keyword">boolean</strong> leftToRight,
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>                                          <strong class="jxr_keyword">int</strong> startColumn,
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>                                          <strong class="jxr_keyword">int</strong> imageRow,
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>                                          <strong class="jxr_keyword">int</strong> minCodewordWidth,
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>                                          <strong class="jxr_keyword">int</strong> maxCodewordWidth) {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>     startColumn = adjustCodewordStartColumn(image, minColumn, maxColumn, leftToRight, startColumn, imageRow);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>     <em class="jxr_comment">// we usually know fairly exact now how long a codeword is. We should provide minimum and maximum expected length</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>     <em class="jxr_comment">// and try to adjust the read pixels, e.g. remove single pixel errors or try to cut off exceeding pixels.</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>     <em class="jxr_comment">// min and maxCodewordWidth should not be used as they are calculated for the whole barcode an can be inaccurate</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>     <em class="jxr_comment">// for the current position</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <strong class="jxr_keyword">int</strong>[] moduleBitCount = getModuleBitCount(image, minColumn, maxColumn, leftToRight, startColumn, imageRow);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>     <strong class="jxr_keyword">if</strong> (moduleBitCount == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>     }
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>     <strong class="jxr_keyword">int</strong> endColumn;
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>     <strong class="jxr_keyword">int</strong> codewordBitCount = PDF417Common.getBitCountSum(moduleBitCount);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>     <strong class="jxr_keyword">if</strong> (leftToRight) {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>       endColumn = startColumn + codewordBitCount;
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; moduleBitCount.length &gt;&gt; 1; i++) {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>         <strong class="jxr_keyword">int</strong> tmpCount = moduleBitCount[i];
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>         moduleBitCount[i] = moduleBitCount[moduleBitCount.length - 1 - i];
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>         moduleBitCount[moduleBitCount.length - 1 - i] = tmpCount;
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>       }
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>       endColumn = startColumn;
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>       startColumn = endColumn - codewordBitCount;
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>     }
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>     <em class="jxr_comment">// TODO implement check for width and correction of black and white bars</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>     <em class="jxr_comment">// use start (and maybe stop pattern) to determine if blackbars are wider than white bars. If so, adjust.</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>     <em class="jxr_comment">// should probably done only for codewords with a lot more than 17 bits. </em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>     <em class="jxr_comment">// The following fixes 10-1.png, which has wide black bars and small white bars</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>     <em class="jxr_comment">//    for (int i = 0; i &lt; moduleBitCount.length; i++) {</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>     <em class="jxr_comment">//      if (i % 2 == 0) {</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <em class="jxr_comment">//        moduleBitCount[i]--;</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>     <em class="jxr_comment">//      } else {</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>     <em class="jxr_comment">//        moduleBitCount[i]++;</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>     <em class="jxr_comment">//      }</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>     <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>     <em class="jxr_comment">// We could also use the width of surrounding codewords for more accurate results, but this seems</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>     <em class="jxr_comment">// sufficient for now</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>     <strong class="jxr_keyword">if</strong> (!checkCodewordSkew(codewordBitCount, minCodewordWidth, maxCodewordWidth)) {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>       <em class="jxr_comment">// We could try to use the startX and endX position of the codeword in the same column in the previous row,</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>       <em class="jxr_comment">// create the bit count from it and normalize it to 8. This would help with single pixel errors.</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>     }
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>     <strong class="jxr_keyword">int</strong> decodedValue = PDF417CodewordDecoder.getDecodedValue(moduleBitCount);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>     <strong class="jxr_keyword">int</strong> codeword = PDF417Common.getCodeword(decodedValue);
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>     <strong class="jxr_keyword">if</strong> (codeword == -1) {
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>     }
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/Codeword.html">Codeword</a>(startColumn, endColumn, getCodewordBucketNumber(decodedValue), codeword);
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>   }
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] getModuleBitCount(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>                                          <strong class="jxr_keyword">int</strong> minColumn,
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>                                          <strong class="jxr_keyword">int</strong> maxColumn,
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>                                          <strong class="jxr_keyword">boolean</strong> leftToRight,
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>                                          <strong class="jxr_keyword">int</strong> startColumn,
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>                                          <strong class="jxr_keyword">int</strong> imageRow) {
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>     <strong class="jxr_keyword">int</strong> imageColumn = startColumn;
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>     <strong class="jxr_keyword">int</strong>[] moduleBitCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[8];
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>     <strong class="jxr_keyword">int</strong> moduleNumber = 0;
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>     <strong class="jxr_keyword">int</strong> increment = leftToRight ? 1 : -1;
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>     <strong class="jxr_keyword">boolean</strong> previousPixelValue = leftToRight;
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>     <strong class="jxr_keyword">while</strong> (((leftToRight &amp;&amp; imageColumn &lt; maxColumn) || (!leftToRight &amp;&amp; imageColumn &gt;= minColumn)) &amp;&amp;
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>         moduleNumber &lt; moduleBitCount.length) {
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>       <strong class="jxr_keyword">if</strong> (image.get(imageColumn, imageRow) == previousPixelValue) {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>         moduleBitCount[moduleNumber]++;
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>         imageColumn += increment;
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>         moduleNumber++;
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>         previousPixelValue = !previousPixelValue;
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>       }
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>     }
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>     <strong class="jxr_keyword">if</strong> (moduleNumber == moduleBitCount.length ||
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>         (((leftToRight &amp;&amp; imageColumn == maxColumn) || (!leftToRight &amp;&amp; imageColumn == minColumn)) &amp;&amp; moduleNumber == moduleBitCount.length - 1)) {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>       <strong class="jxr_keyword">return</strong> moduleBitCount;
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>     }
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>   }
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getNumberOfECCodeWords(<strong class="jxr_keyword">int</strong> barcodeECLevel) {
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>     <strong class="jxr_keyword">return</strong> 2 &lt;&lt; barcodeECLevel;
-<a class="jxr_linenumber" name="L483" href="#L483">483</a>   }
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
-<a class="jxr_linenumber" name="L485" href="#L485">485</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> adjustCodewordStartColumn(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>                                                <strong class="jxr_keyword">int</strong> minColumn,
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>                                                <strong class="jxr_keyword">int</strong> maxColumn,
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>                                                <strong class="jxr_keyword">boolean</strong> leftToRight,
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>                                                <strong class="jxr_keyword">int</strong> codewordStartColumn,
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>                                                <strong class="jxr_keyword">int</strong> imageRow) {
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>     <strong class="jxr_keyword">int</strong> correctedStartColumn = codewordStartColumn;
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>     <strong class="jxr_keyword">int</strong> increment = leftToRight ? -1 : 1;
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>     <em class="jxr_comment">// there should be no black pixels before the start column. If there are, then we need to start earlier.</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 2; i++) {
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>       <strong class="jxr_keyword">while</strong> (((leftToRight &amp;&amp; correctedStartColumn &gt;= minColumn) || (!leftToRight &amp;&amp; correctedStartColumn &lt; maxColumn)) &amp;&amp;
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>           leftToRight == image.get(correctedStartColumn, imageRow)) {
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>         <strong class="jxr_keyword">if</strong> (Math.abs(codewordStartColumn - correctedStartColumn) &gt; CODEWORD_SKEW_SIZE) {
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>           <strong class="jxr_keyword">return</strong> codewordStartColumn;
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>         }
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>         correctedStartColumn += increment;
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>       }
-<a class="jxr_linenumber" name="L502" href="#L502">502</a>       increment = -increment;
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>       leftToRight = !leftToRight;
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>     }
-<a class="jxr_linenumber" name="L505" href="#L505">505</a>     <strong class="jxr_keyword">return</strong> correctedStartColumn;
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>   }
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
-<a class="jxr_linenumber" name="L508" href="#L508">508</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> checkCodewordSkew(<strong class="jxr_keyword">int</strong> codewordSize, <strong class="jxr_keyword">int</strong> minCodewordWidth, <strong class="jxr_keyword">int</strong> maxCodewordWidth) {
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>     <strong class="jxr_keyword">return</strong> minCodewordWidth - CODEWORD_SKEW_SIZE &lt;= codewordSize &amp;&amp;
-<a class="jxr_linenumber" name="L510" href="#L510">510</a>         codewordSize &lt;= maxCodewordWidth + CODEWORD_SKEW_SIZE;
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>   }
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 
-<a class="jxr_linenumber" name="L513" href="#L513">513</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/DecoderResult.html">DecoderResult</a> decodeCodewords(<strong class="jxr_keyword">int</strong>[] codewords, <strong class="jxr_keyword">int</strong> ecLevel, <strong class="jxr_keyword">int</strong>[] erasures) <strong class="jxr_keyword">throws</strong> FormatException,
-<a class="jxr_linenumber" name="L514" href="#L514">514</a>       <a href="../../../../../com/google/zxing/ChecksumException.html">ChecksumException</a> {
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>     <strong class="jxr_keyword">if</strong> (codewords.length == 0) {
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>     }
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>     <strong class="jxr_keyword">int</strong> numECCodewords = 1 &lt;&lt; (ecLevel + 1);
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>     <strong class="jxr_keyword">int</strong> correctedErrorsCount = correctErrors(codewords, erasures, numECCodewords);
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>     verifyCodewordCount(codewords, numECCodewords);
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>     <em class="jxr_comment">// Decode the codewords</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>     <a href="../../../../../com/google/zxing/common/DecoderResult.html">DecoderResult</a> decoderResult = DecodedBitStreamParser.decode(codewords, String.valueOf(ecLevel));
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>     decoderResult.setErrorsCorrected(correctedErrorsCount);
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>     decoderResult.setErasures(erasures.length);
-<a class="jxr_linenumber" name="L527" href="#L527">527</a>     <strong class="jxr_keyword">return</strong> decoderResult;
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>   }
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Given data and error-correction codewords received, possibly corrupted by errors, attempts to</em>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">   * correct the errors in-place.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">   * @param codewords   data and error correction codewords</em>
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">   * @param erasures positions of any known erasures</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">   * @param numECCodewords number of error correction codewords that are available in codewords</em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">   * @throws ChecksumException if error correction fails</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> correctErrors(<strong class="jxr_keyword">int</strong>[] codewords, <strong class="jxr_keyword">int</strong>[] erasures, <strong class="jxr_keyword">int</strong> numECCodewords) <strong class="jxr_keyword">throws</strong> ChecksumException {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>     <strong class="jxr_keyword">if</strong> (erasures != <strong class="jxr_keyword">null</strong> &amp;&amp;
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>         erasures.length &gt; numECCodewords / 2 + MAX_ERRORS ||
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>         numECCodewords &lt; 0 ||
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>         numECCodewords &gt; MAX_EC_CODEWORDS) {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a>       <em class="jxr_comment">// Too many errors or EC Codewords is corrupted</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a>       <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>     }
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>     <strong class="jxr_keyword">return</strong> errorCorrection.decode(codewords, numECCodewords, erasures);
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>   }
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">   * Verify that all is OK with the codeword array.</em>
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> verifyCodewordCount(<strong class="jxr_keyword">int</strong>[] codewords, <strong class="jxr_keyword">int</strong> numECCodewords) <strong class="jxr_keyword">throws</strong> FormatException {
-<a class="jxr_linenumber" name="L554" href="#L554">554</a>     <strong class="jxr_keyword">if</strong> (codewords.length &lt; 4) {
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>       <em class="jxr_comment">// Codeword array size should be at least 4 allowing for</em>
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>       <em class="jxr_comment">// Count CW, At least one Data CW, Error Correction CW, Error Correction CW</em>
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L558" href="#L558">558</a>     }
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>     <em class="jxr_comment">// The first codeword, the Symbol Length Descriptor, shall always encode the total number of data</em>
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>     <em class="jxr_comment">// codewords in the symbol, including the Symbol Length Descriptor itself, data codewords and pad</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a>     <em class="jxr_comment">// codewords, but excluding the number of error correction codewords.</em>
-<a class="jxr_linenumber" name="L562" href="#L562">562</a>     <strong class="jxr_keyword">int</strong> numberOfCodewords = codewords[0];
-<a class="jxr_linenumber" name="L563" href="#L563">563</a>     <strong class="jxr_keyword">if</strong> (numberOfCodewords &gt; codewords.length) {
-<a class="jxr_linenumber" name="L564" href="#L564">564</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L565" href="#L565">565</a>     }
-<a class="jxr_linenumber" name="L566" href="#L566">566</a>     <strong class="jxr_keyword">if</strong> (numberOfCodewords == 0) {
-<a class="jxr_linenumber" name="L567" href="#L567">567</a>       <em class="jxr_comment">// Reset to the length of the array - 8 (Allow for at least level 3 Error Correction (8 Error Codewords)</em>
-<a class="jxr_linenumber" name="L568" href="#L568">568</a>       <strong class="jxr_keyword">if</strong> (numECCodewords &lt; codewords.length) {
-<a class="jxr_linenumber" name="L569" href="#L569">569</a>         codewords[0] = codewords.length - numECCodewords;
-<a class="jxr_linenumber" name="L570" href="#L570">570</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L571" href="#L571">571</a>         <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L572" href="#L572">572</a>       }
-<a class="jxr_linenumber" name="L573" href="#L573">573</a>     }
-<a class="jxr_linenumber" name="L574" href="#L574">574</a>   }
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 
-<a class="jxr_linenumber" name="L576" href="#L576">576</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] getBitCountForCodeword(<strong class="jxr_keyword">int</strong> codeword) {
-<a class="jxr_linenumber" name="L577" href="#L577">577</a>     <strong class="jxr_keyword">int</strong>[] result = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[8];
-<a class="jxr_linenumber" name="L578" href="#L578">578</a>     <strong class="jxr_keyword">int</strong> previousValue = 0;
-<a class="jxr_linenumber" name="L579" href="#L579">579</a>     <strong class="jxr_keyword">int</strong> i = result.length - 1;
-<a class="jxr_linenumber" name="L580" href="#L580">580</a>     <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="L581" href="#L581">581</a>       <strong class="jxr_keyword">if</strong> ((codeword &amp; 0x1) != previousValue) {
-<a class="jxr_linenumber" name="L582" href="#L582">582</a>         previousValue = codeword &amp; 0x1;
-<a class="jxr_linenumber" name="L583" href="#L583">583</a>         i--;
-<a class="jxr_linenumber" name="L584" href="#L584">584</a>         <strong class="jxr_keyword">if</strong> (i &lt; 0) {
-<a class="jxr_linenumber" name="L585" href="#L585">585</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L586" href="#L586">586</a>         }
-<a class="jxr_linenumber" name="L587" href="#L587">587</a>       }
-<a class="jxr_linenumber" name="L588" href="#L588">588</a>       result[i]++;
-<a class="jxr_linenumber" name="L589" href="#L589">589</a>       codeword &gt;&gt;= 1;
-<a class="jxr_linenumber" name="L590" href="#L590">590</a>     }
-<a class="jxr_linenumber" name="L591" href="#L591">591</a>     <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L592" href="#L592">592</a>   }
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 
-<a class="jxr_linenumber" name="L594" href="#L594">594</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getCodewordBucketNumber(<strong class="jxr_keyword">int</strong> codeword) {
-<a class="jxr_linenumber" name="L595" href="#L595">595</a>     <strong class="jxr_keyword">return</strong> getCodewordBucketNumber(getBitCountForCodeword(codeword));
-<a class="jxr_linenumber" name="L596" href="#L596">596</a>   }
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getCodewordBucketNumber(<strong class="jxr_keyword">int</strong>[] moduleBitCount) {
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>     <strong class="jxr_keyword">return</strong> (moduleBitCount[0] - moduleBitCount[2] + moduleBitCount[4] - moduleBitCount[6] + 9) % 9;
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>   }
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 
-<a class="jxr_linenumber" name="L602" href="#L602">602</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toString(<a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] barcodeMatrix) {
-<a class="jxr_linenumber" name="L603" href="#L603">603</a>     Formatter formatter = <strong class="jxr_keyword">new</strong> Formatter();
-<a class="jxr_linenumber" name="L604" href="#L604">604</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> row = 0; row &lt; barcodeMatrix.length; row++) {
-<a class="jxr_linenumber" name="L605" href="#L605">605</a>       formatter.format(<span class="jxr_string">"Row %2d: "</span>, row);
-<a class="jxr_linenumber" name="L606" href="#L606">606</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> column = 0; column &lt; barcodeMatrix[row].length; column++) {
-<a class="jxr_linenumber" name="L607" href="#L607">607</a>         <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a> barcodeValue = barcodeMatrix[row][column];
-<a class="jxr_linenumber" name="L608" href="#L608">608</a>         <strong class="jxr_keyword">if</strong> (barcodeValue.getValue().length == 0) {
-<a class="jxr_linenumber" name="L609" href="#L609">609</a>           formatter.format(<span class="jxr_string">"        "</span>, (Object[]) <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L610" href="#L610">610</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L611" href="#L611">611</a>           formatter.format(<span class="jxr_string">"%4d(%2d)"</span>, barcodeValue.getValue()[0],
-<a class="jxr_linenumber" name="L612" href="#L612">612</a>               barcodeValue.getConfidence(barcodeValue.getValue()[0]));
-<a class="jxr_linenumber" name="L613" href="#L613">613</a>         }
-<a class="jxr_linenumber" name="L614" href="#L614">614</a>       }
-<a class="jxr_linenumber" name="L615" href="#L615">615</a>       formatter.format(<span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L616" href="#L616">616</a>     }
-<a class="jxr_linenumber" name="L617" href="#L617">617</a>     String result = formatter.toString();
-<a class="jxr_linenumber" name="L618" href="#L618">618</a>     formatter.close();
-<a class="jxr_linenumber" name="L619" href="#L619">619</a>     <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L620" href="#L620">620</a>   }
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeMetadata.html">BarcodeMetadata</a> leftBarcodeMetadata;
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <strong class="jxr_keyword">if</strong> (leftRowIndicatorColumn == <strong class="jxr_keyword">null</strong> ||
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>         (leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata()) == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>       <strong class="jxr_keyword">return</strong> rightRowIndicatorColumn == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : rightRowIndicatorColumn.getBarcodeMetadata();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     }
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeMetadata.html">BarcodeMetadata</a> rightBarcodeMetadata;
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">if</strong> (rightRowIndicatorColumn == <strong class="jxr_keyword">null</strong> ||
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         (rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata()) == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>       <strong class="jxr_keyword">return</strong> leftBarcodeMetadata;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>     }
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">if</strong> (leftBarcodeMetadata.getColumnCount() != rightBarcodeMetadata.getColumnCount() &amp;&amp;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>         leftBarcodeMetadata.getErrorCorrectionLevel() != rightBarcodeMetadata.getErrorCorrectionLevel() &amp;&amp;
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>         leftBarcodeMetadata.getRowCount() != rightBarcodeMetadata.getRowCount()) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     }
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>     <strong class="jxr_keyword">return</strong> leftBarcodeMetadata;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>   }
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> getRowIndicatorColumn(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>                                                                          <a href="../../../../../com/google/zxing/pdf417/decoder/BoundingBox.html">BoundingBox</a> boundingBox,
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>                                                                          <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> startPoint,
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>                                                                          <strong class="jxr_keyword">boolean</strong> leftToRight,
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>                                                                          <strong class="jxr_keyword">int</strong> minCodewordWidth,
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>                                                                          <strong class="jxr_keyword">int</strong> maxCodewordWidth) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a> rowIndicatorColumn = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResultRowIndicatorColumn.html">DetectionResultRowIndicatorColumn</a>(boundingBox,
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>         leftToRight);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 2; i++) {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>       <strong class="jxr_keyword">int</strong> increment = i == 0 ? 1 : -1;
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>       <strong class="jxr_keyword">int</strong> startColumn = (<strong class="jxr_keyword">int</strong>) startPoint.getX();
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> imageRow = (<strong class="jxr_keyword">int</strong>) startPoint.getY(); imageRow &lt;= boundingBox.getMaxY() &amp;&amp;
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>           imageRow &gt;= boundingBox.getMinY(); imageRow += increment) {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>         <a href="../../../../../com/google/zxing/pdf417/decoder/Codeword.html">Codeword</a> codeword = detectCodeword(image, 0, image.getWidth(), leftToRight, startColumn, imageRow,
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>             minCodewordWidth, maxCodewordWidth);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>         <strong class="jxr_keyword">if</strong> (codeword != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>           rowIndicatorColumn.setCodeword(imageRow, codeword);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>           <strong class="jxr_keyword">if</strong> (leftToRight) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>             startColumn = codeword.getStartX();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>           } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>             startColumn = codeword.getEndX();
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>           }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>         }
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>       }
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>     }
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>     <strong class="jxr_keyword">return</strong> rowIndicatorColumn;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>   }
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> adjustCodewordCount(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult, <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] barcodeMatrix)
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>     <strong class="jxr_keyword">int</strong>[] numberOfCodewords = barcodeMatrix[0][1].getValue();
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>     <strong class="jxr_keyword">int</strong> calculatedNumberOfCodewords = detectionResult.getBarcodeColumnCount() *
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>         detectionResult.getBarcodeRowCount() -
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>         getNumberOfECCodeWords(detectionResult.getBarcodeECLevel());
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>     <strong class="jxr_keyword">if</strong> (numberOfCodewords.length == 0) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>       <strong class="jxr_keyword">if</strong> (calculatedNumberOfCodewords &lt; 1 || calculatedNumberOfCodewords &gt; PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>         <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>       }
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>       barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (numberOfCodewords[0] != calculatedNumberOfCodewords) {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>       <em class="jxr_comment">// The calculated one is more reliable as it is derived from the row indicator columns</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>       barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>     }
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>   }
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/DecoderResult.html">DecoderResult</a> createDecoderResult(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult) <strong class="jxr_keyword">throws</strong> FormatException,
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>       ChecksumException, <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] barcodeMatrix = createBarcodeMatrix(detectionResult);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     adjustCodewordCount(detectionResult, barcodeMatrix);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>     Collection&lt;Integer&gt; erasures = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>     <strong class="jxr_keyword">int</strong>[] codewords = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[detectionResult.getBarcodeRowCount() * detectionResult.getBarcodeColumnCount()];
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     List&lt;<strong class="jxr_keyword">int</strong>[]&gt; ambiguousIndexValuesList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     List&lt;Integer&gt; ambiguousIndexesList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> row = 0; row &lt; detectionResult.getBarcodeRowCount(); row++) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> column = 0; column &lt; detectionResult.getBarcodeColumnCount(); column++) {
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>         <strong class="jxr_keyword">int</strong>[] values = barcodeMatrix[row][column + 1].getValue();
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>         <strong class="jxr_keyword">int</strong> codewordIndex = row * detectionResult.getBarcodeColumnCount() + column;
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>         <strong class="jxr_keyword">if</strong> (values.length == 0) {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>           erasures.add(codewordIndex);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (values.length == 1) {
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>           codewords[codewordIndex] = values[0];
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>           ambiguousIndexesList.add(codewordIndex);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>           ambiguousIndexValuesList.add(values);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>         }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>       }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     }
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">int</strong>[][] ambiguousIndexValues = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[ambiguousIndexValuesList.size()][];
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ambiguousIndexValues.length; i++) {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>       ambiguousIndexValues[i] = ambiguousIndexValuesList.get(i);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     }
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>     <strong class="jxr_keyword">return</strong> createDecoderResultFromAmbiguousValues(detectionResult.getBarcodeECLevel(), codewords,
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>         PDF417Common.toIntArray(erasures), PDF417Common.toIntArray(ambiguousIndexesList), ambiguousIndexValues);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>   }
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">   * This method deals with the fact, that the decoding process doesn't always yield a single most likely value. The</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">   * current error correction implementation doesn't deal with erasures very well, so it's better to provide a value</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">   * for these ambiguous codewords instead of treating it as an erasure. The problem is that we don't know which of</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">   * the ambiguous values to choose. We try decode using the first value, and if that fails, we use another of the</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">   * ambiguous values and try to decode again. This usually only happens on very hard to read and decode barcodes,</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">   * so decoding the normal barcodes is not affected by this. </em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">   * @param erasureArray contains the indexes of erasures</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">   * @param ambiguousIndexes array with the indexes that have more than one most likely value</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">   * @param ambiguousIndexValues two dimensional array that contains the ambiguous values. The first dimension must</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">   * be the same length as the ambiguousIndexes array</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/DecoderResult.html">DecoderResult</a> createDecoderResultFromAmbiguousValues(<strong class="jxr_keyword">int</strong> ecLevel,
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>                                                                       <strong class="jxr_keyword">int</strong>[] codewords,
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>                                                                       <strong class="jxr_keyword">int</strong>[] erasureArray,
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>                                                                       <strong class="jxr_keyword">int</strong>[] ambiguousIndexes,
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>                                                                       <strong class="jxr_keyword">int</strong>[][] ambiguousIndexValues)
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>       <strong class="jxr_keyword">throws</strong> FormatException, <a href="../../../../../com/google/zxing/ChecksumException.html">ChecksumException</a> {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>     <strong class="jxr_keyword">int</strong>[] ambiguousIndexCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[ambiguousIndexes.length];
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>     <strong class="jxr_keyword">int</strong> tries = 100;
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     <strong class="jxr_keyword">while</strong> (tries-- &gt; 0) {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ambiguousIndexCount.length; i++) {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>         codewords[ambiguousIndexes[i]] = ambiguousIndexValues[i][ambiguousIndexCount[i]];
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>       }
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>       <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>         <strong class="jxr_keyword">return</strong> decodeCodewords(codewords, ecLevel, erasureArray);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>       } <strong class="jxr_keyword">catch</strong> (ChecksumException ignored) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>         <em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>       }
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>       <strong class="jxr_keyword">if</strong> (ambiguousIndexCount.length == 0) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>         <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>       }
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ambiguousIndexCount.length; i++) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>         <strong class="jxr_keyword">if</strong> (ambiguousIndexCount[i] &lt; ambiguousIndexValues[i].length - 1) {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>           ambiguousIndexCount[i]++;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>           ambiguousIndexCount[i] = 0;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>           <strong class="jxr_keyword">if</strong> (i == ambiguousIndexCount.length - 1) {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>             <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>           }
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         }
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>       }
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>     <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>   }
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] createBarcodeMatrix(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult) {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] barcodeMatrix = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[detectionResult.getBarcodeRowCount()][detectionResult
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>         .getBarcodeColumnCount() + 2];
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> row = 0; row &lt; barcodeMatrix.length; row++) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> column = 0; column &lt; barcodeMatrix[row].length; column++) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>         barcodeMatrix[row][column] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>();
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>       }
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>     }
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>     <strong class="jxr_keyword">int</strong> column = -1;
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     <strong class="jxr_keyword">for</strong> (DetectionResultColumn detectionResultColumn : detectionResult.getDetectionResultColumns()) {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>       column++;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>       <strong class="jxr_keyword">if</strong> (detectionResultColumn == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>         <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>       }
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>       <strong class="jxr_keyword">for</strong> (Codeword codeword : detectionResultColumn.getCodewords()) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>         <strong class="jxr_keyword">if</strong> (codeword == <strong class="jxr_keyword">null</strong> || codeword.getRowNumber() == -1) {
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>           <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>         barcodeMatrix[codeword.getRowNumber()][column].setValue(codeword.getValue());
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>       }
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>     }
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>     <strong class="jxr_keyword">return</strong> barcodeMatrix;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>   }
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isValidBarcodeColumn(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult, <strong class="jxr_keyword">int</strong> barcodeColumn) {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>     <strong class="jxr_keyword">return</strong> barcodeColumn &gt;= 0 &amp;&amp; barcodeColumn &lt;= detectionResult.getBarcodeColumnCount() + 1;
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>   }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getStartColumn(<a href="../../../../../com/google/zxing/pdf417/decoder/DetectionResult.html">DetectionResult</a> detectionResult,
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>                                     <strong class="jxr_keyword">int</strong> barcodeColumn,
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>                                     <strong class="jxr_keyword">int</strong> imageRow,
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>                                     <strong class="jxr_keyword">boolean</strong> leftToRight) {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>     <strong class="jxr_keyword">int</strong> offset = leftToRight ? 1 : -1;
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>     <a href="../../../../../com/google/zxing/pdf417/decoder/Codeword.html">Codeword</a> codeword = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>     <strong class="jxr_keyword">if</strong> (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>       codeword = detectionResult.getDetectionResultColumn(barcodeColumn - offset).getCodeword(imageRow);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>     }
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>     <strong class="jxr_keyword">if</strong> (codeword != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>       <strong class="jxr_keyword">return</strong> leftToRight ? codeword.getEndX() : codeword.getStartX();
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>     }
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>     codeword = detectionResult.getDetectionResultColumn(barcodeColumn).getCodewordNearby(imageRow);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>     <strong class="jxr_keyword">if</strong> (codeword != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>       <strong class="jxr_keyword">return</strong> leftToRight ? codeword.getStartX() : codeword.getEndX();
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>     }
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>     <strong class="jxr_keyword">if</strong> (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>       codeword = detectionResult.getDetectionResultColumn(barcodeColumn - offset).getCodewordNearby(imageRow);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>     }
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>     <strong class="jxr_keyword">if</strong> (codeword != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>       <strong class="jxr_keyword">return</strong> leftToRight ? codeword.getEndX() : codeword.getStartX();
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>     }
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>     <strong class="jxr_keyword">int</strong> skippedColumns = 0;
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>     <strong class="jxr_keyword">while</strong> (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>       barcodeColumn -= offset;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>       <strong class="jxr_keyword">for</strong> (Codeword previousRowCodeword : detectionResult.getDetectionResultColumn(barcodeColumn).getCodewords()) {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>         <strong class="jxr_keyword">if</strong> (previousRowCodeword != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>           <strong class="jxr_keyword">return</strong> (leftToRight ? previousRowCodeword.getEndX() : previousRowCodeword.getStartX()) +
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>               offset *
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>               skippedColumns *
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>               (previousRowCodeword.getEndX() - previousRowCodeword.getStartX());
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>         }
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>       }
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>       skippedColumns++;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>     }
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>     <strong class="jxr_keyword">return</strong> leftToRight ? detectionResult.getBoundingBox().getMinX() : detectionResult.getBoundingBox().getMaxX();
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>   }
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/Codeword.html">Codeword</a> detectCodeword(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>                                          <strong class="jxr_keyword">int</strong> minColumn,
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>                                          <strong class="jxr_keyword">int</strong> maxColumn,
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>                                          <strong class="jxr_keyword">boolean</strong> leftToRight,
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>                                          <strong class="jxr_keyword">int</strong> startColumn,
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>                                          <strong class="jxr_keyword">int</strong> imageRow,
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>                                          <strong class="jxr_keyword">int</strong> minCodewordWidth,
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>                                          <strong class="jxr_keyword">int</strong> maxCodewordWidth) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>     startColumn = adjustCodewordStartColumn(image, minColumn, maxColumn, leftToRight, startColumn, imageRow);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>     <em class="jxr_comment">// we usually know fairly exact now how long a codeword is. We should provide minimum and maximum expected length</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>     <em class="jxr_comment">// and try to adjust the read pixels, e.g. remove single pixel errors or try to cut off exceeding pixels.</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <em class="jxr_comment">// min and maxCodewordWidth should not be used as they are calculated for the whole barcode an can be inaccurate</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>     <em class="jxr_comment">// for the current position</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>     <strong class="jxr_keyword">int</strong>[] moduleBitCount = getModuleBitCount(image, minColumn, maxColumn, leftToRight, startColumn, imageRow);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>     <strong class="jxr_keyword">if</strong> (moduleBitCount == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>     }
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>     <strong class="jxr_keyword">int</strong> endColumn;
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     <strong class="jxr_keyword">int</strong> codewordBitCount = PDF417Common.getBitCountSum(moduleBitCount);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>     <strong class="jxr_keyword">if</strong> (leftToRight) {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>       endColumn = startColumn + codewordBitCount;
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; moduleBitCount.length &gt;&gt; 1; i++) {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">int</strong> tmpCount = moduleBitCount[i];
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>         moduleBitCount[i] = moduleBitCount[moduleBitCount.length - 1 - i];
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>         moduleBitCount[moduleBitCount.length - 1 - i] = tmpCount;
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>       }
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>       endColumn = startColumn;
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>       startColumn = endColumn - codewordBitCount;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>     }
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>     <em class="jxr_comment">// TODO implement check for width and correction of black and white bars</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>     <em class="jxr_comment">// use start (and maybe stop pattern) to determine if blackbars are wider than white bars. If so, adjust.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     <em class="jxr_comment">// should probably done only for codewords with a lot more than 17 bits. </em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>     <em class="jxr_comment">// The following fixes 10-1.png, which has wide black bars and small white bars</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <em class="jxr_comment">//    for (int i = 0; i &lt; moduleBitCount.length; i++) {</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>     <em class="jxr_comment">//      if (i % 2 == 0) {</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     <em class="jxr_comment">//        moduleBitCount[i]--;</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>     <em class="jxr_comment">//      } else {</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>     <em class="jxr_comment">//        moduleBitCount[i]++;</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>     <em class="jxr_comment">//      }</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>     <em class="jxr_comment">//    }</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>     <em class="jxr_comment">// We could also use the width of surrounding codewords for more accurate results, but this seems</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>     <em class="jxr_comment">// sufficient for now</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>     <strong class="jxr_keyword">if</strong> (!checkCodewordSkew(codewordBitCount, minCodewordWidth, maxCodewordWidth)) {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>       <em class="jxr_comment">// We could try to use the startX and endX position of the codeword in the same column in the previous row,</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>       <em class="jxr_comment">// create the bit count from it and normalize it to 8. This would help with single pixel errors.</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>     }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>     <strong class="jxr_keyword">int</strong> decodedValue = PDF417CodewordDecoder.getDecodedValue(moduleBitCount);
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>     <strong class="jxr_keyword">int</strong> codeword = PDF417Common.getCodeword(decodedValue);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>     <strong class="jxr_keyword">if</strong> (codeword == -1) {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>     }
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/decoder/Codeword.html">Codeword</a>(startColumn, endColumn, getCodewordBucketNumber(decodedValue), codeword);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>   }
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] getModuleBitCount(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>                                          <strong class="jxr_keyword">int</strong> minColumn,
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>                                          <strong class="jxr_keyword">int</strong> maxColumn,
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>                                          <strong class="jxr_keyword">boolean</strong> leftToRight,
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>                                          <strong class="jxr_keyword">int</strong> startColumn,
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>                                          <strong class="jxr_keyword">int</strong> imageRow) {
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>     <strong class="jxr_keyword">int</strong> imageColumn = startColumn;
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>     <strong class="jxr_keyword">int</strong>[] moduleBitCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[8];
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>     <strong class="jxr_keyword">int</strong> moduleNumber = 0;
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>     <strong class="jxr_keyword">int</strong> increment = leftToRight ? 1 : -1;
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>     <strong class="jxr_keyword">boolean</strong> previousPixelValue = leftToRight;
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>     <strong class="jxr_keyword">while</strong> (((leftToRight &amp;&amp; imageColumn &lt; maxColumn) || (!leftToRight &amp;&amp; imageColumn &gt;= minColumn)) &amp;&amp;
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>         moduleNumber &lt; moduleBitCount.length) {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>       <strong class="jxr_keyword">if</strong> (image.get(imageColumn, imageRow) == previousPixelValue) {
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>         moduleBitCount[moduleNumber]++;
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>         imageColumn += increment;
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>         moduleNumber++;
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>         previousPixelValue = !previousPixelValue;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>       }
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>     }
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>     <strong class="jxr_keyword">if</strong> (moduleNumber == moduleBitCount.length ||
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>         (((leftToRight &amp;&amp; imageColumn == maxColumn) || (!leftToRight &amp;&amp; imageColumn == minColumn)) &amp;&amp; moduleNumber == moduleBitCount.length - 1)) {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>       <strong class="jxr_keyword">return</strong> moduleBitCount;
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>     }
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>   }
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getNumberOfECCodeWords(<strong class="jxr_keyword">int</strong> barcodeECLevel) {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>     <strong class="jxr_keyword">return</strong> 2 &lt;&lt; barcodeECLevel;
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>   }
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> adjustCodewordStartColumn(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>                                                <strong class="jxr_keyword">int</strong> minColumn,
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>                                                <strong class="jxr_keyword">int</strong> maxColumn,
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>                                                <strong class="jxr_keyword">boolean</strong> leftToRight,
+<a class="jxr_linenumber" name="L491" href="#L491">491</a>                                                <strong class="jxr_keyword">int</strong> codewordStartColumn,
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>                                                <strong class="jxr_keyword">int</strong> imageRow) {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>     <strong class="jxr_keyword">int</strong> correctedStartColumn = codewordStartColumn;
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>     <strong class="jxr_keyword">int</strong> increment = leftToRight ? -1 : 1;
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>     <em class="jxr_comment">// there should be no black pixels before the start column. If there are, then we need to start earlier.</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 2; i++) {
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>       <strong class="jxr_keyword">while</strong> (((leftToRight &amp;&amp; correctedStartColumn &gt;= minColumn) || (!leftToRight &amp;&amp; correctedStartColumn &lt; maxColumn)) &amp;&amp;
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>           leftToRight == image.get(correctedStartColumn, imageRow)) {
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>         <strong class="jxr_keyword">if</strong> (Math.abs(codewordStartColumn - correctedStartColumn) &gt; CODEWORD_SKEW_SIZE) {
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>           <strong class="jxr_keyword">return</strong> codewordStartColumn;
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>         }
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>         correctedStartColumn += increment;
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>       }
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>       increment = -increment;
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>       leftToRight = !leftToRight;
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>     }
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>     <strong class="jxr_keyword">return</strong> correctedStartColumn;
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>   }
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> checkCodewordSkew(<strong class="jxr_keyword">int</strong> codewordSize, <strong class="jxr_keyword">int</strong> minCodewordWidth, <strong class="jxr_keyword">int</strong> maxCodewordWidth) {
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>     <strong class="jxr_keyword">return</strong> minCodewordWidth - CODEWORD_SKEW_SIZE &lt;= codewordSize &amp;&amp;
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>         codewordSize &lt;= maxCodewordWidth + CODEWORD_SKEW_SIZE;
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>   }
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/DecoderResult.html">DecoderResult</a> decodeCodewords(<strong class="jxr_keyword">int</strong>[] codewords, <strong class="jxr_keyword">int</strong> ecLevel, <strong class="jxr_keyword">int</strong>[] erasures) <strong class="jxr_keyword">throws</strong> FormatException,
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>       <a href="../../../../../com/google/zxing/ChecksumException.html">ChecksumException</a> {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>     <strong class="jxr_keyword">if</strong> (codewords.length == 0) {
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>     }
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>     <strong class="jxr_keyword">int</strong> numECCodewords = 1 &lt;&lt; (ecLevel + 1);
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>     <strong class="jxr_keyword">int</strong> correctedErrorsCount = correctErrors(codewords, erasures, numECCodewords);
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>     verifyCodewordCount(codewords, numECCodewords);
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>     <em class="jxr_comment">// Decode the codewords</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>     <a href="../../../../../com/google/zxing/common/DecoderResult.html">DecoderResult</a> decoderResult = DecodedBitStreamParser.decode(codewords, String.valueOf(ecLevel));
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>     decoderResult.setErrorsCorrected(correctedErrorsCount);
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>     decoderResult.setErasures(erasures.length);
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>     <strong class="jxr_keyword">return</strong> decoderResult;
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>   }
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Given data and error-correction codewords received, possibly corrupted by errors, attempts to</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">   * correct the errors in-place.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">   * @param codewords   data and error correction codewords</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">   * @param erasures positions of any known erasures</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">   * @param numECCodewords number of error correction codewords that are available in codewords</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">   * @throws ChecksumException if error correction fails</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> correctErrors(<strong class="jxr_keyword">int</strong>[] codewords, <strong class="jxr_keyword">int</strong>[] erasures, <strong class="jxr_keyword">int</strong> numECCodewords) <strong class="jxr_keyword">throws</strong> ChecksumException {
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>     <strong class="jxr_keyword">if</strong> (erasures != <strong class="jxr_keyword">null</strong> &amp;&amp;
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>         erasures.length &gt; numECCodewords / 2 + MAX_ERRORS ||
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>         numECCodewords &lt; 0 ||
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>         numECCodewords &gt; MAX_EC_CODEWORDS) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>       <em class="jxr_comment">// Too many errors or EC Codewords is corrupted</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>       <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>     }
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>     <strong class="jxr_keyword">return</strong> errorCorrection.decode(codewords, numECCodewords, erasures);
+<a class="jxr_linenumber" name="L550" href="#L550">550</a>   }
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">   * Verify that all is OK with the codeword array.</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> verifyCodewordCount(<strong class="jxr_keyword">int</strong>[] codewords, <strong class="jxr_keyword">int</strong> numECCodewords) <strong class="jxr_keyword">throws</strong> FormatException {
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>     <strong class="jxr_keyword">if</strong> (codewords.length &lt; 4) {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>       <em class="jxr_comment">// Codeword array size should be at least 4 allowing for</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>       <em class="jxr_comment">// Count CW, At least one Data CW, Error Correction CW, Error Correction CW</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>     }
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>     <em class="jxr_comment">// The first codeword, the Symbol Length Descriptor, shall always encode the total number of data</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>     <em class="jxr_comment">// codewords in the symbol, including the Symbol Length Descriptor itself, data codewords and pad</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>     <em class="jxr_comment">// codewords, but excluding the number of error correction codewords.</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>     <strong class="jxr_keyword">int</strong> numberOfCodewords = codewords[0];
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>     <strong class="jxr_keyword">if</strong> (numberOfCodewords &gt; codewords.length) {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L567" href="#L567">567</a>     }
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>     <strong class="jxr_keyword">if</strong> (numberOfCodewords == 0) {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a>       <em class="jxr_comment">// Reset to the length of the array - 8 (Allow for at least level 3 Error Correction (8 Error Codewords)</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>       <strong class="jxr_keyword">if</strong> (numECCodewords &lt; codewords.length) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>         codewords[0] = codewords.length - numECCodewords;
+<a class="jxr_linenumber" name="L572" href="#L572">572</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L573" href="#L573">573</a>         <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L574" href="#L574">574</a>       }
+<a class="jxr_linenumber" name="L575" href="#L575">575</a>     }
+<a class="jxr_linenumber" name="L576" href="#L576">576</a>   }
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
+<a class="jxr_linenumber" name="L578" href="#L578">578</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] getBitCountForCodeword(<strong class="jxr_keyword">int</strong> codeword) {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a>     <strong class="jxr_keyword">int</strong>[] result = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[8];
+<a class="jxr_linenumber" name="L580" href="#L580">580</a>     <strong class="jxr_keyword">int</strong> previousValue = 0;
+<a class="jxr_linenumber" name="L581" href="#L581">581</a>     <strong class="jxr_keyword">int</strong> i = result.length - 1;
+<a class="jxr_linenumber" name="L582" href="#L582">582</a>     <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="L583" href="#L583">583</a>       <strong class="jxr_keyword">if</strong> ((codeword &amp; 0x1) != previousValue) {
+<a class="jxr_linenumber" name="L584" href="#L584">584</a>         previousValue = codeword &amp; 0x1;
+<a class="jxr_linenumber" name="L585" href="#L585">585</a>         i--;
+<a class="jxr_linenumber" name="L586" href="#L586">586</a>         <strong class="jxr_keyword">if</strong> (i &lt; 0) {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L588" href="#L588">588</a>         }
+<a class="jxr_linenumber" name="L589" href="#L589">589</a>       }
+<a class="jxr_linenumber" name="L590" href="#L590">590</a>       result[i]++;
+<a class="jxr_linenumber" name="L591" href="#L591">591</a>       codeword &gt;&gt;= 1;
+<a class="jxr_linenumber" name="L592" href="#L592">592</a>     }
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>     <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L594" href="#L594">594</a>   }
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
+<a class="jxr_linenumber" name="L596" href="#L596">596</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getCodewordBucketNumber(<strong class="jxr_keyword">int</strong> codeword) {
+<a class="jxr_linenumber" name="L597" href="#L597">597</a>     <strong class="jxr_keyword">return</strong> getCodewordBucketNumber(getBitCountForCodeword(codeword));
+<a class="jxr_linenumber" name="L598" href="#L598">598</a>   }
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
+<a class="jxr_linenumber" name="L600" href="#L600">600</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getCodewordBucketNumber(<strong class="jxr_keyword">int</strong>[] moduleBitCount) {
+<a class="jxr_linenumber" name="L601" href="#L601">601</a>     <strong class="jxr_keyword">return</strong> (moduleBitCount[0] - moduleBitCount[2] + moduleBitCount[4] - moduleBitCount[6] + 9) % 9;
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>   }
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toString(<a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a>[][] barcodeMatrix) {
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>     Formatter formatter = <strong class="jxr_keyword">new</strong> Formatter();
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> row = 0; row &lt; barcodeMatrix.length; row++) {
+<a class="jxr_linenumber" name="L607" href="#L607">607</a>       formatter.format(<span class="jxr_string">"Row %2d: "</span>, row);
+<a class="jxr_linenumber" name="L608" href="#L608">608</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> column = 0; column &lt; barcodeMatrix[row].length; column++) {
+<a class="jxr_linenumber" name="L609" href="#L609">609</a>         <a href="../../../../../com/google/zxing/pdf417/decoder/BarcodeValue.html">BarcodeValue</a> barcodeValue = barcodeMatrix[row][column];
+<a class="jxr_linenumber" name="L610" href="#L610">610</a>         <strong class="jxr_keyword">if</strong> (barcodeValue.getValue().length == 0) {
+<a class="jxr_linenumber" name="L611" href="#L611">611</a>           formatter.format(<span class="jxr_string">"        "</span>, (Object[]) <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L612" href="#L612">612</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L613" href="#L613">613</a>           formatter.format(<span class="jxr_string">"%4d(%2d)"</span>, barcodeValue.getValue()[0],
+<a class="jxr_linenumber" name="L614" href="#L614">614</a>               barcodeValue.getConfidence(barcodeValue.getValue()[0]));
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>         }
+<a class="jxr_linenumber" name="L616" href="#L616">616</a>       }
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>       formatter.format(<span class="jxr_string">"%n"</span>);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>     }
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>     String result = formatter.toString();
+<a class="jxr_linenumber" name="L620" href="#L620">620</a>     formatter.close();
+<a class="jxr_linenumber" name="L621" href="#L621">621</a>     <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L622" href="#L622">622</a>   }
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

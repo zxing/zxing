@@ -88,23 +88,16 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>    }
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isColonFollowedByPortNumber(String uri, <strong class="jxr_keyword">int</strong> protocolEnd) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">int</strong> nextSlash = uri.indexOf('/', protocolEnd + 1);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">if</strong> (nextSlash &lt; 0) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>        nextSlash = uri.length();
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">if</strong> (nextSlash &lt;= protocolEnd + 1) {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>        <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      }
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = protocolEnd + 1; x &lt; nextSlash; x++) {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>        <strong class="jxr_keyword">if</strong> (uri.charAt(x) &lt; '0' || uri.charAt(x) &gt; '9') {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>          <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>        }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>    }
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">int</strong> start = protocolEnd + 1;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">int</strong> nextSlash = uri.indexOf('/', start);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">if</strong> (nextSlash &lt; 0) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>        nextSlash = uri.length();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">return</strong> ResultParser.isSubstringOfDigits(uri, start, nextSlash - start);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>    }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

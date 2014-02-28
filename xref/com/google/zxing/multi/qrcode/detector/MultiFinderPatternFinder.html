@@ -238,84 +238,85 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a>   <strong class="jxr_keyword">public</strong> <a href="../../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a>[] findMulti(Map&lt;DecodeHintType,?&gt; hints) <strong class="jxr_keyword">throws</strong> NotFoundException {
 <a class="jxr_linenumber" name="L232" href="#L232">232</a>     <strong class="jxr_keyword">boolean</strong> tryHarder = hints != <strong class="jxr_keyword">null</strong> &amp;&amp; hints.containsKey(DecodeHintType.TRY_HARDER);
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <a href="../../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image = getImage();
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>     <strong class="jxr_keyword">int</strong> maxI = image.getHeight();
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>     <strong class="jxr_keyword">int</strong> maxJ = image.getWidth();
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>     <em class="jxr_comment">// We are looking for black/white/black/white/black modules in</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>     <em class="jxr_comment">// 1:1:3:1:1 ratio; this tracks the number of such modules seen so far</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>     <em class="jxr_comment">// Let's assume that the maximum version QR Code we support takes up 1/4 the height of the</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>     <em class="jxr_comment">// image, and then account for the center being 3 modules in size. This gives the smallest</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>     <em class="jxr_comment">// number of pixels the center could be, so skip this often. When trying harder, look for all</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>     <em class="jxr_comment">// QR versions regardless of how dense they are.</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>     <strong class="jxr_keyword">int</strong> iSkip = (<strong class="jxr_keyword">int</strong>) (maxI / (MAX_MODULES * 4.0f) * 3);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">if</strong> (iSkip &lt; MIN_SKIP || tryHarder) {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>       iSkip = MIN_SKIP;
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>     }
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>     <strong class="jxr_keyword">int</strong>[] stateCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[5];
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = iSkip - 1; i &lt; maxI; i += iSkip) {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>       <em class="jxr_comment">// Get a row of black/white values</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>       stateCount[0] = 0;
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>       stateCount[1] = 0;
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>       stateCount[2] = 0;
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>       stateCount[3] = 0;
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>       stateCount[4] = 0;
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>       <strong class="jxr_keyword">int</strong> currentState = 0;
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; maxJ; j++) {
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>         <strong class="jxr_keyword">if</strong> (image.get(j, i)) {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>           <em class="jxr_comment">// Black pixel</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>           <strong class="jxr_keyword">if</strong> ((currentState &amp; 1) == 1) { <em class="jxr_comment">// Counting white pixels</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>             currentState++;
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>           }
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>           stateCount[currentState]++;
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>         } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// White pixel</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>           <strong class="jxr_keyword">if</strong> ((currentState &amp; 1) == 0) { <em class="jxr_comment">// Counting black pixels</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>             <strong class="jxr_keyword">if</strong> (currentState == 4) { <em class="jxr_comment">// A winner?</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>               <strong class="jxr_keyword">if</strong> (foundPatternCross(stateCount) &amp;&amp; handlePossibleCenter(stateCount, i, j)) { <em class="jxr_comment">// Yes</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>                 <em class="jxr_comment">// Clear state to start looking again</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>                 currentState = 0;
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>                 stateCount[0] = 0;
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>                 stateCount[1] = 0;
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>                 stateCount[2] = 0;
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>                 stateCount[3] = 0;
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>                 stateCount[4] = 0;
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>               } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// No, shift counts back by two</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>                 stateCount[0] = stateCount[2];
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>                 stateCount[1] = stateCount[3];
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>                 stateCount[2] = stateCount[4];
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>                 stateCount[3] = 1;
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>                 stateCount[4] = 0;
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>                 currentState = 3;
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>               }
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>               stateCount[++currentState]++;
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>             }
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>           } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// Counting white pixels</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>             stateCount[currentState]++;
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>           }
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>         }
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>       } <em class="jxr_comment">// for j=...</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>       <strong class="jxr_keyword">if</strong> (foundPatternCross(stateCount)) {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>         handlePossibleCenter(stateCount, i, maxJ);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>       } <em class="jxr_comment">// end if foundPatternCross</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     } <em class="jxr_comment">// for i=iSkip-1 ...</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <a href="../../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a>[][] patternInfo = selectMutipleBestPatterns();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>     List&lt;FinderPatternInfo&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>     <strong class="jxr_keyword">for</strong> (FinderPattern[] pattern : patternInfo) {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>       ResultPoint.orderBestPatterns(pattern);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>       result.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a>(pattern));
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>     }
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>     <strong class="jxr_keyword">if</strong> (result.isEmpty()) {
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>       <strong class="jxr_keyword">return</strong> EMPTY_RESULT_ARRAY;
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>       <strong class="jxr_keyword">return</strong> result.toArray(<strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a>[result.size()]);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>     }
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>   }
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> }
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <strong class="jxr_keyword">boolean</strong> pureBarcode = hints != <strong class="jxr_keyword">null</strong> &amp;&amp; hints.containsKey(DecodeHintType.PURE_BARCODE);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>     <a href="../../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image = getImage();
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>     <strong class="jxr_keyword">int</strong> maxI = image.getHeight();
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>     <strong class="jxr_keyword">int</strong> maxJ = image.getWidth();
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>     <em class="jxr_comment">// We are looking for black/white/black/white/black modules in</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>     <em class="jxr_comment">// 1:1:3:1:1 ratio; this tracks the number of such modules seen so far</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     <em class="jxr_comment">// Let's assume that the maximum version QR Code we support takes up 1/4 the height of the</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>     <em class="jxr_comment">// image, and then account for the center being 3 modules in size. This gives the smallest</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>     <em class="jxr_comment">// number of pixels the center could be, so skip this often. When trying harder, look for all</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>     <em class="jxr_comment">// QR versions regardless of how dense they are.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">int</strong> iSkip = (<strong class="jxr_keyword">int</strong>) (maxI / (MAX_MODULES * 4.0f) * 3);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>     <strong class="jxr_keyword">if</strong> (iSkip &lt; MIN_SKIP || tryHarder) {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>       iSkip = MIN_SKIP;
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>     }
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <strong class="jxr_keyword">int</strong>[] stateCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[5];
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = iSkip - 1; i &lt; maxI; i += iSkip) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>       <em class="jxr_comment">// Get a row of black/white values</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>       stateCount[0] = 0;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>       stateCount[1] = 0;
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>       stateCount[2] = 0;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>       stateCount[3] = 0;
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>       stateCount[4] = 0;
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>       <strong class="jxr_keyword">int</strong> currentState = 0;
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; maxJ; j++) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">if</strong> (image.get(j, i)) {
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>           <em class="jxr_comment">// Black pixel</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>           <strong class="jxr_keyword">if</strong> ((currentState &amp; 1) == 1) { <em class="jxr_comment">// Counting white pixels</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>             currentState++;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>           }
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>           stateCount[currentState]++;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>         } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// White pixel</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>           <strong class="jxr_keyword">if</strong> ((currentState &amp; 1) == 0) { <em class="jxr_comment">// Counting black pixels</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>             <strong class="jxr_keyword">if</strong> (currentState == 4) { <em class="jxr_comment">// A winner?</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>               <strong class="jxr_keyword">if</strong> (foundPatternCross(stateCount) &amp;&amp; handlePossibleCenter(stateCount, i, j, pureBarcode)) { <em class="jxr_comment">// Yes</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>                 <em class="jxr_comment">// Clear state to start looking again</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>                 currentState = 0;
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>                 stateCount[0] = 0;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>                 stateCount[1] = 0;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>                 stateCount[2] = 0;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>                 stateCount[3] = 0;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>                 stateCount[4] = 0;
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>               } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// No, shift counts back by two</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>                 stateCount[0] = stateCount[2];
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>                 stateCount[1] = stateCount[3];
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>                 stateCount[2] = stateCount[4];
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>                 stateCount[3] = 1;
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>                 stateCount[4] = 0;
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>                 currentState = 3;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>               }
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>               stateCount[++currentState]++;
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>             }
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>           } <strong class="jxr_keyword">else</strong> { <em class="jxr_comment">// Counting white pixels</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>             stateCount[currentState]++;
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>           }
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>         }
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>       } <em class="jxr_comment">// for j=...</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>       <strong class="jxr_keyword">if</strong> (foundPatternCross(stateCount)) {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>         handlePossibleCenter(stateCount, i, maxJ, pureBarcode);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>       } <em class="jxr_comment">// end if foundPatternCross</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>     } <em class="jxr_comment">// for i=iSkip-1 ...</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>     <a href="../../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a>[][] patternInfo = selectMutipleBestPatterns();
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>     List&lt;FinderPatternInfo&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>     <strong class="jxr_keyword">for</strong> (FinderPattern[] pattern : patternInfo) {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>       ResultPoint.orderBestPatterns(pattern);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>       result.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a>(pattern));
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     }
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>     <strong class="jxr_keyword">if</strong> (result.isEmpty()) {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>       <strong class="jxr_keyword">return</strong> EMPTY_RESULT_ARRAY;
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>       <strong class="jxr_keyword">return</strong> result.toArray(<strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a>[result.size()]);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     }
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>   }
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

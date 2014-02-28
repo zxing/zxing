@@ -35,36 +35,38 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.oned.rss.expanded;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.awt.image.BufferedImage;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> javax.imageio.ImageIO;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Files;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Path;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Paths;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BinaryBitmap;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BufferedImageLuminanceSource;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.common.GlobalHistogramBinarizer;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/google/zxing/oned/rss/expanded/TestCaseUtil.html">TestCaseUtil</a> {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> javax.imageio.ImageIO;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BinaryBitmap;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.BufferedImageLuminanceSource;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.common.GlobalHistogramBinarizer;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../../com/google/zxing/oned/rss/expanded/TestCaseUtil.html">TestCaseUtil</a>() {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>    }
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BufferedImage getBufferedImage(String path) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      File file = <strong class="jxr_keyword">new</strong> File(path);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">if</strong> (!file.exists()) {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>        <em class="jxr_comment">// Support running from project root too</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>        file = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"core"</span>, path);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      }
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">return</strong> ImageIO.read(file);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>    }
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <strong class="jxr_keyword">static</strong> BinaryBitmap getBinaryBitmap(String path) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      BufferedImage bufferedImage = getBufferedImage(path);
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <a href="../../../../../../com/google/zxing/BufferedImageLuminanceSource.html">BufferedImageLuminanceSource</a> luminanceSource = <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/BufferedImageLuminanceSource.html">BufferedImageLuminanceSource</a>(bufferedImage);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BinaryBitmap(<strong class="jxr_keyword">new</strong> GlobalHistogramBinarizer(luminanceSource));
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>    }
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/google/zxing/oned/rss/expanded/TestCaseUtil.html">TestCaseUtil</a> {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../../com/google/zxing/oned/rss/expanded/TestCaseUtil.html">TestCaseUtil</a>() {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>    }
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BufferedImage getBufferedImage(String path) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      Path file = Paths.get(path);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">if</strong> (!Files.exists(file)) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>        <em class="jxr_comment">// Support running from project root too</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>        file = Paths.get(<span class="jxr_string">"core"</span>).resolve(file);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">return</strong> ImageIO.read(file.toFile());
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    <strong class="jxr_keyword">static</strong> BinaryBitmap getBinaryBitmap(String path) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      BufferedImage bufferedImage = getBufferedImage(path);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <a href="../../../../../../com/google/zxing/BufferedImageLuminanceSource.html">BufferedImageLuminanceSource</a> luminanceSource = <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/google/zxing/BufferedImageLuminanceSource.html">BufferedImageLuminanceSource</a>(bufferedImage);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BinaryBitmap(<strong class="jxr_keyword">new</strong> GlobalHistogramBinarizer(luminanceSource));
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>    }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

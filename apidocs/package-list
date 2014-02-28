@@ -3,9 +3,6 @@ com.google.zxing.aztec
 com.google.zxing.aztec.decoder
 com.google.zxing.aztec.detector
 com.google.zxing.aztec.encoder
-com.google.zxing.client.glass
-com.google.zxing.client.glass.mirror
-com.google.zxing.client.glass.store
 com.google.zxing.client.j2se
 com.google.zxing.client.result
 com.google.zxing.common

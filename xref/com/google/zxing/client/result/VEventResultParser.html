@@ -70,58 +70,61 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>        longitude = Double.NaN;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>        <strong class="jxr_keyword">int</strong> semicolon = geoString.indexOf(';');
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>        <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          latitude = Double.parseDouble(geoString.substring(0, semicolon));
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          longitude = Double.parseDouble(geoString.substring(semicolon + 1));
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>        } <strong class="jxr_keyword">catch</strong> (NumberFormatException ignored) {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>        }
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/client/result/CalendarParsedResult.html">CalendarParsedResult</a>(summary,
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>                                        start,
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>                                        end,
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                                        duration,
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                                        location,
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                        organizer,
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                                        attendees,
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                        description,
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                                        latitude,
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>                                        longitude);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException ignored) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>    }
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String matchSingleVCardPrefixedField(CharSequence prefix,
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>                                                        String rawText,
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>                                                        <strong class="jxr_keyword">boolean</strong> trim) {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      List&lt;String&gt; values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim, false);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">return</strong> values == <strong class="jxr_keyword">null</strong> || values.isEmpty() ? <strong class="jxr_keyword">null</strong> : values.get(0);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>    }
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] matchVCardPrefixedField(CharSequence prefix, String rawText, <strong class="jxr_keyword">boolean</strong> trim) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      List&lt;List&lt;String&gt;&gt; values = VCardResultParser.matchVCardPrefixedField(prefix, rawText, trim, false);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong> || values.isEmpty()) {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     }
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">int</strong> size = values.size();
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     String[] result = <strong class="jxr_keyword">new</strong> String[size];
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; size; i++) {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>       result[i] = values.get(i).get(0);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     }
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>   }
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String stripMailto(String s) {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>     <strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong> &amp;&amp; (s.startsWith(<span class="jxr_string">"mailto:"</span>) || s.startsWith(<span class="jxr_string">"MAILTO:"</span>))) {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>       s = s.substring(7);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>     }
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>     <strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>   }
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>        <strong class="jxr_keyword">if</strong> (semicolon &lt; 0) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>        }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>        <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          latitude = Double.parseDouble(geoString.substring(0, semicolon));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          longitude = Double.parseDouble(geoString.substring(semicolon + 1));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>        } <strong class="jxr_keyword">catch</strong> (NumberFormatException ignored) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>        }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/client/result/CalendarParsedResult.html">CalendarParsedResult</a>(summary,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                                        start,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                        end,
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                                        duration,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                        location,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                                        organizer,
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                                        attendees,
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>                                        description,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                                        latitude,
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>                                        longitude);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException ignored) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>    }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String matchSingleVCardPrefixedField(CharSequence prefix,
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>                                                        String rawText,
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                                                        <strong class="jxr_keyword">boolean</strong> trim) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      List&lt;String&gt; values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim, false);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">return</strong> values == <strong class="jxr_keyword">null</strong> || values.isEmpty() ? <strong class="jxr_keyword">null</strong> : values.get(0);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>    }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] matchVCardPrefixedField(CharSequence prefix, String rawText, <strong class="jxr_keyword">boolean</strong> trim) {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     List&lt;List&lt;String&gt;&gt; values = VCardResultParser.matchVCardPrefixedField(prefix, rawText, trim, false);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong> || values.isEmpty()) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">int</strong> size = values.size();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     String[] result = <strong class="jxr_keyword">new</strong> String[size];
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; size; i++) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>       result[i] = values.get(i).get(0);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     }
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>   }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String stripMailto(String s) {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     <strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong> &amp;&amp; (s.startsWith(<span class="jxr_string">"mailto:"</span>) || s.startsWith(<span class="jxr_string">"MAILTO:"</span>))) {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>       s = s.substring(7);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

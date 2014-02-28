@@ -38,21 +38,21 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.Charset;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.security.SecureRandom;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.EnumMap;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.Random;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * Aztec 2D generator unit tests.</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * @author Rustam Abdullaev</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * @author Frank Yellin</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/aztec/encoder/EncoderTest.html">EncoderTest</a> <strong class="jxr_keyword">extends</strong> Assert {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Charset LATIN_1 = Charset.forName(<span class="jxr_string">"ISO-8859-1"</span>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.StandardCharsets;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.security.SecureRandom;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.EnumMap;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Random;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * Aztec 2D generator unit tests.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * @author Rustam Abdullaev</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * @author Frank Yellin</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/aztec/encoder/EncoderTest.html">EncoderTest</a> <strong class="jxr_keyword">extends</strong> Assert {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern DOTX = Pattern.compile(<span class="jxr_string">"[^.X]"</span>);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ResultPoint[] NO_POINTS = <strong class="jxr_keyword">new</strong> ResultPoint[0];
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>     String data = <span class="jxr_string">"In ut magna vel mauris malesuada"</span>;
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>     AztecWriter writer = <strong class="jxr_keyword">new</strong> AztecWriter();
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>     AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1),
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1),
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>         Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>     BitMatrix expectedMatrix = aztec.getMatrix();
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>     assertEquals(matrix, expectedMatrix);
@@ -394,7 +394,7 @@
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 
 <a class="jxr_linenumber" name="L387" href="#L387">387</a>   @Test
 <a class="jxr_linenumber" name="L388" href="#L388">388</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testUserSpecifiedLayers() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>     byte[] alphabet = <span class="jxr_string">"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>.getBytes(LATIN_1);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>     byte[] alphabet = <span class="jxr_string">"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>.getBytes(StandardCharsets.ISO_8859_1);
 <a class="jxr_linenumber" name="L390" href="#L390">390</a>     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
 <a class="jxr_linenumber" name="L391" href="#L391">391</a>     assertEquals(2, aztec.getLayers());
 <a class="jxr_linenumber" name="L392" href="#L392">392</a>     assertTrue(aztec.isCompact());
@@ -421,7 +421,7 @@
 <a class="jxr_linenumber" name="L413" href="#L413">413</a>     String alphabet = <span class="jxr_string">"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>;
 <a class="jxr_linenumber" name="L414" href="#L414">414</a>     <em class="jxr_comment">// encodes as 26 * 5 * 4 = 520 bits of data</em>
 <a class="jxr_linenumber" name="L415" href="#L415">415</a>     String alphabet4 = alphabet + alphabet + alphabet + alphabet;
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>     byte[] data = alphabet4.getBytes(LATIN_1);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>     byte[] data = alphabet4.getBytes(StandardCharsets.ISO_8859_1);
 <a class="jxr_linenumber" name="L417" href="#L417">417</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L418" href="#L418">418</a>       Encoder.encode(data, 0, -4);
 <a class="jxr_linenumber" name="L419" href="#L419">419</a>       fail(<span class="jxr_string">"Encode should have failed.  Text can't fit in 1-layer compact"</span>);
@@ -434,7 +434,7 @@
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 
 <a class="jxr_linenumber" name="L427" href="#L427">427</a>     <em class="jxr_comment">// But shortening the string to 100 bytes (500 bits of data), compact works fine, even if we</em>
 <a class="jxr_linenumber" name="L428" href="#L428">428</a>     <em class="jxr_comment">// include more error checking.</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>     aztecCode = Encoder.encode(alphabet4.substring(0, 100).getBytes(LATIN_1), 10, Encoder.DEFAULT_AZTEC_LAYERS);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     aztecCode = Encoder.encode(alphabet4.substring(0, 100).getBytes(StandardCharsets.ISO_8859_1), 10, Encoder.DEFAULT_AZTEC_LAYERS);
 <a class="jxr_linenumber" name="L430" href="#L430">430</a>     assertTrue(aztecCode.isCompact());
 <a class="jxr_linenumber" name="L431" href="#L431">431</a>     assertEquals(4, aztecCode.getLayers());
 <a class="jxr_linenumber" name="L432" href="#L432">432</a>   }
@@ -442,7 +442,7 @@
 <a class="jxr_linenumber" name="L434" href="#L434">434</a>   <em class="jxr_comment">// Helper routines</em>
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 
 <a class="jxr_linenumber" name="L436" href="#L436">436</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> testEncode(String data, <strong class="jxr_keyword">boolean</strong> compact, <strong class="jxr_keyword">int</strong> layers, String expected) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>     AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1), 33, Encoder.DEFAULT_AZTEC_LAYERS);
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>     AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1), 33, Encoder.DEFAULT_AZTEC_LAYERS);
 <a class="jxr_linenumber" name="L438" href="#L438">438</a>     assertEquals(<span class="jxr_string">"Unexpected symbol format (compact)"</span>, compact, aztec.isCompact());
 <a class="jxr_linenumber" name="L439" href="#L439">439</a>     assertEquals(<span class="jxr_string">"Unexpected nr. of layers"</span>, layers, aztec.getLayers());
 <a class="jxr_linenumber" name="L440" href="#L440">440</a>     BitMatrix matrix = aztec.getMatrix();
@@ -450,7 +450,7 @@
 <a class="jxr_linenumber" name="L442" href="#L442">442</a>   }
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 
 <a class="jxr_linenumber" name="L444" href="#L444">444</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> testEncodeDecode(String data, <strong class="jxr_keyword">boolean</strong> compact, <strong class="jxr_keyword">int</strong> layers) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>     AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1), 25, Encoder.DEFAULT_AZTEC_LAYERS);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>     AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1), 25, Encoder.DEFAULT_AZTEC_LAYERS);
 <a class="jxr_linenumber" name="L446" href="#L446">446</a>     assertEquals(<span class="jxr_string">"Unexpected symbol format (compact)"</span>, compact, aztec.isCompact());
 <a class="jxr_linenumber" name="L447" href="#L447">447</a>     assertEquals(<span class="jxr_string">"Unexpected nr. of layers"</span>, layers, aztec.getLayers());
 <a class="jxr_linenumber" name="L448" href="#L448">448</a>     BitMatrix matrix = aztec.getMatrix();
@@ -476,7 +476,7 @@
 <a class="jxr_linenumber" name="L468" href="#L468">468</a>                                  <strong class="jxr_keyword">int</strong> layers) <strong class="jxr_keyword">throws</strong> FormatException {
 <a class="jxr_linenumber" name="L469" href="#L469">469</a>     <em class="jxr_comment">// 1. Perform an encode-decode round-trip because it can be lossy.</em>
 <a class="jxr_linenumber" name="L470" href="#L470">470</a>     <em class="jxr_comment">// 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>     String expectedData = <strong class="jxr_keyword">new</strong> String(data.getBytes(Charset.forName(charset)), LATIN_1);
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>     String expectedData = <strong class="jxr_keyword">new</strong> String(data.getBytes(Charset.forName(charset)), StandardCharsets.ISO_8859_1);
 <a class="jxr_linenumber" name="L472" href="#L472">472</a>     Map&lt;EncodeHintType,Object&gt; hints = <strong class="jxr_keyword">new</strong> EnumMap&lt;&gt;(EncodeHintType.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a>     hints.put(EncodeHintType.CHARACTER_SET, charset);
 <a class="jxr_linenumber" name="L474" href="#L474">474</a>     hints.put(EncodeHintType.ERROR_CORRECTION, eccPercent);
@@ -545,14 +545,14 @@
 <a class="jxr_linenumber" name="L537" href="#L537">537</a>   }
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 
 <a class="jxr_linenumber" name="L539" href="#L539">539</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> testHighLevelEncodeString(String s, String expectedBits) {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>     BitArray bits = <strong class="jxr_keyword">new</strong> HighLevelEncoder(s.getBytes(LATIN_1)).encode();
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>     BitArray bits = <strong class="jxr_keyword">new</strong> HighLevelEncoder(s.getBytes(StandardCharsets.ISO_8859_1)).encode();
 <a class="jxr_linenumber" name="L541" href="#L541">541</a>     String receivedBits = bits.toString().replace(<span class="jxr_string">" "</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L542" href="#L542">542</a>     assertEquals(<span class="jxr_string">"highLevelEncode() failed for input string: "</span> + s, expectedBits.replace(<span class="jxr_string">" "</span>, <span class="jxr_string">""</span>), receivedBits);
 <a class="jxr_linenumber" name="L543" href="#L543">543</a>     assertEquals(s, Decoder.highLevelDecode(toBooleanArray(bits)));
 <a class="jxr_linenumber" name="L544" href="#L544">544</a>   }
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 
 <a class="jxr_linenumber" name="L546" href="#L546">546</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> testHighLevelEncodeString(String s, <strong class="jxr_keyword">int</strong> expectedReceivedBits) {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>     BitArray bits = <strong class="jxr_keyword">new</strong> HighLevelEncoder(s.getBytes(LATIN_1)).encode();
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>     BitArray bits = <strong class="jxr_keyword">new</strong> HighLevelEncoder(s.getBytes(StandardCharsets.ISO_8859_1)).encode();
 <a class="jxr_linenumber" name="L548" href="#L548">548</a>     <strong class="jxr_keyword">int</strong> receivedBitCount = bits.toString().replace(<span class="jxr_string">" "</span>, <span class="jxr_string">""</span>).length();
 <a class="jxr_linenumber" name="L549" href="#L549">549</a>     assertEquals(<span class="jxr_string">"highLevelEncode() failed for input string: "</span> + s, 
 <a class="jxr_linenumber" name="L550" href="#L550">550</a>                  expectedReceivedBits, receivedBitCount);

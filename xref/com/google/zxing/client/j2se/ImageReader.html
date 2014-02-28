@@ -28,59 +28,54 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.DatatypeConverter;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.awt.image.BufferedImage;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.ByteArrayInputStream;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.net.URLDecoder;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Encapsulates reading URIs as images.</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/client/j2se/ImageReader.html">ImageReader</a> {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BASE64TOKEN = <span class="jxr_string">"base64,"</span>;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>    
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../com/google/zxing/client/j2se/ImageReader.html">ImageReader</a>() {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>    }
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> BufferedImage readImage(URI uri) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"data"</span>.equals(uri.getScheme())) {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>        <strong class="jxr_keyword">return</strong> readDataURIImage(uri);
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      }
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      BufferedImage result;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>        result = ImageIO.read(uri.toURL());
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException iae) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Resource not found: "</span> + uri, iae);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      }
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">if</strong> (result == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Could not load "</span> + uri);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>    }
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>    
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> BufferedImage readDataURIImage(URI uri) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      String uriString = uri.toString();
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">if</strong> (!uriString.startsWith(<span class="jxr_string">"data:image/"</span>)) {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Unsupported data URI MIME type"</span>);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">int</strong> base64Start = uriString.indexOf(BASE64TOKEN);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">if</strong> (base64Start &lt; 0) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Unsupported data URI encoding"</span>);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      String base64DataEncoded = uriString.substring(base64Start + BASE64TOKEN.length());
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      String base64Data = URLDecoder.decode(base64DataEncoded, <span class="jxr_string">"UTF-8"</span>);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64Data);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">return</strong> ImageIO.read(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(imageBytes));
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>    }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>    
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> BufferedImage readImage(File file) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">return</strong> readImage(file.toURI());
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>    }
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>    
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.net.URLDecoder;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Encapsulates reading URIs as images.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/client/j2se/ImageReader.html">ImageReader</a> {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BASE64TOKEN = <span class="jxr_string">"base64,"</span>;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../com/google/zxing/client/j2se/ImageReader.html">ImageReader</a>() {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>    }
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> BufferedImage readImage(URI uri) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"data"</span>.equals(uri.getScheme())) {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>        <strong class="jxr_keyword">return</strong> readDataURIImage(uri);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      BufferedImage result;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>        result = ImageIO.read(uri.toURL());
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException iae) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Resource not found: "</span> + uri, iae);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">if</strong> (result == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Could not load "</span> + uri);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>    
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> BufferedImage readDataURIImage(URI uri) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      String uriString = uri.toString();
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">if</strong> (!uriString.startsWith(<span class="jxr_string">"data:image/"</span>)) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Unsupported data URI MIME type"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">int</strong> base64Start = uriString.indexOf(BASE64TOKEN);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">if</strong> (base64Start &lt; 0) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Unsupported data URI encoding"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      String base64DataEncoded = uriString.substring(base64Start + BASE64TOKEN.length());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      String base64Data = URLDecoder.decode(base64DataEncoded, <span class="jxr_string">"UTF-8"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64Data);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">return</strong> ImageIO.read(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(imageBytes));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>    }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

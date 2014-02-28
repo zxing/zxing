@@ -26,118 +26,121 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.zxing.ChecksumException;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.Random;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/google/zxing/pdf417/decoder/ec/ErrorCorrectionTestCase.html">ErrorCorrectionTestCase</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../com/google/zxing/pdf417/decoder/ec/AbstractErrorCorrectionTestCase.html">AbstractErrorCorrectionTestCase</a> {
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <em class="jxr_javadoccomment">/** See ISO 15438, Annex Q */</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>    <em class="jxr_comment">//private static final int[] PDF417_TEST =</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>    <em class="jxr_comment">//    { 5, 453, 178, 121, 239 };</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>    <em class="jxr_comment">//private static final int[] PDF417_TEST_WITH_EC =</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <em class="jxr_comment">//    { 5, 453, 178, 121, 239, 452, 327, 657, 619 };</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] PDF417_TEST = {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>        48, 901, 56, 141, 627, 856, 330, 69, 244, 900, 852, 169, 843, 895, 852, 895, 913, 154, 845, 778, 387, 89, 869,
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>        901, 219, 474, 543, 650, 169, 201, 9, 160, 35, 70, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900,
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>        900, 900};
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] PDF417_TEST_WITH_EC = {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>        48, 901, 56, 141, 627, 856, 330, 69, 244, 900, 852, 169, 843, 895, 852, 895, 913, 154, 845, 778, 387, 89, 869,
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>        901, 219, 474, 543, 650, 169, 201, 9, 160, 35, 70, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900,
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>        900, 900, 769, 843, 591, 910, 605, 206, 706, 917, 371, 469, 79, 718, 47, 777, 249, 262, 193, 620, 597, 477, 450,
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>        806, 908, 309, 153, 871, 686, 838, 185, 674, 68, 679, 691, 794, 497, 479, 234, 250, 496, 43, 347, 582, 882, 536,
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>        322, 317, 273, 194, 917, 237, 420, 859, 340, 115, 222, 808, 866, 836, 417, 121, 833, 459, 64, 159};
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> ECC_BYTES = PDF417_TEST_WITH_EC.length - PDF417_TEST.length;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <em class="jxr_comment">// Example is EC level 1 (s=1). The number of erasures (l) and substitutions (f) must obey:</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <em class="jxr_comment">// l + 2f &lt;= 2^(s+1) - 3</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> EC_LEVEL = 5;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> ERROR_LIMIT = (1 &lt;&lt; (EC_LEVEL + 1)) - 3;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_ERRORS = ERROR_LIMIT / 2;
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <em class="jxr_comment">//private static final int MAX_ERASURES = ERROR_LIMIT;</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ErrorCorrection ec = <strong class="jxr_keyword">new</strong> ErrorCorrection();
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>    @Test
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testNoError() <strong class="jxr_keyword">throws</strong> ChecksumException {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <em class="jxr_comment">// no errors</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      checkDecode(received);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>    }
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>    @Test
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testOneError() <strong class="jxr_keyword">throws</strong> ChecksumException {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      Random random = getRandom();
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; PDF417_TEST_WITH_EC.length; i++) {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>        <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>        received[i] = random.nextInt(256);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>        checkDecode(received);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>    }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>    @Test
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMaxErrors() <strong class="jxr_keyword">throws</strong> ChecksumException {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      Random random = getRandom();
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> testIterations = 0; testIterations &lt; 100; testIterations++) { <em class="jxr_comment">// # iterations is kind of arbitrary</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>        <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>        corrupt(received, MAX_ERRORS, random);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>        checkDecode(received);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>    }
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>    @Test
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTooManyErrors() {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      Random random = getRandom();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      corrupt(received, MAX_ERRORS + 3, random); <em class="jxr_comment">// +3 since the algo can actually correct 2 more than it should here</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>        checkDecode(received);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>        fail(<span class="jxr_string">"Should not have decoded"</span>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      } <strong class="jxr_keyword">catch</strong> (ChecksumException ce) {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>        <em class="jxr_comment">// good</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>    }
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>    <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_comment">  @Test</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_comment">  public void testMaxErasures() throws ChecksumException {</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_comment">    Random random = getRandom();</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_comment">    for (int test : PDF417_TEST) { // # iterations is kind of arbitrary</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_comment">      int[] received = PDF417_TEST_WITH_EC.clone();</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_comment">      int[] erasures = erase(received, MAX_ERASURES, random);</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_comment">      checkDecode(received, erasures);</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_comment">    }</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_comment">  }</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_comment">  @Test</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_comment">  public void testTooManyErasures() {</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_comment">    Random random = getRandom();</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_comment">    int[] received = PDF417_TEST_WITH_EC.clone();</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_comment">    int[] erasures = erase(received, MAX_ERASURES + 1, random);</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_comment">    try {</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_comment">      checkDecode(received, erasures);</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_comment">      fail("Should not have decoded");</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_comment">    } catch (ChecksumException ce) {</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_comment">      // good</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_comment">    }</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_comment">  }</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_comment">   */</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkDecode(<strong class="jxr_keyword">int</strong>[] received) <strong class="jxr_keyword">throws</strong> ChecksumException {
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>     checkDecode(received, <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[0]);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>   }
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkDecode(<strong class="jxr_keyword">int</strong>[] received, <strong class="jxr_keyword">int</strong>[] erasures) <strong class="jxr_keyword">throws</strong> ChecksumException {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     ec.decode(received, ECC_BYTES, erasures);
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; PDF417_TEST.length; i++) {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>       assertEquals(received[i], PDF417_TEST[i]);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>     }
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>   }
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> }
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.junit.Ignore;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.Random;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/google/zxing/pdf417/decoder/ec/ErrorCorrectionTestCase.html">ErrorCorrectionTestCase</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../com/google/zxing/pdf417/decoder/ec/AbstractErrorCorrectionTestCase.html">AbstractErrorCorrectionTestCase</a> {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>    <em class="jxr_javadoccomment">/** See ISO 15438, Annex Q */</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>    <em class="jxr_comment">//private static final int[] PDF417_TEST =</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>    <em class="jxr_comment">//    { 5, 453, 178, 121, 239 };</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <em class="jxr_comment">//private static final int[] PDF417_TEST_WITH_EC =</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <em class="jxr_comment">//    { 5, 453, 178, 121, 239, 452, 327, 657, 619 };</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] PDF417_TEST = {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>        48, 901, 56, 141, 627, 856, 330, 69, 244, 900, 852, 169, 843, 895, 852, 895, 913, 154, 845, 778, 387, 89, 869,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>        901, 219, 474, 543, 650, 169, 201, 9, 160, 35, 70, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900,
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>        900, 900};
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] PDF417_TEST_WITH_EC = {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>        48, 901, 56, 141, 627, 856, 330, 69, 244, 900, 852, 169, 843, 895, 852, 895, 913, 154, 845, 778, 387, 89, 869,
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>        901, 219, 474, 543, 650, 169, 201, 9, 160, 35, 70, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 900,
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>        900, 900, 769, 843, 591, 910, 605, 206, 706, 917, 371, 469, 79, 718, 47, 777, 249, 262, 193, 620, 597, 477, 450,
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>        806, 908, 309, 153, 871, 686, 838, 185, 674, 68, 679, 691, 794, 497, 479, 234, 250, 496, 43, 347, 582, 882, 536,
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>        322, 317, 273, 194, 917, 237, 420, 859, 340, 115, 222, 808, 866, 836, 417, 121, 833, 459, 64, 159};
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> ECC_BYTES = PDF417_TEST_WITH_EC.length - PDF417_TEST.length;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <em class="jxr_comment">// Example is EC level 1 (s=1). The number of erasures (l) and substitutions (f) must obey:</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <em class="jxr_comment">// l + 2f &lt;= 2^(s+1) - 3</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> EC_LEVEL = 5;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> ERROR_LIMIT = (1 &lt;&lt; (EC_LEVEL + 1)) - 3;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_ERRORS = ERROR_LIMIT / 2;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_ERASURES = ERROR_LIMIT;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ErrorCorrection ec = <strong class="jxr_keyword">new</strong> ErrorCorrection();
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>    @Test
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testNoError() <strong class="jxr_keyword">throws</strong> ChecksumException {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <em class="jxr_comment">// no errors</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      checkDecode(received);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>    }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    @Test
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testOneError() <strong class="jxr_keyword">throws</strong> ChecksumException {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      Random random = getRandom();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; PDF417_TEST_WITH_EC.length; i++) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>        <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>        received[i] = random.nextInt(256);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>        checkDecode(received);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>    }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>    @Test
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMaxErrors() <strong class="jxr_keyword">throws</strong> ChecksumException {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      Random random = getRandom();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> testIterations = 0; testIterations &lt; 100; testIterations++) { <em class="jxr_comment">// # iterations is kind of arbitrary</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>        <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>        corrupt(received, MAX_ERRORS, random);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>        checkDecode(received);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>    }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>    @Ignore(<span class="jxr_string">"Unresolved flakiness with OpenJDK 7 only"</span>)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>    @Test
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTooManyErrors() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      Random random = getRandom();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <em class="jxr_comment">// +3 since the algorithm can actually correct 2 more than it should here</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      corrupt(received, MAX_ERRORS + 3, random);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>        checkDecode(received);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>        fail(<span class="jxr_string">"Should not have decoded"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      } <strong class="jxr_keyword">catch</strong> (ChecksumException ce) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>        <em class="jxr_comment">// good</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>    }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>    @Ignore(<span class="jxr_string">"Erasures not implemented yet"</span>)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>   @Test
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMaxErasures() <strong class="jxr_keyword">throws</strong> ChecksumException {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     Random random = getRandom();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> test : PDF417_TEST) { <em class="jxr_comment">// # iterations is kind of arbitrary</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>       <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>       <strong class="jxr_keyword">int</strong>[] erasures = erase(received, MAX_ERASURES, random);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>       checkDecode(received, erasures);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     }
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>   }
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>   @Ignore(<span class="jxr_string">"Erasures not implemented yet"</span>)
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>   @Test
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTooManyErasures() {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     Random random = getRandom();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">int</strong>[] received = PDF417_TEST_WITH_EC.clone();
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     <strong class="jxr_keyword">int</strong>[] erasures = erase(received, MAX_ERASURES + 1, random);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>       checkDecode(received, erasures);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>       fail(<span class="jxr_string">"Should not have decoded"</span>);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     } <strong class="jxr_keyword">catch</strong> (ChecksumException ce) {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>       <em class="jxr_comment">// good</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>   }
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkDecode(<strong class="jxr_keyword">int</strong>[] received) <strong class="jxr_keyword">throws</strong> ChecksumException {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     checkDecode(received, <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[0]);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>   }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkDecode(<strong class="jxr_keyword">int</strong>[] received, <strong class="jxr_keyword">int</strong>[] erasures) <strong class="jxr_keyword">throws</strong> ChecksumException {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     ec.decode(received, ECC_BYTES, erasures);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; PDF417_TEST.length; i++) {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>       assertEquals(received[i], PDF417_TEST[i]);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     }
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>   }
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

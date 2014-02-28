@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">   * Unspecified, application-specific hint. Maps to an unspecified {@link Object}.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>   OTHER(Object.<strong class="jxr_keyword">class</strong>),
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    OTHER(Object.<strong class="jxr_keyword">class</strong>),
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">   * Image is a pure monochrome image of a barcode. Doesn't matter what it maps to;</em>
@@ -96,28 +96,38 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>    NEED_RESULT_POINT_CALLBACK(ResultPointCallback.<strong class="jxr_keyword">class</strong>),
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>    <em class="jxr_comment">// End of enumeration values.</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>    ;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">   * Data type the hint is expecting.</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">   * Among the possible values the {@link Void} stands out as being used for</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">   * hints that do not expect a value to be supplied (flag hints). Such hints</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">   * will possibly have their value ignored, or replaced by a</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">   * {@link Boolean#TRUE}. Hint suppliers should probably use</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">   * {@link Boolean#TRUE} as directed by the actual hint documentation.</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; valueType;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">   * Allowed extension lengths for EAN or UPC barcodes. Other formats will ignore this.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">   * Maps to an {@code int[]} of the allowed extension lengths, for example [2], [5], or [2, 5].</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">   * If it is optional to have an extension, do not set this hint. If this is set,</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">   * and a UPC or EAN barcode is found but an extension is not, then no result will be returned</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">   * at all.</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>    ALLOWED_EAN_EXTENSIONS(<strong class="jxr_keyword">int</strong>[].<strong class="jxr_keyword">class</strong>),
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>   <em class="jxr_comment">// End of enumeration values.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>   ;
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>   <a href="../../../com/google/zxing/DecodeHintType.html">DecodeHintType</a>(Class&lt;?&gt; valueType) {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">this</strong>.valueType = valueType;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>   }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>   
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>   <strong class="jxr_keyword">public</strong> Class&lt;?&gt; getValueType() {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">return</strong> valueType;
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>   }
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">   * Data type the hint is expecting.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">   * Among the possible values the {@link Void} stands out as being used for</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">   * hints that do not expect a value to be supplied (flag hints). Such hints</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">   * will possibly have their value ignored, or replaced by a</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">   * {@link Boolean#TRUE}. Hint suppliers should probably use</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">   * {@link Boolean#TRUE} as directed by the actual hint documentation.</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; valueType;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>   <a href="../../../com/google/zxing/DecodeHintType.html">DecodeHintType</a>(Class&lt;?&gt; valueType) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     <strong class="jxr_keyword">this</strong>.valueType = valueType;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>   }
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>   <strong class="jxr_keyword">public</strong> Class&lt;?&gt; getValueType() {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     <strong class="jxr_keyword">return</strong> valueType;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>   }
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

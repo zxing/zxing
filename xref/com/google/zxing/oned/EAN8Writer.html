@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>        <strong class="jxr_keyword">int</strong> digit = Integer.parseInt(contents.substring(i, i + 1));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>        pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      appendPattern(result, pos, UPCEANReader.START_END_PATTERN, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">return</strong> result;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>    }

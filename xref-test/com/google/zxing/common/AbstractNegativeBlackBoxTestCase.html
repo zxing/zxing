@@ -35,8 +35,8 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> javax.imageio.ImageIO;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.awt.image.BufferedImage;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Path;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.EnumMap;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.List;
@@ -88,11 +88,11 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBlackBox() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      assertFalse(testResults.isEmpty());
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>      File[] imageFiles = getImageFiles();
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      List&lt;Path&gt; imageFiles = getImageFiles();
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">int</strong>[] falsePositives = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[testResults.size()];
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">for</strong> (File testImage : imageFiles) {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>        log.info(String.format(<span class="jxr_string">"Starting %s"</span>, testImage.getAbsolutePath()));
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>        BufferedImage image = ImageIO.read(testImage);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">for</strong> (Path testImage : imageFiles) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>        log.info(String.format(<span class="jxr_string">"Starting %s"</span>, testImage));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>        BufferedImage image = ImageIO.read(testImage.toFile());
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>        <strong class="jxr_keyword">if</strong> (image == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Could not read image: "</span> + testImage);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>        }
@@ -122,7 +122,7 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; testResults.size(); x++) {
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>       <a href="../../../../com/google/zxing/common/TestResult.html">TestResult</a> testResult = testResults.get(x);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>       log.info(String.format(<span class="jxr_string">"Rotation %d degrees: %d of %d images were false positives (%d allowed)"</span>,
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>                              (<strong class="jxr_keyword">int</strong>) testResult.getRotation(), falsePositives[x], imageFiles.length,
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>                              (<strong class="jxr_keyword">int</strong>) testResult.getRotation(), falsePositives[x], imageFiles.size(),
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>                              testResult.getFalsePositivesAllowed()));
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>       assertTrue(<span class="jxr_string">"Rotation "</span> + testResult.getRotation() + <span class="jxr_string">" degrees: Too many false positives found"</span>,
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>                  falsePositives[x] &lt;= testResult.getFalsePositivesAllowed());

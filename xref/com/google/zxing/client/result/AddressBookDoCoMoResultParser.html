@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      String note = matchSingleDoCoMoPrefixedField(<span class="jxr_string">"NOTE:"</span>, rawText, false);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      String[] addresses = matchDoCoMoPrefixedField(<span class="jxr_string">"ADR:"</span>, rawText, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      String birthday = matchSingleDoCoMoPrefixedField(<span class="jxr_string">"BDAY:"</span>, rawText, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">if</strong> (birthday != <strong class="jxr_keyword">null</strong> &amp;&amp; !isStringOfDigits(birthday, 8)) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">if</strong> (!isStringOfDigits(birthday, 8)) {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>        <em class="jxr_comment">// No reason to throw out the whole card because the birthday is formatted wrong.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>        birthday = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      }
