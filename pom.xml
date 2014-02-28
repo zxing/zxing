@@ -203,6 +203,7 @@
             </dependency>
           </dependencies>
           <configuration>
+            <mavenExecutorId>forked-path</mavenExecutorId>
             <tagNameFormat>zxing-@{project.version}</tagNameFormat>
             <goals>deploy</goals>
           </configuration>
@@ -236,6 +237,7 @@
             </execution>
           </executions>
           <configuration>
+            <keyname>Sean Owen (ZXing) &lt;srowen@gmail.com&gt;</keyname>
             <executable>gpg2</executable>
           </configuration>
         </plugin>
