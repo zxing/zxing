@@ -191,14 +191,14 @@ public final class StringsResourceTranslator {
       return english;
     }
     String translation = m.group(1);
-    System.out.println("  Got translation " + translation);
 
     // This is a little crude; unescape some common escapes in the raw response
-    translation = translation.replaceAll("\\\\u0026quot;", "\"");
-    translation = translation.replaceAll("\\\\u0026#39;", "'");
-    translation = translation.replaceAll("\\\\u200b", "");
+    translation = translation.replaceAll("&quot;", "\"");
+    translation = translation.replaceAll("&#39;", "'");
     translation = translation.replaceAll("&amp;quot;", "\"");
     translation = translation.replaceAll("&amp;#39;", "'");
+
+    System.out.println("  Got translation " + translation);
     return translation;
   }
 
