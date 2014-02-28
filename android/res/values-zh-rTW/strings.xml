@@ -73,7 +73,7 @@
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
   <string name="msg_intent_failed">抱歉，無法打開所需軟體，條碼內容可能不符規格。</string>
-  <string name="msg_invalid_value">值無效</string>
+  <string name="msg_invalid_value">輸入值無效</string>
   <string name="msg_redirect">重定向</string>
   <string name="msg_sbc_book_not_searchable">無法找到此圖書。</string>
   <string name="msg_sbc_failed">搜尋時發生錯誤。</string>
