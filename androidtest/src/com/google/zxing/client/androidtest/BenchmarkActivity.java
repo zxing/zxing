@@ -49,8 +49,6 @@ public final class BenchmarkActivity extends Activity {
     runBenchmarkButton = findViewById(R.id.benchmark_run);
     runBenchmarkButton.setOnClickListener(runBenchmark);
     textView = (TextView) findViewById(R.id.benchmark_help);
-    benchmarkTask = null;
-  }
 
   void onBenchmarkDone(String message) {
     textView.setText(message + "\n\n" + getString(R.string.benchmark_help));
