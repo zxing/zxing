@@ -326,6 +326,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
+        <!-- Work around bogus Maven 3.0.x warning by duplicating version above -->
+        <version>2.7</version>
         <reportSets>
           <reportSet>
             <reports>
@@ -352,6 +354,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <!-- Work around bogus Maven 3.0.x warning by duplicating version above -->
+        <version>2.9.1</version>
         <reportSets>
           <reportSet>
             <id>aggregate</id>
@@ -365,6 +369,8 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
+        <!-- Work around bogus Maven 3.0.x warning by duplicating version above -->
+        <version>2.5.3</version>
         <configuration>
           <threshold>Normal</threshold>
           <effort>Max</effort>
@@ -376,6 +382,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
+        <!-- Work around bogus Maven 3.0.x warning by duplicating version above -->
+        <version>2.4</version>
         <reportSets>
           <reportSet>
             <id>aggregate</id>
