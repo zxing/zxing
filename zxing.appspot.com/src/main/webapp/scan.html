@@ -1,80 +1,91 @@
 <!DOCTYPE HTML>
 
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Zebra Crossing</title>
-    <link rel="stylesheet" href="/style.css" type="text/css"/>
-  </head>
+	<head>
+		<title>App Installation</title>
+		
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+		
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans" />
+		<link rel="stylesheet" href="scan.css" />
+	</head>
 
-  <body>
-    <div id="header">
-      <h1>Zebra Crossing <span>from the ZXing Project</span></h1>
-    </div>
-    
-    <table>
-      <tr>
-        <td style="vertical-align:top;padding:4px;margin:8px">
-          <img src="/zxingiconsmall.png" width="48" height="48" alt="ZXing"/>
-        </td>
-        <td style="vertical-align:top;padding:4px;margin:8px">
-          <p>A web page you are viewing would like to scan a barcode with your camera phone. To do
-          this, you need to install a new application.</p>
-          <p>If you are using an Android device,
-          <a href="market://details?id=com.google.zxing.client.android">click here</a> to
-          install Barcode Scanner. Once installed, it will launch automatically the next time you
-          click on the hyperlink which brought you here.</p>
-        </td>
-      </tr>
-
-      <script type="text/javascript">
-       <!--
-        function getQueryParameter(name) {
-          var query;
-          query = window.location.search.substring(1);
-          if (query.length <= 0)
-            return null;
-          name += "=";
-          var head;
-          head = query.indexOf(name);
-          if (head < 0)
-            return null;
-          head += name.length;
-          var tail;
-          tail = query.indexOf ( "&" , head );
-          if (tail < 0)
-            tail = query.length;
-          return decodeURIComponent(query.substring(head, tail));
-        }
-        function process(form) {
-          if (window.ret == null)
-            return false;
-          var code;
-          code = form['{CODE}'].value;
-          if (code == null || code.length == 0)
-            return false;
-          var url;
-          url = window.ret.replace('{CODE}', encodeURIComponent(code));
-          window.location = url;
-          return false;
-        }
-        window.ret = getQueryParameter("ret");
-        // We COULD allow any protocol, but this is a we
-        if (window.ret != null && window.ret.indexOf("http") == 0) {
-          document.write('<tr><td valign="top"></td><td valign="top">');
-          document.write('<form onsubmit="process(this); return false">');
-          document.write('<input type="text" name="{CODE}" size="13"/>');
-          document.write('<input type="submit" value="Enter Manually"/>');
-          document.write('</form>');
-          document.write('</td></tr>');
-        }
-       // -->
-      </script>
-
-    </table>
-    
-    <div id="footer">
-      <a href="http://github.com/zxing/zxing/">ZXing Project Home Page</a>
-    </div>
-  </body>
+	<body>
+		<img src="img/app.png" id="logo" alt="ZXing" />
+		<br />
+		<div id="info">
+			<p>To scan code with your mobile camera you need to install free Barcode Scanner -app</p>
+			<br />
+			<a href="https://play.google.com/store/apps/details?id=com.google.zxing.client.android" target="_blank" class="playLink"><img alt="Get it on Google Play" src="img/badge.png" /></a>
+			<br />
+			<small><a href="#" id="man">or enter code manually</a></small>
+		</div>
+		<div id="installed">
+			<br />
+			<b>Thank you for installing!</b>
+			<p>To scan barcode and return to webpage <a href="">click here</a></p>
+			<br />
+			<small style="opacity:0.5">Remember to give 5 stars to our app on Google Play</small>
+		</div>
+		<div id="error">
+			<br />
+			<b>Something went wrong :-(</b>
+			<p>You clicked link, but app can't start. Make sure that you have installed Barcode Scanner -app.</p>
+			<a href="https://play.google.com/store/apps/details?id=com.google.zxing.client.android" target="_blank" class="playLink">Try downloading again</a>
+		</div>
+		<br />
+			
+		<script type="text/javascript">
+			$(function(){
+				// If device is Android, change URI to Android-friendly. Otherwise use HTTP URI.
+				if(navigator.userAgent.toLowerCase().indexOf("android") !== -1) {
+					$(".playLink").attr("src","market://details?id=com.google.zxing.client.android");
+				}
+				
+				// Detect GET-parameters from URL
+				GET = {};
+				$.each(location.search.substr(1).split("&"),function(k,v){
+					var prm = v.split("=");
+					GET[prm[0]] = prm[1];	
+				});
+				
+				// Check is it possible to use manual mode
+				if(GET.ret.trim() !== "" && GET.ret.indexOf("http") == -1){
+					$("#man").hide();
+				}
+				
+				// When Google Play -badge is clicked ...
+				$(".playLink").click(function(){
+					$("#info").hide();
+					$("#error").hide();
+					$("#installed").show();
+					var url = location;
+					if(GET.length < 1) url = url + "?";
+					url = url + "&installed=1";
+					$("#installed a").attr("href",url);
+				});
+			
+				// When manual-button is clicked ...
+				$("#man").click(function(e){
+					e.preventDefault();
+					var man = prompt("Please type barcode below");
+					if(man !== "null"){
+						var url = GET.ret;
+						if(url.indexOf("?") == -1) url = url + "?";
+						url = url + "&{CODE}=" + man;
+						location = url;
+					}
+				});
+				
+				// If app isn't installed after visiting on Google Play, show error
+				if(GET.installed !== void(0)){
+					$("#info").hide();
+					$("#error").show();
+				}
+			});
+		</script>
+	</body>
 </html>
