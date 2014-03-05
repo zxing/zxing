@@ -107,6 +107,9 @@ public final class PreferencesFragment
       if (valueString.isEmpty()) {
         return true;
       }
+      // Before validating, remove custom placeholders, which will not
+      // be considered valid parts of the URL in some locations:
+      valueString = valueString.replaceAll("%[sdf]", "");
       // Require a scheme otherwise:
       try {
         URI uri = new URI(valueString);
