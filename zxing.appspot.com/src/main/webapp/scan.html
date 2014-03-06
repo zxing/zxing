@@ -53,7 +53,7 @@
 				});
 				
 				// Check is it possible to use manual mode
-				if(GET.ret.trim() !== "" && GET.ret.indexOf("http") == -1){
+				if(GET.ret == "" || GET.ret == void(0) || GET.ret.indexOf("http") == -1){
 					$("#man").hide();
 				}
 				
@@ -62,8 +62,8 @@
 					$("#info").hide();
 					$("#error").hide();
 					$("#installed").show();
-					var url = location;
-					if(GET.length < 1) url = url + "?";
+					var url = location.href;
+					if(url.indexOf("?") == -1) url = url + "?";
 					url = url + "&installed=1";
 					$("#installed a").attr("href",url);
 				});
@@ -72,7 +72,7 @@
 				$("#man").click(function(e){
 					e.preventDefault();
 					var man = prompt("Please type barcode below");
-					if(man !== "null"){
+					if(man){
 						var url = GET.ret;
 						if(url.indexOf("?") == -1) url = url + "?";
 						url = url + "&{CODE}=" + man;
