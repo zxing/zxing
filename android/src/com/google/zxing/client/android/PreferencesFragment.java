@@ -109,7 +109,10 @@ public final class PreferencesFragment
       }
       // Before validating, remove custom placeholders, which will not
       // be considered valid parts of the URL in some locations:
-      valueString = valueString.replaceAll("%[sdf]", "");
+      // Blank %d and %s:
+      valueString = valueString.replaceAll("%[sd]", "");
+      // Blank %f but not if followed by digit or a-f as it may be a hex sequence
+      valueString = valueString.replaceAll("%f(?![0-9a-f])", "");
       // Require a scheme otherwise:
       try {
         URI uri = new URI(valueString);
