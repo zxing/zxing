@@ -37,6 +37,10 @@ handlers:
   static_files: Generator.html
   upload: Generator.html
 
+- url: /img/(.*)
+  static_files: img/\1
+  upload: img/(.*)
+
 - url: /index.html
   static_files: index.html
   upload: index.html
@@ -44,6 +48,10 @@ handlers:
 - url: /required-field-bg.png
   static_files: required-field-bg.png
   upload: required-field-bg.png
+
+- url: /scan.css
+  static_files: scan.css
+  upload: scan.css
 
 - url: /scan.html
   static_files: scan.html
