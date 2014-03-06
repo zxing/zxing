@@ -16,5 +16,5 @@
  -->
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
   <application>zxing-hrd</application>
-  <version>9</version>
+  <version>10</version>
 </appengine-web-app>
