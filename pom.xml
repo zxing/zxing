@@ -203,7 +203,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.4.2</version>
+          <version>2.5</version>
           <dependencies>
             <dependency>
               <groupId>org.apache.maven.scm</groupId>
@@ -464,7 +464,7 @@
   </scm>
 
   <prerequisites>
-    <maven>3.0</maven>
+    <maven>3.1.1</maven>
   </prerequisites>
 
   <distributionManagement>
