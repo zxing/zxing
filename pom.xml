@@ -79,15 +79,12 @@
     <module>android-integration</module>
     <module>zxing.appspot.com</module>
     <module>zxingorg</module>
-    <module>android</module>
-    <module>androidtest</module>
   </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <slf4j.version>1.7.6</slf4j.version>
-    <android.sdk.path>/Applications/adt-bundle-mac-x86_64-20131030/sdk</android.sdk.path>
   </properties>
 
   <build>
@@ -486,6 +483,18 @@
   </distributionManagement>
 
   <profiles>
+    <profile>
+      <id>build-android</id>
+      <activation>
+        <property>
+          <name>env.ANDROID_HOME</name>
+        </property>
+      </activation>
+      <modules>
+        <module>android</module>
+        <module>androidtest</module>
+      </modules>
+    </profile>
     <profile>
       <id>release-sign-artifacts</id>
       <activation>
