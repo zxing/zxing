@@ -30,6 +30,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +38,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -200,7 +202,10 @@ public final class HtmlAssetTranslator {
 
     DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
     LSSerializer writer = impl.createLSSerializer();
-    writer.writeToURI(document, destFile.toUri().toString());
+    String fileAsString = writer.writeToString(document);
+    // Replace default XML header with HTML DOCTYPE
+    fileAsString = fileAsString.replaceAll("<\\?xml[^>]+>", "<!DOCTYPE HTML>");
+    Files.write(destFile, Collections.singleton(fileAsString), StandardCharsets.UTF_8);
   }
 
   private static boolean shouldTranslate(Node node) {
