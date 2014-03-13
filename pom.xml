@@ -278,6 +278,14 @@
             <sdk>
               <platform>15</platform>
             </sdk>
+            <proguard>
+              <skip>true</skip>
+            </proguard>
+            <sign>
+              <debug>true</debug>
+            </sign>
+            <release>false</release>
+            <apkDebug>true</apkDebug>
           </configuration>
           <dependencies>
             <dependency>
@@ -565,6 +573,8 @@
               <sign>
                 <debug>false</debug>
               </sign>
+              <release>true</release>
+              <apkDebug>false</apkDebug>
             </configuration>
           </plugin>
         </plugins>
