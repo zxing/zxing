@@ -274,6 +274,15 @@
           <artifactId>android-maven-plugin</artifactId>
           <version>3.9.0-rc.1</version>
           <extensions>true</extensions>
+          <executions>
+            <execution>
+              <id>android-zipalign</id>
+              <phase>package</phase>
+              <goals>
+                <goal>zipalign</goal>
+              </goals>
+            </execution>
+          </executions>
           <configuration>
             <sdk>
               <platform>15</platform>
@@ -284,6 +293,9 @@
             <sign>
               <debug>true</debug>
             </sign>
+            <zipalign>
+              <skip>false</skip>
+            </zipalign>
             <release>false</release>
             <apkDebug>true</apkDebug>
           </configuration>
