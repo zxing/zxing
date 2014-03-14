@@ -36,6 +36,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -112,6 +113,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
   private AmbientLightManager ambientLightManager;
+  
+  public static boolean isPortrait;
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -147,6 +150,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   protected void onResume() {
     super.onResume();
 
+    isPortrait = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PreferencesActivity.KEY_PORTRAIT, false);
+    if(isPortrait){
+	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }else {
+	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+    }
+    
     // CameraManager must be initialized here, not in onCreate(). This is necessary because we don't
     // want to open the camera driver and measure the screen size if we're going to show the help on
     // first launch. That led to bugs where the scanning rectangle was the wrong size and partially

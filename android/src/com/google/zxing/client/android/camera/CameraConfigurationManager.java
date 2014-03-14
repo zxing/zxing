@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.camera.metering.MeteringInterface;
 
@@ -70,7 +71,14 @@ final class CameraConfigurationManager {
     Display display = manager.getDefaultDisplay();
     Point theScreenResolution = new Point();
     display.getSize(theScreenResolution);
-    screenResolution = theScreenResolution;
+    
+    if(CaptureActivity.isPortrait){
+	screenResolution = new Point();
+	screenResolution.x = theScreenResolution.y;
+	screenResolution.y = theScreenResolution.x;
+    }else{
+	screenResolution = theScreenResolution;
+    }
     Log.i(TAG, "Screen resolution: " + screenResolution);
     cameraResolution = findBestPreviewSizeValue(parameters, screenResolution);
     Log.i(TAG, "Camera resolution: " + cameraResolution);
@@ -151,6 +159,9 @@ final class CameraConfigurationManager {
 
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
     camera.setParameters(parameters);
+    if(CaptureActivity.isPortrait){
+	camera.setDisplayOrientation(90);
+    }
 
     Camera.Parameters afterParameters = camera.getParameters();
     Camera.Size afterSize = afterParameters.getPreviewSize();
