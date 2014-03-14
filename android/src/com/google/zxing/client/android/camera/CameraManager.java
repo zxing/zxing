@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
@@ -80,6 +81,10 @@ public final class CameraManager {
         throw new IOException();
       }
       camera = theCamera;
+      
+      if(CaptureActivity.isPortrait){
+	  camera.setDisplayOrientation(90);
+      }
     }
     theCamera.setPreviewDisplay(holder);
 
@@ -213,12 +218,23 @@ public final class CameraManager {
         return null;
       }
 
-      int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
-      int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
+      if(CaptureActivity.isPortrait){
+	  int width = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
+	  int height = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
 
-      int leftOffset = (screenResolution.x - width) / 2;
-      int topOffset = (screenResolution.y - height) / 2;
-      framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+	  int leftOffset = (screenResolution.y - width) / 2;
+	  int topOffset = (screenResolution.x - height) / 2;
+	  framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+      }else{
+	  int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
+	  int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
+
+	  int leftOffset = (screenResolution.x - width) / 2;
+	  int topOffset = (screenResolution.y - height) / 2;
+	  framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+      }
+      
+      
       Log.d(TAG, "Calculated framing rect: " + framingRect);
     }
     return framingRect;

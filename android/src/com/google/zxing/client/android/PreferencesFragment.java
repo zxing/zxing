@@ -44,6 +44,7 @@ public final class PreferencesFragment
     PreferenceScreen preferences = getPreferenceScreen();
     preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     checkBoxPrefs = findDecodePrefs(preferences,
+				    PreferencesActivity.KEY_PORTRAIT,
                                     PreferencesActivity.KEY_DECODE_1D_PRODUCT,
                                     PreferencesActivity.KEY_DECODE_1D_INDUSTRIAL,
                                     PreferencesActivity.KEY_DECODE_QR,

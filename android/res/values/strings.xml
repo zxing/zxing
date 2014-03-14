@@ -123,6 +123,7 @@
   <string name="preferences_supplemental_summary">Try to retrieve more information about the barcode contents</string>
   <string name="preferences_supplemental_title">Retrieve more info</string>
   <string name="preferences_vibrate_title">Vibrate</string>
+  <string name="preferences_portrait">Portrait</string>
   <string name="result_address_book">Found contact info</string>
   <string name="result_calendar">Found calendar event</string>
   <string name="result_email_address">Found email address</string>

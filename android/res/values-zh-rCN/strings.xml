@@ -123,6 +123,7 @@
   <string name="preferences_supplemental_summary">尝试检索关于条码内容的更多信息</string>
   <string name="preferences_supplemental_title">检索更多信息</string>
   <string name="preferences_vibrate_title">振动</string>
+  <string name="preferences_portrait">竖屏模式</string>
   <string name="result_address_book">找到联系人信息</string>
   <string name="result_calendar">找到日历事件</string>
   <string name="result_email_address">找到email地址</string>
