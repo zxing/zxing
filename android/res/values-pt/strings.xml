@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Procurar por códigos de barras brancos em fundo preto. Não disponível em certos dispositivos.</string>
   <string name="preferences_invert_scan_title">Inverter leitura</string>
   <string name="preferences_name">Definições</string>
+  <string name="preferences_orientation_title">Sem rotação automática</string>
   <string name="preferences_play_beep_title">Apitar</string>
   <string name="preferences_remember_duplicates_summary">Guardar pesquisas múltiplas do mesmo código de barras no histórico</string>
   <string name="preferences_remember_duplicates_title">Lembrar duplicados</string>

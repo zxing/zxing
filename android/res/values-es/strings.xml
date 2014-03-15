@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Escanear códigos de barras blancas sobre fondo negro. No disponible en algunos dispositivos.</string>
   <string name="preferences_invert_scan_title">Invertir exploración</string>
   <string name="preferences_name">Configuración</string>
+  <string name="preferences_orientation_title">Sin rotación automática</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_remember_duplicates_summary">Almacenar múltiples escáneres del mismo código de barras en el Historial.</string>
   <string name="preferences_remember_duplicates_title">Recuerde duplicados</string>

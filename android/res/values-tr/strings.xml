@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Siyah zemin üzerine beyaz barkod tarama. Bazı cihazlar mevcut değildir.</string>
   <string name="preferences_invert_scan_title">Tarama haricindekileri</string>
   <string name="preferences_name">Ayarlar</string>
+  <string name="preferences_orientation_title">Otomatik rotasyon yok</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_remember_duplicates_summary">Aynı barkoda ait farklı taramaları kayıtlarda depola</string>
   <string name="preferences_remember_duplicates_title">Aynı barkodları hatırla</string>

@@ -59,7 +59,6 @@
               android:screenOrientation="sensorLandscape"
               android:clearTaskOnLaunch="true"
               android:stateNotNeeded="true"
-              android:configChanges="orientation|screenSize|keyboardHidden"
               android:theme="@style/CaptureTheme"
               android:windowSoftInputMode="stateAlwaysHidden">
       <intent-filter>
@@ -124,8 +123,7 @@
     <activity android:name=".book.SearchBookContentsActivity"
               android:label="@string/sbc_name"
               android:stateNotNeeded="true"
-              android:screenOrientation="sensorLandscape"
-              android:configChanges="orientation|keyboardHidden">
+              android:screenOrientation="sensorLandscape">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.SEARCH_BOOK_CONTENTS"/>
         <category android:name="android.intent.category.DEFAULT"/>

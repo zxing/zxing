@@ -36,6 +36,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -51,6 +52,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -162,6 +164,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     handler = null;
     lastResult = null;
 
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
+      setRequestedOrientation(getCurrentOrientation());
+    } else {
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+    }
+
     resetStatusView();
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
@@ -182,7 +192,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     Intent intent = getIntent();
 
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true)
         && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
 
@@ -240,6 +249,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
 
+    }
+  }
+
+  private int getCurrentOrientation() {
+    int rotation = getWindowManager().getDefaultDisplay().getRotation();
+    switch (rotation) {
+      case Surface.ROTATION_0:
+      case Surface.ROTATION_90:
+        return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+      default:
+        return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
     }
   }
   

@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">掃描黑底白字的條碼（某些設備上無法使用）</string>
   <string name="preferences_invert_scan_title">黑底白字掃描</string>
   <string name="preferences_name">設定</string>
+  <string name="preferences_orientation_title">沒有自動旋轉</string>
   <string name="preferences_play_beep_title">嗶一聲</string>
   <string name="preferences_remember_duplicates_summary">在記錄中重複儲存相同的條碼</string>
   <string name="preferences_remember_duplicates_title">記錄重複的條碼</string>

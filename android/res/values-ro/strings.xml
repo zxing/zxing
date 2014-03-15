@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Scanează coduri de bară albe pe fundal negru. Indisponibil pe unele aparate.</string>
   <string name="preferences_invert_scan_title">Scanare în negativ</string>
   <string name="preferences_name">Configurări</string>
+  <string name="preferences_orientation_title">Fără rotire automată</string>
   <string name="preferences_play_beep_title">Sună</string>
   <string name="preferences_remember_duplicates_summary">Înregistrează în Istoric, scanări multiple ale aceluiași cod de bare</string>
   <string name="preferences_remember_duplicates_title">Reține scanările duplicat</string>

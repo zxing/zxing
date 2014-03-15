@@ -65,12 +65,6 @@
         android:title="@string/preferences_supplemental_title"
         android:summary="@string/preferences_supplemental_summary"/>
   </PreferenceCategory>
-  <PreferenceCategory android:title="@string/preferences_result_title">
-    <EditTextPreference
-        android:key="preferences_custom_product_search"
-        android:title="@string/preferences_custom_product_search_title"
-        android:summary="@string/preferences_custom_product_search_summary"/>
-  </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_general_title">
     <ListPreference
         android:entries="@array/preferences_front_light_options"
@@ -93,6 +87,16 @@
         android:defaultValue="false"
         android:title="@string/preferences_bulk_mode_title"
         android:summary="@string/preferences_bulk_mode_summary"/>
+    <CheckBoxPreference
+        android:key="preferences_orientation"
+        android:defaultValue="true"
+        android:title="@string/preferences_orientation_title"/>
+  </PreferenceCategory>
+  <PreferenceCategory android:title="@string/preferences_result_title">
+    <EditTextPreference
+        android:key="preferences_custom_product_search"
+        android:title="@string/preferences_custom_product_search_title"
+        android:summary="@string/preferences_custom_product_search_summary"/>
     <ListPreference
         android:key="preferences_search_country"
         android:defaultValue="-"

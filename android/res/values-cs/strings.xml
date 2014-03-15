@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Skenování čárových kódů pro bílé na černém pozadí. Není k dispozici v některých zařízeních.</string>
   <string name="preferences_invert_scan_title">Obrátit skenování</string>
   <string name="preferences_name">Nastavení</string>
+  <string name="preferences_orientation_title">Žádné automatické otáčení</string>
   <string name="preferences_play_beep_title">Zvuky</string>
   <string name="preferences_remember_duplicates_summary">Duplikáty čárových kódú v historii ukládat samostatně, nebo jako jeden čárový kód</string>
   <string name="preferences_remember_duplicates_title">Pamatovat všechny duplikáty</string>

@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Scansione dei codici a barre bianche su sfondo nero. Non disponibile su alcuni dispositivi.</string>
   <string name="preferences_invert_scan_title">Invertire la scansione</string>
   <string name="preferences_name">Impostazioni</string>
+  <string name="preferences_orientation_title">Nessuna rotazione automatica</string>
   <string name="preferences_play_beep_title">Suona</string>
   <string name="preferences_remember_duplicates_summary">Mantieni scansioni multiple del codice a barre nella stessa Cronologia</string>
   <string name="preferences_remember_duplicates_title">Ricorda duplicati</string>

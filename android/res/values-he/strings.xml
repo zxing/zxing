@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">סרוק ברקודים לבן על רקע שחור. לא זמין על התקנים מסוימים.</string>
   <string name="preferences_invert_scan_title">היפוך לסרוק</string>
   <string name="preferences_name">הגדרות</string>
+  <string name="preferences_orientation_title">סיבוב לא אוטומטי</string>
   <string name="preferences_play_beep_title">צפצוף</string>
   <string name="preferences_remember_duplicates_summary">אחסן מספר סריקות של אותו הברקוד בהיסטוריה</string>
   <string name="preferences_remember_duplicates_title">זכור כפילויות</string>

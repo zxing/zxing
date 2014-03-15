@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Skanna in vita streckkoder mot svart bakgrund. Ej tillgängligt på vissa enheter. </string>
   <string name="preferences_invert_scan_title">Invertera inskanning</string>
   <string name="preferences_name">Inställningar</string>
+  <string name="preferences_orientation_title">Ingen automatisk rotering</string>
   <string name="preferences_play_beep_title">Ton</string>
   <string name="preferences_remember_duplicates_summary">Lagra flera inskanningar av samma streckkod i historik</string>
   <string name="preferences_remember_duplicates_title">Kom ihåg dubletter</string>

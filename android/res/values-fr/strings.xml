@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Scanner des codes-barres blancs sur fond noir. Pas disponible sur certains appareils.</string>
   <string name="preferences_invert_scan_title">Scan négatif</string>
   <string name="preferences_name">Paramètres</string>
+  <string name="preferences_orientation_title">Pas de rotation automatique</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_remember_duplicates_summary">Enregistrer dans l\'historique les lectures multiples d\'un même code-barres</string>
   <string name="preferences_remember_duplicates_title">Enregistrer les doublons</string>

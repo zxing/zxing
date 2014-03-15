@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Für weiße Barcodes auf schwarzem Hintergrund. Nicht bei allen Geräten verfügbar.</string>
   <string name="preferences_invert_scan_title">Negativ-Scan</string>
   <string name="preferences_name">Einstellungen</string>
+  <string name="preferences_orientation_title">Nicht automatisch drehen</string>
   <string name="preferences_play_beep_title">Piepsen</string>
   <string name="preferences_remember_duplicates_summary">Speichern mehrerer Scans des gleichen Barcodes im Verlauf</string>
   <string name="preferences_remember_duplicates_title">Duplikate speichern</string>

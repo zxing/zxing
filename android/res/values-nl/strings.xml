@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Scan naar witte barcodes op een zwarte achtergrond. Niet beschikbaar op sommige apparaten.</string>
   <string name="preferences_invert_scan_title">Scan omkeren</string>
   <string name="preferences_name">Instellingen</string>
+  <string name="preferences_orientation_title">Niet automatisch draaien</string>
   <string name="preferences_play_beep_title">Piepen</string>
   <string name="preferences_remember_duplicates_summary">Meerdere scans van dezelfde barcode opslaan in de geschiedenis</string>
   <string name="preferences_remember_duplicates_title">Dubbele onthouden</string>

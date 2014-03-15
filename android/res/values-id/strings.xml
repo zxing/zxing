@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Memindai barcode putih pada latar belakang hitam. Tidak tersedia pada beberapa perangkat.</string>
   <string name="preferences_invert_scan_title">Balikkan memindai</string>
   <string name="preferences_name">Pengaturan</string>
+  <string name="preferences_orientation_title">Tidak ada rotasi otomatis</string>
   <string name="preferences_play_beep_title">Beep</string>
   <string name="preferences_remember_duplicates_summary">Simpan beberapa pindaian dari barcode yang sama di dalam Riwayat</string>
   <string name="preferences_remember_duplicates_title">Ingat duplikasi</string>

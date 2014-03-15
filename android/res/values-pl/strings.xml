@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Skanowanie białych kodów kreskowych na czarnym tle. Nie dostępne w niektórych urządzeniach.</string>
   <string name="preferences_invert_scan_title">Odwróć skanowania</string>
   <string name="preferences_name">Ustawienia</string>
+  <string name="preferences_orientation_title">Brak automatycznego obracania</string>
   <string name="preferences_play_beep_title">Piszcz</string>
   <string name="preferences_remember_duplicates_summary">Przechowuj zaskanowane kody w tej samej historii</string>
   <string name="preferences_remember_duplicates_title">Pamiętaj, duplikaty</string>

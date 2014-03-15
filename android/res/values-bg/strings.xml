@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Сканиране за бели баркодове на черен фон. Не е на разположение на някои устройства.</string>
   <string name="preferences_invert_scan_title">Обръщане на сканиране</string>
   <string name="preferences_name">Настройки</string>
+  <string name="preferences_orientation_title">Без автоматично завъртане</string>
   <string name="preferences_play_beep_title">Издаване на звук</string>
   <string name="preferences_remember_duplicates_summary">Записвай множество сканирания на един и същи баркод в историята</string>
   <string name="preferences_remember_duplicates_title">Запомняне на повторенията</string>

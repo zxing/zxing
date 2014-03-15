@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Scan fehér vonalkódok a fekete háttér. Nem csak egyes eszközöket.</string>
   <string name="preferences_invert_scan_title">Invert szkennelés</string>
   <string name="preferences_name">Beállítások</string>
+  <string name="preferences_orientation_title">Nincs automatikus forgatás</string>
   <string name="preferences_play_beep_title">Sípolás</string>
   <string name="preferences_remember_duplicates_summary">Ugyanannak a vonalkódnak több szkennelt képét is tárolja az Előzményekben</string>
   <string name="preferences_remember_duplicates_title">Duplikációk megjegyzése</string>

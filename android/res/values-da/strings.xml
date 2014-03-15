@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Scan for hvide stregkoder på sort baggrund. Ikke tilgængelig på nogle enheder.</string>
   <string name="preferences_invert_scan_title">Inverter scanning</string>
   <string name="preferences_name">Indstillinger</string>
+  <string name="preferences_orientation_title">Ingen automatisk rotation</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_remember_duplicates_summary">Gem flere scanninger af de samme stregkoder i Historik</string>
   <string name="preferences_remember_duplicates_title">Husk dubletter</string>

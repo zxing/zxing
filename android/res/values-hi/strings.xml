@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">काली पृष्ठभूमि पर सफेद बारकोड के लिए स्कैन करें. कुछ उपकरणों पर उपलब्ध नहीं है.</string>
   <string name="preferences_invert_scan_title">स्कैन उलटें</string>
   <string name="preferences_name">सेटिंग्स</string>
+  <string name="preferences_orientation_title">कोई स्वचालित रोटेशन</string>
   <string name="preferences_play_beep_title">भोंपू</string>
   <string name="preferences_remember_duplicates_summary">इतिहास में एक ही बारकोड के स्टोर एकाधिक स्कैन</string>
   <string name="preferences_remember_duplicates_title">डुप्लिकेट याद रखें</string>

@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Сканування білих штрих-кодів на чорному фоні. Не працює на деяких пристроях.</string>
   <string name="preferences_invert_scan_title">Інвертувати</string>
   <string name="preferences_name">Налаштування</string>
+  <string name="preferences_orientation_title">Немає автоматичного повороту</string>
   <string name="preferences_play_beep_title">Пищати</string>
   <string name="preferences_remember_duplicates_summary">Зберігати результати сканування однакових штрих-кодів</string>
   <string name="preferences_remember_duplicates_title">Запом\'ятовувати дублікати</string>

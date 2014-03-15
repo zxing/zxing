@@ -114,6 +114,7 @@
   <string name="preferences_invert_scan_summary">Scan za beli črtne kode na črni podlagi. Ni na voljo na nekaterih napravah.</string>
   <string name="preferences_invert_scan_title">Obrni skeniranje</string>
   <string name="preferences_name">Nastavitve</string>
+  <string name="preferences_orientation_title">Št avtomatsko rotacijo</string>
   <string name="preferences_play_beep_title">Pisk</string>
   <string name="preferences_remember_duplicates_summary">Shranjevanje več skandiranje iste črtne kode v zgodovini</string>
   <string name="preferences_remember_duplicates_title">Zapomni si dvojnikov</string>
