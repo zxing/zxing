@@ -16,8 +16,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="4.6.3"
-          android:versionCode="98"
+          android:versionName="4.6.4"
+          android:versionCode="99"
           android:installLocation="auto">
 
   <uses-permission android:name="android.permission.CAMERA"/>
