@@ -59,7 +59,7 @@
               android:screenOrientation="sensorLandscape"
               android:clearTaskOnLaunch="true"
               android:stateNotNeeded="true"
-              android:configChanges="orientation|keyboardHidden"
+              android:configChanges="orientation|screenSize|keyboardHidden"
               android:theme="@style/CaptureTheme"
               android:windowSoftInputMode="stateAlwaysHidden">
       <intent-filter>
