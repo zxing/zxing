@@ -88,6 +88,7 @@
   <string name="msg_unmount_usb">SDカードにアクセスできません</string>
   <string name="preferences_actions_title">スキャン時の動作</string>
   <string name="preferences_auto_focus_title">ｵｰﾄﾌｫｰｶｽを使用</string>
+  <string name="preferences_auto_open_web_title">自動的にWebを開く</string>
   <string name="preferences_bulk_mode_summary">QRコードを連続スキャンして保存します</string>
   <string name="preferences_bulk_mode_title">連続スキャンモード</string>
   <string name="preferences_copy_to_clipboard_title">ｸﾘｯﾌﾟﾎﾞｰﾄﾞにｺﾋﾟｰ</string>

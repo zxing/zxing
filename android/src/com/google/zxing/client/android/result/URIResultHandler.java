@@ -62,6 +62,11 @@ public final class URIResultHandler extends ResultHandler {
   }
 
   @Override
+  public Integer getDefaultButtonID() {
+    return 0;
+  }
+
+  @Override
   public void handleButtonPress(int index) {
     URIParsedResult uriResult = (URIParsedResult) getResult();
     String uri = uriResult.getURI();

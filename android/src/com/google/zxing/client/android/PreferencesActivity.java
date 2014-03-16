@@ -52,6 +52,7 @@ public final class PreferencesActivity extends Activity {
   public static final String KEY_DISABLE_EXPOSURE = "preferences_disable_exposure";
   public static final String KEY_DISABLE_METERING = "preferences_disable_metering";
   public static final String KEY_DISABLE_BARCODE_SCENE_MODE = "preferences_disable_barcode_scene_mode";
+  public static final String KEY_AUTO_OPEN_WEB = "preferences_auto_open_web";
 
   @Override
   protected void onCreate(Bundle icicle) {

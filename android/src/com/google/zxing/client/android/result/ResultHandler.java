@@ -123,6 +123,9 @@ public abstract class ResultHandler {
    */
   public abstract int getButtonText(int index);
 
+  public Integer getDefaultButtonID() {
+    return null;
+  }
 
   /**
    * Execute the action which corresponds to the nth button.

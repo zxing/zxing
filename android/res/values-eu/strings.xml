@@ -88,6 +88,7 @@
   <string name="msg_unmount_usb">Barkatu, SD txartela ez dago eskuragarri.</string>
   <string name="preferences_actions_title">Barra kode bat aurkitzean\u2026</string>
   <string name="preferences_auto_focus_title">Erabili auto foku</string>
+  <string name="preferences_auto_open_web_title">Ireki web orriak automatikoki</string>
   <string name="preferences_bulk_mode_summary">Eskaneatu eta gorde hainbat barra-kode jarraian</string>
   <string name="preferences_bulk_mode_title">Handizkako eskaneatze modua</string>
   <string name="preferences_copy_to_clipboard_title">Kopiatu arbelera</string>
