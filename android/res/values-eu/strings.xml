@@ -138,6 +138,4 @@
   <string name="result_wifi">WLAN Konfigurazioa aurkitu da</string>
   <string name="sbc_name">Google Book Bilaketa</string>
   <string name="wifi_changing_network">Sarerako konexioa eskatzen\u2026</string>
-  <string name="wifi_ssid_label">Sarearen Izena</string>
-  <string name="wifi_type_label">Mota</string>
 </resources>

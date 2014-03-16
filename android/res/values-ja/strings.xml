@@ -138,6 +138,4 @@
   <string name="result_wifi">ネットワーク設定がヒットしました</string>
   <string name="sbc_name">Googleブックス</string>
   <string name="wifi_changing_network">ネットワークへ接続しています…</string>
-  <string name="wifi_ssid_label">ネットワーク名</string>
-  <string name="wifi_type_label">タイプ</string>
 </resources>

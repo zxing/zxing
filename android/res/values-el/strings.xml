@@ -138,6 +138,4 @@
   <string name="result_wifi">Βρέθηκαν ρυθμίσεις Wi-Fi</string>
   <string name="sbc_name">Αναζήτηση βιβλίων Google</string>
   <string name="wifi_changing_network">Αίτηση σύνδεσης με το δίκτυο\u2026</string>
-  <string name="wifi_ssid_label">Όνομα Δικτύου</string>
-  <string name="wifi_type_label">Τύπος</string>
 </resources>

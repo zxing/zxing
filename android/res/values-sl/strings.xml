@@ -138,6 +138,4 @@
   <string name="result_wifi">Najdene WLAN nastavitve</string>
   <string name="sbc_name">Iskanje z Google Book Search</string>
   <string name="wifi_changing_network">Zahteva priključitev na omrežje\u2026</string>
-  <string name="wifi_ssid_label">Ime omrežja</string>
-  <string name="wifi_type_label">Tip</string>
 </resources>

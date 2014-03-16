@@ -138,6 +138,4 @@
   <string name="result_wifi">Configuración de WLAN encontrada</string>
   <string name="sbc_name">Búsqueda de libros de Google</string>
   <string name="wifi_changing_network">Solicitando conexión a la red\u2026</string>
-  <string name="wifi_ssid_label">Nombre de red</string>
-  <string name="wifi_type_label">Tipo</string>
 </resources>
