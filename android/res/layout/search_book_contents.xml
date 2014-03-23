@@ -15,6 +15,7 @@
  limitations under the License.
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
@@ -32,7 +33,8 @@
               android:layout_weight="1"
               android:singleLine="true"
               android:selectAllOnFocus="true"
-              android:inputType="text"/>
+              android:inputType="text"
+              tools:ignore="NestedWeights"/>
 
     <Button android:id="@+id/query_button"
             style="@android:style/Widget.Holo.Button.Borderless.Small"

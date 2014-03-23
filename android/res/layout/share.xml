@@ -17,6 +17,7 @@
 
 <!-- ScrollView wrapper is to accommodate small screens. -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -43,7 +44,8 @@
         android:layout_height="wrap_content"
         android:scaleType="center"
         android:src="@drawable/share_via_barcode"
-        android:paddingBottom="@dimen/standard_padding"/>
+        android:paddingBottom="@dimen/standard_padding"
+        tools:ignore="ContentDescription"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
