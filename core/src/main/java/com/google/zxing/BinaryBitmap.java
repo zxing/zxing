@@ -56,7 +56,7 @@ public final class BinaryBitmap {
    * cached data. Callers should assume this method is expensive and call it as seldom as possible.
    * This method is intended for decoding 1D barcodes and may choose to apply sharpening.
    *
-   * @param y The row to fetch, 0 <= y < bitmap height.
+   * @param y The row to fetch, which must be in [0, bitmap height)
    * @param row An optional preallocated array. If null or too small, it will be ignored.
    *            If used, the Binarizer will call BitArray.clear(). Always use the returned object.
    * @return The array of bits for this row (true means black).
@@ -96,8 +96,8 @@ public final class BinaryBitmap {
    * Returns a new object with cropped image data. Implementations may keep a reference to the
    * original data rather than a copy. Only callable if isCropSupported() is true.
    *
-   * @param left The left coordinate, 0 <= left < getWidth().
-   * @param top The top coordinate, 0 <= top <= getHeight().
+   * @param left The left coordinate, which must be in [0,getWidth())
+   * @param top The top coordinate, which must be in [0,getHeight())
    * @param width The width of the rectangle to crop.
    * @param height The height of the rectangle to crop.
    * @return A cropped version of this object.

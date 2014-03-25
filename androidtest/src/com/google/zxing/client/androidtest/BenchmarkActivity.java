@@ -27,7 +27,7 @@ public final class BenchmarkActivity extends Activity {
 
   private View runBenchmarkButton;
   private TextView textView;
-  private AsyncTask<?,?,?> benchmarkTask;
+  private AsyncTask<Object,Object,String> benchmarkTask;
 
   private final View.OnClickListener runBenchmark = new View.OnClickListener() {
     @Override
