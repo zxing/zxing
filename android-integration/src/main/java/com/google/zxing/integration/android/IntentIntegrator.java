@@ -25,6 +25,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -139,21 +140,41 @@ public class IntentIntegrator {
       );
   
   private final Activity activity;
+  private final Fragment fragment;
+
   private String title;
   private String message;
   private String buttonYes;
   private String buttonNo;
   private List<String> targetApplications;
-  private final Map<String,Object> moreExtras;
-  
+  private final Map<String,Object> moreExtras = new HashMap<String,Object>(3);
+
+  /**
+   * @param activity {@link Activity} invoking the integration
+   */
   public IntentIntegrator(Activity activity) {
     this.activity = activity;
+    this.fragment = null;
+    initializeConfiguration();
+  }
+
+  /**
+   * @param fragment {@link Fragment} invoking the integration.
+   *  {@link #startActivityForResult(Intent, int)} will be called on the {@link Fragment} instead
+   *  of an {@link Activity}
+   */
+  public IntentIntegrator(Fragment fragment) {
+    this.activity = fragment.getActivity();
+    this.fragment = fragment;
+    initializeConfiguration();
+  }
+
+  private void initializeConfiguration() {
     title = DEFAULT_TITLE;
     message = DEFAULT_MESSAGE;
     buttonYes = DEFAULT_YES;
     buttonNo = DEFAULT_NO;
     targetApplications = TARGET_ALL_KNOWN;
-    moreExtras = new HashMap<String,Object>(3);
   }
   
   public String getTitle() {
@@ -281,7 +302,11 @@ public class IntentIntegrator {
    * @see android.app.Fragment#startActivityForResult(Intent, int)
    */
   protected void startActivityForResult(Intent intent, int code) {
-    activity.startActivityForResult(intent, code);
+    if (fragment == null) {
+      activity.startActivityForResult(intent, code);
+    } else {
+      fragment.startActivityForResult(intent, code);
+    }
   }
   
   private String findTargetAppPackage(Intent intent) {
@@ -325,7 +350,11 @@ public class IntentIntegrator {
         Uri uri = Uri.parse("market://details?id=" + packageName);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         try {
-          activity.startActivity(intent);
+          if (fragment == null) {
+            activity.startActivity(intent);
+          } else {
+            fragment.startActivity(intent);
+          }
         } catch (ActivityNotFoundException anfe) {
           // Hmm, market is not installed
           Log.w(TAG, "Google Play is not installed; cannot install " + packageName);
@@ -398,7 +427,11 @@ public class IntentIntegrator {
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     attachMoreExtras(intent);
-    activity.startActivity(intent);
+    if (fragment == null) {
+      activity.startActivity(intent);
+    } else {
+      fragment.startActivity(intent);
+    }
     return null;
   }
   
