@@ -228,9 +228,9 @@ final class ModulusPoly {
   }
 
   public static ModulusPoly copy(ModulusPoly src) {
-      int[] newcf = new int[src.getCoefficients().length];
-      System.arraycopy(src.getCoefficients(), 0, newcf, 0, src.getCoefficients().length);
-      return new ModulusPoly(src.field, newcf);
+    int[] newcf = new int[src.getCoefficients().length];
+    System.arraycopy(src.getCoefficients(), 0, newcf, 0, src.getCoefficients().length);
+    return new ModulusPoly(src.field, newcf);
   }
 
   @Override

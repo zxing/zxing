@@ -77,83 +77,93 @@ public final class ErrorCorrection {
     return errorLocations.length;
   }
 
-    ModulusPoly[] BerlekampMassey(ModulusPoly syn, int[] erasures, int numECCodewords) {
-        ModulusPoly psi2 = field.getZero();
+  ModulusPoly[] BerlekampMassey(ModulusPoly syn, int[] erasures, int numECCodewords) throws ChecksumException {
+    /* initialize Gamma, the erasure locator polynomial */
+    ModulusPoly gamma = initGamma(erasures);
 
-        /* initialize Gamma, the erasure locator polynomial */
-        ModulusPoly gamma = initGamma(erasures);
+    /* initialize to z */
+    ModulusPoly D = ModulusPoly.copy(gamma);
+    D = multiplyByZ(D);
 
-        /* initialize to z */
-        ModulusPoly D = ModulusPoly.copy(gamma);
-        D = multiplyByZ(D);
+    ModulusPoly psi = ModulusPoly.copy(gamma);
+    int k = -1;
+    int L = erasures.length;
 
-        ModulusPoly psi = ModulusPoly.copy(gamma);
-        int k = -1;
-        int L = erasures.length;
+    for (int n = erasures.length; n < numECCodewords; n++) {
+      int d = computeDiscrepancy(psi, syn, L, n);
 
-        for (int n = erasures.length; n < numECCodewords; n++) {
-            int d = computeDiscrepancy(psi, syn, L, n);
+      if (d != 0) {
+        /* psi2 = psi - d*D */
+        ModulusPoly psi2 = psi.subtract(D.multiply(d));
 
-            if (d != 0) {
-                /* psi2 = psi - d*D */
-                psi2 = psi.subtract(D.multiply(d));
-
-                if (L < (n - k)) {
-                    int L2 = n - k;
-                    k = n - L;
-                    /* D = scale_poly(ginv(d), psi); */
-                    D = psi.multiply(field.inverse(d));
-                    L = L2;
-                }
-
-                /* psi = psi2 */
-                psi = ModulusPoly.copy(psi2);
-            }
-
-            D = multiplyByZ(D);
+        if (L < (n - k)) {
+          int L2 = n - k;
+          k = n - L;
+          /* D = scale_poly(ginv(d), psi); */
+          D = psi.multiply(field.inverse(d));
+          L = L2;
         }
 
-        ModulusPoly lambda = ModulusPoly.copy(psi);
-        ModulusPoly omega = computeModifiedOmega(lambda, syn, numECCodewords);
-        return new ModulusPoly[] { lambda, omega };
+        /* psi = psi2 */
+        psi = ModulusPoly.copy(psi2);
+      }
+
+      D = multiplyByZ(D);
     }
 
-    private ModulusPoly initGamma(int[] erasures) {
-        ModulusPoly gamma = field.getOne();
-        for(int erasure : erasures) {
-            int b = field.exp(erasure);
-            // Add (1 - bx) term:
-            ModulusPoly term = new ModulusPoly(field, new int[] { field.subtract(0, b), 1 });
-            gamma = gamma.multiply(term);
-        }
+    ModulusPoly lambda = ModulusPoly.copy(psi);
+    ModulusPoly omega = computeModifiedOmega(lambda, syn, numECCodewords);
+    return new ModulusPoly[] { lambda, omega };
+  }
 
-        return gamma;
+  private ModulusPoly initGamma(int[] erasures) {
+    ModulusPoly gamma = field.getOne();
+    for(int erasure : erasures) {
+      int b = field.exp(erasure);
+      // Add (1 - bx) term:
+      ModulusPoly term = new ModulusPoly(field, new int[] { field.subtract(0, b), 1 });
+      gamma = gamma.multiply(term);
     }
 
-    /* given Psi (called Lambda in Modified_Berlekamp_Massey) and synBytes,
-     * compute the combined erasure/error evaluator polynomial as
-     * Psi*S mod z^4
-     */
-    ModulusPoly computeModifiedOmega(ModulusPoly lambda, ModulusPoly syndromes, int ECCNum) {
-        int[] mod4 = new int[ECCNum];
-        ModulusPoly product = lambda.multiply(syndromes);
-        System.arraycopy(product.getCoefficients(), product.getCoefficients().length - ECCNum, mod4, 0, ECCNum);
-        return new ModulusPoly(field, mod4);
-    }
+    return gamma;
+  }
 
-    private int computeDiscrepancy(ModulusPoly lambda, ModulusPoly S, int L, int n) {
-        int sum = 0;
+  /**
+   * given Psi (called Lambda in Modified_Berlekamp_Massey) and synBytes,
+   * compute the combined erasure/error evaluator polynomial as
+   * Psi*S mod z^4
+   * @param lambda error locator polynomial
+   * @param syndromes syndromes polynomial
+   * @param ECCNum mod value
+   * @return combined erasure/error evaluator polynomial
+   */
+  ModulusPoly computeModifiedOmega(ModulusPoly lambda, ModulusPoly syndromes, int ECCNum) {
+    int[] mod4 = new int[ECCNum];
+    ModulusPoly product = lambda.multiply(syndromes);
+    System.arraycopy(product.getCoefficients(), product.getCoefficients().length - ECCNum, mod4, 0, ECCNum);
+    return new ModulusPoly(field, mod4);
+  }
 
-        for (int i = 0; i <= L; i++) {
-            sum = field.add(sum, field.multiply(lambda.getCoefficient(i), S.getCoefficient(n - i)));
-        }
-        return sum;
+  private int computeDiscrepancy(ModulusPoly lambda, ModulusPoly S, int L, int n) throws ChecksumException {
+    if(S.getDegree() < n || lambda.getDegree() < L) {
+      throw ChecksumException.getChecksumInstance();
     }
+    int sum = 0;
 
-    /* multiply by z, i.e., shift right by 1 */
-    ModulusPoly multiplyByZ(ModulusPoly src) {
-        return src.multiply(new ModulusPoly(field, new int[] { 1, 0 }));
+    for (int i = 0; i <= L; i++) {
+        sum = field.add(sum, field.multiply(lambda.getCoefficient(i), S.getCoefficient(n - i)));
     }
+    return sum;
+  }
+
+  /**
+   * multiply by z, i.e., shift right by 1
+   * @param src polynomial to be shifted
+   * @return shifted polynomial
+   */
+  ModulusPoly multiplyByZ(ModulusPoly src) {
+    return src.multiply(new ModulusPoly(field, new int[] { 1, 0 }));
+  }
 
 
   private int[] findErrorLocations(ModulusPoly errorLocator) throws ChecksumException {
