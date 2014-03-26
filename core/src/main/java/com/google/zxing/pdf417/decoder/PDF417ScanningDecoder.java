@@ -25,10 +25,7 @@ import com.google.zxing.common.DecoderResult;
 import com.google.zxing.pdf417.PDF417Common;
 import com.google.zxing.pdf417.decoder.ec.ErrorCorrection;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Formatter;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Guenther Grau
@@ -98,23 +95,18 @@ public final class PDF417ScanningDecoder {
       } else {
         detectionResultColumn = new DetectionResultColumn(boundingBox);
       }
+
       detectionResult.setDetectionResultColumn(barcodeColumn, detectionResultColumn);
-      int startColumn = -1;
-      int previousStartColumn = startColumn;
+      // get the most common start column and use it.. instead of using a nearby codeword.
+      // this avoids shifts caused by one pixel errors
+      int startColumn = getStartColumn(detectionResult, barcodeColumn, boundingBox.getMinY(), leftToRight);
+
       // TODO start at a row for which we know the start position, then detect upwards and downwards from there.
       for (int imageRow = boundingBox.getMinY(); imageRow <= boundingBox.getMaxY(); imageRow++) {
-        startColumn = getStartColumn(detectionResult, barcodeColumn, imageRow, leftToRight);
-        if (startColumn < 0 || startColumn > boundingBox.getMaxX()) {
-          if (previousStartColumn == -1) {
-            continue;
-          }
-          startColumn = previousStartColumn;
-        }
         Codeword codeword = detectCodeword(image, boundingBox.getMinX(), boundingBox.getMaxX(), leftToRight,
             startColumn, imageRow, minCodewordWidth, maxCodewordWidth);
         if (codeword != null) {
           detectionResultColumn.setCodeword(imageRow, codeword);
-          previousStartColumn = startColumn;
           minCodewordWidth = Math.min(minCodewordWidth, codeword.getWidth());
           maxCodewordWidth = Math.max(maxCodewordWidth, codeword.getWidth());
         }
@@ -259,13 +251,10 @@ public final class PDF417ScanningDecoder {
       for (int column = 0; column < detectionResult.getBarcodeColumnCount(); column++) {
         int[] values = barcodeMatrix[row][column + 1].getValue();
         int codewordIndex = row * detectionResult.getBarcodeColumnCount() + column;
-        if (values.length == 0) {
-          erasures.add(codewordIndex);
-        } else if (values.length == 1) {
+        if (values.length > 0) {
           codewords[codewordIndex] = values[0];
         } else {
-          ambiguousIndexesList.add(codewordIndex);
-          ambiguousIndexValuesList.add(values);
+          erasures.add(codewords.length - codewordIndex -1);
         }
       }
     }
@@ -342,7 +331,7 @@ public final class PDF417ScanningDecoder {
         continue;
       }
       for (Codeword codeword : detectionResultColumn.getCodewords()) {
-        if (codeword == null || codeword.getRowNumber() == -1) {
+        if (codeword == null || codeword.getRowNumber() == -1 || codeword.getRowNumber() >= barcodeMatrix.length) {
           continue;
         }
         barcodeMatrix[codeword.getRowNumber()][column].setValue(codeword.getValue());
@@ -359,39 +348,73 @@ public final class PDF417ScanningDecoder {
                                     int barcodeColumn,
                                     int imageRow,
                                     boolean leftToRight) {
+
     int offset = leftToRight ? 1 : -1;
     Codeword codeword = null;
-    if (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
-      codeword = detectionResult.getDetectionResultColumn(barcodeColumn - offset).getCodeword(imageRow);
-    }
-    if (codeword != null) {
-      return leftToRight ? codeword.getEndX() : codeword.getStartX();
-    }
-    codeword = detectionResult.getDetectionResultColumn(barcodeColumn).getCodewordNearby(imageRow);
-    if (codeword != null) {
-      return leftToRight ? codeword.getStartX() : codeword.getEndX();
-    }
-    if (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
-      codeword = detectionResult.getDetectionResultColumn(barcodeColumn - offset).getCodewordNearby(imageRow);
-    }
-    if (codeword != null) {
-      return leftToRight ? codeword.getEndX() : codeword.getStartX();
-    }
-    int skippedColumns = 0;
 
-    while (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
-      barcodeColumn -= offset;
-      for (Codeword previousRowCodeword : detectionResult.getDetectionResultColumn(barcodeColumn).getCodewords()) {
-        if (previousRowCodeword != null) {
-          return (leftToRight ? previousRowCodeword.getEndX() : previousRowCodeword.getStartX()) +
-              offset *
-              skippedColumns *
-              (previousRowCodeword.getEndX() - previousRowCodeword.getStartX());
-        }
+    Map<Integer, Integer> prevColumnsEndigns = new HashMap<>();
+    DetectionResultColumn c = detectionResult.getDetectionResultColumn(barcodeColumn - offset);
+    Codeword[] cws = c.getCodewords();
+
+    for(Codeword cw : cws) {
+      if (cw != null) {
+          int value = leftToRight ? cw.getEndX() : cw.getStartX();
+          Integer confidence = prevColumnsEndigns.get(value);
+          if(confidence == null) confidence = 0;
+          confidence++;
+          prevColumnsEndigns.put(value, confidence);
       }
-      skippedColumns++;
     }
-    return leftToRight ? detectionResult.getBoundingBox().getMinX() : detectionResult.getBoundingBox().getMaxX();
+
+    int maxConfidence = -1;
+    ArrayList<Integer> result = new ArrayList<>();
+    for (Map.Entry<Integer,Integer> entry : prevColumnsEndigns.entrySet()) {
+      if (entry.getValue() > maxConfidence) {
+          maxConfidence = entry.getValue();
+          result.clear();
+          result.add(entry.getKey());
+      } else if (entry.getValue() == maxConfidence) {
+          result.add(entry.getKey());
+      }
+    }
+
+    if (result.size() == 1) {
+      return result.get(0);
+    }
+    else {
+
+        if (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+            codeword = detectionResult.getDetectionResultColumn(barcodeColumn - offset).getCodeword(imageRow);
+        }
+        if (codeword != null) {
+            return leftToRight ? codeword.getEndX() : codeword.getStartX();
+        }
+        codeword = detectionResult.getDetectionResultColumn(barcodeColumn).getCodewordNearby(imageRow);
+        if (codeword != null) {
+            return leftToRight ? codeword.getStartX() : codeword.getEndX();
+        }
+        if (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+            codeword = detectionResult.getDetectionResultColumn(barcodeColumn - offset).getCodewordNearby(imageRow);
+        }
+        if (codeword != null) {
+            return leftToRight ? codeword.getEndX() : codeword.getStartX();
+        }
+        int skippedColumns = 0;
+
+        while (isValidBarcodeColumn(detectionResult, barcodeColumn - offset)) {
+            barcodeColumn -= offset;
+            for (Codeword previousRowCodeword : detectionResult.getDetectionResultColumn(barcodeColumn).getCodewords()) {
+                if (previousRowCodeword != null) {
+                    return (leftToRight ? previousRowCodeword.getEndX() : previousRowCodeword.getStartX()) +
+                            offset *
+                                    skippedColumns *
+                                    (previousRowCodeword.getEndX() - previousRowCodeword.getStartX());
+                }
+            }
+            skippedColumns++;
+        }
+        return leftToRight ? detectionResult.getBoundingBox().getMinX() : detectionResult.getBoundingBox().getMaxX();
+    }
   }
 
   private static Codeword detectCodeword(BitMatrix image,
