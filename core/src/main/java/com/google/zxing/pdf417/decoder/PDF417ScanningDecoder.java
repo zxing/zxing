@@ -263,13 +263,13 @@ public final class PDF417ScanningDecoder {
         int[] values = barcodeMatrix[row][column + 1].getValue();
         int codewordIndex = row * detectionResult.getBarcodeColumnCount() + column;
         if(values.length > 2) {
-          erasures.add(codewords.length - codewordIndex - 1);
+          erasures.add(codewordIndex);
         } else if(values.length > 1) {
           codewords[codewordIndex] = values[1];
         } else if(values.length > 0) {
           codewords[codewordIndex] = values[0];
         } else {
-          erasures.add(codewords.length - codewordIndex - 1);
+          erasures.add(codewordIndex);
         }
       }
     }

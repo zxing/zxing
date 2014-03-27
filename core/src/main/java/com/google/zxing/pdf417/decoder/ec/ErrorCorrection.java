@@ -42,6 +42,11 @@ public final class ErrorCorrection {
                     int numECCodewords,
                     int[] erasures) throws ChecksumException {
 
+    //codewords.Length - codewordIndex - 1
+    for (int i = 0; i < erasures.length; i++) {
+      erasures[i] = received.length - erasures[i] - 1;
+    }
+
     ModulusPoly poly = new ModulusPoly(field, received);
     int[] S = new int[numECCodewords];
     boolean error = false;
