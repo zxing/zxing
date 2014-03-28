@@ -528,7 +528,7 @@ public final class PDF417 {
   public PDF417(boolean compact) {
     this.compact = compact;
     compaction = Compaction.AUTO;
-    encoding = PDF417HighLevelEncoder.DEFAULT_ENCODING;
+    encoding = null; // Use default
     minCols = 2;
     maxCols = 30;
     maxRows = 30;
