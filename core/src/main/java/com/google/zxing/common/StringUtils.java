@@ -16,6 +16,7 @@
 
 package com.google.zxing.common;
 
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import com.google.zxing.DecodeHintType;
@@ -28,8 +29,7 @@ import com.google.zxing.DecodeHintType;
  */
 public final class StringUtils {
 
-  private static final String PLATFORM_DEFAULT_ENCODING =
-      System.getProperty("file.encoding");
+  private static final String PLATFORM_DEFAULT_ENCODING = Charset.defaultCharset().name();
   public static final String SHIFT_JIS = "SJIS";
   public static final String GB2312 = "GB2312";
   private static final String EUC_JP = "EUC_JP";
