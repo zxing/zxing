@@ -155,7 +155,7 @@ public final class HighLevelEncoder {
   }
 
   /**
-   * Convert the text represented by this High Level Encoder into a BitArray.
+   * @return text represented by this encoder encoded as a {@link BitArray}
    */
   public BitArray encode() {
     Collection<State> states = Collections.singletonList(State.INITIAL_STATE);

@@ -116,7 +116,7 @@ public final class CalendarParsedResult extends ParsedResult {
   }
 
   /**
-   * May return null if the event has no duration.
+   * @return event end {@link Date}, or {@code null} if event has no duration
    * @see #getStart()
    */
   public Date getEnd() {

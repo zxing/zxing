@@ -54,20 +54,21 @@ public class Detector {
   }
 
   /**
-   * <p>Detects a QR Code in an image, simply.</p>
+   * <p>Detects a QR Code in an image.</p>
    *
    * @return {@link DetectorResult} encapsulating results of detecting a QR Code
-   * @throws NotFoundException if no QR Code can be found
+   * @throws NotFoundException if QR Code cannot be found
+   * @throws FormatException if a QR Code cannot be decoded
    */
   public DetectorResult detect() throws NotFoundException, FormatException {
     return detect(null);
   }
 
   /**
-   * <p>Detects a QR Code in an image, simply.</p>
+   * <p>Detects a QR Code in an image.</p>
    *
    * @param hints optional hints to detector
-   * @return {@link NotFoundException} encapsulating results of detecting a QR Code
+   * @return {@link DetectorResult} encapsulating results of detecting a QR Code
    * @throws NotFoundException if QR Code cannot be found
    * @throws FormatException if a QR Code cannot be decoded
    */
@@ -218,6 +219,11 @@ public class Detector {
   /**
    * <p>Computes an average estimated module size based on estimated derived from the positions
    * of the three finder patterns.</p>
+   *
+   * @param topLeft detected top-left finder pattern center
+   * @param topRight detected top-right finder pattern center
+   * @param bottomLeft detected bottom-left finder pattern center
+   * @return estimated module size
    */
   protected final float calculateModuleSize(ResultPoint topLeft,
                                             ResultPoint topRight,

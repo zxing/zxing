@@ -95,9 +95,9 @@ public enum CharacterSetECI {
 
   /**
    * @param value character set ECI value
-   * @return CharacterSetECI representing ECI of given value, or null if it is legal but
+   * @return {@link CharacterSetECI} representing ECI of given value, or null if it is legal but
    *   unsupported
-   * @throws IllegalArgumentException if ECI value is invalid
+   * @throws FormatException if ECI value is invalid
    */
   public static CharacterSetECI getCharacterSetECIByValue(int value) throws FormatException {
     if (value < 0 || value >= 900) {

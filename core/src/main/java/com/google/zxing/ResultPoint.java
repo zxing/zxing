@@ -70,6 +70,8 @@ public class ResultPoint {
   /**
    * Orders an array of three ResultPoints in an order [A,B,C] such that AB is less than AC
    * and BC is less than AC, and the angle between BC and BA is less than 180 degrees.
+   *
+   * @param patterns array of three {@link ResultPoint} to order
    */
   public static void orderBestPatterns(ResultPoint[] patterns) {
 
@@ -113,6 +115,8 @@ public class ResultPoint {
 
 
   /**
+   * @param pattern1 first pattern
+   * @param pattern2 second pattern
    * @return distance between two points
    */
   public static float distance(ResultPoint pattern1, ResultPoint pattern2) {

@@ -48,6 +48,10 @@ public final class WhiteRectangleDetector {
   }
 
   /**
+   * @param image barcode image to find a rectangle in
+   * @param initSize initial size of search area around center
+   * @param x x position of search center
+   * @param y y position of search center
    * @throws NotFoundException if image is too small to accommodate {@code initSize}
    */
   public WhiteRectangleDetector(BitMatrix image, int initSize, int x, int y) throws NotFoundException {

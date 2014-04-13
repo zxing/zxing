@@ -17,7 +17,6 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitArray;
@@ -88,7 +87,7 @@ public final class UPCEReader extends UPCEANReader {
   }
 
   @Override
-  protected boolean checkChecksum(String s) throws FormatException, ChecksumException {
+  protected boolean checkChecksum(String s) throws FormatException {
     return super.checkChecksum(convertUPCEtoUPCA(s));
   }
 

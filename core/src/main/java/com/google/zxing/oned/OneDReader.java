@@ -295,7 +295,9 @@ public abstract class OneDReader implements Reader {
    * @param row the black/white pixel data of the row
    * @param hints decode hints
    * @return {@link Result} containing encoded string and start/end of barcode
-   * @throws NotFoundException if an error occurs or barcode cannot be found
+   * @throws NotFoundException if no potential barcode is found
+   * @throws ChecksumException if a potential barcode is found but does not pass its checksum
+   * @throws FormatException if a potential barcode is found but format is invalid
    */
   public abstract Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException;

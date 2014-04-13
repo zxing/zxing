@@ -62,15 +62,11 @@ public final class Encoder {
   }
 
   /**
-   *  Encode "bytes" with the error correction level "ecLevel". The encoding mode will be chosen
-   * internally by chooseMode(). On success, store the result in "qrCode".
-   *
-   * We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
-   * "getECLevel" since our primary use is to show QR code on desktop screens. We don't need very
-   * strong error correction for this purpose.
-   *
-   * Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
-   * with which clients can specify the encoding mode. For now, we don't need the functionality.
+   * @param content text to encode
+   * @param ecLevel error correction level to use
+   * @return {@link QRCode} representing the encoded QR code
+   * @throws WriterException if encoding can't succeed, because of for example invalid content
+   *   or configuration
    */
   public static QRCode encode(String content, ErrorCorrectionLevel ecLevel) throws WriterException {
     return encode(content, ecLevel, null);

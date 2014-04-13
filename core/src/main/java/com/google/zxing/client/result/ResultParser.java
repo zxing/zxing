@@ -71,6 +71,9 @@ public abstract class ResultParser {
    * Attempts to parse the raw {@link Result}'s contents as a particular type
    * of information (email, URL, etc.) and return a {@link ParsedResult} encapsulating
    * the result of parsing.
+   *
+   * @param theResult the raw {@link Result} to parse
+   * @return {@link ParsedResult} encapsulating the parsing result
    */
   public abstract ParsedResult parse(Result theResult);
 

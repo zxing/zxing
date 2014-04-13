@@ -132,6 +132,15 @@ public abstract class UPCEANReader extends OneDReader {
    * <p>Like {@link #decodeRow(int, BitArray, java.util.Map)}, but
    * allows caller to inform method about where the UPC/EAN start pattern is
    * found. This allows this to be computed once and reused across many implementations.</p>
+   *
+   * @param rowNumber row index into the image
+   * @param row encoding of the row of the barcode image
+   * @param startGuardRange start/end column where the opening start pattern was found
+   * @param hints optional hints that influence decoding
+   * @return {@link Result} encapsulating the result of decoding a barcode in the row
+   * @throws NotFoundException if no potential barcode is found
+   * @throws ChecksumException if a potential barcode is found but does not pass its checksum
+   * @throws FormatException if a potential barcode is found but format is invalid
    */
   public Result decodeRow(int rowNumber,
                           BitArray row,
@@ -232,9 +241,11 @@ public abstract class UPCEANReader extends OneDReader {
   }
 
   /**
+   * @param s string of digits to check
    * @return {@link #checkStandardUPCEANChecksum(CharSequence)}
+   * @throws FormatException if the string does not contain only digits
    */
-  boolean checkChecksum(String s) throws ChecksumException, FormatException {
+  boolean checkChecksum(String s) throws FormatException {
     return checkStandardUPCEANChecksum(s);
   }
 

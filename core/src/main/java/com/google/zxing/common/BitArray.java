@@ -111,6 +111,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
+   * @param from index to start looking for unset bit
+   * @return index of next unset bit, or {@code size} if none are unset until the end
    * @see #getNextSet(int)
    */
   public int getNextUnset(int from) {
@@ -237,6 +239,9 @@ public final class BitArray implements Cloneable {
    * Appends the least-significant bits, from value, in order from most-significant to
    * least-significant. For example, appending 6 bits from 0x000001E will append the bits
    * 0, 1, 1, 1, 1, 0 in that order.
+   *
+   * @param value {@code int} containing bits to append
+   * @param numBits bits from value to append
    */
   public void appendBits(int value, int numBits) {
     if (numBits < 0 || numBits > 32) {

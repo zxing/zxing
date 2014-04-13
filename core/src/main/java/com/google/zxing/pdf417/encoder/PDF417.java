@@ -638,9 +638,9 @@ public final class PDF417 {
   }
 
   /**
-   * Generates the barcode logic.
-   *
-   * @param msg        the message to encode
+   * @param msg message to encode
+   * @param errorCorrectionLevel PDF417 error correction level to use
+   * @throws WriterException if the contents cannot be encoded in this format
    */
   public void generateBarcodeLogic(String msg, int errorCorrectionLevel) throws WriterException {
 
@@ -731,6 +731,11 @@ public final class PDF417 {
 
   /**
    * Sets max/min row/col values
+   *
+   * @param maxCols maximum allowed columns
+   * @param minCols minimum allowed columns
+   * @param maxRows maximum allowed rows
+   * @param minRows minimum allowed rows
    */
   public void setDimensions(int maxCols, int minCols, int maxRows, int minRows) {
     this.maxCols = maxCols;
@@ -740,21 +745,21 @@ public final class PDF417 {
   }
 
   /**
-   * Sets compaction to values stored in {@link Compaction} enum
+   * @param compaction compaction mode to use
    */
   public void setCompaction(Compaction compaction) {
     this.compaction = compaction;
   }
 
   /**
-   * Sets compact to be true or false
+   * @param compact if true, enables compaction
    */
   public void setCompact(boolean compact) {
     this.compact = compact;
   }
 
   /**
-   * Sets output encoding.
+   * @param encoding sets character encoding to use
    */
   public void setEncoding(Charset encoding) {
     this.encoding = encoding;

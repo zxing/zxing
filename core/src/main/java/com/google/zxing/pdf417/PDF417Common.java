@@ -60,8 +60,7 @@ public final class PDF417Common {
   }
 
   /**
-   * Translate the symbol into a codeword.
-   *
+   * @param symbol encoded symbol to translate to a codeword
    * @return the codeword corresponding to the symbol.
    */
   public static int getCodeword(long symbol) {

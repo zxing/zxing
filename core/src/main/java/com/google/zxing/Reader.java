@@ -37,7 +37,9 @@ public interface Reader {
    *
    * @param image image of barcode to decode
    * @return String which the barcode encodes
-   * @throws NotFoundException if the barcode cannot be located or decoded for any reason
+   * @throws NotFoundException if no potential barcode is found
+   * @throws ChecksumException if a potential barcode is found but does not pass its checksum
+   * @throws FormatException if a potential barcode is found but format is invalid
    */
   Result decode(BinaryBitmap image) throws NotFoundException, ChecksumException, FormatException;
 
@@ -51,7 +53,9 @@ public interface Reader {
    * meaning of the data depends upon the hint type. The implementation may or may not do
    * anything with these hints.
    * @return String which the barcode encodes
-   * @throws NotFoundException if the barcode cannot be located or decoded for any reason
+   * @throws NotFoundException if no potential barcode is found
+   * @throws ChecksumException if a potential barcode is found but does not pass its checksum
+   * @throws FormatException if a potential barcode is found but format is invalid
    */
   Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException;

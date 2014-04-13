@@ -65,6 +65,7 @@ public final class Detector {
   /**
    * <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
    *
+   * @param image barcode image to decode
    * @param hints optional hints to detector
    * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
    * be found and returned

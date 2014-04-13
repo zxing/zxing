@@ -24,6 +24,9 @@ public final class MathUtils {
   /**
    * Ends up being a bit faster than {@link Math#round(float)}. This merely rounds its
    * argument to the nearest int, where x.5 rounds up to x+1.
+   *
+   * @param d real value to round
+   * @return nearest {@code int}
    */
   public static int round(float d) {
     return (int) (d + 0.5f);

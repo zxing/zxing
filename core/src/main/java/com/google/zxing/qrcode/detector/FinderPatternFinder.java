@@ -476,6 +476,7 @@ public class FinderPatternFinder {
    * @param stateCount reading state module counts from horizontal scan
    * @param i row where finder pattern may be found
    * @param j end of possible finder pattern in row
+   * @param pureBarcode true if in "pure barcode" mode
    * @return true if a finder pattern candidate was found this time
    */
   protected final boolean handlePossibleCenter(int[] stateCount, int i, int j, boolean pureBarcode) {
