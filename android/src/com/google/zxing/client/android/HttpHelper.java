@@ -60,6 +60,10 @@ public final class HttpHelper {
   /**
    * Downloads the entire resource instead of part.
    *
+   * @param uri URI to retrieve
+   * @param type expected text-like MIME type of that content
+   * @return content as a {@code String}
+   * @throws IOException if the content can't be retrieved because of a bad URI, network problem, etc.
    * @see #downloadViaHttp(String, HttpHelper.ContentType, int)
    */
   public static CharSequence downloadViaHttp(String uri, ContentType type) throws IOException {

@@ -164,6 +164,8 @@ public final class CameraManager {
 
   /**
    * Convenience method for {@link com.google.zxing.client.android.CaptureActivity}
+   *
+   * @param newSetting if {@code true}, light should be turned on if currently off. And vice versa.
    */
   public synchronized void setTorch(boolean newSetting) {
     if (newSetting != configManager.getTorchState(camera)) {
@@ -238,6 +240,8 @@ public final class CameraManager {
   /**
    * Like {@link #getFramingRect} but coordinates are in terms of the preview frame,
    * not UI / screen.
+   *
+   * @return {@link Rect} expressing barcode scan area in terms of the preview size
    */
   public synchronized Rect getFramingRectInPreview() {
     if (framingRectInPreview == null) {

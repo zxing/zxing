@@ -40,7 +40,10 @@ public final class MatrixToImageWriter {
 
   /**
    * Renders a {@link BitMatrix} as an image, where "false" bits are rendered
-   * as white, and "true" bits are rendered as black.
+   * as white, and "true" bits are rendered as black. Uses default configuration.
+   *
+   * @param matrix {@link BitMatrix} to write
+   * @return {@link BufferedImage} representation of the input
    */
   public static BufferedImage toBufferedImage(BitMatrix matrix) {
     return toBufferedImage(matrix, DEFAULT_CONFIG);
@@ -48,6 +51,10 @@ public final class MatrixToImageWriter {
 
   /**
    * As {@link #toBufferedImage(BitMatrix)}, but allows customization of the output.
+   *
+   * @param matrix {@link BitMatrix} to write
+   * @param config output configuration
+   * @return {@link BufferedImage} representation of the input
    */
   public static BufferedImage toBufferedImage(BitMatrix matrix, MatrixToImageConfig config) {
     int width = matrix.getWidth();
@@ -64,6 +71,10 @@ public final class MatrixToImageWriter {
   }
 
   /**
+   * @param matrix {@link BitMatrix} to write
+   * @param format image format
+   * @param file file {@link File} to write image to
+   * @throws IOException if writes to the file fail
    * @deprecated use {@link #writeToPath(BitMatrix, String, Path)}
    */
   @Deprecated
@@ -72,8 +83,12 @@ public final class MatrixToImageWriter {
   }
 
   /**
-   * Writes a {@link BitMatrix} to a file.
+   * Writes a {@link BitMatrix} to a file with default configuration.
    *
+   * @param matrix {@link BitMatrix} to write
+   * @param format image format
+   * @param file file {@link Path} to write image to
+   * @throws IOException if writes to the stream fail
    * @see #toBufferedImage(BitMatrix)
    */
   public static void writeToPath(BitMatrix matrix, String format, Path file) throws IOException {
@@ -81,6 +96,11 @@ public final class MatrixToImageWriter {
   }
 
   /**
+   * @param matrix {@link BitMatrix} to write
+   * @param format image format
+   * @param file file {@link File} to write image to
+   * @param config output configuration
+   * @throws IOException if writes to the file fail
    * @deprecated use {@link #writeToPath(BitMatrix, String, Path, MatrixToImageConfig)}
    */
   @Deprecated
@@ -91,6 +111,12 @@ public final class MatrixToImageWriter {
 
   /**
    * As {@link #writeToFile(BitMatrix, String, File)}, but allows customization of the output.
+   *
+   * @param matrix {@link BitMatrix} to write
+   * @param format image format
+   * @param file file {@link Path} to write image to
+   * @param config output configuration
+   * @throws IOException if writes to the file fail
    */
   public static void writeToPath(BitMatrix matrix, String format, Path file, MatrixToImageConfig config)
       throws IOException {
@@ -101,8 +127,12 @@ public final class MatrixToImageWriter {
   }
 
   /**
-   * Writes a {@link BitMatrix} to a stream.
+   * Writes a {@link BitMatrix} to a stream with default configuration.
    *
+   * @param matrix {@link BitMatrix} to write
+   * @param format image format
+   * @param stream {@link OutputStream} to write image to
+   * @throws IOException if writes to the stream fail
    * @see #toBufferedImage(BitMatrix)
    */
   public static void writeToStream(BitMatrix matrix, String format, OutputStream stream) throws IOException {
@@ -111,6 +141,12 @@ public final class MatrixToImageWriter {
 
   /**
    * As {@link #writeToStream(BitMatrix, String, OutputStream)}, but allows customization of the output.
+   *
+   * @param matrix {@link BitMatrix} to write
+   * @param format image format
+   * @param stream {@link OutputStream} to write image to
+   * @param config output configuration
+   * @throws IOException if writes to the stream fail
    */
   public static void writeToStream(BitMatrix matrix, String format, OutputStream stream, MatrixToImageConfig config) 
       throws IOException {  

@@ -250,6 +250,9 @@ public class IntentIntegrator {
 
   /**
    * Initiates a scan for all known barcode types.
+   *
+   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
+   *   if a prompt was needed, or null otherwiseo
    */
   public final AlertDialog initiateScan() {
     return initiateScan(ALL_CODE_TYPES);
@@ -260,6 +263,7 @@ public class IntentIntegrator {
    * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
    * like {@link #PRODUCT_CODE_TYPES} for example.
    *
+   * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
    *   if a prompt was needed, or null otherwise
    */
@@ -371,6 +375,9 @@ public class IntentIntegrator {
    * <p>Call this from your {@link Activity}'s
    * {@link Activity#onActivityResult(int, int, Intent)} method.</p>
    *
+   * @param requestCode request code from {@code onActivityResult()}
+   * @param resultCode result code from {@code onActivityResult()}
+   * @param intent {@link Intent} from {@code onActivityResult()}
    * @return null if the event handled here was not related to this class, or
    *  else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
    *  the fields will be null.
@@ -398,6 +405,10 @@ public class IntentIntegrator {
 
   /**
    * Defaults to type "TEXT_TYPE".
+   *
+   * @param text the text string to encode as a barcode
+   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
+   *   if a prompt was needed, or null otherwise
    * @see #shareText(CharSequence, CharSequence)
    */
   public final AlertDialog shareText(CharSequence text) {
