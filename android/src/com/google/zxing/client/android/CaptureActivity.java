@@ -95,10 +95,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                  ResultMetadataType.ERROR_CORRECTION_LEVEL,
                  ResultMetadataType.POSSIBLE_COUNTRY);
 
-  private CameraManager cameraManager;
+  //private CameraManager cameraManager;
   private CaptureActivityHandler handler;
   private Result savedResultToShow;
-  private ViewfinderView viewfinderView;
+  //private ViewfinderView viewfinderView;
   private TextView statusView;
   private View resultView;
   private Result lastResult;
@@ -115,16 +115,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private BeepManager beepManager;
   private AmbientLightManager ambientLightManager;
 
-  ViewfinderView getViewfinderView() {
-    return viewfinderView;
-  }
-
-  public Handler getHandler() {
-    return handler;
-  }
-
-  CameraManager getCameraManager() {
-    return cameraManager;
+  Handler getHandler(){
+	  return this.handler;
   }
 
   @Override
@@ -143,6 +135,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ambientLightManager = new AmbientLightManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    
+    //set this instance to mediator also
+    Mediator.getInstance().setCaptureActivity(this);
+    
   }
 
   @Override
@@ -153,10 +149,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // want to open the camera driver and measure the screen size if we're going to show the help on
     // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
     // off screen.
-    cameraManager = new CameraManager(getApplication());
+    //cameraManager = ;
+    // update mediator with this object
+    Mediator.getInstance().setCameraManager(new CameraManager(getApplication()));
 
-    viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
-    viewfinderView.setCameraManager(cameraManager);
+    //viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+    Mediator.getInstance().setViewfinderView((ViewfinderView) findViewById(R.id.viewfinder_view));
+    //viewfinderView.setCameraManager(cameraManager); // this shouldn't be needed anymore now that we have that mediator
 
     resultView = findViewById(R.id.result_view);
     statusView = (TextView) findViewById(R.id.status_view);
@@ -186,7 +185,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     beepManager.updatePrefs();
-    ambientLightManager.start(cameraManager);
+    //ambientLightManager.start(cameraManager);
+    ambientLightManager.start();
 
     inactivityTimer.onResume();
 
@@ -215,7 +215,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
           int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
           if (width > 0 && height > 0) {
-            cameraManager.setManualFramingRect(width, height);
+            Mediator.getInstance().getCameraManager().setManualFramingRect(width, height);
+        	  
           }
         }
         
@@ -283,7 +284,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     inactivityTimer.onPause();
     ambientLightManager.stop();
-    cameraManager.closeDriver();
+    Mediator.getInstance().getCameraManager().closeDriver();
     if (!hasSurface) {
       SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -318,10 +319,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         return true;
       // Use volume up/down to turn on light
       case KeyEvent.KEYCODE_VOLUME_DOWN:
-        cameraManager.setTorch(false);
+        Mediator.getInstance().getCameraManager().setTorch(false);
         return true;
       case KeyEvent.KEYCODE_VOLUME_UP:
-        cameraManager.setTorch(true);
+    	  Mediator.getInstance().getCameraManager().setTorch(true);
         return true;
     }
     return super.onKeyDown(keyCode, event);
@@ -518,7 +519,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     statusView.setVisibility(View.GONE);
-    viewfinderView.setVisibility(View.GONE);
+    Mediator.getInstance().getViewfinderView().setVisibility(View.GONE);
     resultView.setVisibility(View.VISIBLE);
 
     ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
@@ -596,7 +597,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private void handleDecodeExternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
 
     if (barcode != null) {
-      viewfinderView.drawResultBitmap(barcode);
+    	Mediator.getInstance().getViewfinderView().drawResultBitmap(barcode);
     }
 
     long resultDurationMS;
@@ -691,15 +692,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if (surfaceHolder == null) {
       throw new IllegalStateException("No SurfaceHolder provided");
     }
-    if (cameraManager.isOpen()) {
+    if (Mediator.getInstance().getCameraManager().isOpen()) {
       Log.w(TAG, "initCamera() while already open -- late SurfaceView callback?");
       return;
     }
     try {
-      cameraManager.openDriver(surfaceHolder);
+    	Mediator.getInstance().getCameraManager().openDriver(surfaceHolder);
       // Creating the handler starts the preview, which can also throw a RuntimeException.
       if (handler == null) {
-        handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
+        handler = new CaptureActivityHandler(decodeFormats, decodeHints, characterSet);// no longer needed, cameraManager);
       }
       decodeOrStoreSavedBitmap(null, null);
     } catch (IOException ioe) {
@@ -733,11 +734,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     resultView.setVisibility(View.GONE);
     statusView.setText(R.string.msg_default_status);
     statusView.setVisibility(View.VISIBLE);
-    viewfinderView.setVisibility(View.VISIBLE);
+    Mediator.getInstance().getViewfinderView().setVisibility(View.VISIBLE);
     lastResult = null;
   }
 
   public void drawViewfinder() {
-    viewfinderView.drawViewfinder();
+	  Mediator.getInstance().getViewfinderView().drawViewfinder();
   }
 }

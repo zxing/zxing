@@ -24,7 +24,6 @@ import android.provider.Browser;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
-import com.google.zxing.client.android.camera.CameraManager;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,10 +46,12 @@ public final class CaptureActivityHandler extends Handler {
 
   private static final String TAG = CaptureActivityHandler.class.getSimpleName();
 
-  private final CaptureActivity activity;
+  // moved to mediator 
+  //private final CaptureActivity activity;
+  //private final CameraManager cameraManager;
+  
   private final DecodeThread decodeThread;
   private State state;
-  private final CameraManager cameraManager;
 
   private enum State {
     PREVIEW,
@@ -58,20 +59,16 @@ public final class CaptureActivityHandler extends Handler {
     DONE
   }
 
-  CaptureActivityHandler(CaptureActivity activity,
-                         Collection<BarcodeFormat> decodeFormats,
+  CaptureActivityHandler(Collection<BarcodeFormat> decodeFormats,
                          Map<DecodeHintType,?> baseHints,
-                         String characterSet,
-                         CameraManager cameraManager) {
-    this.activity = activity;
-    decodeThread = new DecodeThread(activity, decodeFormats, baseHints, characterSet,
-        new ViewfinderResultPointCallback(activity.getViewfinderView()));
+                         String characterSet){
+    decodeThread = new DecodeThread(decodeFormats, baseHints, characterSet,
+        new ViewfinderResultPointCallback(Mediator.getInstance().getViewfinderView()));
     decodeThread.start();
     state = State.SUCCESS;
 
     // Start ourselves capturing previews and decoding.
-    this.cameraManager = cameraManager;
-    cameraManager.startPreview();
+    Mediator.getInstance().getCameraManager().startPreview();
     restartPreviewAndDecode();
   }
 
@@ -95,16 +92,16 @@ public final class CaptureActivityHandler extends Handler {
           }
           scaleFactor = bundle.getFloat(DecodeThread.BARCODE_SCALED_FACTOR);          
         }
-        activity.handleDecode((Result) message.obj, barcode, scaleFactor);
+        Mediator.getInstance().getCaptureActivity().handleDecode((Result) message.obj, barcode, scaleFactor);
         break;
       case R.id.decode_failed:
         // We're decoding as fast as possible, so when one decode fails, start another.
         state = State.PREVIEW;
-        cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+        Mediator.getInstance().getCameraManager().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
         break;
       case R.id.return_scan_result:
-        activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-        activity.finish();
+    	Mediator.getInstance().getCaptureActivity().setResult(Activity.RESULT_OK, (Intent) message.obj);
+    	Mediator.getInstance().getCaptureActivity().finish();
         break;
       case R.id.launch_product_query:
         String url = (String) message.obj;
@@ -114,7 +111,7 @@ public final class CaptureActivityHandler extends Handler {
         intent.setData(Uri.parse(url));
 
         ResolveInfo resolveInfo =
-            activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        		Mediator.getInstance().getCaptureActivity().getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
         String browserPackageName = null;
         if (resolveInfo != null && resolveInfo.activityInfo != null) {
           browserPackageName = resolveInfo.activityInfo.packageName;
@@ -129,7 +126,7 @@ public final class CaptureActivityHandler extends Handler {
         }
 
         try {
-          activity.startActivity(intent);
+        	Mediator.getInstance().getCaptureActivity().startActivity(intent);
         } catch (ActivityNotFoundException ignored) {
           Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
         }
@@ -139,7 +136,7 @@ public final class CaptureActivityHandler extends Handler {
 
   public void quitSynchronously() {
     state = State.DONE;
-    cameraManager.stopPreview();
+    Mediator.getInstance().getCameraManager().stopPreview();
     Message quit = Message.obtain(decodeThread.getHandler(), R.id.quit);
     quit.sendToTarget();
     try {
@@ -157,8 +154,8 @@ public final class CaptureActivityHandler extends Handler {
   private void restartPreviewAndDecode() {
     if (state == State.SUCCESS) {
       state = State.PREVIEW;
-      cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-      activity.drawViewfinder();
+      Mediator.getInstance().getCameraManager().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+      Mediator.getInstance().getCaptureActivity().drawViewfinder();
     }
   }
 
