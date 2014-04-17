@@ -118,6 +118,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   Handler getHandler(){
 	  return this.handler;
   }
+  
+  public CaptureActivity(){
+	    //set this instance to mediator also
+	    Mediator.getInstance().setCaptureActivity(this);
+  }
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -135,10 +140,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ambientLightManager = new AmbientLightManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    
-    //set this instance to mediator also
-    Mediator.getInstance().setCaptureActivity(this);
-    
   }
 
   @Override

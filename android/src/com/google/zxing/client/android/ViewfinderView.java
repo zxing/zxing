@@ -17,7 +17,6 @@
 package com.google.zxing.client.android;
 
 import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -46,7 +45,7 @@ public final class ViewfinderView extends View {
   private static final int MAX_RESULT_POINTS = 20;
   private static final int POINT_SIZE = 6;
 
-  private CameraManager cameraManager;
+  //private CameraManager cameraManager;
   private final Paint paint;
   private Bitmap resultBitmap;
   private final int maskColor;
@@ -73,18 +72,14 @@ public final class ViewfinderView extends View {
     lastPossibleResultPoints = null;
   }
 
-  public void setCameraManager(CameraManager cameraManager) {
-    this.cameraManager = cameraManager;
-  }
-
   @SuppressLint("DrawAllocation")
   @Override
   public void onDraw(Canvas canvas) {
-    if (cameraManager == null) {
+    if (Mediator.getInstance().getCameraManager() == null) {
       return; // not ready yet, early draw before done configuring
     }
-    Rect frame = cameraManager.getFramingRect();
-    Rect previewFrame = cameraManager.getFramingRectInPreview();    
+    Rect frame = Mediator.getInstance().getCameraManager().getFramingRect();
+    Rect previewFrame = Mediator.getInstance().getCameraManager().getFramingRectInPreview();    
     if (frame == null || previewFrame == null) {
       return;
     }
