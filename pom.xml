@@ -19,7 +19,7 @@
 
   <groupId>com.google.zxing</groupId>
   <artifactId>zxing-parent</artifactId>
-  <version>3.0.1</version>
+  <version>3.0.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <dependencyManagement>
@@ -473,7 +473,7 @@
     <connection>scm:git:https://github.com/zxing/zxing.git</connection>
     <developerConnection>scm:git:https://github.com/zxing/zxing.git</developerConnection>
     <url>scm:git:https://github.com/zxing/zxing.git</url>
-    <tag>zxing-3.0.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <prerequisites>
