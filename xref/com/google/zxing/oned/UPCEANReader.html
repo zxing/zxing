@@ -140,256 +140,267 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Like {@link #decodeRow(int, BitArray, java.util.Map)}, but</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">   * allows caller to inform method about where the UPC/EAN start pattern is</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">   * found. This allows this to be computed once and reused across many implementations.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>   <strong class="jxr_keyword">public</strong> <a href="../../../../com/google/zxing/Result.html">Result</a> decodeRow(<strong class="jxr_keyword">int</strong> rowNumber,
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>                           <a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>                           <strong class="jxr_keyword">int</strong>[] startGuardRange,
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>                           Map&lt;DecodeHintType,?&gt; hints)
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>       <strong class="jxr_keyword">throws</strong> NotFoundException, ChecksumException, <a href="../../../../com/google/zxing/FormatException.html">FormatException</a> {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     <a href="../../../../com/google/zxing/ResultPointCallback.html">ResultPointCallback</a> resultPointCallback = hints == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> :
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>         (<a href="../../../../com/google/zxing/ResultPointCallback.html">ResultPointCallback</a>) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>     <strong class="jxr_keyword">if</strong> (resultPointCallback != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>       resultPointCallback.foundPossibleResultPoint(<strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>           (startGuardRange[0] + startGuardRange[1]) / 2.0f, rowNumber
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>       ));
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>     }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">   * @param rowNumber row index into the image</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">   * @param row encoding of the row of the barcode image</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">   * @param startGuardRange start/end column where the opening start pattern was found</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">   * @param hints optional hints that influence decoding</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">   * @return {@link Result} encapsulating the result of decoding a barcode in the row</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if no potential barcode is found</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">   * @throws ChecksumException if a potential barcode is found but does not pass its checksum</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">   * @throws FormatException if a potential barcode is found but format is invalid</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>   <strong class="jxr_keyword">public</strong> <a href="../../../../com/google/zxing/Result.html">Result</a> decodeRow(<strong class="jxr_keyword">int</strong> rowNumber,
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>                           <a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>                           <strong class="jxr_keyword">int</strong>[] startGuardRange,
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>                           Map&lt;DecodeHintType,?&gt; hints)
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>       <strong class="jxr_keyword">throws</strong> NotFoundException, ChecksumException, <a href="../../../../com/google/zxing/FormatException.html">FormatException</a> {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>     StringBuilder result = decodeRowStringBuffer;
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>     result.setLength(0);
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">int</strong> endStart = decodeMiddle(row, startGuardRange, result);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>     <strong class="jxr_keyword">if</strong> (resultPointCallback != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>       resultPointCallback.foundPossibleResultPoint(<strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>           endStart, rowNumber
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>       ));
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>     }
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">int</strong>[] endRange = decodeEnd(row, endStart);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     <strong class="jxr_keyword">if</strong> (resultPointCallback != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>       resultPointCallback.foundPossibleResultPoint(<strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>           (endRange[0] + endRange[1]) / 2.0f, rowNumber
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>       ));
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>     }
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>     <a href="../../../../com/google/zxing/ResultPointCallback.html">ResultPointCallback</a> resultPointCallback = hints == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> :
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         (<a href="../../../../com/google/zxing/ResultPointCallback.html">ResultPointCallback</a>) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     <strong class="jxr_keyword">if</strong> (resultPointCallback != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>       resultPointCallback.foundPossibleResultPoint(<strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>           (startGuardRange[0] + startGuardRange[1]) / 2.0f, rowNumber
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>       ));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>     }
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>     StringBuilder result = decodeRowStringBuffer;
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>     result.setLength(0);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     <strong class="jxr_keyword">int</strong> endStart = decodeMiddle(row, startGuardRange, result);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     <strong class="jxr_keyword">if</strong> (resultPointCallback != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>       resultPointCallback.foundPossibleResultPoint(<strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>           endStart, rowNumber
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>       ));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     }
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <em class="jxr_comment">// Make sure there is a quiet zone at least as big as the end pattern after the barcode. The</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>     <em class="jxr_comment">// spec might want more whitespace, but in practice this is the maximum we can count on.</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">int</strong> end = endRange[1];
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>     <strong class="jxr_keyword">int</strong> quietEnd = end + (end - endRange[0]);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>     <strong class="jxr_keyword">if</strong> (quietEnd &gt;= row.getSize() || !row.isRange(end, quietEnd, false)) {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">int</strong>[] endRange = decodeEnd(row, endStart);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">if</strong> (resultPointCallback != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>       resultPointCallback.foundPossibleResultPoint(<strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>           (endRange[0] + endRange[1]) / 2.0f, rowNumber
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>       ));
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>     }
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>     String resultString = result.toString();
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>     <em class="jxr_comment">// UPC/EAN should never be less than 8 chars anyway</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>     <strong class="jxr_keyword">if</strong> (resultString.length() &lt; 8) {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>     }
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>     <strong class="jxr_keyword">if</strong> (!checkChecksum(resultString)) {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>       <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>     <em class="jxr_comment">// Make sure there is a quiet zone at least as big as the end pattern after the barcode. The</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     <em class="jxr_comment">// spec might want more whitespace, but in practice this is the maximum we can count on.</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     <strong class="jxr_keyword">int</strong> end = endRange[1];
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>     <strong class="jxr_keyword">int</strong> quietEnd = end + (end - endRange[0]);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>     <strong class="jxr_keyword">if</strong> (quietEnd &gt;= row.getSize() || !row.isRange(end, quietEnd, false)) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>     }
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <strong class="jxr_keyword">float</strong> left = (<strong class="jxr_keyword">float</strong>) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">float</strong> right = (<strong class="jxr_keyword">float</strong>) (endRange[1] + endRange[0]) / 2.0f;
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>     <a href="../../../../com/google/zxing/BarcodeFormat.html">BarcodeFormat</a> format = getBarcodeFormat();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <a href="../../../../com/google/zxing/Result.html">Result</a> decodeResult = <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/Result.html">Result</a>(resultString,
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">null</strong>, <em class="jxr_comment">// no natural byte representation for these barcodes</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[]{
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(left, (<strong class="jxr_keyword">float</strong>) rowNumber),
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(right, (<strong class="jxr_keyword">float</strong>) rowNumber)},
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>         format);
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">int</strong> extensionLength = 0;
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>       <a href="../../../../com/google/zxing/Result.html">Result</a> extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>       decodeResult.putMetadata(ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.getText());
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>       decodeResult.putAllMetadata(extensionResult.getResultMetadata());
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>       decodeResult.addResultPoints(extensionResult.getResultPoints());
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>       extensionLength = extensionResult.getText().length();
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>     } <strong class="jxr_keyword">catch</strong> (ReaderException re) {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>       <em class="jxr_comment">// continue</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>     }
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>     <strong class="jxr_keyword">int</strong>[] allowedExtensions =
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>         hints == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : (<strong class="jxr_keyword">int</strong>[]) hints.get(DecodeHintType.ALLOWED_EAN_EXTENSIONS);
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">if</strong> (allowedExtensions != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">boolean</strong> valid = false;
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> length : allowedExtensions) {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>         <strong class="jxr_keyword">if</strong> (extensionLength == length) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>           valid = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>         }
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>       }
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>       <strong class="jxr_keyword">if</strong> (!valid) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>         <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>       }
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>     }
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <strong class="jxr_keyword">if</strong> (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>       String countryID = eanManSupport.lookupCountryIdentifier(resultString);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>       <strong class="jxr_keyword">if</strong> (countryID != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>         decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>       }
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>     }
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>     <strong class="jxr_keyword">return</strong> decodeResult;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>   }
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">   * @return {@link #checkStandardUPCEANChecksum(CharSequence)}</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>   <strong class="jxr_keyword">boolean</strong> checkChecksum(String s) <strong class="jxr_keyword">throws</strong> ChecksumException, FormatException {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>     <strong class="jxr_keyword">return</strong> checkStandardUPCEANChecksum(s);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>   }
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">   * Computes the UPC/EAN checksum on a string of digits, and reports</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">   * whether the checksum is correct or not.</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">   * @param s string of digits to check</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">   * @return true iff string of digits passes the UPC/EAN checksum algorithm</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">   * @throws FormatException if the string does not contain only digits</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> checkStandardUPCEANChecksum(CharSequence s) <strong class="jxr_keyword">throws</strong> FormatException {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">int</strong> length = s.length();
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>     <strong class="jxr_keyword">if</strong> (length == 0) {
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>       <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>     }
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>     <strong class="jxr_keyword">int</strong> sum = 0;
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = length - 2; i &gt;= 0; i -= 2) {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>       <strong class="jxr_keyword">int</strong> digit = (<strong class="jxr_keyword">int</strong>) s.charAt(i) - (<strong class="jxr_keyword">int</strong>) '0';
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>       <strong class="jxr_keyword">if</strong> (digit &lt; 0 || digit &gt; 9) {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>       }
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>       sum += digit;
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>     }
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>     sum *= 3;
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = length - 1; i &gt;= 0; i -= 2) {
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>       <strong class="jxr_keyword">int</strong> digit = (<strong class="jxr_keyword">int</strong>) s.charAt(i) - (<strong class="jxr_keyword">int</strong>) '0';
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>       <strong class="jxr_keyword">if</strong> (digit &lt; 0 || digit &gt; 9) {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>         <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>       }
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>       sum += digit;
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     }
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">return</strong> sum % 10 == 0;
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>   }
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>   <strong class="jxr_keyword">int</strong>[] decodeEnd(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, <strong class="jxr_keyword">int</strong> endStart) <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>     <strong class="jxr_keyword">return</strong> findGuardPattern(row, endStart, false, START_END_PATTERN);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>   }
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] findGuardPattern(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>                                 <strong class="jxr_keyword">int</strong> rowOffset,
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>                                 <strong class="jxr_keyword">boolean</strong> whiteFirst,
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>                                 <strong class="jxr_keyword">int</strong>[] pattern) <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>     <strong class="jxr_keyword">return</strong> findGuardPattern(row, rowOffset, whiteFirst, pattern, <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[pattern.length]);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     String resultString = result.toString();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <em class="jxr_comment">// UPC/EAN should never be less than 8 chars anyway</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>     <strong class="jxr_keyword">if</strong> (resultString.length() &lt; 8) {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     }
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">if</strong> (!checkChecksum(resultString)) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>       <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>     }
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     <strong class="jxr_keyword">float</strong> left = (<strong class="jxr_keyword">float</strong>) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">float</strong> right = (<strong class="jxr_keyword">float</strong>) (endRange[1] + endRange[0]) / 2.0f;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>     <a href="../../../../com/google/zxing/BarcodeFormat.html">BarcodeFormat</a> format = getBarcodeFormat();
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     <a href="../../../../com/google/zxing/Result.html">Result</a> decodeResult = <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/Result.html">Result</a>(resultString,
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>         <strong class="jxr_keyword">null</strong>, <em class="jxr_comment">// no natural byte representation for these barcodes</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[]{
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(left, (<strong class="jxr_keyword">float</strong>) rowNumber),
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(right, (<strong class="jxr_keyword">float</strong>) rowNumber)},
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>         format);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>     <strong class="jxr_keyword">int</strong> extensionLength = 0;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>       <a href="../../../../com/google/zxing/Result.html">Result</a> extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>       decodeResult.putMetadata(ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.getText());
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>       decodeResult.putAllMetadata(extensionResult.getResultMetadata());
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>       decodeResult.addResultPoints(extensionResult.getResultPoints());
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>       extensionLength = extensionResult.getText().length();
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>     } <strong class="jxr_keyword">catch</strong> (ReaderException re) {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>       <em class="jxr_comment">// continue</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>     }
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>     <strong class="jxr_keyword">int</strong>[] allowedExtensions =
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>         hints == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : (<strong class="jxr_keyword">int</strong>[]) hints.get(DecodeHintType.ALLOWED_EAN_EXTENSIONS);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <strong class="jxr_keyword">if</strong> (allowedExtensions != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>       <strong class="jxr_keyword">boolean</strong> valid = false;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> length : allowedExtensions) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>         <strong class="jxr_keyword">if</strong> (extensionLength == length) {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>           valid = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>         }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>       }
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>       <strong class="jxr_keyword">if</strong> (!valid) {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>         <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>       }
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>     }
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <strong class="jxr_keyword">if</strong> (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>       String countryID = eanManSupport.lookupCountryIdentifier(resultString);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>       <strong class="jxr_keyword">if</strong> (countryID != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>         decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>       }
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>     }
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     <strong class="jxr_keyword">return</strong> decodeResult;
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>   }
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">   * @param s string of digits to check</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">   * @return {@link #checkStandardUPCEANChecksum(CharSequence)}</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">   * @throws FormatException if the string does not contain only digits</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>   <strong class="jxr_keyword">boolean</strong> checkChecksum(String s) <strong class="jxr_keyword">throws</strong> FormatException {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <strong class="jxr_keyword">return</strong> checkStandardUPCEANChecksum(s);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>   }
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">   * Computes the UPC/EAN checksum on a string of digits, and reports</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">   * whether the checksum is correct or not.</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">   * @param s string of digits to check</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">   * @return true iff string of digits passes the UPC/EAN checksum algorithm</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">   * @throws FormatException if the string does not contain only digits</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> checkStandardUPCEANChecksum(CharSequence s) <strong class="jxr_keyword">throws</strong> FormatException {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>     <strong class="jxr_keyword">int</strong> length = s.length();
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>     <strong class="jxr_keyword">if</strong> (length == 0) {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>       <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>     }
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>     <strong class="jxr_keyword">int</strong> sum = 0;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = length - 2; i &gt;= 0; i -= 2) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>       <strong class="jxr_keyword">int</strong> digit = (<strong class="jxr_keyword">int</strong>) s.charAt(i) - (<strong class="jxr_keyword">int</strong>) '0';
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>       <strong class="jxr_keyword">if</strong> (digit &lt; 0 || digit &gt; 9) {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>         <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>       }
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>       sum += digit;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     }
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     sum *= 3;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = length - 1; i &gt;= 0; i -= 2) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>       <strong class="jxr_keyword">int</strong> digit = (<strong class="jxr_keyword">int</strong>) s.charAt(i) - (<strong class="jxr_keyword">int</strong>) '0';
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>       <strong class="jxr_keyword">if</strong> (digit &lt; 0 || digit &gt; 9) {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>         <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>       }
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>       sum += digit;
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>     }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     <strong class="jxr_keyword">return</strong> sum % 10 == 0;
 <a class="jxr_linenumber" name="L283" href="#L283">283</a>   }
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">   * @param row row of black/white values to search</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">   * @param rowOffset position to start search</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">   * @param whiteFirst if true, indicates that the pattern specifies white/black/white/...</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">   * pixel counts, otherwise, it is interpreted as black/white/black/...</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">   * @param pattern pattern of counts of number of black and white pixels that are being</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">   * searched for as a pattern</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">   * @param counters array of counters, as long as pattern, to re-use</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">   * @return start/end horizontal offset of guard pattern, as an array of two ints</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if pattern is not found</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] findGuardPattern(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>                                         <strong class="jxr_keyword">int</strong> rowOffset,
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>                                         <strong class="jxr_keyword">boolean</strong> whiteFirst,
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>                                         <strong class="jxr_keyword">int</strong>[] pattern,
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>                                         <strong class="jxr_keyword">int</strong>[] counters) <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>     <strong class="jxr_keyword">int</strong> patternLength = pattern.length;
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>     <strong class="jxr_keyword">int</strong> width = row.getSize();
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>     <strong class="jxr_keyword">boolean</strong> isWhite = whiteFirst;
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>     rowOffset = whiteFirst ? row.getNextUnset(rowOffset) : row.getNextSet(rowOffset);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <strong class="jxr_keyword">int</strong> counterPosition = 0;
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>     <strong class="jxr_keyword">int</strong> patternStart = rowOffset;
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = rowOffset; x &lt; width; x++) {
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>       <strong class="jxr_keyword">if</strong> (row.get(x) ^ isWhite) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>         counters[counterPosition]++;
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>         <strong class="jxr_keyword">if</strong> (counterPosition == patternLength - 1) {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>           <strong class="jxr_keyword">if</strong> (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) &lt; MAX_AVG_VARIANCE) {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{patternStart, x};
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>           }
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>           patternStart += counters[0] + counters[1];
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>           System.arraycopy(counters, 2, counters, 0, patternLength - 2);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>           counters[patternLength - 2] = 0;
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>           counters[patternLength - 1] = 0;
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>           counterPosition--;
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>           counterPosition++;
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>         }
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>         counters[counterPosition] = 1;
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>         isWhite = !isWhite;
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>       }
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>     }
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>     <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>   }
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">   * Attempts to decode a single UPC/EAN-encoded digit.</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">   * @param row row of black/white values to decode</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">   * @param counters the counts of runs of observed black/white/black/... values</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">   * @param rowOffset horizontal offset to start decoding from</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">   * @param patterns the set of patterns to use to decode -- sometimes different encodings</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">   * for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">   * be used</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">   * @return horizontal offset of first pixel beyond the decoded digit</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if digit cannot be decoded</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> decodeDigit(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, <strong class="jxr_keyword">int</strong>[] counters, <strong class="jxr_keyword">int</strong> rowOffset, <strong class="jxr_keyword">int</strong>[][] patterns)
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>     recordPattern(row, rowOffset, counters);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>     <strong class="jxr_keyword">int</strong> bestVariance = MAX_AVG_VARIANCE; <em class="jxr_comment">// worst variance we'll accept</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>     <strong class="jxr_keyword">int</strong> bestMatch = -1;
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     <strong class="jxr_keyword">int</strong> max = patterns.length;
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; max; i++) {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>       <strong class="jxr_keyword">int</strong>[] pattern = patterns[i];
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>       <strong class="jxr_keyword">int</strong> variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>       <strong class="jxr_keyword">if</strong> (variance &lt; bestVariance) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>         bestVariance = variance;
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>         bestMatch = i;
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>       }
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>     }
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>     <strong class="jxr_keyword">if</strong> (bestMatch &gt;= 0) {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>       <strong class="jxr_keyword">return</strong> bestMatch;
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>     }
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>   }
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">   * Get the format of this decoder.</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">   * @return The 1D format.</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>   <strong class="jxr_keyword">abstract</strong> <a href="../../../../com/google/zxing/BarcodeFormat.html">BarcodeFormat</a> getBarcodeFormat();
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">   * Subclasses override this to decode the portion of a barcode between the start</em>
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">   * and end guard patterns.</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">   * @param row row of black/white values to search</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">   * @param startRange start/end offset of start guard pattern</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">   * @param resultString {@link StringBuilder} to append decoded chars to</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">   * @return horizontal offset of first pixel after the "middle" that was decoded</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if decoding could not complete successfully</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">int</strong> decodeMiddle(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>                                       <strong class="jxr_keyword">int</strong>[] startRange,
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>                                       StringBuilder resultString) <strong class="jxr_keyword">throws</strong> NotFoundException;
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> }
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>   <strong class="jxr_keyword">int</strong>[] decodeEnd(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, <strong class="jxr_keyword">int</strong> endStart) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>     <strong class="jxr_keyword">return</strong> findGuardPattern(row, endStart, false, START_END_PATTERN);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>   }
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] findGuardPattern(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>                                 <strong class="jxr_keyword">int</strong> rowOffset,
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>                                 <strong class="jxr_keyword">boolean</strong> whiteFirst,
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>                                 <strong class="jxr_keyword">int</strong>[] pattern) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     <strong class="jxr_keyword">return</strong> findGuardPattern(row, rowOffset, whiteFirst, pattern, <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[pattern.length]);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>   }
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">   * @param row row of black/white values to search</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">   * @param rowOffset position to start search</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">   * @param whiteFirst if true, indicates that the pattern specifies white/black/white/...</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">   * pixel counts, otherwise, it is interpreted as black/white/black/...</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">   * @param pattern pattern of counts of number of black and white pixels that are being</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">   * searched for as a pattern</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">   * @param counters array of counters, as long as pattern, to re-use</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">   * @return start/end horizontal offset of guard pattern, as an array of two ints</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if pattern is not found</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] findGuardPattern(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>                                         <strong class="jxr_keyword">int</strong> rowOffset,
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>                                         <strong class="jxr_keyword">boolean</strong> whiteFirst,
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>                                         <strong class="jxr_keyword">int</strong>[] pattern,
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>                                         <strong class="jxr_keyword">int</strong>[] counters) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>     <strong class="jxr_keyword">int</strong> patternLength = pattern.length;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <strong class="jxr_keyword">int</strong> width = row.getSize();
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>     <strong class="jxr_keyword">boolean</strong> isWhite = whiteFirst;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     rowOffset = whiteFirst ? row.getNextUnset(rowOffset) : row.getNextSet(rowOffset);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <strong class="jxr_keyword">int</strong> counterPosition = 0;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>     <strong class="jxr_keyword">int</strong> patternStart = rowOffset;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = rowOffset; x &lt; width; x++) {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>       <strong class="jxr_keyword">if</strong> (row.get(x) ^ isWhite) {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>         counters[counterPosition]++;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>         <strong class="jxr_keyword">if</strong> (counterPosition == patternLength - 1) {
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>           <strong class="jxr_keyword">if</strong> (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) &lt; MAX_AVG_VARIANCE) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{patternStart, x};
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>           }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>           patternStart += counters[0] + counters[1];
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>           System.arraycopy(counters, 2, counters, 0, patternLength - 2);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>           counters[patternLength - 2] = 0;
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>           counters[patternLength - 1] = 0;
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>           counterPosition--;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>           counterPosition++;
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>         }
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>         counters[counterPosition] = 1;
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>         isWhite = !isWhite;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>       }
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>     }
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>     <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>   }
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">   * Attempts to decode a single UPC/EAN-encoded digit.</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">   * @param row row of black/white values to decode</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">   * @param counters the counts of runs of observed black/white/black/... values</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">   * @param rowOffset horizontal offset to start decoding from</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">   * @param patterns the set of patterns to use to decode -- sometimes different encodings</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">   * for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">   * be used</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">   * @return horizontal offset of first pixel beyond the decoded digit</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if digit cannot be decoded</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> decodeDigit(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, <strong class="jxr_keyword">int</strong>[] counters, <strong class="jxr_keyword">int</strong> rowOffset, <strong class="jxr_keyword">int</strong>[][] patterns)
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>     recordPattern(row, rowOffset, counters);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>     <strong class="jxr_keyword">int</strong> bestVariance = MAX_AVG_VARIANCE; <em class="jxr_comment">// worst variance we'll accept</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>     <strong class="jxr_keyword">int</strong> bestMatch = -1;
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>     <strong class="jxr_keyword">int</strong> max = patterns.length;
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; max; i++) {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>       <strong class="jxr_keyword">int</strong>[] pattern = patterns[i];
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>       <strong class="jxr_keyword">int</strong> variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>       <strong class="jxr_keyword">if</strong> (variance &lt; bestVariance) {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>         bestVariance = variance;
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>         bestMatch = i;
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>       }
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>     }
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>     <strong class="jxr_keyword">if</strong> (bestMatch &gt;= 0) {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>       <strong class="jxr_keyword">return</strong> bestMatch;
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>     }
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>   }
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">   * Get the format of this decoder.</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">   * @return The 1D format.</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>   <strong class="jxr_keyword">abstract</strong> <a href="../../../../com/google/zxing/BarcodeFormat.html">BarcodeFormat</a> getBarcodeFormat();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">   * Subclasses override this to decode the portion of a barcode between the start</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">   * and end guard patterns.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">   * @param row row of black/white values to search</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">   * @param startRange start/end offset of start guard pattern</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">   * @param resultString {@link StringBuilder} to append decoded chars to</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">   * @return horizontal offset of first pixel after the "middle" that was decoded</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if decoding could not complete successfully</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">int</strong> decodeMiddle(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row,
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>                                       <strong class="jxr_keyword">int</strong>[] startRange,
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>                                       StringBuilder resultString) <strong class="jxr_keyword">throws</strong> NotFoundException;
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

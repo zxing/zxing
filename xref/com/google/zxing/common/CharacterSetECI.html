@@ -103,9 +103,9 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">   * @param value character set ECI value</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">   * @return CharacterSetECI representing ECI of given value, or null if it is legal but</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">   * @return {@link CharacterSetECI} representing ECI of given value, or null if it is legal but</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">   *   unsupported</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">   * @throws IllegalArgumentException if ECI value is invalid</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">   * @throws FormatException if ECI value is invalid</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/google/zxing/common/CharacterSetECI.html">CharacterSetECI</a> getCharacterSetECIByValue(<strong class="jxr_keyword">int</strong> value) <strong class="jxr_keyword">throws</strong> FormatException {
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">if</strong> (value &lt; 0 || value &gt;= 900) {

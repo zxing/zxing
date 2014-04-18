@@ -536,7 +536,7 @@
 <a class="jxr_linenumber" name="L528" href="#L528">528</a>   <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/pdf417/encoder/PDF417.html">PDF417</a>(<strong class="jxr_keyword">boolean</strong> compact) {
 <a class="jxr_linenumber" name="L529" href="#L529">529</a>     <strong class="jxr_keyword">this</strong>.compact = compact;
 <a class="jxr_linenumber" name="L530" href="#L530">530</a>     compaction = Compaction.AUTO;
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>     encoding = PDF417HighLevelEncoder.DEFAULT_ENCODING;
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>     encoding = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// Use default</em>
 <a class="jxr_linenumber" name="L532" href="#L532">532</a>     minCols = 2;
 <a class="jxr_linenumber" name="L533" href="#L533">533</a>     maxCols = 30;
 <a class="jxr_linenumber" name="L534" href="#L534">534</a>     maxRows = 30;
@@ -646,9 +646,9 @@
 <a class="jxr_linenumber" name="L638" href="#L638">638</a>   }
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 
 <a class="jxr_linenumber" name="L640" href="#L640">640</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">   * Generates the barcode logic.</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">   * @param msg        the message to encode</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">   * @param msg message to encode</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">   * @param errorCorrectionLevel PDF417 error correction level to use</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">   * @throws WriterException if the contents cannot be encoded in this format</em>
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L645" href="#L645">645</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generateBarcodeLogic(String msg, <strong class="jxr_keyword">int</strong> errorCorrectionLevel) <strong class="jxr_keyword">throws</strong> WriterException {
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 
@@ -739,37 +739,42 @@
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 
 <a class="jxr_linenumber" name="L732" href="#L732">732</a>   <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">   * Sets max/min row/col values</em>
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L735" href="#L735">735</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDimensions(<strong class="jxr_keyword">int</strong> maxCols, <strong class="jxr_keyword">int</strong> minCols, <strong class="jxr_keyword">int</strong> maxRows, <strong class="jxr_keyword">int</strong> minRows) {
-<a class="jxr_linenumber" name="L736" href="#L736">736</a>     <strong class="jxr_keyword">this</strong>.maxCols = maxCols;
-<a class="jxr_linenumber" name="L737" href="#L737">737</a>     <strong class="jxr_keyword">this</strong>.minCols = minCols;
-<a class="jxr_linenumber" name="L738" href="#L738">738</a>     <strong class="jxr_keyword">this</strong>.maxRows = maxRows;
-<a class="jxr_linenumber" name="L739" href="#L739">739</a>     <strong class="jxr_keyword">this</strong>.minRows = minRows;
-<a class="jxr_linenumber" name="L740" href="#L740">740</a>   }
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 
-<a class="jxr_linenumber" name="L742" href="#L742">742</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">   * Sets compaction to values stored in {@link Compaction} enum</em>
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L745" href="#L745">745</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCompaction(<a href="../../../../../com/google/zxing/pdf417/encoder/Compaction.html">Compaction</a> compaction) {
-<a class="jxr_linenumber" name="L746" href="#L746">746</a>     <strong class="jxr_keyword">this</strong>.compaction = compaction;
-<a class="jxr_linenumber" name="L747" href="#L747">747</a>   }
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 
-<a class="jxr_linenumber" name="L749" href="#L749">749</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">   * Sets compact to be true or false</em>
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L752" href="#L752">752</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCompact(<strong class="jxr_keyword">boolean</strong> compact) {
-<a class="jxr_linenumber" name="L753" href="#L753">753</a>     <strong class="jxr_keyword">this</strong>.compact = compact;
-<a class="jxr_linenumber" name="L754" href="#L754">754</a>   }
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 
-<a class="jxr_linenumber" name="L756" href="#L756">756</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">   * Sets output encoding.</em>
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L759" href="#L759">759</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEncoding(Charset encoding) {
-<a class="jxr_linenumber" name="L760" href="#L760">760</a>     <strong class="jxr_keyword">this</strong>.encoding = encoding;
-<a class="jxr_linenumber" name="L761" href="#L761">761</a>   }
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> }
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">   * @param maxCols maximum allowed columns</em>
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">   * @param minCols minimum allowed columns</em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">   * @param maxRows maximum allowed rows</em>
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">   * @param minRows minimum allowed rows</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L740" href="#L740">740</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDimensions(<strong class="jxr_keyword">int</strong> maxCols, <strong class="jxr_keyword">int</strong> minCols, <strong class="jxr_keyword">int</strong> maxRows, <strong class="jxr_keyword">int</strong> minRows) {
+<a class="jxr_linenumber" name="L741" href="#L741">741</a>     <strong class="jxr_keyword">this</strong>.maxCols = maxCols;
+<a class="jxr_linenumber" name="L742" href="#L742">742</a>     <strong class="jxr_keyword">this</strong>.minCols = minCols;
+<a class="jxr_linenumber" name="L743" href="#L743">743</a>     <strong class="jxr_keyword">this</strong>.maxRows = maxRows;
+<a class="jxr_linenumber" name="L744" href="#L744">744</a>     <strong class="jxr_keyword">this</strong>.minRows = minRows;
+<a class="jxr_linenumber" name="L745" href="#L745">745</a>   }
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 
+<a class="jxr_linenumber" name="L747" href="#L747">747</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> <em class="jxr_javadoccomment">   * @param compaction compaction mode to use</em>
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L750" href="#L750">750</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCompaction(<a href="../../../../../com/google/zxing/pdf417/encoder/Compaction.html">Compaction</a> compaction) {
+<a class="jxr_linenumber" name="L751" href="#L751">751</a>     <strong class="jxr_keyword">this</strong>.compaction = compaction;
+<a class="jxr_linenumber" name="L752" href="#L752">752</a>   }
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 
+<a class="jxr_linenumber" name="L754" href="#L754">754</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">   * @param compact if true, enables compaction</em>
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCompact(<strong class="jxr_keyword">boolean</strong> compact) {
+<a class="jxr_linenumber" name="L758" href="#L758">758</a>     <strong class="jxr_keyword">this</strong>.compact = compact;
+<a class="jxr_linenumber" name="L759" href="#L759">759</a>   }
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 
+<a class="jxr_linenumber" name="L761" href="#L761">761</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">   * @param encoding sets character encoding to use</em>
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L764" href="#L764">764</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEncoding(Charset encoding) {
+<a class="jxr_linenumber" name="L765" href="#L765">765</a>     <strong class="jxr_keyword">this</strong>.encoding = encoding;
+<a class="jxr_linenumber" name="L766" href="#L766">766</a>   }
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> }
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

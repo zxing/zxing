@@ -62,349 +62,355 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>    }
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">   * &lt;p&gt;Detects a QR Code in an image, simply.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">   * &lt;p&gt;Detects a QR Code in an image.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">   *</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">   * @return {@link DetectorResult} encapsulating results of detecting a QR Code</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">   * @throws NotFoundException if no QR Code can be found</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/common/DetectorResult.html">DetectorResult</a> detect() <strong class="jxr_keyword">throws</strong> NotFoundException, FormatException {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">return</strong> detect(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">   * &lt;p&gt;Detects a QR Code in an image, simply.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">   * @param hints optional hints to detector</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">   * @return {@link NotFoundException} encapsulating results of detecting a QR Code</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">   * @throws NotFoundException if QR Code cannot be found</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">   * @throws FormatException if a QR Code cannot be decoded</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/common/DetectorResult.html">DetectorResult</a> detect(Map&lt;DecodeHintType,?&gt; hints) <strong class="jxr_keyword">throws</strong> NotFoundException, FormatException {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      resultPointCallback = hints == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> :
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          (<a href="../../../../../com/google/zxing/ResultPointCallback.html">ResultPointCallback</a>) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FinderPatternFinder</a> finder = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FinderPatternFinder</a>(image, resultPointCallback);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a> info = finder.find(hints);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">return</strong> processFinderPatternInfo(info);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>    }
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/common/DetectorResult.html">DetectorResult</a> processFinderPatternInfo(<a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a> info)
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>        <strong class="jxr_keyword">throws</strong> NotFoundException, <a href="../../../../../com/google/zxing/FormatException.html">FormatException</a> {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> topLeft = info.getTopLeft();
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> topRight = info.getTopRight();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> bottomLeft = info.getBottomLeft();
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">float</strong> moduleSize = calculateModuleSize(topLeft, topRight, bottomLeft);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">if</strong> (moduleSize &lt; 1.0f) {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>        <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">int</strong> dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      <a href="../../../../../com/google/zxing/qrcode/decoder/Version.html">Version</a> provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">int</strong> modulesBetweenFPCenters = provisionalVersion.getDimensionForVersion() - 7;
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <a href="../../../../../com/google/zxing/qrcode/detector/AlignmentPattern.html">AlignmentPattern</a> alignmentPattern = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <em class="jxr_comment">// Anything above version 1 has an alignment pattern</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">if</strong> (provisionalVersion.getAlignmentPatternCenters().length &gt; 0) {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>       <em class="jxr_comment">// Guess where a "bottom right" finder pattern would have been</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>       <strong class="jxr_keyword">float</strong> bottomRightX = topRight.getX() - topLeft.getX() + bottomLeft.getX();
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>       <strong class="jxr_keyword">float</strong> bottomRightY = topRight.getY() - topLeft.getY() + bottomLeft.getY();
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>       <em class="jxr_comment">// Estimate that alignment pattern is closer by 3 modules</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>       <em class="jxr_comment">// from "bottom right" to known top left location</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>       <strong class="jxr_keyword">float</strong> correctionToTopLeft = 1.0f - 3.0f / (<strong class="jxr_keyword">float</strong>) modulesBetweenFPCenters;
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>       <strong class="jxr_keyword">int</strong> estAlignmentX = (<strong class="jxr_keyword">int</strong>) (topLeft.getX() + correctionToTopLeft * (bottomRightX - topLeft.getX()));
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>       <strong class="jxr_keyword">int</strong> estAlignmentY = (<strong class="jxr_keyword">int</strong>) (topLeft.getY() + correctionToTopLeft * (bottomRightY - topLeft.getY()));
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>       <em class="jxr_comment">// Kind of arbitrary -- expand search radius before giving up</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 4; i &lt;= 16; i &lt;&lt;= 1) {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>           alignmentPattern = findAlignmentInRegion(moduleSize,
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>               estAlignmentX,
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>               estAlignmentY,
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>               (<strong class="jxr_keyword">float</strong>) i);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>         } <strong class="jxr_keyword">catch</strong> (NotFoundException re) {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>           <em class="jxr_comment">// try next round</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>         }
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>       }
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>       <em class="jxr_comment">// If we didn't find alignment pattern... well try anyway without it</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>     }
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>     <a href="../../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> transform =
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>         createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> bits = sampleGrid(image, transform, dimension);
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>     <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] points;
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <strong class="jxr_keyword">if</strong> (alignmentPattern == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>       points = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[]{bottomLeft, topLeft, topRight};
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>       points = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[]{bottomLeft, topLeft, topRight, alignmentPattern};
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>     }
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/common/DetectorResult.html">DetectorResult</a>(bits, points);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>   }
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> createTransform(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topLeft,
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>                                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topRight,
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>                                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> bottomLeft,
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>                                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> alignmentPattern,
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>                                                       <strong class="jxr_keyword">int</strong> dimension) {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>     <strong class="jxr_keyword">float</strong> dimMinusThree = (<strong class="jxr_keyword">float</strong>) dimension - 3.5f;
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>     <strong class="jxr_keyword">float</strong> bottomRightX;
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>     <strong class="jxr_keyword">float</strong> bottomRightY;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>     <strong class="jxr_keyword">float</strong> sourceBottomRightX;
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>     <strong class="jxr_keyword">float</strong> sourceBottomRightY;
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">if</strong> (alignmentPattern != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>       bottomRightX = alignmentPattern.getX();
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>       bottomRightY = alignmentPattern.getY();
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>       sourceBottomRightX = dimMinusThree - 3.0f;
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>       sourceBottomRightY = sourceBottomRightX;
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>       <em class="jxr_comment">// Don't have an alignment pattern, just make up the bottom-right point</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>       bottomRightX = (topRight.getX() - topLeft.getX()) + bottomLeft.getX();
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>       bottomRightY = (topRight.getY() - topLeft.getY()) + bottomLeft.getY();
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>       sourceBottomRightX = dimMinusThree;
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>       sourceBottomRightY = dimMinusThree;
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>     }
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>     <strong class="jxr_keyword">return</strong> PerspectiveTransform.quadrilateralToQuadrilateral(
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>         3.5f,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">   * @throws NotFoundException if QR Code cannot be found</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">   * @throws FormatException if a QR Code cannot be decoded</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/common/DetectorResult.html">DetectorResult</a> detect() <strong class="jxr_keyword">throws</strong> NotFoundException, FormatException {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">return</strong> detect(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>    }
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">   * &lt;p&gt;Detects a QR Code in an image.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">   * @param hints optional hints to detector</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">   * @return {@link DetectorResult} encapsulating results of detecting a QR Code</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">   * @throws NotFoundException if QR Code cannot be found</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">   * @throws FormatException if a QR Code cannot be decoded</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/common/DetectorResult.html">DetectorResult</a> detect(Map&lt;DecodeHintType,?&gt; hints) <strong class="jxr_keyword">throws</strong> NotFoundException, FormatException {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      resultPointCallback = hints == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> :
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          (<a href="../../../../../com/google/zxing/ResultPointCallback.html">ResultPointCallback</a>) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FinderPatternFinder</a> finder = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternFinder.html">FinderPatternFinder</a>(image, resultPointCallback);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a> info = finder.find(hints);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">return</strong> processFinderPatternInfo(info);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>    }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/common/DetectorResult.html">DetectorResult</a> processFinderPatternInfo(<a href="../../../../../com/google/zxing/qrcode/detector/FinderPatternInfo.html">FinderPatternInfo</a> info)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>        <strong class="jxr_keyword">throws</strong> NotFoundException, <a href="../../../../../com/google/zxing/FormatException.html">FormatException</a> {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> topLeft = info.getTopLeft();
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> topRight = info.getTopRight();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      <a href="../../../../../com/google/zxing/qrcode/detector/FinderPattern.html">FinderPattern</a> bottomLeft = info.getBottomLeft();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">float</strong> moduleSize = calculateModuleSize(topLeft, topRight, bottomLeft);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">if</strong> (moduleSize &lt; 1.0f) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>        <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      <strong class="jxr_keyword">int</strong> dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <a href="../../../../../com/google/zxing/qrcode/decoder/Version.html">Version</a> provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">int</strong> modulesBetweenFPCenters = provisionalVersion.getDimensionForVersion() - 7;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <a href="../../../../../com/google/zxing/qrcode/detector/AlignmentPattern.html">AlignmentPattern</a> alignmentPattern = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <em class="jxr_comment">// Anything above version 1 has an alignment pattern</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">if</strong> (provisionalVersion.getAlignmentPatternCenters().length &gt; 0) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>       <em class="jxr_comment">// Guess where a "bottom right" finder pattern would have been</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>       <strong class="jxr_keyword">float</strong> bottomRightX = topRight.getX() - topLeft.getX() + bottomLeft.getX();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>       <strong class="jxr_keyword">float</strong> bottomRightY = topRight.getY() - topLeft.getY() + bottomLeft.getY();
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>       <em class="jxr_comment">// Estimate that alignment pattern is closer by 3 modules</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>       <em class="jxr_comment">// from "bottom right" to known top left location</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>       <strong class="jxr_keyword">float</strong> correctionToTopLeft = 1.0f - 3.0f / (<strong class="jxr_keyword">float</strong>) modulesBetweenFPCenters;
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>       <strong class="jxr_keyword">int</strong> estAlignmentX = (<strong class="jxr_keyword">int</strong>) (topLeft.getX() + correctionToTopLeft * (bottomRightX - topLeft.getX()));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>       <strong class="jxr_keyword">int</strong> estAlignmentY = (<strong class="jxr_keyword">int</strong>) (topLeft.getY() + correctionToTopLeft * (bottomRightY - topLeft.getY()));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>       <em class="jxr_comment">// Kind of arbitrary -- expand search radius before giving up</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 4; i &lt;= 16; i &lt;&lt;= 1) {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>           alignmentPattern = findAlignmentInRegion(moduleSize,
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>               estAlignmentX,
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>               estAlignmentY,
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>               (<strong class="jxr_keyword">float</strong>) i);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>         } <strong class="jxr_keyword">catch</strong> (NotFoundException re) {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>           <em class="jxr_comment">// try next round</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         }
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>       }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>       <em class="jxr_comment">// If we didn't find alignment pattern... well try anyway without it</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     }
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     <a href="../../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> transform =
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>         createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> bits = sampleGrid(image, transform, dimension);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] points;
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">if</strong> (alignmentPattern == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>       points = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[]{bottomLeft, topLeft, topRight};
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>       points = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[]{bottomLeft, topLeft, topRight, alignmentPattern};
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/common/DetectorResult.html">DetectorResult</a>(bits, points);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>   }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> createTransform(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topLeft,
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>                                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topRight,
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>                                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> bottomLeft,
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>                                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> alignmentPattern,
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>                                                       <strong class="jxr_keyword">int</strong> dimension) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>     <strong class="jxr_keyword">float</strong> dimMinusThree = (<strong class="jxr_keyword">float</strong>) dimension - 3.5f;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     <strong class="jxr_keyword">float</strong> bottomRightX;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>     <strong class="jxr_keyword">float</strong> bottomRightY;
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     <strong class="jxr_keyword">float</strong> sourceBottomRightX;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">float</strong> sourceBottomRightY;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     <strong class="jxr_keyword">if</strong> (alignmentPattern != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>       bottomRightX = alignmentPattern.getX();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>       bottomRightY = alignmentPattern.getY();
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>       sourceBottomRightX = dimMinusThree - 3.0f;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>       sourceBottomRightY = sourceBottomRightX;
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>       <em class="jxr_comment">// Don't have an alignment pattern, just make up the bottom-right point</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>       bottomRightX = (topRight.getX() - topLeft.getX()) + bottomLeft.getX();
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>       bottomRightY = (topRight.getY() - topLeft.getY()) + bottomLeft.getY();
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>       sourceBottomRightX = dimMinusThree;
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>       sourceBottomRightY = dimMinusThree;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     }
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>     <strong class="jxr_keyword">return</strong> PerspectiveTransform.quadrilateralToQuadrilateral(
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>         3.5f,
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>         dimMinusThree,
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>         3.5f,
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>         sourceBottomRightX,
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>         sourceBottomRightY,
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>         3.5f,
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>         dimMinusThree,
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>         topLeft.getX(),
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>         topLeft.getY(),
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>         topRight.getX(),
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>         topRight.getY(),
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>         bottomRightX,
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>         bottomRightY,
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>         bottomLeft.getX(),
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>         bottomLeft.getY());
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>   }
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> sampleGrid(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>                                       <a href="../../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> transform,
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>                                       <strong class="jxr_keyword">int</strong> dimension) <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>     <a href="../../../../../com/google/zxing/common/GridSampler.html">GridSampler</a> sampler = GridSampler.getInstance();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <strong class="jxr_keyword">return</strong> sampler.sampleGrid(image, dimension, dimension, transform);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>   }
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Computes the dimension (number of modules on a size) of the QR Code based on the position</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">   * of the finder patterns and estimated module size.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> computeDimension(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topLeft,
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topRight,
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> bottomLeft,
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>                                       <strong class="jxr_keyword">float</strong> moduleSize) <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>     <strong class="jxr_keyword">int</strong> tltrCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>     <strong class="jxr_keyword">int</strong> tlblCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>     <strong class="jxr_keyword">int</strong> dimension = ((tltrCentersDimension + tlblCentersDimension) &gt;&gt; 1) + 7;
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">switch</strong> (dimension &amp; 0x03) { <em class="jxr_comment">// mod 4</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>       <strong class="jxr_keyword">case</strong> 0:
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>         dimension++;
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>         <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>         <em class="jxr_comment">// 1? do nothing</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>       <strong class="jxr_keyword">case</strong> 2:
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>         dimension--;
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>         <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">case</strong> 3:
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>         <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>     }
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>     <strong class="jxr_keyword">return</strong> dimension;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>   }
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Computes an average estimated module size based on estimated derived from the positions</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">   * of the three finder patterns.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> calculateModuleSize(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topLeft,
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>                                             <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topRight,
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>                                             <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> bottomLeft) {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>     <em class="jxr_comment">// Take the average</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>     <strong class="jxr_keyword">return</strong> (calculateModuleSizeOneWay(topLeft, topRight) +
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>         calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2.0f;
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>   }
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Estimates module size based on two finder patterns -- it uses</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">   * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">   * width of each, measuring along the axis between their centers.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> calculateModuleSizeOneWay(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> pattern, <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> otherPattern) {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>     <strong class="jxr_keyword">float</strong> moduleSizeEst1 = sizeOfBlackWhiteBlackRunBothWays((<strong class="jxr_keyword">int</strong>) pattern.getX(),
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>         (<strong class="jxr_keyword">int</strong>) pattern.getY(),
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>         (<strong class="jxr_keyword">int</strong>) otherPattern.getX(),
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>         (<strong class="jxr_keyword">int</strong>) otherPattern.getY());
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>     <strong class="jxr_keyword">float</strong> moduleSizeEst2 = sizeOfBlackWhiteBlackRunBothWays((<strong class="jxr_keyword">int</strong>) otherPattern.getX(),
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>         (<strong class="jxr_keyword">int</strong>) otherPattern.getY(),
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>         (<strong class="jxr_keyword">int</strong>) pattern.getX(),
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>         (<strong class="jxr_keyword">int</strong>) pattern.getY());
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">if</strong> (Float.isNaN(moduleSizeEst1)) {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>       <strong class="jxr_keyword">return</strong> moduleSizeEst2 / 7.0f;
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>     }
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>     <strong class="jxr_keyword">if</strong> (Float.isNaN(moduleSizeEst2)) {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>       <strong class="jxr_keyword">return</strong> moduleSizeEst1 / 7.0f;
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>     }
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <em class="jxr_comment">// Average them, and divide by 7 since we've counted the width of 3 black modules,</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>     <em class="jxr_comment">// and 1 white and 1 black module on either side. Ergo, divide sum by 14.</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>     <strong class="jxr_keyword">return</strong> (moduleSizeEst1 + moduleSizeEst2) / 14.0f;
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>   }
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">   * See {@link #sizeOfBlackWhiteBlackRun(int, int, int, int)}; computes the total width of</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">   * a finder pattern by looking for a black-white-black run from the center in the direction</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">   * of another point (another finder pattern center), and in the opposite direction too.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> sizeOfBlackWhiteBlackRunBothWays(<strong class="jxr_keyword">int</strong> fromX, <strong class="jxr_keyword">int</strong> fromY, <strong class="jxr_keyword">int</strong> toX, <strong class="jxr_keyword">int</strong> toY) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>     <strong class="jxr_keyword">float</strong> result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>     <em class="jxr_comment">// Now count other way -- don't run off image though of course</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>     <strong class="jxr_keyword">float</strong> scale = 1.0f;
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>     <strong class="jxr_keyword">int</strong> otherToX = fromX - (toX - fromX);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <strong class="jxr_keyword">if</strong> (otherToX &lt; 0) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>       scale = (<strong class="jxr_keyword">float</strong>) fromX / (<strong class="jxr_keyword">float</strong>) (fromX - otherToX);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>       otherToX = 0;
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (otherToX &gt;= image.getWidth()) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>       scale = (<strong class="jxr_keyword">float</strong>) (image.getWidth() - 1 - fromX) / (<strong class="jxr_keyword">float</strong>) (otherToX - fromX);
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>       otherToX = image.getWidth() - 1;
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>     }
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>     <strong class="jxr_keyword">int</strong> otherToY = (<strong class="jxr_keyword">int</strong>) (fromY - (toY - fromY) * scale);
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>     scale = 1.0f;
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>     <strong class="jxr_keyword">if</strong> (otherToY &lt; 0) {
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>       scale = (<strong class="jxr_keyword">float</strong>) fromY / (<strong class="jxr_keyword">float</strong>) (fromY - otherToY);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>       otherToY = 0;
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (otherToY &gt;= image.getHeight()) {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>       scale = (<strong class="jxr_keyword">float</strong>) (image.getHeight() - 1 - fromY) / (<strong class="jxr_keyword">float</strong>) (otherToY - fromY);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>       otherToY = image.getHeight() - 1;
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>     }
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>     otherToX = (<strong class="jxr_keyword">int</strong>) (fromX + (otherToX - fromX) * scale);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>     result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>     <em class="jxr_comment">// Middle pixel is double-counted this way; subtract 1</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>     <strong class="jxr_keyword">return</strong> result - 1.0f;
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>   }
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>         3.5f,
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         dimMinusThree,
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>         3.5f,
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>         sourceBottomRightX,
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>         sourceBottomRightY,
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         3.5f,
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>         dimMinusThree,
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>         topLeft.getX(),
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>         topLeft.getY(),
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         topRight.getX(),
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>         topRight.getY(),
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>         bottomRightX,
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         bottomRightY,
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>         bottomLeft.getX(),
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         bottomLeft.getY());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>   }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> sampleGrid(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> image,
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>                                       <a href="../../../../../com/google/zxing/common/PerspectiveTransform.html">PerspectiveTransform</a> transform,
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>                                       <strong class="jxr_keyword">int</strong> dimension) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <a href="../../../../../com/google/zxing/common/GridSampler.html">GridSampler</a> sampler = GridSampler.getInstance();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">return</strong> sampler.sampleGrid(image, dimension, dimension, transform);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>   }
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Computes the dimension (number of modules on a size) of the QR Code based on the position</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">   * of the finder patterns and estimated module size.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> computeDimension(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topLeft,
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topRight,
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>                                       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> bottomLeft,
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>                                       <strong class="jxr_keyword">float</strong> moduleSize) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>     <strong class="jxr_keyword">int</strong> tltrCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>     <strong class="jxr_keyword">int</strong> tlblCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">int</strong> dimension = ((tltrCentersDimension + tlblCentersDimension) &gt;&gt; 1) + 7;
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     <strong class="jxr_keyword">switch</strong> (dimension &amp; 0x03) { <em class="jxr_comment">// mod 4</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>       <strong class="jxr_keyword">case</strong> 0:
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>         dimension++;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>         <em class="jxr_comment">// 1? do nothing</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>       <strong class="jxr_keyword">case</strong> 2:
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>         dimension--;
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>       <strong class="jxr_keyword">case</strong> 3:
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>         <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>     }
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>     <strong class="jxr_keyword">return</strong> dimension;
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>   }
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Computes an average estimated module size based on estimated derived from the positions</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">   * of the three finder patterns.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">   * @param topLeft detected top-left finder pattern center</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">   * @param topRight detected top-right finder pattern center</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">   * @param bottomLeft detected bottom-left finder pattern center</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">   * @return estimated module size</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> calculateModuleSize(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topLeft,
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>                                             <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> topRight,
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>                                             <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> bottomLeft) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>     <em class="jxr_comment">// Take the average</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>     <strong class="jxr_keyword">return</strong> (calculateModuleSizeOneWay(topLeft, topRight) +
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>         calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2.0f;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>   }
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Estimates module size based on two finder patterns -- it uses</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">   * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">   * width of each, measuring along the axis between their centers.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> calculateModuleSizeOneWay(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> pattern, <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> otherPattern) {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>     <strong class="jxr_keyword">float</strong> moduleSizeEst1 = sizeOfBlackWhiteBlackRunBothWays((<strong class="jxr_keyword">int</strong>) pattern.getX(),
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>         (<strong class="jxr_keyword">int</strong>) pattern.getY(),
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>         (<strong class="jxr_keyword">int</strong>) otherPattern.getX(),
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>         (<strong class="jxr_keyword">int</strong>) otherPattern.getY());
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>     <strong class="jxr_keyword">float</strong> moduleSizeEst2 = sizeOfBlackWhiteBlackRunBothWays((<strong class="jxr_keyword">int</strong>) otherPattern.getX(),
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>         (<strong class="jxr_keyword">int</strong>) otherPattern.getY(),
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>         (<strong class="jxr_keyword">int</strong>) pattern.getX(),
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>         (<strong class="jxr_keyword">int</strong>) pattern.getY());
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">if</strong> (Float.isNaN(moduleSizeEst1)) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>       <strong class="jxr_keyword">return</strong> moduleSizeEst2 / 7.0f;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>     }
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     <strong class="jxr_keyword">if</strong> (Float.isNaN(moduleSizeEst2)) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>       <strong class="jxr_keyword">return</strong> moduleSizeEst1 / 7.0f;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>     }
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     <em class="jxr_comment">// Average them, and divide by 7 since we've counted the width of 3 black modules,</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     <em class="jxr_comment">// and 1 white and 1 black module on either side. Ergo, divide sum by 14.</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">return</strong> (moduleSizeEst1 + moduleSizeEst2) / 14.0f;
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>   }
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">   * See {@link #sizeOfBlackWhiteBlackRun(int, int, int, int)}; computes the total width of</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">   * a finder pattern by looking for a black-white-black run from the center in the direction</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">   * of another point (another finder pattern center), and in the opposite direction too.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> sizeOfBlackWhiteBlackRunBothWays(<strong class="jxr_keyword">int</strong> fromX, <strong class="jxr_keyword">int</strong> fromY, <strong class="jxr_keyword">int</strong> toX, <strong class="jxr_keyword">int</strong> toY) {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <strong class="jxr_keyword">float</strong> result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>     <em class="jxr_comment">// Now count other way -- don't run off image though of course</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">float</strong> scale = 1.0f;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">int</strong> otherToX = fromX - (toX - fromX);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <strong class="jxr_keyword">if</strong> (otherToX &lt; 0) {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>       scale = (<strong class="jxr_keyword">float</strong>) fromX / (<strong class="jxr_keyword">float</strong>) (fromX - otherToX);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>       otherToX = 0;
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (otherToX &gt;= image.getWidth()) {
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>       scale = (<strong class="jxr_keyword">float</strong>) (image.getWidth() - 1 - fromX) / (<strong class="jxr_keyword">float</strong>) (otherToX - fromX);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>       otherToX = image.getWidth() - 1;
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>     }
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     <strong class="jxr_keyword">int</strong> otherToY = (<strong class="jxr_keyword">int</strong>) (fromY - (toY - fromY) * scale);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     scale = 1.0f;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>     <strong class="jxr_keyword">if</strong> (otherToY &lt; 0) {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>       scale = (<strong class="jxr_keyword">float</strong>) fromY / (<strong class="jxr_keyword">float</strong>) (fromY - otherToY);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>       otherToY = 0;
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (otherToY &gt;= image.getHeight()) {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>       scale = (<strong class="jxr_keyword">float</strong>) (image.getHeight() - 1 - fromY) / (<strong class="jxr_keyword">float</strong>) (otherToY - fromY);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>       otherToY = image.getHeight() - 1;
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>     }
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>     otherToX = (<strong class="jxr_keyword">int</strong>) (fromX + (otherToX - fromX) * scale);
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">   * &lt;p&gt;This method traces a line from a point in the image, in the direction towards another point.</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">   * It begins in a black region, and keeps going until it finds white, then black, then white again.</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">   * It reports the distance from the start to this point.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">   * &lt;p&gt;This is used when figuring out how wide a finder pattern is, when the finder pattern</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">   * may be skewed or rotated.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> sizeOfBlackWhiteBlackRun(<strong class="jxr_keyword">int</strong> fromX, <strong class="jxr_keyword">int</strong> fromY, <strong class="jxr_keyword">int</strong> toX, <strong class="jxr_keyword">int</strong> toY) {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>     <em class="jxr_comment">// Mild variant of Bresenham's algorithm;</em>
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>     <em class="jxr_comment">// see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm</em>
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>     <strong class="jxr_keyword">boolean</strong> steep = Math.abs(toY - fromY) &gt; Math.abs(toX - fromX);
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>     <strong class="jxr_keyword">if</strong> (steep) {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>       <strong class="jxr_keyword">int</strong> temp = fromX;
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>       fromX = fromY;
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>       fromY = temp;
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>       temp = toX;
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>       toX = toY;
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>       toY = temp;
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>     }
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <strong class="jxr_keyword">int</strong> dx = Math.abs(toX - fromX);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>     <strong class="jxr_keyword">int</strong> dy = Math.abs(toY - fromY);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">int</strong> error = -dx &gt;&gt; 1;
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <strong class="jxr_keyword">int</strong> xstep = fromX &lt; toX ? 1 : -1;
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>     <strong class="jxr_keyword">int</strong> ystep = fromY &lt; toY ? 1 : -1;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     <em class="jxr_comment">// Middle pixel is double-counted this way; subtract 1</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     <strong class="jxr_keyword">return</strong> result - 1.0f;
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>   }
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">   * &lt;p&gt;This method traces a line from a point in the image, in the direction towards another point.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">   * It begins in a black region, and keeps going until it finds white, then black, then white again.</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">   * It reports the distance from the start to this point.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">   * &lt;p&gt;This is used when figuring out how wide a finder pattern is, when the finder pattern</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">   * may be skewed or rotated.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> sizeOfBlackWhiteBlackRun(<strong class="jxr_keyword">int</strong> fromX, <strong class="jxr_keyword">int</strong> fromY, <strong class="jxr_keyword">int</strong> toX, <strong class="jxr_keyword">int</strong> toY) {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <em class="jxr_comment">// Mild variant of Bresenham's algorithm;</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <em class="jxr_comment">// see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">boolean</strong> steep = Math.abs(toY - fromY) &gt; Math.abs(toX - fromX);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>     <strong class="jxr_keyword">if</strong> (steep) {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>       <strong class="jxr_keyword">int</strong> temp = fromX;
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>       fromX = fromY;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>       fromY = temp;
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>       temp = toX;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>       toX = toY;
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>       toY = temp;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>     }
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>     <em class="jxr_comment">// In black pixels, looking for white, first or second time.</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">int</strong> state = 0;
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <em class="jxr_comment">// Loop up until x == toX, but not beyond</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>     <strong class="jxr_keyword">int</strong> xLimit = toX + xstep;
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = fromX, y = fromY; x != xLimit; x += xstep) {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>       <strong class="jxr_keyword">int</strong> realX = steep ? y : x;
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>       <strong class="jxr_keyword">int</strong> realY = steep ? x : y;
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>       <em class="jxr_comment">// Does current pixel mean we have moved white to black or vice versa?</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>       <em class="jxr_comment">// Scanning black in state 0,2 and white in state 1, so if we find the wrong</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>       <em class="jxr_comment">// color, advance to next state or end if we are in state 2 already</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>       <strong class="jxr_keyword">if</strong> ((state == 1) == image.get(realX, realY)) {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>         <strong class="jxr_keyword">if</strong> (state == 2) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>           <strong class="jxr_keyword">return</strong> MathUtils.distance(x, y, fromX, fromY);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>         }
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>         state++;
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>       }
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>       error += dy;
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>       <strong class="jxr_keyword">if</strong> (error &gt; 0) {
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>         <strong class="jxr_keyword">if</strong> (y == toY) {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>         }
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>         y += ystep;
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>         error -= dx;
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>       }
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>     }
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>     <em class="jxr_comment">// Found black-white-black; give the benefit of the doubt that the next pixel outside the image</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     <em class="jxr_comment">// is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>     <em class="jxr_comment">// small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>     <strong class="jxr_keyword">if</strong> (state == 2) {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>       <strong class="jxr_keyword">return</strong> MathUtils.distance(toX + xstep, toY, fromX, fromY);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>     <strong class="jxr_keyword">int</strong> dx = Math.abs(toX - fromX);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">int</strong> dy = Math.abs(toY - fromY);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">int</strong> error = -dx &gt;&gt; 1;
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>     <strong class="jxr_keyword">int</strong> xstep = fromX &lt; toX ? 1 : -1;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>     <strong class="jxr_keyword">int</strong> ystep = fromY &lt; toY ? 1 : -1;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     <em class="jxr_comment">// In black pixels, looking for white, first or second time.</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>     <strong class="jxr_keyword">int</strong> state = 0;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     <em class="jxr_comment">// Loop up until x == toX, but not beyond</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     <strong class="jxr_keyword">int</strong> xLimit = toX + xstep;
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = fromX, y = fromY; x != xLimit; x += xstep) {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>       <strong class="jxr_keyword">int</strong> realX = steep ? y : x;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>       <strong class="jxr_keyword">int</strong> realY = steep ? x : y;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>       <em class="jxr_comment">// Does current pixel mean we have moved white to black or vice versa?</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>       <em class="jxr_comment">// Scanning black in state 0,2 and white in state 1, so if we find the wrong</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>       <em class="jxr_comment">// color, advance to next state or end if we are in state 2 already</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>       <strong class="jxr_keyword">if</strong> ((state == 1) == image.get(realX, realY)) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>         <strong class="jxr_keyword">if</strong> (state == 2) {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>           <strong class="jxr_keyword">return</strong> MathUtils.distance(x, y, fromX, fromY);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>         }
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>         state++;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>       }
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>       error += dy;
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>       <strong class="jxr_keyword">if</strong> (error &gt; 0) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>         <strong class="jxr_keyword">if</strong> (y == toY) {
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>         y += ystep;
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>         error -= dx;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>       }
 <a class="jxr_linenumber" name="L351" href="#L351">351</a>     }
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>     <em class="jxr_comment">// else we didn't find even black-white-black; no estimate is really possible</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>     <strong class="jxr_keyword">return</strong> Float.NaN;
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>   }
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Attempts to locate an alignment pattern in a limited region of the image, which is</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">   * guessed to contain it. This method uses {@link AlignmentPattern}.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">   * @param overallEstModuleSize estimated module size so far</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">   * @param estAlignmentX x coordinate of center of area probably containing alignment pattern</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">   * @param estAlignmentY y coordinate of above</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">   * @param allowanceFactor number of pixels in all directions to search from the center</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">   * @return {@link AlignmentPattern} if found, or null otherwise</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if an unexpected error occurs during detection</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/qrcode/detector/AlignmentPattern.html">AlignmentPattern</a> findAlignmentInRegion(<strong class="jxr_keyword">float</strong> overallEstModuleSize,
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>                                                          <strong class="jxr_keyword">int</strong> estAlignmentX,
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>                                                          <strong class="jxr_keyword">int</strong> estAlignmentY,
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>                                                          <strong class="jxr_keyword">float</strong> allowanceFactor)
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>     <em class="jxr_comment">// Look for an alignment pattern (3 modules in size) around where it</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>     <em class="jxr_comment">// should be</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>     <strong class="jxr_keyword">int</strong> allowance = (<strong class="jxr_keyword">int</strong>) (allowanceFactor * overallEstModuleSize);
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>     <strong class="jxr_keyword">int</strong> alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>     <strong class="jxr_keyword">int</strong> alignmentAreaRightX = Math.min(image.getWidth() - 1, estAlignmentX + allowance);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>     <strong class="jxr_keyword">if</strong> (alignmentAreaRightX - alignmentAreaLeftX &lt; overallEstModuleSize * 3) {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>     }
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>     <strong class="jxr_keyword">int</strong> alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>     <strong class="jxr_keyword">int</strong> alignmentAreaBottomY = Math.min(image.getHeight() - 1, estAlignmentY + allowance);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>     <strong class="jxr_keyword">if</strong> (alignmentAreaBottomY - alignmentAreaTopY &lt; overallEstModuleSize * 3) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>     <em class="jxr_comment">// Found black-white-black; give the benefit of the doubt that the next pixel outside the image</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>     <em class="jxr_comment">// is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>     <em class="jxr_comment">// small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>     <strong class="jxr_keyword">if</strong> (state == 2) {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>       <strong class="jxr_keyword">return</strong> MathUtils.distance(toX + xstep, toY, fromX, fromY);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>     }
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>     <em class="jxr_comment">// else we didn't find even black-white-black; no estimate is really possible</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>     <strong class="jxr_keyword">return</strong> Float.NaN;
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>   }
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Attempts to locate an alignment pattern in a limited region of the image, which is</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">   * guessed to contain it. This method uses {@link AlignmentPattern}.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">   * @param overallEstModuleSize estimated module size so far</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">   * @param estAlignmentX x coordinate of center of area probably containing alignment pattern</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">   * @param estAlignmentY y coordinate of above</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">   * @param allowanceFactor number of pixels in all directions to search from the center</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">   * @return {@link AlignmentPattern} if found, or null otherwise</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if an unexpected error occurs during detection</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/google/zxing/qrcode/detector/AlignmentPattern.html">AlignmentPattern</a> findAlignmentInRegion(<strong class="jxr_keyword">float</strong> overallEstModuleSize,
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>                                                          <strong class="jxr_keyword">int</strong> estAlignmentX,
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>                                                          <strong class="jxr_keyword">int</strong> estAlignmentY,
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>                                                          <strong class="jxr_keyword">float</strong> allowanceFactor)
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>     <em class="jxr_comment">// Look for an alignment pattern (3 modules in size) around where it</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>     <em class="jxr_comment">// should be</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>     <strong class="jxr_keyword">int</strong> allowance = (<strong class="jxr_keyword">int</strong>) (allowanceFactor * overallEstModuleSize);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>     <strong class="jxr_keyword">int</strong> alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>     <strong class="jxr_keyword">int</strong> alignmentAreaRightX = Math.min(image.getWidth() - 1, estAlignmentX + allowance);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>     <strong class="jxr_keyword">if</strong> (alignmentAreaRightX - alignmentAreaLeftX &lt; overallEstModuleSize * 3) {
 <a class="jxr_linenumber" name="L384" href="#L384">384</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
 <a class="jxr_linenumber" name="L385" href="#L385">385</a>     }
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>     <a href="../../../../../com/google/zxing/qrcode/detector/AlignmentPatternFinder.html">AlignmentPatternFinder</a> alignmentFinder =
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>         <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/AlignmentPatternFinder.html">AlignmentPatternFinder</a>(
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>             image,
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>             alignmentAreaLeftX,
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>             alignmentAreaTopY,
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>             alignmentAreaRightX - alignmentAreaLeftX,
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>             alignmentAreaBottomY - alignmentAreaTopY,
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>             overallEstModuleSize,
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>             resultPointCallback);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>     <strong class="jxr_keyword">return</strong> alignmentFinder.find();
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>   }
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> }
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>     <strong class="jxr_keyword">int</strong> alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>     <strong class="jxr_keyword">int</strong> alignmentAreaBottomY = Math.min(image.getHeight() - 1, estAlignmentY + allowance);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>     <strong class="jxr_keyword">if</strong> (alignmentAreaBottomY - alignmentAreaTopY &lt; overallEstModuleSize * 3) {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>     }
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>     <a href="../../../../../com/google/zxing/qrcode/detector/AlignmentPatternFinder.html">AlignmentPatternFinder</a> alignmentFinder =
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>         <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/qrcode/detector/AlignmentPatternFinder.html">AlignmentPatternFinder</a>(
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>             image,
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>             alignmentAreaLeftX,
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>             alignmentAreaTopY,
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>             alignmentAreaRightX - alignmentAreaLeftX,
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>             alignmentAreaBottomY - alignmentAreaTopY,
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>             overallEstModuleSize,
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>             resultPointCallback);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>     <strong class="jxr_keyword">return</strong> alignmentFinder.find();
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>   }
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

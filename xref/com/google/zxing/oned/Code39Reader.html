@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">int</strong> whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>     <em class="jxr_comment">// If 50% of last pattern size, following last pattern, is not whitespace, fail</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>     <em class="jxr_comment">// (but if it's whitespace to the very end of the image, that's OK)</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">if</strong> (nextStart != end &amp;&amp; (whiteSpaceAfterEnd &gt;&gt; 1) &lt; lastPatternSize) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">if</strong> (nextStart != end &amp;&amp; (whiteSpaceAfterEnd &lt;&lt; 1) &lt; lastPatternSize) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>     }
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 

@@ -33,411 +33,455 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> android.app.Activity;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> android.app.AlertDialog;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> android.content.ActivityNotFoundException;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> android.content.DialogInterface;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> android.content.Intent;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> android.content.pm.PackageManager;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> android.content.pm.ResolveInfo;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> android.net.Uri;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> android.os.Bundle;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> android.util.Log;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;A utility class which helps ease integration with Barcode Scanner via {@link Intent}s. This is a simple</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * project's source code.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h2&gt;Initiating a barcode scan&lt;/h2&gt;</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;To integrate, create an instance of {@code IntentIntegrator} and call {@link #initiateScan()} and wait</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * for the result in your app.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;It does require that the Barcode Scanner (or work-alike) application is installed. The</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * {@link #initiateScan()} method will prompt the user to download the application, if needed.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;There are a few steps to using this integration. First, your {@link Activity} must implement</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * the method {@link Activity#onActivityResult(int, int, Intent)} and include a line of code like this:&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;pre&gt;{@code</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * public void onActivityResult(int requestCode, int resultCode, Intent intent) {</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> *   IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> *   if (scanResult != null) {</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> *     // handle scan result</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> *   }</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> *   // else continue with any other code you need in the method</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> *   ...</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * }</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * }&lt;/pre&gt;</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;This is where you will handle a scan result.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Second, just call this in response to a user action somewhere to begin the scan process:&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;pre&gt;{@code</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * IntentIntegrator integrator = new IntentIntegrator(yourActivity);</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * integrator.initiateScan();</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * }&lt;/pre&gt;</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Note that {@link #initiateScan()} returns an {@link AlertDialog} which is non-null if the</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * user was prompted to download the application. This lets the calling app potentially manage the dialog.</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * In particular, ideally, the app dismisses the dialog if it's still active in its {@link Activity#onPause()}</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * method.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;You can use {@link #setTitle(String)} to customize the title of this download prompt dialog (or, use</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * {@link #setTitleByID(int)} to set the title by string resource ID.) Likewise, the prompt message, and</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * yes/no button labels can be changed.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Finally, you can use {@link #addExtra(String, Object)} to add more parameters to the Intent used</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * to invoke the scanner. This can be used to set additional options not directly exposed by this</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * simplified API.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;By default, this will only allow applications that are known to respond to this intent correctly</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(List)}.</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * For example, set to {@link #TARGET_BARCODE_SCANNER_ONLY} to only target the Barcode Scanner app itself.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * &lt;h2&gt;Sharing text via barcode&lt;/h2&gt;</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;To share text, encoded as a QR Code on-screen, similarly, see {@link #shareText(CharSequence)}.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Some code, particularly download integration, was contributed from the Anobiit application.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * &lt;h2&gt;Enabling experimental barcode formats&lt;/h2&gt;</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Some formats are not enabled by default even when scanning with {@link #ALL_CODE_TYPES}, such as</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> * PDF417. Use {@link #initiateScan(java.util.Collection)} with</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment"> * a collection containing the names of formats to scan for explicitly, like "PDF_417", to use such</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment"> * formats.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment"> * @author Sean Owen</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment"> * @author Fred Lin</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment"> * @author Isaac Potoczny-Jones</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment"> * @author Brad Drehmer</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment"> * @author gcstang</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/integration/android/IntentIntegrator.html">IntentIntegrator</a> {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> REQUEST_CODE = 0x0000c0de; <em class="jxr_comment">// Only use bottom 16 bits</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TAG = IntentIntegrator.<strong class="jxr_keyword">class</strong>.getSimpleName();
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_TITLE = <span class="jxr_string">"Install Barcode Scanner?"</span>;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_MESSAGE =
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>       <span class="jxr_string">"This application requires Barcode Scanner. Would you like to install it?"</span>;
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_YES = <span class="jxr_string">"Yes"</span>;
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_NO = <span class="jxr_string">"No"</span>;
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BS_PACKAGE = <span class="jxr_string">"com.google.zxing.client.android"</span>;
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BSPLUS_PACKAGE = <span class="jxr_string">"com.srowen.bs.android"</span>;
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>   <em class="jxr_comment">// supported barcode formats</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; PRODUCT_CODE_TYPES = list(<span class="jxr_string">"UPC_A"</span>, <span class="jxr_string">"UPC_E"</span>, <span class="jxr_string">"EAN_8"</span>, <span class="jxr_string">"EAN_13"</span>, <span class="jxr_string">"RSS_14"</span>);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; ONE_D_CODE_TYPES =
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>       list(<span class="jxr_string">"UPC_A"</span>, <span class="jxr_string">"UPC_E"</span>, <span class="jxr_string">"EAN_8"</span>, <span class="jxr_string">"EAN_13"</span>, <span class="jxr_string">"CODE_39"</span>, <span class="jxr_string">"CODE_93"</span>, <span class="jxr_string">"CODE_128"</span>,
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>            <span class="jxr_string">"ITF"</span>, <span class="jxr_string">"RSS_14"</span>, <span class="jxr_string">"RSS_EXPANDED"</span>);
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; QR_CODE_TYPES = Collections.singleton(<span class="jxr_string">"QR_CODE"</span>);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; DATA_MATRIX_TYPES = Collections.singleton(<span class="jxr_string">"DATA_MATRIX"</span>);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; ALL_CODE_TYPES = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>   
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; TARGET_BARCODE_SCANNER_ONLY = Collections.singletonList(BS_PACKAGE);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; TARGET_ALL_KNOWN = list(
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>           BSPLUS_PACKAGE,             <em class="jxr_comment">// Barcode Scanner+</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>           BSPLUS_PACKAGE + <span class="jxr_string">".simple"</span>, <em class="jxr_comment">// Barcode Scanner+ Simple</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>           BS_PACKAGE                  <em class="jxr_comment">// Barcode Scanner          </em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>           <em class="jxr_comment">// What else supports this intent?</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>       );
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>   
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Activity activity;
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>   <strong class="jxr_keyword">private</strong> String title;
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>   <strong class="jxr_keyword">private</strong> String message;
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>   <strong class="jxr_keyword">private</strong> String buttonYes;
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>   <strong class="jxr_keyword">private</strong> String buttonNo;
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>   <strong class="jxr_keyword">private</strong> List&lt;String&gt; targetApplications;
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Object&gt; moreExtras;
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>   
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>   <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/integration/android/IntentIntegrator.html">IntentIntegrator</a>(Activity activity) {
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>     <strong class="jxr_keyword">this</strong>.activity = activity;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>     title = DEFAULT_TITLE;
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>     message = DEFAULT_MESSAGE;
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>     buttonYes = DEFAULT_YES;
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>     buttonNo = DEFAULT_NO;
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>     targetApplications = TARGET_ALL_KNOWN;
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>     moreExtras = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;(3);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>   }
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>   
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>   <strong class="jxr_keyword">public</strong> String getTitle() {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>     <strong class="jxr_keyword">return</strong> title;
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>   }
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>   
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTitle(String title) {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>     <strong class="jxr_keyword">this</strong>.title = title;
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>   }
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTitleByID(<strong class="jxr_keyword">int</strong> titleID) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>     title = activity.getString(titleID);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>   }
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>   <strong class="jxr_keyword">public</strong> String getMessage() {
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">return</strong> message;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>   }
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMessage(String message) {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>     <strong class="jxr_keyword">this</strong>.message = message;
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>   }
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMessageByID(<strong class="jxr_keyword">int</strong> messageID) {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>     message = activity.getString(messageID);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>   }
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>   <strong class="jxr_keyword">public</strong> String getButtonYes() {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>     <strong class="jxr_keyword">return</strong> buttonYes;
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>   }
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setButtonYes(String buttonYes) {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">this</strong>.buttonYes = buttonYes;
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>   }
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setButtonYesByID(<strong class="jxr_keyword">int</strong> buttonYesID) {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>     buttonYes = activity.getString(buttonYesID);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>   }
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>   <strong class="jxr_keyword">public</strong> String getButtonNo() {
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>     <strong class="jxr_keyword">return</strong> buttonNo;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>   }
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setButtonNo(String buttonNo) {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">this</strong>.buttonNo = buttonNo;
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>   }
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setButtonNoByID(<strong class="jxr_keyword">int</strong> buttonNoID) {
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>     buttonNo = activity.getString(buttonNoID);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>   }
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>   
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>   <strong class="jxr_keyword">public</strong> Collection&lt;String&gt; getTargetApplications() {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>     <strong class="jxr_keyword">return</strong> targetApplications;
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>   }
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>   
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setTargetApplications(List&lt;String&gt; targetApplications) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>     <strong class="jxr_keyword">if</strong> (targetApplications.isEmpty()) {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"No target applications"</span>);
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>     }
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>     <strong class="jxr_keyword">this</strong>.targetApplications = targetApplications;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>   }
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>   
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSingleTargetApplication(String targetApplication) {
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>     <strong class="jxr_keyword">this</strong>.targetApplications = Collections.singletonList(targetApplication);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>   }
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>   <strong class="jxr_keyword">public</strong> Map&lt;String,?&gt; getMoreExtras() {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>     <strong class="jxr_keyword">return</strong> moreExtras;
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>   }
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> addExtra(String key, Object value) {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>     moreExtras.put(key, value);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>   }
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">   * Initiates a scan for all known barcode types.</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> AlertDialog initiateScan() {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>     <strong class="jxr_keyword">return</strong> initiateScan(ALL_CODE_TYPES);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>   }
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">   * Initiates a scan only for a certain set of barcode types, given as strings corresponding</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">   * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">   * like {@link #PRODUCT_CODE_TYPES} for example.</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">   *   if a prompt was needed, or null otherwise</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> AlertDialog initiateScan(Collection&lt;String&gt; desiredBarcodeFormats) {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>     Intent intentScan = <strong class="jxr_keyword">new</strong> Intent(BS_PACKAGE + <span class="jxr_string">".SCAN"</span>);
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <em class="jxr_comment">// check which types of codes to scan for</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">if</strong> (desiredBarcodeFormats != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>       <em class="jxr_comment">// set the desired barcode types</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>       StringBuilder joinedByComma = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>       <strong class="jxr_keyword">for</strong> (String format : desiredBarcodeFormats) {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>         <strong class="jxr_keyword">if</strong> (joinedByComma.length() &gt; 0) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>           joinedByComma.append(',');
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>         }
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>         joinedByComma.append(format);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>       }
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>       intentScan.putExtra(<span class="jxr_string">"SCAN_FORMATS"</span>, joinedByComma.toString());
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>     }
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>     String targetAppPackage = findTargetAppPackage(intentScan);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>     <strong class="jxr_keyword">if</strong> (targetAppPackage == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>       <strong class="jxr_keyword">return</strong> showDownloadDialog();
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>     }
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>     intentScan.setPackage(targetAppPackage);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>     attachMoreExtras(intentScan);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     startActivityForResult(intentScan, REQUEST_CODE);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>   }
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> android.app.Fragment;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> android.content.ActivityNotFoundException;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> android.content.DialogInterface;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> android.content.Intent;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> android.content.pm.PackageManager;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> android.content.pm.ResolveInfo;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> android.net.Uri;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> android.os.Bundle;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> android.util.Log;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;A utility class which helps ease integration with Barcode Scanner via {@link Intent}s. This is a simple</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * project's source code.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h2&gt;Initiating a barcode scan&lt;/h2&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;To integrate, create an instance of {@code IntentIntegrator} and call {@link #initiateScan()} and wait</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * for the result in your app.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;It does require that the Barcode Scanner (or work-alike) application is installed. The</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * {@link #initiateScan()} method will prompt the user to download the application, if needed.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;There are a few steps to using this integration. First, your {@link Activity} must implement</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * the method {@link Activity#onActivityResult(int, int, Intent)} and include a line of code like this:&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * &lt;pre&gt;{@code</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * public void onActivityResult(int requestCode, int resultCode, Intent intent) {</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> *   IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> *   if (scanResult != null) {</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> *     // handle scan result</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> *   }</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> *   // else continue with any other code you need in the method</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> *   ...</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * }</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * }&lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;This is where you will handle a scan result.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Second, just call this in response to a user action somewhere to begin the scan process:&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;pre&gt;{@code</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * IntentIntegrator integrator = new IntentIntegrator(yourActivity);</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * integrator.initiateScan();</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * }&lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Note that {@link #initiateScan()} returns an {@link AlertDialog} which is non-null if the</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * user was prompted to download the application. This lets the calling app potentially manage the dialog.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * In particular, ideally, the app dismisses the dialog if it's still active in its {@link Activity#onPause()}</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * method.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;You can use {@link #setTitle(String)} to customize the title of this download prompt dialog (or, use</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * {@link #setTitleByID(int)} to set the title by string resource ID.) Likewise, the prompt message, and</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * yes/no button labels can be changed.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Finally, you can use {@link #addExtra(String, Object)} to add more parameters to the Intent used</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * to invoke the scanner. This can be used to set additional options not directly exposed by this</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * simplified API.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;By default, this will only allow applications that are known to respond to this intent correctly</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(List)}.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * For example, set to {@link #TARGET_BARCODE_SCANNER_ONLY} to only target the Barcode Scanner app itself.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * &lt;h2&gt;Sharing text via barcode&lt;/h2&gt;</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;To share text, encoded as a QR Code on-screen, similarly, see {@link #shareText(CharSequence)}.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Some code, particularly download integration, was contributed from the Anobiit application.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> * &lt;h2&gt;Enabling experimental barcode formats&lt;/h2&gt;</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Some formats are not enabled by default even when scanning with {@link #ALL_CODE_TYPES}, such as</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment"> * PDF417. Use {@link #initiateScan(java.util.Collection)} with</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment"> * a collection containing the names of formats to scan for explicitly, like "PDF_417", to use such</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment"> * formats.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment"> * @author Fred Lin</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment"> * @author Isaac Potoczny-Jones</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment"> * @author Brad Drehmer</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment"> * @author gcstang</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/integration/android/IntentIntegrator.html">IntentIntegrator</a> {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> REQUEST_CODE = 0x0000c0de; <em class="jxr_comment">// Only use bottom 16 bits</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TAG = IntentIntegrator.<strong class="jxr_keyword">class</strong>.getSimpleName();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_TITLE = <span class="jxr_string">"Install Barcode Scanner?"</span>;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_MESSAGE =
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>       <span class="jxr_string">"This application requires Barcode Scanner. Would you like to install it?"</span>;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_YES = <span class="jxr_string">"Yes"</span>;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_NO = <span class="jxr_string">"No"</span>;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BS_PACKAGE = <span class="jxr_string">"com.google.zxing.client.android"</span>;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BSPLUS_PACKAGE = <span class="jxr_string">"com.srowen.bs.android"</span>;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>   <em class="jxr_comment">// supported barcode formats</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; PRODUCT_CODE_TYPES = list(<span class="jxr_string">"UPC_A"</span>, <span class="jxr_string">"UPC_E"</span>, <span class="jxr_string">"EAN_8"</span>, <span class="jxr_string">"EAN_13"</span>, <span class="jxr_string">"RSS_14"</span>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; ONE_D_CODE_TYPES =
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>       list(<span class="jxr_string">"UPC_A"</span>, <span class="jxr_string">"UPC_E"</span>, <span class="jxr_string">"EAN_8"</span>, <span class="jxr_string">"EAN_13"</span>, <span class="jxr_string">"CODE_39"</span>, <span class="jxr_string">"CODE_93"</span>, <span class="jxr_string">"CODE_128"</span>,
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>            <span class="jxr_string">"ITF"</span>, <span class="jxr_string">"RSS_14"</span>, <span class="jxr_string">"RSS_EXPANDED"</span>);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; QR_CODE_TYPES = Collections.singleton(<span class="jxr_string">"QR_CODE"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; DATA_MATRIX_TYPES = Collections.singleton(<span class="jxr_string">"DATA_MATRIX"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; ALL_CODE_TYPES = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>   
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; TARGET_BARCODE_SCANNER_ONLY = Collections.singletonList(BS_PACKAGE);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; TARGET_ALL_KNOWN = list(
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>           BSPLUS_PACKAGE,             <em class="jxr_comment">// Barcode Scanner+</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>           BSPLUS_PACKAGE + <span class="jxr_string">".simple"</span>, <em class="jxr_comment">// Barcode Scanner+ Simple</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>           BS_PACKAGE                  <em class="jxr_comment">// Barcode Scanner          </em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>           <em class="jxr_comment">// What else supports this intent?</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>       );
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>   
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Activity activity;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Fragment fragment;
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>   <strong class="jxr_keyword">private</strong> String title;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>   <strong class="jxr_keyword">private</strong> String message;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>   <strong class="jxr_keyword">private</strong> String buttonYes;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>   <strong class="jxr_keyword">private</strong> String buttonNo;
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>   <strong class="jxr_keyword">private</strong> List&lt;String&gt; targetApplications;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Object&gt; moreExtras = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;(3);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">   * @param activity {@link Activity} invoking the integration</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>   <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/integration/android/IntentIntegrator.html">IntentIntegrator</a>(Activity activity) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     <strong class="jxr_keyword">this</strong>.activity = activity;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>     <strong class="jxr_keyword">this</strong>.fragment = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>     initializeConfiguration();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>   }
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">   * @param fragment {@link Fragment} invoking the integration.</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">   *  {@link #startActivityForResult(Intent, int)} will be called on the {@link Fragment} instead</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">   *  of an {@link Activity}</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>   <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/integration/android/IntentIntegrator.html">IntentIntegrator</a>(Fragment fragment) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>     <strong class="jxr_keyword">this</strong>.activity = fragment.getActivity();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     <strong class="jxr_keyword">this</strong>.fragment = fragment;
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>     initializeConfiguration();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>   }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> initializeConfiguration() {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>     title = DEFAULT_TITLE;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>     message = DEFAULT_MESSAGE;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     buttonYes = DEFAULT_YES;
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>     buttonNo = DEFAULT_NO;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>     targetApplications = TARGET_ALL_KNOWN;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>   }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>   
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>   <strong class="jxr_keyword">public</strong> String getTitle() {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     <strong class="jxr_keyword">return</strong> title;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>   }
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>   
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTitle(String title) {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>     <strong class="jxr_keyword">this</strong>.title = title;
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>   }
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTitleByID(<strong class="jxr_keyword">int</strong> titleID) {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>     title = activity.getString(titleID);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>   }
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>   <strong class="jxr_keyword">public</strong> String getMessage() {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     <strong class="jxr_keyword">return</strong> message;
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>   }
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMessage(String message) {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">this</strong>.message = message;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>   }
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMessageByID(<strong class="jxr_keyword">int</strong> messageID) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     message = activity.getString(messageID);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>   }
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>   <strong class="jxr_keyword">public</strong> String getButtonYes() {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     <strong class="jxr_keyword">return</strong> buttonYes;
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>   }
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setButtonYes(String buttonYes) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     <strong class="jxr_keyword">this</strong>.buttonYes = buttonYes;
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>   }
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setButtonYesByID(<strong class="jxr_keyword">int</strong> buttonYesID) {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>     buttonYes = activity.getString(buttonYesID);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>   }
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>   <strong class="jxr_keyword">public</strong> String getButtonNo() {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>     <strong class="jxr_keyword">return</strong> buttonNo;
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>   }
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setButtonNo(String buttonNo) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>     <strong class="jxr_keyword">this</strong>.buttonNo = buttonNo;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>   }
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setButtonNoByID(<strong class="jxr_keyword">int</strong> buttonNoID) {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>     buttonNo = activity.getString(buttonNoID);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>   }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>   
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>   <strong class="jxr_keyword">public</strong> Collection&lt;String&gt; getTargetApplications() {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>     <strong class="jxr_keyword">return</strong> targetApplications;
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>   }
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>   
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setTargetApplications(List&lt;String&gt; targetApplications) {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <strong class="jxr_keyword">if</strong> (targetApplications.isEmpty()) {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"No target applications"</span>);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>     }
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>     <strong class="jxr_keyword">this</strong>.targetApplications = targetApplications;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>   }
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>   
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSingleTargetApplication(String targetApplication) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     <strong class="jxr_keyword">this</strong>.targetApplications = Collections.singletonList(targetApplication);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>   }
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>   <strong class="jxr_keyword">public</strong> Map&lt;String,?&gt; getMoreExtras() {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">return</strong> moreExtras;
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>   }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> addExtra(String key, Object value) {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     moreExtras.put(key, value);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>   }
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">   * Initiates a scan for all known barcode types.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">   *   if a prompt was needed, or null otherwiseo</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> AlertDialog initiateScan() {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">return</strong> initiateScan(ALL_CODE_TYPES);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>   }
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">   * Initiates a scan only for a certain set of barcode types, given as strings corresponding</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">   * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">   * like {@link #PRODUCT_CODE_TYPES} for example.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">   * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">   *   if a prompt was needed, or null otherwise</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> AlertDialog initiateScan(Collection&lt;String&gt; desiredBarcodeFormats) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     Intent intentScan = <strong class="jxr_keyword">new</strong> Intent(BS_PACKAGE + <span class="jxr_string">".SCAN"</span>);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">   * Start an activity. This method is defined to allow different methods of activity starting for</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">   * newer versions of Android and for compatibility library.</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">   * @param intent Intent to start.</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">   * @param code Request code for the activity</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">   * @see android.app.Activity#startActivityForResult(Intent, int)</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">   * @see android.app.Fragment#startActivityForResult(Intent, int)</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> startActivityForResult(Intent intent, <strong class="jxr_keyword">int</strong> code) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>     activity.startActivityForResult(intent, code);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>   }
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>   
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>   <strong class="jxr_keyword">private</strong> String findTargetAppPackage(Intent intent) {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>     PackageManager pm = activity.getPackageManager();
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>     List&lt;ResolveInfo&gt; availableApps = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>     <strong class="jxr_keyword">if</strong> (availableApps != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>       <strong class="jxr_keyword">for</strong> (String targetApp : targetApplications) {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>         <strong class="jxr_keyword">if</strong> (contains(availableApps, targetApp)) {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>           <strong class="jxr_keyword">return</strong> targetApp;
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>         }
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>       }
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>     }
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>   }
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>   
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> contains(Iterable&lt;ResolveInfo&gt; availableApps, String targetApp) {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>     <strong class="jxr_keyword">for</strong> (ResolveInfo availableApp : availableApps) {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>       String packageName = availableApp.activityInfo.packageName;
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>       <strong class="jxr_keyword">if</strong> (targetApp.equals(packageName)) {
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>       }
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>     }
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>   }
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>   <strong class="jxr_keyword">private</strong> AlertDialog showDownloadDialog() {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>     AlertDialog.Builder downloadDialog = <strong class="jxr_keyword">new</strong> AlertDialog.Builder(activity);
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>     downloadDialog.setTitle(title);
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>     downloadDialog.setMessage(message);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>     downloadDialog.setPositiveButton(buttonYes, <strong class="jxr_keyword">new</strong> DialogInterface.OnClickListener() {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>       @Override
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>       <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onClick(DialogInterface dialogInterface, <strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>         String packageName;
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>         <strong class="jxr_keyword">if</strong> (targetApplications.contains(BS_PACKAGE)) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>           <em class="jxr_comment">// Prefer to suggest download of BS if it's anywhere in the list</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>           packageName = BS_PACKAGE;
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>           <em class="jxr_comment">// Otherwise, first option:</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>           packageName = targetApplications.get(0);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>         }
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>         Uri uri = Uri.parse(<span class="jxr_string">"market://details?id="</span> + packageName);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>         Intent intent = <strong class="jxr_keyword">new</strong> Intent(Intent.ACTION_VIEW, uri);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>           activity.startActivity(intent);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>         } <strong class="jxr_keyword">catch</strong> (ActivityNotFoundException anfe) {
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>           <em class="jxr_comment">// Hmm, market is not installed</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>           Log.w(TAG, <span class="jxr_string">"Google Play is not installed; cannot install "</span> + packageName);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>         }
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>       }
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>     });
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>     downloadDialog.setNegativeButton(buttonNo, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>     downloadDialog.setCancelable(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>     <strong class="jxr_keyword">return</strong> downloadDialog.show();
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>   }
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Call this from your {@link Activity}'s</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">   * {@link Activity#onActivityResult(int, int, Intent)} method.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">   * @return null if the event handled here was not related to this class, or</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">   *  else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">   *  the fields will be null.</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/integration/android/IntentResult.html">IntentResult</a> parseActivityResult(<strong class="jxr_keyword">int</strong> requestCode, <strong class="jxr_keyword">int</strong> resultCode, Intent intent) {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>     <strong class="jxr_keyword">if</strong> (requestCode == REQUEST_CODE) {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>       <strong class="jxr_keyword">if</strong> (resultCode == Activity.RESULT_OK) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>         String contents = intent.getStringExtra(<span class="jxr_string">"SCAN_RESULT"</span>);
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>         String formatName = intent.getStringExtra(<span class="jxr_string">"SCAN_RESULT_FORMAT"</span>);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>         byte[] rawBytes = intent.getByteArrayExtra(<span class="jxr_string">"SCAN_RESULT_BYTES"</span>);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>         <strong class="jxr_keyword">int</strong> intentOrientation = intent.getIntExtra(<span class="jxr_string">"SCAN_RESULT_ORIENTATION"</span>, Integer.MIN_VALUE);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>         Integer orientation = intentOrientation == Integer.MIN_VALUE ? <strong class="jxr_keyword">null</strong> : intentOrientation;
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>         String errorCorrectionLevel = intent.getStringExtra(<span class="jxr_string">"SCAN_RESULT_ERROR_CORRECTION_LEVEL"</span>);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/integration/android/IntentResult.html">IntentResult</a>(contents,
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>                                 formatName,
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>                                 rawBytes,
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>                                 orientation,
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>                                 errorCorrectionLevel);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>       }
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/integration/android/IntentResult.html">IntentResult</a>();
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>     }
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>   }
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">   * Defaults to type "TEXT_TYPE".</em>
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">   * @see #shareText(CharSequence, CharSequence)</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> AlertDialog shareText(CharSequence text) {
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>     <strong class="jxr_keyword">return</strong> shareText(text, <span class="jxr_string">"TEXT_TYPE"</span>);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>   }
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">   * Shares the given text by encoding it as a barcode, such that another user can</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">   * scan the text off the screen of the device.</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">   * @param text the text string to encode as a barcode</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">   * @param type type of data to encode. See {@code com.google.zxing.client.android.Contents.Type} constants.</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">   *   if a prompt was needed, or null otherwise</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> AlertDialog shareText(CharSequence text, CharSequence type) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>     Intent intent = <strong class="jxr_keyword">new</strong> Intent();
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>     intent.addCategory(Intent.CATEGORY_DEFAULT);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>     intent.setAction(BS_PACKAGE + <span class="jxr_string">".ENCODE"</span>);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>     intent.putExtra(<span class="jxr_string">"ENCODE_TYPE"</span>, type);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>     intent.putExtra(<span class="jxr_string">"ENCODE_DATA"</span>, text);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>     String targetAppPackage = findTargetAppPackage(intent);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>     <strong class="jxr_keyword">if</strong> (targetAppPackage == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>       <strong class="jxr_keyword">return</strong> showDownloadDialog();
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>     }
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>     intent.setPackage(targetAppPackage);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>     attachMoreExtras(intent);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>     activity.startActivity(intent);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     <em class="jxr_comment">// check which types of codes to scan for</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     <strong class="jxr_keyword">if</strong> (desiredBarcodeFormats != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>       <em class="jxr_comment">// set the desired barcode types</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>       StringBuilder joinedByComma = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>       <strong class="jxr_keyword">for</strong> (String format : desiredBarcodeFormats) {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>         <strong class="jxr_keyword">if</strong> (joinedByComma.length() &gt; 0) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>           joinedByComma.append(',');
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>         }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>         joinedByComma.append(format);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>       }
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>       intentScan.putExtra(<span class="jxr_string">"SCAN_FORMATS"</span>, joinedByComma.toString());
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>     }
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>     String targetAppPackage = findTargetAppPackage(intentScan);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>     <strong class="jxr_keyword">if</strong> (targetAppPackage == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>       <strong class="jxr_keyword">return</strong> showDownloadDialog();
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>     }
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     intentScan.setPackage(targetAppPackage);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     attachMoreExtras(intentScan);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     startActivityForResult(intentScan, REQUEST_CODE);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>   }
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">   * Start an activity. This method is defined to allow different methods of activity starting for</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">   * newer versions of Android and for compatibility library.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">   * @param intent Intent to start.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">   * @param code Request code for the activity</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">   * @see android.app.Activity#startActivityForResult(Intent, int)</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">   * @see android.app.Fragment#startActivityForResult(Intent, int)</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> startActivityForResult(Intent intent, <strong class="jxr_keyword">int</strong> code) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">if</strong> (fragment == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>       activity.startActivityForResult(intent, code);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>       fragment.startActivityForResult(intent, code);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     }
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>   }
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>   
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>   <strong class="jxr_keyword">private</strong> String findTargetAppPackage(Intent intent) {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>     PackageManager pm = activity.getPackageManager();
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>     List&lt;ResolveInfo&gt; availableApps = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>     <strong class="jxr_keyword">if</strong> (availableApps != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>       <strong class="jxr_keyword">for</strong> (String targetApp : targetApplications) {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>         <strong class="jxr_keyword">if</strong> (contains(availableApps, targetApp)) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>           <strong class="jxr_keyword">return</strong> targetApp;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         }
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>       }
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>   }
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>   
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> contains(Iterable&lt;ResolveInfo&gt; availableApps, String targetApp) {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     <strong class="jxr_keyword">for</strong> (ResolveInfo availableApp : availableApps) {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>       String packageName = availableApp.activityInfo.packageName;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>       <strong class="jxr_keyword">if</strong> (targetApp.equals(packageName)) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>       }
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>     }
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>     <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>   }
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>   <strong class="jxr_keyword">private</strong> AlertDialog showDownloadDialog() {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>     AlertDialog.Builder downloadDialog = <strong class="jxr_keyword">new</strong> AlertDialog.Builder(activity);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>     downloadDialog.setTitle(title);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>     downloadDialog.setMessage(message);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>     downloadDialog.setPositiveButton(buttonYes, <strong class="jxr_keyword">new</strong> DialogInterface.OnClickListener() {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>       @Override
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>       <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onClick(DialogInterface dialogInterface, <strong class="jxr_keyword">int</strong> i) {
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>         String packageName;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         <strong class="jxr_keyword">if</strong> (targetApplications.contains(BS_PACKAGE)) {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>           <em class="jxr_comment">// Prefer to suggest download of BS if it's anywhere in the list</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>           packageName = BS_PACKAGE;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>           <em class="jxr_comment">// Otherwise, first option:</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>           packageName = targetApplications.get(0);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>         }
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>         Uri uri = Uri.parse(<span class="jxr_string">"market://details?id="</span> + packageName);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>         Intent intent = <strong class="jxr_keyword">new</strong> Intent(Intent.ACTION_VIEW, uri);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>           <strong class="jxr_keyword">if</strong> (fragment == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>             activity.startActivity(intent);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>           } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>             fragment.startActivity(intent);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>           }
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>         } <strong class="jxr_keyword">catch</strong> (ActivityNotFoundException anfe) {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>           <em class="jxr_comment">// Hmm, market is not installed</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>           Log.w(TAG, <span class="jxr_string">"Google Play is not installed; cannot install "</span> + packageName);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>         }
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>       }
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>     });
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>     downloadDialog.setNegativeButton(buttonNo, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>     downloadDialog.setCancelable(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>     <strong class="jxr_keyword">return</strong> downloadDialog.show();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>   }
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">   * &lt;p&gt;Call this from your {@link Activity}'s</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">   * {@link Activity#onActivityResult(int, int, Intent)} method.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">   * @param requestCode request code from {@code onActivityResult()}</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">   * @param resultCode result code from {@code onActivityResult()}</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">   * @param intent {@link Intent} from {@code onActivityResult()}</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">   * @return null if the event handled here was not related to this class, or</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">   *  else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">   *  the fields will be null.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/integration/android/IntentResult.html">IntentResult</a> parseActivityResult(<strong class="jxr_keyword">int</strong> requestCode, <strong class="jxr_keyword">int</strong> resultCode, Intent intent) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>     <strong class="jxr_keyword">if</strong> (requestCode == REQUEST_CODE) {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>       <strong class="jxr_keyword">if</strong> (resultCode == Activity.RESULT_OK) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>         String contents = intent.getStringExtra(<span class="jxr_string">"SCAN_RESULT"</span>);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>         String formatName = intent.getStringExtra(<span class="jxr_string">"SCAN_RESULT_FORMAT"</span>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>         byte[] rawBytes = intent.getByteArrayExtra(<span class="jxr_string">"SCAN_RESULT_BYTES"</span>);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>         <strong class="jxr_keyword">int</strong> intentOrientation = intent.getIntExtra(<span class="jxr_string">"SCAN_RESULT_ORIENTATION"</span>, Integer.MIN_VALUE);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>         Integer orientation = intentOrientation == Integer.MIN_VALUE ? <strong class="jxr_keyword">null</strong> : intentOrientation;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>         String errorCorrectionLevel = intent.getStringExtra(<span class="jxr_string">"SCAN_RESULT_ERROR_CORRECTION_LEVEL"</span>);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/integration/android/IntentResult.html">IntentResult</a>(contents,
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>                                 formatName,
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>                                 rawBytes,
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>                                 orientation,
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>                                 errorCorrectionLevel);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>       }
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/integration/android/IntentResult.html">IntentResult</a>();
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>     }
 <a class="jxr_linenumber" name="L402" href="#L402">402</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L403" href="#L403">403</a>   }
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>   
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; list(String... values) {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>     <strong class="jxr_keyword">return</strong> Collections.unmodifiableList(Arrays.asList(values));
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>   }
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> attachMoreExtras(Intent intent) {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>     <strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,Object&gt; entry : moreExtras.entrySet()) {
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>       String key = entry.getKey();
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>       Object value = entry.getValue();
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>       <em class="jxr_comment">// Kind of hacky</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>       <strong class="jxr_keyword">if</strong> (value instanceof Integer) {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>         intent.putExtra(key, (Integer) value);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Long) {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>         intent.putExtra(key, (Long) value);
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Boolean) {
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>         intent.putExtra(key, (Boolean) value);
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Double) {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>         intent.putExtra(key, (Double) value);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Float) {
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>         intent.putExtra(key, (Float) value);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Bundle) {
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>         intent.putExtra(key, (Bundle) value);
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>         intent.putExtra(key, value.toString());
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>       }
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>     }
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>   }
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> }
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">   * Defaults to type "TEXT_TYPE".</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">   * @param text the text string to encode as a barcode</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">   *   if a prompt was needed, or null otherwise</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">   * @see #shareText(CharSequence, CharSequence)</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> AlertDialog shareText(CharSequence text) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     <strong class="jxr_keyword">return</strong> shareText(text, <span class="jxr_string">"TEXT_TYPE"</span>);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>   }
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">   * Shares the given text by encoding it as a barcode, such that another user can</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">   * scan the text off the screen of the device.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">   * @param text the text string to encode as a barcode</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">   * @param type type of data to encode. See {@code com.google.zxing.client.android.Contents.Type} constants.</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">   *   if a prompt was needed, or null otherwise</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> AlertDialog shareText(CharSequence text, CharSequence type) {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>     Intent intent = <strong class="jxr_keyword">new</strong> Intent();
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     intent.addCategory(Intent.CATEGORY_DEFAULT);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>     intent.setAction(BS_PACKAGE + <span class="jxr_string">".ENCODE"</span>);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>     intent.putExtra(<span class="jxr_string">"ENCODE_TYPE"</span>, type);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>     intent.putExtra(<span class="jxr_string">"ENCODE_DATA"</span>, text);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     String targetAppPackage = findTargetAppPackage(intent);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>     <strong class="jxr_keyword">if</strong> (targetAppPackage == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>       <strong class="jxr_keyword">return</strong> showDownloadDialog();
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>     }
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>     intent.setPackage(targetAppPackage);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>     attachMoreExtras(intent);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>     <strong class="jxr_keyword">if</strong> (fragment == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>       activity.startActivity(intent);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>       fragment.startActivity(intent);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>     }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>   }
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>   
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; list(String... values) {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>     <strong class="jxr_keyword">return</strong> Collections.unmodifiableList(Arrays.asList(values));
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>   }
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> attachMoreExtras(Intent intent) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     <strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,Object&gt; entry : moreExtras.entrySet()) {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>       String key = entry.getKey();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>       Object value = entry.getValue();
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>       <em class="jxr_comment">// Kind of hacky</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>       <strong class="jxr_keyword">if</strong> (value instanceof Integer) {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>         intent.putExtra(key, (Integer) value);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Long) {
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>         intent.putExtra(key, (Long) value);
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Boolean) {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>         intent.putExtra(key, (Boolean) value);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Double) {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>         intent.putExtra(key, (Double) value);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Float) {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>         intent.putExtra(key, (Float) value);
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>       } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Bundle) {
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>         intent.putExtra(key, (Bundle) value);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>         intent.putExtra(key, value.toString());
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>       }
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>     }
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>   }
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

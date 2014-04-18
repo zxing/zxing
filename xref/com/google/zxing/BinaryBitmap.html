@@ -64,96 +64,98 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">   * cached data. Callers should assume this method is expensive and call it as seldom as possible.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">   * This method is intended for decoding 1D barcodes and may choose to apply sharpening.</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">   * @param y The row to fetch, 0 &lt;= y &lt; bitmap height.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">   * @param y The row to fetch, which must be in [0, bitmap height)</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">   * @param row An optional preallocated array. If null or too small, it will be ignored.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">   *            If used, the Binarizer will call BitArray.clear(). Always use the returned object.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">   * @return The array of bits for this row (true means black).</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/common/BitArray.html">BitArray</a> getBlackRow(<strong class="jxr_keyword">int</strong> y, <a href="../../../com/google/zxing/common/BitArray.html">BitArray</a> row) <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">return</strong> binarizer.getBlackRow(y, row);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>    }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">   * Converts a 2D array of luminance data to 1 bit. As above, assume this method is expensive</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">   * and do not call it repeatedly. This method is intended for decoding 2D barcodes and may or</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">   * may not apply sharpening. Therefore, a row from this matrix may not be identical to one</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">   * fetched using getBlackRow(), so don't mix and match between them.</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">   * @return The 2D array of bits for the image (true means black).</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>    <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> getBlackMatrix() <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <em class="jxr_comment">// The matrix is created on demand the first time it is requested, then cached. There are two</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <em class="jxr_comment">// reasons for this:</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <em class="jxr_comment">// 1. This work will never be done if the caller only installs 1D Reader objects, or if a</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <em class="jxr_comment">//    1D Reader finds a barcode before the 2D Readers run.</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <em class="jxr_comment">// 2. This work will only be done once even if the caller installs multiple 2D Readers.</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">if</strong> (matrix == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>        matrix = binarizer.getBlackMatrix();
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">return</strong> matrix;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>    }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">   * @return Whether this bitmap can be cropped.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isCropSupported() {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">return</strong> binarizer.getLuminanceSource().isCropSupported();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>    }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">   * Returns a new object with cropped image data. Implementations may keep a reference to the</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">   * original data rather than a copy. Only callable if isCropSupported() is true.</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">   * @param left The left coordinate, 0 &lt;= left &lt; getWidth().</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">   * @param top The top coordinate, 0 &lt;= top &lt;= getHeight().</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">   * @param width The width of the rectangle to crop.</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">   * @param height The height of the rectangle to crop.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">   * @return A cropped version of this object.</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>   <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a> crop(<strong class="jxr_keyword">int</strong> left, <strong class="jxr_keyword">int</strong> top, <strong class="jxr_keyword">int</strong> width, <strong class="jxr_keyword">int</strong> height) {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     <a href="../../../com/google/zxing/LuminanceSource.html">LuminanceSource</a> newSource = binarizer.getLuminanceSource().crop(left, top, width, height);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a>(binarizer.createBinarizer(newSource));
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>   }
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">   * @return Whether this bitmap supports counter-clockwise rotation.</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isRotateSupported() {
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">return</strong> binarizer.getLuminanceSource().isRotateSupported();
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>   }
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">   * Returns a new object with rotated image data by 90 degrees counterclockwise.</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">   * Only callable if {@link #isRotateSupported()} is true.</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">   * @return A rotated version of this object.</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>   <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a> rotateCounterClockwise() {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     <a href="../../../com/google/zxing/LuminanceSource.html">LuminanceSource</a> newSource = binarizer.getLuminanceSource().rotateCounterClockwise();
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a>(binarizer.createBinarizer(newSource));
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>   }
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">   * Returns a new object with rotated image data by 45 degrees counterclockwise.</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">   * Only callable if {@link #isRotateSupported()} is true.</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">   * @return A rotated version of this object.</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>   <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a> rotateCounterClockwise45() {
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <a href="../../../com/google/zxing/LuminanceSource.html">LuminanceSource</a> newSource = binarizer.getLuminanceSource().rotateCounterClockwise45();
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a>(binarizer.createBinarizer(newSource));
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>   }
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>   @Override
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>   <strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>       <strong class="jxr_keyword">return</strong> getBlackMatrix().toString();
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>     } <strong class="jxr_keyword">catch</strong> (NotFoundException e) {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>       <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>     }
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>   }
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">   * @throws NotFoundException if row can't be binarized</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>    <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/common/BitArray.html">BitArray</a> getBlackRow(<strong class="jxr_keyword">int</strong> y, <a href="../../../com/google/zxing/common/BitArray.html">BitArray</a> row) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">return</strong> binarizer.getBlackRow(y, row);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">   * Converts a 2D array of luminance data to 1 bit. As above, assume this method is expensive</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">   * and do not call it repeatedly. This method is intended for decoding 2D barcodes and may or</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">   * may not apply sharpening. Therefore, a row from this matrix may not be identical to one</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">   * fetched using getBlackRow(), so don't mix and match between them.</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">   * @return The 2D array of bits for the image (true means black).</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">   * @throws NotFoundException if image can't be binarized to make a matrix</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>    <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> getBlackMatrix() <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <em class="jxr_comment">// The matrix is created on demand the first time it is requested, then cached. There are two</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <em class="jxr_comment">// reasons for this:</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <em class="jxr_comment">// 1. This work will never be done if the caller only installs 1D Reader objects, or if a</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <em class="jxr_comment">//    1D Reader finds a barcode before the 2D Readers run.</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <em class="jxr_comment">// 2. This work will only be done once even if the caller installs multiple 2D Readers.</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">if</strong> (matrix == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>        matrix = binarizer.getBlackMatrix();
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">return</strong> matrix;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>    }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">   * @return Whether this bitmap can be cropped.</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isCropSupported() {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">return</strong> binarizer.getLuminanceSource().isCropSupported();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>    }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">   * Returns a new object with cropped image data. Implementations may keep a reference to the</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">   * original data rather than a copy. Only callable if isCropSupported() is true.</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">   * @param left The left coordinate, which must be in [0,getWidth())</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">   * @param top The top coordinate, which must be in [0,getHeight())</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">   * @param width The width of the rectangle to crop.</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">   * @param height The height of the rectangle to crop.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">   * @return A cropped version of this object.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>   <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a> crop(<strong class="jxr_keyword">int</strong> left, <strong class="jxr_keyword">int</strong> top, <strong class="jxr_keyword">int</strong> width, <strong class="jxr_keyword">int</strong> height) {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     <a href="../../../com/google/zxing/LuminanceSource.html">LuminanceSource</a> newSource = binarizer.getLuminanceSource().crop(left, top, width, height);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a>(binarizer.createBinarizer(newSource));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>   }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">   * @return Whether this bitmap supports counter-clockwise rotation.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isRotateSupported() {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">return</strong> binarizer.getLuminanceSource().isRotateSupported();
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">   * Returns a new object with rotated image data by 90 degrees counterclockwise.</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">   * Only callable if {@link #isRotateSupported()} is true.</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">   * @return A rotated version of this object.</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>   <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a> rotateCounterClockwise() {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     <a href="../../../com/google/zxing/LuminanceSource.html">LuminanceSource</a> newSource = binarizer.getLuminanceSource().rotateCounterClockwise();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a>(binarizer.createBinarizer(newSource));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>   }
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">   * Returns a new object with rotated image data by 45 degrees counterclockwise.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">   * Only callable if {@link #isRotateSupported()} is true.</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">   * @return A rotated version of this object.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>   <strong class="jxr_keyword">public</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a> rotateCounterClockwise45() {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     <a href="../../../com/google/zxing/LuminanceSource.html">LuminanceSource</a> newSource = binarizer.getLuminanceSource().rotateCounterClockwise45();
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a>(binarizer.createBinarizer(newSource));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>   }
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>   @Override
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>   <strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>       <strong class="jxr_keyword">return</strong> getBlackMatrix().toString();
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     } <strong class="jxr_keyword">catch</strong> (NotFoundException e) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>       <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>     }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>   }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

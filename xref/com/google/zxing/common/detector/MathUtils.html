@@ -32,24 +32,27 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">   * Ends up being a bit faster than {@link Math#round(float)}. This merely rounds its</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">   * argument to the nearest int, where x.5 rounds up to x+1.</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> round(<strong class="jxr_keyword">float</strong> d) {
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">int</strong>) (d + 0.5f);
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>    }
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">float</strong> distance(<strong class="jxr_keyword">float</strong> aX, <strong class="jxr_keyword">float</strong> aY, <strong class="jxr_keyword">float</strong> bX, <strong class="jxr_keyword">float</strong> bY) {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">float</strong> xDiff = aX - bX;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">float</strong> yDiff = aY - bY;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">float</strong>) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>    }
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">float</strong> distance(<strong class="jxr_keyword">int</strong> aX, <strong class="jxr_keyword">int</strong> aY, <strong class="jxr_keyword">int</strong> bX, <strong class="jxr_keyword">int</strong> bY) {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">int</strong> xDiff = aX - bX;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">int</strong> yDiff = aY - bY;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">float</strong>) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>    }
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  }
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">   * @param d real value to round</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">   * @return nearest {@code int}</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> round(<strong class="jxr_keyword">float</strong> d) {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">int</strong>) (d + 0.5f);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>    }
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">float</strong> distance(<strong class="jxr_keyword">float</strong> aX, <strong class="jxr_keyword">float</strong> aY, <strong class="jxr_keyword">float</strong> bX, <strong class="jxr_keyword">float</strong> bY) {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">float</strong> xDiff = aX - bX;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">float</strong> yDiff = aY - bY;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">float</strong>) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>    }
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">float</strong> distance(<strong class="jxr_keyword">int</strong> aX, <strong class="jxr_keyword">int</strong> aY, <strong class="jxr_keyword">int</strong> bX, <strong class="jxr_keyword">int</strong> bY) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">int</strong> xDiff = aX - bX;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">int</strong> yDiff = aY - bY;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">float</strong>) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>    }
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

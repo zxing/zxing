@@ -303,12 +303,14 @@
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">   * @param row the black/white pixel data of the row</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">   * @param hints decode hints</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">   * @return {@link Result} containing encoded string and start/end of barcode</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if an error occurs or barcode cannot be found</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../../com/google/zxing/Result.html">Result</a> decodeRow(<strong class="jxr_keyword">int</strong> rowNumber, <a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, Map&lt;DecodeHintType,?&gt; hints)
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>       <strong class="jxr_keyword">throws</strong> NotFoundException, ChecksumException, FormatException;
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> }
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if no potential barcode is found</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">   * @throws ChecksumException if a potential barcode is found but does not pass its checksum</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">   * @throws FormatException if a potential barcode is found but format is invalid</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../../com/google/zxing/Result.html">Result</a> decodeRow(<strong class="jxr_keyword">int</strong> rowNumber, <a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, Map&lt;DecodeHintType,?&gt; hints)
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>       <strong class="jxr_keyword">throws</strong> NotFoundException, ChecksumException, FormatException;
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
