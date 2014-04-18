@@ -212,6 +212,7 @@
           <configuration>
             <mavenExecutorId>forked-path</mavenExecutorId>
             <tagNameFormat>zxing-@{project.version}</tagNameFormat>
+            <releaseProfiles>release,!build-android</releaseProfiles>
             <goals>deploy</goals>
           </configuration>
         </plugin>
@@ -517,13 +518,7 @@
       </modules>
     </profile>
     <profile>
-      <id>release-sign-artifacts</id>
-      <activation>
-        <property>
-          <name>performRelease</name>
-          <value>true</value>
-        </property>
-      </activation>
+      <id>release</id>
       <build>
         <plugins>
           <plugin>
