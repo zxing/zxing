@@ -22,12 +22,6 @@
   <version>3.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>9</version>
-  </parent>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -135,7 +129,7 @@
             <execution>
               <id>attach-sources</id>
               <goals>
-                <goal>jar</goal>
+                <goal>jar-no-fork</goal>
               </goals>
             </execution>
           </executions>
@@ -212,7 +206,7 @@
           <configuration>
             <mavenExecutorId>forked-path</mavenExecutorId>
             <tagNameFormat>zxing-@{project.version}</tagNameFormat>
-            <releaseProfiles>release,!build-android</releaseProfiles>
+            <releaseProfiles>release</releaseProfiles>
             <goals>deploy</goals>
           </configuration>
         </plugin>
@@ -489,13 +483,13 @@
   <distributionManagement>
     <repository>
       <id>sonatype-nexus-staging</id>
-      <name>Sonatype Nexus Staging</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      <name>Nexus Release Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
       <name>Sonatype Nexus Snapshots</name>
-      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </snapshotRepository>
     <site>
       <id>zxing.website</id>
@@ -524,18 +518,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <keyname>Sean Owen (ZXing) &lt;srowen@gmail.com&gt;</keyname>
-            </configuration>
           </plugin>
         </plugins>
       </build>
