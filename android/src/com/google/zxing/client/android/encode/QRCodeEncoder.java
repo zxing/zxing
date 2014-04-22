@@ -187,8 +187,9 @@ final class QRCodeEncoder {
     }
     byte[] vcard;
     String vcardString;
+    InputStream stream = null;
     try {
-      InputStream stream = activity.getContentResolver().openInputStream(uri);
+      stream = activity.getContentResolver().openInputStream(uri);
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       byte[] buffer = new byte[2048];
       int bytesRead;
@@ -199,6 +200,14 @@ final class QRCodeEncoder {
       vcardString = new String(vcard, 0, vcard.length, "UTF-8");
     } catch (IOException ioe) {
       throw new WriterException(ioe);
+    } finally {
+      if (stream != null) {
+        try {
+          stream.close();
+        } catch (IOException e) {
+          // continue
+        }
+      }
     }
     Log.d(TAG, "Encoding share intent content:");
     Log.d(TAG, vcardString);
