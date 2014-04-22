@@ -46,6 +46,11 @@ public final class ErrorCorrection {
                     int numECCodewords,
                     int[] erasures) throws ChecksumException {
 
+    //codewords.Length - codewordIndex - 1
+    for (int i = 0; i < erasures.length; i++) {
+      erasures[i] = received.length - erasures[i] - 1;
+    }
+
     ModulusPoly poly = new ModulusPoly(field, received);
     int[] S = new int[numECCodewords];
     boolean error = false;
@@ -61,23 +66,12 @@ public final class ErrorCorrection {
       return 0;
     }
 
-    ModulusPoly knownErrors = field.getOne();
-    for (int erasure : erasures) {
-      int b = field.exp(received.length - 1 - erasure);
-      // Add (1 - bx) term:
-      ModulusPoly term = new ModulusPoly(field, new int[] { field.subtract(0, b), 1 });
-      knownErrors = knownErrors.multiply(term);
-    }
-
     ModulusPoly syndrome = new ModulusPoly(field, S);
-    //syndrome = syndrome.multiply(knownErrors);
 
-    ModulusPoly[] sigmaOmega =
-        runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
-    ModulusPoly sigma = sigmaOmega[0];
-    ModulusPoly omega = sigmaOmega[1];
-
-    //sigma = sigma.multiply(knownErrors);
+    // lambda, omega
+    ModulusPoly[] pols = BerlekampMassey(syndrome, erasures, numECCodewords);
+    ModulusPoly sigma = pols[0];
+    ModulusPoly omega = pols[1];
 
     int[] errorLocations = findErrorLocations(sigma);
     int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
@@ -92,56 +86,94 @@ public final class ErrorCorrection {
     return errorLocations.length;
   }
 
-  private ModulusPoly[] runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R)
-      throws ChecksumException {
-    // Assume a's degree is >= b's
-    if (a.getDegree() < b.getDegree()) {
-      ModulusPoly temp = a;
-      a = b;
-      b = temp;
-    }
+  ModulusPoly[] BerlekampMassey(ModulusPoly syn, int[] erasures, int numECCodewords) throws ChecksumException {
+    /* initialize Gamma, the erasure locator polynomial */
+    ModulusPoly gamma = initGamma(erasures);
 
-    ModulusPoly rLast = a;
-    ModulusPoly r = b;
-    ModulusPoly tLast = field.getZero();
-    ModulusPoly t = field.getOne();
+    /* initialize to z */
+    ModulusPoly D = ModulusPoly.copy(gamma);
+    D = multiplyByZ(D);
 
-    // Run Euclidean algorithm until r's degree is less than R/2
-    while (r.getDegree() >= R / 2) {
-      ModulusPoly rLastLast = rLast;
-      ModulusPoly tLastLast = tLast;
-      rLast = r;
-      tLast = t;
+    ModulusPoly psi = ModulusPoly.copy(gamma);
+    int k = -1;
+    int L = erasures.length;
 
-      // Divide rLastLast by rLast, with quotient in q and remainder in r
-      if (rLast.isZero()) {
-        // Oops, Euclidean algorithm already terminated?
-        throw ChecksumException.getChecksumInstance();
-      }
-      r = rLastLast;
-      ModulusPoly q = field.getZero();
-      int denominatorLeadingTerm = rLast.getCoefficient(rLast.getDegree());
-      int dltInverse = field.inverse(denominatorLeadingTerm);
-      while (r.getDegree() >= rLast.getDegree() && !r.isZero()) {
-        int degreeDiff = r.getDegree() - rLast.getDegree();
-        int scale = field.multiply(r.getCoefficient(r.getDegree()), dltInverse);
-        q = q.add(field.buildMonomial(degreeDiff, scale));
-        r = r.subtract(rLast.multiplyByMonomial(degreeDiff, scale));
+    for (int n = erasures.length; n < numECCodewords; n++) {
+      int d = computeDiscrepancy(psi, syn, L, n);
+
+      if (d != 0) {
+        /* psi2 = psi - d*D */
+        ModulusPoly psi2 = psi.subtract(D.multiply(d));
+
+        if (L < (n - k)) {
+          int L2 = n - k;
+          k = n - L;
+          /* D = scale_poly(ginv(d), psi); */
+          D = psi.multiply(field.inverse(d));
+          L = L2;
+        }
+
+        /* psi = psi2 */
+        psi = ModulusPoly.copy(psi2);
       }
 
-      t = q.multiply(tLast).subtract(tLastLast).negative();
+      D = multiplyByZ(D);
     }
 
-    int sigmaTildeAtZero = t.getCoefficient(0);
-    if (sigmaTildeAtZero == 0) {
+    ModulusPoly lambda = ModulusPoly.copy(psi);
+    ModulusPoly omega = computeModifiedOmega(lambda, syn, numECCodewords);
+    return new ModulusPoly[] { lambda, omega };
+  }
+
+  private ModulusPoly initGamma(int[] erasures) {
+    ModulusPoly gamma = field.getOne();
+    for(int erasure : erasures) {
+      int b = field.exp(erasure);
+      // Add (1 - bx) term:
+      ModulusPoly term = new ModulusPoly(field, new int[] { field.subtract(0, b), 1 });
+      gamma = gamma.multiply(term);
+    }
+
+    return gamma;
+  }
+
+  /**
+   * given Psi (called Lambda in Modified_Berlekamp_Massey) and synBytes,
+   * compute the combined erasure/error evaluator polynomial as
+   * Psi*S mod z^4
+   * @param lambda error locator polynomial
+   * @param syndromes syndromes polynomial
+   * @param ECCNum mod value
+   * @return combined erasure/error evaluator polynomial
+   */
+  ModulusPoly computeModifiedOmega(ModulusPoly lambda, ModulusPoly syndromes, int ECCNum) {
+    int[] mod4 = new int[ECCNum];
+    ModulusPoly product = lambda.multiply(syndromes);
+    System.arraycopy(product.getCoefficients(), product.getCoefficients().length - ECCNum, mod4, 0, ECCNum);
+    return new ModulusPoly(field, mod4);
+  }
+
+  private int computeDiscrepancy(ModulusPoly lambda, ModulusPoly S, int L, int n) throws ChecksumException {
+    if(S.getDegree() < n || lambda.getDegree() < L) {
       throw ChecksumException.getChecksumInstance();
     }
+    int sum = 0;
 
-    int inverse = field.inverse(sigmaTildeAtZero);
-    ModulusPoly sigma = t.multiply(inverse);
-    ModulusPoly omega = r.multiply(inverse);
-    return new ModulusPoly[]{sigma, omega};
+    for (int i = 0; i <= L; i++) {
+        sum = field.add(sum, field.multiply(lambda.getCoefficient(i), S.getCoefficient(n - i)));
+    }
+    return sum;
   }
+
+  /**
+   * multiply by z, i.e., shift right by 1
+   * @param src polynomial to be shifted
+   * @return shifted polynomial
+   */
+  ModulusPoly multiplyByZ(ModulusPoly src) {
+    return src.multiply(new ModulusPoly(field, new int[] { 1, 0 }));
+  }
+
 
   private int[] findErrorLocations(ModulusPoly errorLocator) throws ChecksumException {
     // This is a direct application of Chien's search
