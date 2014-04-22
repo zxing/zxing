@@ -55,8 +55,7 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
     } else if (result instanceof ProductParsedResult) {
       ProductParsedResult productParsedResult = (ProductParsedResult) result;
       String productID = productParsedResult.getProductID();
-      String normalizedProductID = productParsedResult.getNormalizedProductID();
-      SupplementalInfoRetriever productRetriever = 
+      SupplementalInfoRetriever productRetriever =
           new ProductResultInfoRetriever(textView, productID, historyManager, context);
       productRetriever.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     } else if (result instanceof ISBNParsedResult) {

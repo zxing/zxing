@@ -146,7 +146,10 @@ public final class EncodeActivity extends Activity {
       return;
     }
     File barcodeFile = new File(barcodesRoot, makeBarcodeFileName(contents) + ".png");
-    barcodeFile.delete();
+    if (!barcodeFile.delete()) {
+      Log.w(TAG, "Could not delete " + barcodeFile);
+      // continue anyway
+    }
     FileOutputStream fos = null;
     try {
       fos = new FileOutputStream(barcodeFile);

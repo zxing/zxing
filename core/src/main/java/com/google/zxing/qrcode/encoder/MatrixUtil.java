@@ -305,6 +305,9 @@ final class MatrixUtil {
   // Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
   // operations. We don't care if cofficients are positive or negative.
   static int calculateBCHCode(int value, int poly) {
+    if (poly == 0) {
+      throw new IllegalArgumentException("0 polynomial");
+    }
     // If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1
     // from 13 to make it 12.
     int msbSetInPoly = findMSBSet(poly);
