@@ -166,7 +166,7 @@ final class PDF417HighLevelEncoder {
     //the codewords 0..928 are encoded as Unicode characters
     StringBuilder sb = new StringBuilder(msg.length());
 
-    if (encoding != null || !DEFAULT_ENCODING_NAMES.contains(encoding.name())) {
+    if (encoding != null && !DEFAULT_ENCODING_NAMES.contains(encoding.name())) {
       CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding.name());
       if (eci != null) {
         encodingECI(eci.getValue(), sb);
