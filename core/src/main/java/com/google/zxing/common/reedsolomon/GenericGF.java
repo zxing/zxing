@@ -38,16 +38,13 @@ public final class GenericGF {
   public static final GenericGF AZTEC_DATA_8 = DATA_MATRIX_FIELD_256;
   public static final GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
-  private static final int INITIALIZATION_THRESHOLD = 0;
-
-  private int[] expTable;
-  private int[] logTable;
-  private GenericGFPoly zero;
-  private GenericGFPoly one;
+  private final int[] expTable;
+  private final int[] logTable;
+  private final GenericGFPoly zero;
+  private final GenericGFPoly one;
   private final int size;
   private final int primitive;
   private final int generatorBase;
-  private boolean initialized = false;
 
   /**
    * Create a representation of GF(size) using the given primitive polynomial.
@@ -64,13 +61,7 @@ public final class GenericGF {
     this.primitive = primitive;
     this.size = size;
     this.generatorBase = b;
-    
-    if (size <= INITIALIZATION_THRESHOLD) {
-      initialize();
-    }
-  }
 
-  private void initialize() {
     expTable = new int[size];
     logTable = new int[size];
     int x = 1;
@@ -88,24 +79,13 @@ public final class GenericGF {
     // logTable[0] == 0 but this should never be used
     zero = new GenericGFPoly(this, new int[]{0});
     one = new GenericGFPoly(this, new int[]{1});
-    initialized = true;
   }
-  
-  private void checkInit() {
-    if (!initialized) {
-      initialize();
-    }
-  }
-  
-  GenericGFPoly getZero() {
-    checkInit();
 
+  GenericGFPoly getZero() {
     return zero;
   }
 
   GenericGFPoly getOne() {
-    checkInit();
-
     return one;
   }
 
@@ -113,8 +93,6 @@ public final class GenericGF {
    * @return the monomial representing coefficient * x^degree
    */
   GenericGFPoly buildMonomial(int degree, int coefficient) {
-    checkInit();
-
     if (degree < 0) {
       throw new IllegalArgumentException();
     }
@@ -139,8 +117,6 @@ public final class GenericGF {
    * @return 2 to the power of a in GF(size)
    */
   int exp(int a) {
-    checkInit();
-
     return expTable[a];
   }
 
@@ -148,8 +124,6 @@ public final class GenericGF {
    * @return base 2 log of a in GF(size)
    */
   int log(int a) {
-    checkInit();
-
     if (a == 0) {
       throw new IllegalArgumentException();
     }
@@ -160,8 +134,6 @@ public final class GenericGF {
    * @return multiplicative inverse of a
    */
   int inverse(int a) {
-    checkInit();
-
     if (a == 0) {
       throw new ArithmeticException();
     }
@@ -172,8 +144,6 @@ public final class GenericGF {
    * @return product of a and b in GF(size)
    */
   int multiply(int a, int b) {
-    checkInit();
-
     if (a == 0 || b == 0) {
       return 0;
     }
