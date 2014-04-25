@@ -44,8 +44,8 @@ import java.util.Map;
  */
 public final class ITFReader extends OneDReader {
 
-  private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-  private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.78f);
+  private static final float MAX_AVG_VARIANCE = 0.38f;
+  private static final float MAX_INDIVIDUAL_VARIANCE = 0.78f;
 
   private static final int W = 3; // Pixel width of a wide line
   private static final int N = 1; // Pixed width of a narrow line
@@ -336,13 +336,12 @@ public final class ITFReader extends OneDReader {
    * @throws NotFoundException if digit cannot be decoded
    */
   private static int decodeDigit(int[] counters) throws NotFoundException {
-
-    int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
+    float bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
     int max = PATTERNS.length;
     for (int i = 0; i < max; i++) {
       int[] pattern = PATTERNS[i];
-      int variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+      float variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = i;

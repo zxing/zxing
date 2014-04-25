@@ -44,8 +44,8 @@ public abstract class UPCEANReader extends OneDReader {
   // These two values are critical for determining how permissive the decoding will be.
   // We've arrived at these values through a lot of trial and error. Setting them any higher
   // lets false positives creep in quickly.
-  private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.48f);
-  private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+  private static final float MAX_AVG_VARIANCE = 0.48f;
+  private static final float MAX_INDIVIDUAL_VARIANCE = 0.7f;
 
   /**
    * Start/end guard pattern.
@@ -353,12 +353,12 @@ public abstract class UPCEANReader extends OneDReader {
   static int decodeDigit(BitArray row, int[] counters, int rowOffset, int[][] patterns)
       throws NotFoundException {
     recordPattern(row, rowOffset, counters);
-    int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
+    float bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
     int max = patterns.length;
     for (int i = 0; i < max; i++) {
       int[] pattern = patterns[i];
-      int variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+      float variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = i;

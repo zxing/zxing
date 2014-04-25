@@ -42,7 +42,6 @@ public class FinderPatternFinder {
   private static final int CENTER_QUORUM = 2;
   protected static final int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
   protected static final int MAX_MODULES = 57; // support up to version 10 for mobile clients
-  private static final int INTEGER_MATH_SHIFT = 8;
 
   private final BitMatrix image;
   private final List<FinderPattern> possibleCenters;
@@ -209,14 +208,15 @@ public class FinderPatternFinder {
     if (totalModuleSize < 7) {
       return false;
     }
-    int moduleSize = (totalModuleSize << INTEGER_MATH_SHIFT) / 7;
-    int maxVariance = moduleSize / 2;
+    float moduleSize = totalModuleSize / 7.0f;
+    float maxVariance = moduleSize / 2.0f;
     // Allow less than 50% variance from 1-1-3-1-1 proportions
-    return Math.abs(moduleSize - (stateCount[0] << INTEGER_MATH_SHIFT)) < maxVariance &&
-        Math.abs(moduleSize - (stateCount[1] << INTEGER_MATH_SHIFT)) < maxVariance &&
-        Math.abs(3 * moduleSize - (stateCount[2] << INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
-        Math.abs(moduleSize - (stateCount[3] << INTEGER_MATH_SHIFT)) < maxVariance &&
-        Math.abs(moduleSize - (stateCount[4] << INTEGER_MATH_SHIFT)) < maxVariance;
+    return
+        Math.abs(moduleSize - stateCount[0]) < maxVariance &&
+        Math.abs(moduleSize - stateCount[1]) < maxVariance &&
+        Math.abs(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
+        Math.abs(moduleSize - stateCount[3]) < maxVariance &&
+        Math.abs(moduleSize - stateCount[4]) < maxVariance;
   }
 
   private int[] getCrossCheckStateCount() {

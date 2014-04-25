@@ -39,10 +39,8 @@ public final class Detector {
 
   private static final int[] INDEXES_START_PATTERN = {0, 4, 1, 5};
   private static final int[] INDEXES_STOP_PATTERN = {6, 2, 7, 3};
-  private static final int INTEGER_MATH_SHIFT = 8;
-  private static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
-  private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-  private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
+  private static final float MAX_AVG_VARIANCE = 0.42f;
+  private static final float MAX_INDIVIDUAL_VARIANCE = 0.8f;
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
@@ -310,13 +308,9 @@ public final class Detector {
    * @param counters observed counters
    * @param pattern expected pattern
    * @param maxIndividualVariance The most any counter can differ before we give up
-   * @return ratio of total variance between counters and pattern compared to
-   *         total pattern size, where the ratio has been multiplied by 256.
-   *         So, 0 means no variance (perfect match); 256 means the total
-   *         variance between counters and patterns equals the pattern length,
-   *         higher values mean even more variance
+   * @return ratio of total variance between counters and pattern compared to total pattern size
    */
-  private static int patternMatchVariance(int[] counters, int[] pattern, int maxIndividualVariance) {
+  private static float patternMatchVariance(int[] counters, int[] pattern, float maxIndividualVariance) {
     int numCounters = counters.length;
     int total = 0;
     int patternLength = 0;
@@ -327,21 +321,21 @@ public final class Detector {
     if (total < patternLength) {
       // If we don't even have one pixel per unit of bar width, assume this
       // is too small to reliably match, so fail:
-      return Integer.MAX_VALUE;
+      return Float.POSITIVE_INFINITY;
     }
     // We're going to fake floating-point math in integers. We just need to use more bits.
     // Scale up patternLength so that intermediate values below like scaledCounter will have
     // more "significant digits".
-    int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
-    maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> INTEGER_MATH_SHIFT;
+    float unitBarWidth = (float) total / patternLength;
+    maxIndividualVariance *= unitBarWidth;
 
-    int totalVariance = 0;
+    float totalVariance = 0.0f;
     for (int x = 0; x < numCounters; x++) {
-      int counter = counters[x] << INTEGER_MATH_SHIFT;
-      int scaledPattern = pattern[x] * unitBarWidth;
-      int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
+      int counter = counters[x];
+      float scaledPattern = pattern[x] * unitBarWidth;
+      float variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
       if (variance > maxIndividualVariance) {
-        return Integer.MAX_VALUE;
+        return Float.POSITIVE_INFINITY;
       }
       totalVariance += variance;
     }

@@ -37,8 +37,8 @@ public final class CodaBarReader extends OneDReader {
   // These values are critical for determining how permissive the decoding
   // will be. All stripe sizes must be within the window these define, as
   // compared to the average stripe size.
-  private static final int MAX_ACCEPTABLE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 2.0f);
-  private static final int PADDING = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 1.5f);
+  private static final float MAX_ACCEPTABLE = 2.0f;
+  private static final float PADDING = 1.5f;
 
   private static final String ALPHABET_STRING = "0123456789-$:/.+ABCD";
   static final char[] ALPHABET = ALPHABET_STRING.toCharArray();
@@ -188,15 +188,14 @@ public final class CodaBarReader extends OneDReader {
     }
 
     // Calculate our allowable size thresholds using fixed-point math.
-    int[] maxes = new int[4];
-    int[] mins = new int[4];
+    float[] maxes = new float[4];
+    float[] mins = new float[4];
     // Define the threshold of acceptability to be the midpoint between the
     // average small stripe and the average large stripe. No stripe lengths
     // should be on the "wrong" side of that line.
     for (int i = 0; i < 2; i++) {
-      mins[i] = 0;  // Accept arbitrarily small "short" stripes.
-      mins[i + 2] = ((sizes[i] << INTEGER_MATH_SHIFT) / counts[i] +
-                     (sizes[i + 2] << INTEGER_MATH_SHIFT) / counts[i + 2]) >> 1;
+      mins[i] = 0.0f;  // Accept arbitrarily small "short" stripes.
+      mins[i + 2] = ((float) sizes[i] / counts[i] + (float) sizes[i + 2] / counts[i + 2]) / 2.0f;
       maxes[i] = mins[i + 2];
       maxes[i + 2] = (sizes[i + 2] * MAX_ACCEPTABLE + PADDING) / counts[i + 2];
     }
@@ -209,7 +208,7 @@ public final class CodaBarReader extends OneDReader {
         // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
         // long stripes, while 0 and 1 are for short stripes.
         int category = (j & 1) + (pattern & 1) * 2;
-        int size = counters[pos + j] << INTEGER_MATH_SHIFT;
+        int size = counters[pos + j];
         if (size < mins[category] || size > maxes[category]) {
           throw NotFoundException.getNotFoundInstance();
         }
