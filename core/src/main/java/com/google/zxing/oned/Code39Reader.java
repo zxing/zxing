@@ -136,7 +136,7 @@ public final class Code39Reader extends OneDReader {
     int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
     // If 50% of last pattern size, following last pattern, is not whitespace, fail
     // (but if it's whitespace to the very end of the image, that's OK)
-    if (nextStart != end && (whiteSpaceAfterEnd << 1) < lastPatternSize) {
+    if (nextStart != end && (whiteSpaceAfterEnd * 2) < lastPatternSize) {
       throw NotFoundException.getNotFoundInstance();
     }
 
@@ -192,7 +192,7 @@ public final class Code39Reader extends OneDReader {
         if (counterPosition == patternLength - 1) {
           // Look for whitespace before start pattern, >= 50% of width of start pattern
           if (toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
-              row.isRange(Math.max(0, patternStart - ((i - patternStart) >> 1)), patternStart, false)) {
+              row.isRange(Math.max(0, patternStart - ((i - patternStart) / 2)), patternStart, false)) {
             return new int[]{patternStart, i};
           }
           patternStart += counters[0] + counters[1];
@@ -244,7 +244,7 @@ public final class Code39Reader extends OneDReader {
           if (counter > maxNarrowCounter) {
             wideCounters--;
             // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
-            if ((counter << 1) >= totalWideCountersWidth) {
+            if ((counter * 2) >= totalWideCountersWidth) {
               return -1;
             }
           }

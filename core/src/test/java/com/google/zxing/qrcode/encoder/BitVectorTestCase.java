@@ -28,7 +28,7 @@ public final class BitVectorTestCase extends Assert {
 
   private static long getUnsignedInt(BitArray v, int index) {
     long result = 0L;
-    for (int i = 0, offset = index << 3; i < 32; i++) {
+    for (int i = 0, offset = index * 8; i < 32; i++) {
       if (v.get(offset + i)) {
         result |= 1L << (31 - i);
       }

@@ -123,7 +123,7 @@ public final class DataMatrixReader implements Reader {
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
-    int nudge = moduleSize >> 1;
+    int nudge = moduleSize / 2;
     top += nudge;
     left += nudge;
 

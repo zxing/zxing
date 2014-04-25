@@ -54,7 +54,7 @@ public final class RGBLuminanceSource extends LuminanceSource {
           luminances[offset + x] = (byte) r;
         } else {
           // Calculate luminance cheaply, favoring green.
-          luminances[offset + x] = (byte) ((r + g + g + b) >> 2);
+          luminances[offset + x] = (byte) ((r + 2 * g + b) / 4);
         }
       }
     }

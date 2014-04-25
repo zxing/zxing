@@ -639,7 +639,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
         }
         count = 8;
       }
-      int offset = i >> 1;
+      int offset = i / 2;
       if ((i & 0x01) == 0) {
         oddCounts[offset] = count;
         oddRoundingErrors[offset] = value - count;

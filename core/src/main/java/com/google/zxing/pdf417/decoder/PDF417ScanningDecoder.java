@@ -416,7 +416,7 @@ public final class PDF417ScanningDecoder {
     if (leftToRight) {
       endColumn = startColumn + codewordBitCount;
     } else {
-      for (int i = 0; i < moduleBitCount.length >> 1; i++) {
+      for (int i = 0; i < moduleBitCount.length / 2; i++) {
         int tmpCount = moduleBitCount[i];
         moduleBitCount[i] = moduleBitCount[moduleBitCount.length - 1 - i];
         moduleBitCount[moduleBitCount.length - 1 - i] = tmpCount;

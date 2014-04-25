@@ -211,7 +211,7 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
           //
           // The default assumption is that the block is light/background. Since no estimate for
           // the level of dark pixels exists locally, use half the min for the block.
-          average = min >> 1;
+          average = min / 2;
 
           if (y > 0 && x > 0) {
             // Correct the "white background" assumption for blocks that have neighbors by comparing
@@ -221,8 +221,8 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
             // the boundaries is used for the interior.
 
             // The (min < bp) is arbitrary but works better than other heuristics that were tried.
-            int averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
-                blackPoints[y - 1][x - 1]) >> 2;
+            int averageNeighborBlackPoint =
+                (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) + blackPoints[y - 1][x - 1]) / 4;
             if (min < averageNeighborBlackPoint) {
               average = averageNeighborBlackPoint;
             }

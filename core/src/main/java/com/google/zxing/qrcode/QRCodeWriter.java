@@ -90,8 +90,8 @@ public final class QRCodeWriter implements Writer {
     }
     int inputWidth = input.getWidth();
     int inputHeight = input.getHeight();
-    int qrWidth = inputWidth + (quietZone << 1);
-    int qrHeight = inputHeight + (quietZone << 1);
+    int qrWidth = inputWidth + (quietZone * 2);
+    int qrHeight = inputHeight + (quietZone * 2);
     int outputWidth = Math.max(width, qrWidth);
     int outputHeight = Math.max(height, qrHeight);
 

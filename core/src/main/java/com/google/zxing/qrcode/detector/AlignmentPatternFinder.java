@@ -88,13 +88,13 @@ final class AlignmentPatternFinder {
     int startX = this.startX;
     int height = this.height;
     int maxJ = startX + width;
-    int middleI = startY + (height >> 1);
+    int middleI = startY + (height / 2);
     // We are looking for black/white/black modules in 1:1:1 ratio;
     // this tracks the number of black/white/black modules seen so far
     int[] stateCount = new int[3];
     for (int iGen = 0; iGen < height; iGen++) {
       // Search from middle outwards
-      int i = middleI + ((iGen & 0x01) == 0 ? (iGen + 1) >> 1 : -((iGen + 1) >> 1));
+      int i = middleI + ((iGen & 0x01) == 0 ? (iGen + 1) / 2 : -((iGen + 1) / 2));
       stateCount[0] = 0;
       stateCount[1] = 0;
       stateCount[2] = 0;

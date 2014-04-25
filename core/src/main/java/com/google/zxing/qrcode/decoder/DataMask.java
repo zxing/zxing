@@ -125,7 +125,7 @@ abstract class DataMask {
   private static final class DataMask100 extends DataMask {
     @Override
     boolean isMasked(int i, int j) {
-      return (((i >>> 1) + (j /3)) & 0x01) == 0;
+      return (((i / 2) + (j /3)) & 0x01) == 0;
     }
   }
 

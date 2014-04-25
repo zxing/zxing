@@ -129,7 +129,7 @@ public final class RSSUtils {
   /*
   static int[] elements(int[] eDist, int N, int K) {
     int[] widths = new int[eDist.length + 2];
-    int twoK = K << 1;
+    int twoK = 2 * K;
     widths[0] = 1;
     int i;
     int minEven = 10;

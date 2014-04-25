@@ -217,7 +217,7 @@ final class DecodedBitStreamParser {
                                         Collection<byte[]> byteSegments,
                                         Map<DecodeHintType,?> hints) throws FormatException {
     // Don't crash trying to read more bits than we have available.
-    if (count << 3 > bits.available()) {
+    if (8 * count > bits.available()) {
       throw FormatException.getFormatInstance();
     }
 

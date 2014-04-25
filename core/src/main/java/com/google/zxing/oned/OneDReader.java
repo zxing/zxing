@@ -119,7 +119,7 @@ public abstract class OneDReader implements Reader {
     for (int x = 0; x < maxLines; x++) {
 
       // Scanning from the middle out. Determine which row we're looking at next:
-      int rowStepsAboveOrBelow = (x + 1) >> 1;
+      int rowStepsAboveOrBelow = (x + 1) / 2;
       boolean isAbove = (x & 0x01) == 0; // i.e. is x even?
       int rowNumber = middle + rowStep * (isAbove ? rowStepsAboveOrBelow : -rowStepsAboveOrBelow);
       if (rowNumber < 0 || rowNumber >= height) {

@@ -94,7 +94,7 @@ public final class Version {
       throw FormatException.getFormatInstance();
     }
     try {
-      return getVersionForNumber((dimension - 17) >> 2);
+      return getVersionForNumber((dimension - 17) / 4);
     } catch (IllegalArgumentException ignored) {
       throw FormatException.getFormatInstance();
     }

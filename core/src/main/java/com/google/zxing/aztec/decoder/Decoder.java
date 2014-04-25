@@ -323,7 +323,7 @@ public final class Decoder {
     for (int i = startIndex; i < startIndex + length; i++) {
       res <<= 1;
       if (rawbits[i]) {
-        res++;
+        res |= 0x01;
       }
     }
     return res;

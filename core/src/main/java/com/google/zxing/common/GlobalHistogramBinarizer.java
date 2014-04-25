@@ -72,7 +72,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
     for (int x = 1; x < width - 1; x++) {
       int right = localLuminances[x + 1] & 0xff;
       // A simple -1 4 -1 box filter with a weight of 2.
-      int luminance = ((center << 2) - left - right) >> 1;
+      int luminance = ((center * 4) - left - right) / 2;
       if (luminance < blackPoint) {
         row.set(x);
       }
@@ -97,7 +97,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
     for (int y = 1; y < 5; y++) {
       int row = height * y / 5;
       byte[] localLuminances = source.getRow(row, luminances);
-      int right = (width << 2) / 5;
+      int right = (width * 4) / 5;
       for (int x = width / 5; x < right; x++) {
         int pixel = localLuminances[x] & 0xff;
         localBuckets[pixel >> LUMINANCE_SHIFT]++;
@@ -174,7 +174,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
 
     // If there is too little contrast in the image to pick a meaningful black point, throw rather
     // than waste time trying to decode the image, and risk false positives.
-    if (secondPeak - firstPeak <= numBuckets >> 4) {
+    if (secondPeak - firstPeak <= numBuckets / 16) {
       throw NotFoundException.getNotFoundInstance();
     }
 

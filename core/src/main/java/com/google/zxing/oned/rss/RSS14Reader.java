@@ -228,7 +228,7 @@ public final class RSS14Reader extends AbstractRSSReader {
       } else if (count > 8) {
         count = 8;
       }
-      int offset = i >> 1;
+      int offset = i / 2;
       if ((i & 0x01) == 0) {
         oddCounts[offset] = count;
         oddRoundingErrors[offset] = value - count;

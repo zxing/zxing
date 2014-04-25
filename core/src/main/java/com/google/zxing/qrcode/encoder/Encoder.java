@@ -268,7 +268,7 @@ public final class Encoder {
    * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
    */
   static void terminateBits(int numDataBytes, BitArray bits) throws WriterException {
-    int capacity = numDataBytes << 3;
+    int capacity = numDataBytes * 8;
     if (bits.getSize() > capacity) {
       throw new WriterException("data bits cannot fit in the QR Code" + bits.getSize() + " > " +
           capacity);

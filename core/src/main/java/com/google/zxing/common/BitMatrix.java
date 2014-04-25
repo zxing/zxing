@@ -51,7 +51,7 @@ public final class BitMatrix implements Cloneable {
     }
     this.width = width;
     this.height = height;
-    this.rowSize = (width + 31) >> 5;
+    this.rowSize = (width + 31) / 32;
     bits = new int[rowSize * height];
   }
 
@@ -70,7 +70,7 @@ public final class BitMatrix implements Cloneable {
    * @return value of given bit in matrix
    */
   public boolean get(int x, int y) {
-    int offset = y * rowSize + (x >> 5);
+    int offset = y * rowSize + (x / 32);
     return ((bits[offset] >>> (x & 0x1f)) & 1) != 0;
   }
 
@@ -81,7 +81,7 @@ public final class BitMatrix implements Cloneable {
    * @param y The vertical component (i.e. which row)
    */
   public void set(int x, int y) {
-    int offset = y * rowSize + (x >> 5);
+    int offset = y * rowSize + (x / 32);
     bits[offset] |= 1 << (x & 0x1f);
   }
 
@@ -92,7 +92,7 @@ public final class BitMatrix implements Cloneable {
    * @param y The vertical component (i.e. which row)
    */
   public void flip(int x, int y) {
-    int offset = y * rowSize + (x >> 5);
+    int offset = y * rowSize + (x / 32);
     bits[offset] ^= 1 << (x & 0x1f);
   }
 
@@ -129,7 +129,7 @@ public final class BitMatrix implements Cloneable {
     for (int y = top; y < bottom; y++) {
       int offset = y * rowSize;
       for (int x = left; x < right; x++) {
-        bits[offset + (x >> 5)] |= 1 << (x & 0x1f);
+        bits[offset + (x / 32)] |= 1 << (x & 0x1f);
       }
     }
   }
@@ -150,7 +150,7 @@ public final class BitMatrix implements Cloneable {
     }
     int offset = y * rowSize;
     for (int x = 0; x < rowSize; x++) {
-      row.setBulk(x << 5, bits[offset + x]);
+      row.setBulk(x * 32, bits[offset + x]);
     }
     return row;
   }
@@ -248,7 +248,7 @@ public final class BitMatrix implements Cloneable {
       return null;
     }
     int y = bitsOffset / rowSize;
-    int x = (bitsOffset % rowSize) << 5;
+    int x = (bitsOffset % rowSize) * 32;
 
     int theBits = bits[bitsOffset];
     int bit = 0;
@@ -269,7 +269,7 @@ public final class BitMatrix implements Cloneable {
     }
 
     int y = bitsOffset / rowSize;
-    int x = (bitsOffset % rowSize) << 5;
+    int x = (bitsOffset % rowSize) * 32;
 
     int theBits = bits[bitsOffset];
     int bit = 31;

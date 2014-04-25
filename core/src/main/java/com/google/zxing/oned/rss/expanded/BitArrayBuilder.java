@@ -40,7 +40,7 @@ final class BitArrayBuilder {
   }
 
   static BitArray buildBitArray(List<ExpandedPair> pairs) {
-    int charNumber = (pairs.size() << 1) - 1;
+    int charNumber = (pairs.size() * 2) - 1;
     if (pairs.get(pairs.size() - 1).getRightChar() == null) {
       charNumber -= 1;
     }

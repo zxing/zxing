@@ -101,7 +101,7 @@ final class BitMatrixParser {
 
     int dimension = bitMatrix.getHeight();
 
-    int provisionalVersion = (dimension - 17) >> 2;
+    int provisionalVersion = (dimension - 17) / 4;
     if (provisionalVersion <= 6) {
       return Version.getVersionForNumber(provisionalVersion);
     }

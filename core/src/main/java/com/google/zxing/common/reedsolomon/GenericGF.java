@@ -67,7 +67,7 @@ public final class GenericGF {
     int x = 1;
     for (int i = 0; i < size; i++) {
       expTable[i] = x;
-      x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
+      x *= 2; // we're assuming the generator alpha is 2
       if (x >= size) {
         x ^= primitive;
         x &= size-1;

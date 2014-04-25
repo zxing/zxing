@@ -83,7 +83,7 @@ public final class PDF417Common {
     int first = 0;
     int upto = SYMBOL_TABLE.length;
     while (first < upto) {
-      int mid = (first + upto) >>> 1; // Compute mid point.
+      int mid = (first + upto) / 2; // Compute mid point.
       if (symbol < SYMBOL_TABLE[mid]) {
         upto = mid; // continue search in bottom half.
       } else if (symbol > SYMBOL_TABLE[mid]) {

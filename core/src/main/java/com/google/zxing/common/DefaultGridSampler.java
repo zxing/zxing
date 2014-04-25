@@ -52,12 +52,12 @@ public final class DefaultGridSampler extends GridSampler {
       throw NotFoundException.getNotFoundInstance();      
     }
     BitMatrix bits = new BitMatrix(dimensionX, dimensionY);
-    float[] points = new float[dimensionX << 1];
+    float[] points = new float[2 * dimensionX];
     for (int y = 0; y < dimensionY; y++) {
       int max = points.length;
       float iValue = (float) y + 0.5f;
       for (int x = 0; x < max; x += 2) {
-        points[x] = (float) (x >> 1) + 0.5f;
+        points[x] = (float) (x / 2) + 0.5f;
         points[x + 1] = iValue;
       }
       transform.transformPoints(points);
@@ -68,7 +68,7 @@ public final class DefaultGridSampler extends GridSampler {
         for (int x = 0; x < max; x += 2) {
           if (image.get((int) points[x], (int) points[x + 1])) {
             // Black(-ish) pixel
-            bits.set(x >> 1, y);
+            bits.set(x / 2, y);
           }
         }
       } catch (ArrayIndexOutOfBoundsException aioobe) {

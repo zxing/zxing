@@ -157,7 +157,7 @@ public final class ITFReader extends OneDReader {
       recordPattern(row, payloadStart, counterDigitPair);
       // Split them into each array
       for (int k = 0; k < 5; k++) {
-        int twoK = k << 1;
+        int twoK = 2 * k;
         counterBlack[k] = counterDigitPair[twoK];
         counterWhite[k] = counterDigitPair[twoK + 1];
       }
@@ -188,7 +188,7 @@ public final class ITFReader extends OneDReader {
     // Determine the width of a narrow line in pixels. We can do this by
     // getting the width of the start pattern and dividing by 4 because its
     // made up of 4 narrow lines.
-    this.narrowLineWidth = (startPattern[1] - startPattern[0]) >> 2;
+    this.narrowLineWidth = (startPattern[1] - startPattern[0]) / 4;
 
     validateQuietZone(row, startPattern[0]);
 
