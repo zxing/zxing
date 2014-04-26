@@ -509,6 +509,7 @@
       <modules>
         <module>android</module>
         <module>androidtest</module>
+        <module>glass</module>
       </modules>
     </profile>
     <profile>
