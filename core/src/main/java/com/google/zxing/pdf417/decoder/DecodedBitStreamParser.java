@@ -59,7 +59,7 @@ final class DecodedBitStreamParser {
   private static final int PAL = 29;
 
   private static final char[] PUNCT_CHARS = {
-      ';', '<', '>', '@', '[', '\\', '}', '_', '`', '~', '!',
+      ';', '<', '>', '@', '[', '\\', ']', '_', '`', '~', '!',
       '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
       '(', ')', '?', '{', '}', '\''};
 
