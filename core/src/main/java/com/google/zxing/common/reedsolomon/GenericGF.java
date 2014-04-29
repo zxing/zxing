@@ -21,8 +21,7 @@ package com.google.zxing.common.reedsolomon;
  * the Galois Fields. Operations use a given primitive polynomial in calculations.</p>
  *
  * <p>Throughout this package, elements of the GF are represented as an {@code int}
- * for convenience and speed (but at the cost of memory).
- * </p>
+ * for convenience and speed (but at the cost of memory). This class is thread-safe.</p>
  *
  * @author Sean Owen
  * @author David Olivier
@@ -38,13 +37,45 @@ public final class GenericGF {
   public static final GenericGF AZTEC_DATA_8 = DATA_MATRIX_FIELD_256;
   public static final GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
-  private final int[] expTable;
-  private final int[] logTable;
-  private final GenericGFPoly zero;
-  private final GenericGFPoly one;
   private final int size;
   private final int primitive;
   private final int generatorBase;
+
+  private static final Object LAZY_HOLDER_LOCK = new Object();
+  private volatile LazyHolder lazyHolder;
+
+  /**
+   * Holder for shared resources which are lazily initialized.
+   */
+  private final class LazyHolder {
+    private final int[] expTable;
+    private final int[] logTable;
+    private final GenericGFPoly zero;
+    private final GenericGFPoly one;
+
+    public LazyHolder() {
+      // Final field freeze guarantees that the array values will be visible when the constructor
+      // completes. (Java Concurrency in Practice section 16.3 and JSR-133 fig. 22-23)
+      expTable = new int[size];
+      logTable = new int[size];
+
+      for (int i = 0, x = 1; i < size; i++) {
+        expTable[i] = x;
+        x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
+        if (x >= size) {
+          x ^= primitive;
+          x &= size - 1;
+        }
+      }
+      for (int i = 0; i < size - 1; i++) {
+        logTable[expTable[i]] = i;
+      }
+      // logTable[0] == 0 but this should never be used
+
+      zero = new GenericGFPoly(GenericGF.this, new int[] { 0 });
+      one = new GenericGFPoly(GenericGF.this, new int[] { 1 });
+    }
+  }
 
   /**
    * Create a representation of GF(size) using the given primitive polynomial.
@@ -61,32 +92,28 @@ public final class GenericGF {
     this.primitive = primitive;
     this.size = size;
     this.generatorBase = b;
-
-    expTable = new int[size];
-    logTable = new int[size];
-    int x = 1;
-    for (int i = 0; i < size; i++) {
-      expTable[i] = x;
-      x *= 2; // we're assuming the generator alpha is 2
-      if (x >= size) {
-        x ^= primitive;
-        x &= size-1;
-      }
-    }
-    for (int i = 0; i < size-1; i++) {
-      logTable[expTable[i]] = i;
-    }
-    // logTable[0] == 0 but this should never be used
-    zero = new GenericGFPoly(this, new int[]{0});
-    one = new GenericGFPoly(this, new int[]{1});
   }
 
+  private LazyHolder getLazyHolder() {
+    // Double-checked lock idiom, not broken since JDK 1.5.
+    LazyHolder instance = lazyHolder;
+    if (instance == null) {
+      synchronized (LAZY_HOLDER_LOCK) {
+        instance = lazyHolder;
+        if (instance == null) {
+          lazyHolder = instance = new LazyHolder();
+        }
+      }
+    }
+    return instance;
+  }
+  
   GenericGFPoly getZero() {
-    return zero;
+    return getLazyHolder().zero;
   }
 
   GenericGFPoly getOne() {
-    return one;
+    return getLazyHolder().one;
   }
 
   /**
@@ -97,7 +124,7 @@ public final class GenericGF {
       throw new IllegalArgumentException();
     }
     if (coefficient == 0) {
-      return zero;
+      return getLazyHolder().zero;
     }
     int[] coefficients = new int[degree + 1];
     coefficients[0] = coefficient;
@@ -117,7 +144,7 @@ public final class GenericGF {
    * @return 2 to the power of a in GF(size)
    */
   int exp(int a) {
-    return expTable[a];
+    return getLazyHolder().expTable[a];
   }
 
   /**
@@ -127,7 +154,7 @@ public final class GenericGF {
     if (a == 0) {
       throw new IllegalArgumentException();
     }
-    return logTable[a];
+    return getLazyHolder().logTable[a];
   }
 
   /**
@@ -137,7 +164,8 @@ public final class GenericGF {
     if (a == 0) {
       throw new ArithmeticException();
     }
-    return expTable[size - logTable[a] - 1];
+    LazyHolder lazyHolder = getLazyHolder();
+    return lazyHolder.expTable[size - lazyHolder.logTable[a] - 1];
   }
 
   /**
@@ -147,7 +175,8 @@ public final class GenericGF {
     if (a == 0 || b == 0) {
       return 0;
     }
-    return expTable[(logTable[a] + logTable[b]) % (size - 1)];
+    LazyHolder lazyHolder = getLazyHolder();
+    return lazyHolder.expTable[(lazyHolder.logTable[a] + lazyHolder.logTable[b]) % (size - 1)];
   }
 
   public int getSize() {
