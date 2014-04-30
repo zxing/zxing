@@ -19,6 +19,7 @@ package com.google.zxing.client.android.camera;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
+import android.os.Build;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Utility methods for configuring the Android camera.
@@ -37,6 +39,8 @@ import java.util.List;
 public final class CameraConfigurationUtils {
 
   private static final String TAG = "CameraConfiguration";
+
+  private static final Pattern SEMICOLON = Pattern.compile(";");
 
   private static final int MIN_PREVIEW_PIXELS = 480 * 320; // normal screen
   private static final float MAX_EXPOSURE_COMPENSATION = 1.5f;
@@ -398,6 +402,44 @@ public final class CameraConfigurationUtils {
     for (Camera.Area area : areas) {
       result.append(area.rect).append(':').append(area.weight).append(' ');
     }
+    return result.toString();
+  }
+
+  public static String collectStats(Camera.Parameters parameters) {
+    return collectStats(parameters.flatten());
+  }
+
+  public static String collectStats(CharSequence flattenedParams) {
+    StringBuilder result = new StringBuilder(1000);
+
+    result.append("BOARD=").append(Build.BOARD).append('\n');
+    result.append("BRAND=").append(Build.BRAND).append('\n');
+    result.append("CPU_ABI=").append(Build.CPU_ABI).append('\n');
+    result.append("DEVICE=").append(Build.DEVICE).append('\n');
+    result.append("DISPLAY=").append(Build.DISPLAY).append('\n');
+    result.append("FINGERPRINT=").append(Build.FINGERPRINT).append('\n');
+    result.append("HOST=").append(Build.HOST).append('\n');
+    result.append("ID=").append(Build.ID).append('\n');
+    result.append("MANUFACTURER=").append(Build.MANUFACTURER).append('\n');
+    result.append("MODEL=").append(Build.MODEL).append('\n');
+    result.append("PRODUCT=").append(Build.PRODUCT).append('\n');
+    result.append("TAGS=").append(Build.TAGS).append('\n');
+    result.append("TIME=").append(Build.TIME).append('\n');
+    result.append("TYPE=").append(Build.TYPE).append('\n');
+    result.append("USER=").append(Build.USER).append('\n');
+    result.append("VERSION.CODENAME=").append(Build.VERSION.CODENAME).append('\n');
+    result.append("VERSION.INCREMENTAL=").append(Build.VERSION.INCREMENTAL).append('\n');
+    result.append("VERSION.RELEASE=").append(Build.VERSION.RELEASE).append('\n');
+    result.append("VERSION.SDK_INT=").append(Build.VERSION.SDK_INT).append('\n');
+
+    if (flattenedParams != null) {
+      String[] params = SEMICOLON.split(flattenedParams);
+      Arrays.sort(params);
+      for (String param : params) {
+        result.append(param).append('\n');
+      }
+    }
+
     return result.toString();
   }
 
