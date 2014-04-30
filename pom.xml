@@ -507,6 +507,7 @@
         </property>
       </activation>
       <modules>
+        <module>android-core</module>
         <module>android</module>
         <module>androidtest</module>
         <module>glass</module>
