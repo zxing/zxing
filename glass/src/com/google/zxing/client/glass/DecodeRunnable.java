@@ -141,8 +141,19 @@ final class DecodeRunnable implements Runnable, Camera.PreviewCallback {
 
     private void decode(byte[] data) {
       Result rawResult = null;
+
+      int subtendedWidth = width / CameraConfigurationManager.ZOOM;
+      int subtendedHeight = height / CameraConfigurationManager.ZOOM;
+      int excessWidth = width - subtendedWidth;
+      int excessHeight = height - subtendedHeight;
+
+      //long start = System.currentTimeMillis();
       PlanarYUVLuminanceSource source =
-          new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false);
+          new PlanarYUVLuminanceSource(data,
+                                       width, height,
+                                       excessWidth / 2, excessHeight / 2,
+                                       subtendedWidth, subtendedHeight,
+                                       false);
       BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
       try {
         rawResult = new MultiFormatReader().decode(bitmap, hints);
@@ -150,6 +161,8 @@ final class DecodeRunnable implements Runnable, Camera.PreviewCallback {
         // continue
       }
 
+      //long end = System.currentTimeMillis();
+      //Log.i(TAG, "Decode in " + (end - start));
       Handler handler = getHandler();
       Message message;
       if (rawResult == null) {
