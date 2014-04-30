@@ -35,16 +35,16 @@ There are also additional modules which are contributed and/or intermittently ma
 
 | Module       | Description
 | ------------ | -----------
-| actionscript | partial port to Actionscript
 | jruby        | JRuby wrapper
 
 ### Available in previous releases
 
 | Module | Description
 | ------ | -----------
-| [cpp](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/cpp)       | C++ port
-| [iphone](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/iphone) | iPhone client
-| [objc](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/objc)     | Objective C port
+| [cpp](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/cpp)                   | C++ port
+| [iphone](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/iphone)             | iPhone client
+| [objc](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/objc)                 | Objective C port
+| [actionscript](https://github.com/zxing/zxing/tree/c1df162b95e07928afbd4830798cc1408af1ac67/actionscript) | Partial ActionScript port
 
 ### Related third-party open source projects
 
