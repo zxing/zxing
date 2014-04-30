@@ -31,8 +31,10 @@ final class CameraConfigurationManager {
   static void configure(Camera camera) {
     Camera.Parameters parameters = camera.getParameters();
     //parameters.setPreviewSize(1024, 768);
-    parameters.setPreviewSize(512, 288);
-    //configureAdvanced(parameters);
+    parameters.setPreviewSize(1024, 576);
+    //    parameters.setPreviewSize(512, 288);
+
+    configureAdvanced(parameters);
     camera.setParameters(parameters);
   }
 
@@ -41,7 +43,7 @@ final class CameraConfigurationManager {
     CameraConfigurationUtils.setBarcodeSceneMode(parameters);
     CameraConfigurationUtils.setVideoStabilization(parameters);
     CameraConfigurationUtils.setMetering(parameters);
-    CameraConfigurationUtils.setMaxZoom(parameters);
+    CameraConfigurationUtils.setZoom(parameters, 2.0);
   }
 
 }

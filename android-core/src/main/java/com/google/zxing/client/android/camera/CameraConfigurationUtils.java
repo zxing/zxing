@@ -43,6 +43,7 @@ public final class CameraConfigurationUtils {
   private static final float MIN_EXPOSURE_COMPENSATION = 0.0f;
   private static final double MAX_ASPECT_DISTORTION = 0.15;
   private static final int MIN_FPS = 10;
+  private static final int MAX_FPS = 20;
   private static final int AREA_PER_1000 = 400;
 
   private CameraConfigurationUtils() {
@@ -129,33 +130,33 @@ public final class CameraConfigurationUtils {
   }
 
   public static void setBestPreviewFPS(Camera.Parameters parameters) {
-    setBestPreviewFPS(parameters, MIN_FPS);
+    setBestPreviewFPS(parameters, MIN_FPS, MAX_FPS);
   }
 
-  public static void setBestPreviewFPS(Camera.Parameters parameters, int minFPS) {
+  public static void setBestPreviewFPS(Camera.Parameters parameters, int minFPS, int maxFPS) {
     List<int[]> supportedPreviewFpsRanges = parameters.getSupportedPreviewFpsRange();
     Log.i(TAG, "Supported FPS ranges: " + toString(supportedPreviewFpsRanges));
     if (supportedPreviewFpsRanges != null && !supportedPreviewFpsRanges.isEmpty()) {
-      int[] minimumSuitableFpsRange = null;
+      int[] suitableFPSRange = null;
       for (int[] fpsRange : supportedPreviewFpsRanges) {
-        int fpsMax = fpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX];
-        if (fpsMax >= minFPS * 1000 &&
-            (minimumSuitableFpsRange == null ||
-             fpsMax > minimumSuitableFpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX])) {
-          minimumSuitableFpsRange = fpsRange;
+        int thisMin = fpsRange[Camera.Parameters.PREVIEW_FPS_MIN_INDEX];
+        int thisMax = fpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX];
+        if (thisMin >= minFPS * 1000 && thisMax <= maxFPS * 1000) {
+          suitableFPSRange = fpsRange;
+          break;
         }
       }
-      if (minimumSuitableFpsRange == null) {
+      if (suitableFPSRange == null) {
         Log.i(TAG, "No suitable FPS range?");
       } else {
         int[] currentFpsRange = new int[2];
         parameters.getPreviewFpsRange(currentFpsRange);
-        if (Arrays.equals(currentFpsRange, minimumSuitableFpsRange)) {
-          Log.i(TAG, "FPS range already set to " + Arrays.toString(minimumSuitableFpsRange));
+        if (Arrays.equals(currentFpsRange, suitableFPSRange)) {
+          Log.i(TAG, "FPS range already set to " + Arrays.toString(suitableFPSRange));
         } else {
-          Log.i(TAG, "Setting FPS range to " + Arrays.toString(minimumSuitableFpsRange));
-          parameters.setPreviewFpsRange(minimumSuitableFpsRange[Camera.Parameters.PREVIEW_FPS_MIN_INDEX],
-                                        minimumSuitableFpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
+          Log.i(TAG, "Setting FPS range to " + Arrays.toString(suitableFPSRange));
+          parameters.setPreviewFpsRange(suitableFPSRange[Camera.Parameters.PREVIEW_FPS_MIN_INDEX],
+                                        suitableFPSRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
         }
       }
     }
@@ -214,14 +215,12 @@ public final class CameraConfigurationUtils {
     }
   }
 
-  public static void setMaxZoom(Camera.Parameters parameters) {
-    int maxZoom = parameters.getMaxZoom();
-    Log.i(TAG, "Setting zoom to max of " + maxZoom);
-    setZoom(parameters, maxZoom);
-  }
-
-  public static void setZoom(Camera.Parameters parameters, int zoom) {
+  public static void setZoom(Camera.Parameters parameters, double targetZoomRatio) {
     if (parameters.isZoomSupported()) {
+      Integer zoom = indexOfClosestZoom(parameters, targetZoomRatio);
+      if (zoom == null) {
+        return;
+      }
       if (parameters.getZoom() == zoom) {
         Log.i(TAG, "Zoom is already set to " + zoom);
       } else {
@@ -231,6 +230,28 @@ public final class CameraConfigurationUtils {
     } else {
       Log.i(TAG, "Zoom is not supported");
     }
+  }
+
+  private static Integer indexOfClosestZoom(Camera.Parameters parameters, double targetZoomRatio) {
+    List<Integer> ratios = parameters.getZoomRatios();
+    Log.i(TAG, "Zoom ratios: " + ratios);
+    int maxZoom = parameters.getMaxZoom();
+    if (ratios == null || ratios.isEmpty() || ratios.size() != maxZoom + 1) {
+      Log.w(TAG, "Invalid zoom ratios!");
+      return null;
+    }
+    double target100 = 100.0 * targetZoomRatio;
+    double smallestDiff = Double.POSITIVE_INFINITY;
+    int closestIndex = 0;
+    for (int i = 0; i < ratios.size(); i++) {
+      double diff = Math.abs(ratios.get(i) - target100);
+      if (diff < smallestDiff) {
+        smallestDiff = diff;
+        closestIndex = i;
+      }
+    }
+    Log.i(TAG, "Chose zoom ratio of " + (ratios.get(closestIndex) / 100.0));
+    return closestIndex;
   }
 
   public static void setInvertColor(Camera.Parameters parameters) {
