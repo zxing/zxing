@@ -147,7 +147,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       camera.setPreviewDisplay(holder);
       camera.startPreview();
     } catch (IOException e) {
-      Log.e(TAG, "Cannot start prevew", e);
+      Log.e(TAG, "Cannot start preview", e);
     }
 
     decodeRunnable = new DecodeRunnable(this, camera);

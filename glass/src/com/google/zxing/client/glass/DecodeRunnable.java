@@ -47,6 +47,7 @@ final class DecodeRunnable implements Runnable, Camera.PreviewCallback {
   private final Camera camera;
   private final int height;
   private final int width;
+  private final byte[] previewBuffer;
   private boolean running;
   private Handler handler;
   private final CountDownLatch handlerInitLatch;
@@ -58,6 +59,7 @@ final class DecodeRunnable implements Runnable, Camera.PreviewCallback {
     Camera.Size previewSize = parameters.getPreviewSize();
     height = previewSize.height;
     width = previewSize.width;
+    previewBuffer = new byte[(height * width * 3) / 2];
     running = true;
     handlerInitLatch = new CountDownLatch(1);
   }
@@ -81,7 +83,7 @@ final class DecodeRunnable implements Runnable, Camera.PreviewCallback {
   }
 
   void startScanning() {
-    getHandler().obtainMessage(R.id.decode_failed).sendToTarget();
+    getHandler().obtainMessage(R.id.decode_start).sendToTarget();
   }
 
   void stop() {
@@ -111,6 +113,10 @@ final class DecodeRunnable implements Runnable, Camera.PreviewCallback {
         return;
       }
       switch (message.what) {
+        case R.id.decode_start:
+          camera.setPreviewCallbackWithBuffer(DecodeRunnable.this);
+          camera.addCallbackBuffer(previewBuffer);
+          break;
         case R.id.decode:
           decode((byte[]) message.obj);
           break;
@@ -124,7 +130,7 @@ final class DecodeRunnable implements Runnable, Camera.PreviewCallback {
           });
           break;
         case R.id.decode_failed:
-          camera.setOneShotPreviewCallback(DecodeRunnable.this);
+          camera.addCallbackBuffer(previewBuffer);
           break;
         case R.id.quit:
           running = false;
