@@ -280,11 +280,11 @@ public final class CameraManager {
    * @param cameraId camera ID of the camera to use
    */
   public synchronized void setManualCameraId(int cameraId) {
-	  if (initialized) {
-	    // FIXME throw exception? Just store for future use? Do not want to suddenly swap cameras!
-	  } else {
-  	  requestedCameraId = cameraId;
-  	}
+    if (initialized) {
+      // FIXME throw exception? Just store for future use? Do not want to suddenly swap cameras!
+    } else {
+      requestedCameraId = cameraId;
+    }
   }
   
   /**
