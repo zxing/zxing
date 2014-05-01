@@ -41,10 +41,10 @@ public final class OpenCameraInterface {
       return null;
     }
 	  
-	  boolean explicitRequest = cameraId >= 0;
+    boolean explicitRequest = cameraId >= 0;
 	  
-	  if (!explicitRequest) {
-	    // Select a camera if no explicit camera requested
+    if (!explicitRequest) {
+      // Select a camera if no explicit camera requested
       int index = 0;
       while (index < numCameras) {
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
@@ -56,7 +56,7 @@ public final class OpenCameraInterface {
       }
       
       cameraId = index;
-	  }
+    }
 	  
     Camera camera;
     if (cameraId < numCameras) {
