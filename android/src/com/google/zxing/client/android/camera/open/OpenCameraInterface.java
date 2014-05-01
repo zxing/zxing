@@ -26,6 +26,39 @@ public final class OpenCameraInterface {
   private OpenCameraInterface() {
   }
 
+  
+  /**
+   * Opens the requested camera with {@link Camera#open(int)}, if one exists.
+   *
+   * @param cameraId camera ID of the camera to use
+   * @return handle to {@link Camera} that was opened
+   */
+  public static Camera open(int cameraId) {
+	if (cameraId < 0) {
+		Log.w(TAG, "Requested invalid camera ID: " + cameraId);
+		return null;
+	}
+	
+    int numCameras = Camera.getNumberOfCameras();
+	
+	if (numCameras == 0) {
+      Log.w(TAG, "No cameras!");
+      return null;
+    }
+	
+	Camera camera;
+    if (cameraId < numCameras) {
+      Log.i(TAG, "Opening camera #" + cameraId);
+      camera = Camera.open(cameraId);
+    } else {
+      Log.w(TAG, "Requested camera does not exist: " + cameraId);
+      camera = null;
+    }
+
+    return camera;
+  }
+  
+  
   /**
    * Opens a rear-facing camera with {@link Camera#open(int)}, if one exists, or opens camera 0.
    *
