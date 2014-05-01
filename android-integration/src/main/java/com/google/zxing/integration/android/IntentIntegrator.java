@@ -249,25 +249,50 @@ public class IntentIntegrator {
   }
 
   /**
-   * Initiates a scan for all known barcode types.
+   * Initiates a scan for all known barcode types with the default camera.
    *
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
-   *   if a prompt was needed, or null otherwiseo
+   *   if a prompt was needed, or null otherwise.
    */
   public final AlertDialog initiateScan() {
-    return initiateScan(ALL_CODE_TYPES);
+    return initiateScan(ALL_CODE_TYPES, -1);
+  }
+  
+  /**
+   * Initiates a scan for all known barcode types with the specified camera.
+   *
+   * @param cameraId camera ID of the camera to use. A negative value means "no preference".
+   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
+   *   if a prompt was needed, or null otherwise.
+   */
+  public final AlertDialog initiateScan(int cameraId) {
+    return initiateScan(ALL_CODE_TYPES, cameraId);
   }
 
   /**
-   * Initiates a scan only for a certain set of barcode types, given as strings corresponding
+   * Initiates a scan, using the default camera, only for a certain set of barcode types, given as strings corresponding
    * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
    * like {@link #PRODUCT_CODE_TYPES} for example.
    *
    * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
-   *   if a prompt was needed, or null otherwise
+   *   if a prompt was needed, or null otherwise.
    */
   public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats) {
+    return initiateScan(desiredBarcodeFormats, -1);
+  }
+  
+  /**
+   * Initiates a scan, using the specified camera, only for a certain set of barcode types, given as strings corresponding
+   * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
+   * like {@link #PRODUCT_CODE_TYPES} for example.
+   *
+   * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
+   * @param cameraId camera ID of the camera to use. A negative value means "no preference".
+   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
+   *   if a prompt was needed, or null otherwise
+   */
+  public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats, int cameraId) {
     Intent intentScan = new Intent(BS_PACKAGE + ".SCAN");
     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
 
@@ -282,6 +307,11 @@ public class IntentIntegrator {
         joinedByComma.append(format);
       }
       intentScan.putExtra("SCAN_FORMATS", joinedByComma.toString());
+    }
+	
+    // check requested camera ID
+    if (cameraId >= 0) {
+      intentScan.putExtra("SCAN_CAMERA_ID", cameraId);
     }
 
     String targetAppPackage = findTargetAppPackage(intentScan);

@@ -80,6 +80,13 @@ public final class Intents {
      * Example: "EAN_13,EAN_8,QR_CODE". This overrides {@link #MODE}.
      */
     public static final String FORMATS = "SCAN_FORMATS";
+	
+    /**
+     * Optional parameter to specify the id of the camera from which to recognize barcodes.
+     * Overrides the default camera that would otherwise would have been selected.
+     * If provided, should be an int.
+     */
+    public static final String CAMERA_ID = "SCAN_CAMERA_ID";
 
     /**
      * @see com.google.zxing.DecodeHintType#CHARACTER_SET

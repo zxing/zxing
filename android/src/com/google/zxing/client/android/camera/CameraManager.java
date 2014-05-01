@@ -52,6 +52,7 @@ public final class CameraManager {
   private Rect framingRectInPreview;
   private boolean initialized;
   private boolean previewing;
+  private int requestedCameraId = -1;
   private int requestedFramingRectWidth;
   private int requestedFramingRectHeight;
   /**
@@ -65,7 +66,7 @@ public final class CameraManager {
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
   }
-
+  
   /**
    * Opens the camera driver and initializes the hardware parameters.
    *
@@ -75,7 +76,13 @@ public final class CameraManager {
   public synchronized void openDriver(SurfaceHolder holder) throws IOException {
     Camera theCamera = camera;
     if (theCamera == null) {
-      theCamera = OpenCameraInterface.open();
+	  
+      if (requestedCameraId >= 0) {
+        theCamera = OpenCameraInterface.open(requestedCameraId);
+      } else {
+        theCamera = OpenCameraInterface.open();
+      }
+      
       if (theCamera == null) {
         throw new IOException();
       }
@@ -265,6 +272,21 @@ public final class CameraManager {
     return framingRectInPreview;
   }
 
+  
+  /**
+   * Allows third party apps to specify the camera ID, rather than determine
+   * it automatically based on available cameras and their orientation.
+   *
+   * @param cameraId camera ID of the camera to use. A negative value means "no preference".
+   */
+  public synchronized void setManualCameraId(int cameraId) {
+    if (initialized) {
+      throw new IllegalStateException();
+    } else {
+      requestedCameraId = cameraId;
+    }
+  }
+  
   /**
    * Allows third party apps to specify the scanning rectangle dimensions, rather than determine
    * them automatically based on screen resolution.
