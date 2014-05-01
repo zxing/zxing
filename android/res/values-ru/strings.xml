@@ -101,11 +101,11 @@
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">QR-коды</string>
   <string name="preferences_device_bug_workarounds_title">Исправление ошибок устройства</string>
-  <string name="preferences_disable_barcode_scene_mode_title">Отключить режим съемки "штрих-код"</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Не использовать режим съемки "штрих-код"</string>
   <string name="preferences_disable_continuous_focus_summary">Использовать только стандартный режим фокусировки</string>
-  <string name="preferences_disable_continuous_focus_title">Отключить непрерывную фокусировку</string>
-  <string name="preferences_disable_exposure_title">Отключить экспозицию</string>
-  <string name="preferences_disable_metering_title">Отключить измерение</string>
+  <string name="preferences_disable_continuous_focus_title">Не использовать непрерывную фокусировку</string>
+  <string name="preferences_disable_exposure_title">Не использовать экспозицию</string>
+  <string name="preferences_disable_metering_title">Не использовать измерение</string>
   <string name="preferences_front_light_auto">Автоматически</string>
   <string name="preferences_front_light_off">Выключен</string>
   <string name="preferences_front_light_on">Включен</string>
