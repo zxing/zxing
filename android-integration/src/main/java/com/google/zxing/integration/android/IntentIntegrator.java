@@ -266,7 +266,7 @@ public class IntentIntegrator {
    *   if a prompt was needed, or null otherwise.
    */
   public final AlertDialog initiateScan(int cameraId) {
-	return initiateScan(ALL_CODE_TYPES, cameraId);
+    return initiateScan(ALL_CODE_TYPES, cameraId);
   }
 
   /**
@@ -279,7 +279,7 @@ public class IntentIntegrator {
    *   if a prompt was needed, or null otherwise.
    */
   public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats) {
-	return initiateScan(desiredBarcodeFormats, -1);
+    return initiateScan(desiredBarcodeFormats, -1);
   }
   
   /**
@@ -309,10 +309,10 @@ public class IntentIntegrator {
       intentScan.putExtra("SCAN_FORMATS", joinedByComma.toString());
     }
 	
-	// check requested camera ID
-	if (cameraId > -1) {
-	  intentScan.putExtra("SCAN_CAMERA_ID", cameraId);
-	}
+    // check requested camera ID
+    if (cameraId > -1) {
+      intentScan.putExtra("SCAN_CAMERA_ID", cameraId);
+    }
 
     String targetAppPackage = findTargetAppPackage(intentScan);
     if (targetAppPackage == null) {
