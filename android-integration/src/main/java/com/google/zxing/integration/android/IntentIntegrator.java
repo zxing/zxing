@@ -261,7 +261,7 @@ public class IntentIntegrator {
   /**
    * Initiates a scan for all known barcode types with the specified camera.
    *
-   * @param cameraId camera ID of the camera to use
+   * @param cameraId camera ID of the camera to use. A negative value means "no preference".
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
    *   if a prompt was needed, or null otherwise.
    */
@@ -288,7 +288,7 @@ public class IntentIntegrator {
    * like {@link #PRODUCT_CODE_TYPES} for example.
    *
    * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
-   * @param cameraId camera ID of the camera to use
+   * @param cameraId camera ID of the camera to use. A negative value means "no preference".
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
    *   if a prompt was needed, or null otherwise
    */
@@ -310,7 +310,7 @@ public class IntentIntegrator {
     }
 	
     // check requested camera ID
-    if (cameraId > -1) {
+    if (cameraId >= 0) {
       intentScan.putExtra("SCAN_CAMERA_ID", cameraId);
     }
 
