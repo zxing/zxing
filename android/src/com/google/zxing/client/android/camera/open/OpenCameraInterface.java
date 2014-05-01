@@ -34,19 +34,19 @@ public final class OpenCameraInterface {
    * @return handle to {@link Camera} that was opened
    */
   public static Camera open(int cameraId) {
-	if (cameraId < 0) {
-		Log.w(TAG, "Requested invalid camera ID: " + cameraId);
-		return null;
-	}
+  	if (cameraId < 0) {
+  	  Log.w(TAG, "Requested invalid camera ID: " + cameraId);
+  	  return null;
+  	}
 	
     int numCameras = Camera.getNumberOfCameras();
 	
-	if (numCameras == 0) {
+    if (numCameras == 0) {
       Log.w(TAG, "No cameras!");
       return null;
     }
 	
-	Camera camera;
+    Camera camera;
     if (cameraId < numCameras) {
       Log.i(TAG, "Opening camera #" + cameraId);
       camera = Camera.open(cameraId);
@@ -54,7 +54,7 @@ public final class OpenCameraInterface {
       Log.w(TAG, "Requested camera does not exist: " + cameraId);
       camera = null;
     }
-
+    
     return camera;
   }
   
