@@ -34,10 +34,10 @@ public final class OpenCameraInterface {
    * @return handle to {@link Camera} that was opened
    */
   public static Camera open(int cameraId) {
-  	if (cameraId < 0) {
-  	  Log.w(TAG, "Requested invalid camera ID: " + cameraId);
-  	  return null;
-  	}
+    if (cameraId < 0) {
+      Log.w(TAG, "Requested invalid camera ID: " + cameraId);
+      return null;
+    }
 	
     int numCameras = Camera.getNumberOfCameras();
 	
