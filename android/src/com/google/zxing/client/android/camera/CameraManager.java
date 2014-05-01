@@ -77,7 +77,7 @@ public final class CameraManager {
     Camera theCamera = camera;
     if (theCamera == null) {
 	  
-      if (requestedCameraId > -1) {
+      if (requestedCameraId >= 0) {
         theCamera = OpenCameraInterface.open(requestedCameraId);
       } else {
         theCamera = OpenCameraInterface.open();
@@ -277,11 +277,11 @@ public final class CameraManager {
    * Allows third party apps to specify the camera ID, rather than determine
    * it automatically based on available cameras and their orientation.
    *
-   * @param cameraId camera ID of the camera to use
+   * @param cameraId camera ID of the camera to use. A negative value means "no preference".
    */
   public synchronized void setManualCameraId(int cameraId) {
     if (initialized) {
-      // FIXME throw exception? Just store for future use? Do not want to suddenly swap cameras!
+      throw new IllegalStateException();
     } else {
       requestedCameraId = cameraId;
     }
