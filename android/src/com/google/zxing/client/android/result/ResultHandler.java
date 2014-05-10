@@ -379,8 +379,7 @@ public abstract class ResultHandler {
   }
 
   final void openBookSearch(String isbn) {
-    Uri uri = Uri.parse("http://books.google." + LocaleManager.getBookSearchCountryTLD(activity) +
-        "/books?vid=isbn" + isbn);
+    Uri uri = Uri.parse("http://www.outpan.com?view_product.php?barcode=" + isbn);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
