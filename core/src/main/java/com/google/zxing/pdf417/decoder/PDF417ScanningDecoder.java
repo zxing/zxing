@@ -326,27 +326,31 @@ public final class PDF417ScanningDecoder {
     throw ChecksumException.getChecksumInstance();
   }
 
-  private static BarcodeValue[][] createBarcodeMatrix(DetectionResult detectionResult) {
-    BarcodeValue[][] barcodeMatrix = new BarcodeValue[detectionResult.getBarcodeRowCount()][detectionResult
-        .getBarcodeColumnCount() + 2];
+  private static BarcodeValue[][] createBarcodeMatrix(DetectionResult detectionResult) throws FormatException {
+    BarcodeValue[][] barcodeMatrix =
+        new BarcodeValue[detectionResult.getBarcodeRowCount()][detectionResult.getBarcodeColumnCount() + 2];
     for (int row = 0; row < barcodeMatrix.length; row++) {
       for (int column = 0; column < barcodeMatrix[row].length; column++) {
         barcodeMatrix[row][column] = new BarcodeValue();
       }
     }
 
-    int column = -1;
+    int column = 0;
     for (DetectionResultColumn detectionResultColumn : detectionResult.getDetectionResultColumns()) {
-      column++;
-      if (detectionResultColumn == null) {
-        continue;
-      }
-      for (Codeword codeword : detectionResultColumn.getCodewords()) {
-        if (codeword == null || codeword.getRowNumber() == -1) {
-          continue;
+      if (detectionResultColumn != null) {
+        for (Codeword codeword : detectionResultColumn.getCodewords()) {
+          if (codeword != null) {
+            int rowNumber = codeword.getRowNumber();
+            if (rowNumber >= 0) {
+              if (rowNumber >= barcodeMatrix.length) {
+                throw FormatException.getFormatInstance();
+              }
+              barcodeMatrix[rowNumber][column].setValue(codeword.getValue());
+            }
+          }
         }
-        barcodeMatrix[codeword.getRowNumber()][column].setValue(codeword.getValue());
       }
+      column++;
     }
     return barcodeMatrix;
   }
