@@ -20,7 +20,7 @@ import android.content.SharedPreferences;
 import com.google.zxing.client.android.PreferencesActivity;
 
 /**
- * Enumerates settings of the prefernce controlling the front light.
+ * Enumerates settings of the preference controlling the front light.
  */
 public enum FrontLightMode {
 

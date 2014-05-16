@@ -76,8 +76,6 @@ final class CameraConfigurationManager {
 
     initializeTorch(parameters, prefs, safeMode);
 
-    CameraConfigurationUtils.setBestPreviewFPS(parameters);
-
     CameraConfigurationUtils.setFocus(
         parameters,
         prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
