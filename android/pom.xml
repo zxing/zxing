@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>android</artifactId>
-  <version>4.6.5</version>
+  <version>4.7.0</version>
   <packaging>apk</packaging>
 
   <dependencies>
