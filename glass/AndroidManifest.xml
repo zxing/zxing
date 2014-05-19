@@ -35,6 +35,12 @@
       <intent-filter>
         <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
       </intent-filter>
+
+      <intent-filter>
+        <action android:name="com.google.zxing.client.android.SCAN"/>
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+
       <meta-data android:name="com.google.android.glass.VoiceTrigger"
                  android:resource="@xml/barcode_scanner_show" />
     </activity>
@@ -42,4 +48,3 @@
   </application>
 
 </manifest>
-
