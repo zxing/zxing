@@ -43,7 +43,7 @@
   </parent>
 
   <properties>
-    <gwt.version>2.6.1-rc2</gwt.version>
+    <gwt.version>2.6.1</gwt.version>
   </properties>
 
   <build>
