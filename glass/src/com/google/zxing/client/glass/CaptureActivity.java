@@ -191,7 +191,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     startActivity(intent);
   }
 
-  private void reset() {
+  private synchronized void reset() {
     TextView statusView = (TextView) findViewById(R.id.status_view);
     statusView.setVisibility(View.GONE);
     result = null;

@@ -16,12 +16,11 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.glass"
-          android:versionCode="2"
-          android:versionName="0.2.0">
+          android:versionCode="3"
+          android:versionName="0.2.1">
 
   <uses-permission android:name="android.permission.CAMERA"/>
   <uses-permission android:name="com.google.android.glass.permission.DEVELOPMENT" />
-  
 
   <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19"/>
 
