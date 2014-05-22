@@ -173,7 +173,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       TextView statusView = (TextView) findViewById(R.id.status_view);
       String text = result.getText();
       statusView.setText(text);
-      statusView.setTextSize(TypedValue.COMPLEX_UNIT_SP, Math.max(14, 72 - text.length() / 2));
+      statusView.setTextSize(TypedValue.COMPLEX_UNIT_SP, Math.max(14, 56 - text.length() / 4));
       statusView.setVisibility(View.VISIBLE);
       this.result = result;
     }
