@@ -178,115 +178,111 @@
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>     }
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>     <strong class="jxr_keyword">int</strong> pattern = 0;
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; max; i++) {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>       <strong class="jxr_keyword">int</strong> scaledShifted = (counters[i] &lt;&lt; INTEGER_MATH_SHIFT) * 9 / sum;
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>       <strong class="jxr_keyword">int</strong> scaledUnshifted = scaledShifted &gt;&gt; INTEGER_MATH_SHIFT;
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>       <strong class="jxr_keyword">if</strong> ((scaledShifted &amp; 0xFF) &gt; 0x7F) {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>         scaledUnshifted++;
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>       }
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>       <strong class="jxr_keyword">if</strong> (scaledUnshifted &lt; 1 || scaledUnshifted &gt; 4) {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>         <strong class="jxr_keyword">return</strong> -1;
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>       }
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>       <strong class="jxr_keyword">if</strong> ((i &amp; 0x01) == 0) {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; scaledUnshifted; j++) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>           pattern = (pattern &lt;&lt; 1) | 0x01;
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>         }
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>         pattern &lt;&lt;= scaledUnshifted;
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>       }
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>     }
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>     <strong class="jxr_keyword">return</strong> pattern;
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>   }
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">char</strong> patternToChar(<strong class="jxr_keyword">int</strong> pattern) <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; CHARACTER_ENCODINGS.length; i++) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>       <strong class="jxr_keyword">if</strong> (CHARACTER_ENCODINGS[i] == pattern) {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>         <strong class="jxr_keyword">return</strong> ALPHABET[i];
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>       }
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>     }
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>     <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>   }
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String decodeExtended(CharSequence encoded) <strong class="jxr_keyword">throws</strong> FormatException {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>     <strong class="jxr_keyword">int</strong> length = encoded.length();
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>     StringBuilder decoded = <strong class="jxr_keyword">new</strong> StringBuilder(length);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; length; i++) {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>       <strong class="jxr_keyword">char</strong> c = encoded.charAt(i);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>       <strong class="jxr_keyword">if</strong> (c &gt;= 'a' &amp;&amp; c &lt;= 'd') {
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>         <strong class="jxr_keyword">if</strong> (i &gt;= length - 1) {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>           <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>         }
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>         <strong class="jxr_keyword">char</strong> next = encoded.charAt(i + 1);
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>         <strong class="jxr_keyword">char</strong> decodedChar = '\0';
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>         <strong class="jxr_keyword">switch</strong> (c) {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>           <strong class="jxr_keyword">case</strong> 'd':
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>             <em class="jxr_comment">// +A to +Z map to a to z</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>             <strong class="jxr_keyword">if</strong> (next &gt;= 'A' &amp;&amp; next &lt;= 'Z') {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next + 32);
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>               <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>             }
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>             <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>           <strong class="jxr_keyword">case</strong> 'a':
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>             <em class="jxr_comment">// $A to $Z map to control codes SH to SB</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>             <strong class="jxr_keyword">if</strong> (next &gt;= 'A' &amp;&amp; next &lt;= 'Z') {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next - 64);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>               <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>             }
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>             <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>           <strong class="jxr_keyword">case</strong> 'b':
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>             <em class="jxr_comment">// %A to %E map to control codes ESC to US</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>             <strong class="jxr_keyword">if</strong> (next &gt;= 'A' &amp;&amp; next &lt;= 'E') {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next - 38);
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (next &gt;= 'F' &amp;&amp; next &lt;= 'W') {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next - 11);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>               <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>             }
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>             <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>           <strong class="jxr_keyword">case</strong> 'c':
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>             <em class="jxr_comment">// /A to /O map to ! to , and /Z maps to :</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>             <strong class="jxr_keyword">if</strong> (next &gt;= 'A' &amp;&amp; next &lt;= 'O') {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next - 32);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (next == 'Z') {
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>               decodedChar = ':';
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>               <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>             }
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>             <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>         }
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>         decoded.append(decodedChar);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>         <em class="jxr_comment">// bump up i again since we read two characters</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>         i++;
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>         decoded.append(c);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>       }
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>     }
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>     <strong class="jxr_keyword">return</strong> decoded.toString();
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>   }
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkChecksums(CharSequence result) <strong class="jxr_keyword">throws</strong> ChecksumException {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>     <strong class="jxr_keyword">int</strong> length = result.length();
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>     checkOneChecksum(result, length - 2, 20);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>     checkOneChecksum(result, length - 1, 15);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>   }
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkOneChecksum(CharSequence result, <strong class="jxr_keyword">int</strong> checkPosition, <strong class="jxr_keyword">int</strong> weightMax)
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../com/google/zxing/ChecksumException.html">ChecksumException</a> {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <strong class="jxr_keyword">int</strong> weight = 1;
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>     <strong class="jxr_keyword">int</strong> total = 0;
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = checkPosition - 1; i &gt;= 0; i--) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>       total += weight * ALPHABET_STRING.indexOf(result.charAt(i));
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>       <strong class="jxr_keyword">if</strong> (++weight &gt; weightMax) {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>         weight = 1;
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>       }
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>     }
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>     <strong class="jxr_keyword">if</strong> (result.charAt(checkPosition) != ALPHABET[total % 47]) {
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>       <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>     }
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>   }
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> }
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>       <strong class="jxr_keyword">int</strong> scaled = Math.round(counters[i] * 9.0f / sum);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>       <strong class="jxr_keyword">if</strong> (scaled &lt; 1 || scaled &gt; 4) {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>         <strong class="jxr_keyword">return</strong> -1;
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>       }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>       <strong class="jxr_keyword">if</strong> ((i &amp; 0x01) == 0) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; scaled; j++) {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>           pattern = (pattern &lt;&lt; 1) | 0x01;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>         }
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>         pattern &lt;&lt;= scaled;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>       }
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>     }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>     <strong class="jxr_keyword">return</strong> pattern;
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>   }
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">char</strong> patternToChar(<strong class="jxr_keyword">int</strong> pattern) <strong class="jxr_keyword">throws</strong> NotFoundException {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; CHARACTER_ENCODINGS.length; i++) {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>       <strong class="jxr_keyword">if</strong> (CHARACTER_ENCODINGS[i] == pattern) {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">return</strong> ALPHABET[i];
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>       }
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     }
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>     <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>   }
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String decodeExtended(CharSequence encoded) <strong class="jxr_keyword">throws</strong> FormatException {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>     <strong class="jxr_keyword">int</strong> length = encoded.length();
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     StringBuilder decoded = <strong class="jxr_keyword">new</strong> StringBuilder(length);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; length; i++) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>       <strong class="jxr_keyword">char</strong> c = encoded.charAt(i);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>       <strong class="jxr_keyword">if</strong> (c &gt;= 'a' &amp;&amp; c &lt;= 'd') {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>         <strong class="jxr_keyword">if</strong> (i &gt;= length - 1) {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>           <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>         }
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>         <strong class="jxr_keyword">char</strong> next = encoded.charAt(i + 1);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>         <strong class="jxr_keyword">char</strong> decodedChar = '\0';
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>         <strong class="jxr_keyword">switch</strong> (c) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>           <strong class="jxr_keyword">case</strong> 'd':
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>             <em class="jxr_comment">// +A to +Z map to a to z</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>             <strong class="jxr_keyword">if</strong> (next &gt;= 'A' &amp;&amp; next &lt;= 'Z') {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next + 32);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>               <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>             }
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>           <strong class="jxr_keyword">case</strong> 'a':
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>             <em class="jxr_comment">// $A to $Z map to control codes SH to SB</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>             <strong class="jxr_keyword">if</strong> (next &gt;= 'A' &amp;&amp; next &lt;= 'Z') {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next - 64);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>               <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>             }
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>           <strong class="jxr_keyword">case</strong> 'b':
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>             <em class="jxr_comment">// %A to %E map to control codes ESC to US</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>             <strong class="jxr_keyword">if</strong> (next &gt;= 'A' &amp;&amp; next &lt;= 'E') {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next - 38);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (next &gt;= 'F' &amp;&amp; next &lt;= 'W') {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next - 11);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>               <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>             }
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>           <strong class="jxr_keyword">case</strong> 'c':
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>             <em class="jxr_comment">// /A to /O map to ! to , and /Z maps to :</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>             <strong class="jxr_keyword">if</strong> (next &gt;= 'A' &amp;&amp; next &lt;= 'O') {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>               decodedChar = (<strong class="jxr_keyword">char</strong>) (next - 32);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (next == 'Z') {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>               decodedChar = ':';
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>               <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>             }
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>         }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>         decoded.append(decodedChar);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>         <em class="jxr_comment">// bump up i again since we read two characters</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>         i++;
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>         decoded.append(c);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>       }
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>     }
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     <strong class="jxr_keyword">return</strong> decoded.toString();
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>   }
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkChecksums(CharSequence result) <strong class="jxr_keyword">throws</strong> ChecksumException {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     <strong class="jxr_keyword">int</strong> length = result.length();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     checkOneChecksum(result, length - 2, 20);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>     checkOneChecksum(result, length - 1, 15);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>   }
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkOneChecksum(CharSequence result, <strong class="jxr_keyword">int</strong> checkPosition, <strong class="jxr_keyword">int</strong> weightMax)
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../com/google/zxing/ChecksumException.html">ChecksumException</a> {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>     <strong class="jxr_keyword">int</strong> weight = 1;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>     <strong class="jxr_keyword">int</strong> total = 0;
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = checkPosition - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>       total += weight * ALPHABET_STRING.indexOf(result.charAt(i));
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>       <strong class="jxr_keyword">if</strong> (++weight &gt; weightMax) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>         weight = 1;
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>       }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     }
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">if</strong> (result.charAt(checkPosition) != ALPHABET[total % 47]) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>       <strong class="jxr_keyword">throw</strong> ChecksumException.getChecksumInstance();
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     }
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>   }
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>                                       <strong class="jxr_keyword">float</strong> moduleSize) <strong class="jxr_keyword">throws</strong> NotFoundException {
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>     <strong class="jxr_keyword">int</strong> tltrCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>     <strong class="jxr_keyword">int</strong> tlblCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">int</strong> dimension = ((tltrCentersDimension + tlblCentersDimension) &gt;&gt; 1) + 7;
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">int</strong> dimension = ((tltrCentersDimension + tlblCentersDimension) / 2) + 7;
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>     <strong class="jxr_keyword">switch</strong> (dimension &amp; 0x03) { <em class="jxr_comment">// mod 4</em>
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>       <strong class="jxr_keyword">case</strong> 0:
 <a class="jxr_linenumber" name="L207" href="#L207">207</a>         dimension++;
@@ -326,7 +326,7 @@
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 
 <a class="jxr_linenumber" name="L319" href="#L319">319</a>     <strong class="jxr_keyword">int</strong> dx = Math.abs(toX - fromX);
 <a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">int</strong> dy = Math.abs(toY - fromY);
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">int</strong> error = -dx &gt;&gt; 1;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">int</strong> error = -dx / 2;
 <a class="jxr_linenumber" name="L322" href="#L322">322</a>     <strong class="jxr_keyword">int</strong> xstep = fromX &lt; toX ? 1 : -1;
 <a class="jxr_linenumber" name="L323" href="#L323">323</a>     <strong class="jxr_keyword">int</strong> ystep = fromY &lt; toY ? 1 : -1;
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 

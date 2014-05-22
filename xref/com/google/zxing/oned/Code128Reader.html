@@ -154,8 +154,8 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>       {2, 3, 3, 1, 1, 1, 2}
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>   };
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_AVG_VARIANCE = (<strong class="jxr_keyword">int</strong>) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_INDIVIDUAL_VARIANCE = (<strong class="jxr_keyword">int</strong>) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_AVG_VARIANCE = 0.25f;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_INDIVIDUAL_VARIANCE = 0.7f;
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CODE_SHIFT = 98;
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
@@ -189,10 +189,10 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>         counters[counterPosition]++;
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>       } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">if</strong> (counterPosition == patternLength - 1) {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>           <strong class="jxr_keyword">int</strong> bestVariance = MAX_AVG_VARIANCE;
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>           <strong class="jxr_keyword">float</strong> bestVariance = MAX_AVG_VARIANCE;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>           <strong class="jxr_keyword">int</strong> bestMatch = -1;
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>           <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> startCode = CODE_START_A; startCode &lt;= CODE_START_C; startCode++) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>             <strong class="jxr_keyword">int</strong> variance = patternMatchVariance(counters, CODE_PATTERNS[startCode],
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>             <strong class="jxr_keyword">float</strong> variance = patternMatchVariance(counters, CODE_PATTERNS[startCode],
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>                 MAX_INDIVIDUAL_VARIANCE);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>             <strong class="jxr_keyword">if</strong> (variance &lt; bestVariance) {
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>               bestVariance = variance;
@@ -222,11 +222,11 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> decodeCode(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, <strong class="jxr_keyword">int</strong>[] counters, <strong class="jxr_keyword">int</strong> rowOffset)
 <a class="jxr_linenumber" name="L215" href="#L215">215</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>     recordPattern(row, rowOffset, counters);
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>     <strong class="jxr_keyword">int</strong> bestVariance = MAX_AVG_VARIANCE; <em class="jxr_comment">// worst variance we'll accept</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>     <strong class="jxr_keyword">float</strong> bestVariance = MAX_AVG_VARIANCE; <em class="jxr_comment">// worst variance we'll accept</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a>     <strong class="jxr_keyword">int</strong> bestMatch = -1;
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> d = 0; d &lt; CODE_PATTERNS.length; d++) {
 <a class="jxr_linenumber" name="L220" href="#L220">220</a>       <strong class="jxr_keyword">int</strong>[] pattern = CODE_PATTERNS[d];
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>       <strong class="jxr_keyword">int</strong> variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>       <strong class="jxr_keyword">float</strong> variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a>       <strong class="jxr_keyword">if</strong> (variance &lt; bestVariance) {
 <a class="jxr_linenumber" name="L223" href="#L223">223</a>         bestVariance = variance;
 <a class="jxr_linenumber" name="L224" href="#L224">224</a>         bestMatch = d;

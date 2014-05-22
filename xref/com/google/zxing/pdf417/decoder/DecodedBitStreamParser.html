@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> PAL = 29;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">char</strong>[] PUNCT_CHARS = {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>        ';', '&lt;', '&gt;', '@', '[', '&#92;&#92;', '}', '_', '`', '~', '!',
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>        ';', '&lt;', '&gt;', '@', '[', '&#92;&#92;', ']', '_', '`', '~', '!',
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>        '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '&quot;', '|', '*',
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>        '(', ')', '?', '{', '}', '\''};
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
@@ -205,9 +205,9 @@
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> textCompaction(<strong class="jxr_keyword">int</strong>[] codewords, <strong class="jxr_keyword">int</strong> codeIndex, StringBuilder result) {
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>     <em class="jxr_comment">// 2 character per codeword</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">int</strong>[] textCompactionData = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[(codewords[0] - codeIndex) &lt;&lt; 1];
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">int</strong>[] textCompactionData = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[(codewords[0] - codeIndex) * 2];
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>     <em class="jxr_comment">// Used to hold the byte compaction value if there is a mode shift</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>     <strong class="jxr_keyword">int</strong>[] byteCompactionData = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[(codewords[0] - codeIndex) &lt;&lt; 1];
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>     <strong class="jxr_keyword">int</strong>[] byteCompactionData = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[(codewords[0] - codeIndex) * 2];
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">int</strong> index = 0;
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>     <strong class="jxr_keyword">boolean</strong> end = false;

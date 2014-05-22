@@ -52,8 +52,8 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/google/zxing/oned/ITFReader.html">ITFReader</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../com/google/zxing/oned/OneDReader.html">OneDReader</a> {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_AVG_VARIANCE = (<strong class="jxr_keyword">int</strong>) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_INDIVIDUAL_VARIANCE = (<strong class="jxr_keyword">int</strong>) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.78f);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_AVG_VARIANCE = 0.38f;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_INDIVIDUAL_VARIANCE = 0.78f;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> W = 3; <em class="jxr_comment">// Pixel width of a wide line</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> N = 1; <em class="jxr_comment">// Pixed width of a narrow line</em>
@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>       recordPattern(row, payloadStart, counterDigitPair);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>       <em class="jxr_comment">// Split them into each array</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> k = 0; k &lt; 5; k++) {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">int</strong> twoK = k &lt;&lt; 1;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">int</strong> twoK = 2 * k;
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>         counterBlack[k] = counterDigitPair[twoK];
 <a class="jxr_linenumber" name="L162" href="#L162">162</a>         counterWhite[k] = counterDigitPair[twoK + 1];
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>       }
@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>     <em class="jxr_comment">// Determine the width of a narrow line in pixels. We can do this by</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>     <em class="jxr_comment">// getting the width of the start pattern and dividing by 4 because its</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>     <em class="jxr_comment">// made up of 4 narrow lines.</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">this</strong>.narrowLineWidth = (startPattern[1] - startPattern[0]) &gt;&gt; 2;
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">this</strong>.narrowLineWidth = (startPattern[1] - startPattern[0]) / 4;
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>     validateQuietZone(row, startPattern[0]);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
@@ -344,26 +344,25 @@
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">   * @throws NotFoundException if digit cannot be decoded</em>
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L338" href="#L338">338</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> decodeDigit(<strong class="jxr_keyword">int</strong>[] counters) <strong class="jxr_keyword">throws</strong> NotFoundException {
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>     <strong class="jxr_keyword">int</strong> bestVariance = MAX_AVG_VARIANCE; <em class="jxr_comment">// worst variance we'll accept</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>     <strong class="jxr_keyword">int</strong> bestMatch = -1;
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>     <strong class="jxr_keyword">int</strong> max = PATTERNS.length;
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; max; i++) {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>       <strong class="jxr_keyword">int</strong>[] pattern = PATTERNS[i];
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>       <strong class="jxr_keyword">int</strong> variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>       <strong class="jxr_keyword">if</strong> (variance &lt; bestVariance) {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>         bestVariance = variance;
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>         bestMatch = i;
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>       }
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>     }
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>     <strong class="jxr_keyword">if</strong> (bestMatch &gt;= 0) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>       <strong class="jxr_keyword">return</strong> bestMatch;
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>     }
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>   }
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> }
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     <strong class="jxr_keyword">float</strong> bestVariance = MAX_AVG_VARIANCE; <em class="jxr_comment">// worst variance we'll accept</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>     <strong class="jxr_keyword">int</strong> bestMatch = -1;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>     <strong class="jxr_keyword">int</strong> max = PATTERNS.length;
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; max; i++) {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>       <strong class="jxr_keyword">int</strong>[] pattern = PATTERNS[i];
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>       <strong class="jxr_keyword">float</strong> variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>       <strong class="jxr_keyword">if</strong> (variance &lt; bestVariance) {
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>         bestVariance = variance;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         bestMatch = i;
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>       }
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>     }
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>     <strong class="jxr_keyword">if</strong> (bestMatch &gt;= 0) {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>       <strong class="jxr_keyword">return</strong> bestMatch;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>     }
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>   }
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

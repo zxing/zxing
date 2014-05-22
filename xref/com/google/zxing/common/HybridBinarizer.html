@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a>           <em class="jxr_comment">//</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a>           <em class="jxr_comment">// The default assumption is that the block is light/background. Since no estimate for</em>
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>           <em class="jxr_comment">// the level of dark pixels exists locally, use half the min for the block.</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>           average = min &gt;&gt; 1;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>           average = min / 2;
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>           <strong class="jxr_keyword">if</strong> (y &gt; 0 &amp;&amp; x &gt; 0) {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>             <em class="jxr_comment">// Correct the "white background" assumption for blocks that have neighbors by comparing</em>
@@ -229,8 +229,8 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>             <em class="jxr_comment">// the boundaries is used for the interior.</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
 <a class="jxr_linenumber" name="L223" href="#L223">223</a>             <em class="jxr_comment">// The (min &lt; bp) is arbitrary but works better than other heuristics that were tried.</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>             <strong class="jxr_keyword">int</strong> averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>                 blackPoints[y - 1][x - 1]) &gt;&gt; 2;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>             <strong class="jxr_keyword">int</strong> averageNeighborBlackPoint =
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>                 (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) + blackPoints[y - 1][x - 1]) / 4;
 <a class="jxr_linenumber" name="L226" href="#L226">226</a>             <strong class="jxr_keyword">if</strong> (min &lt; averageNeighborBlackPoint) {
 <a class="jxr_linenumber" name="L227" href="#L227">227</a>               average = averageNeighborBlackPoint;
 <a class="jxr_linenumber" name="L228" href="#L228">228</a>             }

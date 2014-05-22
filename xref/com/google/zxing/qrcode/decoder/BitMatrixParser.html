@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">int</strong> dimension = bitMatrix.getHeight();
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">int</strong> provisionalVersion = (dimension - 17) &gt;&gt; 2;
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">int</strong> provisionalVersion = (dimension - 17) / 4;
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">if</strong> (provisionalVersion &lt;= 6) {
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>       <strong class="jxr_keyword">return</strong> Version.getVersionForNumber(provisionalVersion);
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>     }

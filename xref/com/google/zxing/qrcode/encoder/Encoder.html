@@ -276,7 +276,7 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">   * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).</em>
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> terminateBits(<strong class="jxr_keyword">int</strong> numDataBytes, <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a> bits) <strong class="jxr_keyword">throws</strong> WriterException {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">int</strong> capacity = numDataBytes &lt;&lt; 3;
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">int</strong> capacity = numDataBytes * 8;
 <a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">if</strong> (bits.getSize() &gt; capacity) {
 <a class="jxr_linenumber" name="L273" href="#L273">273</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>(<span class="jxr_string">"data bits cannot fit in the QR Code"</span> + bits.getSize() + <span class="jxr_string">" &gt; "</span> +
 <a class="jxr_linenumber" name="L274" href="#L274">274</a>           capacity);

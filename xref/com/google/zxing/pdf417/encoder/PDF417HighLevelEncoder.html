@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>     <em class="jxr_comment">//the codewords 0..928 are encoded as Unicode characters</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>     StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(msg.length());
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>     <strong class="jxr_keyword">if</strong> (encoding != <strong class="jxr_keyword">null</strong> || !DEFAULT_ENCODING_NAMES.contains(encoding.name())) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>     <strong class="jxr_keyword">if</strong> (encoding != <strong class="jxr_keyword">null</strong> &amp;&amp; !DEFAULT_ENCODING_NAMES.contains(encoding.name())) {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>       <a href="../../../../../com/google/zxing/common/CharacterSetECI.html">CharacterSetECI</a> eci = CharacterSetECI.getCharacterSetECIByName(encoding.name());
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>       <strong class="jxr_keyword">if</strong> (eci != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>         encodingECI(eci.getValue(), sb);

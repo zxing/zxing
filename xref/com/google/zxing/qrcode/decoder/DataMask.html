@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/google/zxing/qrcode/decoder/DataMask.html">DataMask100</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../com/google/zxing/qrcode/decoder/DataMask.html">DataMask</a> {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>     @Override
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>     <strong class="jxr_keyword">boolean</strong> isMasked(<strong class="jxr_keyword">int</strong> i, <strong class="jxr_keyword">int</strong> j) {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>       <strong class="jxr_keyword">return</strong> (((i &gt;&gt;&gt; 1) + (j /3)) &amp; 0x01) == 0;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>       <strong class="jxr_keyword">return</strong> (((i / 2) + (j /3)) &amp; 0x01) == 0;
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     }
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>   }
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 

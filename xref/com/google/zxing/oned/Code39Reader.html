@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">int</strong> whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>     <em class="jxr_comment">// If 50% of last pattern size, following last pattern, is not whitespace, fail</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>     <em class="jxr_comment">// (but if it's whitespace to the very end of the image, that's OK)</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">if</strong> (nextStart != end &amp;&amp; (whiteSpaceAfterEnd &lt;&lt; 1) &lt; lastPatternSize) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">if</strong> (nextStart != end &amp;&amp; (whiteSpaceAfterEnd * 2) &lt; lastPatternSize) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>     }
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
@@ -200,7 +200,7 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">if</strong> (counterPosition == patternLength - 1) {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>           <em class="jxr_comment">// Look for whitespace before start pattern, &gt;= 50% of width of start pattern</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>           <strong class="jxr_keyword">if</strong> (toNarrowWidePattern(counters) == ASTERISK_ENCODING &amp;&amp;
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>               row.isRange(Math.max(0, patternStart - ((i - patternStart) &gt;&gt; 1)), patternStart, false)) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>               row.isRange(Math.max(0, patternStart - ((i - patternStart) / 2)), patternStart, false)) {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{patternStart, i};
 <a class="jxr_linenumber" name="L197" href="#L197">197</a>           }
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>           patternStart += counters[0] + counters[1];
@@ -252,7 +252,7 @@
 <a class="jxr_linenumber" name="L244" href="#L244">244</a>           <strong class="jxr_keyword">if</strong> (counter &gt; maxNarrowCounter) {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>             wideCounters--;
 <a class="jxr_linenumber" name="L246" href="#L246">246</a>             <em class="jxr_comment">// totalWideCountersWidth = 3 * average, so this checks if counter &gt;= 3/2 * average</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>             <strong class="jxr_keyword">if</strong> ((counter &lt;&lt; 1) &gt;= totalWideCountersWidth) {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>             <strong class="jxr_keyword">if</strong> ((counter * 2) &gt;= totalWideCountersWidth) {
 <a class="jxr_linenumber" name="L248" href="#L248">248</a>               <strong class="jxr_keyword">return</strong> -1;
 <a class="jxr_linenumber" name="L249" href="#L249">249</a>             }
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>           }

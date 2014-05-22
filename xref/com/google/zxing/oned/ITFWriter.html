@@ -71,8 +71,8 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>        <strong class="jxr_keyword">int</strong> two = Character.digit(contents.charAt(i+1), 10);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>        <strong class="jxr_keyword">int</strong>[] encoding = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[18];
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>        <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; 5; j++) {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          encoding[j &lt;&lt; 1] = ITFReader.PATTERNS[one][j];
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          encoding[(j &lt;&lt; 1) + 1] = ITFReader.PATTERNS[two][j];
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          encoding[2 * j] = ITFReader.PATTERNS[one][j];
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          encoding[2 * j + 1] = ITFReader.PATTERNS[two][j];
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>        }
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>        pos += appendPattern(result, pos, encoding, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      }

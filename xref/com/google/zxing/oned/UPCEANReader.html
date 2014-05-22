@@ -52,8 +52,8 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>    <em class="jxr_comment">// These two values are critical for determining how permissive the decoding will be.</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>    <em class="jxr_comment">// We've arrived at these values through a lot of trial and error. Setting them any higher</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>    <em class="jxr_comment">// lets false positives creep in quickly.</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_AVG_VARIANCE = (<strong class="jxr_keyword">int</strong>) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.48f);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_INDIVIDUAL_VARIANCE = (<strong class="jxr_keyword">int</strong>) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_AVG_VARIANCE = 0.48f;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_INDIVIDUAL_VARIANCE = 0.7f;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">   * Start/end guard pattern.</em>
@@ -361,12 +361,12 @@
 <a class="jxr_linenumber" name="L353" href="#L353">353</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> decodeDigit(<a href="../../../../com/google/zxing/common/BitArray.html">BitArray</a> row, <strong class="jxr_keyword">int</strong>[] counters, <strong class="jxr_keyword">int</strong> rowOffset, <strong class="jxr_keyword">int</strong>[][] patterns)
 <a class="jxr_linenumber" name="L354" href="#L354">354</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
 <a class="jxr_linenumber" name="L355" href="#L355">355</a>     recordPattern(row, rowOffset, counters);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>     <strong class="jxr_keyword">int</strong> bestVariance = MAX_AVG_VARIANCE; <em class="jxr_comment">// worst variance we'll accept</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>     <strong class="jxr_keyword">float</strong> bestVariance = MAX_AVG_VARIANCE; <em class="jxr_comment">// worst variance we'll accept</em>
 <a class="jxr_linenumber" name="L357" href="#L357">357</a>     <strong class="jxr_keyword">int</strong> bestMatch = -1;
 <a class="jxr_linenumber" name="L358" href="#L358">358</a>     <strong class="jxr_keyword">int</strong> max = patterns.length;
 <a class="jxr_linenumber" name="L359" href="#L359">359</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; max; i++) {
 <a class="jxr_linenumber" name="L360" href="#L360">360</a>       <strong class="jxr_keyword">int</strong>[] pattern = patterns[i];
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>       <strong class="jxr_keyword">int</strong> variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>       <strong class="jxr_keyword">float</strong> variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
 <a class="jxr_linenumber" name="L362" href="#L362">362</a>       <strong class="jxr_keyword">if</strong> (variance &lt; bestVariance) {
 <a class="jxr_linenumber" name="L363" href="#L363">363</a>         bestVariance = variance;
 <a class="jxr_linenumber" name="L364" href="#L364">364</a>         bestMatch = i;

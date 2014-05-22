@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>                                         Collection&lt;byte[]&gt; byteSegments,
 <a class="jxr_linenumber" name="L218" href="#L218">218</a>                                         Map&lt;DecodeHintType,?&gt; hints) <strong class="jxr_keyword">throws</strong> FormatException {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>     <em class="jxr_comment">// Don't crash trying to read more bits than we have available.</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <strong class="jxr_keyword">if</strong> (count &lt;&lt; 3 &gt; bits.available()) {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <strong class="jxr_keyword">if</strong> (8 * count &gt; bits.available()) {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>       <strong class="jxr_keyword">throw</strong> FormatException.getFormatInstance();
 <a class="jxr_linenumber" name="L222" href="#L222">222</a>     }
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 

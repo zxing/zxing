@@ -58,31 +58,31 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] detect() <strong class="jxr_keyword">throws</strong> NotFoundException {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">int</strong> height = image.getHeight();
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">int</strong> width = image.getWidth();
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">int</strong> halfHeight = height &gt;&gt; 1;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">int</strong> halfWidth = width &gt;&gt; 1;
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">int</strong> deltaY = Math.max(1, height / (MAX_MODULES &lt;&lt; 3));
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">int</strong> deltaX = Math.max(1, width / (MAX_MODULES &lt;&lt; 3));
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">int</strong> halfHeight = height / 2;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">int</strong> halfWidth = width / 2;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">int</strong> deltaY = Math.max(1, height / (MAX_MODULES * 8));
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">int</strong> deltaX = Math.max(1, width / (MAX_MODULES * 8));
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">int</strong> top = 0;
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">int</strong> bottom = height;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">int</strong> left = 0;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">int</strong> right = width;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> pointA = findCornerFromCenter(halfWidth, 0, left, right,
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          halfHeight, -deltaY, top, bottom, halfWidth &gt;&gt; 1);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          halfHeight, -deltaY, top, bottom, halfWidth / 2);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      top = (<strong class="jxr_keyword">int</strong>) pointA.getY() - 1;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> pointB = findCornerFromCenter(halfWidth, -deltaX, left, right,
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          halfHeight, 0, top, bottom, halfHeight &gt;&gt; 1);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          halfHeight, 0, top, bottom, halfHeight / 2);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      left = (<strong class="jxr_keyword">int</strong>) pointB.getX() - 1;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> pointC = findCornerFromCenter(halfWidth, deltaX, left, right,
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          halfHeight, 0, top, bottom, halfHeight &gt;&gt; 1);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          halfHeight, 0, top, bottom, halfHeight / 2);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      right = (<strong class="jxr_keyword">int</strong>) pointC.getX() + 1;
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a> pointD = findCornerFromCenter(halfWidth, 0, left, right,
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          halfHeight, deltaY, top, bottom, halfWidth &gt;&gt; 1);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          halfHeight, deltaY, top, bottom, halfWidth / 2);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      bottom = (<strong class="jxr_keyword">int</strong>) pointD.getY() + 1;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <em class="jxr_comment">// Go try to find point A again with better information -- might have been off at first.</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      pointA = findCornerFromCenter(halfWidth, 0, left, right,
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          halfHeight, -deltaY, top, bottom, halfWidth &gt;&gt; 2);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          halfHeight, -deltaY, top, bottom, halfWidth / 4);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] { pointA, pointB, pointC, pointD };
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>    }
@@ -175,7 +175,7 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong>[] blackWhiteRange(<strong class="jxr_keyword">int</strong> fixedDimension, <strong class="jxr_keyword">int</strong> maxWhiteRun, <strong class="jxr_keyword">int</strong> minDim, <strong class="jxr_keyword">int</strong> maxDim, <strong class="jxr_keyword">boolean</strong> horizontal) {
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">int</strong> center = (minDim + maxDim) &gt;&gt; 1;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">int</strong> center = (minDim + maxDim) / 2;
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>     <em class="jxr_comment">// Scan left/up first</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>     <strong class="jxr_keyword">int</strong> start = center;

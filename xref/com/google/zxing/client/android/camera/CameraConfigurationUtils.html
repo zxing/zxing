@@ -1,0 +1,459 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>CameraConfigurationUtils xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/com/google/zxing/client/android/camera/CameraConfigurationUtils.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright (C) 2014 ZXing authors</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> com.google.zxing.client.android.camera;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> android.graphics.Point;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> android.graphics.Rect;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> android.hardware.Camera;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> android.os.Build;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> android.util.Log;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Collection;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Comparator;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.Iterator;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * Utility methods for configuring the Android camera.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * @author Sean Owen</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/google/zxing/client/android/camera/CameraConfigurationUtils.html">CameraConfigurationUtils</a> {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TAG = <span class="jxr_string">"CameraConfiguration"</span>;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern SEMICOLON = Pattern.compile(<span class="jxr_string">";"</span>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MIN_PREVIEW_PIXELS = 480 * 320; <em class="jxr_comment">// normal screen</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_EXPOSURE_COMPENSATION = 1.5f;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MIN_EXPOSURE_COMPENSATION = 0.0f;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> MAX_ASPECT_DISTORTION = 0.15;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MIN_FPS = 10;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_FPS = 20;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> AREA_PER_1000 = 400;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../../com/google/zxing/client/android/camera/CameraConfigurationUtils.html">CameraConfigurationUtils</a>() {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>    }
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setFocus(Camera.Parameters parameters,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>                                <strong class="jxr_keyword">boolean</strong> autoFocus,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                                <strong class="jxr_keyword">boolean</strong> disableContinuous,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>                                <strong class="jxr_keyword">boolean</strong> safeMode) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      List&lt;String&gt; supportedFocusModes = parameters.getSupportedFocusModes();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      String focusMode = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">if</strong> (autoFocus) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>        <strong class="jxr_keyword">if</strong> (safeMode || disableContinuous) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          focusMode = CameraConfigurationUtils.findSettableValue(<span class="jxr_string">"focus mode"</span>,
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                                                                 supportedFocusModes,
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                                                                 Camera.Parameters.FOCUS_MODE_AUTO);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>        } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          focusMode = CameraConfigurationUtils.findSettableValue(<span class="jxr_string">"focus mode"</span>,
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>                                                                 supportedFocusModes,
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                                                                 Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                                                                 Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>                                                                 Camera.Parameters.FOCUS_MODE_AUTO);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>        }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <em class="jxr_comment">// Maybe selected auto-focus but not available, so fall through here:</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">if</strong> (!safeMode &amp;&amp; focusMode == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>        focusMode = CameraConfigurationUtils.findSettableValue(<span class="jxr_string">"focus mode"</span>,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                                                               supportedFocusModes,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                                               Camera.Parameters.FOCUS_MODE_MACRO,
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                                                               Camera.Parameters.FOCUS_MODE_EDOF);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">if</strong> (focusMode != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>        <strong class="jxr_keyword">if</strong> (focusMode.equals(parameters.getFocusMode())) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          Log.i(TAG, <span class="jxr_string">"Focus mode already set to "</span> + focusMode);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>        } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          parameters.setFocusMode(focusMode);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>        }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>    }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setTorch(Camera.Parameters parameters, <strong class="jxr_keyword">boolean</strong> on) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      List&lt;String&gt; supportedFlashModes = parameters.getSupportedFlashModes();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      String flashMode;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">if</strong> (on) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>        flashMode = CameraConfigurationUtils.findSettableValue(<span class="jxr_string">"flash mode"</span>,
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>                                                               supportedFlashModes,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>                                                               Camera.Parameters.FLASH_MODE_TORCH,
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>                                                               Camera.Parameters.FLASH_MODE_ON);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>       flashMode = CameraConfigurationUtils.findSettableValue(<span class="jxr_string">"flash mode"</span>,
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                                                              supportedFlashModes,
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>                                                              Camera.Parameters.FLASH_MODE_OFF);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">if</strong> (flashMode != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>       <strong class="jxr_keyword">if</strong> (flashMode.equals(parameters.getFlashMode())) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         Log.i(TAG, <span class="jxr_string">"Flash mode already set to "</span> + flashMode);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         Log.i(TAG, <span class="jxr_string">"Setting flash mode to "</span> + flashMode);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>         parameters.setFlashMode(flashMode);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>       }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     }
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setBestExposure(Camera.Parameters parameters, <strong class="jxr_keyword">boolean</strong> lightOn) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     <strong class="jxr_keyword">int</strong> minExposure = parameters.getMinExposureCompensation();
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">int</strong> maxExposure = parameters.getMaxExposureCompensation();
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>     <strong class="jxr_keyword">float</strong> step = parameters.getExposureCompensationStep();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>     <strong class="jxr_keyword">if</strong> ((minExposure != 0 || maxExposure != 0) &amp;&amp; step &gt; 0.0f) {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>       <em class="jxr_comment">// Set low when light is on</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>       <strong class="jxr_keyword">float</strong> targetCompensation = lightOn ? MIN_EXPOSURE_COMPENSATION : MAX_EXPOSURE_COMPENSATION;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>       <strong class="jxr_keyword">int</strong> compensationSteps = Math.round(targetCompensation / step);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>       <strong class="jxr_keyword">float</strong> actualCompensation = step * compensationSteps;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>       <em class="jxr_comment">// Clamp value:</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>       compensationSteps = Math.max(Math.min(compensationSteps, maxExposure), minExposure);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>       <strong class="jxr_keyword">if</strong> (parameters.getExposureCompensation() == compensationSteps) {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>         Log.i(TAG, <span class="jxr_string">"Exposure compensation already set to "</span> + compensationSteps + <span class="jxr_string">" / "</span> + actualCompensation);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         Log.i(TAG, <span class="jxr_string">"Setting exposure compensation to "</span> + compensationSteps + <span class="jxr_string">" / "</span> + actualCompensation);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>         parameters.setExposureCompensation(compensationSteps);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>       }
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>       Log.i(TAG, <span class="jxr_string">"Camera does not support exposure compensation"</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     }
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>   }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setBestPreviewFPS(Camera.Parameters parameters) {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     setBestPreviewFPS(parameters, MIN_FPS, MAX_FPS);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>   }
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setBestPreviewFPS(Camera.Parameters parameters, <strong class="jxr_keyword">int</strong> minFPS, <strong class="jxr_keyword">int</strong> maxFPS) {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     List&lt;<strong class="jxr_keyword">int</strong>[]&gt; supportedPreviewFpsRanges = parameters.getSupportedPreviewFpsRange();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     Log.i(TAG, <span class="jxr_string">"Supported FPS ranges: "</span> + toString(supportedPreviewFpsRanges));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">if</strong> (supportedPreviewFpsRanges != <strong class="jxr_keyword">null</strong> &amp;&amp; !supportedPreviewFpsRanges.isEmpty()) {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>       <strong class="jxr_keyword">int</strong>[] suitableFPSRange = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong>[] fpsRange : supportedPreviewFpsRanges) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>         <strong class="jxr_keyword">int</strong> thisMin = fpsRange[Camera.Parameters.PREVIEW_FPS_MIN_INDEX];
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         <strong class="jxr_keyword">int</strong> thisMax = fpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX];
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         <strong class="jxr_keyword">if</strong> (thisMin &gt;= minFPS * 1000 &amp;&amp; thisMax &lt;= maxFPS * 1000) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>           suitableFPSRange = fpsRange;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         }
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>       }
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>       <strong class="jxr_keyword">if</strong> (suitableFPSRange == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         Log.i(TAG, <span class="jxr_string">"No suitable FPS range?"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">int</strong>[] currentFpsRange = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[2];
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>         parameters.getPreviewFpsRange(currentFpsRange);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>         <strong class="jxr_keyword">if</strong> (Arrays.equals(currentFpsRange, suitableFPSRange)) {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>           Log.i(TAG, <span class="jxr_string">"FPS range already set to "</span> + Arrays.toString(suitableFPSRange));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>           Log.i(TAG, <span class="jxr_string">"Setting FPS range to "</span> + Arrays.toString(suitableFPSRange));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>           parameters.setPreviewFpsRange(suitableFPSRange[Camera.Parameters.PREVIEW_FPS_MIN_INDEX],
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>                                         suitableFPSRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>         }
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>       }
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>     }
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>   }
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setFocusArea(Camera.Parameters parameters) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">if</strong> (parameters.getMaxNumFocusAreas() &gt; 0) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>       Log.i(TAG, <span class="jxr_string">"Old focus areas: "</span> + toString(parameters.getFocusAreas()));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>       List&lt;Camera.Area&gt; middleArea = buildMiddleArea(AREA_PER_1000);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>       Log.i(TAG, <span class="jxr_string">"Setting focus area to : "</span> + toString(middleArea));
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>       parameters.setFocusAreas(middleArea);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>       Log.i(TAG, <span class="jxr_string">"Device does not support focus areas"</span>);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>     }
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>   }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setMetering(Camera.Parameters parameters) {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     <strong class="jxr_keyword">if</strong> (parameters.getMaxNumMeteringAreas() &gt; 0) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>       Log.i(TAG, <span class="jxr_string">"Old metering areas: "</span> + parameters.getMeteringAreas());
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>       List&lt;Camera.Area&gt; middleArea = buildMiddleArea(AREA_PER_1000);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>       Log.i(TAG, <span class="jxr_string">"Setting metering area to : "</span> + toString(middleArea));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>       parameters.setMeteringAreas(middleArea);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>       Log.i(TAG, <span class="jxr_string">"Device does not support metering areas"</span>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>     }
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>   }
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Camera.Area&gt; buildMiddleArea(<strong class="jxr_keyword">int</strong> areaPer1000) {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">return</strong> Collections.singletonList(
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <strong class="jxr_keyword">new</strong> Camera.Area(<strong class="jxr_keyword">new</strong> Rect(-areaPer1000, -areaPer1000, areaPer1000, areaPer1000), 1));
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>   }
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setVideoStabilization(Camera.Parameters parameters) {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">if</strong> (parameters.isVideoStabilizationSupported()) {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>       <strong class="jxr_keyword">if</strong> (parameters.getVideoStabilization()) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>         Log.i(TAG, <span class="jxr_string">"Video stabilization already enabled"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         Log.i(TAG, <span class="jxr_string">"Enabling video stabilization..."</span>);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>         parameters.setVideoStabilization(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>       }
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>       Log.i(TAG, <span class="jxr_string">"This device does not support video stabilization"</span>);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>     }
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>   }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setBarcodeSceneMode(Camera.Parameters parameters) {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     <strong class="jxr_keyword">if</strong> (Camera.Parameters.SCENE_MODE_BARCODE.equals(parameters.getSceneMode())) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>       Log.i(TAG, <span class="jxr_string">"Barcode scene mode already set"</span>);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>     }
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>     String sceneMode = findSettableValue(<span class="jxr_string">"scene mode"</span>,
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>                                          parameters.getSupportedSceneModes(),
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>                                          Camera.Parameters.SCENE_MODE_BARCODE);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>     <strong class="jxr_keyword">if</strong> (sceneMode != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>       parameters.setSceneMode(sceneMode);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>     }
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>   }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setZoom(Camera.Parameters parameters, <strong class="jxr_keyword">double</strong> targetZoomRatio) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>     <strong class="jxr_keyword">if</strong> (parameters.isZoomSupported()) {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>       Integer zoom = indexOfClosestZoom(parameters, targetZoomRatio);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>       <strong class="jxr_keyword">if</strong> (zoom == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>         <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>       }
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>       <strong class="jxr_keyword">if</strong> (parameters.getZoom() == zoom) {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>         Log.i(TAG, <span class="jxr_string">"Zoom is already set to "</span> + zoom);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>         Log.i(TAG, <span class="jxr_string">"Setting zoom to "</span> + zoom);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>         parameters.setZoom(zoom);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>       }
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>       Log.i(TAG, <span class="jxr_string">"Zoom is not supported"</span>);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>     }
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>   }
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Integer indexOfClosestZoom(Camera.Parameters parameters, <strong class="jxr_keyword">double</strong> targetZoomRatio) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     List&lt;Integer&gt; ratios = parameters.getZoomRatios();
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>     Log.i(TAG, <span class="jxr_string">"Zoom ratios: "</span> + ratios);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>     <strong class="jxr_keyword">int</strong> maxZoom = parameters.getMaxZoom();
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>     <strong class="jxr_keyword">if</strong> (ratios == <strong class="jxr_keyword">null</strong> || ratios.isEmpty() || ratios.size() != maxZoom + 1) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>       Log.w(TAG, <span class="jxr_string">"Invalid zoom ratios!"</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>     }
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>     <strong class="jxr_keyword">double</strong> target100 = 100.0 * targetZoomRatio;
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     <strong class="jxr_keyword">double</strong> smallestDiff = Double.POSITIVE_INFINITY;
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <strong class="jxr_keyword">int</strong> closestIndex = 0;
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ratios.size(); i++) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>       <strong class="jxr_keyword">double</strong> diff = Math.abs(ratios.get(i) - target100);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>       <strong class="jxr_keyword">if</strong> (diff &lt; smallestDiff) {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>         smallestDiff = diff;
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>         closestIndex = i;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>       }
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     }
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     Log.i(TAG, <span class="jxr_string">"Chose zoom ratio of "</span> + (ratios.get(closestIndex) / 100.0));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">return</strong> closestIndex;
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>   }
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setInvertColor(Camera.Parameters parameters) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>     <strong class="jxr_keyword">if</strong> (Camera.Parameters.EFFECT_NEGATIVE.equals(parameters.getColorEffect())) {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>       Log.i(TAG, <span class="jxr_string">"Negative effect already set"</span>);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>     }
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>     String colorMode =
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>         CameraConfigurationUtils.findSettableValue(<span class="jxr_string">"color effect"</span>,
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>                                                    parameters.getSupportedColorEffects(),
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>                                                    Camera.Parameters.EFFECT_NEGATIVE);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>     <strong class="jxr_keyword">if</strong> (colorMode != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>       parameters.setColorEffect(colorMode);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     }
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>   }
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>     List&lt;Camera.Size&gt; rawSupportedSizes = parameters.getSupportedPreviewSizes();
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     <strong class="jxr_keyword">if</strong> (rawSupportedSizes == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>       Log.w(TAG, <span class="jxr_string">"Device returned no supported preview sizes; using default"</span>);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>       Camera.Size defaultSize = parameters.getPreviewSize();
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>       <strong class="jxr_keyword">if</strong> (defaultSize == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Parameters contained no preview size!"</span>);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>       }
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Point(defaultSize.width, defaultSize.height);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>     }
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>     <em class="jxr_comment">// Sort by size, descending</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>     List&lt;Camera.Size&gt; supportedPreviewSizes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(rawSupportedSizes);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>     Collections.sort(supportedPreviewSizes, <strong class="jxr_keyword">new</strong> Comparator&lt;Camera.Size&gt;() {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>       @Override
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>       <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compare(Camera.Size a, Camera.Size b) {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>         <strong class="jxr_keyword">int</strong> aPixels = a.height * a.width;
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>         <strong class="jxr_keyword">int</strong> bPixels = b.height * b.width;
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>         <strong class="jxr_keyword">if</strong> (bPixels &lt; aPixels) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>           <strong class="jxr_keyword">return</strong> -1;
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>         }
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>         <strong class="jxr_keyword">if</strong> (bPixels &gt; aPixels) {
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>           <strong class="jxr_keyword">return</strong> 1;
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>         }
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>         <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>       }
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     });
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>     <strong class="jxr_keyword">if</strong> (Log.isLoggable(TAG, Log.INFO)) {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>       StringBuilder previewSizesString = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>       <strong class="jxr_keyword">for</strong> (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>         previewSizesString.append(supportedPreviewSize.width).append('x')
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>             .append(supportedPreviewSize.height).append(' ');
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>       }
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>       Log.i(TAG, <span class="jxr_string">"Supported preview sizes: "</span> + previewSizesString);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     }
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <strong class="jxr_keyword">double</strong> screenAspectRatio = (<strong class="jxr_keyword">double</strong>) screenResolution.x / (<strong class="jxr_keyword">double</strong>) screenResolution.y;
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <em class="jxr_comment">// Remove sizes that are unsuitable</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     Iterator&lt;Camera.Size&gt; it = supportedPreviewSizes.iterator();
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>     <strong class="jxr_keyword">while</strong> (it.hasNext()) {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>       Camera.Size supportedPreviewSize = it.next();
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>       <strong class="jxr_keyword">int</strong> realWidth = supportedPreviewSize.width;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>       <strong class="jxr_keyword">int</strong> realHeight = supportedPreviewSize.height;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>       <strong class="jxr_keyword">if</strong> (realWidth * realHeight &lt; MIN_PREVIEW_PIXELS) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>         it.remove();
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>       }
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>       <strong class="jxr_keyword">boolean</strong> isCandidatePortrait = realWidth &lt; realHeight;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>       <strong class="jxr_keyword">int</strong> maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>       <strong class="jxr_keyword">int</strong> maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>       <strong class="jxr_keyword">double</strong> aspectRatio = (<strong class="jxr_keyword">double</strong>) maybeFlippedWidth / (<strong class="jxr_keyword">double</strong>) maybeFlippedHeight;
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>       <strong class="jxr_keyword">double</strong> distortion = Math.abs(aspectRatio - screenAspectRatio);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>       <strong class="jxr_keyword">if</strong> (distortion &gt; MAX_ASPECT_DISTORTION) {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>         it.remove();
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>         <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>       }
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>       <strong class="jxr_keyword">if</strong> (maybeFlippedWidth == screenResolution.x &amp;&amp; maybeFlippedHeight == screenResolution.y) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>         Point exactPoint = <strong class="jxr_keyword">new</strong> Point(realWidth, realHeight);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>         Log.i(TAG, <span class="jxr_string">"Found preview size exactly matching screen size: "</span> + exactPoint);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>         <strong class="jxr_keyword">return</strong> exactPoint;
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>       }
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>     }
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>     <em class="jxr_comment">// If no exact match, use largest preview size. This was not a great idea on older devices because</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>     <em class="jxr_comment">// of the additional computation needed. We're likely to get here on newer Android 4+ devices, where</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>     <em class="jxr_comment">// the CPU is much more powerful.</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>     <strong class="jxr_keyword">if</strong> (!supportedPreviewSizes.isEmpty()) {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>       Camera.Size largestPreview = supportedPreviewSizes.get(0);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>       Point largestSize = <strong class="jxr_keyword">new</strong> Point(largestPreview.width, largestPreview.height);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>       Log.i(TAG, <span class="jxr_string">"Using largest suitable preview size: "</span> + largestSize);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>       <strong class="jxr_keyword">return</strong> largestSize;
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>     }
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>     <em class="jxr_comment">// If there is nothing at all suitable, return current preview size</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>     Camera.Size defaultPreview = parameters.getPreviewSize();
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>     <strong class="jxr_keyword">if</strong> (defaultPreview == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Parameters contained no preview size!"</span>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>     }
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>     Point defaultSize = <strong class="jxr_keyword">new</strong> Point(defaultPreview.width, defaultPreview.height);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>     Log.i(TAG, <span class="jxr_string">"No suitable preview sizes, using default: "</span> + defaultSize);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>     <strong class="jxr_keyword">return</strong> defaultSize;
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>   }
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findSettableValue(String name,
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>                                           Collection&lt;String&gt; supportedValues,
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>                                           String... desiredValues) {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>     Log.i(TAG, <span class="jxr_string">"Requesting "</span> + name + <span class="jxr_string">" value from among: "</span> + Arrays.toString(desiredValues));
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>     Log.i(TAG, <span class="jxr_string">"Supported "</span> + name + <span class="jxr_string">" values: "</span> + supportedValues);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>     <strong class="jxr_keyword">if</strong> (supportedValues != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>       <strong class="jxr_keyword">for</strong> (String desiredValue : desiredValues) {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>         <strong class="jxr_keyword">if</strong> (supportedValues.contains(desiredValue)) {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>           Log.i(TAG, <span class="jxr_string">"Can set "</span> + name + <span class="jxr_string">" to: "</span> + desiredValue);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>           <strong class="jxr_keyword">return</strong> desiredValue;
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>         }
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>       }
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>     }
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>     Log.i(TAG, <span class="jxr_string">"No supported values match"</span>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>   }
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String toString(Collection&lt;<strong class="jxr_keyword">int</strong>[]&gt; arrays) {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>     <strong class="jxr_keyword">if</strong> (arrays == <strong class="jxr_keyword">null</strong> || arrays.isEmpty()) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>       <strong class="jxr_keyword">return</strong> <span class="jxr_string">"[]"</span>;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>     }
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>     StringBuilder buffer = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>     buffer.append('[');
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>     Iterator&lt;<strong class="jxr_keyword">int</strong>[]&gt; it = arrays.iterator();
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>     <strong class="jxr_keyword">while</strong> (it.hasNext()) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>       buffer.append(Arrays.toString(it.next()));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>       <strong class="jxr_keyword">if</strong> (it.hasNext()) {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>         buffer.append(<span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>       }
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>     }
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>     buffer.append(']');
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>     <strong class="jxr_keyword">return</strong> buffer.toString();
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>   }
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String toString(Iterable&lt;Camera.Area&gt; areas) {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>     <strong class="jxr_keyword">if</strong> (areas == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>     }
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>     StringBuilder result = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>     <strong class="jxr_keyword">for</strong> (Camera.Area area : areas) {
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>       result.append(area.rect).append(':').append(area.weight).append(' ');
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>     }
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>     <strong class="jxr_keyword">return</strong> result.toString();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>   }
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String collectStats(Camera.Parameters parameters) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>     <strong class="jxr_keyword">return</strong> collectStats(parameters.flatten());
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>   }
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String collectStats(CharSequence flattenedParams) {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>     StringBuilder result = <strong class="jxr_keyword">new</strong> StringBuilder(1000);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     result.append(<span class="jxr_string">"BOARD="</span>).append(Build.BOARD).append('\n');
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>     result.append(<span class="jxr_string">"BRAND="</span>).append(Build.BRAND).append('\n');
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>     result.append(<span class="jxr_string">"CPU_ABI="</span>).append(Build.CPU_ABI).append('\n');
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>     result.append(<span class="jxr_string">"DEVICE="</span>).append(Build.DEVICE).append('\n');
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>     result.append(<span class="jxr_string">"DISPLAY="</span>).append(Build.DISPLAY).append('\n');
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>     result.append(<span class="jxr_string">"FINGERPRINT="</span>).append(Build.FINGERPRINT).append('\n');
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     result.append(<span class="jxr_string">"HOST="</span>).append(Build.HOST).append('\n');
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>     result.append(<span class="jxr_string">"ID="</span>).append(Build.ID).append('\n');
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>     result.append(<span class="jxr_string">"MANUFACTURER="</span>).append(Build.MANUFACTURER).append('\n');
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>     result.append(<span class="jxr_string">"MODEL="</span>).append(Build.MODEL).append('\n');
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>     result.append(<span class="jxr_string">"PRODUCT="</span>).append(Build.PRODUCT).append('\n');
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>     result.append(<span class="jxr_string">"TAGS="</span>).append(Build.TAGS).append('\n');
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>     result.append(<span class="jxr_string">"TIME="</span>).append(Build.TIME).append('\n');
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>     result.append(<span class="jxr_string">"TYPE="</span>).append(Build.TYPE).append('\n');
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     result.append(<span class="jxr_string">"USER="</span>).append(Build.USER).append('\n');
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>     result.append(<span class="jxr_string">"VERSION.CODENAME="</span>).append(Build.VERSION.CODENAME).append('\n');
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>     result.append(<span class="jxr_string">"VERSION.INCREMENTAL="</span>).append(Build.VERSION.INCREMENTAL).append('\n');
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>     result.append(<span class="jxr_string">"VERSION.RELEASE="</span>).append(Build.VERSION.RELEASE).append('\n');
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     result.append(<span class="jxr_string">"VERSION.SDK_INT="</span>).append(Build.VERSION.SDK_INT).append('\n');
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>     <strong class="jxr_keyword">if</strong> (flattenedParams != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>       String[] params = SEMICOLON.split(flattenedParams);
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>       Arrays.sort(params);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>       <strong class="jxr_keyword">for</strong> (String param : params) {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>         result.append(param).append('\n');
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>       }
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>     }
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>     <strong class="jxr_keyword">return</strong> result.toString();
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>   }
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
+</body>
+</html>

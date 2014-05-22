@@ -3,6 +3,7 @@ com.google.zxing.aztec
 com.google.zxing.aztec.decoder
 com.google.zxing.aztec.detector
 com.google.zxing.aztec.encoder
+com.google.zxing.client.android.camera
 com.google.zxing.client.j2se
 com.google.zxing.client.result
 com.google.zxing.common

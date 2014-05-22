@@ -4,6 +4,7 @@ com.google.zxing.aztec.detector
 com.google.zxing.aztec.encoder
 com.google.zxing.client.result
 com.google.zxing.common
+com.google.zxing.common.detector
 com.google.zxing.common.reedsolomon
 com.google.zxing.datamatrix
 com.google.zxing.datamatrix.decoder

@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">this</strong>.width = width;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">this</strong>.height = height;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">this</strong>.rowSize = (width + 31) &gt;&gt; 5;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">this</strong>.rowSize = (width + 31) / 32;
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      bits = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[rowSize * height];
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>    }
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">   * @return value of given bit in matrix</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> get(<strong class="jxr_keyword">int</strong> x, <strong class="jxr_keyword">int</strong> y) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">int</strong> offset = y * rowSize + (x &gt;&gt; 5);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">int</strong> offset = y * rowSize + (x / 32);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">return</strong> ((bits[offset] &gt;&gt;&gt; (x &amp; 0x1f)) &amp; 1) != 0;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>    }
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">   * @param y The vertical component (i.e. which row)</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> set(<strong class="jxr_keyword">int</strong> x, <strong class="jxr_keyword">int</strong> y) {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">int</strong> offset = y * rowSize + (x &gt;&gt; 5);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">int</strong> offset = y * rowSize + (x / 32);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      bits[offset] |= 1 &lt;&lt; (x &amp; 0x1f);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>    }
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">   * @param y The vertical component (i.e. which row)</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flip(<strong class="jxr_keyword">int</strong> x, <strong class="jxr_keyword">int</strong> y) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">int</strong> offset = y * rowSize + (x &gt;&gt; 5);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">int</strong> offset = y * rowSize + (x / 32);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      bits[offset] ^= 1 &lt;&lt; (x &amp; 0x1f);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>    }
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = top; y &lt; bottom; y++) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>       <strong class="jxr_keyword">int</strong> offset = y * rowSize;
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = left; x &lt; right; x++) {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>         bits[offset + (x &gt;&gt; 5)] |= 1 &lt;&lt; (x &amp; 0x1f);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>         bits[offset + (x / 32)] |= 1 &lt;&lt; (x &amp; 0x1f);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>       }
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>     }
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>   }
@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>     }
 <a class="jxr_linenumber" name="L151" href="#L151">151</a>     <strong class="jxr_keyword">int</strong> offset = y * rowSize;
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; rowSize; x++) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>       row.setBulk(x &lt;&lt; 5, bits[offset + x]);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>       row.setBulk(x * 32, bits[offset + x]);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>     }
 <a class="jxr_linenumber" name="L155" href="#L155">155</a>     <strong class="jxr_keyword">return</strong> row;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>   }
@@ -256,7 +256,7 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L249" href="#L249">249</a>     }
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">int</strong> y = bitsOffset / rowSize;
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>     <strong class="jxr_keyword">int</strong> x = (bitsOffset % rowSize) &lt;&lt; 5;
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>     <strong class="jxr_keyword">int</strong> x = (bitsOffset % rowSize) * 32;
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 
 <a class="jxr_linenumber" name="L253" href="#L253">253</a>     <strong class="jxr_keyword">int</strong> theBits = bits[bitsOffset];
 <a class="jxr_linenumber" name="L254" href="#L254">254</a>     <strong class="jxr_keyword">int</strong> bit = 0;
@@ -277,7 +277,7 @@
 <a class="jxr_linenumber" name="L269" href="#L269">269</a>     }
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
 <a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">int</strong> y = bitsOffset / rowSize;
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">int</strong> x = (bitsOffset % rowSize) &lt;&lt; 5;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">int</strong> x = (bitsOffset % rowSize) * 32;
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 
 <a class="jxr_linenumber" name="L274" href="#L274">274</a>     <strong class="jxr_keyword">int</strong> theBits = bits[bitsOffset];
 <a class="jxr_linenumber" name="L275" href="#L275">275</a>     <strong class="jxr_keyword">int</strong> bit = 31;

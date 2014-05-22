@@ -106,99 +106,102 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>    }
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getInt(byte[] bytes, byte[] x) {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">int</strong> val = 0;
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; x.length; i++) {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>       val += getBit(x[i], bytes) &lt;&lt; (x.length - i - 1);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     }
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">return</strong> val;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>   }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getCountry(byte[] bytes) {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">return</strong> getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {53, 54, 43, 44, 45, 46, 47, 48, 37, 38});
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>   }
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getServiceClass(byte[] bytes) {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>     <strong class="jxr_keyword">return</strong> getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {55, 56, 57, 58, 59, 60, 49, 50, 51, 52});
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>   }
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getPostCode2Length(byte[] bytes) {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>     <strong class="jxr_keyword">return</strong> getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {39, 40, 41, 42, 31, 32});
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>   }
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getPostCode2(byte[] bytes) {
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>     <strong class="jxr_keyword">return</strong> getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>         20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2});
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>   }
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getPostCode3(byte[] bytes) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     <strong class="jxr_keyword">return</strong> String.valueOf(
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>        <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[] {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {39, 40, 41, 42, 31, 32})),
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {33, 34, 35, 36, 25, 26})),
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {27, 28, 29, 30, 19, 20})),
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {21, 22, 23, 24, 13, 14})),
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {15, 16, 17, 18,  7,  8})),
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] { 9, 10, 11, 12,  1,  2})),
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>        }
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     );
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>   }
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getMessage(byte[] bytes, <strong class="jxr_keyword">int</strong> start, <strong class="jxr_keyword">int</strong> len) {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>     StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>     <strong class="jxr_keyword">int</strong> shift = -1;
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>     <strong class="jxr_keyword">int</strong> set = 0;
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     <strong class="jxr_keyword">int</strong> lastset = 0;
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = start; i &lt; start + len; i++) {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>       <strong class="jxr_keyword">char</strong> c = SETS[set].charAt(bytes[i]);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>       <strong class="jxr_keyword">switch</strong> (c) {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>         <strong class="jxr_keyword">case</strong> LATCHA:
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>           set = 0;
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>           shift = -1;
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>         <strong class="jxr_keyword">case</strong> LATCHB:
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>           set = 1;
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>           shift = -1;
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>         <strong class="jxr_keyword">case</strong> SHIFTA:
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>         <strong class="jxr_keyword">case</strong> SHIFTB:
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">case</strong> SHIFTC:
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">case</strong> SHIFTD:
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>         <strong class="jxr_keyword">case</strong> SHIFTE:
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>           lastset = set;
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>           set = c - SHIFTA;
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>           shift = 1;
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>         <strong class="jxr_keyword">case</strong> TWOSHIFTA:
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>           lastset = set;
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>           set = 0;
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>           shift = 2;
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>         <strong class="jxr_keyword">case</strong> THREESHIFTA:
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>           lastset = set;
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>           set = 0;
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>           shift = 3;
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>         <strong class="jxr_keyword">case</strong> NS:
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>           <strong class="jxr_keyword">int</strong> nsval = (bytes[++i] &lt;&lt; 24) + (bytes[++i] &lt;&lt; 18) + (bytes[++i] &lt;&lt; 12) + (bytes[++i] &lt;&lt; 6) + bytes[++i];
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>           sb.append(NINE_DIGITS.format(nsval));
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>         <strong class="jxr_keyword">case</strong> LOCK:
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>           shift = -1;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">if</strong> (x.length == 0) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">int</strong> val = 0;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; x.length; i++) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>       val += getBit(x[i], bytes) &lt;&lt; (x.length - i - 1);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     }
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     <strong class="jxr_keyword">return</strong> val;
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>   }
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getCountry(byte[] bytes) {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     <strong class="jxr_keyword">return</strong> getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {53, 54, 43, 44, 45, 46, 47, 48, 37, 38});
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>   }
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getServiceClass(byte[] bytes) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">return</strong> getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {55, 56, 57, 58, 59, 60, 49, 50, 51, 52});
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>   }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getPostCode2Length(byte[] bytes) {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     <strong class="jxr_keyword">return</strong> getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {39, 40, 41, 42, 31, 32});
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>   }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getPostCode2(byte[] bytes) {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     <strong class="jxr_keyword">return</strong> getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2});
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>   }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getPostCode3(byte[] bytes) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     <strong class="jxr_keyword">return</strong> String.valueOf(
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>        <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[] {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {39, 40, 41, 42, 31, 32})),
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {33, 34, 35, 36, 25, 26})),
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {27, 28, 29, 30, 19, 20})),
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {21, 22, 23, 24, 13, 14})),
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] {15, 16, 17, 18,  7,  8})),
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>          SETS[0].charAt(getInt(bytes, <strong class="jxr_keyword">new</strong> byte[] { 9, 10, 11, 12,  1,  2})),
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>        }
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     );
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>   }
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getMessage(byte[] bytes, <strong class="jxr_keyword">int</strong> start, <strong class="jxr_keyword">int</strong> len) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">int</strong> shift = -1;
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     <strong class="jxr_keyword">int</strong> set = 0;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     <strong class="jxr_keyword">int</strong> lastset = 0;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = start; i &lt; start + len; i++) {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>       <strong class="jxr_keyword">char</strong> c = SETS[set].charAt(bytes[i]);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>       <strong class="jxr_keyword">switch</strong> (c) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         <strong class="jxr_keyword">case</strong> LATCHA:
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>           set = 0;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>           shift = -1;
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         <strong class="jxr_keyword">case</strong> LATCHB:
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>           set = 1;
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>           shift = -1;
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">case</strong> SHIFTA:
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>         <strong class="jxr_keyword">case</strong> SHIFTB:
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>         <strong class="jxr_keyword">case</strong> SHIFTC:
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">case</strong> SHIFTD:
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         <strong class="jxr_keyword">case</strong> SHIFTE:
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>           lastset = set;
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>           set = c - SHIFTA;
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>           shift = 1;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>         <strong class="jxr_keyword">case</strong> TWOSHIFTA:
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>           lastset = set;
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>           set = 0;
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>           shift = 2;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>         <strong class="jxr_keyword">case</strong> THREESHIFTA:
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>           lastset = set;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>           set = 0;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>           shift = 3;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>         <strong class="jxr_keyword">case</strong> NS:
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>           <strong class="jxr_keyword">int</strong> nsval = (bytes[++i] &lt;&lt; 24) + (bytes[++i] &lt;&lt; 18) + (bytes[++i] &lt;&lt; 12) + (bytes[++i] &lt;&lt; 6) + bytes[++i];
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>           sb.append(NINE_DIGITS.format(nsval));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>         <strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>           sb.append(c);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>       }
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>       <strong class="jxr_keyword">if</strong> (shift-- == 0) {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>         set = lastset;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>         <strong class="jxr_keyword">case</strong> LOCK:
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>           shift = -1;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>           sb.append(c);
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>       }
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>     }
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <strong class="jxr_keyword">while</strong> (sb.length() &gt; 0 &amp;&amp; sb.charAt(sb.length() - 1) == PAD) {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>       sb.setLength(sb.length() - 1);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>       <strong class="jxr_keyword">if</strong> (shift-- == 0) {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>         set = lastset;
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>       }
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>     }
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>   }
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> }
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <strong class="jxr_keyword">while</strong> (sb.length() &gt; 0 &amp;&amp; sb.charAt(sb.length() - 1) == PAD) {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>       sb.setLength(sb.length() - 1);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     }
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     <strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>   }
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

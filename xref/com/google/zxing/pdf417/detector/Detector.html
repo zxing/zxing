@@ -47,315 +47,309 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] INDEXES_START_PATTERN = {0, 4, 1, 5};
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] INDEXES_STOP_PATTERN = {6, 2, 7, 3};
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> INTEGER_MATH_SHIFT = 8;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 &lt;&lt; INTEGER_MATH_SHIFT;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_AVG_VARIANCE = (<strong class="jxr_keyword">int</strong>) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_INDIVIDUAL_VARIANCE = (<strong class="jxr_keyword">int</strong>) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <em class="jxr_comment">// B S B S B S B S Bar/Space pattern</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <em class="jxr_comment">// 11111111 0 1 0 1 0 1 000</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] START_PATTERN = {8, 1, 1, 1, 1, 1, 1, 3};
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <em class="jxr_comment">// 1111111 0 1 000 1 0 1 00 1</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] STOP_PATTERN = {7, 1, 1, 3, 1, 1, 1, 2, 1};
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_PIXEL_DRIFT = 3;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_PATTERN_DRIFT = 5;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <em class="jxr_comment">// if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>    <em class="jxr_comment">// if we set the value too high, then we might detect the start pattern from a neighbor barcode.</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> SKIPPED_ROW_COUNT_MAX = 25;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>    <em class="jxr_comment">// A PDF471 barcode should have at least 3 rows, with each row being &gt;= 3 times the module width. Therefore it should be at least</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <em class="jxr_comment">// 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> ROW_STEP = 5;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> BARCODE_MIN_HEIGHT = 10;
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../com/google/zxing/pdf417/detector/Detector.html">Detector</a>() {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>    }
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">   * &lt;p&gt;Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">   * @param image barcode image to decode</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">   * @param hints optional hints to detector</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">   * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">   * be found and returned</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">   * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">   * @throws NotFoundException if no PDF417 Code can be found</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/detector/PDF417DetectorResult.html">PDF417DetectorResult</a> detect(<a href="../../../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a> image, Map&lt;DecodeHintType,?&gt; hints, <strong class="jxr_keyword">boolean</strong> multiple)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>        <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <em class="jxr_comment">// TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even </em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <em class="jxr_comment">// different binarizers</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <em class="jxr_comment">//boolean tryHarder = hints != null &amp;&amp; hints.containsKey(DecodeHintType.TRY_HARDER);</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_AVG_VARIANCE = 0.42f;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_INDIVIDUAL_VARIANCE = 0.8f;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>    <em class="jxr_comment">// B S B S B S B S Bar/Space pattern</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>    <em class="jxr_comment">// 11111111 0 1 0 1 0 1 000</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] START_PATTERN = {8, 1, 1, 1, 1, 1, 1, 3};
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <em class="jxr_comment">// 1111111 0 1 000 1 0 1 00 1</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] STOP_PATTERN = {7, 1, 1, 3, 1, 1, 1, 2, 1};
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_PIXEL_DRIFT = 3;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_PATTERN_DRIFT = 5;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>    <em class="jxr_comment">// if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <em class="jxr_comment">// if we set the value too high, then we might detect the start pattern from a neighbor barcode.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> SKIPPED_ROW_COUNT_MAX = 25;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    <em class="jxr_comment">// A PDF471 barcode should have at least 3 rows, with each row being &gt;= 3 times the module width. Therefore it should be at least</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <em class="jxr_comment">// 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> ROW_STEP = 5;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> BARCODE_MIN_HEIGHT = 10;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../com/google/zxing/pdf417/detector/Detector.html">Detector</a>() {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>    }
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">   * &lt;p&gt;Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">   * @param image barcode image to decode</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">   * @param hints optional hints to detector</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">   * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">   * be found and returned</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">   * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">   * @throws NotFoundException if no PDF417 Code can be found</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/pdf417/detector/PDF417DetectorResult.html">PDF417DetectorResult</a> detect(<a href="../../../../../com/google/zxing/BinaryBitmap.html">BinaryBitmap</a> image, Map&lt;DecodeHintType,?&gt; hints, <strong class="jxr_keyword">boolean</strong> multiple)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>        <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/NotFoundException.html">NotFoundException</a> {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <em class="jxr_comment">// TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even </em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <em class="jxr_comment">// different binarizers</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <em class="jxr_comment">//boolean tryHarder = hints != null &amp;&amp; hints.containsKey(DecodeHintType.TRY_HARDER);</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> bitMatrix = image.getBlackMatrix();
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> bitMatrix = image.getBlackMatrix();
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>      List&lt;ResultPoint[]&gt; barcodeCoordinates = detect(multiple, bitMatrix);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">if</strong> (barcodeCoordinates.isEmpty()) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>        bitMatrix = bitMatrix.clone();
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>        bitMatrix.rotate180();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>        barcodeCoordinates = detect(multiple, bitMatrix);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/detector/PDF417DetectorResult.html">PDF417DetectorResult</a>(bitMatrix, barcodeCoordinates);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>    }
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">   * Detects PDF417 codes in an image. Only checks 0 degree rotation</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">   * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">   * be found and returned</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">   * @param bitMatrix bit matrix to detect barcodes in</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">   * @return List of ResultPoint arrays containing the coordinates of found barcodes</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;ResultPoint[]&gt; detect(<strong class="jxr_keyword">boolean</strong> multiple, <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> bitMatrix) {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     List&lt;ResultPoint[]&gt; barcodeCoordinates = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">int</strong> row = 0;
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">int</strong> column = 0;
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">boolean</strong> foundBarcodeInRow = false;
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">while</strong> (row &lt; bitMatrix.getHeight()) {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] vertices = findVertices(bitMatrix, row, column);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>       <strong class="jxr_keyword">if</strong> (vertices[0] == <strong class="jxr_keyword">null</strong> &amp;&amp; vertices[3] == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>         <strong class="jxr_keyword">if</strong> (!foundBarcodeInRow) {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>           <em class="jxr_comment">// we didn't find any barcode so that's the end of searching </em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>           <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>         }
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>         <em class="jxr_comment">// we didn't find a barcode starting at the given column and row. Try again from the first column and slightly</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>         <em class="jxr_comment">// below the lowest barcode we found so far.</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>         foundBarcodeInRow = false;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>         column = 0;
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">for</strong> (ResultPoint[] barcodeCoordinate : barcodeCoordinates) {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>           <strong class="jxr_keyword">if</strong> (barcodeCoordinate[1] != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>             row = (<strong class="jxr_keyword">int</strong>) Math.max(row, barcodeCoordinate[1].getY());
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>           }
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>           <strong class="jxr_keyword">if</strong> (barcodeCoordinate[3] != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>             row = Math.max(row, (<strong class="jxr_keyword">int</strong>) barcodeCoordinate[3].getY());
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>           }
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>         }
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>         row += ROW_STEP;
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>         <strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>       }
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>       foundBarcodeInRow = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>       barcodeCoordinates.add(vertices);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>       <strong class="jxr_keyword">if</strong> (!multiple) {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>         <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>       }
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>       <em class="jxr_comment">// if we didn't find a right row indicator column, then continue the search for the next barcode after the </em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>       <em class="jxr_comment">// start pattern of the barcode just found.</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>       <strong class="jxr_keyword">if</strong> (vertices[2] != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>         column = (<strong class="jxr_keyword">int</strong>) vertices[2].getX();
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         row = (<strong class="jxr_keyword">int</strong>) vertices[2].getY();
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>         column = (<strong class="jxr_keyword">int</strong>) vertices[4].getX();
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>         row = (<strong class="jxr_keyword">int</strong>) vertices[4].getY();
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>       }
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>     }
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     <strong class="jxr_keyword">return</strong> barcodeCoordinates;
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>   }
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">   * Locate the vertices and the codewords area of a black blob using the Start</em>
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">   * and Stop patterns as locators.</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">   * @param matrix the scanned barcode image.</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">   * @return an array containing the vertices:</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">   *           vertices[0] x, y top left barcode</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">   *           vertices[1] x, y bottom left barcode</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">   *           vertices[2] x, y top right barcode</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">   *           vertices[3] x, y bottom right barcode</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">   *           vertices[4] x, y top left codeword area</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">   *           vertices[5] x, y bottom left codeword area</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">   *           vertices[6] x, y top right codeword area</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">   *           vertices[7] x, y bottom right codeword area</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] findVertices(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> matrix, <strong class="jxr_keyword">int</strong> startRow, <strong class="jxr_keyword">int</strong> startColumn) {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">int</strong> height = matrix.getHeight();
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>     <strong class="jxr_keyword">int</strong> width = matrix.getWidth();
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>     <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] result = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[8];
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>     copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, START_PATTERN),
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>         INDEXES_START_PATTERN);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>     <strong class="jxr_keyword">if</strong> (result[4] != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>       startColumn = (<strong class="jxr_keyword">int</strong>) result[4].getX();
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>       startRow = (<strong class="jxr_keyword">int</strong>) result[4].getY();
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>     }
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>     copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, STOP_PATTERN),
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>         INDEXES_STOP_PATTERN);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>     <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>   }
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> copyToResult(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] result, <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] tmpResult, <strong class="jxr_keyword">int</strong>[] destinationIndexes) {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; destinationIndexes.length; i++) {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>       result[destinationIndexes[i]] = tmpResult[i];
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>     }
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>   }
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] findRowsWithPattern(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> matrix,
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>                                                    <strong class="jxr_keyword">int</strong> height,
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>                                                    <strong class="jxr_keyword">int</strong> width,
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>                                                    <strong class="jxr_keyword">int</strong> startRow,
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>                                                    <strong class="jxr_keyword">int</strong> startColumn,
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>                                                    <strong class="jxr_keyword">int</strong>[] pattern) {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>     <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] result = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[4];
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <strong class="jxr_keyword">boolean</strong> found = false;
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">int</strong>[] counters = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[pattern.length];
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">for</strong> (; startRow &lt; height; startRow += ROW_STEP) {
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>       <strong class="jxr_keyword">int</strong>[] loc = findGuardPattern(matrix, startColumn, startRow, width, false, pattern, counters);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>       <strong class="jxr_keyword">if</strong> (loc != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>         <strong class="jxr_keyword">while</strong> (startRow &gt; 0) {
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>           <strong class="jxr_keyword">int</strong>[] previousRowLoc = findGuardPattern(matrix, startColumn, --startRow, width, false, pattern, counters);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>           <strong class="jxr_keyword">if</strong> (previousRowLoc != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>             loc = previousRowLoc;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>           } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>             startRow++;
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>             <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>           }
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>         }
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>         result[0] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(loc[0], startRow);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>         result[1] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(loc[1], startRow);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>         found = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>         <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>       }
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>     }
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>     <strong class="jxr_keyword">int</strong> stopRow = startRow + 1;
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <em class="jxr_comment">// Last row of the current symbol that contains pattern</em>
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>     <strong class="jxr_keyword">if</strong> (found) {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>       <strong class="jxr_keyword">int</strong> skippedRowCount = 0;
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>       <strong class="jxr_keyword">int</strong>[] previousRowLoc = {(<strong class="jxr_keyword">int</strong>) result[0].getX(), (<strong class="jxr_keyword">int</strong>) result[1].getX()};
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>       <strong class="jxr_keyword">for</strong> (; stopRow &lt; height; stopRow++) {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>         <strong class="jxr_keyword">int</strong>[] loc = findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>         <em class="jxr_comment">// a found pattern is only considered to belong to the same barcode if the start and end positions</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>         <em class="jxr_comment">// don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>         <em class="jxr_comment">// a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>         <em class="jxr_comment">// larger drift and don't check for skipped rows.</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>         <strong class="jxr_keyword">if</strong> (loc != <strong class="jxr_keyword">null</strong> &amp;&amp;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>             Math.abs(previousRowLoc[0] - loc[0]) &lt; MAX_PATTERN_DRIFT &amp;&amp;
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>             Math.abs(previousRowLoc[1] - loc[1]) &lt; MAX_PATTERN_DRIFT) {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>           previousRowLoc = loc;
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>           skippedRowCount = 0;
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>           <strong class="jxr_keyword">if</strong> (skippedRowCount &gt; SKIPPED_ROW_COUNT_MAX) {
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>             <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>           } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>             skippedRowCount++;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>           }
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>         }
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>       }
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>       stopRow -= skippedRowCount + 1;
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>       result[2] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(previousRowLoc[0], stopRow);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>       result[3] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(previousRowLoc[1], stopRow);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>     }
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>     <strong class="jxr_keyword">if</strong> (stopRow - startRow &lt; BARCODE_MIN_HEIGHT) {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; result.length; i++) {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>         result[i] = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>       }
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>     }
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>     <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>   }
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">   * @param matrix row of black/white values to search</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">   * @param column x position to start search</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">   * @param row y position to start search</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">   * @param width the number of pixels to search on this row</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">   * @param pattern pattern of counts of number of black and white pixels that are</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">   *                 being searched for as a pattern</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">   * @param counters array of counters, as long as pattern, to re-use </em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">   * @return start/end horizontal offset of guard pattern, as an array of two ints.</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] findGuardPattern(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> matrix,
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>                                         <strong class="jxr_keyword">int</strong> column,
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>                                         <strong class="jxr_keyword">int</strong> row,
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>                                         <strong class="jxr_keyword">int</strong> width,
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>                                         <strong class="jxr_keyword">boolean</strong> whiteFirst,
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>                                         <strong class="jxr_keyword">int</strong>[] pattern,
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>                                         <strong class="jxr_keyword">int</strong>[] counters) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>     Arrays.fill(counters, 0, counters.length, 0);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>     <strong class="jxr_keyword">int</strong> patternLength = pattern.length;
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>     <strong class="jxr_keyword">boolean</strong> isWhite = whiteFirst;
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>     <strong class="jxr_keyword">int</strong> patternStart = column;
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <strong class="jxr_keyword">int</strong> pixelDrift = 0;
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>     <em class="jxr_comment">// if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels </em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     <strong class="jxr_keyword">while</strong> (matrix.get(patternStart, row) &amp;&amp; patternStart &gt; 0 &amp;&amp; pixelDrift++ &lt; MAX_PIXEL_DRIFT) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>       patternStart--;
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>     }
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <strong class="jxr_keyword">int</strong> x = patternStart;
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>     <strong class="jxr_keyword">int</strong> counterPosition = 0;
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>     <strong class="jxr_keyword">for</strong> (; x &lt; width; x++) {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>       <strong class="jxr_keyword">boolean</strong> pixel = matrix.get(x, row);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>       <strong class="jxr_keyword">if</strong> (pixel ^ isWhite) {
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>         counters[counterPosition]++;
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>         <strong class="jxr_keyword">if</strong> (counterPosition == patternLength - 1) {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>           <strong class="jxr_keyword">if</strong> (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) &lt; MAX_AVG_VARIANCE) {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] {patternStart, x};
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>           }
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>           patternStart += counters[0] + counters[1];
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>           System.arraycopy(counters, 2, counters, 0, patternLength - 2);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>           counters[patternLength - 2] = 0;
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>           counters[patternLength - 1] = 0;
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>           counterPosition--;
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>           counterPosition++;
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>         }
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>         counters[counterPosition] = 1;
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>         isWhite = !isWhite;
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>       }
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     }
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <strong class="jxr_keyword">if</strong> (counterPosition == patternLength - 1) {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>       <strong class="jxr_keyword">if</strong> (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) &lt; MAX_AVG_VARIANCE) {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] {patternStart, x - 1};
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>       }
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>     }
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>   }
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">   * Determines how closely a set of observed counts of runs of black/white</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">   * values matches a given target pattern. This is reported as the ratio of</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">   * the total variance from the expected pattern proportions across all</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">   * pattern elements, to the length of the pattern.</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">   * @param counters observed counters</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">   * @param pattern expected pattern</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">   * @param maxIndividualVariance The most any counter can differ before we give up</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">   * @return ratio of total variance between counters and pattern compared to</em>
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">   *         total pattern size, where the ratio has been multiplied by 256.</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">   *         So, 0 means no variance (perfect match); 256 means the total</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">   *         variance between counters and patterns equals the pattern length,</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">   *         higher values mean even more variance</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> patternMatchVariance(<strong class="jxr_keyword">int</strong>[] counters, <strong class="jxr_keyword">int</strong>[] pattern, <strong class="jxr_keyword">int</strong> maxIndividualVariance) {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">int</strong> numCounters = counters.length;
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">int</strong> total = 0;
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>     <strong class="jxr_keyword">int</strong> patternLength = 0;
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; numCounters; i++) {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>       total += counters[i];
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>       patternLength += pattern[i];
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>     }
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>     <strong class="jxr_keyword">if</strong> (total &lt; patternLength) {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>       <em class="jxr_comment">// If we don't even have one pixel per unit of bar width, assume this</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>       <em class="jxr_comment">// is too small to reliably match, so fail:</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>       <strong class="jxr_keyword">return</strong> Integer.MAX_VALUE;
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>     }
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>     <em class="jxr_comment">// We're going to fake floating-point math in integers. We just need to use more bits.</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>     <em class="jxr_comment">// Scale up patternLength so that intermediate values below like scaledCounter will have</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>     <em class="jxr_comment">// more "significant digits".</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>     <strong class="jxr_keyword">int</strong> unitBarWidth = (total &lt;&lt; INTEGER_MATH_SHIFT) / patternLength;
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>     maxIndividualVariance = (maxIndividualVariance * unitBarWidth) &gt;&gt; INTEGER_MATH_SHIFT;
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>     <strong class="jxr_keyword">int</strong> totalVariance = 0;
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; numCounters; x++) {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>       <strong class="jxr_keyword">int</strong> counter = counters[x] &lt;&lt; INTEGER_MATH_SHIFT;
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>       <strong class="jxr_keyword">int</strong> scaledPattern = pattern[x] * unitBarWidth;
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>       <strong class="jxr_keyword">int</strong> variance = counter &gt; scaledPattern ? counter - scaledPattern : scaledPattern - counter;
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>       <strong class="jxr_keyword">if</strong> (variance &gt; maxIndividualVariance) {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>         <strong class="jxr_keyword">return</strong> Integer.MAX_VALUE;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>       }
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>       totalVariance += variance;
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     }
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>     <strong class="jxr_keyword">return</strong> totalVariance / total;
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>   }
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      List&lt;ResultPoint[]&gt; barcodeCoordinates = detect(multiple, bitMatrix);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">if</strong> (barcodeCoordinates.isEmpty()) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>        bitMatrix = bitMatrix.clone();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>        bitMatrix.rotate180();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>        barcodeCoordinates = detect(multiple, bitMatrix);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/pdf417/detector/PDF417DetectorResult.html">PDF417DetectorResult</a>(bitMatrix, barcodeCoordinates);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>    }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">   * Detects PDF417 codes in an image. Only checks 0 degree rotation</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">   * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">   * be found and returned</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">   * @param bitMatrix bit matrix to detect barcodes in</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">   * @return List of ResultPoint arrays containing the coordinates of found barcodes</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;ResultPoint[]&gt; detect(<strong class="jxr_keyword">boolean</strong> multiple, <a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> bitMatrix) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      List&lt;ResultPoint[]&gt; barcodeCoordinates = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">int</strong> row = 0;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">int</strong> column = 0;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">boolean</strong> foundBarcodeInRow = false;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">while</strong> (row &lt; bitMatrix.getHeight()) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>       <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] vertices = findVertices(bitMatrix, row, column);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>       <strong class="jxr_keyword">if</strong> (vertices[0] == <strong class="jxr_keyword">null</strong> &amp;&amp; vertices[3] == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">if</strong> (!foundBarcodeInRow) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>           <em class="jxr_comment">// we didn't find any barcode so that's the end of searching </em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>           <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>         }
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         <em class="jxr_comment">// we didn't find a barcode starting at the given column and row. Try again from the first column and slightly</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>         <em class="jxr_comment">// below the lowest barcode we found so far.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         foundBarcodeInRow = false;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>         column = 0;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>         <strong class="jxr_keyword">for</strong> (ResultPoint[] barcodeCoordinate : barcodeCoordinates) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>           <strong class="jxr_keyword">if</strong> (barcodeCoordinate[1] != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>             row = (<strong class="jxr_keyword">int</strong>) Math.max(row, barcodeCoordinate[1].getY());
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>           }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>           <strong class="jxr_keyword">if</strong> (barcodeCoordinate[3] != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>             row = Math.max(row, (<strong class="jxr_keyword">int</strong>) barcodeCoordinate[3].getY());
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>           }
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>         }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>         row += ROW_STEP;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>         <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>       }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>       foundBarcodeInRow = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>       barcodeCoordinates.add(vertices);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>       <strong class="jxr_keyword">if</strong> (!multiple) {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>       }
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>       <em class="jxr_comment">// if we didn't find a right row indicator column, then continue the search for the next barcode after the </em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>       <em class="jxr_comment">// start pattern of the barcode just found.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>       <strong class="jxr_keyword">if</strong> (vertices[2] != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         column = (<strong class="jxr_keyword">int</strong>) vertices[2].getX();
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>         row = (<strong class="jxr_keyword">int</strong>) vertices[2].getY();
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         column = (<strong class="jxr_keyword">int</strong>) vertices[4].getX();
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         row = (<strong class="jxr_keyword">int</strong>) vertices[4].getY();
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>       }
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     }
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     <strong class="jxr_keyword">return</strong> barcodeCoordinates;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>   }
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">   * Locate the vertices and the codewords area of a black blob using the Start</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">   * and Stop patterns as locators.</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">   * @param matrix the scanned barcode image.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">   * @return an array containing the vertices:</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">   *           vertices[0] x, y top left barcode</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">   *           vertices[1] x, y bottom left barcode</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">   *           vertices[2] x, y top right barcode</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">   *           vertices[3] x, y bottom right barcode</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">   *           vertices[4] x, y top left codeword area</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">   *           vertices[5] x, y bottom left codeword area</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">   *           vertices[6] x, y top right codeword area</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">   *           vertices[7] x, y bottom right codeword area</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] findVertices(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> matrix, <strong class="jxr_keyword">int</strong> startRow, <strong class="jxr_keyword">int</strong> startColumn) {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     <strong class="jxr_keyword">int</strong> height = matrix.getHeight();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>     <strong class="jxr_keyword">int</strong> width = matrix.getWidth();
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] result = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[8];
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>     copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, START_PATTERN),
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>         INDEXES_START_PATTERN);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>     <strong class="jxr_keyword">if</strong> (result[4] != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>       startColumn = (<strong class="jxr_keyword">int</strong>) result[4].getX();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>       startRow = (<strong class="jxr_keyword">int</strong>) result[4].getY();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>     }
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, STOP_PATTERN),
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>         INDEXES_STOP_PATTERN);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>   }
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> copyToResult(<a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] result, <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] tmpResult, <strong class="jxr_keyword">int</strong>[] destinationIndexes) {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; destinationIndexes.length; i++) {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>       result[destinationIndexes[i]] = tmpResult[i];
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>     }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>   }
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] findRowsWithPattern(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> matrix,
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>                                                    <strong class="jxr_keyword">int</strong> height,
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>                                                    <strong class="jxr_keyword">int</strong> width,
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>                                                    <strong class="jxr_keyword">int</strong> startRow,
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>                                                    <strong class="jxr_keyword">int</strong> startColumn,
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>                                                    <strong class="jxr_keyword">int</strong>[] pattern) {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[] result = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>[4];
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">boolean</strong> found = false;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>     <strong class="jxr_keyword">int</strong>[] counters = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[pattern.length];
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <strong class="jxr_keyword">for</strong> (; startRow &lt; height; startRow += ROW_STEP) {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>       <strong class="jxr_keyword">int</strong>[] loc = findGuardPattern(matrix, startColumn, startRow, width, false, pattern, counters);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>       <strong class="jxr_keyword">if</strong> (loc != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <strong class="jxr_keyword">while</strong> (startRow &gt; 0) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>           <strong class="jxr_keyword">int</strong>[] previousRowLoc = findGuardPattern(matrix, startColumn, --startRow, width, false, pattern, counters);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>           <strong class="jxr_keyword">if</strong> (previousRowLoc != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>             loc = previousRowLoc;
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>           } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>             startRow++;
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>           }
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         }
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>         result[0] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(loc[0], startRow);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>         result[1] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(loc[1], startRow);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>         found = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>       }
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     <strong class="jxr_keyword">int</strong> stopRow = startRow + 1;
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     <em class="jxr_comment">// Last row of the current symbol that contains pattern</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     <strong class="jxr_keyword">if</strong> (found) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>       <strong class="jxr_keyword">int</strong> skippedRowCount = 0;
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">int</strong>[] previousRowLoc = {(<strong class="jxr_keyword">int</strong>) result[0].getX(), (<strong class="jxr_keyword">int</strong>) result[1].getX()};
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>       <strong class="jxr_keyword">for</strong> (; stopRow &lt; height; stopRow++) {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>         <strong class="jxr_keyword">int</strong>[] loc = findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>         <em class="jxr_comment">// a found pattern is only considered to belong to the same barcode if the start and end positions</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>         <em class="jxr_comment">// don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>         <em class="jxr_comment">// a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>         <em class="jxr_comment">// larger drift and don't check for skipped rows.</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>         <strong class="jxr_keyword">if</strong> (loc != <strong class="jxr_keyword">null</strong> &amp;&amp;
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>             Math.abs(previousRowLoc[0] - loc[0]) &lt; MAX_PATTERN_DRIFT &amp;&amp;
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>             Math.abs(previousRowLoc[1] - loc[1]) &lt; MAX_PATTERN_DRIFT) {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>           previousRowLoc = loc;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>           skippedRowCount = 0;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>           <strong class="jxr_keyword">if</strong> (skippedRowCount &gt; SKIPPED_ROW_COUNT_MAX) {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>           } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>             skippedRowCount++;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>           }
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>         }
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>       }
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>       stopRow -= skippedRowCount + 1;
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>       result[2] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(previousRowLoc[0], stopRow);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>       result[3] = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/ResultPoint.html">ResultPoint</a>(previousRowLoc[1], stopRow);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>     }
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>     <strong class="jxr_keyword">if</strong> (stopRow - startRow &lt; BARCODE_MIN_HEIGHT) {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; result.length; i++) {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>         result[i] = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>       }
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     }
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>     <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>   }
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">   * @param matrix row of black/white values to search</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">   * @param column x position to start search</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">   * @param row y position to start search</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">   * @param width the number of pixels to search on this row</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">   * @param pattern pattern of counts of number of black and white pixels that are</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">   *                 being searched for as a pattern</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">   * @param counters array of counters, as long as pattern, to re-use </em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">   * @return start/end horizontal offset of guard pattern, as an array of two ints.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] findGuardPattern(<a href="../../../../../com/google/zxing/common/BitMatrix.html">BitMatrix</a> matrix,
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>                                         <strong class="jxr_keyword">int</strong> column,
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>                                         <strong class="jxr_keyword">int</strong> row,
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>                                         <strong class="jxr_keyword">int</strong> width,
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>                                         <strong class="jxr_keyword">boolean</strong> whiteFirst,
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>                                         <strong class="jxr_keyword">int</strong>[] pattern,
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>                                         <strong class="jxr_keyword">int</strong>[] counters) {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>     Arrays.fill(counters, 0, counters.length, 0);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>     <strong class="jxr_keyword">int</strong> patternLength = pattern.length;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>     <strong class="jxr_keyword">boolean</strong> isWhite = whiteFirst;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>     <strong class="jxr_keyword">int</strong> patternStart = column;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>     <strong class="jxr_keyword">int</strong> pixelDrift = 0;
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <em class="jxr_comment">// if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels </em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <strong class="jxr_keyword">while</strong> (matrix.get(patternStart, row) &amp;&amp; patternStart &gt; 0 &amp;&amp; pixelDrift++ &lt; MAX_PIXEL_DRIFT) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>       patternStart--;
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>     }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <strong class="jxr_keyword">int</strong> x = patternStart;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">int</strong> counterPosition = 0;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <strong class="jxr_keyword">for</strong> (; x &lt; width; x++) {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>       <strong class="jxr_keyword">boolean</strong> pixel = matrix.get(x, row);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>       <strong class="jxr_keyword">if</strong> (pixel ^ isWhite) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>         counters[counterPosition]++;
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>         <strong class="jxr_keyword">if</strong> (counterPosition == patternLength - 1) {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>           <strong class="jxr_keyword">if</strong> (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) &lt; MAX_AVG_VARIANCE) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] {patternStart, x};
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>           }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>           patternStart += counters[0] + counters[1];
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>           System.arraycopy(counters, 2, counters, 0, patternLength - 2);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>           counters[patternLength - 2] = 0;
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>           counters[patternLength - 1] = 0;
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>           counterPosition--;
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>           counterPosition++;
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>         }
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>         counters[counterPosition] = 1;
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>         isWhite = !isWhite;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>       }
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     }
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     <strong class="jxr_keyword">if</strong> (counterPosition == patternLength - 1) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>       <strong class="jxr_keyword">if</strong> (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) &lt; MAX_AVG_VARIANCE) {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] {patternStart, x - 1};
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>       }
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>     }
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>   }
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">   * Determines how closely a set of observed counts of runs of black/white</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">   * values matches a given target pattern. This is reported as the ratio of</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">   * the total variance from the expected pattern proportions across all</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">   * pattern elements, to the length of the pattern.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">   * @param counters observed counters</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">   * @param pattern expected pattern</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">   * @param maxIndividualVariance The most any counter can differ before we give up</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">   * @return ratio of total variance between counters and pattern compared to total pattern size</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">float</strong> patternMatchVariance(<strong class="jxr_keyword">int</strong>[] counters, <strong class="jxr_keyword">int</strong>[] pattern, <strong class="jxr_keyword">float</strong> maxIndividualVariance) {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>     <strong class="jxr_keyword">int</strong> numCounters = counters.length;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">int</strong> total = 0;
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <strong class="jxr_keyword">int</strong> patternLength = 0;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; numCounters; i++) {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>       total += counters[i];
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>       patternLength += pattern[i];
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     }
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">if</strong> (total &lt; patternLength) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>       <em class="jxr_comment">// If we don't even have one pixel per unit of bar width, assume this</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>       <em class="jxr_comment">// is too small to reliably match, so fail:</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>       <strong class="jxr_keyword">return</strong> Float.POSITIVE_INFINITY;
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>     <em class="jxr_comment">// We're going to fake floating-point math in integers. We just need to use more bits.</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     <em class="jxr_comment">// Scale up patternLength so that intermediate values below like scaledCounter will have</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     <em class="jxr_comment">// more "significant digits".</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>     <strong class="jxr_keyword">float</strong> unitBarWidth = (<strong class="jxr_keyword">float</strong>) total / patternLength;
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     maxIndividualVariance *= unitBarWidth;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>     <strong class="jxr_keyword">float</strong> totalVariance = 0.0f;
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; numCounters; x++) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>       <strong class="jxr_keyword">int</strong> counter = counters[x];
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>       <strong class="jxr_keyword">float</strong> scaledPattern = pattern[x] * unitBarWidth;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>       <strong class="jxr_keyword">float</strong> variance = counter &gt; scaledPattern ? counter - scaledPattern : scaledPattern - counter;
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>       <strong class="jxr_keyword">if</strong> (variance &gt; maxIndividualVariance) {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>         <strong class="jxr_keyword">return</strong> Float.POSITIVE_INFINITY;
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>       }
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>       totalVariance += variance;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>     }
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>     <strong class="jxr_keyword">return</strong> totalVariance / total;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>   }
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>

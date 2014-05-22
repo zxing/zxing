@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 255; i++) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>        ALOG[i] = p;
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>        LOG[p] = i;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>        p &lt;&lt;= 1;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>        p *= 2;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>        <strong class="jxr_keyword">if</strong> (p &gt;= 256) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          p ^= MODULO_VALUE;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>        }

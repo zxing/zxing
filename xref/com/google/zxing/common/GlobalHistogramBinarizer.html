@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 1; x &lt; width - 1; x++) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>        <strong class="jxr_keyword">int</strong> right = localLuminances[x + 1] &amp; 0xff;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>        <em class="jxr_comment">// A simple -1 4 -1 box filter with a weight of 2.</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>        <strong class="jxr_keyword">int</strong> luminance = ((center &lt;&lt; 2) - left - right) &gt;&gt; 1;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>        <strong class="jxr_keyword">int</strong> luminance = ((center * 4) - left - right) / 2;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>        <strong class="jxr_keyword">if</strong> (luminance &lt; blackPoint) {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          row.set(x);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>        }
@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = 1; y &lt; 5; y++) {
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>        <strong class="jxr_keyword">int</strong> row = height * y / 5;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>        byte[] localLuminances = source.getRow(row, luminances);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>       <strong class="jxr_keyword">int</strong> right = (width &lt;&lt; 2) / 5;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>       <strong class="jxr_keyword">int</strong> right = (width * 4) / 5;
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = width / 5; x &lt; right; x++) {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>         <strong class="jxr_keyword">int</strong> pixel = localLuminances[x] &amp; 0xff;
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>         localBuckets[pixel &gt;&gt; LUMINANCE_SHIFT]++;
@@ -182,7 +182,7 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>     <em class="jxr_comment">// If there is too little contrast in the image to pick a meaningful black point, throw rather</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>     <em class="jxr_comment">// than waste time trying to decode the image, and risk false positives.</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>     <strong class="jxr_keyword">if</strong> (secondPeak - firstPeak &lt;= numBuckets &gt;&gt; 4) {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>     <strong class="jxr_keyword">if</strong> (secondPeak - firstPeak &lt;= numBuckets / 16) {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>       <strong class="jxr_keyword">throw</strong> NotFoundException.getNotFoundInstance();
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>     }
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 

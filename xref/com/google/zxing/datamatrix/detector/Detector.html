@@ -378,7 +378,7 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 
 <a class="jxr_linenumber" name="L371" href="#L371">371</a>     <strong class="jxr_keyword">int</strong> dx = Math.abs(toX - fromX);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a>     <strong class="jxr_keyword">int</strong> dy = Math.abs(toY - fromY);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>     <strong class="jxr_keyword">int</strong> error = -dx &gt;&gt; 1;
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>     <strong class="jxr_keyword">int</strong> error = -dx / 2;
 <a class="jxr_linenumber" name="L374" href="#L374">374</a>     <strong class="jxr_keyword">int</strong> ystep = fromY &lt; toY ? 1 : -1;
 <a class="jxr_linenumber" name="L375" href="#L375">375</a>     <strong class="jxr_keyword">int</strong> xstep = fromX &lt; toX ? 1 : -1;
 <a class="jxr_linenumber" name="L376" href="#L376">376</a>     <strong class="jxr_keyword">int</strong> transitions = 0;

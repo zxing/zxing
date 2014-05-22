@@ -96,13 +96,13 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">int</strong> startX = <strong class="jxr_keyword">this</strong>.startX;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">int</strong> height = <strong class="jxr_keyword">this</strong>.height;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">int</strong> maxJ = startX + width;
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      <strong class="jxr_keyword">int</strong> middleI = startY + (height &gt;&gt; 1);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      <strong class="jxr_keyword">int</strong> middleI = startY + (height / 2);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      <em class="jxr_comment">// We are looking for black/white/black modules in 1:1:1 ratio;</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>      <em class="jxr_comment">// this tracks the number of black/white/black modules seen so far</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">int</strong>[] stateCount = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[3];
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> iGen = 0; iGen &lt; height; iGen++) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>        <em class="jxr_comment">// Search from middle outwards</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>        <strong class="jxr_keyword">int</strong> i = middleI + ((iGen &amp; 0x01) == 0 ? (iGen + 1) &gt;&gt; 1 : -((iGen + 1) &gt;&gt; 1));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>        <strong class="jxr_keyword">int</strong> i = middleI + ((iGen &amp; 0x01) == 0 ? (iGen + 1) / 2 : -((iGen + 1) / 2));
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>        stateCount[0] = 0;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>        stateCount[1] = 0;
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>       stateCount[2] = 0;

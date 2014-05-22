@@ -313,181 +313,184 @@
 <a class="jxr_linenumber" name="L305" href="#L305">305</a>   <em class="jxr_comment">// Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit</em>
 <a class="jxr_linenumber" name="L306" href="#L306">306</a>   <em class="jxr_comment">// operations. We don't care if cofficients are positive or negative.</em>
 <a class="jxr_linenumber" name="L307" href="#L307">307</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> calculateBCHCode(<strong class="jxr_keyword">int</strong> value, <strong class="jxr_keyword">int</strong> poly) {
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <em class="jxr_comment">// If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <em class="jxr_comment">// from 13 to make it 12.</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>     <strong class="jxr_keyword">int</strong> msbSetInPoly = findMSBSet(poly);
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>     value &lt;&lt;= msbSetInPoly - 1;
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>     <em class="jxr_comment">// Do the division business using exclusive-or operations.</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <strong class="jxr_keyword">while</strong> (findMSBSet(value) &gt;= msbSetInPoly) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>       value ^= poly &lt;&lt; (findMSBSet(value) - msbSetInPoly);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>     }
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <em class="jxr_comment">// Now the "value" is the remainder (i.e. the BCH code)</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>     <strong class="jxr_keyword">return</strong> value;
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>   }
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>   <em class="jxr_comment">// Make bit vector of type information. On success, store the result in "bits" and return true.</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>   <em class="jxr_comment">// Encode error correction level and mask pattern. See 8.9 of</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>   <em class="jxr_comment">// JISX0510:2004 (p.45) for details.</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> makeTypeInfoBits(<a href="../../../../../com/google/zxing/qrcode/decoder/ErrorCorrectionLevel.html">ErrorCorrectionLevel</a> ecLevel, <strong class="jxr_keyword">int</strong> maskPattern, <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a> bits)
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a> {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>     <strong class="jxr_keyword">if</strong> (!QRCode.isValidMaskPattern(maskPattern)) {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>(<span class="jxr_string">"Invalid mask pattern"</span>);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>     }
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>     <strong class="jxr_keyword">int</strong> typeInfo = (ecLevel.getBits() &lt;&lt; 3) | maskPattern;
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>     bits.appendBits(typeInfo, 5);
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>     <strong class="jxr_keyword">int</strong> bchCode = calculateBCHCode(typeInfo, TYPE_INFO_POLY);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>     bits.appendBits(bchCode, 10);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <strong class="jxr_keyword">if</strong> (poly == 0) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"0 polynomial"</span>);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>     }
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     <em class="jxr_comment">// If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>     <em class="jxr_comment">// from 13 to make it 12.</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <strong class="jxr_keyword">int</strong> msbSetInPoly = findMSBSet(poly);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>     value &lt;&lt;= msbSetInPoly - 1;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <em class="jxr_comment">// Do the division business using exclusive-or operations.</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <strong class="jxr_keyword">while</strong> (findMSBSet(value) &gt;= msbSetInPoly) {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>       value ^= poly &lt;&lt; (findMSBSet(value) - msbSetInPoly);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>     }
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>     <em class="jxr_comment">// Now the "value" is the remainder (i.e. the BCH code)</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">return</strong> value;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>   }
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>   <em class="jxr_comment">// Make bit vector of type information. On success, store the result in "bits" and return true.</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>   <em class="jxr_comment">// Encode error correction level and mask pattern. See 8.9 of</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>   <em class="jxr_comment">// JISX0510:2004 (p.45) for details.</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> makeTypeInfoBits(<a href="../../../../../com/google/zxing/qrcode/decoder/ErrorCorrectionLevel.html">ErrorCorrectionLevel</a> ecLevel, <strong class="jxr_keyword">int</strong> maskPattern, <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a> bits)
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>       <strong class="jxr_keyword">throws</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a> {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     <strong class="jxr_keyword">if</strong> (!QRCode.isValidMaskPattern(maskPattern)) {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>(<span class="jxr_string">"Invalid mask pattern"</span>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     }
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>     <strong class="jxr_keyword">int</strong> typeInfo = (ecLevel.getBits() &lt;&lt; 3) | maskPattern;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>     bits.appendBits(typeInfo, 5);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>     <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a> maskBits = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a>();
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>     maskBits.appendBits(TYPE_INFO_MASK_PATTERN, 15);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>     bits.xor(maskBits);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>     <strong class="jxr_keyword">if</strong> (bits.getSize() != 15) {  <em class="jxr_comment">// Just in case.</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>(<span class="jxr_string">"should not happen but we got: "</span> + bits.getSize());
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>     }
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>   }
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>   <em class="jxr_comment">// Make bit vector of version information. On success, store the result in "bits" and return true.</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>   <em class="jxr_comment">// See 8.10 of JISX0510:2004 (p.45) for details.</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> makeVersionInfoBits(<a href="../../../../../com/google/zxing/qrcode/decoder/Version.html">Version</a> version, <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a> bits) <strong class="jxr_keyword">throws</strong> WriterException {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>     bits.appendBits(version.getVersionNumber(), 6);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     <strong class="jxr_keyword">int</strong> bchCode = calculateBCHCode(version.getVersionNumber(), VERSION_INFO_POLY);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>     bits.appendBits(bchCode, 12);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>     <strong class="jxr_keyword">if</strong> (bits.getSize() != 18) {  <em class="jxr_comment">// Just in case.</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>(<span class="jxr_string">"should not happen but we got: "</span> + bits.getSize());
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>     }
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>   }
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>   <em class="jxr_comment">// Check if "value" is empty.</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isEmpty(<strong class="jxr_keyword">int</strong> value) {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>     <strong class="jxr_keyword">return</strong> value == -1;
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>   }
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedTimingPatterns(<a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) {
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>     <em class="jxr_comment">// -8 is for skipping position detection patterns (size 7), and two horizontal/vertical</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>     <em class="jxr_comment">// separation patterns (size 1). Thus, 8 = 7 + 1.</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 8; i &lt; matrix.getWidth() - 8; ++i) {
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>       <strong class="jxr_keyword">int</strong> bit = (i + 1) % 2;
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>       <em class="jxr_comment">// Horizontal line.</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>       <strong class="jxr_keyword">if</strong> (isEmpty(matrix.get(i, 6))) {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>         matrix.set(i, 6, bit);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>       }
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>       <em class="jxr_comment">// Vertical line.</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>       <strong class="jxr_keyword">if</strong> (isEmpty(matrix.get(6, i))) {
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>         matrix.set(6, i, bit);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>       }
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>     }
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>   }
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>   <em class="jxr_comment">// Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedDarkDotAtLeftBottomCorner(<a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) <strong class="jxr_keyword">throws</strong> WriterException {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>     <strong class="jxr_keyword">if</strong> (matrix.get(8, matrix.getHeight() - 8) == 0) {
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>();
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>     }
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>     matrix.set(8, matrix.getHeight() - 8, 1);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>   }
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedHorizontalSeparationPattern(<strong class="jxr_keyword">int</strong> xStart,
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>                                                        <strong class="jxr_keyword">int</strong> yStart,
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>                                                        <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) <strong class="jxr_keyword">throws</strong> WriterException {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; 8; ++x) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>       <strong class="jxr_keyword">if</strong> (!isEmpty(matrix.get(xStart + x, yStart))) {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>();
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>       }
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>       matrix.set(xStart + x, yStart, 0);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>     }
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>   }
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedVerticalSeparationPattern(<strong class="jxr_keyword">int</strong> xStart,
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>                                                      <strong class="jxr_keyword">int</strong> yStart,
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>                                                      <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) <strong class="jxr_keyword">throws</strong> WriterException {
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = 0; y &lt; 7; ++y) {
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>       <strong class="jxr_keyword">if</strong> (!isEmpty(matrix.get(xStart, yStart + y))) {
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>();
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>       }
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>       matrix.set(xStart, yStart + y, 0);
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>     }
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>   }
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>   <em class="jxr_comment">// Note that we cannot unify the function with embedPositionDetectionPattern() despite they are</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>   <em class="jxr_comment">// almost identical, since we cannot write a function that takes 2D arrays in different sizes in</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>   <em class="jxr_comment">// C/C++. We should live with the fact.</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedPositionAdjustmentPattern(<strong class="jxr_keyword">int</strong> xStart, <strong class="jxr_keyword">int</strong> yStart, <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = 0; y &lt; 5; ++y) {
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; 5; ++x) {
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>         matrix.set(xStart + x, yStart + y, POSITION_ADJUSTMENT_PATTERN[y][x]);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>       }
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>     }
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>   }
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedPositionDetectionPattern(<strong class="jxr_keyword">int</strong> xStart, <strong class="jxr_keyword">int</strong> yStart, <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = 0; y &lt; 7; ++y) {
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; 7; ++x) {
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>         matrix.set(xStart + x, yStart + y, POSITION_DETECTION_PATTERN[y][x]);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>       }
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>     }
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>   }
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>   <em class="jxr_comment">// Embed position detection patterns and surrounding vertical/horizontal separators.</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedPositionDetectionPatternsAndSeparators(<a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) <strong class="jxr_keyword">throws</strong> WriterException {
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>     <em class="jxr_comment">// Embed three big squares at corners.</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>     <strong class="jxr_keyword">int</strong> pdpWidth = POSITION_DETECTION_PATTERN[0].length;
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>     <em class="jxr_comment">// Left top corner.</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>     embedPositionDetectionPattern(0, 0, matrix);
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <em class="jxr_comment">// Right top corner.</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>     embedPositionDetectionPattern(matrix.getWidth() - pdpWidth, 0, matrix);
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>     <em class="jxr_comment">// Left bottom corner.</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>     embedPositionDetectionPattern(0, matrix.getWidth() - pdpWidth, matrix);
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>     <em class="jxr_comment">// Embed horizontal separation patterns around the squares.</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>     <strong class="jxr_keyword">int</strong> hspWidth = 8;
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>     <em class="jxr_comment">// Left top corner.</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>     embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>     <em class="jxr_comment">// Right top corner.</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>     embedHorizontalSeparationPattern(matrix.getWidth() - hspWidth,
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>         hspWidth - 1, matrix);
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>     <em class="jxr_comment">// Left bottom corner.</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>     embedHorizontalSeparationPattern(0, matrix.getWidth() - hspWidth, matrix);
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>     <em class="jxr_comment">// Embed vertical separation patterns around the squares.</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>     <strong class="jxr_keyword">int</strong> vspSize = 7;
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>     <em class="jxr_comment">// Left top corner.</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>     embedVerticalSeparationPattern(vspSize, 0, matrix);
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>     <em class="jxr_comment">// Right top corner.</em>
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>     embedVerticalSeparationPattern(matrix.getHeight() - vspSize - 1, 0, matrix);
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>     <em class="jxr_comment">// Left bottom corner.</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>     embedVerticalSeparationPattern(vspSize, matrix.getHeight() - vspSize,
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>         matrix);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>   }
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>   <em class="jxr_comment">// Embed position adjustment patterns if need be.</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> maybeEmbedPositionAdjustmentPatterns(<a href="../../../../../com/google/zxing/qrcode/decoder/Version.html">Version</a> version, <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) {
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>     <strong class="jxr_keyword">if</strong> (version.getVersionNumber() &lt; 2) {  <em class="jxr_comment">// The patterns appear if version &gt;= 2</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>       <strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>     }
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>     <strong class="jxr_keyword">int</strong> index = version.getVersionNumber() - 1;
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>     <strong class="jxr_keyword">int</strong>[] coordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>     <strong class="jxr_keyword">int</strong> numCoordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index].length;
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; numCoordinates; ++i) {
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; numCoordinates; ++j) {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>         <strong class="jxr_keyword">int</strong> y = coordinates[i];
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>         <strong class="jxr_keyword">int</strong> x = coordinates[j];
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>         <strong class="jxr_keyword">if</strong> (x == -1 || y == -1) {
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>           <strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>         }
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>         <em class="jxr_comment">// If the cell is unset, we embed the position adjustment pattern here.</em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>         <strong class="jxr_keyword">if</strong> (isEmpty(matrix.get(x, y))) {
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>           <em class="jxr_comment">// -2 is necessary since the x/y coordinates point to the center of the pattern, not the</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>           <em class="jxr_comment">// left top corner.</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>           embedPositionAdjustmentPattern(x - 2, y - 2, matrix);
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>         }
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>       }
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>     }
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>   }
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> }
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>     <strong class="jxr_keyword">int</strong> bchCode = calculateBCHCode(typeInfo, TYPE_INFO_POLY);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>     bits.appendBits(bchCode, 10);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>     <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a> maskBits = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a>();
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>     maskBits.appendBits(TYPE_INFO_MASK_PATTERN, 15);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     bits.xor(maskBits);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>     <strong class="jxr_keyword">if</strong> (bits.getSize() != 15) {  <em class="jxr_comment">// Just in case.</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>(<span class="jxr_string">"should not happen but we got: "</span> + bits.getSize());
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>     }
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>   }
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>   <em class="jxr_comment">// Make bit vector of version information. On success, store the result in "bits" and return true.</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>   <em class="jxr_comment">// See 8.10 of JISX0510:2004 (p.45) for details.</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> makeVersionInfoBits(<a href="../../../../../com/google/zxing/qrcode/decoder/Version.html">Version</a> version, <a href="../../../../../com/google/zxing/common/BitArray.html">BitArray</a> bits) <strong class="jxr_keyword">throws</strong> WriterException {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>     bits.appendBits(version.getVersionNumber(), 6);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>     <strong class="jxr_keyword">int</strong> bchCode = calculateBCHCode(version.getVersionNumber(), VERSION_INFO_POLY);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>     bits.appendBits(bchCode, 12);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>     <strong class="jxr_keyword">if</strong> (bits.getSize() != 18) {  <em class="jxr_comment">// Just in case.</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>(<span class="jxr_string">"should not happen but we got: "</span> + bits.getSize());
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>     }
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>   }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>   <em class="jxr_comment">// Check if "value" is empty.</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isEmpty(<strong class="jxr_keyword">int</strong> value) {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>     <strong class="jxr_keyword">return</strong> value == -1;
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>   }
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedTimingPatterns(<a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>     <em class="jxr_comment">// -8 is for skipping position detection patterns (size 7), and two horizontal/vertical</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>     <em class="jxr_comment">// separation patterns (size 1). Thus, 8 = 7 + 1.</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 8; i &lt; matrix.getWidth() - 8; ++i) {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>       <strong class="jxr_keyword">int</strong> bit = (i + 1) % 2;
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>       <em class="jxr_comment">// Horizontal line.</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>       <strong class="jxr_keyword">if</strong> (isEmpty(matrix.get(i, 6))) {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>         matrix.set(i, 6, bit);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>       }
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>       <em class="jxr_comment">// Vertical line.</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>       <strong class="jxr_keyword">if</strong> (isEmpty(matrix.get(6, i))) {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>         matrix.set(6, i, bit);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>       }
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>     }
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>   }
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>   <em class="jxr_comment">// Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedDarkDotAtLeftBottomCorner(<a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) <strong class="jxr_keyword">throws</strong> WriterException {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>     <strong class="jxr_keyword">if</strong> (matrix.get(8, matrix.getHeight() - 8) == 0) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>();
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>     }
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>     matrix.set(8, matrix.getHeight() - 8, 1);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>   }
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedHorizontalSeparationPattern(<strong class="jxr_keyword">int</strong> xStart,
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>                                                        <strong class="jxr_keyword">int</strong> yStart,
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>                                                        <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) <strong class="jxr_keyword">throws</strong> WriterException {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; 8; ++x) {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>       <strong class="jxr_keyword">if</strong> (!isEmpty(matrix.get(xStart + x, yStart))) {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>();
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>       }
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>       matrix.set(xStart + x, yStart, 0);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>     }
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>   }
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedVerticalSeparationPattern(<strong class="jxr_keyword">int</strong> xStart,
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>                                                      <strong class="jxr_keyword">int</strong> yStart,
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>                                                      <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) <strong class="jxr_keyword">throws</strong> WriterException {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = 0; y &lt; 7; ++y) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>       <strong class="jxr_keyword">if</strong> (!isEmpty(matrix.get(xStart, yStart + y))) {
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/google/zxing/WriterException.html">WriterException</a>();
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>       }
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>       matrix.set(xStart, yStart + y, 0);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>     }
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>   }
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>   <em class="jxr_comment">// Note that we cannot unify the function with embedPositionDetectionPattern() despite they are</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>   <em class="jxr_comment">// almost identical, since we cannot write a function that takes 2D arrays in different sizes in</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>   <em class="jxr_comment">// C/C++. We should live with the fact.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedPositionAdjustmentPattern(<strong class="jxr_keyword">int</strong> xStart, <strong class="jxr_keyword">int</strong> yStart, <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = 0; y &lt; 5; ++y) {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; 5; ++x) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>         matrix.set(xStart + x, yStart + y, POSITION_ADJUSTMENT_PATTERN[y][x]);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>       }
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>     }
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>   }
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedPositionDetectionPattern(<strong class="jxr_keyword">int</strong> xStart, <strong class="jxr_keyword">int</strong> yStart, <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) {
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> y = 0; y &lt; 7; ++y) {
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> x = 0; x &lt; 7; ++x) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>         matrix.set(xStart + x, yStart + y, POSITION_DETECTION_PATTERN[y][x]);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>       }
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>     }
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>   }
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>   <em class="jxr_comment">// Embed position detection patterns and surrounding vertical/horizontal separators.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> embedPositionDetectionPatternsAndSeparators(<a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) <strong class="jxr_keyword">throws</strong> WriterException {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>     <em class="jxr_comment">// Embed three big squares at corners.</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <strong class="jxr_keyword">int</strong> pdpWidth = POSITION_DETECTION_PATTERN[0].length;
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>     <em class="jxr_comment">// Left top corner.</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     embedPositionDetectionPattern(0, 0, matrix);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>     <em class="jxr_comment">// Right top corner.</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>     embedPositionDetectionPattern(matrix.getWidth() - pdpWidth, 0, matrix);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>     <em class="jxr_comment">// Left bottom corner.</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>     embedPositionDetectionPattern(0, matrix.getWidth() - pdpWidth, matrix);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>     <em class="jxr_comment">// Embed horizontal separation patterns around the squares.</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>     <strong class="jxr_keyword">int</strong> hspWidth = 8;
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>     <em class="jxr_comment">// Left top corner.</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>     embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>     <em class="jxr_comment">// Right top corner.</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>     embedHorizontalSeparationPattern(matrix.getWidth() - hspWidth,
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>         hspWidth - 1, matrix);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>     <em class="jxr_comment">// Left bottom corner.</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>     embedHorizontalSeparationPattern(0, matrix.getWidth() - hspWidth, matrix);
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>     <em class="jxr_comment">// Embed vertical separation patterns around the squares.</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>     <strong class="jxr_keyword">int</strong> vspSize = 7;
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>     <em class="jxr_comment">// Left top corner.</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>     embedVerticalSeparationPattern(vspSize, 0, matrix);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>     <em class="jxr_comment">// Right top corner.</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     embedVerticalSeparationPattern(matrix.getHeight() - vspSize - 1, 0, matrix);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>     <em class="jxr_comment">// Left bottom corner.</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>     embedVerticalSeparationPattern(vspSize, matrix.getHeight() - vspSize,
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>         matrix);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>   }
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>   <em class="jxr_comment">// Embed position adjustment patterns if need be.</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> maybeEmbedPositionAdjustmentPatterns(<a href="../../../../../com/google/zxing/qrcode/decoder/Version.html">Version</a> version, <a href="../../../../../com/google/zxing/qrcode/encoder/ByteMatrix.html">ByteMatrix</a> matrix) {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>     <strong class="jxr_keyword">if</strong> (version.getVersionNumber() &lt; 2) {  <em class="jxr_comment">// The patterns appear if version &gt;= 2</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>     }
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>     <strong class="jxr_keyword">int</strong> index = version.getVersionNumber() - 1;
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>     <strong class="jxr_keyword">int</strong>[] coordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>     <strong class="jxr_keyword">int</strong> numCoordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index].length;
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; numCoordinates; ++i) {
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; numCoordinates; ++j) {
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>         <strong class="jxr_keyword">int</strong> y = coordinates[i];
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>         <strong class="jxr_keyword">int</strong> x = coordinates[j];
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>         <strong class="jxr_keyword">if</strong> (x == -1 || y == -1) {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>           <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>         }
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>         <em class="jxr_comment">// If the cell is unset, we embed the position adjustment pattern here.</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>         <strong class="jxr_keyword">if</strong> (isEmpty(matrix.get(x, y))) {
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>           <em class="jxr_comment">// -2 is necessary since the x/y coordinates point to the center of the pattern, not the</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>           <em class="jxr_comment">// left top corner.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>           embedPositionAdjustmentPattern(x - 2, y - 2, matrix);
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>         }
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>       }
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>     }
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>   }
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2007&#x2013;2014. All rights reserved.</div>
