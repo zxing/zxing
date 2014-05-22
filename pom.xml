@@ -90,6 +90,7 @@
   <modules>
     <module>core</module>
     <module>javase</module>
+    <module>android-core</module>
     <module>android-integration</module>
     <module>zxing.appspot.com</module>
     <module>zxingorg</module>
@@ -548,7 +549,6 @@
         </property>
       </activation>
       <modules>
-        <module>android-core</module>
         <module>android</module>
         <module>androidtest</module>
         <module>glass</module>
