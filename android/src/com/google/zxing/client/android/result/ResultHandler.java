@@ -30,16 +30,23 @@ import com.google.zxing.client.result.ResultParser;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Nickname;
+import android.provider.ContactsContract.CommonDataKinds.Event;
+import android.provider.ContactsContract.CommonDataKinds.Website;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.Intents.Insert;
 import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
+import java.util.ArrayList;
 
 /**
  * A base class for the Android-specific barcode handlers. These allow the app to polymorphically
@@ -224,29 +231,49 @@ public abstract class ResultHandler {
       }
     }
 
-    // No field for URL, birthday; use notes
-    StringBuilder aggregatedNotes = new StringBuilder();
+    ArrayList<ContentValues> data = new ArrayList<ContentValues>();
     if (urls != null) {
       for (String url : urls) {
         if (url != null && !url.isEmpty()) {
-          aggregatedNotes.append('\n').append(url);
+          ContentValues row = new ContentValues();
+          row.put(Data.MIMETYPE, Website.CONTENT_ITEM_TYPE);
+          row.put(Website.TYPE, Website.TYPE_HOMEPAGE);
+          row.put(Website.URL, url);
+          data.add(row);
+          break;
         }
       }
     }
-    for (String aNote : new String[] { birthday, note }) {
-      if (aNote != null) {
-        aggregatedNotes.append('\n').append(aNote);
-      }
+
+    if (birthday != null) {
+      ContentValues row = new ContentValues();
+      row.put(Data.MIMETYPE, Event.CONTENT_ITEM_TYPE);
+      row.put(Event.TYPE, Event.TYPE_BIRTHDAY);
+      row.put(Event.START_DATE, birthday);
+      data.add(row);
     }
+
     if (nicknames != null) {
       for (String nickname : nicknames) {
         if (nickname != null && !nickname.isEmpty()) {
-          aggregatedNotes.append('\n').append(nickname);
+          ContentValues row = new ContentValues();
+          row.put(Data.MIMETYPE, Nickname.CONTENT_ITEM_TYPE);
+          row.put(Nickname.TYPE, Nickname.TYPE_DEFAULT);
+          row.put(Nickname.NAME, nickname);
+          data.add(row);
+          break;
         }
       }
     }
+
+    intent.putParcelableArrayListExtra(Insert.DATA, data);
+
+    StringBuilder aggregatedNotes = new StringBuilder();
+    if (note != null) {
+      aggregatedNotes.append('\n').append(note);
+    }
     if (geo != null) {
-      aggregatedNotes.append('\n').append(geo[0]).append(',').append(geo[1]);
+      aggregatedNotes.append(geo[0]).append(',').append(geo[1]);
     }
 
     if (aggregatedNotes.length() > 0) {
