@@ -25,12 +25,10 @@
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>core</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>javase</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>javax</groupId>
