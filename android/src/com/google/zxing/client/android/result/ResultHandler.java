@@ -36,11 +36,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Nickname;
-import android.provider.ContactsContract.CommonDataKinds.Event;
-import android.provider.ContactsContract.CommonDataKinds.Website;
-import android.provider.ContactsContract.Data;
-import android.provider.ContactsContract.Intents.Insert;
 import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
@@ -231,14 +226,13 @@ public abstract class ResultHandler {
       }
     }
 
-    ArrayList<ContentValues> data = new ArrayList<ContentValues>();
+    ArrayList<ContentValues> data = new ArrayList<>();
     if (urls != null) {
       for (String url : urls) {
         if (url != null && !url.isEmpty()) {
-          ContentValues row = new ContentValues();
-          row.put(Data.MIMETYPE, Website.CONTENT_ITEM_TYPE);
-          row.put(Website.TYPE, Website.TYPE_HOMEPAGE);
-          row.put(Website.URL, url);
+          ContentValues row = new ContentValues(2);
+          row.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE);
+          row.put(ContactsContract.CommonDataKinds.Website.URL, url);
           data.add(row);
           break;
         }
@@ -246,34 +240,37 @@ public abstract class ResultHandler {
     }
 
     if (birthday != null) {
-      ContentValues row = new ContentValues();
-      row.put(Data.MIMETYPE, Event.CONTENT_ITEM_TYPE);
-      row.put(Event.TYPE, Event.TYPE_BIRTHDAY);
-      row.put(Event.START_DATE, birthday);
+      ContentValues row = new ContentValues(3);
+      row.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE);
+      row.put(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY);
+      row.put(ContactsContract.CommonDataKinds.Event.START_DATE, birthday);
       data.add(row);
     }
 
     if (nicknames != null) {
       for (String nickname : nicknames) {
         if (nickname != null && !nickname.isEmpty()) {
-          ContentValues row = new ContentValues();
-          row.put(Data.MIMETYPE, Nickname.CONTENT_ITEM_TYPE);
-          row.put(Nickname.TYPE, Nickname.TYPE_DEFAULT);
-          row.put(Nickname.NAME, nickname);
+          ContentValues row = new ContentValues(3);
+          row.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE);
+          row.put(ContactsContract.CommonDataKinds.Nickname.TYPE,
+                  ContactsContract.CommonDataKinds.Nickname.TYPE_DEFAULT);
+          row.put(ContactsContract.CommonDataKinds.Nickname.NAME, nickname);
           data.add(row);
           break;
         }
       }
     }
 
-    intent.putParcelableArrayListExtra(Insert.DATA, data);
+    if (!data.isEmpty()) {
+      intent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, data);
+    }
 
     StringBuilder aggregatedNotes = new StringBuilder();
     if (note != null) {
       aggregatedNotes.append('\n').append(note);
     }
     if (geo != null) {
-      aggregatedNotes.append(geo[0]).append(',').append(geo[1]);
+      aggregatedNotes.append('\n').append(geo[0]).append(',').append(geo[1]);
     }
 
     if (aggregatedNotes.length() > 0) {
