@@ -545,9 +545,11 @@ final class DecodedBitStreamParser {
         // while in Numeric Compaction mode) serves  to terminate the
         // current Numeric Compaction mode grouping as described in 5.4.4.2,
         // and then to start a new one grouping.
-        String s = decodeBase900toBase10(numericCodewords, count);
-        result.append(s);
-        count = 0;
+        if (count > 0) {
+          String s = decodeBase900toBase10(numericCodewords, count);
+          result.append(s);
+          count = 0;
+        }
       }
     }
     return codeIndex;
