@@ -17,10 +17,12 @@
 package com.google.zxing.pdf417.decoder;
 
 import com.google.zxing.FormatException;
+import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.pdf417.PDF417ResultMetadata;
 
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 /**
@@ -44,6 +46,9 @@ final class DecodedBitStreamParser {
   private static final int BYTE_COMPACTION_MODE_LATCH = 901;
   private static final int NUMERIC_COMPACTION_MODE_LATCH = 902;
   private static final int BYTE_COMPACTION_MODE_LATCH_6 = 924;
+  private static final int ECI_USER_DEFINED = 925;
+  private static final int ECI_GENERAL_PURPOSE = 926;
+  private static final int ECI_CHARSET = 927;
   private static final int BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
   private static final int BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
   private static final int MACRO_PDF417_TERMINATOR = 922;
@@ -106,6 +111,20 @@ final class DecodedBitStreamParser {
           break;
         case NUMERIC_COMPACTION_MODE_LATCH:
           codeIndex = numericCompaction(codewords, codeIndex, result);
+          break;
+        case ECI_CHARSET:
+          CharacterSetECI charsetECI =
+              CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
+          Charset charset = Charset.forName(charsetECI.name());
+          // TODO actually use charset!
+          break;
+        case ECI_GENERAL_PURPOSE:
+          // Can't do anything with generic ECI; skip its 2 characters
+          codeIndex += 2;
+          break;
+        case ECI_USER_DEFINED:
+          // Can't do anything with user ECI; skip its 1 character
+          codeIndex ++;
           break;
         case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
           codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
