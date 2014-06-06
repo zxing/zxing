@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Barcode</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="Scan_Start">Scan Start!</string>
+    <string name="barcode_name">Name</string>
+    <string name="barcode_type">Type</string>
+    <string name="text">Get the barcode of any product!</string>
+
+</resources>
