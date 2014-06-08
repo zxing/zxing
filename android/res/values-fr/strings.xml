@@ -109,7 +109,7 @@
   <string name="preferences_front_light_auto">Automatique</string>
   <string name="preferences_front_light_off">Éteinte</string>
   <string name="preferences_front_light_on">Allumée</string>
-  <string name="preferences_front_light_summary">Améliore le balayage lors d'une faible luminosité sur certains téléphone, mais peut causer un reflet. Ne fonctionne pas sur tous les téléphones.</string>
+  <string name="preferences_front_light_summary">Améliore le balayage lors d\'une faible luminosité sur certains téléphone, mais peut causer un reflet. Ne fonctionne pas sur tous les téléphones.</string>
   <string name="preferences_front_light_title">Utiliser la lumière frontale</string>
   <string name="preferences_general_title">Paramètres généraux</string>
   <string name="preferences_invert_scan_summary">Balayer des codes-barres blancs sur fond noir. Non disponible sur certains appareils.</string>
