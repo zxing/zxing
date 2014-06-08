@@ -25,15 +25,18 @@ import javax.servlet.http.HttpServletResponse;
 
 public final class LegacyJavadocRedirectServlet extends HttpServlet {
 
-  private static final String PREFIX = "/w/docs/javadoc/";
+  private static final String PREFIX = "/w/docs/javadoc";
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) {
     String requestURI = request.getRequestURI();
     Preconditions.checkArgument(requestURI.startsWith(PREFIX));
-    String redirectURI = "http://zxing.github.io/zxing/apidocs/" + requestURI.substring(PREFIX.length());
+    String requestWithoutPrefix = requestURI.substring(PREFIX.length());
+    if (requestWithoutPrefix.isEmpty()) {
+      requestWithoutPrefix = "/";
+    }
     response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-    response.setHeader(HttpHeaders.LOCATION, redirectURI);
+    response.setHeader(HttpHeaders.LOCATION, "http://zxing.github.io/zxing/apidocs" + requestWithoutPrefix);
   }
 
 }
