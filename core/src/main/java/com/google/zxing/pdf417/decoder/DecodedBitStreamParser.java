@@ -21,6 +21,7 @@ import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.pdf417.PDF417ResultMetadata;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -73,6 +74,8 @@ final class DecodedBitStreamParser {
       '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
       '=', '^'};
 
+  private static final Charset DEFAULT_ENCODING = Charset.forName("ISO-8859-1");
+
   /**
    * Table containing values for the exponent of 900.
    * This is used in the numeric compaction decode algorithm.
@@ -95,6 +98,7 @@ final class DecodedBitStreamParser {
 
   static DecoderResult decode(int[] codewords, String ecLevel) throws FormatException {
     StringBuilder result = new StringBuilder(codewords.length * 2);
+    Charset encoding = DEFAULT_ENCODING;
     // Get compaction mode
     int codeIndex = 1;
     int code = codewords[codeIndex++];
@@ -107,7 +111,7 @@ final class DecodedBitStreamParser {
         case BYTE_COMPACTION_MODE_LATCH:
         case BYTE_COMPACTION_MODE_LATCH_6:
         case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-          codeIndex = byteCompaction(code, codewords, codeIndex, result);
+          codeIndex = byteCompaction(code, codewords, encoding, codeIndex, result);
           break;
         case NUMERIC_COMPACTION_MODE_LATCH:
           codeIndex = numericCompaction(codewords, codeIndex, result);
@@ -115,8 +119,7 @@ final class DecodedBitStreamParser {
         case ECI_CHARSET:
           CharacterSetECI charsetECI =
               CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
-          Charset charset = Charset.forName(charsetECI.name());
-          // TODO actually use charset!
+          encoding = Charset.forName(charsetECI.name());
           break;
         case ECI_GENERAL_PURPOSE:
           // Can't do anything with generic ECI; skip its 2 characters
@@ -335,6 +338,7 @@ final class DecodedBitStreamParser {
               priorToShiftMode = subMode;
               subMode = Mode.PUNCT_SHIFT;
             } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+              // TODO Does this need to use the current character encoding? See other occurrences below
               result.append((char) byteCompactionData[i]);
             } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
               subMode = Mode.ALPHA;
@@ -429,17 +433,22 @@ final class DecodedBitStreamParser {
    *
    * @param mode      The byte compaction mode i.e. 901 or 924
    * @param codewords The array of codewords (data + error)
+   * @param encoding  Currently active character encoding
    * @param codeIndex The current index into the codeword array.
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  private static int byteCompaction(int mode, int[] codewords, int codeIndex, StringBuilder result) {
+  private static int byteCompaction(int mode,
+                                    int[] codewords,
+                                    Charset encoding,
+                                    int codeIndex,
+                                    StringBuilder result) {
+    ByteArrayOutputStream decodedBytes = new ByteArrayOutputStream();
     if (mode == BYTE_COMPACTION_MODE_LATCH) {
       // Total number of Byte Compaction characters to be encoded
       // is not a multiple of 6
       int count = 0;
       long value = 0;
-      char[] decodedData = new char[6];
       int[] byteCompactedCodewords = new int[6];
       boolean end = false;
       int nextCode = codewords[codeIndex++];
@@ -463,10 +472,9 @@ final class DecodedBitStreamParser {
             // Decode every 5 codewords
             // Convert to Base 256
             for (int j = 0; j < 6; ++j) {
-              decodedData[5 - j] = (char) (value % 256);
-              value >>= 8;
+              decodedBytes.write((byte) (value >> (8 * (5 - j))));
             }
-            result.append(decodedData);
+            value = 0;
             count = 0;
           }
         }
@@ -481,7 +489,7 @@ final class DecodedBitStreamParser {
       // the last group of codewords is interpreted directly
       // as one byte per codeword, without compaction.
       for (int i = 0; i < count; i++) {
-        result.append((char) byteCompactedCodewords[i]);
+        decodedBytes.write((byte) byteCompactedCodewords[i]);
       }
 
     } else if (mode == BYTE_COMPACTION_MODE_LATCH_6) {
@@ -511,16 +519,15 @@ final class DecodedBitStreamParser {
         if ((count % 5 == 0) && (count > 0)) {
           // Decode every 5 codewords
           // Convert to Base 256
-          char[] decodedData = new char[6];
           for (int j = 0; j < 6; ++j) {
-            decodedData[5 - j] = (char) (value & 0xFF);
-            value >>= 8;
+            decodedBytes.write((byte) (value >> (8 * (5 - j))));
           }
-          result.append(decodedData);
+          value = 0;
           count = 0;
         }
       }
     }
+    result.append(new String(decodedBytes.toByteArray(), encoding));
     return codeIndex;
   }
 
