@@ -554,18 +554,6 @@ final class PDF417HighLevelEncoder {
       if (numericCount >= 13) {
         return idx - startpos;
       }
-      int textCount = 0;
-      while (textCount < 5 && isText(ch)) {
-        textCount++;
-        int i = idx + textCount;
-        if (i >= len) {
-          break;
-        }
-        ch = msg.charAt(i);
-      }
-      if (textCount >= 5) {
-        return idx - startpos;
-      }
       ch = msg.charAt(idx);
 
       //Check if character is encodable
