@@ -110,8 +110,10 @@ final class DecodedBitStreamParser {
           break;
         case BYTE_COMPACTION_MODE_LATCH:
         case BYTE_COMPACTION_MODE_LATCH_6:
-        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
           codeIndex = byteCompaction(code, codewords, encoding, codeIndex, result);
+          break;
+        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+          result.append((char) codewords[codeIndex++]);
           break;
         case NUMERIC_COMPACTION_MODE_LATCH:
           codeIndex = numericCompaction(codewords, codeIndex, result);
