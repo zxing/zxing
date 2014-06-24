@@ -56,7 +56,7 @@ public final class MatrixToImageConfig {
 
   int getBufferedImageColorModel() {
     // Use faster BINARY if colors match default
-    return onColor == BLACK && offColor == WHITE ? BufferedImage.TYPE_BYTE_BINARY : BufferedImage.TYPE_INT_RGB;
+    return onColor == BLACK && offColor == WHITE ? BufferedImage.TYPE_BYTE_BINARY : BufferedImage.TYPE_INT_ARGB;
   }
 
 }
