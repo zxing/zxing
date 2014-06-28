@@ -40,9 +40,9 @@ public final class OpenCameraInterface {
       Log.w(TAG, "No cameras!");
       return null;
     }
-	  
+
     boolean explicitRequest = cameraId >= 0;
-	  
+
     if (!explicitRequest) {
       // Select a camera if no explicit camera requested
       int index = 0;
@@ -57,7 +57,7 @@ public final class OpenCameraInterface {
       
       cameraId = index;
     }
-	  
+
     Camera camera;
     if (cameraId < numCameras) {
       Log.i(TAG, "Opening camera #" + cameraId);

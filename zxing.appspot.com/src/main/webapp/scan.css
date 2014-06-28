@@ -1,10 +1,9 @@
 body{
-	background-color:#404040;
+	background: #404040 url("img/bg.png");
 	text-align:center;
 	color:#FFF;
 	font-size: 20px;
 	font-family: 'Droid Sans',sans-serif;
-	background-image:url("img/bg.png");
 }
 a img{
 	border:0;

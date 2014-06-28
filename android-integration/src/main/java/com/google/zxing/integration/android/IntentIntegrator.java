@@ -308,7 +308,7 @@ public class IntentIntegrator {
       }
       intentScan.putExtra("SCAN_FORMATS", joinedByComma.toString());
     }
-	
+
     // check requested camera ID
     if (cameraId >= 0) {
       intentScan.putExtra("SCAN_CAMERA_ID", cameraId);

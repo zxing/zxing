@@ -218,7 +218,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             cameraManager.setManualFramingRect(width, height);
           }
         }
-		
+
         if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
           int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
           if (cameraId >= 0) {

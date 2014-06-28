@@ -16,8 +16,7 @@
 
 package com.google.zxing.oned;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +25,7 @@ import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-public class Code128WriterTestCase {
+public class Code128WriterTestCase extends Assert {
 
   private static final String FNC1 = "11110101110";
   private static final String FNC2 = "11110101000";
@@ -91,7 +90,7 @@ public class Code128WriterTestCase {
     assertEquals(expected, actual);
   }
 
-  private String matrixToString(BitMatrix result) {
+  private static String matrixToString(BitMatrix result) {
     StringBuilder builder = new StringBuilder(result.getWidth());
     for (int i = 0; i < result.getWidth(); i++) {
       builder.append(result.get(i, 0) ? '1' : '0');
