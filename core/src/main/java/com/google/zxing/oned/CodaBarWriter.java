@@ -16,8 +16,6 @@
 
 package com.google.zxing.oned;
 
-import java.util.Arrays;
-
 /**
  * This class renders CodaBar as {@code boolean[]}.
  *
@@ -28,26 +26,40 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
   private static final char[] START_END_CHARS = {'A', 'B', 'C', 'D'};
   private static final char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
   private static final char[] CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = {'/', ':', '+', '.'};
+  private static final char DEFAULT_GUARD = START_END_CHARS[0];
 
   @Override
   public boolean[] encode(String contents) {
 
     if (contents.length() < 2) {
-      throw new IllegalArgumentException("Codabar should start/end with start/stop symbols");
-    }
-    // Verify input and calculate decoded length.
-    char firstChar = Character.toUpperCase(contents.charAt(0));
-    char lastChar = Character.toUpperCase(contents.charAt(contents.length() - 1));
-    boolean startsEndsNormal = 
-        CodaBarReader.arrayContains(START_END_CHARS, firstChar) && 
-        CodaBarReader.arrayContains(START_END_CHARS, lastChar);
-    boolean startsEndsAlt = 
-        CodaBarReader.arrayContains(ALT_START_END_CHARS, firstChar) && 
-        CodaBarReader.arrayContains(ALT_START_END_CHARS, lastChar);
-    if (!(startsEndsNormal || startsEndsAlt)) {
-      throw new IllegalArgumentException(
-          "Codabar should start/end with " + Arrays.toString(START_END_CHARS) + 
-          ", or start/end with " + Arrays.toString(ALT_START_END_CHARS));
+      // Can't have a start/end guard, so tentatively add default guards
+      contents = DEFAULT_GUARD + contents + DEFAULT_GUARD;
+    } else {
+      // Verify input and calculate decoded length.
+      char firstChar = Character.toUpperCase(contents.charAt(0));
+      char lastChar = Character.toUpperCase(contents.charAt(contents.length() - 1));
+      boolean startsNormal = CodaBarReader.arrayContains(START_END_CHARS, firstChar);
+      boolean endsNormal = CodaBarReader.arrayContains(START_END_CHARS, lastChar);
+      boolean startsAlt = CodaBarReader.arrayContains(ALT_START_END_CHARS, firstChar);
+      boolean endsAlt = CodaBarReader.arrayContains(ALT_START_END_CHARS, lastChar);
+      if (startsNormal) {
+        if (!endsNormal) {
+          throw new IllegalArgumentException("Invalid start/end guards: " + contents);
+        }
+        // else already has valid start/end
+      } else if (startsAlt) {
+        if (!endsAlt) {
+          throw new IllegalArgumentException("Invalid start/end guards: " + contents);
+        }
+        // else already has valid start/end
+      } else {
+        // Doesn't start with a guard
+        if (endsNormal || endsAlt) {
+          throw new IllegalArgumentException("Invalid start/end guards: " + contents);
+        }
+        // else doesn't end with guard either, so add a default
+        contents = DEFAULT_GUARD + contents + DEFAULT_GUARD;
+      }
     }
 
     // The start character and the end character are decoded to 10 length each.
