@@ -190,6 +190,9 @@ final class QRCodeEncoder {
     InputStream stream = null;
     try {
       stream = activity.getContentResolver().openInputStream(uri);
+      if (stream == null) {
+        throw new WriterException("Can't open stream for " + uri);
+      }
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       byte[] buffer = new byte[2048];
       int bytesRead;
