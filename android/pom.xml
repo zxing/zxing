@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>android</artifactId>
-  <version>4.7.0</version>
+  <version>4.7.1</version>
   <packaging>apk</packaging>
 
   <dependencies>
@@ -39,7 +39,7 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <build>

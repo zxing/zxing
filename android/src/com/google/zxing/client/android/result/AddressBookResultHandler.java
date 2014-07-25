@@ -146,7 +146,7 @@ public final class AddressBookResultHandler extends ResultHandler {
         dialPhone(addressResult.getPhoneNumbers()[0]);
         break;
       case 3:
-        sendEmail(addressResult.getEmails()[0], null, null);
+        sendEmail(addressResult.getEmails(), null, null, null, null);
         break;
       default:
         break;
