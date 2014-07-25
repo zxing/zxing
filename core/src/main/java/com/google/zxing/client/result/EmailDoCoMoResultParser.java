@@ -37,17 +37,18 @@ public final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
     if (!rawText.startsWith("MATMSG:")) {
       return null;
     }
-    String[] rawTo = matchDoCoMoPrefixedField("TO:", rawText, true);
-    if (rawTo == null) {
+    String[] tos = matchDoCoMoPrefixedField("TO:", rawText, true);
+    if (tos == null) {
       return null;
     }
-    String to = rawTo[0];
-    if (!isBasicallyValidEmailAddress(to)) {
-      return null;
+    for (String to : tos) {
+      if (!isBasicallyValidEmailAddress(to)) {
+        return null;
+      }
     }
     String subject = matchSingleDoCoMoPrefixedField("SUB:", rawText, false);
     String body = matchSingleDoCoMoPrefixedField("BODY:", rawText, false);
-    return new EmailAddressParsedResult(to, subject, body, "mailto:" + to);
+    return new EmailAddressParsedResult(tos, null, null, subject, body);
   }
 
   /**

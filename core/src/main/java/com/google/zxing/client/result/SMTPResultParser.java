@@ -45,7 +45,10 @@ public final class SMTPResultParser extends ResultParser {
         subject = subject.substring(0, colon);
       }
     }
-    String mailtoURI = "mailto:" + emailAddress;
-    return new EmailAddressParsedResult(emailAddress, subject, body, mailtoURI);
+    return new EmailAddressParsedResult(new String[] {emailAddress},
+                                        null,
+                                        null,
+                                        subject,
+                                        body);
   }
 }
