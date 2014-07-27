@@ -61,23 +61,23 @@ public final class CameraConfigurationUtils {
     String focusMode = null;
     if (autoFocus) {
       if (safeMode || disableContinuous) {
-        focusMode = CameraConfigurationUtils.findSettableValue("focus mode",
-                                                               supportedFocusModes,
-                                                               Camera.Parameters.FOCUS_MODE_AUTO);
+        focusMode = findSettableValue("focus mode",
+                                       supportedFocusModes,
+                                       Camera.Parameters.FOCUS_MODE_AUTO);
       } else {
-        focusMode = CameraConfigurationUtils.findSettableValue("focus mode",
-                                                               supportedFocusModes,
-                                                               Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
-                                                               Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
-                                                               Camera.Parameters.FOCUS_MODE_AUTO);
+        focusMode = findSettableValue("focus mode",
+                                      supportedFocusModes,
+                                      Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
+                                      Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
+                                      Camera.Parameters.FOCUS_MODE_AUTO);
       }
     }
     // Maybe selected auto-focus but not available, so fall through here:
     if (!safeMode && focusMode == null) {
-      focusMode = CameraConfigurationUtils.findSettableValue("focus mode",
-                                                             supportedFocusModes,
-                                                             Camera.Parameters.FOCUS_MODE_MACRO,
-                                                             Camera.Parameters.FOCUS_MODE_EDOF);
+      focusMode = findSettableValue("focus mode",
+                                    supportedFocusModes,
+                                    Camera.Parameters.FOCUS_MODE_MACRO,
+                                    Camera.Parameters.FOCUS_MODE_EDOF);
     }
     if (focusMode != null) {
       if (focusMode.equals(parameters.getFocusMode())) {
@@ -92,14 +92,14 @@ public final class CameraConfigurationUtils {
     List<String> supportedFlashModes = parameters.getSupportedFlashModes();
     String flashMode;
     if (on) {
-      flashMode = CameraConfigurationUtils.findSettableValue("flash mode",
-                                                             supportedFlashModes,
-                                                             Camera.Parameters.FLASH_MODE_TORCH,
-                                                             Camera.Parameters.FLASH_MODE_ON);
+      flashMode = findSettableValue("flash mode",
+                                    supportedFlashModes,
+                                    Camera.Parameters.FLASH_MODE_TORCH,
+                                    Camera.Parameters.FLASH_MODE_ON);
     } else {
-      flashMode = CameraConfigurationUtils.findSettableValue("flash mode",
-                                                             supportedFlashModes,
-                                                             Camera.Parameters.FLASH_MODE_OFF);
+      flashMode = findSettableValue("flash mode",
+                                    supportedFlashModes,
+                                    Camera.Parameters.FLASH_MODE_OFF);
     }
     if (flashMode != null) {
       if (flashMode.equals(parameters.getFlashMode())) {
@@ -263,10 +263,9 @@ public final class CameraConfigurationUtils {
       Log.i(TAG, "Negative effect already set");
       return;
     }
-    String colorMode =
-        CameraConfigurationUtils.findSettableValue("color effect",
-                                                   parameters.getSupportedColorEffects(),
-                                                   Camera.Parameters.EFFECT_NEGATIVE);
+    String colorMode = findSettableValue("color effect",
+                                         parameters.getSupportedColorEffects(),
+                                         Camera.Parameters.EFFECT_NEGATIVE);
     if (colorMode != null) {
       parameters.setColorEffect(colorMode);
     }
