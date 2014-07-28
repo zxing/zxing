@@ -106,6 +106,9 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     float maxX = 0.0f;
     float maxY = 0.0f;
     for (ResultPoint point : resultPoints) {
+      if (point == null) {
+        continue;
+      }
       float x = point.getX();
       float y = point.getY();
       if (x < minX) {
