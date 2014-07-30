@@ -64,6 +64,11 @@ public final class WifiParsedResultTestCase extends Assert {
     doTest("WIFI:S:TenChars;P:hello\\:there;T:WEP;;", "TenChars", "hello:there", "WEP");
   }
 
+  @Test
+  public void testEscape() {
+    doTest("WIFI:T:WPA;S:test;P:my_password\\\\;;", "test", "my_password\\", "WPA");
+  }
+
   /**
    * Given the string contents for the barcode, check that it matches our expectations
    */
