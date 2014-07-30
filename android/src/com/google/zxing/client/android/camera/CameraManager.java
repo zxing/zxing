@@ -280,11 +280,7 @@ public final class CameraManager {
    * @param cameraId camera ID of the camera to use. A negative value means "no preference".
    */
   public synchronized void setManualCameraId(int cameraId) {
-    if (initialized) {
-      throw new IllegalStateException();
-    } else {
-      requestedCameraId = cameraId;
-    }
+    requestedCameraId = cameraId;
   }
   
   /**
