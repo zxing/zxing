@@ -227,10 +227,6 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
                       wcEnterpriseField = wcClass;
                       break;
                   }
-              boolean noEnterpriseFieldType = false;
-              if(wcEnterpriseField == null) {
-                  noEnterpriseFieldType = true; // Cupcake/Donut access enterprise settings directly
-              }
 
               Field wcefEap = null;
               Field wcefIdentity = null;
@@ -253,45 +249,17 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
                   }
               }
               Method wcefSetValue = null;
-              if(!noEnterpriseFieldType){
-                  for(Method m: wcEnterpriseField.getMethods()) {
-                      //System.out.println(m.getName());
-                      if (m.getName().trim().equals("setValue")) {
-                          wcefSetValue = m;
-                      }
+              for(Method m: wcEnterpriseField.getMethods()) {
+                  //System.out.println(m.getName());
+                  if (m.getName().trim().equals("setValue")) {
+                      wcefSetValue = m;
                   }
               }
-              //EAP Method
-              if(!noEnterpriseFieldType) {
-                  wcefSetValue.invoke(wcefEap.get(config),  wifiResult.getNetworkEncryption());
-              } else {
-                  wcefEap.set(config, wifiResult.getNetworkEncryption());
-              }
-              // EAP Phase 2 Authentication
-              if(!noEnterpriseFieldType) {
-                  wcefSetValue.invoke(wcefPhase2.get(config), wifiResult.getPhase2());
-              } else {
-                  wcefPhase2.set(config, wifiResult.getPhase2());
-              }
-	      // EAP Anonymous Identity
-	      if(!noEnterpriseFieldType) {
-		  wcefSetValue.invoke(wcefAnonymousId.get(config), wifiResult.getAnon());
-	      } else {
-	        wcefAnonymousId.set(config, wifiResult.getAnon());
-	      }
-	      // EAP Identity
-              if(!noEnterpriseFieldType) {
-                  wcefSetValue.invoke(wcefIdentity.get(config), wifiResult.getUsername());
-              } else {
-                  wcefIdentity.set(config, wifiResult.getUsername());
-              }
-              // EAP Password
-              if(!noEnterpriseFieldType) {
-                  // Hex passwords that are 64 bits long are not to be quoted.
-                  wcefSetValue.invoke(wcefPassword.get(config), wifiResult.getPassword());
-              } else {
-                  wcefPassword.set(config, wifiResult.getPassword());
-              }
+              wcefSetValue.invoke(wcefEap.get(config),  wifiResult.getNetworkEncryption());
+              wcefSetValue.invoke(wcefPhase2.get(config), wifiResult.getPhase2());
+	      wcefSetValue.invoke(wcefAnonymousId.get(config), wifiResult.getAnon());
+              wcefSetValue.invoke(wcefIdentity.get(config), wifiResult.getUsername());
+              wcefSetValue.invoke(wcefPassword.get(config), wifiResult.getPassword());
         } catch (Exception e)
           {
               // TODO Auto-generated catch block
