@@ -74,6 +74,7 @@ public final class EmailAddressParsedResult extends ParsedResult {
   }
 
   /**
+   * @return "mailto:"
    * @deprecated without replacement
    */
   @Deprecated
