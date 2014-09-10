@@ -28,6 +28,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +47,7 @@ import java.util.Map;
  *
  * @author Sean Owen
  */
+@WebServlet("/w/chart")
 public final class ChartServlet extends HttpServlet {
 
   private static final int MAX_DIMENSION = 4096;

@@ -19,10 +19,12 @@ package com.google.zxing.web;
 import com.google.common.base.Preconditions;
 import com.google.common.net.HttpHeaders;
 
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet("/w/docs/javadoc/*")
 public final class LegacyJavadocRedirectServlet extends HttpServlet {
 
   private static final String PREFIX = "/w/docs/javadoc";

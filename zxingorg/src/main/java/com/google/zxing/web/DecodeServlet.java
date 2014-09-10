@@ -38,16 +38,9 @@ import com.google.zxing.common.HybridBinarizer;
 
 import com.google.zxing.multi.GenericMultipleBarcodeReader;
 import com.google.zxing.multi.MultipleBarcodeReader;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileCleaningTracker;
 
 import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -72,9 +65,12 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  * {@link HttpServlet} which decodes images containing barcodes. Given a URL, it will
@@ -82,6 +78,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sean Owen
  */
+@MultipartConfig(
+    maxFileSize = 10_000_000,
+    maxRequestSize = 10_000_000,
+    fileSizeThreshold = 1_000_000,
+    location = "/tmp")
+@WebServlet("/w/decode")
 public final class DecodeServlet extends HttpServlet {
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
@@ -102,7 +104,6 @@ public final class DecodeServlet extends HttpServlet {
     HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
   }
 
-  private DiskFileItemFactory diskFileItemFactory;
   private Iterable<String> blockedURLSubstrings;
 
   @Override
@@ -110,10 +111,6 @@ public final class DecodeServlet extends HttpServlet {
     Logger logger = Logger.getLogger("com.google.zxing");
     ServletContext context = servletConfig.getServletContext();
     logger.addHandler(new ServletContextLogHandler(context));
-    File repository = (File) context.getAttribute("javax.servlet.context.tempdir");
-    FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(context);
-    diskFileItemFactory = new DiskFileItemFactory(1 << 16, repository);
-    diskFileItemFactory.setFileCleaningTracker(fileCleaningTracker);
 
     URL blockURL = context.getClassLoader().getResource("/private/uri-block-substrings.txt");
     if (blockURL == null) {
@@ -259,37 +256,18 @@ public final class DecodeServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
-    if (!ServletFileUpload.isMultipartContent(request)) {
+    Collection<Part> parts = request.getParts();
+    if (parts.isEmpty()) {
       log.info("File upload was not multipart");
       response.sendRedirect("badimage.jspx");
       return;
     }
-
-    ServletFileUpload upload = new ServletFileUpload(diskFileItemFactory);
-    upload.setFileSizeMax(MAX_IMAGE_SIZE);
-
-    // Parse the request
-    try {
-      for (FileItem item : upload.parseRequest(request)) {
-        if (!item.isFormField()) {
-          if (item.getSize() <= MAX_IMAGE_SIZE) {
-            log.info("Decoding uploaded file");
-            try (InputStream is = item.getInputStream()) {
-              processStream(is, request, response);
-            }
-          } else {
-            log.info("Too large");
-            response.sendRedirect("badimage.jspx");
-          }
-          break;
-        }
+    for (Part part : parts) {
+      log.info("Decoding uploaded file");
+      try (InputStream is = part.getInputStream()) {
+        processStream(is, request, response);
       }
-    } catch (FileUploadException fue) {
-      log.info(fue.toString());
-      response.sendRedirect("badimage.jspx");
     }
-
   }
 
   private static void processStream(InputStream is,
