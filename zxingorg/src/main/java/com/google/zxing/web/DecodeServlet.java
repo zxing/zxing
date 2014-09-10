@@ -82,7 +82,7 @@ import javax.servlet.http.Part;
     maxFileSize = 10_000_000,
     maxRequestSize = 10_000_000,
     fileSizeThreshold = 1_000_000,
-    location = "/tmp")
+    location = "/tmp/DecodeServlet")
 @WebServlet("/w/decode")
 public final class DecodeServlet extends HttpServlet {
 

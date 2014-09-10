@@ -16,16 +16,9 @@
  -->
 <!-- Author: Sean Owen -->
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1">
-<jsp:directive.page contentType="text/html" session="false"/>
-<jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
-<jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>
-<html>
-  <head>
-    <title>Redirect</title>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="Refresh" content="0;url=decode.jspx"/>
-  </head>
-  <body>
-  </body>
-</html>
+<jsp:directive.page session="false"/>
+<jsp:scriptlet>
+response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+response.setHeader("Location", "decode.jspx");
+</jsp:scriptlet>
 </jsp:root>
