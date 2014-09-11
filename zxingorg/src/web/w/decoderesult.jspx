@@ -41,7 +41,9 @@
     <div id="main">
     <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1></div>
     <jsp:scriptlet>
-      for (Result result : (Iterable&lt;Result&gt;) request.getAttribute("results")) {
+      @SuppressWarnings("unchecked")
+      Iterable&lt;Result&gt; results = (Iterable&lt;Result&gt;) request.getAttribute("results");
+      for (Result result : results) {
         ParsedResult parsedResult = ResultParser.parseResult(result);
 
         String text = result.getText();
