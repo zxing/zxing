@@ -14,19 +14,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" version="2.1">
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1">
 <jsp:directive.page contentType="text/html" session="false"/>
 <jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>
 <html>
 <head>
   <meta charset="UTF-8"/>
-  <title><c:out value="${requestScope['title']}"/></title>
+  <title>${requestScope['title']}</title>
   <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
 <div id="main">
-  <div id="header"><h1><img src="zxing-icon.png" id="icon" alt=""/>&amp;nbsp;<c:out value="${requestScope['title']}"/></h1></div>
-  <p><c:out value="${requestScope['text']}"/></p>
+  <div id="header"><h1><img src="zxing-icon.png" id="icon" alt=""/>&amp;nbsp;${requestScope['title']}</h1></div>
+  <p>${requestScope['text']}</p>
 </div>
 </body>
 </html>
