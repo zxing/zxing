@@ -39,7 +39,7 @@
   </head>
   <body>
     <div id="main">
-    <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1></div>
+    <div id="header"><h1><img src="zxing-icon.png" id="icon" alt=""/> Decode Succeeded</h1></div>
     <jsp:scriptlet>
       @SuppressWarnings("unchecked")
       Iterable&lt;Result&gt; results = (Iterable&lt;Result&gt;) request.getAttribute("results");

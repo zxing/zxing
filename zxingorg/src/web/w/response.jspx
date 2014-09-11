@@ -25,7 +25,7 @@
 </head>
 <body>
 <div id="main">
-  <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> <c:out value="${requestScope['title']}"/></h1></div>
+  <div id="header"><h1><img src="zxing-icon.png" id="icon" alt=""/>&amp;nbsp;<c:out value="${requestScope['title']}"/></h1></div>
   <p><c:out value="${requestScope['text']}"/></p>
 </div>
 </body>
