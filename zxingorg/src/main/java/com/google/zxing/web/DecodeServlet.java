@@ -16,10 +16,6 @@
 
 package com.google.zxing.web;
 
-import com.google.common.collect.Lists;
-import com.google.common.io.Resources;
-import com.google.common.net.HttpHeaders;
-import com.google.common.net.MediaType;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
@@ -35,9 +31,13 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.j2se.ImageReader;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
-
 import com.google.zxing.multi.GenericMultipleBarcodeReader;
 import com.google.zxing.multi.MultipleBarcodeReader;
+
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
+import com.google.common.net.HttpHeaders;
+import com.google.common.net.MediaType;
 
 import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
@@ -265,14 +265,19 @@ public final class DecodeServlet extends HttpServlet {
       errorResponse(request, response, "badimage");
       return;
     }
-    if (parts.isEmpty()) {
+    Part fileUploadPart = null;
+    for (Part part : parts) {
+      if (part.getHeader(HttpHeaders.CONTENT_DISPOSITION) != null) {
+        fileUploadPart = part;
+        break;
+      }
+    }
+    if (fileUploadPart == null) {
       log.info("File upload was not multipart");
       errorResponse(request, response, "badimage");
-      return;
-    }
-    for (Part part : parts) {
+    } else {
       log.info("Decoding uploaded file");
-      try (InputStream is = part.getInputStream()) {
+      try (InputStream is = fileUploadPart.getInputStream()) {
         processStream(is, request, response);
       }
     }
