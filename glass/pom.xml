@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>glass</artifactId>
-  <version>0.2.1</version>
+  <version>0.2.2</version>
   <packaging>apk</packaging>
 
   <dependencies>
@@ -39,7 +39,7 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
 
   <build>
