@@ -326,7 +326,7 @@
         <plugin>
           <groupId>com.jayway.maven.plugins.android.generation2</groupId>
           <artifactId>android-maven-plugin</artifactId>
-          <version>3.9.0-rc.3</version>
+          <version>4.0.0-rc.1</version>
           <extensions>true</extensions>
           <executions>
             <execution>
@@ -352,6 +352,9 @@
             </zipalign>
             <release>false</release>
             <apkDebug>true</apkDebug>
+            <androidManifestFile>AndroidManifest.xml</androidManifestFile>
+            <resourceDirectory>res</resourceDirectory>
+            <assetsDirectory>assets</assetsDirectory>
           </configuration>
           <dependencies>
             <dependency>
