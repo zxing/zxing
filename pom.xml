@@ -47,12 +47,6 @@
         <version>18.0</version>
       </dependency>
       <dependency>
-        <groupId>javax</groupId>
-        <artifactId>javaee-web-api</artifactId>
-        <version>6.0</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
         <groupId>com.google.android</groupId>
         <artifactId>android</artifactId>
         <version>4.1.1.4</version>
@@ -278,7 +272,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>1.9.1</version>
+          <version>1.9.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
