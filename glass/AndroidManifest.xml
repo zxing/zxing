@@ -16,8 +16,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.glass"
-          android:versionCode="3"
-          android:versionName="0.2.1">
+          android:versionCode="4"
+          android:versionName="0.2.2">
 
   <uses-permission android:name="android.permission.CAMERA"/>
   <uses-permission android:name="com.google.android.glass.permission.DEVELOPMENT" />
