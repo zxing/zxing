@@ -92,7 +92,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
     output.append("MECARD:");
     maybeAppendMECARD(output, "N", name.replace(",", ""));
     maybeAppendMECARD(output, "ORG", company);
-    maybeAppendMECARD(output, "TEL", keepOnlyDigits(tel));
+    maybeAppendMECARD(output, "TEL", tel == null ? null : tel.replaceAll("[^0-9+]+", ""));
     maybeAppendMECARD(output, "URL", url);
     maybeAppendMECARD(output, "EMAIL", email);
     maybeAppendMECARD(output, "ADR", buildAddress(address, address2));
@@ -110,11 +110,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
     output.append(';');
     return output.toString();
   }
-  
-  private static String keepOnlyDigits(String s) {
-    return s == null ? null : s.replaceAll("[^0-9]+", "");
-  }
-  
+
   private static String buildAddress(String address, String address2) {
     if (!address.isEmpty()) {
       if (!address2.isEmpty()) {
