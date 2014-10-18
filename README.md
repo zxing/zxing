@@ -40,14 +40,7 @@ Ommatidia is an open-source image recognition library that scans multiple 1D bar
 
 ## Contacting
 
-Post to the [discussion forum](https://groups.google.com/group/zxing) or tag a question with [`zxing`
-on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
-
-## Etcetera
-
-[![Build Status](https://travis-ci.org/zxing/zxing.png?branch=master)](https://travis-ci.org/zxing/zxing)
-[![Coverity Status](https://scan.coverity.com/projects/1924/badge.svg)](https://scan.coverity.com/projects/1924)
-[![codecov.io](https://codecov.io/github/zxing/zxing/coverage.svg?branch=master)](https://codecov.io/github/zxing/zxing?branch=master)
 
 
-Optimized with [![JProfiler](http://www.ej-technologies.com/images/banners/jprofiler_small.png)](http://www.ej-technologies.com/products/jprofiler/overview.html)
+
+
