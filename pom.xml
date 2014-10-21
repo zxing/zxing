@@ -339,7 +339,7 @@
           </executions>
           <configuration>
             <sdk>
-              <platform>15</platform>
+              <platform>21</platform>
             </sdk>
             <proguard>
               <skip>true</skip>
@@ -361,7 +361,7 @@
             <dependency>
               <groupId>net.sf.proguard</groupId>
               <artifactId>proguard-base</artifactId>
-              <version>4.10</version>
+              <version>5.0</version>
             </dependency>
           </dependencies>
         </plugin>
