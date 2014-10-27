@@ -229,8 +229,8 @@ public final class Decoder {
     try {
       ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(gf);
       rsDecoder.decode(dataWords, numECCodewords);
-    } catch (ReedSolomonException ignored) {
-      throw FormatException.getFormatInstance();
+    } catch (ReedSolomonException ex) {
+      throw FormatException.getFormatInstance(ex);
     }
 
     // Now perform the unstuffing operation.
