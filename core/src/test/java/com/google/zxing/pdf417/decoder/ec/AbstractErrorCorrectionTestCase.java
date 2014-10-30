@@ -49,7 +49,7 @@ abstract class AbstractErrorCorrectionTestCase extends Assert {
   }
 
   static Random getRandom() {
-    return new Random(0);
+    return new Random(0xDEADBEEF);
   }
 
 }

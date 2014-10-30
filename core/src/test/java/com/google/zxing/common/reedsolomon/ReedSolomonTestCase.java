@@ -501,7 +501,7 @@ public final class ReedSolomonTestCase extends Assert {
   }
 
   private static Random getPseudoRandom() {
-    return new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
+    return new Random(0xDEADBEEF);
   }
 
 }

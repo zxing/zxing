@@ -19,11 +19,9 @@ import com.google.zxing.FormatException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.aztec.AztecDetectorResult;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.DecoderResult;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-public class DecoderTest {
+public final class DecoderTest {
 
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
 
@@ -36,8 +34,8 @@ public class DecoderTest {
    *	at com.google.zxing.aztec.decoder.Decoder.decode(Decoder.java:77)
    *	at com.google.zxing.aztec.decoder.DecoderTest.testDecodeBug1(DecoderTest.java:66)</pre>
    */
-  @Test
-  public void testDecodeTooManyErrors() {
+  @Test(expected = FormatException.class)
+  public void testDecodeTooManyErrors() throws FormatException {
     BitMatrix matrix = BitMatrix.parse(""
         + "X X . X . . . X X . . . X . . X X X . X . X X X X X . \n"
         + "X X . . X X . . . . . X X . . . X X . . . X . X . . X \n"
@@ -68,15 +66,11 @@ public class DecoderTest {
         + "X X . X . X . . . X . X . . . . X X . X . . X X . . . \n",
         "X ", ". ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
-    try {
-      DecoderResult res = new Decoder().decode(r);
-      fail();
-    } catch (FormatException ex) {
-    }
+    new Decoder().decode(r);
   }
 
-  @Test
-  public void testDecodeTooManyErrors2() {
+  @Test(expected = FormatException.class)
+  public void testDecodeTooManyErrors2() throws FormatException {
     BitMatrix matrix = BitMatrix.parse(""
         + ". X X . . X . X X . . . X . . X X X . . . X X . X X . \n"
         + "X X . X X . . X . . . X X . . . X X . X X X . X . X X \n"
@@ -107,11 +101,7 @@ public class DecoderTest {
         + "X X . . . X X . . X . X . . . . X X . X . . X . X . X \n",
         "X ", ". ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
-    try {
-      DecoderResult res = new Decoder().decode(r);
-      fail();
-    } catch (FormatException ex) {
-    }
+    new Decoder().decode(r);
   }
 
 }

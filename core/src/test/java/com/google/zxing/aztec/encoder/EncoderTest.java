@@ -27,17 +27,14 @@ import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
-import org.junit.Before;
 
 /**
  * Aztec 2D generator unit tests.
@@ -49,12 +46,6 @@ public final class EncoderTest extends Assert {
 
   private static final Pattern DOTX = Pattern.compile("[^.X]");
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
-  private static Random random;
-
-  @Before
-  public void beforeTest() {
-    random = new Random(0);
-  }
 
   // real life tests
 
@@ -513,7 +504,7 @@ public final class EncoderTest extends Assert {
   }
 
   private static Random getPseudoRandom() {
-    return random;
+    return new Random(0xDEADBEEF);
   }
 
   private static void testModeMessage(boolean compact, int layers, int words, String expected) {

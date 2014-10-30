@@ -63,7 +63,6 @@ public final class BitMatrix implements Cloneable {
   }
 
   public static BitMatrix parse(String stringRepresentation, String setString, String unsetString) {
-    int pos = 0;
     if (stringRepresentation == null) {
       throw new IllegalArgumentException();
     }
@@ -73,8 +72,10 @@ public final class BitMatrix implements Cloneable {
     int rowStartPos = 0;
     int rowLength = -1;
     int nRows = 0;
+    int pos = 0;
     while (pos < stringRepresentation.length()) {
-      if (stringRepresentation.substring(pos, pos + 1).equals("\n") || stringRepresentation.substring(pos, pos + 1).equals("\r")) {
+      if (stringRepresentation.charAt(pos) == '\n' ||
+          stringRepresentation.charAt(pos) == '\r') {
         if (bitsPos > rowStartPos) {
           if(rowLength == -1) {
             rowLength = bitsPos - rowStartPos;
@@ -97,7 +98,8 @@ public final class BitMatrix implements Cloneable {
         bits[bitsPos] = false;
         bitsPos++;
       } else {
-        throw new IllegalArgumentException("illegal character encountered: " + stringRepresentation.substring(pos));
+        throw new IllegalArgumentException(
+            "illegal character encountered: " + stringRepresentation.substring(pos));
       }
     }
 
@@ -105,15 +107,14 @@ public final class BitMatrix implements Cloneable {
     if (bitsPos > rowStartPos) {
       if(rowLength == -1) {
         rowLength = bitsPos - rowStartPos;
-      }
-      else if (bitsPos - rowStartPos != rowLength) {
+      } else if (bitsPos - rowStartPos != rowLength) {
         throw new IllegalArgumentException("row lengths do not match");
       }
       nRows++;
     }
 
     BitMatrix matrix = new BitMatrix(rowLength, nRows);
-    for (int i=0; i<bitsPos; i++) {
+    for (int i = 0; i < bitsPos; i++) {
       if (bits[i]) {
         matrix.set(i % rowLength, i / rowLength);
       }
@@ -161,17 +162,17 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
-   * <p>XOR for {@link BitMatrix}.</p>
-   * Flip the bit in this {@link BitMatrix} if the corresponding mask bit is set.
+   * Exclusive-or (XOR): Flip the bit in this {@code BitMatrix} if the corresponding
+   * mask bit is set.
    *
-   * @param mask
+   * @param mask XOR mask
    */
   public void xor(BitMatrix mask) {
     if (width != mask.getWidth() || height != mask.getHeight()
         || rowSize != mask.getRowSize()) {
       throw new IllegalArgumentException("input matrix dimensions do not match");
     }
-    BitArray rowArray = new BitArray(width/32+1);
+    BitArray rowArray = new BitArray(width / 32 + 1);
     for (int y = 0; y < height; y++) {
       int offset = y * rowSize;
       int[] row = mask.getRow(y, rowArray).getBitArray();

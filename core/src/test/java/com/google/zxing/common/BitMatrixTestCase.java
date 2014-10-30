@@ -173,7 +173,9 @@ public final class BitMatrixTestCase extends Assert {
     try {
       assertEquals(centerMatrix, BitMatrix.parse("   \n xy\n   \n", "x", " "));
       fail();
-    } catch (IllegalArgumentException ex) {}
+    } catch (IllegalArgumentException ex) {
+      // good
+    }
 
     assertEquals(emptyMatrix24, BitMatrix.parse("  \n  \n  \n  \n", "x", " "));
 
@@ -222,12 +224,16 @@ public final class BitMatrixTestCase extends Assert {
     try {
       emptyMatrix.clone().xor(badMatrix);
       fail();
-    } catch(IllegalArgumentException ex) {}
+    } catch(IllegalArgumentException ex) {
+      // good
+    }
 
     try {
       badMatrix.clone().xor(emptyMatrix);
       fail();
-    } catch(IllegalArgumentException ex) {}
+    } catch(IllegalArgumentException ex) {
+      // good
+    }
   }
 
   private static void testXOR(BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix) {

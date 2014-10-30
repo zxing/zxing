@@ -33,7 +33,7 @@ public abstract class ReaderException extends Exception {
   }
 
   ReaderException(Throwable cause) {
-      super(cause);
+    super(cause);
   }
 
   // Prevent stack traces from being taken
