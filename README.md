@@ -57,9 +57,9 @@ There are also additional modules which are contributed and/or intermittently ma
 
 | Module                                         | Description
 | ---------------------------------------------- | -----------
-| [Barcode4J](http://barcode4j.sourceforge.net/) | Encoder library in Java
-| [ZBar](http://zbar.sourceforge.net/)           | Decoder in C++, especially for iPhone
-| [Zint](http://sourceforge.net/projects/zint/)  | Barcode generator
+| [Barcode4J](http://barcode4j.sourceforge.net/) | Generator library in Java
+| [ZBar](http://zbar.sourceforge.net/)           | Reader library in C99
+| [Zint](http://sourceforge.net/projects/zint/)  | Generator library in C99
 
 ## Links
 
