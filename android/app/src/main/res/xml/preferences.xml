@@ -41,9 +41,9 @@
         android:defaultValue="false"
         android:title="@string/preferences_decode_PDF417_title"/>
      <CheckBoxPreference
-        android:key=""
+        android:key="preferences_disable_history"
         android:defaultValue="true"
-        android:title=""
+        android:title="@string/preferences_disable_history_title"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_actions_title">
     <CheckBoxPreference
