@@ -430,10 +430,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     inactivityTimer.onActivity();
     lastResult = rawResult;
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     boolean fromLiveScan = barcode != null;
     if (fromLiveScan) {
-      historyManager.addHistoryItem(rawResult, resultHandler);
+        //added to check if preference for history is off.
+        if(prefs.getBoolean(PreferencesActivity.KEY_DISABLE_HISTORY, true)) {
+            historyManager.addHistoryItem(rawResult, resultHandler);
+        }
       // Then not from history, so beep/vibrate and we have an image to draw on
       beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, scaleFactor, rawResult);
