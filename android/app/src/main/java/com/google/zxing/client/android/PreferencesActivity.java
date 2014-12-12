@@ -47,6 +47,8 @@ public final class PreferencesActivity extends Activity {
   public static final String KEY_INVERT_SCAN = "preferences_invert_scan";  
   public static final String KEY_SEARCH_COUNTRY = "preferences_search_country";
   public static final String KEY_DISABLE_AUTO_ORIENTATION = "preferences_orientation";
+  public static final String KEY_DISABLE_HISTORY = "preferences_disable_history";
+
 
   public static final String KEY_DISABLE_CONTINUOUS_FOCUS = "preferences_disable_continuous_focus";
   public static final String KEY_DISABLE_EXPOSURE = "preferences_disable_exposure";
