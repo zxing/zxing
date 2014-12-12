@@ -40,6 +40,10 @@
         android:key="preferences_decode_PDF417"
         android:defaultValue="false"
         android:title="@string/preferences_decode_PDF417_title"/>
+     <CheckBoxPreference
+        android:key=""
+        android:defaultValue="true"
+        android:title=""
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_actions_title">
     <CheckBoxPreference
