@@ -67,10 +67,12 @@ public final class DataMatrixWriter implements Writer {
       if (requestedShape != null) {
         shape = requestedShape;
       }
+      @SuppressWarnings("deprecated")
       Dimension requestedMinSize = (Dimension) hints.get(EncodeHintType.MIN_SIZE);
       if (requestedMinSize != null) {
         minSize = requestedMinSize;
       }
+      @SuppressWarnings("deprecated")
       Dimension requestedMaxSize = (Dimension) hints.get(EncodeHintType.MAX_SIZE);
       if (requestedMaxSize != null) {
         maxSize = requestedMaxSize;
