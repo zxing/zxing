@@ -70,6 +70,12 @@ public final class TextResultHandler extends ResultHandler {
   }
 
   @Override
+  public CharSequence getDisplayContents() {
+    String contents = result.getDisplayResult();
+    return contents;
+  }
+
+  @Override
   public int getDisplayTitle() {
     return R.string.result_text;
   }
