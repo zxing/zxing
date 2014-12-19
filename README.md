@@ -48,10 +48,12 @@ There are also additional modules which are contributed and/or intermittently ma
 
 ### Related third-party open source projects
 
-| Module                                             | Description
-| -------------------------------------------------- | -----------
-| [QZXing](https://sourceforge.net/projects/qzxing)  | port to Qt framework
-| [ZXing .NET](http://zxingnet.codeplex.com/)        | port to .NET and C#, and related Windows platform
+| Module                                                          | Description
+| --------------------------------------------------------------- | -----------
+| [QZXing](https://sourceforge.net/projects/qzxing)               | port to Qt framework
+| [zxing-cpp](https://github.com/glassechidna/zxing-cpp)          | port to C++ (forked from the [deprecated official C++ port](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/cpp))
+| [zxing_cpp.rb](https://github.com/glassechidna/zxing_cpp.rb)    | bindings for Ruby (not just JRuby), powered by [zxing-cpp](https://github.com/glassechidna/zxing-cpp)
+| [ZXing .NET](http://zxingnet.codeplex.com/)                     | port to .NET and C#, and related Windows platform
 
 ### Other third-party open source projects
 
