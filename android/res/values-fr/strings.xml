@@ -60,7 +60,7 @@
   <string name="menu_history">Historique</string>
   <string name="menu_settings">Paramètres</string>
   <string name="menu_share">Partager</string>
-  <string name="msg_bulk_mode_scanned">Balyage en rafale : code-barres balayés et enregistrés</string>
+  <string name="msg_bulk_mode_scanned">Balayage en rafale\u00A0: code-barres balayés et enregistrés</string>
   <string name="msg_camera_framework_bug">Désolé, la caméra Android a rencontré un problème. Un redémarrage de l\'appareil est peut-être nécessaire.</string>
   <string name="msg_default_format">Format</string>
   <string name="msg_default_meta">Métadonnées</string>
@@ -84,7 +84,7 @@
   <string name="msg_sbc_snippet_unavailable">Extrait non disponible</string>
   <string name="msg_share_explanation">Vous pouvez partager des données en affichant un code-barres sur votre écran et en le balayant avec un autre téléphone.</string>
   <string name="msg_share_text">Ou tapez du texte et appuyez sur Entrée</string>
-  <string name="msg_sure">Êtes-vous sûr ?</string>
+  <string name="msg_sure">Le voulez-vous vraiment\u00A0?</string>
   <string name="msg_unmount_usb">Désolé, la carte SD n\'est pas accessible.</string>
   <string name="preferences_actions_title">Quand un code-barres est trouvé\u2026</string>
   <string name="preferences_auto_focus_title">Utiliser la mise au point automatique</string>
@@ -92,7 +92,7 @@
   <string name="preferences_bulk_mode_summary">Balayer et enregistrer des codes-barres en rafale</string>
   <string name="preferences_bulk_mode_title">Mode de lecture en rafale</string>
   <string name="preferences_copy_to_clipboard_title">Copier dans le presse-papiers</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Remplacements : %s = contenu, %f = format, %t = type</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Remplacements\u00A0: %s = contenu, %f = format, %t = type</string>
   <string name="preferences_custom_product_search_title">URL de recherche personnalisée</string>
   <string name="preferences_decode_1D_industrial_title">1D industrielle</string>
   <string name="preferences_decode_1D_product_title">1D produit</string>
