@@ -95,12 +95,13 @@ public final class EncodeActivity extends Activity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_share:
-        share();
+	// Fix the bug of Android Studio -> switch to the if / else if
+	int id = item.getItemId();
+	if(id == R.id.menu_share){
+		share();
         return true;
-      case R.id.menu_encode:
-        Intent intent = getIntent();
+	}else if(id == R.id.menu_encode){
+		Intent intent = getIntent();
         if (intent == null) {
           return false;
         }
@@ -109,9 +110,9 @@ public final class EncodeActivity extends Activity {
         startActivity(intent);
         finish();
         return true;
-      default:
-        return false;
-    }
+	}else {
+		return false;
+	}
   }
   
   private void share() {

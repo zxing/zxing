@@ -77,12 +77,13 @@ public final class CaptureActivityHandler extends Handler {
 
   @Override
   public void handleMessage(Message message) {
-    switch (message.what) {
-      case R.id.restart_preview:
-        restartPreviewAndDecode();
-        break;
-      case R.id.decode_succeeded:
-        state = State.SUCCESS;
+	
+	// Fix the bug of Android Studio -> switch to the if / else if
+	int what = message.what;
+	if(what == R.id.restart_preview:){
+		restartPreviewAndDecode();
+	}else if(what == R.id.decode_succeeded){
+		state = State.SUCCESS;
         Bundle bundle = message.getData();
         Bitmap barcode = null;
         float scaleFactor = 1.0f;
@@ -96,18 +97,15 @@ public final class CaptureActivityHandler extends Handler {
           scaleFactor = bundle.getFloat(DecodeThread.BARCODE_SCALED_FACTOR);          
         }
         activity.handleDecode((Result) message.obj, barcode, scaleFactor);
-        break;
-      case R.id.decode_failed:
-        // We're decoding as fast as possible, so when one decode fails, start another.
+	}else if(what == R.id.decode_failed){
+		// We're decoding as fast as possible, so when one decode fails, start another.
         state = State.PREVIEW;
         cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-        break;
-      case R.id.return_scan_result:
-        activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
+	}else if(what == R.id.return_scan_result){
+		activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
         activity.finish();
-        break;
-      case R.id.launch_product_query:
-        String url = (String) message.obj;
+	}else if(what == R.id.launch_product_query){
+		String url = (String) message.obj;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -133,8 +131,7 @@ public final class CaptureActivityHandler extends Handler {
         } catch (ActivityNotFoundException ignored) {
           Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
         }
-        break;
-    }
+	}
   }
 
   public void quitSynchronously() {

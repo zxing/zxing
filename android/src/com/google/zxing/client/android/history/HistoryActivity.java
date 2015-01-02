@@ -114,9 +114,10 @@ public final class HistoryActivity extends ListActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_history_send:
-        CharSequence history = historyManager.buildHistory();
+	// Fix the bug of Android Studio -> switch to the if / else if
+	int id = item.getItemId();
+	if(id == R.id.menu_history_send){
+		CharSequence history = historyManager.buildHistory();
         Parcelable historyFile = HistoryManager.saveHistory(history.toString());
         if (historyFile == null) {
           AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -137,9 +138,8 @@ public final class HistoryActivity extends ListActivity {
             Log.w(TAG, anfe.toString());
           }
         }
-        break;
-      case R.id.menu_history_clear_text:
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	}else if(id == R.id.menu_history_clear_text){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.msg_sure);
         builder.setCancelable(true);
         builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
@@ -152,10 +152,9 @@ public final class HistoryActivity extends ListActivity {
         });
         builder.setNegativeButton(R.string.button_cancel, null);
         builder.show();
-        break;
-      default:
-        return super.onOptionsItemSelected(item);
-    }
+	}else{
+		return super.onOptionsItemSelected(item);
+	}
     return true;
   }
 
