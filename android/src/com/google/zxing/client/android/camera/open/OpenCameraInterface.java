@@ -26,11 +26,14 @@ public final class OpenCameraInterface {
   private OpenCameraInterface() {
   }
 
-  
+  /** For {@link #open(int), means no preference for which camera to open. */
+  public static final int NO_REQUESTED_CAMERA = -1;
+
   /**
    * Opens the requested camera with {@link Camera#open(int)}, if one exists.
    *
-   * @param cameraId camera ID of the camera to use. A negative value means "no preference"
+   * @param cameraId camera ID of the camera to use. A negative value
+   *  or {@link #NO_REQUESTED_CAMERA} means "no preference"
    * @return handle to {@link Camera} that was opened
    */
   public static Camera open(int cameraId) {
