@@ -75,14 +75,4 @@ public final class OpenCameraInterface {
     return camera;
   }
   
-  
-  /**
-   * Opens a rear-facing camera with {@link Camera#open(int)}, if one exists, or opens camera 0.
-   *
-   * @return handle to {@link Camera} that was opened
-   */
-  public static Camera open() {
-    return open(-1);
-  }
-
 }
