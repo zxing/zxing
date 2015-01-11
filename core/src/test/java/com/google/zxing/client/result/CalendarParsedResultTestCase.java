@@ -36,9 +36,10 @@ public final class CalendarParsedResultTestCase extends Assert {
 
   private static final double EPSILON = 0.0000000001;
 
-  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'", Locale.ENGLISH);
-  static {
-    DATE_TIME_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
+  private static DateFormat makeGMTFormat() {
+    DateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'", Locale.ENGLISH);
+    format.setTimeZone(TimeZone.getTimeZone("GMT"));
+    return format;
   }
 
   @Before
@@ -229,8 +230,9 @@ public final class CalendarParsedResultTestCase extends Assert {
     assertEquals(description, calResult.getDescription());
     assertEquals(summary, calResult.getSummary());
     assertEquals(location, calResult.getLocation());
-    assertEquals(startString, DATE_TIME_FORMAT.format(calResult.getStart()));
-    assertEquals(endString, calResult.getEnd() == null ? null : DATE_TIME_FORMAT.format(calResult.getEnd()));
+    DateFormat dateFormat = makeGMTFormat();
+    assertEquals(startString, dateFormat.format(calResult.getStart()));
+    assertEquals(endString, calResult.getEnd() == null ? null : dateFormat.format(calResult.getEnd()));
     assertEquals(organizer, calResult.getOrganizer());
     assertArrayEquals(attendees, calResult.getAttendees());
     assertEqualOrNaN(latitude, calResult.getLatitude());

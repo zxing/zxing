@@ -125,7 +125,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
   }
 
   private static void maybeAppendMECARD(StringBuilder output, String prefix, String value) {
-    if (!value.isEmpty()) {
+    if (value != null && !value.isEmpty()) {
       value = value.replaceAll("([\\\\:;])", "\\\\$1");
       value = value.replaceAll("\\n", "");
       output.append(prefix).append(':').append(value).append(';');
