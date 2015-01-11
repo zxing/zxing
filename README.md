@@ -26,6 +26,8 @@ library implemented in Java, with ports to other languages.
 | android             | Android client Barcode Scanner [![Barcode Scanner](http://www.android.com/images/brand/android_app_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
 | androidtest         | Android test app, ZXing Test
 | android-integration | Supports integration with Barcode Scanner via `Intent`
+| android-core        | Android-related code shared among `android`, `androidtest`, `glass`
+| glass               | Simple Google Glass application
 | zxingorg            | The source behind `zxing.org`
 | zxing.appspot.com   | The source behind web-based barcode generator at `zxing.appspot.com`
 
