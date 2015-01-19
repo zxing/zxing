@@ -421,7 +421,7 @@ final class PDF417HighLevelEncoder {
     StringBuilder tmp = new StringBuilder(count / 3 + 1);
     BigInteger num900 = BigInteger.valueOf(900);
     BigInteger num0 = BigInteger.valueOf(0);
-    while (idx < count) {
+    while (idx < count - 1) {
       tmp.setLength(0);
       int len = Math.min(44, count - idx);
       String part = '1' + msg.substring(startpos + idx, startpos + idx + len);
