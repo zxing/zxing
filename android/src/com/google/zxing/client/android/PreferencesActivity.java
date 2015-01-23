@@ -42,6 +42,7 @@ public final class PreferencesActivity extends Activity {
   public static final String KEY_FRONT_LIGHT_MODE = "preferences_front_light_mode";
   public static final String KEY_BULK_MODE = "preferences_bulk_mode";
   public static final String KEY_REMEMBER_DUPLICATES = "preferences_remember_duplicates";
+  public static final String KEY_ENABLE_HISTORY = "preferences_history";
   public static final String KEY_SUPPLEMENTAL = "preferences_supplemental";
   public static final String KEY_AUTO_FOCUS = "preferences_auto_focus";
   public static final String KEY_INVERT_SCAN = "preferences_invert_scan";  
