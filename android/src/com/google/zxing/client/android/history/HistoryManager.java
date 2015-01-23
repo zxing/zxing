@@ -69,9 +69,12 @@ public final class HistoryManager {
   private static final String[] ID_DETAIL_COL_PROJECTION = { DBHelper.ID_COL, DBHelper.DETAILS_COL };
 
   private final Activity activity;
+  private final boolean enableHistory;
 
   public HistoryManager(Activity activity) {
     this.activity = activity;
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    enableHistory = prefs.getBoolean(PreferencesActivity.KEY_ENABLE_HISTORY, true);
   }
 
   public boolean hasHistoryItems() {
@@ -152,7 +155,7 @@ public final class HistoryManager {
     // Do not save this item to the history if the preference is turned off, or the contents are
     // considered secure.
     if (!activity.getIntent().getBooleanExtra(Intents.Scan.SAVE_HISTORY, true) ||
-        handler.areContentsSecure()) {
+        handler.areContentsSecure() || !enableHistory) {
       return;
     }
 
