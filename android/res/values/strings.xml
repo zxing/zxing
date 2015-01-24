@@ -119,6 +119,8 @@
   <string name="preferences_play_beep_title">Beep</string>
   <string name="preferences_remember_duplicates_summary">Store multiple scans of the same barcode in History</string>
   <string name="preferences_remember_duplicates_title">Remember duplicates</string>
+  <string name="preferences_history_summary">Store your scans in History</string>
+  <string name="preferences_history_title">Add to History</string>
   <string name="preferences_result_title">Result settings</string>
   <string name="preferences_scanning_title">When scanning for barcodes, decode\u2026</string>
   <string name="preferences_search_country">Search country</string>
