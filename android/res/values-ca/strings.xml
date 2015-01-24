@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Millora l\'escaneig amb poca llum en alguns dispositius, però pot produir enlluernament. No funciona en tots els dispositius.</string>
   <string name="preferences_front_light_title">Usa el llum frontal</string>
   <string name="preferences_general_title">Configuració general</string>
+  <string name="preferences_history_summary">Emmagatzemi les seves exploracions de la història</string>
+  <string name="preferences_history_title">Afegir a la Història</string>
   <string name="preferences_invert_scan_summary">Escanejar codis de barres blanques sobre fons negre. No disponible en alguns dispositius.</string>
   <string name="preferences_invert_scan_title">Invertir exploració</string>
   <string name="preferences_name">Configuració</string>

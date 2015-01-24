@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Melhora a leitura em luz fraca em alguns telefones, mas pode causar clarões. Não disponível em certos dispositivos.</string>
   <string name="preferences_front_light_title">Usar luz da frente</string>
   <string name="preferences_general_title">Definições Gerais</string>
+  <string name="preferences_history_summary">Armazene seus scans em História</string>
+  <string name="preferences_history_title">Adicionar à História</string>
   <string name="preferences_invert_scan_summary">Procurar por códigos de barras brancos em fundo preto. Não disponível em certos dispositivos.</string>
   <string name="preferences_invert_scan_title">Inverter leitura</string>
   <string name="preferences_name">Definições</string>

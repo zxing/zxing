@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Förbättrar inskanning i svag belysing på vissa telefoner, men kan orsaka bländning. Ej tillgängligt på vissa enheter.</string>
   <string name="preferences_front_light_title">Använd frontljus</string>
   <string name="preferences_general_title">Grundläggande inställningar</string>
+  <string name="preferences_history_summary">Lagra dina skanningar i historia</string>
+  <string name="preferences_history_title">Lägg till Historia</string>
   <string name="preferences_invert_scan_summary">Skanna in vita streckkoder mot svart bakgrund. Ej tillgängligt på vissa enheter. </string>
   <string name="preferences_invert_scan_title">Invertera inskanning</string>
   <string name="preferences_name">Inställningar</string>

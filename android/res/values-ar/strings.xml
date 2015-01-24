@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">تقوم بتحسين عملية المسح في إضاءة ضعيفة في بعض الهواتف، ولكن يمكن أن يتسبب في حدوث سطوع</string>
   <string name="preferences_front_light_title">استخدم إضاءة أمامية</string>
   <string name="preferences_general_title">إعدادات عامة</string>
+  <string name="preferences_history_summary">تخزين عمليات الفحص الخاص بك في التاريخ</string>
+  <string name="preferences_history_title">أضف إلى التاريخ</string>
   <string name="preferences_invert_scan_summary">مسح الباركود لأبيض على خلفية سوداء. لا تتوفر على بعض الأجهزة.</string>
   <string name="preferences_invert_scan_title">عكس المسح الضوئي</string>
   <string name="preferences_name">إعدادات</string>

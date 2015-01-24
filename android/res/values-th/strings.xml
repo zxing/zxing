@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2014 ZXing authors
 
@@ -47,8 +47,8 @@
   <string name="contents_phone">เบอร์โทรศัพท์</string>
   <string name="contents_sms">ที่อยู่ SMS</string>
   <string name="contents_text">ข้อความธรรมดา</string>
-  <string name="history_clear_text">ล้างประวัติ</string>
   <string name="history_clear_one_history_text">ล้าง</string>
+  <string name="history_clear_text">ล้างประวัติ</string>
   <string name="history_email_title">ประวัติ Barcode Scanner</string>
   <string name="history_empty">ว่าง</string>
   <string name="history_empty_detail">ไม่มีบาร์โค้ดที่ถูกบันทึกไว้</string>
@@ -106,14 +106,16 @@
   <string name="preferences_disable_continuous_focus_title">ไม่มีการโฟกัสอย่างต่อเนื่อง</string>
   <string name="preferences_disable_exposure_title">ไม่มีการการเปิดรับแสง</string>
   <string name="preferences_disable_metering_title">ไม่มีการวัดแสง</string>
-  <string name="preferences_front_light_summary">ปรับปรุงการสแกนในที่มีแสงน้อยบนโทรศัพท์บางรุ่น แต่อาจก่อให้เกิดแสงจ้า ไม่ได้ทำงานบนโทรศัพท์ทุกรุ่น</string>
-  <string name="preferences_front_light_title">ใช้แฟลช</string>
   <string name="preferences_front_light_auto">อัตโนมัติ</string>
   <string name="preferences_front_light_off">ปิด</string>
   <string name="preferences_front_light_on">เปิด</string>
+  <string name="preferences_front_light_summary">ปรับปรุงการสแกนในที่มีแสงน้อยบนโทรศัพท์บางรุ่น แต่อาจก่อให้เกิดแสงจ้า ไม่ได้ทำงานบนโทรศัพท์ทุกรุ่น</string>
+  <string name="preferences_front_light_title">ใช้แฟลช</string>
   <string name="preferences_general_title">การตั้งค่าทั่วไป</string>
+  <string name="preferences_history_summary">เก็บภาพสแกนในประวัติศาสตร์</string>
+  <string name="preferences_history_title">เพิ่มลงในประวัติศาสตร์</string>
+  <string name="preferences_invert_scan_summary">สแกนบาร์โค้ดสีขาวบนพื้นหลังสีดำ ไม่สามารถใช้ได้บนบางอุปกรณ์</string>
   <string name="preferences_invert_scan_title">สลับการสแกน</string>
-  <string name="preferences_invert_scan_summary">สแกนบาร์โค้ดสีขาวบนพื้นหลังสีดำ ไม่สามารถใช้ได้บนบางอุปกรณ์</string>  
   <string name="preferences_name">การตั้งค่า</string>
   <string name="preferences_orientation_title">ไม่มีการหมุนอัตโนมัติ</string>
   <string name="preferences_play_beep_title">เสียงเตือน</string>

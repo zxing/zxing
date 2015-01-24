@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">改善在低光源的環境下掃描的成功率，但有可能造成過度曝光的現象</string>
   <string name="preferences_front_light_title">使用前光源</string>
   <string name="preferences_general_title">一般設定</string>
+  <string name="preferences_history_summary">存儲在歷史的掃描</string>
+  <string name="preferences_history_title">加入歷史</string>
   <string name="preferences_invert_scan_summary">掃描黑底白字的條碼（某些設備上無法使用）</string>
   <string name="preferences_invert_scan_title">黑底白字掃描</string>
   <string name="preferences_name">設定</string>

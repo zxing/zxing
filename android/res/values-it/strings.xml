@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Migliora la scansione con poca luminosità su alcuni telefoni, ma può provocare abbagliamento. Non funziona su tutti i telefoni.</string>
   <string name="preferences_front_light_title">Usa luce frontale</string>
   <string name="preferences_general_title">Impostazioni generali</string>
+  <string name="preferences_history_summary">Mantieni le tue scansioni nella Cronologia</string>
+  <string name="preferences_history_title">Aggiungi alla Cronologia</string>
   <string name="preferences_invert_scan_summary">Scansione dei codici a barre bianche su sfondo nero. Non disponibile su alcuni dispositivi.</string>
   <string name="preferences_invert_scan_title">Invertire la scansione</string>
   <string name="preferences_name">Impostazioni</string>
@@ -119,8 +121,6 @@
   <string name="preferences_play_beep_title">Suona</string>
   <string name="preferences_remember_duplicates_summary">Mantieni scansioni multiple del codice a barre nella stessa Cronologia</string>
   <string name="preferences_remember_duplicates_title">Ricorda duplicati</string>
-  <string name="preferences_history_summary">Mantieni le tue scansioni nella Cronologia</string>
-  <string name="preferences_history_title">Aggiungi alla Cronologia</string>
   <string name="preferences_result_title">Impostazioni risultato</string>
   <string name="preferences_scanning_title">Durante la scansione di codici a barre, decodifica\u2026</string>
   <string name="preferences_search_country">Cerca paese</string>

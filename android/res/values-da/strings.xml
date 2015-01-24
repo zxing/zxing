@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Forbedrer aflæsning i svagt lys på nogle telefoner, men kan medføre genskær. Virker ikke på alle telefoner.</string>
   <string name="preferences_front_light_title">Brug frontlys</string>
   <string name="preferences_general_title">Generelle indstillinger</string>
+  <string name="preferences_history_summary">Gem dine scanninger i Historie</string>
+  <string name="preferences_history_title">Tilføj til Historie</string>
   <string name="preferences_invert_scan_summary">Scan for hvide stregkoder på sort baggrund. Ikke tilgængelig på nogle enheder.</string>
   <string name="preferences_invert_scan_title">Inverter scanning</string>
   <string name="preferences_name">Indstillinger</string>

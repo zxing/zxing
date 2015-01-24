@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Verbessert bei einigen Mobiltelefonen das Scannen bei schwachem Licht, kann aber Überbelichtung verursachen. Funktioniert nicht mit allen Handys.</string>
   <string name="preferences_front_light_title">Foto LED einschalten</string>
   <string name="preferences_general_title">Allgemeine Einstellungen</string>
+  <string name="preferences_history_summary">Speichern Sie Ihre Scans im Verlauf</string>
+  <string name="preferences_history_title">Speichern im Verlauf</string>
   <string name="preferences_invert_scan_summary">Für weiße Barcodes auf schwarzem Hintergrund. Nicht bei allen Geräten verfügbar.</string>
   <string name="preferences_invert_scan_title">Negativ-Scan</string>
   <string name="preferences_name">Einstellungen</string>

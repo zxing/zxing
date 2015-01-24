@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Покращує розпізнавання при поганому освітлення, але може викликати відблиски. Працює не на всіх пристроях.</string>
   <string name="preferences_front_light_title">Ліхтарик</string>
   <string name="preferences_general_title">Загальні налаштування</string>
+  <string name="preferences_history_summary">Зберігайте ваші скани в історії</string>
+  <string name="preferences_history_title">Додати в історії</string>
   <string name="preferences_invert_scan_summary">Сканування білих штрих-кодів на чорному фоні. Не працює на деяких пристроях.</string>
   <string name="preferences_invert_scan_title">Інвертувати</string>
   <string name="preferences_name">Налаштування</string>
