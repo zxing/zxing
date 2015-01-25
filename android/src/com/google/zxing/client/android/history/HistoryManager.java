@@ -268,13 +268,14 @@ public final class HistoryManager {
    * and double-quoted. Double-quotes within values are escaped with a sequence of two
    * double-quotes. The fields output are:</p>
    *
-   * <ul>
+   * <ol>
    *  <li>Raw text</li>
    *  <li>Display text</li>
    *  <li>Format (e.g. QR_CODE)</li>
-   *  <li>Timestamp</li>
+   *  <li>Unix timestamp (milliseconds since the epoch)</li>
    *  <li>Formatted version of timestamp</li>
-   * </ul>
+   *  <li>Supplemental info (e.g. price info for a product barcode)</li>
+   * </ol>
    */
   CharSequence buildHistory() {
     SQLiteOpenHelper helper = new DBHelper(activity);
