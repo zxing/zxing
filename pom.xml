@@ -367,7 +367,7 @@
             <dependency>
               <groupId>net.sf.proguard</groupId>
               <artifactId>proguard-base</artifactId>
-              <version>5.0</version>
+              <version>5.2</version>
             </dependency>
           </dependencies>
         </plugin>
