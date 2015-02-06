@@ -325,6 +325,12 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("238 9 10 104 141 254 50 129", visualized);
   }
 
+  @Test
+  public void testX12Unlatch2() {
+    String visualized = encodeHighLevel("*DTCP0");
+    assertEquals("238 9 10 104 141", visualized);
+  }
+
   @Test  
   public void testBug3048549() {
     //There was an IllegalArgumentException for an illegal character here because
