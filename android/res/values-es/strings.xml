@@ -51,7 +51,7 @@
   <string name="history_clear_text">Borrar historial</string>
   <string name="history_email_title">Historial de Escáner de código de barras</string>
   <string name="history_empty">Vacío</string>
-  <string name="history_empty_detail">Ningún escanea de códigos de barras se han registrado aún</string>
+  <string name="history_empty_detail">Ninguna lectura de código de barras se ha registrado aún</string>
   <string name="history_send">Enviar historial</string>
   <string name="history_title">Historial</string>
   <string name="menu_encode_mecard">Usar MECARD</string>
