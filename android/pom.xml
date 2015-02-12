@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>android</artifactId>
-  <version>4.7.1</version>
+  <version>4.7.2</version>
   <packaging>apk</packaging>
 
   <dependencies>
@@ -46,7 +46,7 @@
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
-        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+        <groupId>com.simpligility.maven.plugins</groupId>
         <artifactId>android-maven-plugin</artifactId>
       </plugin>
       <plugin>
