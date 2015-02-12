@@ -26,7 +26,7 @@ public final class OpenCameraInterface {
   private OpenCameraInterface() {
   }
 
-  /** For {@link #open(int), means no preference for which camera to open. */
+  /** For {@link #open(int)}, means no preference for which camera to open. */
   public static final int NO_REQUESTED_CAMERA = -1;
 
   /**

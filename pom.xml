@@ -99,25 +99,6 @@
     <zxing.version>3.1.1-SNAPSHOT</zxing.version>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>central</id>
-      <url>https://repo1.maven.org/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>central</id>
-      <url>https://repo1.maven.org/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
-
   <build>
     <plugins>
       <plugin>
@@ -253,6 +234,28 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jarsigner-plugin</artifactId>
           <version>1.3.2</version>
+          <executions>
+            <execution>
+              <id>signing</id>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+              <phase>package</phase>
+              <configuration>
+                <includes>
+                  <include>target/*.apk</include>
+                </includes>
+                <keystore>../private/ZXing.keystore</keystore>
+                <alias>zxing</alias>
+                <arguments>
+                  <argument>-sigalg</argument>
+                  <argument>MD5withRSA</argument>
+                  <argument>-digestalg</argument>
+                  <argument>SHA1</argument>
+                </arguments>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -364,7 +367,7 @@
             <dependency>
               <groupId>net.sf.proguard</groupId>
               <artifactId>proguard-base</artifactId>
-              <version>5.0</version>
+              <version>5.2</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -620,28 +623,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jarsigner-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>signing</id>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-                <phase>package</phase>
-                <configuration>
-                  <includes>
-                    <include>target/*.apk</include>
-                  </includes>
-                  <keystore>../private/ZXing.keystore</keystore>
-                  <alias>zxing</alias>
-                  <arguments>
-                    <argument>-sigalg</argument>
-                    <argument>MD5withRSA</argument>
-                    <argument>-digestalg</argument>
-                    <argument>SHA1</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
           </plugin>
           <plugin>
             <groupId>com.jayway.maven.plugins.android.generation2</groupId>
