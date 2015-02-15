@@ -19,7 +19,7 @@
 
   <groupId>com.google.zxing</groupId>
   <artifactId>zxing-parent</artifactId>
-  <version>3.1.1-SNAPSHOT</version>
+  <version>3.2.0</version>
   <packaging>pom</packaging>
 
   <dependencyManagement>
@@ -96,7 +96,7 @@
     <java.version>1.7</java.version>
     <slf4j.version>1.7.10</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
-    <zxing.version>3.1.1-SNAPSHOT</zxing.version>
+    <zxing.version>3.2.0</zxing.version>
   </properties>
 
   <build>
@@ -566,7 +566,7 @@
     <connection>scm:git:https://github.com/zxing/zxing.git</connection>
     <developerConnection>scm:git:https://github.com/zxing/zxing.git</developerConnection>
     <url>scm:git:https://github.com/zxing/zxing.git</url>
-    <tag>HEAD</tag>
+    <tag>zxing-3.2.0</tag>
   </scm>
 
   <prerequisites>
