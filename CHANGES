@@ -346,7 +346,7 @@
   - Retire actionscript port
   - Small bug fixes
 
-3.2.0 (15 Feb 2014)
+3.2.0 (15 Feb 2015)
 
   - Several bug fixes, especially for Data Matrix and PDF417 parsing
   - Retired jruby binding
