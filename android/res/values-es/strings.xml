@@ -110,7 +110,7 @@
   <string name="preferences_front_light_off">Inactivo</string>
   <string name="preferences_front_light_on">Activo</string>
   <string name="preferences_front_light_summary">Mejora la exploración en condiciones de poca luz en algunos teléfonos, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
-  <string name="preferences_front_light_title">Utilizar luz delantera</string>
+  <string name="preferences_front_light_title">Utilizar flash</string>
   <string name="preferences_general_title">Configuración general</string>
   <string name="preferences_history_summary">Almacene escáneres en la historia</string>
   <string name="preferences_history_title">Añadir a Historia</string>
