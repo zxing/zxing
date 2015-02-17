@@ -112,8 +112,8 @@
   <string name="preferences_front_light_summary">Améliore le balayage lors d\'une faible luminosité sur certains téléphone, mais peut causer un reflet. Ne fonctionne pas sur tous les téléphones.</string>
   <string name="preferences_front_light_title">Utiliser la lumière frontale</string>
   <string name="preferences_general_title">Paramètres généraux</string>
-  <string name="preferences_history_summary">Stockez vos scans dans l\'histoire</string>
-  <string name="preferences_history_title">Ajouter à Histoire</string>
+  <string name="preferences_history_summary">Stockez vos scans dans l\'historique</string>
+  <string name="preferences_history_title">Ajouter à l\'historique</string>
   <string name="preferences_invert_scan_summary">Balayer des codes-barres blancs sur fond noir. Non disponible sur certains appareils.</string>
   <string name="preferences_invert_scan_title">Balayage négatif</string>
   <string name="preferences_name">Paramètres</string>
