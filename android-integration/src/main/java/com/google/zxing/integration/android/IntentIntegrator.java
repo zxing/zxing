@@ -106,6 +106,7 @@ import android.util.Log;
  * @author Isaac Potoczny-Jones
  * @author Brad Drehmer
  * @author gcstang
+ * @author Esteban Maringolo
  */
 public class IntentIntegrator {
 
@@ -413,24 +414,45 @@ public class IntentIntegrator {
    *  the fields will be null.
    */
   public static IntentResult parseActivityResult(int requestCode, int resultCode, Intent intent) {
-    if (requestCode == REQUEST_CODE) {
-      if (resultCode == Activity.RESULT_OK) {
-        String contents = intent.getStringExtra("SCAN_RESULT");
-        String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
-        byte[] rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
-        int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
-        Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
-        String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
-        return new IntentResult(contents,
-                                formatName,
-                                rawBytes,
-                                orientation,
-                                errorCorrectionLevel);
-      }
-      return new IntentResult();
-    }
-    return null;
+    return parseActivityResult(requestCode, resultCode, intent, true);
   }
+
+
+    /**
+     * <p>Call this from your {@link Activity}'s
+     * {@link Activity#onActivityResult(int, int, Intent)} method.</p>
+     *
+     * @param requestCode request code from {@code onActivityResult()}
+     * @param resultCode result code from {@code onActivityResult()}
+     * @param intent {@link Intent} from {@code onActivityResult()}
+     * @param useStaticRequestCode flag to determine whether to check against receiver's static {@link #REQUEST_CODE}*
+     * @return null if the event handled here was not related to this class, or
+     *  else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
+     *  the fields will be null.
+     */
+    public static IntentResult parseActivityResult(int requestCode, int resultCode, Intent intent, boolean useStaticRequestCode ) {
+        if (useStaticRequestCode && requestCode != REQUEST_CODE) {
+            return null;
+        } else {
+            if (resultCode == Activity.RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                byte[] rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
+                int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
+                Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
+                String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
+                return new IntentResult(contents,
+                        formatName,
+                        rawBytes,
+                        orientation,
+                        errorCorrectionLevel);
+            } else {
+                return new IntentResult();
+            }
+        }
+    }
+
+
 
 
   /**
