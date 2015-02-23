@@ -414,9 +414,13 @@ public final class BitMatrix implements Cloneable {
   }
 
   public String toString(String setString, String unsetString) {
-    return toString(setString, unsetString, System.lineSeparator());
+    return toString(setString, unsetString, "\n");
   }
-  
+
+  /**
+   * @deprecated call {@link #toString(String,String)} only, which uses \n line separator always
+   */
+  @Deprecated
   public String toString(String setString, String unsetString, String lineSeparator) {
     StringBuilder result = new StringBuilder(height * (width + 1));
     for (int y = 0; y < height; y++) {
