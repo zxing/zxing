@@ -179,7 +179,7 @@ public final class BitMatrixTestCase extends Assert {
 
     assertEquals(emptyMatrix24, BitMatrix.parse("  \n  \n  \n  \n", "x", " "));
 
-    assertEquals(centerMatrix, BitMatrix.parse(centerMatrix.toString("x", ".", "\n"), "x", "."));
+    assertEquals(centerMatrix, BitMatrix.parse(centerMatrix.toString("x", "."), "x", "."));
   }
 
   @Test
