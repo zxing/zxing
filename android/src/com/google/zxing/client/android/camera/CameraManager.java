@@ -52,7 +52,7 @@ public final class CameraManager {
   private Rect framingRectInPreview;
   private boolean initialized;
   private boolean previewing;
-  private int requestedCameraId = -1;
+  private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
   private int requestedFramingRectWidth;
   private int requestedFramingRectHeight;
   /**
@@ -76,13 +76,8 @@ public final class CameraManager {
   public synchronized void openDriver(SurfaceHolder holder) throws IOException {
     Camera theCamera = camera;
     if (theCamera == null) {
-	  
-      if (requestedCameraId >= 0) {
-        theCamera = OpenCameraInterface.open(requestedCameraId);
-      } else {
-        theCamera = OpenCameraInterface.open();
-      }
-      
+
+      theCamera = OpenCameraInterface.open(requestedCameraId);
       if (theCamera == null) {
         throw new IOException();
       }
@@ -280,11 +275,7 @@ public final class CameraManager {
    * @param cameraId camera ID of the camera to use. A negative value means "no preference".
    */
   public synchronized void setManualCameraId(int cameraId) {
-    if (initialized) {
-      throw new IllegalStateException();
-    } else {
-      requestedCameraId = cameraId;
-    }
+    requestedCameraId = cameraId;
   }
   
   /**

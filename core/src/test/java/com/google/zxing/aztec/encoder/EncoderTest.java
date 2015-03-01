@@ -27,12 +27,10 @@ import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
@@ -127,23 +125,24 @@ public final class EncoderTest extends Assert {
           "X       X           X   X   X     X X   X               X     X     X X X         \n");
   }
 
-  @Ignore("Flaky test for unknown reasons -- disabling for now")
   @Test
   public void testAztecWriter() throws Exception {
-    testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
-    testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
-    testWriter("\u20AC 1 sample data.", "UTF-8",  25, true, 2);
-    testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
-    testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
-    testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
-    // Test AztecWriter defaults
-    String data = "In ut magna vel mauris malesuada";
-    AztecWriter writer = new AztecWriter();
-    BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-    AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1),
-        Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
-    BitMatrix expectedMatrix = aztec.getMatrix();
-    assertEquals(matrix, expectedMatrix);
+    for (int i = 0; i < 1000; i++) {
+      testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
+      testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
+      testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
+      testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
+      testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
+      testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
+      // Test AztecWriter defaults
+      String data = "In ut magna vel mauris malesuada";
+      AztecWriter writer = new AztecWriter();
+      BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
+      AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1),
+          Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
+      BitMatrix expectedMatrix = aztec.getMatrix();
+      assertEquals(matrix, expectedMatrix);
+    }
   }
   
   // synthetic tests (encode-decode round-trip)
@@ -486,8 +485,8 @@ public final class EncoderTest extends Assert {
         new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     DecoderResult res = new Decoder().decode(r);
     assertEquals(expectedData, res.getText());
-    // Check error correction by introducing up to eccPercent errors
-    int ecWords = aztec.getCodeWords() * eccPercent / 100;
+    // Check error correction by introducing up to eccPercent/2 errors
+    int ecWords = aztec.getCodeWords() * eccPercent / 100 / 2;
     Random random = getPseudoRandom();
     for (int i = 0; i < ecWords; i++) {
       // don't touch the core
@@ -505,7 +504,7 @@ public final class EncoderTest extends Assert {
   }
 
   private static Random getPseudoRandom() {
-    return new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
+    return new Random(0xDEADBEEF);
   }
 
   private static void testModeMessage(boolean compact, int layers, int words, String expected) {

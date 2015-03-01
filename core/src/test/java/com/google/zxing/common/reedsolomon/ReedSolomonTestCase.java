@@ -394,7 +394,7 @@ public final class ReedSolomonTestCase extends Assert {
     testEncodeDecodeRandom(GenericGF.AZTEC_DATA_12, 3072, 1023);
   }
 
-  private static void corrupt(int[] received, int howMany, Random random, int max) {
+  public static void corrupt(int[] received, int howMany, Random random, int max) {
     BitSet corrupted = new BitSet(received.length);
     for (int j = 0; j < howMany; j++) {
       int location = random.nextInt(received.length);
@@ -501,7 +501,7 @@ public final class ReedSolomonTestCase extends Assert {
   }
 
   private static Random getPseudoRandom() {
-    return new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
+    return new Random(0xDEADBEEF);
   }
 
 }

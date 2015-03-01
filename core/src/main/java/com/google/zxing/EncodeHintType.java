@@ -44,12 +44,19 @@ public enum EncodeHintType {
 
   /**
    * Specifies a minimum barcode size (type {@link Dimension}). Only applicable to Data Matrix now.
+   *
+   * @deprecated use width/height params in
+   * {@link com.google.zxing.datamatrix.DataMatrixWriter#encode(String, BarcodeFormat, int, int)}
    */
+  @Deprecated
   MIN_SIZE,
 
   /**
    * Specifies a maximum barcode size (type {@link Dimension}). Only applicable to Data Matrix now.
+   *
+   * @deprecated without replacement
    */
+  @Deprecated
   MAX_SIZE,
 
   /**

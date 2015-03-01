@@ -45,8 +45,10 @@ import java.io.IOException;
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
+  private static final String SCAN_ACTION = "com.google.zxing.client.android.SCAN";
 
   private boolean hasSurface;
+  private boolean returnResult;
   private SurfaceHolder holderWithCallback;
   private Camera camera;
   private DecodeRunnable decodeRunnable;
@@ -55,6 +57,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
+
+    // returnResult should be true if activity was started using 
+    // startActivityForResult() with SCAN_ACTION intent
+    Intent intent = getIntent();
+    returnResult = intent != null && SCAN_ACTION.equals(intent.getAction());
+
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     setContentView(R.layout.capture);
@@ -156,12 +164,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   void setResult(Result result) {
-    TextView statusView = (TextView) findViewById(R.id.status_view);
-    String text = result.getText();
-    statusView.setText(text);
-    statusView.setTextSize(TypedValue.COMPLEX_UNIT_SP, Math.max(14, 72 - text.length() / 2));
-    statusView.setVisibility(View.VISIBLE);
-    this.result = result;
+    if (returnResult) {
+      Intent scanResult = new Intent("com.google.zxing.client.android.SCAN");
+      scanResult.putExtra("SCAN_RESULT", result.getText());
+      setResult(RESULT_OK, scanResult);
+      finish();
+    } else {
+      TextView statusView = (TextView) findViewById(R.id.status_view);
+      String text = result.getText();
+      statusView.setText(text);
+      statusView.setTextSize(TypedValue.COMPLEX_UNIT_SP, Math.max(14, 56 - text.length() / 4));
+      statusView.setVisibility(View.VISIBLE);
+      this.result = result;
+    }
   }
 
   private void handleResult(Result result) {
@@ -176,7 +191,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     startActivity(intent);
   }
 
-  private void reset() {
+  private synchronized void reset() {
     TextView statusView = (TextView) findViewById(R.id.status_view);
     statusView.setVisibility(View.GONE);
     result = null;

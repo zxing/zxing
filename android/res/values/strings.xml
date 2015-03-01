@@ -112,6 +112,8 @@
   <string name="preferences_front_light_off">Off</string>
   <string name="preferences_front_light_on">On</string>
   <string name="preferences_general_title">General settings</string>
+  <string name="preferences_history_summary">Store your scans in History</string>
+  <string name="preferences_history_title">Add to History</string>
   <string name="preferences_invert_scan_title">Invert scan</string>
   <string name="preferences_invert_scan_summary">Scan for white barcodes on black background. Not available on some devices.</string>  
   <string name="preferences_name">Settings</string>

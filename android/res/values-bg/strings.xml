@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Подобрява четенето при лошо осветление, но предизвиква отблясъци. Само за някои модели.</string>
   <string name="preferences_front_light_title">Използвай фенерче</string>
   <string name="preferences_general_title">Общи настройки</string>
+  <string name="preferences_history_summary">Съхранявайте сканирания в историята</string>
+  <string name="preferences_history_title">Добави към История</string>
   <string name="preferences_invert_scan_summary">Сканиране за бели баркодове на черен фон. Не е на разположение на някои устройства.</string>
   <string name="preferences_invert_scan_title">Обръщане на сканиране</string>
   <string name="preferences_name">Настройки</string>

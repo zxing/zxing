@@ -25,17 +25,14 @@
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>core</artifactId>
-      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>android-integration</artifactId>
-      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>android-core</artifactId>
-      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.android</groupId>
@@ -46,15 +43,22 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.2.1-SNAPSHOT</version>
   </parent>
 
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
-        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+        <groupId>com.simpligility.maven.plugins</groupId>
         <artifactId>android-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
       </plugin>
     </plugins>
   </build>

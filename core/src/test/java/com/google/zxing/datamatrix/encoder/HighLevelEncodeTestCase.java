@@ -16,8 +16,11 @@
 
 package com.google.zxing.datamatrix.encoder;
 
+import java.nio.charset.StandardCharsets;
+
 import junit.framework.ComparisonFailure;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -316,6 +319,18 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("240 13 33 88 181 64 78 124 59 105 105 105", visualized);
   }
 
+  @Test
+  public void testX12Unlatch() {
+    String visualized = encodeHighLevel("*DTCP01");
+    assertEquals("238 9 10 104 141 254 50 129", visualized);
+  }
+
+  @Test
+  public void testX12Unlatch2() {
+    String visualized = encodeHighLevel("*DTCP0");
+    assertEquals("238 9 10 104 141", visualized);
+  }
+
   @Test  
   public void testBug3048549() {
     //There was an IllegalArgumentException for an illegal character here because
@@ -334,14 +349,13 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("236 185 185 29 196 196 129 56", visualized);
   }
 
-  // Not passing?
-  /*
+  @Ignore
   @Test  
   public void testDataURL() {
 
     byte[] data = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A,
         0x7E, 0x7F, (byte) 0x80, (byte) 0x81, (byte) 0x82};
-    String expected = encodeHighLevel(new String(data, StandardCharsets.ISO-8859-1)));
+    String expected = encodeHighLevel(new String(data, StandardCharsets.ISO_8859_1));
     String visualized = encodeHighLevel("url(data:text/plain;charset=iso-8859-1,"
                                             + "%00%01%02%03%04%05%06%07%08%09%0A%7E%7F%80%81%82)");
     assertEquals(expected, visualized);
@@ -350,7 +364,6 @@ public final class HighLevelEncodeTestCase extends Assert {
     visualized = encodeHighLevel("url(data:;base64,flRlc3R+)");
     assertEquals("127 85 102 116 117 127 129 56", visualized);
   }
-   */
 
   private static String encodeHighLevel(String msg) {
     CharSequence encoded = HighLevelEncoder.encodeHighLevel(msg);

@@ -23,6 +23,7 @@ import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
 
 import java.util.Map;
 
@@ -58,30 +59,33 @@ public final class ByQuadrantReader implements Reader {
     int halfWidth = width / 2;
     int halfHeight = height / 2;
 
-    BinaryBitmap topLeft = image.crop(0, 0, halfWidth, halfHeight);
     try {
-      return delegate.decode(topLeft, hints);
+      // No need to call makeAbsolute as results will be relative to original top left here
+      return delegate.decode(image.crop(0, 0, halfWidth, halfHeight), hints);
     } catch (NotFoundException re) {
       // continue
     }
 
-    BinaryBitmap topRight = image.crop(halfWidth, 0, halfWidth, halfHeight);
     try {
-      return delegate.decode(topRight, hints);
+      Result result = delegate.decode(image.crop(halfWidth, 0, halfWidth, halfHeight), hints);
+      makeAbsolute(result.getResultPoints(), halfWidth, 0);
+      return result;
     } catch (NotFoundException re) {
       // continue
     }
 
-    BinaryBitmap bottomLeft = image.crop(0, halfHeight, halfWidth, halfHeight);
     try {
-      return delegate.decode(bottomLeft, hints);
+      Result result = delegate.decode(image.crop(0, halfHeight, halfWidth, halfHeight), hints);
+      makeAbsolute(result.getResultPoints(), 0, halfHeight);
+      return result;
     } catch (NotFoundException re) {
       // continue
     }
 
-    BinaryBitmap bottomRight = image.crop(halfWidth, halfHeight, halfWidth, halfHeight);
     try {
-      return delegate.decode(bottomRight, hints);
+      Result result = delegate.decode(image.crop(halfWidth, halfHeight, halfWidth, halfHeight), hints);
+      makeAbsolute(result.getResultPoints(), halfWidth, halfHeight);
+      return result;
     } catch (NotFoundException re) {
       // continue
     }
@@ -89,12 +93,23 @@ public final class ByQuadrantReader implements Reader {
     int quarterWidth = halfWidth / 2;
     int quarterHeight = halfHeight / 2;
     BinaryBitmap center = image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
-    return delegate.decode(center, hints);
+    Result result = delegate.decode(center, hints);
+    makeAbsolute(result.getResultPoints(), quarterWidth, quarterHeight);
+    return result;
   }
 
   @Override
   public void reset() {
     delegate.reset();
+  }
+
+  private static void makeAbsolute(ResultPoint[] points, int leftOffset, int topOffset) {
+    if (points != null) {
+      for (int i = 0; i < points.length; i++) {
+        ResultPoint relative = points[i];
+        points[i] = new ResultPoint(relative.getX() + leftOffset, relative.getY() + topOffset);
+      }
+    }
   }
 
 }

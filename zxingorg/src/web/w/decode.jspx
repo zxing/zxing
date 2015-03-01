@@ -27,7 +27,7 @@
   <body>
     <div id="main">
       <div id="header">
-        <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> ZXing Decoder Online</h1>
+        <h1><img src="zxing-icon.png" id="icon" alt=""/> ZXing Decoder Online</h1>
       </div>
       <p>Decode a 1D or 2D barcode from an image on the web. Supported formats include:</p>
       <table><tr>

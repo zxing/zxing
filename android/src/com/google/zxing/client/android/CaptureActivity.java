@@ -136,8 +136,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     setContentView(R.layout.capture);
 
     hasSurface = false;
-    historyManager = new HistoryManager(this);
-    historyManager.trimHistory();
     inactivityTimer = new InactivityTimer(this);
     beepManager = new BeepManager(this);
     ambientLightManager = new AmbientLightManager(this);
@@ -148,6 +146,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   protected void onResume() {
     super.onResume();
+    
+    // historyManager must be initialized here to update the history preference
+    historyManager = new HistoryManager(this);
+    historyManager.trimHistory();
 
     // CameraManager must be initialized here, not in onCreate(). This is necessary because we don't
     // want to open the camera driver and measure the screen size if we're going to show the help on
@@ -196,6 +198,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
 
     source = IntentSource.NONE;
+    sourceUrl = null;
+    scanFromWebPageManager = null;
     decodeFormats = null;
     characterSet = null;
 
@@ -218,7 +222,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             cameraManager.setManualFramingRect(width, height);
           }
         }
-		
+
         if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
           int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
           if (cameraId >= 0) {
@@ -292,6 +296,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ambientLightManager.stop();
     beepManager.close();
     cameraManager.closeDriver();
+    //historyManager = null; // Keep for onActivityResult
     if (!hasSurface) {
       SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -678,6 +683,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
       if (scanFromWebPageManager != null && scanFromWebPageManager.isScanFromWebPage()) {
         String replyURL = scanFromWebPageManager.buildReplyURL(rawResult, resultHandler);
+        scanFromWebPageManager = null;
         sendReplyMessage(R.id.launch_product_query, replyURL, resultDurationMS);
       }
       

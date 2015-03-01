@@ -25,9 +25,7 @@ import com.google.zxing.common.CharacterSetECI;
 
 import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
@@ -127,7 +125,7 @@ final class PDF417HighLevelEncoder {
   private static final byte[] MIXED = new byte[128];
   private static final byte[] PUNCTUATION = new byte[128];
 
-  private static final List<String> DEFAULT_ENCODING_NAMES = Arrays.asList("Cp437", "IBM437");
+  private static final Charset DEFAULT_ENCODING = Charset.forName("ISO-8859-1");
 
   private PDF417HighLevelEncoder() {
   }
@@ -166,7 +164,9 @@ final class PDF417HighLevelEncoder {
     //the codewords 0..928 are encoded as Unicode characters
     StringBuilder sb = new StringBuilder(msg.length());
 
-    if (encoding != null && !DEFAULT_ENCODING_NAMES.contains(encoding.name())) {
+    if (encoding == null) {
+      encoding = DEFAULT_ENCODING;
+    } else if (!DEFAULT_ENCODING.equals(encoding)) {
       CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding.name());
       if (eci != null) {
         encodingECI(eci.getValue(), sb);
@@ -183,7 +183,7 @@ final class PDF417HighLevelEncoder {
       encodeText(msg, p, len, sb, textSubMode);
 
     } else if (compaction == Compaction.BYTE) {
-      bytes = toBytes(msg, encoding);
+      bytes = msg.getBytes(encoding);
       encodeBinary(bytes, p, bytes.length, BYTE_COMPACTION, sb);
 
     } else if (compaction == Compaction.NUMERIC) {
@@ -212,7 +212,7 @@ final class PDF417HighLevelEncoder {
             p += t;
           } else {
             if (bytes == null) {
-              bytes = toBytes(msg, encoding);
+              bytes = msg.getBytes(encoding);
             }
             int b = determineConsecutiveBinaryCount(msg, bytes, p);
             if (b == 0) {
@@ -234,24 +234,6 @@ final class PDF417HighLevelEncoder {
     }
 
     return sb.toString();
-  }
-
-  private static byte[] toBytes(String msg, Charset encoding) throws WriterException {
-    // Defer instantiating default Charset until needed, since it may be for an unsupported
-    // encoding. For example the default of Cp437 doesn't seem to exist on Android.
-    if (encoding == null) {
-      for (String encodingName : DEFAULT_ENCODING_NAMES) {
-        try {
-          encoding = Charset.forName(encodingName);
-        } catch (UnsupportedCharsetException uce) {
-          // continue
-        }
-      }
-      if (encoding == null) {
-        throw new WriterException("No support for any encoding: " + DEFAULT_ENCODING_NAMES);
-      }
-    }
-    return msg.getBytes(encoding);
   }
 
   /**
@@ -439,7 +421,7 @@ final class PDF417HighLevelEncoder {
     StringBuilder tmp = new StringBuilder(count / 3 + 1);
     BigInteger num900 = BigInteger.valueOf(900);
     BigInteger num0 = BigInteger.valueOf(0);
-    while (idx < count - 1) {
+    while (idx < count) {
       tmp.setLength(0);
       int len = Math.min(44, count - idx);
       String part = '1' + msg.substring(startpos + idx, startpos + idx + len);
@@ -570,18 +552,6 @@ final class PDF417HighLevelEncoder {
         ch = msg.charAt(i);
       }
       if (numericCount >= 13) {
-        return idx - startpos;
-      }
-      int textCount = 0;
-      while (textCount < 5 && isText(ch)) {
-        textCount++;
-        int i = idx + textCount;
-        if (i >= len) {
-          break;
-        }
-        ch = msg.charAt(i);
-      }
-      if (textCount >= 5) {
         return idx - startpos;
       }
       ch = msg.charAt(idx);

@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">कुछ फोन पर कम रोशनी में स्कैनिंग बढ़ाता है, लेकिन चमक का कारण हो सकता है. सभी फोन पर काम नहीं करता.</string>
   <string name="preferences_front_light_title">सामने प्रकाश का उपयोग करें</string>
   <string name="preferences_general_title">सामान्य सेटिंग्स</string>
+  <string name="preferences_history_summary">इतिहास में अपने स्कैन स्टोर</string>
+  <string name="preferences_history_title">इतिहास में जोड़ें</string>
   <string name="preferences_invert_scan_summary">काली पृष्ठभूमि पर सफेद बारकोड के लिए स्कैन करें. कुछ उपकरणों पर उपलब्ध नहीं है.</string>
   <string name="preferences_invert_scan_title">स्कैन उलटें</string>
   <string name="preferences_name">सेटिंग्स</string>

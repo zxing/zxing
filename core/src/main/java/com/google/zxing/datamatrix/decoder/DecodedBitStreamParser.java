@@ -71,6 +71,9 @@ final class DecodedBitStreamParser {
     'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
   };
 
+  // Shift 2 for Text is the same encoding as C40
+  private static final char[] TEXT_SHIFT2_SET_CHARS = C40_SHIFT2_SET_CHARS;
+
   private static final char[] TEXT_SHIFT3_SET_CHARS = {
     '`', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
@@ -139,7 +142,7 @@ final class DecodedBitStreamParser {
         return Mode.PAD_ENCODE;
       } else if (oneByte <= 229) {  // 2-digit data 00-99 (Numeric Value + 130)
         int value = oneByte - 130;
-        if (value < 10) { // padd with '0' for single digit values
+        if (value < 10) { // pad with '0' for single digit values
           result.append('0');
         }
         result.append(value);
@@ -319,13 +322,13 @@ final class DecodedBitStreamParser {
             break;
           case 2:
             // Shift 2 for Text is the same encoding as C40
-            if (cValue < C40_SHIFT2_SET_CHARS.length) {
-              char c40char = C40_SHIFT2_SET_CHARS[cValue];
+            if (cValue < TEXT_SHIFT2_SET_CHARS.length) {
+              char textChar = TEXT_SHIFT2_SET_CHARS[cValue];
               if (upperShift) {
-                result.append((char) (c40char + 128));
+                result.append((char) (textChar + 128));
                 upperShift = false;
               } else {
-                result.append(c40char);
+                result.append(textChar);
               }
             } else if (cValue == 27) {  // FNC1
               result.append((char) 29); // translate as ASCII 29

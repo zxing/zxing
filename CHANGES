@@ -336,3 +336,18 @@
   - Java 7 now used for all Java-based modules
   - Project moved to github.com/zxing/zxing
   - Many small bug fixes and improvements
+
+3.0.1 (18 April 2014)
+
+  - Several small bug fixes
+
+3.1.0 (22 May 2014)
+
+  - Retire actionscript port
+  - Small bug fixes
+
+3.2.0 (15 Feb 2015)
+
+  - Several bug fixes, especially for Data Matrix and PDF417 parsing
+  - Retired jruby binding
+  - Barcode Scanner can now disable history

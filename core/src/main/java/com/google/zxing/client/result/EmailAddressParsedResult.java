@@ -21,24 +21,48 @@ package com.google.zxing.client.result;
  */
 public final class EmailAddressParsedResult extends ParsedResult {
 
-  private final String emailAddress;
+  private final String[] tos;
+  private final String[] ccs;
+  private final String[] bccs;
   private final String subject;
   private final String body;
-  private final String mailtoURI;
 
-  EmailAddressParsedResult(String emailAddress,
-                           String subject,
-                           String body,
-                           String mailtoURI) {
-    super(ParsedResultType.EMAIL_ADDRESS);
-    this.emailAddress = emailAddress;
-    this.subject = subject;
-    this.body = body;
-    this.mailtoURI = mailtoURI;
+  EmailAddressParsedResult(String to) {
+    this(new String[] {to}, null, null, null, null);
   }
 
+  EmailAddressParsedResult(String[] tos,
+                           String[] ccs,
+                           String[] bccs,
+                           String subject,
+                           String body) {
+    super(ParsedResultType.EMAIL_ADDRESS);
+    this.tos = tos;
+    this.ccs = ccs;
+    this.bccs = bccs;
+    this.subject = subject;
+    this.body = body;
+  }
+
+  /**
+   * @return first elements of {@link #getTos()} or {@code null} if none
+   * @deprecated use {@link #getTos()}
+   */
+  @Deprecated
   public String getEmailAddress() {
-    return emailAddress;
+    return tos == null || tos.length == 0 ? null : tos[0];
+  }
+
+  public String[] getTos() {
+    return tos;
+  }
+
+  public String[] getCCs() {
+    return ccs;
+  }
+
+  public String[] getBCCs() {
+    return bccs;
   }
 
   public String getSubject() {
@@ -49,14 +73,21 @@ public final class EmailAddressParsedResult extends ParsedResult {
     return body;
   }
 
+  /**
+   * @return "mailto:"
+   * @deprecated without replacement
+   */
+  @Deprecated
   public String getMailtoURI() {
-    return mailtoURI;
+    return "mailto:";
   }
 
   @Override
   public String getDisplayResult() {
     StringBuilder result = new StringBuilder(30);
-    maybeAppend(emailAddress, result);
+    maybeAppend(tos, result);
+    maybeAppend(ccs, result);
+    maybeAppend(bccs, result);
     maybeAppend(subject, result);
     maybeAppend(body, result);
     return result.toString();

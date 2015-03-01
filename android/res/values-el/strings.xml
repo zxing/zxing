@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Βελτιώνει το σκανάρισμα με χαμηλο φωτισμό σε μερικά κινητά, ίσως όμως προκαλέσει λάμψη. Δουλεύει σε μερικά κινητά.</string>
   <string name="preferences_front_light_title">Χρήση μπροστινού φακού</string>
   <string name="preferences_general_title">Γενικές ρυθμίσεις</string>
+  <string name="preferences_history_summary">Αποθηκεύστε τις σαρώσεις σας στην Ιστορία</string>
+  <string name="preferences_history_title">Προσθήκη στην Ιστορία</string>
   <string name="preferences_invert_scan_summary">Σάρωση για τη λευκή barcodes σε μαύρο φόντο. Δεν διατίθεται σε ορισμένες συσκευές.</string>
   <string name="preferences_invert_scan_title">Αντιστροφή της σάρωσης</string>
   <string name="preferences_name">Ρυθμίσεις</string>

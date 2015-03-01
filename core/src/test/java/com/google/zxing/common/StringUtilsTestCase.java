@@ -53,7 +53,9 @@ public final class StringUtilsTestCase extends Assert {
   /**
    * Utility for printing out a string in given encoding as a Java statement, since it's better
    * to write that into the Java source file rather than risk character encoding issues in the 
-   * source file itself
+   * source file itself.
+   *
+   * @param args command line arguments
    */
   public static void main(String[] args) {
     String text = args[0];

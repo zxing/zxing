@@ -36,7 +36,7 @@ public final class WifiGenerator implements GeneratorSource {
   private Grid table;
   private final TextBox ssid = new TextBox();
   private final TextBox password = new TextBox();
-  private final ListBox networkType = new ListBox(false);
+  private final ListBox networkType = new ListBox();
   private final CheckBox hidden = new CheckBox();
 
   public WifiGenerator(ChangeHandler handler, KeyPressHandler keyListener) {

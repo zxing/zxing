@@ -26,16 +26,10 @@ library implemented in Java, with ports to other languages.
 | android             | Android client Barcode Scanner [![Barcode Scanner](http://www.android.com/images/brand/android_app_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
 | androidtest         | Android test app, ZXing Test
 | android-integration | Supports integration with Barcode Scanner via `Intent`
+| android-core        | Android-related code shared among `android`, `androidtest`, `glass`
+| glass               | Simple Google Glass application
 | zxingorg            | The source behind `zxing.org`
 | zxing.appspot.com   | The source behind web-based barcode generator at `zxing.appspot.com`
-
-### Intermittently maintained
-
-There are also additional modules which are contributed and/or intermittently maintained:
-
-| Module       | Description
-| ------------ | -----------
-| jruby        | JRuby wrapper
 
 ### Available in previous releases
 
@@ -45,21 +39,24 @@ There are also additional modules which are contributed and/or intermittently ma
 | [iphone](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/iphone)             | iPhone client
 | [objc](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/objc)                 | Objective C port
 | [actionscript](https://github.com/zxing/zxing/tree/c1df162b95e07928afbd4830798cc1408af1ac67/actionscript) | Partial ActionScript port
+| [jruby](https://github.com/zxing/zxing/tree/a95a8fee842f67fb43799a8e0e70e4c68b509c43/jruby)               | JRuby wrapper
 
-### Related third-party open source projects
+### ZXing-based third-party open source projects
 
-| Module                                             | Description
-| -------------------------------------------------- | -----------
-| [QZXing](https://sourceforge.net/projects/qzxing)  | port to Qt framework
-| [ZXing .NET](http://zxingnet.codeplex.com/)        | port to .NET and C#, and related Windows platform
+| Module                                                          | Description
+| --------------------------------------------------------------- | -----------
+| [QZXing](https://sourceforge.net/projects/qzxing)               | port to Qt framework
+| [zxing-cpp](https://github.com/glassechidna/zxing-cpp)          | port to C++ (forked from the [deprecated official C++ port](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/cpp))
+| [zxing_cpp.rb](https://github.com/glassechidna/zxing_cpp.rb)    | bindings for Ruby (not just JRuby), powered by [zxing-cpp](https://github.com/glassechidna/zxing-cpp)
+| [ZXing .NET](http://zxingnet.codeplex.com/)                     | port to .NET and C#, and related Windows platform
 
-### Other third-party open source projects
+### Other related third-party open source projects
 
 | Module                                         | Description
 | ---------------------------------------------- | -----------
-| [Barcode4J](http://barcode4j.sourceforge.net/) | Encoder library in Java
-| [ZBar](http://zbar.sourceforge.net/)           | Decoder in C++, especially for iPhone
-| [Zint](http://sourceforge.net/projects/zint/)  | Barcode generator
+| [Barcode4J](http://barcode4j.sourceforge.net/) | Generator library in Java
+| [ZBar](http://zbar.sourceforge.net/)           | Reader library in C99
+| [Zint](http://sourceforge.net/projects/zint/)  | Generator library in C99
 
 ## Links
 
@@ -78,6 +75,7 @@ on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
 
 [![Build Status](https://travis-ci.org/zxing/zxing.png?branch=master)](https://travis-ci.org/zxing/zxing)
 [![Coverity Status](https://scan.coverity.com/projects/1924/badge.svg)](https://scan.coverity.com/projects/1924)
+[![codecov.io](https://codecov.io/github/zxing/zxing/coverage.svg?branch=master)](https://codecov.io/github/zxing/zxing?branch=master)
 
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
 

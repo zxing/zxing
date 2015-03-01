@@ -66,7 +66,7 @@ public final class StringsResourceTranslator {
 
   private static final String APACHE_2_LICENSE =
       "<!--\n" +
-      " Copyright (C) 2014 ZXing authors\n" +
+      " Copyright (C) 2015 ZXing authors\n" +
       '\n' +
       " Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
       " you may not use this file except in compliance with the License.\n" +
@@ -118,7 +118,9 @@ public final class StringsResourceTranslator {
     String parentName = translatedFile.getParent().getFileName().toString();
 
     Matcher stringsFileNameMatcher = STRINGS_FILE_NAME_PATTERN.matcher(parentName);
-    stringsFileNameMatcher.find();
+    if (!stringsFileNameMatcher.find()) {
+      throw new IllegalArgumentException("Invalid parent dir: " + parentName);
+    }
     String language = stringsFileNameMatcher.group(1);
     String massagedLanguage = LANGUAGE_CODE_MASSAGINGS.get(language);
     if (massagedLanguage != null) {
@@ -151,6 +153,8 @@ public final class StringsResourceTranslator {
         if (translatedString == null || forceRetranslation.contains(key)) {
           anyChange = true;
           translatedString = translateString(value, language);
+          // Specially for string resources, escape ' with \
+          translatedString = translatedString.replaceAll("'", "\\\\'");
         }
         out.write(translatedString);
 
@@ -193,10 +197,8 @@ public final class StringsResourceTranslator {
     String translation = m.group(1);
 
     // This is a little crude; unescape some common escapes in the raw response
-    translation = translation.replaceAll("&quot;", "\"");
-    translation = translation.replaceAll("&#39;", "'");
-    translation = translation.replaceAll("&amp;quot;", "\"");
-    translation = translation.replaceAll("&amp;#39;", "'");
+    translation = translation.replaceAll("&(amp;)?quot;", "\"");
+    translation = translation.replaceAll("&(amp;)?#39;", "'");
 
     System.out.println("  Got translation " + translation);
     return translation;

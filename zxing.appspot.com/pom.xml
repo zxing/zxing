@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   
   <artifactId>zxing.appspot.com</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.2.1-SNAPSHOT</version>
   <packaging>war</packaging>
 
   <dependencies>
@@ -39,11 +39,11 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.2.1-SNAPSHOT</version>
   </parent>
 
   <properties>
-    <gwt.version>2.6.0</gwt.version>
+    <gwt.version>2.7.0</gwt.version>
   </properties>
 
   <build>

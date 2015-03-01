@@ -101,7 +101,7 @@ public final class BitArrayTestCase extends Assert {
   
   @Test
   public void testGetNextSet5() {
-    Random r = new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
+    Random r = new Random(0xDEADBEEF);
     for (int i = 0; i < 10; i++) {
       BitArray array = new BitArray(1 + r.nextInt(100));
       int numSet = r.nextInt(20);

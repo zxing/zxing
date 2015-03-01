@@ -71,7 +71,7 @@ public class ResultPoint {
    * Orders an array of three ResultPoints in an order [A,B,C] such that AB is less than AC
    * and BC is less than AC, and the angle between BC and BA is less than 180 degrees.
    *
-   * @param patterns array of three {@link ResultPoint} to order
+   * @param patterns array of three {@code ResultPoint} to order
    */
   public static void orderBestPatterns(ResultPoint[] patterns) {
 

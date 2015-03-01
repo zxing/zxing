@@ -51,7 +51,7 @@
   <string name="history_clear_text">Borrar historial</string>
   <string name="history_email_title">Historial de Escáner de código de barras</string>
   <string name="history_empty">Vacío</string>
-  <string name="history_empty_detail">Ningún escanea de códigos de barras se han registrado aún</string>
+  <string name="history_empty_detail">Ninguna lectura de código de barras se ha registrado aún</string>
   <string name="history_send">Enviar historial</string>
   <string name="history_title">Historial</string>
   <string name="menu_encode_mecard">Usar MECARD</string>
@@ -72,7 +72,7 @@
   <string name="msg_error">Error</string>
   <string name="msg_google_books">Google</string>
   <string name="msg_google_product">Google</string>
-  <string name="msg_intent_failed">Lo sentimos, la aplicación solicitada no pudo ser lanzada. El contenido de código de barras puede ser inválida.</string>
+  <string name="msg_intent_failed">Lo sentimos, la aplicación solicitada no pudo ser lanzada. El contenido del código de barras puede ser inválido.</string>
   <string name="msg_invalid_value">Valor no válido</string>
   <string name="msg_redirect">Redirigir</string>
   <string name="msg_sbc_book_not_searchable">Lo sentimos, no se puede buscar en este libro.</string>
@@ -110,14 +110,16 @@
   <string name="preferences_front_light_off">Inactivo</string>
   <string name="preferences_front_light_on">Activo</string>
   <string name="preferences_front_light_summary">Mejora la exploración en condiciones de poca luz en algunos teléfonos, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
-  <string name="preferences_front_light_title">Utilizar luz delantera</string>
+  <string name="preferences_front_light_title">Utilizar flash</string>
   <string name="preferences_general_title">Configuración general</string>
+  <string name="preferences_history_summary">Almacene escáneres en la historia</string>
+  <string name="preferences_history_title">Añadir a Historia</string>
   <string name="preferences_invert_scan_summary">Escanear códigos de barras blancas sobre fondo negro. No disponible en algunos dispositivos.</string>
   <string name="preferences_invert_scan_title">Invertir exploración</string>
   <string name="preferences_name">Configuración</string>
   <string name="preferences_orientation_title">Sin rotación automática</string>
   <string name="preferences_play_beep_title">Bip</string>
-  <string name="preferences_remember_duplicates_summary">Almacenar múltiples escáneres del mismo código de barras en el Historial.</string>
+  <string name="preferences_remember_duplicates_summary">Almacenar múltiples lecturas del mismo código de barras en el Historial.</string>
   <string name="preferences_remember_duplicates_title">Recuerde duplicados</string>
   <string name="preferences_result_title">Configuración de resultados</string>
   <string name="preferences_scanning_title">Al escanear códigos de barras, descodificar\u2026</string>
@@ -131,7 +133,7 @@
   <string name="result_geo">Coordenadas geográficas encontradas</string>
   <string name="result_isbn">Libro encontrado</string>
   <string name="result_product">Producto encontrado</string>
-  <string name="result_sms">Dirección de SMS encontrado</string>
+  <string name="result_sms">Dirección de SMS encontrada</string>
   <string name="result_tel">Número de teléfono encontrado</string>
   <string name="result_text">Texto encontrado</string>
   <string name="result_uri">URL encontrada</string>

@@ -19,6 +19,7 @@ package com.google.zxing.client.result;
 import com.google.zxing.Result;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Represents a result that encodes an e-mail address, either as a plain address
@@ -28,35 +29,52 @@ import java.util.Map;
  */
 public final class EmailAddressResultParser extends ResultParser {
 
+  private static final Pattern COMMA = Pattern.compile(",");
+
   @Override
   public EmailAddressParsedResult parse(Result result) {
     String rawText = getMassagedText(result);
-    String emailAddress;
     if (rawText.startsWith("mailto:") || rawText.startsWith("MAILTO:")) {
       // If it starts with mailto:, assume it is definitely trying to be an email address
-      emailAddress = rawText.substring(7);
-      int queryStart = emailAddress.indexOf('?');
+      String hostEmail = rawText.substring(7);
+      int queryStart = hostEmail.indexOf('?');
       if (queryStart >= 0) {
-        emailAddress = emailAddress.substring(0, queryStart);
+        hostEmail = hostEmail.substring(0, queryStart);
       }
-      emailAddress = urlDecode(emailAddress);
+      hostEmail = urlDecode(hostEmail);
+      String[] tos = null;
+      if (!hostEmail.isEmpty()) {
+        tos = COMMA.split(hostEmail);
+      }
       Map<String,String> nameValues = parseNameValuePairs(rawText);
+      String[] ccs = null;
+      String[] bccs = null;
       String subject = null;
       String body = null;
       if (nameValues != null) {
-        if (emailAddress.isEmpty()) {
-          emailAddress = nameValues.get("to");
+        if (tos == null) {
+          String tosString = nameValues.get("to");
+          if (tosString != null) {
+            tos = COMMA.split(tosString);
+          }
+        }
+        String ccString = nameValues.get("cc");
+        if (ccString != null) {
+          ccs = COMMA.split(ccString);
+        }
+        String bccString = nameValues.get("bcc");
+        if (bccString != null) {
+          bccs = COMMA.split(bccString);
         }
         subject = nameValues.get("subject");
         body = nameValues.get("body");
       }
-      return new EmailAddressParsedResult(emailAddress, subject, body, rawText);
+      return new EmailAddressParsedResult(tos, ccs, bccs, subject, body);
     } else {
       if (!EmailDoCoMoResultParser.isBasicallyValidEmailAddress(rawText)) {
         return null;
       }
-      emailAddress = rawText;
-      return new EmailAddressParsedResult(emailAddress, null, null, "mailto:" + emailAddress);
+      return new EmailAddressParsedResult(rawText);
     }
   }
 

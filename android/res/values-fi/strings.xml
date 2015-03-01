@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Parantaa joissain laitteissa hämärässä skannaamista, mutta voi aiheuttaa häikäisyongelmia. Ei toimi kaikissa puhelimissa.</string>
   <string name="preferences_front_light_title">Käytä etuosan valoa</string>
   <string name="preferences_general_title">Yleiset asetukset</string>
+  <string name="preferences_history_summary">Säilytä skannaa historia</string>
+  <string name="preferences_history_title">Lisää Historia</string>
   <string name="preferences_invert_scan_summary">Etsi valkoisia viivakoodeja mustalla taustalla. Ei toimi kaikilla laitteilla.</string>
   <string name="preferences_invert_scan_title">Käänteinen (negatiivin) skannaus</string>
   <string name="preferences_name">Asetukset</string>

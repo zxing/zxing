@@ -77,7 +77,7 @@
   <string name="msg_redirect">Inoltra</string>
   <string name="msg_sbc_book_not_searchable">Spiacenti, questo libro non è ricercabile.</string>
   <string name="msg_sbc_failed">Spiacenti, la ricerca ha avuto un problema.</string>
-  <string name="msg_sbc_no_page_returned">Nessuna pagina restitiuta</string>
+  <string name="msg_sbc_no_page_returned">Nessuna pagina restituita</string>
   <string name="msg_sbc_page">Pagina</string>
   <string name="msg_sbc_results">Risultati</string>
   <string name="msg_sbc_searching_book">Ricerca libro\u2026</string>
@@ -97,7 +97,7 @@
   <string name="preferences_decode_1D_industrial_title">1D industriali</string>
   <string name="preferences_decode_1D_product_title">1D prodotto</string>
   <string name="preferences_decode_Aztec_title">Aztec</string>
-  <string name="preferences_decode_Data_Matrix_title">Matrice Dati</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
   <string name="preferences_decode_QR_title">Codici QR</string>
   <string name="preferences_device_bug_workarounds_title">Soluzioni alternative dispositivo Bug</string>
@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Migliora la scansione con poca luminosità su alcuni telefoni, ma può provocare abbagliamento. Non funziona su tutti i telefoni.</string>
   <string name="preferences_front_light_title">Usa luce frontale</string>
   <string name="preferences_general_title">Impostazioni generali</string>
+  <string name="preferences_history_summary">Mantieni le tue scansioni nella Cronologia</string>
+  <string name="preferences_history_title">Aggiungi alla Cronologia</string>
   <string name="preferences_invert_scan_summary">Scansione dei codici a barre bianche su sfondo nero. Non disponibile su alcuni dispositivi.</string>
   <string name="preferences_invert_scan_title">Invertire la scansione</string>
   <string name="preferences_name">Impostazioni</string>

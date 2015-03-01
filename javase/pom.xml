@@ -18,21 +18,20 @@
   <modelVersion>4.0.0</modelVersion>
   
   <artifactId>javase</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.2.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>core</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
 
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.2.1-SNAPSHOT</version>
   </parent>
 
   <name>ZXing Java SE extensions</name>

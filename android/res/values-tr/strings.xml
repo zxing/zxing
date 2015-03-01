@@ -112,6 +112,8 @@
   <string name="preferences_front_light_summary">Bazı telefonlarda düşük ışıkta taramayı iyileştirir, ancak parlamaya neden olabilir. Tüm telefonlarda sonuç vermez.</string>
   <string name="preferences_front_light_title">Ön ışığı kullan</string>
   <string name="preferences_general_title">Genel ayarlar</string>
+  <string name="preferences_history_summary">Tarih içinde taramaları saklayın</string>
+  <string name="preferences_history_title">Tarih ekle</string>
   <string name="preferences_invert_scan_summary">Siyah zemin üzerine beyaz barkod tarama. Bazı cihazlar mevcut değildir.</string>
   <string name="preferences_invert_scan_title">Tarama haricindekileri</string>
   <string name="preferences_name">Ayarlar</string>

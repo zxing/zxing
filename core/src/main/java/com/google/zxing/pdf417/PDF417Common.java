@@ -15,6 +15,7 @@
  */
 package com.google.zxing.pdf417;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -63,36 +64,12 @@ public final class PDF417Common {
    * @param symbol encoded symbol to translate to a codeword
    * @return the codeword corresponding to the symbol.
    */
-  public static int getCodeword(long symbol) {
-    long sym = symbol & 0x3FFFF;
-    int i = findCodewordIndex(sym);
-    if (i == -1) {
+  public static int getCodeword(int symbol) {
+    int i = Arrays.binarySearch(SYMBOL_TABLE, symbol & 0x3FFFF);
+    if (i < 0) {
       return -1;
     }
     return (CODEWORD_TABLE[i] - 1) % NUMBER_OF_CODEWORDS;
-  }
-
-  /**
-   * Use a binary search to find the index of the codeword corresponding to
-   * this symbol.
-   *
-   * @param symbol the symbol from the barcode.
-   * @return the index into the codeword table.
-   */
-  private static int findCodewordIndex(long symbol) {
-    int first = 0;
-    int upto = SYMBOL_TABLE.length;
-    while (first < upto) {
-      int mid = (first + upto) / 2; // Compute mid point.
-      if (symbol < SYMBOL_TABLE[mid]) {
-        upto = mid; // continue search in bottom half.
-      } else if (symbol > SYMBOL_TABLE[mid]) {
-        first = mid + 1; // continue search in top half.
-      } else {
-        return mid; // Found it. return position
-      }
-    }
-    return -1;
   }
 
   /**

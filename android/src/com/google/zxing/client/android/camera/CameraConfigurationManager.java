@@ -76,8 +76,6 @@ final class CameraConfigurationManager {
 
     initializeTorch(parameters, prefs, safeMode);
 
-    CameraConfigurationUtils.setBestPreviewFPS(parameters);
-
     CameraConfigurationUtils.setFocus(
         parameters,
         prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
@@ -102,6 +100,9 @@ final class CameraConfigurationManager {
     }
 
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+
+    Log.i(TAG, "Final camera parameters: " + parameters.flatten());
+
     camera.setParameters(parameters);
 
     Camera.Parameters afterParameters = camera.getParameters();
@@ -126,7 +127,7 @@ final class CameraConfigurationManager {
     if (camera != null) {
       Camera.Parameters parameters = camera.getParameters();
       if (parameters != null) {
-        String flashMode = camera.getParameters().getFlashMode();
+        String flashMode = parameters.getFlashMode();
         return flashMode != null &&
             (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
              Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode));
