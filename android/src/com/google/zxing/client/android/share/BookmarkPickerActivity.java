@@ -19,7 +19,6 @@ package com.google.zxing.client.android.share;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.provider.Browser;
 import android.util.Log;
 import android.view.View;
@@ -49,8 +48,8 @@ public final class BookmarkPickerActivity extends ListActivity {
   private Cursor cursor;
 
   @Override
-  protected void onCreate(Bundle icicle) {
-    super.onCreate(icicle);
+  protected void onResume() {
+    super.onResume();
     cursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
         BOOKMARK_SELECTION, null, null);
     if (cursor == null) {
@@ -62,11 +61,12 @@ public final class BookmarkPickerActivity extends ListActivity {
   }
   
   @Override
-  protected void onDestroy() {
+  protected void onPause() {
     if (cursor != null) {
       cursor.close();
+      cursor = null;
     }
-    super.onDestroy();
+    super.onPause();
   }
 
   @Override
