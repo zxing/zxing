@@ -176,16 +176,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     resetStatusView();
 
-    SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
-    SurfaceHolder surfaceHolder = surfaceView.getHolder();
-    if (hasSurface) {
-      // The activity was paused but not stopped, so the surface still exists. Therefore
-      // surfaceCreated() won't be called, so init the camera here.
-      initCamera(surfaceHolder);
-    } else {
-      // Install the callback and wait for surfaceCreated() to init the camera.
-      surfaceHolder.addCallback(this);
-    }
 
     beepManager.updatePrefs();
     ambientLightManager.start(cameraManager);
@@ -260,6 +250,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
 
+    }
+
+    SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+    SurfaceHolder surfaceHolder = surfaceView.getHolder();
+    if (hasSurface) {
+      // The activity was paused but not stopped, so the surface still exists. Therefore
+      // surfaceCreated() won't be called, so init the camera here.
+      initCamera(surfaceHolder);
+    } else {
+      // Install the callback and wait for surfaceCreated() to init the camera.
+      surfaceHolder.addCallback(this);
     }
   }
 
