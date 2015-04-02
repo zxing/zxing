@@ -74,6 +74,7 @@ public final class LocaleManager {
     GOOGLE_COUNTRY_TLD.put("CH", "ch"); // SWITZERLAND    
     GOOGLE_COUNTRY_TLD.put(Locale.TAIWAN.getCountry(), "tw");
     GOOGLE_COUNTRY_TLD.put("TR", "com.tr"); // TURKEY
+    GOOGLE_COUNTRY_TLD.put("UA", "com.ua"); // UKRAINE
     GOOGLE_COUNTRY_TLD.put(Locale.UK.getCountry(), "co.uk");
     GOOGLE_COUNTRY_TLD.put(Locale.US.getCountry(), "com");
   }
