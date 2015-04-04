@@ -74,6 +74,7 @@ public final class LocaleManager {
     GOOGLE_COUNTRY_TLD.put("CH", "ch"); // SWITZERLAND    
     GOOGLE_COUNTRY_TLD.put(Locale.TAIWAN.getCountry(), "tw");
     GOOGLE_COUNTRY_TLD.put("TR", "com.tr"); // TURKEY
+    GOOGLE_COUNTRY_TLD.put("UA", "com.ua"); // UKRAINE
     GOOGLE_COUNTRY_TLD.put(Locale.UK.getCountry(), "co.uk");
     GOOGLE_COUNTRY_TLD.put(Locale.US.getCountry(), "com");
   }
@@ -104,7 +105,7 @@ public final class LocaleManager {
   private static final Map<String,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD = GOOGLE_COUNTRY_TLD;
 
   private static final Collection<String> TRANSLATED_HELP_ASSET_LANGUAGES =
-      Arrays.asList("de", "en", "es", "fr", "it", "ja", "ko", "nl", "pt", "ru", "zh-rCN", "zh-rTW", "zh-rHK");
+      Arrays.asList("de", "en", "es", "fr", "it", "ja", "ko", "nl", "pt", "ru", "uk", "zh-rCN", "zh-rTW", "zh-rHK");
 
   private LocaleManager() {}
 
