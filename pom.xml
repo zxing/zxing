@@ -94,7 +94,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.7</java.version>
-    <slf4j.version>1.7.10</slf4j.version>
+    <slf4j.version>1.7.12</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.2.1-SNAPSHOT</zxing.version>
   </properties>
@@ -152,7 +152,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.2</version>
+          <version>3.3</version>
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>
@@ -265,7 +265,7 @@
             <dependency>
               <groupId>org.apache.maven.scm</groupId>
               <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.9.2</version>
+              <version>1.9.4</version>
             </dependency>
           </dependencies>
           <configuration>
@@ -278,7 +278,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>1.9.2</version>
+          <version>1.9.4</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -389,7 +389,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.0.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
