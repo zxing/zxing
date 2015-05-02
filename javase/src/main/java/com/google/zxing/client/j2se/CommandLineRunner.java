@@ -20,6 +20,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,7 +28,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
  * directories, summary statistics are also displayed.
  *
  * @author dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
  */
 public final class CommandLineRunner {
 
@@ -58,7 +59,7 @@ public final class CommandLineRunner {
     }
 
     Config config = new Config();
-    Queue<Path> inputs = new ConcurrentLinkedQueue<>();
+    Queue<URI> inputs = new ConcurrentLinkedQueue<>();
 
     for (String arg : args) {
       String[] argValue = arg.split("=");
@@ -104,13 +105,25 @@ public final class CommandLineRunner {
             printUsage();
             return;
           }
-          addArgumentToInputs(Paths.get(arg), config, inputs);
+          URI argURI = URI.create(arg);
+          if (argURI.getScheme() == null) {
+            argURI = new URI("file", argURI.getSchemeSpecificPart(), argURI.getFragment());
+          }
+          addArgumentToInputs(argURI, config, inputs);
           break;
       }
     }
+
+    int numInputs = inputs.size();
+    if (numInputs == 0) {
+      System.err.println("No inputs specified");
+      printUsage();
+      return;
+    }
+
     config.setHints(buildHints(config));
 
-    int numThreads = Math.min(inputs.size(), Runtime.getRuntime().availableProcessors());
+    int numThreads = Math.min(numInputs, Runtime.getRuntime().availableProcessors());
     int successful = 0;    
     if (numThreads > 1) {
       ExecutorService executor = Executors.newFixedThreadPool(numThreads);
@@ -126,44 +139,38 @@ public final class CommandLineRunner {
       successful += new DecodeWorker(config, inputs).call();
     }
 
-    int total = inputs.size();
-    if (total > 1) {
-      System.out.println("\nDecoded " + successful + " files out of " + total +
-          " successfully (" + (successful * 100 / total) + "%)\n");
+    if (numInputs > 1) {
+      System.out.println("\nDecoded " + successful + " files out of " + numInputs +
+          " successfully (" + (successful * 100 / numInputs) + "%)\n");
     }
   }
 
-  // Build all the inputs up front into a single flat list, so the threads can atomically pull
-  // paths/URLs off the queue.
-  private static void addArgumentToInputs(Path inputFile, Config config, Queue<Path> inputs) throws IOException {
-    if (Files.isDirectory(inputFile)) {
-      try (DirectoryStream<Path> paths = Files.newDirectoryStream(inputFile)) {
-        for (Path singleFile : paths) {
-          String filename = singleFile.getFileName().toString().toLowerCase(Locale.ENGLISH);
+  /**
+   * Build all the inputs up front into a single flat list, so the threads can atomically pull
+   * paths/URLs off the queue.
+   */
+  private static void addArgumentToInputs(URI input, Config config, Queue<URI> inputs) throws IOException {
+    // Special case: a local directory
+    if ("file".equals(input.getScheme()) && Files.isDirectory(Paths.get(input))) {
+      try (DirectoryStream<Path> childPaths = Files.newDirectoryStream(Paths.get(input))) {
+        for (Path childPath : childPaths) {
+          Path realChildPath = childPath.toRealPath();
           // Skip hidden files and directories (e.g. svn stuff).
-          if (filename.startsWith(".")) {
-            continue;
-          }
-          // Recur on nested directories if requested, otherwise skip them.
-          if (Files.isDirectory(singleFile)) {
-            if (config.isRecursive()) {
-              addArgumentToInputs(singleFile, config, inputs);
+          if (!realChildPath.getFileName().toString().startsWith(".")) {
+            // Recur on nested directories if requested, otherwise skip them.
+            if (config.isRecursive() && Files.isDirectory(realChildPath)) {
+              addArgumentToInputs(realChildPath.toUri(), config, inputs);
+            } else {
+              inputs.add(realChildPath.toUri());
             }
-            continue;
           }
-          // Skip text files and the results of dumping the black point.
-          if (filename.endsWith(".txt") || filename.contains(".mono.png")) {
-            continue;
-          }
-          inputs.add(singleFile);
         }
       }
     } else {
-      inputs.add(inputFile);
+      inputs.add(input);
     }
   }
 
-  // Manually turn on all formats, even those not yet considered production quality.
   private static Map<DecodeHintType,?> buildHints(Config config) {
     Collection<BarcodeFormat> possibleFormats = new ArrayList<>();
     String[] possibleFormatsNames = config.getPossibleFormats();

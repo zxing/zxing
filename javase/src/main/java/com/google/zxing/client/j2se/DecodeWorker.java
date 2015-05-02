@@ -42,7 +42,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.Callable;
@@ -59,9 +58,9 @@ final class DecodeWorker implements Callable<Integer> {
   private static final int WHITE = 0xFFFFFFFF;
 
   private final Config config;
-  private final Queue<Path> inputs;
+  private final Queue<URI> inputs;
 
-  DecodeWorker(Config config, Queue<Path> inputs) {
+  DecodeWorker(Config config, Queue<URI> inputs) {
     this.config = config;
     this.inputs = inputs;
   }
@@ -69,139 +68,101 @@ final class DecodeWorker implements Callable<Integer> {
   @Override
   public Integer call() throws IOException {
     int successful = 0;
-    Path input;
-    while ((input = inputs.poll()) != null) {
-      if (Files.exists(input)) {
-        if (config.isMulti()) {
-          Result[] results = decodeMulti(input.toUri(), config.getHints());
-          if (results != null) {
-            successful++;
-            if (config.isDumpResults()) {
-              dumpResultMulti(input, results);
-            }
-          }
-        } else {
-          Result result = decode(input.toUri(), config.getHints());
-          if (result != null) {
-            successful++;
-            if (config.isDumpResults()) {
-              dumpResult(input, result);
-            }
-          }
-        }
-      } else {
-        if (decode(input.toUri(), config.getHints()) != null) {
-          successful++;
+    for (URI input; (input = inputs.poll()) != null;) {
+      Result[] results = decode(input, config.getHints());
+      if (results != null) {
+        successful++;
+        if (config.isDumpResults()) {
+          dumpResult(input, results);
         }
       }
     }
     return successful;
   }
 
-  private static void dumpResult(Path input, Result result) throws IOException {
-    String name = input.getFileName().toString();
-    int pos = name.lastIndexOf('.');
-    if (pos > 0) {
-      name = name.substring(0, pos) + ".txt";
+  private static Path buildOutputPath(URI input, String suffix) throws IOException {
+    Path outDir;
+    String inputFileName;
+    if ("file".equals(input.getScheme())) {
+      Path inputPath = Paths.get(input);
+      outDir = inputPath.getParent();
+      inputFileName = inputPath.getFileName().toString();
+    } else {
+      outDir = Paths.get(".").toRealPath();
+      String[] pathElements = input.getPath().split("/");
+      inputFileName = pathElements[pathElements.length - 1];
     }
-    Path dumpFile = input.getParent().resolve(name);
-    Files.write(dumpFile, Collections.singleton(result.getText()), StandardCharsets.UTF_8);
+
+    // Replace/add extension
+    int pos = inputFileName.lastIndexOf('.');
+    if (pos > 0) {
+      inputFileName = inputFileName.substring(0, pos) + suffix;
+    } else {
+      inputFileName += suffix;
+    }
+
+    return outDir.resolve(inputFileName);
   }
 
-  private static void dumpResultMulti(Path input, Result[] results) throws IOException {
-    String name = input.getFileName().toString();
-    int pos = name.lastIndexOf('.');
-    if (pos > 0) {
-      name = name.substring(0, pos) + ".txt";
-    }
-    Path dumpFile = input.getParent().resolve(name);
+  private static void dumpResult(URI input, Result... results) throws IOException {
     Collection<String> resultTexts = new ArrayList<>();
     for (Result result : results) {
       resultTexts.add(result.getText());
     }
-    Files.write(dumpFile, resultTexts, StandardCharsets.UTF_8);
+    Files.write(buildOutputPath(input, ".txt"), resultTexts, StandardCharsets.UTF_8);
   }
 
-  private Result decode(URI uri, Map<DecodeHintType,?> hints) throws IOException {
+  private Result[] decode(URI uri, Map<DecodeHintType,?> hints) throws IOException {
     BufferedImage image = ImageReader.readImage(uri);
-    try {
-      LuminanceSource source;
-      if (config.getCrop() == null) {
-        source = new BufferedImageLuminanceSource(image);
-      } else {
-        int[] crop = config.getCrop();
-        source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
-      }
-      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-      if (config.isDumpBlackPoint()) {
-        dumpBlackPoint(uri, image, bitmap);
-      }
-      Result result = new MultiFormatReader().decode(bitmap, hints);
-      if (config.isBrief()) {
-        System.out.println(uri + ": Success");
-      } else {
-        ParsedResult parsedResult = ResultParser.parseResult(result);
-        System.out.println(uri + " (format: " + result.getBarcodeFormat() + ", type: " +
-            parsedResult.getType() + "):\nRaw result:\n" + result.getText() + "\nParsed result:\n" +
-            parsedResult.getDisplayResult());
 
+    LuminanceSource source;
+    if (config.getCrop() == null) {
+      source = new BufferedImageLuminanceSource(image);
+    } else {
+      int[] crop = config.getCrop();
+      source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
+    }
+
+    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+    if (config.isDumpBlackPoint()) {
+      dumpBlackPoint(uri, image, bitmap);
+    }
+
+    MultiFormatReader multiFormatReader = new MultiFormatReader();
+    Result[] results;
+    try {
+      if (config.isMulti()) {
+        MultipleBarcodeReader reader = new GenericMultipleBarcodeReader(multiFormatReader);
+        results = reader.decodeMultiple(bitmap, hints);
+      } else {
+        results = new Result[]{multiFormatReader.decode(bitmap, hints)};
+      }
+    } catch (NotFoundException ignored) {
+      System.out.println(uri + ": No barcode found");
+      return null;
+    }
+
+    if (config.isBrief()) {
+      System.out.println(uri + ": Success");
+    } else {
+      for (Result result : results) {
+        ParsedResult parsedResult = ResultParser.parseResult(result);
+        System.out.println(uri +
+            " (format: " + result.getBarcodeFormat() +
+            ", type: " + parsedResult.getType() + "):\n" +
+            "Raw result:\n" +
+            result.getText() + "\n" +
+            "Parsed result:\n" +
+            parsedResult.getDisplayResult());
         System.out.println("Found " + result.getResultPoints().length + " result points.");
         for (int i = 0; i < result.getResultPoints().length; i++) {
           ResultPoint rp = result.getResultPoints()[i];
-          if (rp != null) {
-            System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
-          }
+          System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
         }
       }
-
-      return result;
-    } catch (NotFoundException ignored) {
-      System.out.println(uri + ": No barcode found");
-      return null;
     }
-  }
 
-  private Result[] decodeMulti(URI uri, Map<DecodeHintType,?> hints) throws IOException {
-    BufferedImage image = ImageReader.readImage(uri);
-    try {
-      LuminanceSource source;
-      if (config.getCrop() == null) {
-        source = new BufferedImageLuminanceSource(image);
-      } else {
-        int[] crop = config.getCrop();
-        source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
-      }
-      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-      if (config.isDumpBlackPoint()) {
-        dumpBlackPoint(uri, image, bitmap);
-      }
-
-      MultiFormatReader multiFormatReader = new MultiFormatReader();
-      MultipleBarcodeReader reader = new GenericMultipleBarcodeReader(multiFormatReader);
-      Result[] results = reader.decodeMultiple(bitmap, hints);
-
-      if (config.isBrief()) {
-        System.out.println(uri + ": Success");
-      } else {
-        for (Result result : results) {
-          ParsedResult parsedResult = ResultParser.parseResult(result);
-          System.out.println(uri + " (format: "
-              + result.getBarcodeFormat() + ", type: "
-              + parsedResult.getType() + "):\nRaw result:\n"
-              + result.getText() + "\nParsed result:\n"
-              + parsedResult.getDisplayResult());
-          System.out.println("Found " + result.getResultPoints().length + " result points.");
-          for (int i = 0; i < result.getResultPoints().length; i++) {
-            ResultPoint rp = result.getResultPoints()[i];
-            System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
-          }
-        }
-      }
-      return results;
-    } catch (NotFoundException ignored) {
-      System.out.println(uri + ": No barcode found");
-      return null;
-    }
+    return results;
   }
 
   /**
@@ -209,11 +170,7 @@ final class DecodeWorker implements Callable<Integer> {
    * to right: the original image, the row sampling monochrome version, and the 2D sampling
    * monochrome version.
    */
-  private static void dumpBlackPoint(URI uri, BufferedImage image, BinaryBitmap bitmap) {
-    if (uri.getPath().contains(".mono.png")) {
-      return;
-    }
-
+  private static void dumpBlackPoint(URI uri, BufferedImage image, BinaryBitmap bitmap) throws IOException {
     int width = bitmap.getWidth();
     int height = bitmap.getHeight();
     int stride = width * 3;
@@ -263,30 +220,17 @@ final class DecodeWorker implements Callable<Integer> {
   private static void writeResultImage(int stride,
                                        int height,
                                        int[] pixels,
-                                       URI uri,
-                                       String suffix) {
+                                       URI input,
+                                       String suffix) throws IOException {
     BufferedImage result = new BufferedImage(stride, height, BufferedImage.TYPE_INT_ARGB);
     result.setRGB(0, 0, stride, height, pixels, 0, stride);
-
-    // Use the current working directory for URLs
-    String resultName = uri.getPath();
-    if ("http".equals(uri.getScheme())) {
-      int pos = resultName.lastIndexOf('/');
-      if (pos > 0) {
-        resultName = '.' + resultName.substring(pos);
-      }
-    }
-    int pos = resultName.lastIndexOf('.');
-    if (pos > 0) {
-      resultName = resultName.substring(0, pos);
-    }
-    resultName += suffix;
+    Path imagePath = buildOutputPath(input, suffix);
     try {
-      if (!ImageIO.write(result, "png", Paths.get(resultName).toFile())) {
-        System.err.println("Could not encode an image to " + resultName);
+      if (!ImageIO.write(result, "png", imagePath.toFile())) {
+        System.err.println("Could not encode an image to " + imagePath);
       }
     } catch (IOException ignored) {
-      System.err.println("Could not write to " + resultName);
+      System.err.println("Could not write to " + imagePath);
     }
   }
 

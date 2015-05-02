@@ -53,8 +53,8 @@ public final class ImageReader {
   }
   
   public static BufferedImage readDataURIImage(URI uri) throws IOException {
-    String uriString = uri.toString();
-    if (!uriString.startsWith("data:image/")) {
+    String uriString = uri.getSchemeSpecificPart();
+    if (!uriString.startsWith("image/")) {
       throw new IOException("Unsupported data URI MIME type");
     }
     int base64Start = uriString.indexOf(BASE64TOKEN);
