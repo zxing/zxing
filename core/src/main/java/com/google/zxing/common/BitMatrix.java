@@ -408,16 +408,27 @@ public final class BitMatrix implements Cloneable {
     return hash;
   }
 
+  /**
+   * @return string representation using "X" for set and " " for unset bits
+   */
   @Override
   public String toString() {
     return toString("X ", "  ");
   }
 
+  /**
+   * @param setString representation of a set bit
+   * @param unsetString representation of an unset bit
+   * @return string representation of entire matrix utilizing given strings
+   */
   public String toString(String setString, String unsetString) {
     return toString(setString, unsetString, "\n");
   }
 
   /**
+   * @param setString representation of a set bit
+   * @param unsetString representation of an unset bit
+   * @param lineSeparator newline character in string representation
    * @deprecated call {@link #toString(String,String)} only, which uses \n line separator always
    */
   @Deprecated
