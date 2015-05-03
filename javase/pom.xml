@@ -26,6 +26,11 @@
       <groupId>com.google.zxing</groupId>
       <artifactId>core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+      <version>1.48</version>
+    </dependency>
   </dependencies>
 
   <parent>

@@ -42,6 +42,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.Callable;
@@ -57,22 +58,24 @@ final class DecodeWorker implements Callable<Integer> {
   private static final int BLACK = 0xFF000000;
   private static final int WHITE = 0xFFFFFFFF;
 
-  private final Config config;
+  private final DecoderConfig config;
   private final Queue<URI> inputs;
+  private final Map<DecodeHintType,?> hints;
 
-  DecodeWorker(Config config, Queue<URI> inputs) {
+  DecodeWorker(DecoderConfig config, Queue<URI> inputs) {
     this.config = config;
     this.inputs = inputs;
+    hints = config.buildHints();
   }
 
   @Override
   public Integer call() throws IOException {
     int successful = 0;
     for (URI input; (input = inputs.poll()) != null;) {
-      Result[] results = decode(input, config.getHints());
+      Result[] results = decode(input, hints);
       if (results != null) {
         successful++;
-        if (config.isDumpResults()) {
+        if (config.dumpResults) {
           dumpResult(input, results);
         }
       }
@@ -116,22 +119,23 @@ final class DecodeWorker implements Callable<Integer> {
     BufferedImage image = ImageReader.readImage(uri);
 
     LuminanceSource source;
-    if (config.getCrop() == null) {
+    if (config.crop == null) {
       source = new BufferedImageLuminanceSource(image);
     } else {
-      int[] crop = config.getCrop();
-      source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
+      List<Integer> crop = config.crop;
+      source = new BufferedImageLuminanceSource(
+          image, crop.get(0), crop.get(1), crop.get(2), crop.get(3));
     }
 
     BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-    if (config.isDumpBlackPoint()) {
+    if (config.dumpBlackPoint) {
       dumpBlackPoint(uri, image, bitmap);
     }
 
     MultiFormatReader multiFormatReader = new MultiFormatReader();
     Result[] results;
     try {
-      if (config.isMulti()) {
+      if (config.multi) {
         MultipleBarcodeReader reader = new GenericMultipleBarcodeReader(multiFormatReader);
         results = reader.decodeMultiple(bitmap, hints);
       } else {
@@ -142,7 +146,7 @@ final class DecodeWorker implements Callable<Integer> {
       return null;
     }
 
-    if (config.isBrief()) {
+    if (config.brief) {
       System.out.println(uri + ": Success");
     } else {
       for (Result result : results) {
