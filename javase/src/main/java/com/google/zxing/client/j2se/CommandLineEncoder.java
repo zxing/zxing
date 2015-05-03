@@ -16,7 +16,7 @@
 
 package com.google.zxing.client.j2se;
 
-import com.google.zxing.BarcodeFormat;
+import com.beust.jcommander.JCommander;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 
@@ -29,80 +29,27 @@ import java.util.Locale;
  * @author Sean Owen
  */
 public final class CommandLineEncoder {
-  
-  private static final BarcodeFormat DEFAULT_BARCODE_FORMAT = BarcodeFormat.QR_CODE;
-  private static final String DEFAULT_IMAGE_FORMAT = "PNG";
-  private static final String DEFAULT_OUTPUT_FILE = "out";
-  private static final int DEFAULT_WIDTH = 300;
-  private static final int DEFAULT_HEIGHT = 300;
 
   private CommandLineEncoder() {
   }
 
   public static void main(String[] args) throws Exception {
-    if (args.length == 0) {
-      printUsage();
+    EncoderConfig config = new EncoderConfig();
+    JCommander jCommander = new JCommander(config, args);
+    jCommander.setProgramName(CommandLineEncoder.class.getSimpleName());
+    if (config.help) {
+      jCommander.usage();
       return;
     }
 
-    BarcodeFormat barcodeFormat = DEFAULT_BARCODE_FORMAT;
-    String imageFormat = DEFAULT_IMAGE_FORMAT;
-    String outFileString = DEFAULT_OUTPUT_FILE;
-    int width = DEFAULT_WIDTH;
-    int height = DEFAULT_HEIGHT;
-    String contents = null;
-
-    for (String arg : args) {
-      String[] argValue = arg.split("=");
-      switch (argValue[0]) {
-        case "--barcode_format":
-          barcodeFormat = BarcodeFormat.valueOf(argValue[1]);
-          break;
-        case "--image_format":
-          imageFormat = argValue[1];
-          break;
-        case "--output":
-          outFileString = argValue[1];
-          break;
-        case "--width":
-          width = Integer.parseInt(argValue[1]);
-          break;
-        case "--height":
-          height = Integer.parseInt(argValue[1]);
-          break;
-        default:
-          if (arg.startsWith("-")) {
-            System.err.println("Unknown command line option " + arg);
-            printUsage();
-            return;
-          }
-          contents = arg;
-          break;
-      }
-    }
-
-    if (contents == null) {
-      printUsage();
-      return;
+    String outFileString = config.outputFileBase;
+    if (EncoderConfig.DEFAULT_OUTPUT_FILE_BASE.equals(outFileString)) {
+      outFileString += '.' + config.imageFormat.toLowerCase(Locale.ENGLISH);
     }
     
-    if (DEFAULT_OUTPUT_FILE.equals(outFileString)) {
-      outFileString += '.' + imageFormat.toLowerCase(Locale.ENGLISH);
-    }
-    
-    BitMatrix matrix = new MultiFormatWriter().encode(contents, barcodeFormat, width, height);
-    MatrixToImageWriter.writeToPath(matrix, imageFormat, Paths.get(outFileString));
-  }
-
-  private static void printUsage() {
-    System.err.println("Encodes barcode images using the ZXing library\n");
-    System.err.println("usage: CommandLineEncoder [ options ] content_to_encode");
-    System.err.println("  --barcode_format=format: Format to encode, from BarcodeFormat class. " +
-                           "Not all formats are supported. Defaults to QR_CODE.");
-    System.err.println("  --image_format=format: image output format, such as PNG, JPG, GIF. Defaults to PNG");
-    System.err.println("  --output=filename: File to write to. Defaults to out.png");
-    System.err.println("  --width=pixels: Image width. Defaults to 300");
-    System.err.println("  --height=pixels: Image height. Defaults to 300");
+    BitMatrix matrix = new MultiFormatWriter().encode(
+        config.contents.get(0), config.barcodeFormat, config.width, config.height);
+    MatrixToImageWriter.writeToPath(matrix, config.imageFormat, Paths.get(outFileString));
   }
 
 }
