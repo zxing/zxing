@@ -60,7 +60,7 @@ public final class DataMatrixWriter implements Writer {
 
     // Try to get force shape & min / max size
     SymbolShapeHint shape = SymbolShapeHint.FORCE_NONE;
-    Dimension minSize = new Dimension(width, height);
+    Dimension minSize = null;
     Dimension maxSize = null;
     if (hints != null) {
       SymbolShapeHint requestedShape = (SymbolShapeHint) hints.get(EncodeHintType.DATA_MATRIX_SHAPE);
