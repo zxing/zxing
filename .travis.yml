@@ -1,12 +1,19 @@
 language: java
 before_install: sudo pip install codecov
-script: mvn -Pjacoco test
+script: mvn ${JACOCO} test
 jdk:
   - openjdk7
   - oraclejdk8
+matrix:
+ include:
+   # Covers Java 7, Open JDK, and code coverage
+   - jdk: openjdk7
+     env: JACOCO=-Pjacoco
+   # Covers Java 8, Oracle JDK
+   - jdk: oraclejdk8
 cache:
   directories:
     - $HOME/.m2
 git:
-  depth: 3
+  depth: 10
 after_success: codecov
