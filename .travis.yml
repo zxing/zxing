@@ -1,9 +1,6 @@
 language: java
-before_install: sudo pip install codecov
+before_install: pip install codecov
 script: mvn ${JACOCO} test
-jdk:
-  - openjdk7
-  - oraclejdk8
 matrix:
  include:
    # Covers Java 7, Open JDK, and code coverage
