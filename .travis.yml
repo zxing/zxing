@@ -1,5 +1,4 @@
 language: java
-before_install: pip install codecov
 script: mvn ${JACOCO} test
 matrix:
  include:
@@ -13,4 +12,4 @@ cache:
     - $HOME/.m2
 git:
   depth: 10
-after_success: codecov
+after_success: bash <(curl -s https://codecov.io/bash)
