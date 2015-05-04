@@ -1,4 +1,5 @@
 language: java
+sudo: false
 script: mvn ${JACOCO} test
 matrix:
  include:
