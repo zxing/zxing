@@ -14,3 +14,15 @@ cache:
 git:
   depth: 10
 after_success: bash <(curl -s https://codecov.io/bash)
+env:
+  global:
+   - secure: "HmfK5Ya1l1/hWFk+RV5lwlrWAlv3FwyOFV1689JPtK9OBZAuDGmj0uskmLRWI7X6MdwHSpP93P5pADE1YbbqX2pZmhysBiLsGh8rmI+eTm/Q9h708qyRk3T2Yie49rfk5xlo1IN41dDt+3XZ0bEC7VEXNoCAyn9YMpZ/wOJiP/s="
+addons:
+  coverity_scan:
+    project:
+      name: "zxing/zxing"
+      description: "Build submitted via Travis CI"
+    notification_email: srowen@gmail.com
+    build_command_prepend: "mvn clean"
+    build_command: "mvn -DskipTests=true compile"
+    branch_pattern: master
