@@ -264,6 +264,10 @@ public final class DecodeServlet extends HttpServlet {
       log.info("File upload was too large or invalid");
       errorResponse(request, response, "badimage");
       return;
+    } catch (IOException ioe) {
+      log.info(ioe.toString());
+      errorResponse(request, response, "badurl");
+      return;
     }
     Part fileUploadPart = null;
     for (Part part : parts) {
