@@ -84,7 +84,7 @@ import javax.servlet.http.Part;
     maxRequestSize = 10_000_000,
     fileSizeThreshold = 1_000_000,
     location = "/tmp")
-@WebServlet("/w/decode")
+@WebServlet(value = "/w/decode", loadOnStartup = 1)
 public final class DecodeServlet extends HttpServlet {
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
@@ -204,13 +204,13 @@ public final class DecodeServlet extends HttpServlet {
 
     try {
       connection.connect();
-    } catch (IOException ioe) {
+    } catch (IOException | IllegalArgumentException e) {
       // Encompasses lots of stuff, including
       //  java.net.SocketException, java.net.UnknownHostException,
       //  javax.net.ssl.SSLPeerUnverifiedException,
       //  org.apache.http.NoHttpResponseException,
       //  org.apache.http.client.ClientProtocolException,
-      log.info(ioe.toString());
+      log.info(e.toString());
       errorResponse(request, response, "badurl");
       return;
     }
