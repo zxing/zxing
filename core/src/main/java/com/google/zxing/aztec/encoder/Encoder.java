@@ -311,7 +311,7 @@ public final class Encoder {
       case 12:
         return GenericGF.AZTEC_DATA_12;
       default:
-        return null;
+        throw new IllegalArgumentException("Unsupported word size " + wordSize);
     }
   }
 

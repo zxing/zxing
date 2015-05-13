@@ -170,10 +170,12 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
 
   private static Integer findNetworkInExistingConfig(WifiManager wifiManager, String ssid) {
     Iterable<WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
-    for (WifiConfiguration existingConfig : existingConfigs) {
-      String existingSSID = existingConfig.SSID;
-      if (existingSSID != null && existingSSID.equals(ssid)) {
-        return existingConfig.networkId;
+    if (existingConfigs != null) {
+      for (WifiConfiguration existingConfig : existingConfigs) {
+        String existingSSID = existingConfig.SSID;
+        if (existingSSID != null && existingSSID.equals(ssid)) {
+          return existingConfig.networkId;
+        }
       }
     }
     return null;

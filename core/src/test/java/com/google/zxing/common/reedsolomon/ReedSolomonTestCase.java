@@ -19,7 +19,6 @@ package com.google.zxing.common.reedsolomon;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Random;

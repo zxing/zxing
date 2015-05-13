@@ -19,7 +19,6 @@ package com.google.zxing.common;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -116,9 +115,6 @@ public final class BitArrayTestCase extends Assert {
           expected++;
         }
         int actual = array.getNextSet(query);
-        if (actual != expected) {
-          array.getNextSet(query);
-        }
         assertEquals(expected, actual);
       }
     }
