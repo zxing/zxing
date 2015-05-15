@@ -294,9 +294,6 @@ public final class ITFReader extends OneDReader {
   private static int[] findGuardPattern(BitArray row,
                                         int rowOffset,
                                         int[] pattern) throws NotFoundException {
-
-    // TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
-    // merged to a single method.
     int patternLength = pattern.length;
     int[] counters = new int[patternLength];
     int width = row.getSize();

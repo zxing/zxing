@@ -77,23 +77,20 @@ public final class BitMatrix implements Cloneable {
       if (stringRepresentation.charAt(pos) == '\n' ||
           stringRepresentation.charAt(pos) == '\r') {
         if (bitsPos > rowStartPos) {
-          if(rowLength == -1) {
+          if (rowLength == -1) {
             rowLength = bitsPos - rowStartPos;
-          }
-          else if (bitsPos - rowStartPos != rowLength) {
+          } else if (bitsPos - rowStartPos != rowLength) {
             throw new IllegalArgumentException("row lengths do not match");
           }
           rowStartPos = bitsPos;
           nRows++;
         }
         pos++;
-      }
-      else if (stringRepresentation.substring(pos, pos + setString.length()).equals(setString)) {
+      }  else if (stringRepresentation.substring(pos, pos + setString.length()).equals(setString)) {
         pos += setString.length();
         bits[bitsPos] = true;
         bitsPos++;
-      }
-      else if (stringRepresentation.substring(pos, pos + unsetString.length()).equals(unsetString)) {
+      } else if (stringRepresentation.substring(pos, pos + unsetString.length()).equals(unsetString)) {
         pos += unsetString.length();
         bits[bitsPos] = false;
         bitsPos++;

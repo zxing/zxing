@@ -261,7 +261,7 @@ public class Detector {
   /**
    * See {@link #sizeOfBlackWhiteBlackRun(int, int, int, int)}; computes the total width of
    * a finder pattern by looking for a black-white-black run from the center in the direction
-   * of another point (another finder pattern center), and in the opposite direction too.</p>
+   * of another point (another finder pattern center), and in the opposite direction too.
    */
   private float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY) {
 

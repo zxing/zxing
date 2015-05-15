@@ -118,7 +118,7 @@ public final class CalendarEventGenerator implements GeneratorSource {
 
   private void buildTimeZoneList() {
     for (TimeZoneInfo info : TimeZoneList.TIMEZONES) {
-      timeZones.addItem(info.getGMTRelative() + ' ' + info.getAbreviation(),
+      timeZones.addItem(info.getGmtRelative() + ' ' + info.getAbbreviation(),
                         String.valueOf(info.getGmtDiff()));
     }
   }

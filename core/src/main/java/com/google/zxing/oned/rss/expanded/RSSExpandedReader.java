@@ -110,15 +110,12 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
   };
 
-  //private static final int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.length - 1].length;
-
   private static final int MAX_PAIRS = 11;
 
   private final List<ExpandedPair> pairs = new ArrayList<>(MAX_PAIRS);
   private final List<ExpandedRow> rows = new ArrayList<>();
   private final int [] startEnd = new int[2];
-  //private final int [] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
-  private boolean startFromEven = false;
+  private boolean startFromEven;
 
   @Override
   public Result decodeRow(int rowNumber,
@@ -153,7 +150,6 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       while (true){
         ExpandedPair nextPair = retrieveNextPair(row, this.pairs, rowNumber);
         this.pairs.add(nextPair);
-        //System.out.println(this.pairs.size()+" pairs found so far on row "+rowNumber+": "+this.pairs);
         // exit this loop when retrieveNextPair() fails and throws
       }
     } catch (NotFoundException nfe) {
@@ -171,7 +167,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     boolean wasReversed = false; // TODO: deal with reversed rows
     storeRow(rowNumber, wasReversed);
     if (tryStackedDecode) {
-      // When the image is 180-rotated, then rows are sorted in wrong dirrection.
+      // When the image is 180-rotated, then rows are sorted in wrong direction.
       // Try twice with both the directions.
       List<ExpandedPair> ps = checkRows(false);
       if (ps != null) {
@@ -189,7 +185,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   private List<ExpandedPair> checkRows(boolean reverse) {
     // Limit number of rows we are checking
     // We use recursive algorithm with pure complexity and don't want it to take forever
-    // Stacked barcode can have up to 11 rows, so 25 seems resonable enough
+    // Stacked barcode can have up to 11 rows, so 25 seems reasonable enough
     if (this.rows.size() > 25) {
       this.rows.clear();  // We will never have a chance to get result, so clear it
       return null;
@@ -306,7 +302,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
   // Remove all the rows that contains only specified pairs 
   private static void removePartialRows(List<ExpandedPair> pairs, List<ExpandedRow> rows) {
-    for (Iterator<ExpandedRow> iterator = rows.iterator(); iterator.hasNext(); ) {
+    for (Iterator<ExpandedRow> iterator = rows.iterator(); iterator.hasNext();) {
       ExpandedRow r = iterator.next();
       if (r.getPairs().size() == pairs.size()) {
         continue;

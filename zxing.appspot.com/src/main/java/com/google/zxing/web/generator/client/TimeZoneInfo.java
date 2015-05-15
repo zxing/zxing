@@ -18,28 +18,28 @@ package com.google.zxing.web.generator.client;
 
 final class TimeZoneInfo {
 
-  private final String abreviation;
+  private final String abbreviation;
   private final String longName;
-  private final String GMTRelative;
+  private final String gmtRelative;
   private final long gmtDiff;
 
-  TimeZoneInfo(String abreviation, String longName, String relative, long gmtDiff) {
-    GMTRelative = relative;
-    this.abreviation = abreviation;
+  TimeZoneInfo(String abbreviation, String longName, String relative, long gmtDiff) {
+    gmtRelative = relative;
+    this.abbreviation = abbreviation;
     this.gmtDiff = gmtDiff;
     this.longName = longName;
   }
 
-  String getAbreviation() {
-    return abreviation;
+  String getAbbreviation() {
+    return abbreviation;
   }
 
   String getLongName() {
     return longName;
   }
 
-  String getGMTRelative() {
-    return GMTRelative;
+  String getGmtRelative() {
+    return gmtRelative;
   }
 
   long getGmtDiff() {
