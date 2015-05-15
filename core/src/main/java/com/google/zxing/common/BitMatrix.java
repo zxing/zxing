@@ -426,6 +426,7 @@ public final class BitMatrix implements Cloneable {
    * @param setString representation of a set bit
    * @param unsetString representation of an unset bit
    * @param lineSeparator newline character in string representation
+   * @return string representation of entire matrix utilizing given strings and line separator
    * @deprecated call {@link #toString(String,String)} only, which uses \n line separator always
    */
   @Deprecated

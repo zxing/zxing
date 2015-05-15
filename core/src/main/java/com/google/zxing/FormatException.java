@@ -35,10 +35,10 @@ public final class FormatException extends ReaderException {
   }
 
   public static FormatException getFormatInstance() {
-    return IS_STACK_TRACE ? new FormatException() : INSTANCE;
+    return isStackTrace ? new FormatException() : INSTANCE;
   }
   
   public static FormatException getFormatInstance(Throwable cause) {
-    return IS_STACK_TRACE ? new FormatException(cause) : INSTANCE;
+    return isStackTrace ? new FormatException(cause) : INSTANCE;
   }
 }

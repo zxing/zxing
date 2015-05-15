@@ -75,8 +75,8 @@ public class SymbolInfo {
   private final boolean rectangular;
   private final int dataCapacity;
   private final int errorCodewords;
-  private final int matrixWidth;
-  private final int matrixHeight;
+  public final int matrixWidth;
+  public final int matrixHeight;
   private final int dataRegions;
   private final int rsBlockData;
   private final int rsBlockError;
@@ -184,14 +184,6 @@ public class SymbolInfo {
       default:
         throw new IllegalStateException("Cannot handle this number of data regions");
     }
-  }
-
-  public int getMatrixWidth() {
-    return matrixWidth;
-  }
-
-  public int getMatrixHeight() {
-    return matrixHeight;
   }
 
   public final int getSymbolDataWidth() {

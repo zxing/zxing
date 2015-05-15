@@ -26,7 +26,7 @@ package com.google.zxing;
 public abstract class ReaderException extends Exception {
 
   // disable stack traces when not running inside test units
-  protected static final boolean IS_STACK_TRACE =
+  protected static final boolean isStackTrace =
       System.getProperty("surefire.test.class.path") != null;
 
   ReaderException() {

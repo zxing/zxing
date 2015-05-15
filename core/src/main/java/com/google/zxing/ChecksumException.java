@@ -35,10 +35,10 @@ public final class ChecksumException extends ReaderException {
   }
 
   public static ChecksumException getChecksumInstance() {
-    return IS_STACK_TRACE ? new ChecksumException() : INSTANCE;
+    return isStackTrace ? new ChecksumException() : INSTANCE;
   }
 
   public static ChecksumException getChecksumInstance(Throwable cause) {
-    return IS_STACK_TRACE ? new ChecksumException(cause) : INSTANCE;
+    return isStackTrace ? new ChecksumException(cause) : INSTANCE;
   }
 }

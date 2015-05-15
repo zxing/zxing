@@ -412,6 +412,8 @@
           <version>2.15</version>
           <configuration>
             <configLocation>src/checkstyle/checkstyle.xml</configLocation>
+            <!-- Android generated files -->
+            <excludes>**/R.java,**/BuildConfig.java</excludes>
           </configuration>
           <executions>
             <execution>
@@ -460,6 +462,20 @@
               </goals>
             </execution>
           </executions>
+          <!-- workaround for Xerces warnings -->
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-core</artifactId>
+              <version>1.6</version>
+              <exclusions>
+                <exclusion>
+                  <groupId>xerces</groupId>
+                  <artifactId>xercesImpl</artifactId>
+                </exclusion>
+              </exclusions>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
