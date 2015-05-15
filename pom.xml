@@ -411,7 +411,6 @@
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>2.15</version>
           <configuration>
-            <headerLocation>src/checkstyle/header-file.txt</headerLocation>
             <configLocation>src/checkstyle/checkstyle.xml</configLocation>
           </configuration>
           <executions>
