@@ -93,5 +93,15 @@ public enum ResultMetadataType {
    * parity is given with it.
    */
   STRUCTURED_APPEND_PARITY,
-  
+
+  /**
+   * For Code39 this contains the decoded contents with the Full-ASCII range.
+   */
+  CODE_39_EXTENDED,
+
+  /**
+   * For Code39 this contains a boolean marking whether the checksum is valid.
+   */
+  CODE_39_CHECKSUM_CORRECT,
+
 }

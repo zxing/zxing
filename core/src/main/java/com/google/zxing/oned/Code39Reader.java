@@ -22,6 +22,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
@@ -140,16 +141,25 @@ public final class Code39Reader extends OneDReader {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    if (usingCheckDigit) {
-      int max = result.length() - 1;
-      int total = 0;
-      for (int i = 0; i < max; i++) {
-        total += ALPHABET_STRING.indexOf(decodeRowResult.charAt(i));
-      }
-      if (result.charAt(max) != ALPHABET[total % 43]) {
+    // Calculate the checksum. Validate it if it was requested.
+    int max = result.length() - 1;
+    int total = 0;
+    for (int i = 0; i < max; i++) {
+      total += ALPHABET_STRING.indexOf(decodeRowResult.charAt(i));
+    }
+    Boolean checksumFlag;
+    if (result.charAt(max) != ALPHABET[total % 43]) {
+      // Checksum does not match.
+      if (usingCheckDigit) {
         throw ChecksumException.getChecksumInstance();
       }
-      result.setLength(max);
+      checksumFlag = Boolean.FALSE;
+    } else {
+      // Checksum matches.
+      if (usingCheckDigit) {
+        result.setLength(max);
+      }
+      checksumFlag = Boolean.TRUE;
     }
 
     if (result.length() == 0) {
@@ -158,22 +168,37 @@ public final class Code39Reader extends OneDReader {
     }
 
     String resultString;
+    String extendedString;
     if (extendedMode) {
       resultString = decodeExtended(result);
+      extendedString = resultString;
     } else {
       resultString = result.toString();
+      try {
+        // Optional. The string may be non-extended.
+        extendedString = decodeExtended(result);
+      } catch (FormatException e) {
+        extendedString = null;
+      }
     }
 
     float left = (float) (start[1] + start[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
-    return new Result(
+    Result decodeResult;
+    decodeResult = new Result(
         resultString,
         null,
         new ResultPoint[]{
             new ResultPoint(left, (float) rowNumber),
             new ResultPoint(right, (float) rowNumber)},
         BarcodeFormat.CODE_39);
-
+    if (checksumFlag != null) {
+      decodeResult.putMetadata(ResultMetadataType.CODE_39_CHECKSUM_CORRECT, checksumFlag);
+    }
+    if (extendedString != null) {
+      decodeResult.putMetadata(ResultMetadataType.CODE_39_EXTENDED, extendedString);
+    }
+    return decodeResult;
   }
 
   private static int[] findAsteriskPattern(BitArray row, int[] counters) throws NotFoundException {
@@ -270,6 +295,10 @@ public final class Code39Reader extends OneDReader {
     for (int i = 0; i < length; i++) {
       char c = encoded.charAt(i);
       if (c == '+' || c == '$' || c == '%' || c == '/') {
+        // Make sure we have more characters, throw a FormatException we don't
+        if (i >= length - 1) {
+          throw FormatException.getFormatInstance();
+        }
         char next = encoded.charAt(i + 1);
         char decodedChar = '\0';
         switch (c) {

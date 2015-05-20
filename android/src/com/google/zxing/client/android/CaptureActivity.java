@@ -93,7 +93,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
                  ResultMetadataType.SUGGESTED_PRICE,
                  ResultMetadataType.ERROR_CORRECTION_LEVEL,
-                 ResultMetadataType.POSSIBLE_COUNTRY);
+                 ResultMetadataType.POSSIBLE_COUNTRY,
+                 ResultMetadataType.CODE_39_EXTENDED);
 
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
