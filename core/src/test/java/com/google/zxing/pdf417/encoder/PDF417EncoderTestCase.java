@@ -31,6 +31,13 @@ public final class PDF417EncoderTestCase extends Assert {
   }
 
   @Test
+  public void testEncodeAutoWithSpecialChars() throws Exception {
+	//Just check if this does not throw an exception
+    PDF417HighLevelEncoder.encodeHighLevel(
+        "1%§s ?aG$", Compaction.AUTO, StandardCharsets.UTF_8);
+  }
+
+  @Test
   public void testEncodeText() throws Exception {
     String encoded = PDF417HighLevelEncoder.encodeHighLevel(
         "ABCD", Compaction.TEXT, StandardCharsets.UTF_8);
