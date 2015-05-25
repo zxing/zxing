@@ -33,6 +33,7 @@ public final class DecoderTest {
    *	at com.google.zxing.aztec.decoder.Decoder.correctBits(Decoder.java:231)
    *	at com.google.zxing.aztec.decoder.Decoder.decode(Decoder.java:77)
    *	at com.google.zxing.aztec.decoder.DecoderTest.testDecodeBug1(DecoderTest.java:66)</pre>
+   * @throws FormatException
    */
   @Test(expected = FormatException.class)
   public void testDecodeTooManyErrors() throws FormatException {
