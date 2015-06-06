@@ -25,6 +25,9 @@ package com.google.zxing;
 public final class ChecksumException extends ReaderException {
 
   private static final ChecksumException INSTANCE = new ChecksumException();
+  static {
+    INSTANCE.setStackTrace(NO_TRACE); // since it's meaningless
+  }
 
   private ChecksumException() {
     // do nothing

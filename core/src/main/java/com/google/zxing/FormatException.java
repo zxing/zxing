@@ -26,6 +26,9 @@ package com.google.zxing;
 public final class FormatException extends ReaderException {
 
   private static final FormatException INSTANCE = new FormatException();
+  static {
+    INSTANCE.setStackTrace(NO_TRACE); // since it's meaningless
+  }
 
   private FormatException() {
   }

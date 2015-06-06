@@ -34,7 +34,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.GenericMultipleBarcodeReader;
 import com.google.zxing.multi.MultipleBarcodeReader;
 
-import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
@@ -51,6 +50,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -320,7 +320,7 @@ public final class DecodeServlet extends HttpServlet {
 
     LuminanceSource source = new BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-    Collection<Result> results = Lists.newArrayListWithCapacity(1);
+    Collection<Result> results = new ArrayList<>(1);
 
     try {
 
@@ -375,7 +375,15 @@ public final class DecodeServlet extends HttpServlet {
       }
   
       if (results.isEmpty()) {
-        handleException(savedException, request, response);
+        try {
+          throw savedException == null ? NotFoundException.getNotFoundInstance() : savedException;
+        } catch (FormatException | ChecksumException e) {
+          log.info(e.getMessage());
+          errorResponse(request, response, "format");
+        } catch (ReaderException e) { // Including NotFoundException
+          log.info(e.getMessage());
+          errorResponse(request, response, "notfound");
+        }
         return;
       }
 
@@ -399,25 +407,6 @@ public final class DecodeServlet extends HttpServlet {
     } else {
       request.setAttribute("results", results);
       request.getRequestDispatcher("decoderesult.jspx").forward(request, response);
-    }
-  }
-
-  private static void handleException(ReaderException re,
-                                      HttpServletRequest request,
-                                      HttpServletResponse response)
-      throws IOException, ServletException {
-    if (re instanceof NotFoundException) {
-      log.info("Not found: " + re);
-      errorResponse(request, response, "notfound");
-    } else if (re instanceof FormatException) {
-      log.info("Format problem: " + re);
-      errorResponse(request, response, "format");
-    } else if (re instanceof ChecksumException) {
-      log.info("Checksum problem: " + re);
-      errorResponse(request, response, "format");
-    } else {
-      log.info("Unknown problem: " + re);
-      errorResponse(request, response, "notfound");
     }
   }
 
