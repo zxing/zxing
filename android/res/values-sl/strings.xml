@@ -51,7 +51,7 @@
   <string name="history_clear_text">Pobriši zgodovino</string>
   <string name="history_email_title">Barcode Scanner zgodovina</string>
   <string name="history_empty">Prazne</string>
-  <string name="history_empty_detail">Št črtne kode scans so bile zabeležene</string>
+  <string name="history_empty_detail">Ni zapisov o skeniranih črtnih kodah</string>
   <string name="history_send">Pošlji zgodovino</string>
   <string name="history_title">Zgodovina</string>
   <string name="menu_encode_mecard">Uporaba MECARD</string>
@@ -87,8 +87,8 @@
   <string name="msg_sure">Ali ste prepričani?</string>
   <string name="msg_unmount_usb">Oprostite, do SD kartice ni možno dostopati</string>
   <string name="preferences_actions_title">Ko je črtna koda najdena\u2026</string>
-  <string name="preferences_auto_focus_title">Uporabite samodejno ostrenje</string>
-  <string name="preferences_auto_open_web_title">Odpiranje spletnih strani samodejno</string>
+  <string name="preferences_auto_focus_title">Uporabite samodejno fokus</string>
+  <string name="preferences_auto_open_web_title">Samodejno odpiranje spletnih strani</string>
   <string name="preferences_bulk_mode_summary">Beri in shrani več črtnih kod zaporedoma</string>
   <string name="preferences_bulk_mode_title">Branje črtnih kod na debelo</string>
   <string name="preferences_copy_to_clipboard_title">Kopiraj v beležnico</string>
@@ -99,13 +99,13 @@
   <string name="preferences_decode_Aztec_title">Aztec</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
-  <string name="preferences_decode_QR_title">QR kodo</string>
+  <string name="preferences_decode_QR_title">QR kode</string>
   <string name="preferences_device_bug_workarounds_title">Naprava Bug Rešitve</string>
-  <string name="preferences_disable_barcode_scene_mode_title">Št črtne kode scenski način</string>
-  <string name="preferences_disable_continuous_focus_summary">Uporabljajte samo standardni način ostrenja</string>
-  <string name="preferences_disable_continuous_focus_title">Št stalna osredotočenost</string>
-  <string name="preferences_disable_exposure_title">Nobena izpostavljenost</string>
-  <string name="preferences_disable_metering_title">Št merjenje</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Ni scenskega načina za črtne kode</string>
+  <string name="preferences_disable_continuous_focus_summary">Uporabi samo standardni način fokusiranja</string>
+  <string name="preferences_disable_continuous_focus_title">Onemogoči stalni fokus</string>
+  <string name="preferences_disable_exposure_title">Brez izpostavljenosti</string>
+  <string name="preferences_disable_metering_title">Brez merjenja</string>
   <string name="preferences_front_light_auto">Samodejno</string>
   <string name="preferences_front_light_off">Neaktivno</string>
   <string name="preferences_front_light_on">Aktivna</string>
@@ -117,15 +117,15 @@
   <string name="preferences_invert_scan_summary">Scan za beli črtne kode na črni podlagi. Ni na voljo na nekaterih napravah.</string>
   <string name="preferences_invert_scan_title">Obrni skeniranje</string>
   <string name="preferences_name">Nastavitve</string>
-  <string name="preferences_orientation_title">Št avtomatsko rotacijo</string>
+  <string name="preferences_orientation_title">Brez avtomatske rotacije</string>
   <string name="preferences_play_beep_title">Pisk</string>
-  <string name="preferences_remember_duplicates_summary">Shranjevanje več skandiranje iste črtne kode v zgodovini</string>
-  <string name="preferences_remember_duplicates_title">Zapomni si dvojnikov</string>
+  <string name="preferences_remember_duplicates_summary">Shranjevanje večkratnega skeniranja iste črtne kode v zgodovini</string>
+  <string name="preferences_remember_duplicates_title">Zapomni si dvojnike</string>
   <string name="preferences_result_title">Nastavitve rezultatov branja</string>
   <string name="preferences_scanning_title">Ko berete črtne kode, preberi\u2026</string>
   <string name="preferences_search_country">Išči po državi</string>
   <string name="preferences_supplemental_summary">Poskusite pridobiti več informacij o vsebini črtne kode</string>
-  <string name="preferences_supplemental_title">Naloži Več info</string>
+  <string name="preferences_supplemental_title">Naloži več informacij</string>
   <string name="preferences_vibrate_title">Vibriraj</string>
   <string name="result_address_book">Najdene informacije o kontaktu</string>
   <string name="result_calendar">Najden koledarski dogodek</string>
@@ -139,5 +139,5 @@
   <string name="result_uri">Najden URL</string>
   <string name="result_wifi">Najdene WLAN nastavitve</string>
   <string name="sbc_name">Iskanje z Google Book Search</string>
-  <string name="wifi_changing_network">Zahteva priključitev na omrežje\u2026</string>
+  <string name="wifi_changing_network">Priključevanje na omrežje\u2026</string>
 </resources>
