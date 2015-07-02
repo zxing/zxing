@@ -36,6 +36,12 @@ public final class PDF417EncoderTestCase extends Assert {
     PDF417HighLevelEncoder.encodeHighLevel(
         "1%§s ?aG$", Compaction.AUTO, StandardCharsets.UTF_8);
   }
+  
+  @Test
+  public void testEncodeIso88591WithSpecialChars() throws Exception {
+	  // Just check if this does not throw an exception
+	  PDF417HighLevelEncoder.encodeHighLevel("asdfg§asd", Compaction.AUTO, StandardCharsets.ISO_8859_1);
+  }
 
   @Test
   public void testEncodeText() throws Exception {
