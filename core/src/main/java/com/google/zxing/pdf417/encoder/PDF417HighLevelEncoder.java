@@ -215,7 +215,7 @@ final class PDF417HighLevelEncoder {
             if (b == 0) {
               b = 1;
             }
-            byte[] bytes = msg.substring(p, b).getBytes(encoding);
+            byte[] bytes = msg.substring(p, p + b).getBytes(encoding);
             if (bytes.length == 1 && encodingMode == TEXT_COMPACTION) {
               //Switch for one byte (instead of latch)
               encodeBinary(bytes, 0, 1, TEXT_COMPACTION, sb);
