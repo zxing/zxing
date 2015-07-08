@@ -23,7 +23,7 @@ library implemented in Java, with ports to other languages.
 | ------------------- | -----------
 | core                | The core image decoding library, and test code
 | javase              | JavaSE-specific client code
-| android             | Android client Barcode Scanner [![Barcode Scanner](http://www.android.com/images/brand/android_app_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
+| android             | Android client Barcode Scanner [![Barcode Scanner](http://www.android.com/images/brand/android_app_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.google.zxing.client.android) [![Barcode Scanner](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Get_it_on_F-Droid.svg/129px-Get_it_on_F-Droid.svg.png)](https://f-droid.org/repository/browse/?fdid=com.google.zxing.client.android)
 | androidtest         | Android test app, ZXing Test
 | android-integration | Supports integration with Barcode Scanner via `Intent`
 | android-core        | Android-related code shared among `android`, `androidtest`, `glass`
