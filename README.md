@@ -56,7 +56,7 @@ library implemented in Java, with ports to other languages.
 | ---------------------------------------------- | -----------
 | [Barcode4J](http://barcode4j.sourceforge.net/) | Generator library in Java
 | [ZBar](http://zbar.sourceforge.net/)           | Reader library in C99
-| [Zint](http://sourceforge.net/projects/zint/)  | Generator library in C99
+| [OkapiBarcode](https://github.com/woo-j/OkapiBarcode)  | 
 
 ## Links
 
