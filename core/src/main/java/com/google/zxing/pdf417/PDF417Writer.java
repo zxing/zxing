@@ -97,9 +97,8 @@ public final class PDF417Writer implements Writer {
     int errorCorrectionLevel = 2;
     encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
 
-    int lineThickness = 2;
     int aspectRatio = 4;
-    byte[][] originalScale = encoder.getBarcodeMatrix().getScaledMatrix(lineThickness, aspectRatio * lineThickness);
+    byte[][] originalScale = encoder.getBarcodeMatrix().getScaledMatrix(1, aspectRatio);
     boolean rotated = false;
     if ((height > width) ^ (originalScale[0].length < originalScale.length)) {
       originalScale = rotateArray(originalScale);
@@ -118,7 +117,7 @@ public final class PDF417Writer implements Writer {
 
     if (scale > 1) {
       byte[][] scaledMatrix =
-          encoder.getBarcodeMatrix().getScaledMatrix(scale * lineThickness, scale * aspectRatio * lineThickness);
+          encoder.getBarcodeMatrix().getScaledMatrix(scale, scale * aspectRatio);
       if (rotated) {
         scaledMatrix = rotateArray(scaledMatrix);
       }
