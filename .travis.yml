@@ -13,7 +13,7 @@ cache:
     - $HOME/.m2
 git:
   depth: 10
-after_success: bash <(curl -s https://codecov.io/bash)
+after_success: if [ -n "$JACOCO" ]; then bash <(curl -s https://codecov.io/bash); fi
 env:
   global:
    # COVERITY_SCAN:
