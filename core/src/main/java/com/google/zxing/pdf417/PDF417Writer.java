@@ -39,6 +39,11 @@ public final class PDF417Writer implements Writer {
    */
   static final int WHITE_SPACE = 30;
 
+  /**
+   * default error correction level
+   */
+  static final int DEFAULT_ERROR_CORRECTION_LEVEL = 2;
+
   @Override
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
@@ -51,6 +56,7 @@ public final class PDF417Writer implements Writer {
 
     PDF417 encoder = new PDF417();
     int margin = WHITE_SPACE;
+    int errorCorrectionLevel = DEFAULT_ERROR_CORRECTION_LEVEL;
 
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
@@ -69,13 +75,16 @@ public final class PDF417Writer implements Writer {
       if (hints.containsKey(EncodeHintType.MARGIN)) {
         margin = ((Number) hints.get(EncodeHintType.MARGIN)).intValue();
       }
+      if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+        errorCorrectionLevel = ((Number) hints.get(EncodeHintType.ERROR_CORRECTION)).intValue();
+      }
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
         String encoding = (String) hints.get(EncodeHintType.CHARACTER_SET);
         encoder.setEncoding(Charset.forName(encoding));
       }
     }
 
-    return bitMatrixFromEncoder(encoder, contents, width, height, margin);
+    return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin);
   }
 
   @Override
@@ -91,10 +100,10 @@ public final class PDF417Writer implements Writer {
    */
   private static BitMatrix bitMatrixFromEncoder(PDF417 encoder,
                                                 String contents,
+                                                int errorCorrectionLevel,
                                                 int width,
                                                 int height,
                                                 int margin) throws WriterException {
-    int errorCorrectionLevel = 2;
     encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
 
     int aspectRatio = 4;
