@@ -377,13 +377,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    if (resultCode == RESULT_OK) {
-      if (requestCode == HISTORY_REQUEST_CODE) {
-        int itemNumber = intent.getIntExtra(Intents.History.ITEM_NUMBER, -1);
-        if (itemNumber >= 0) {
-          HistoryItem historyItem = historyManager.buildHistoryItem(itemNumber);
-          decodeOrStoreSavedBitmap(null, historyItem.getResult());
-        }
+    if (resultCode == RESULT_OK && requestCode == HISTORY_REQUEST_CODE && historyManager != null) {
+      int itemNumber = intent.getIntExtra(Intents.History.ITEM_NUMBER, -1);
+      if (itemNumber >= 0) {
+        HistoryItem historyItem = historyManager.buildHistoryItem(itemNumber);
+        decodeOrStoreSavedBitmap(null, historyItem.getResult());
       }
     }
   }
