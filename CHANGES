@@ -351,3 +351,7 @@
   - Several bug fixes, especially for Data Matrix and PDF417 parsing
   - Retired jruby binding
   - Barcode Scanner can now disable history
+
+3.2.1 (20 Aug 2015)
+
+  - Small bug fixes
