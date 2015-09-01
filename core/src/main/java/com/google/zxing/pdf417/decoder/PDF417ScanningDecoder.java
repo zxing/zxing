@@ -343,7 +343,8 @@ public final class PDF417ScanningDecoder {
             int rowNumber = codeword.getRowNumber();
             if (rowNumber >= 0) {
               if (rowNumber >= barcodeMatrix.length) {
-                throw FormatException.getFormatInstance();
+                // We have more rows than the barcode metadata allows for, ignore them.
+                continue;
               }
               barcodeMatrix[rowNumber][column].setValue(codeword.getValue());
             }
