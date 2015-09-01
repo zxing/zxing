@@ -122,7 +122,8 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       if (codeword != null) {
         int rowNumber = codeword.getRowNumber();
         if (rowNumber >= result.length) {
-          throw FormatException.getFormatInstance();
+          // We have more rows than the barcode metadata allows for, ignore them.
+          continue;
         }
         result[rowNumber]++;
       } // else throw exception?
