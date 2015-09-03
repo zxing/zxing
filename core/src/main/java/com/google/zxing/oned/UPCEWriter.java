@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.zxing.zxing.oned;
+package com.google.zxing.oned;
 
 import java.util.Map;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.zxing.EncodeHintType;
-import com.google.zxing.zxing.WriterException;
-import com.google.zxing.zxing.common.BitMatrix;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
 /**
  * This object renders an UPC-E code as a {@link BitMatrix}.
