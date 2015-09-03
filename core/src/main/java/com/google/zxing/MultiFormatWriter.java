@@ -58,6 +58,9 @@ public final class MultiFormatWriter implements Writer {
       case EAN_8:
         writer = new EAN8Writer();
         break;
+      case UPC_E:
+        writer = new UPCEWriter();
+        break;
       case EAN_13:
         writer = new EAN13Writer();
         break;
