@@ -15,9 +15,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
+
+<!-- Additional config:
+ JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ JAVA_OPTS="-Djava.awt.headless=true -Xmx960m -XX:+UseG1GC -XX:+UseStringDeduplication"
+-->
+
 <Server port="8005" shutdown="SHUTDOWN">
   <!--APR library loader. Documentation at /docs/apr.html -->
-  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <!--<Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />-->
   <!-- Prevent memory leaks due to use of particular java/javax APIs-->
   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
@@ -25,29 +31,32 @@
 
   <Service name="Catalina">
 
-    <!-- Customize URIEncoding -->
-    <Connector port="8080" protocol="HTTP/1.1"
-               connectionTimeout="20000"
-               redirectPort="8443"
+    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-" maxThreads="10" minSpareThreads="2"/>
+
+    <Connector port="80" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
+               redirectPort="443" 
+               server="Apache" compression="4096"
+               executor="tomcatThreadPool"
                URIEncoding="UTF-8"/>
 
-    <!-- Customize URIEncoding -->
-    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" URIEncoding="UTF-8"/>
+    <Connector port="443" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
+               server="Apache" compression="4096"
+               executor="tomcatThreadPool"
+               SSLEnabled="true" scheme="https" secure="true"
+               keyAlias="zxingorg" 
+               keystoreFile="" keystorePass=""
+               URIEncoding="UTF-8" />
 
     <Engine name="Catalina" defaultHost="localhost">
 
-      <Host name="localhost"  appBase="webapps"
-            unpackWARs="true" autoDeploy="true">
+      <Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">
 
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log" suffix=".txt" rotatable="false"
                pattern="%h %l %u %t &quot;%r&quot; %s %b" />
 
-        <!-- Amazon EBS customization? -->
-        <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="X-Forwarded-Proto"
-               internalProxies="10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|169\.254\.\d+\.\d+|127\.\d+\.\d+\.\d+|172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+" />
-
       </Host>
     </Engine>
   </Service>
 </Server>
+
