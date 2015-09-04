@@ -29,7 +29,32 @@ import com.google.zxing.common.BitArray;
  * @author Sean Owen
  */
 public final class UPCEReader extends UPCEANReader {
-
+  // For an UPC-E barcode, the final digit is represented by the parities used
+  // to encode the middle six digits, according to the table below.
+  //
+  //                Parity of next 6 digits
+  //    Digit   0     1     2     3     4     5
+  //       0    Even   Even  Even Odd  Odd   Odd
+  //       1    Even   Even  Odd  Even Odd   Odd
+  //       2    Even   Even  Odd  Odd  Even  Odd
+  //       3    Even   Even  Odd  Odd  Odd   Even
+  //       4    Even   Odd   Even Even Odd   Odd
+  //       5    Even   Odd   Odd  Even Even  Odd
+  //       6    Even   Odd   Odd  Odd  Even  Even
+  //       7    Even   Odd   Even Odd  Even  Odd
+  //       8    Even   Odd   Even Odd  Odd   Even
+  //       9    Even   Odd   Odd  Even Odd   Even
+  //
+  // The encoding is represented by the following array, which is a bit pattern
+  // using Odd = 0 and Even = 1. For example, 5 is represented by:
+  //
+  //              Odd Even Even Odd Odd Even
+  // in binary:
+  //                0    1    1   0   0    1   == 0x19
+  //
+  static final int[] CHECK_DIGIT_ENCODINGS = {
+      0x38, 0x34, 0x32, 0x31, 0x2C, 0x26, 0x23, 0x2A, 0x29, 0x25
+  };
   /**
    * The pattern that marks the middle, and end, of a UPC-E pattern.
    * There is no "second half" to a UPC-E barcode.

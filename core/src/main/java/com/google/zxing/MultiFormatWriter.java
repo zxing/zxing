@@ -26,6 +26,7 @@ import com.google.zxing.oned.EAN13Writer;
 import com.google.zxing.oned.EAN8Writer;
 import com.google.zxing.oned.ITFWriter;
 import com.google.zxing.oned.UPCAWriter;
+import com.google.zxing.oned.UPCEWriter;
 import com.google.zxing.pdf417.PDF417Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
 
@@ -57,6 +58,9 @@ public final class MultiFormatWriter implements Writer {
     switch (format) {
       case EAN_8:
         writer = new EAN8Writer();
+        break;
+      case UPC_E:
+        writer = new UPCEWriter();
         break;
       case EAN_13:
         writer = new EAN13Writer();
