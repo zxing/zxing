@@ -56,7 +56,10 @@ public abstract class UPCEANReader extends OneDReader {
    * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
    */
   static final int[] MIDDLE_PATTERN = {1, 1, 1, 1, 1};
-
+  /**
+   * end guard pattern.
+   */
+  static final int[] END_PATTERN = {1, 1, 1, 1, 1, 1};
   /**
    * "Odd", or "L" patterns used to encode UPC/EAN digits.
    */
