@@ -23,6 +23,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLDecoder;
+import ij.ImagePlus;
+import ij.io.Opener;
+
 
 /**
  * Encapsulates reading URIs as images.
@@ -47,7 +50,13 @@ public final class ImageReader {
       throw new IOException("Resource not found: " + uri, iae);
     }
     if (result == null) {
-      throw new IOException("Could not load " + uri);
+      Opener opener_ = new Opener();
+      ImagePlus tmp = opener_.openTiff(uri.toString().split(":")[1],1);
+      if (tmp == null) {
+        throw new IOException("Could not load " + uri.toString());
+      } else {
+        result = tmp.getBufferedImage();
+      }
     }
     return result;
   }
