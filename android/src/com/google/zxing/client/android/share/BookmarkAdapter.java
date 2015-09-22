@@ -46,7 +46,7 @@ final class BookmarkAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return cursor.getCount();
+    return cursor.isClosed() ? 0 : cursor.getCount();
   }
 
   @Override

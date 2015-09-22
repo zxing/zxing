@@ -41,7 +41,11 @@ public final class EmailAddressResultParser extends ResultParser {
       if (queryStart >= 0) {
         hostEmail = hostEmail.substring(0, queryStart);
       }
-      hostEmail = urlDecode(hostEmail);
+      try {
+        hostEmail = urlDecode(hostEmail);
+      } catch (IllegalArgumentException iae) {
+        return null;
+      }
       String[] tos = null;
       if (!hostEmail.isEmpty()) {
         tos = COMMA.split(hostEmail);
