@@ -53,7 +53,7 @@ final class EncoderConfig {
       help = true)
   boolean help;
   
-  @Parameter(names = "--errorcorrection",
+  @Parameter(names = "--error_correction",
       description = "Define the error correction level. Defaults to 'M'",
       validateWith = PositiveInteger.class)
   char errorcorrection = 'M';

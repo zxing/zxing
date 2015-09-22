@@ -21,10 +21,11 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.BarcodeFormat;
 
 import java.nio.file.Paths;
 import java.util.Locale;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Command line utility for encoding barcodes.
@@ -48,17 +49,16 @@ public final class CommandLineEncoder {
     if (EncoderConfig.DEFAULT_OUTPUT_FILE_BASE.equals(outFileString)) {
       outFileString += '.' + config.imageFormat.toLowerCase(Locale.ENGLISH);
     }
-    
     if (config.barcodeFormat == BarcodeFormat.QR_CODE) {
-        Map<EncodeHintType,?> hints = new Map<EncodeHintType,?>;
+        HashMap<EncodeHintType,ErrorCorrectionLevel> hints = new HashMap<EncodeHintType,ErrorCorrectionLevel>();
         if (config.errorcorrection == 'H') {
-            hints.put(EncodeHintType.ERRORCORRECTION,ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.ERROR_CORRECTION,ErrorCorrectionLevel.H);
         } else if (config.errorcorrection == 'L') {
-            hints.put(EncodeHintType.ERRORCORRECTION,ErrorCorrectionLevel.L);
+            hints.put(EncodeHintType.ERROR_CORRECTION,ErrorCorrectionLevel.L);
         } else if (config.errorcorrection == 'Q') {
-            hints.put(EncodeHintType.ERRORCORRECTION,ErrorCorrectionLevel.Q);
+            hints.put(EncodeHintType.ERROR_CORRECTION,ErrorCorrectionLevel.Q);
         } else {
-            hints.put(EncodeHintType.ERRORCORRECTION,ErrorCorrectionLevel.M);
+            hints.put(EncodeHintType.ERROR_CORRECTION,ErrorCorrectionLevel.M);
         }
         BitMatrix matrix = new MultiFormatWriter().encode(config.contents.get(0), config.barcodeFormat,
                                                           config.width, config.height, hints);
