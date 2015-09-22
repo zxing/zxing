@@ -78,6 +78,11 @@
         <version>4.12</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+	<groupId>net.imagej</groupId>
+	<artifactId>ij</artifactId>
+	<version>1.48r</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

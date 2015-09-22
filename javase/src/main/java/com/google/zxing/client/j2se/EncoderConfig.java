@@ -52,6 +52,12 @@ final class EncoderConfig {
       description = "Prints this help message",
       help = true)
   boolean help;
+  
+  @Parameter(names = "--error_correction",
+      description = "Define the error correction level. Defaults to 'M'",
+      validateWith = PositiveInteger.class)
+  char errorcorrection = 'M';
+
 
   @Parameter(description = "(Text to encode)", required = true)
   List<String> contents;
