@@ -62,11 +62,14 @@ public final class MatrixToImageWriter {
     BufferedImage image = new BufferedImage(width, height, config.getBufferedImageColorModel());
     int onColor = config.getPixelOnColor();
     int offColor = config.getPixelOffColor();
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        image.setRGB(x, y, matrix.get(x, y) ? onColor : offColor);
+    int[] pixels = new int[width * height];
+    int index = 0;
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+          pixels[index++] = matrix.get(x, y) ? onColor : offColor;
       }
     }
+    image.setRGB(0, 0, width, height, pixels, 0, width);
     return image;
   }
 
