@@ -1,5 +1,5 @@
 application: zxing-hrd
-version: 12
+version: 13
 runtime: python27
 api_version: 1
 threadsafe: true

@@ -61,7 +61,7 @@
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.3.2.v20150730</version>
+        <version>9.3.4.RC0</version>
         <configuration>
           <webAppSourceDirectory>src/web</webAppSourceDirectory>
         </configuration>
