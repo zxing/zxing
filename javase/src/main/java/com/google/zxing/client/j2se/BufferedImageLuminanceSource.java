@@ -70,12 +70,12 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
             pixel = 0xFFFFFFFF; // = white
           }
 
-          // .229R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC)
+          // .299R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC)
           buffer[x] =
               (306 * ((pixel >> 16) & 0xFF) +
                601 * ((pixel >> 8) & 0xFF) +
-               117 * (pixel & 0xFF) +
-               0x200) >> 10;
+               117 * (pixel & 0xFF) 
+               ) >> 10;
         }
         raster.setPixels(left, y, width, 1, buffer);
       }
