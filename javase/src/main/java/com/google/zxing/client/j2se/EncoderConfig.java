@@ -48,6 +48,13 @@ final class EncoderConfig {
       validateWith = PositiveInteger.class)
   int height = 300;
 
+  @Parameter(names = "--error_correction_level",
+      description = "The error correction level change depending on the format."
+             + "Starts at 0 and the max depends on the barcode type (-1 for default)."
+             + "For QR code, 0->M, 1->L,2->H,3->Q",
+      help = true)
+  Integer errorCorrectionLevel = -1;
+
   @Parameter(names = "--help",
       description = "Prints this help message",
       help = true)
