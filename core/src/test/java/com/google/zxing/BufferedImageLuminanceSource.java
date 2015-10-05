@@ -68,7 +68,9 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
             pixel = 0xFFFFFFFF; // = white
           }
 
-          // .229R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC)
+          // .299R + 0.587G + 0.114B (YUV/YIQ for PAL and NTSC), 
+          // (306*R) >> 10 is approximately equal to R*0.299, and so on.
+          // 0x200 >> 10 is 0.5, it implements rounding.
           buffer[x] =
               (306 * ((pixel >> 16) & 0xFF) +
                601 * ((pixel >> 8) & 0xFF) +
