@@ -29,6 +29,7 @@ public enum EncodeHintType {
    * {@link com.google.zxing.qrcode.decoder.ErrorCorrectionLevel ErrorCorrectionLevel}.
    * For Aztec it is of type {@link Integer}, representing the minimal percentage of error correction words.
    * For PDF417 it is of type {@link Integer}, valid values being 0 to 8.
+   * In all cases, it can also be a {@link String} representation of the desired value as well.
    * Note: an Aztec symbol should have a minimum of 25% EC words.
    */
   ERROR_CORRECTION,
@@ -63,18 +64,20 @@ public enum EncodeHintType {
   /**
    * Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
    * by format; for example it controls margin before and after the barcode horizontally for
-   * most 1D formats. (Type {@link Integer}).
+   * most 1D formats. (Type {@link Integer}, or {@link String} representation of the integer value).
    */
   MARGIN,
 
   /**
-   * Specifies whether to use compact mode for PDF417 (type {@link Boolean}).
+   * Specifies whether to use compact mode for PDF417 (type {@link Boolean}, or "true" or "false"
+   * {@link String} value).
    */
   PDF417_COMPACT,
 
   /**
    * Specifies what compaction mode to use for PDF417 (type
-   * {@link com.google.zxing.pdf417.encoder.Compaction Compaction}).
+   * {@link com.google.zxing.pdf417.encoder.Compaction Compaction} or {@link String} value of one of its
+   * enum values).
    */
   PDF417_COMPACTION,
 
@@ -85,10 +88,11 @@ public enum EncodeHintType {
   PDF417_DIMENSIONS,
 
   /**
-   * Specifies the required number of layers for an Aztec code:
-   *   a negative number (-1, -2, -3, -4) specifies a compact Aztec code
-   *   0 indicates to use the minimum number of layers (the default)
-   *   a positive number (1, 2, .. 32) specifies a normaol (non-compact) Aztec code
+   * Specifies the required number of layers for an Aztec code.
+   * A negative number (-1, -2, -3, -4) specifies a compact Aztec code.
+   * 0 indicates to use the minimum number of layers (the default).
+   * A positive number (1, 2, .. 32) specifies a normal (non-compact) Aztec code.
+   * (Type {@link Integer}, or {@link String} representation of the integer value).
    */
    AZTEC_LAYERS,
 }

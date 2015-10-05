@@ -77,9 +77,9 @@ public final class Encoder {
                               Map<EncodeHintType,?> hints) throws WriterException {
 
     // Determine what character encoding has been specified by the caller, if any
-    String encoding = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
-    if (encoding == null) {
-      encoding = DEFAULT_BYTE_MODE_ENCODING;
+    String encoding = DEFAULT_BYTE_MODE_ENCODING;
+    if (hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET)) {
+      encoding = hints.get(EncodeHintType.CHARACTER_SET).toString();
     }
 
     // Pick an encoding mode appropriate for the content. Note that this will not attempt to use

@@ -60,10 +60,10 @@ public final class PDF417Writer implements Writer {
 
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
-        encoder.setCompact((Boolean) hints.get(EncodeHintType.PDF417_COMPACT));
+        encoder.setCompact(Boolean.valueOf(hints.get(EncodeHintType.PDF417_COMPACT).toString()));
       }
       if (hints.containsKey(EncodeHintType.PDF417_COMPACTION)) {
-        encoder.setCompaction((Compaction) hints.get(EncodeHintType.PDF417_COMPACTION));
+        encoder.setCompaction(Compaction.valueOf(hints.get(EncodeHintType.PDF417_COMPACTION).toString()));
       }
       if (hints.containsKey(EncodeHintType.PDF417_DIMENSIONS)) {
         Dimensions dimensions = (Dimensions) hints.get(EncodeHintType.PDF417_DIMENSIONS);
@@ -73,14 +73,14 @@ public final class PDF417Writer implements Writer {
                               dimensions.getMinRows());
       }
       if (hints.containsKey(EncodeHintType.MARGIN)) {
-        margin = ((Number) hints.get(EncodeHintType.MARGIN)).intValue();
+        margin = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
       }
       if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
-        errorCorrectionLevel = ((Number) hints.get(EncodeHintType.ERROR_CORRECTION)).intValue();
+        errorCorrectionLevel = Integer.parseInt(hints.get(EncodeHintType.ERROR_CORRECTION).toString());
       }
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
-        String encoding = (String) hints.get(EncodeHintType.CHARACTER_SET);
-        encoder.setEncoding(Charset.forName(encoding));
+        Charset encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
+        encoder.setEncoding(encoding);
       }
     }
 

@@ -60,11 +60,8 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     }
 
     int sidesMargin = getDefaultMargin();
-    if (hints != null) {
-      Integer sidesMarginInt = (Integer) hints.get(EncodeHintType.MARGIN);
-      if (sidesMarginInt != null) {
-        sidesMargin = sidesMarginInt;
-      }
+    if (hints != null && hints.containsKey(EncodeHintType.MARGIN)) {
+      sidesMargin = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
     }
 
     boolean[] code = encode(contents);
