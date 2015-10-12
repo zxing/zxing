@@ -31,11 +31,11 @@ final class EncoderConfig {
   BarcodeFormat barcodeFormat = BarcodeFormat.QR_CODE;
 
   @Parameter(names = "--image_format",
-      description = "image output format, such as PNG, JPG, GIF")
+      description = "Image output format, such as PNG, JPG, GIF")
   String imageFormat = "PNG";
 
   @Parameter(names = "--output",
-      description = " File to write to. Defaults to out.png")
+      description = "File to write to. Defaults to out.png")
   String outputFileBase = DEFAULT_OUTPUT_FILE_BASE;
 
   @Parameter(names = "--width",
@@ -47,6 +47,10 @@ final class EncoderConfig {
       description = "Image height",
       validateWith = PositiveInteger.class)
   int height = 300;
+
+  @Parameter(names = "--error_correction_level",
+      description = "Error correction level for the encoding")
+  String errorCorrectionLevel = null;
 
   @Parameter(names = "--help",
       description = "Prints this help message",
