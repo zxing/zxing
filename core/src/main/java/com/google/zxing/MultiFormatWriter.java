@@ -16,12 +16,14 @@
 
 package com.google.zxing;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.aztec.AztecWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.datamatrix.DataMatrixWriter;
 import com.google.zxing.oned.CodaBarWriter;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.oned.Code39Writer;
+import com.google.zxing.oned.Code93Writer;
 import com.google.zxing.oned.EAN13Writer;
 import com.google.zxing.oned.EAN8Writer;
 import com.google.zxing.oned.ITFWriter;
@@ -73,6 +75,9 @@ public final class MultiFormatWriter implements Writer {
         break;
       case CODE_39:
         writer = new Code39Writer();
+        break;
+      case CODE_93:
+        writer = new Code93Writer();
         break;
       case CODE_128:
         writer = new Code128Writer();
