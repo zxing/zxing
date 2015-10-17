@@ -71,11 +71,12 @@ public class Code93Writer extends OneDimensionalCodeWriter {
         toIntArray(Code93Reader.CHARACTER_ENCODINGS[check1], widths);
         pos += appendPattern(result, pos, widths, true);
 
-        contents += Code39Reader.ALPHABET_STRING.charAt(check1 + 1);
+        //append the contents to reflect the first checksum added
+        contents += Code93Reader.ALPHABET_STRING.charAt(check1);
+
         int check2 = computeChecksumIndex(contents, 15);
         toIntArray(Code93Reader.CHARACTER_ENCODINGS[check2], widths);
         pos += appendPattern(result, pos, widths, true);
-
 
         //end character (*)
         toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
