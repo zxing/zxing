@@ -42,8 +42,7 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     }
 
     @Override
-    public boolean[] encode(String contents)
-    {
+    public boolean[] encode(String contents) {
         int length = contents.length();
         if (length > 80) {
             throw new IllegalArgumentException(
@@ -61,8 +60,7 @@ public class Code93Writer extends OneDimensionalCodeWriter {
         toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
         int pos = appendPattern(result, 0, widths, true);
 
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             int indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents.charAt(i));
             toIntArray(Code93Reader.CHARACTER_ENCODINGS[indexInString], widths);
             pos += appendPattern(result, pos, widths, true);
@@ -89,37 +87,31 @@ public class Code93Writer extends OneDimensionalCodeWriter {
         return result;
     }
 
-    private static void toIntArray(int a, int[] toReturn)
-    {
-        for (int i = 0; i < 9; i++)
-        {
+    private static void toIntArray(int a, int[] toReturn) {
+        for (int i = 0; i < 9; i++) {
             int temp = a & (1 << (8 - i));
             toReturn[i] = temp == 0 ? 0 : 1;
         }
     }
 
-    protected static int appendPattern(boolean[] target, int pos, int[] pattern, boolean startColor)
-    {
+    protected static int appendPattern(boolean[] target, int pos, int[] pattern, boolean startColor) {
         int numAdded = 9;
-        for (int bit : pattern)
-        {
+        for (int bit : pattern) {
             target[pos++] = bit == 0 ? false : true;
         }
         return numAdded;
     }
 
-    private static int computeChecksumIndex(String contents, int maxWeight)
-    {
+    private static int computeChecksumIndex(String contents, int maxWeight) {
         int weight = 1;
         int total = 0;
 
-        for (int i = contents.length()-1; i >= 0; i--)
-        {
+        for (int i = contents.length()-1; i >= 0; i--) {
             int indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents.charAt(i));
             total += indexInString * weight;
-            if (++weight > maxWeight)
+            if (++weight > maxWeight) {
                 weight = 1;
-
+            }
         }
         int checksum = total % 47;
 
