@@ -93,26 +93,23 @@ public class Code93Writer extends OneDimensionalCodeWriter {
   }
 
   protected static int appendPattern(boolean[] target, int pos, int[] pattern, boolean startColor) {
-    int numAdded = 9;
     for (int bit : pattern) {
       target[pos++] = bit != 0;
     }
-    return numAdded;
+    return 9;
   }
 
   private static int computeChecksumIndex(String contents, int maxWeight) {
     int weight = 1;
     int total = 0;
 
-    for (int i = contents.length()-1; i >= 0; i--) {
+    for (int i = contents.length() - 1; i >= 0; i--) {
       int indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents.charAt(i));
       total += indexInString * weight;
       if (++weight > maxWeight) {
         weight = 1;
       }
     }
-    int checksum = total % 47;
-
-    return checksum;
+    return total % 47;
   }
 }
