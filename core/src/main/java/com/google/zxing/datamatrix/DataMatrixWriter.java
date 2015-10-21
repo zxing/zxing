@@ -36,7 +36,18 @@ import java.util.Map;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Guillaume Le Biller Added to zxing lib.
  */
-public final class DataMatrixWriter implements Writer {
+public class DataMatrixWriter implements Writer {
+
+  protected int defaultEncoding;
+
+  public DataMatrixWriter(){
+    this(HighLevelEncoder.ASCII_ENCODATION);
+  }
+
+  public DataMatrixWriter(int defaultEncoding) {
+    super();
+    this.defaultEncoding = defaultEncoding;
+  }
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
@@ -81,7 +92,7 @@ public final class DataMatrixWriter implements Writer {
 
 
     //1. step: Data encodation
-    String encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
+    String encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncoding);
 
     SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.length(), shape, minSize, maxSize, true);
 
