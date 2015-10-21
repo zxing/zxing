@@ -143,6 +143,14 @@ public final class HighLevelEncoder {
     return encodeHighLevel(msg, SymbolShapeHint.FORCE_NONE, null, null, ASCII_ENCODATION);
   }
 
+
+  public static String encodeHighLevel(String msg,
+      SymbolShapeHint shape,
+      Dimension minSize,
+      Dimension maxSize) {
+    return encodeHighLevel(msg, shape, minSize, maxSize, ASCII_ENCODATION);
+  }
+
   /**
    * Performs message encoding of a DataMatrix message using the algorithm described in annex P
    * of ISO/IEC 16022:2000(E).
