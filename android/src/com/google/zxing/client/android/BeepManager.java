@@ -32,8 +32,7 @@ import java.io.IOException;
 /**
  * Manages beeps and vibrations for {@link CaptureActivity}.
  */
-final class BeepManager implements
-    MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, Closeable {
+final class BeepManager implements MediaPlayer.OnErrorListener, Closeable {
 
   private static final String TAG = BeepManager.class.getSimpleName();
 
@@ -87,9 +86,6 @@ final class BeepManager implements
 
   private MediaPlayer buildMediaPlayer(Context activity) {
     MediaPlayer mediaPlayer = new MediaPlayer();
-    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-    mediaPlayer.setOnCompletionListener(this);
-    mediaPlayer.setOnErrorListener(this);
     try {
       AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.beep);
       try {
@@ -97,6 +93,9 @@ final class BeepManager implements
       } finally {
         file.close();
       }
+      mediaPlayer.setOnErrorListener(this);
+      mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+      mediaPlayer.setLooping(false);
       mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
       mediaPlayer.prepare();
       return mediaPlayer;
@@ -108,20 +107,13 @@ final class BeepManager implements
   }
 
   @Override
-  public void onCompletion(MediaPlayer mp) {
-    // When the beep has finished playing, rewind to queue up another one.      
-    mp.seekTo(0);
-  }
-
-  @Override
   public synchronized boolean onError(MediaPlayer mp, int what, int extra) {
     if (what == MediaPlayer.MEDIA_ERROR_SERVER_DIED) {
       // we are finished, so put up an appropriate error toast if required and finish
       activity.finish();
     } else {
       // possibly media player error, so release and recreate
-      mp.release();
-      mediaPlayer = null;
+      close();
       updatePrefs();
     }
     return true;
