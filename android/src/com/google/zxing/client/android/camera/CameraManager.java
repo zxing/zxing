@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.client.android.camera.open.OpenCamera;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public final class CameraManager {
 
   private final Context context;
   private final CameraConfigurationManager configManager;
-  private Camera camera;
+  private OpenCamera camera;
   private AutoFocusManager autoFocusManager;
   private Rect framingRect;
   private Rect framingRectInPreview;
@@ -74,16 +75,14 @@ public final class CameraManager {
    * @throws IOException Indicates the camera driver failed to open.
    */
   public synchronized void openDriver(SurfaceHolder holder) throws IOException {
-    Camera theCamera = camera;
+    OpenCamera theCamera = camera;
     if (theCamera == null) {
-
       theCamera = OpenCameraInterface.open(requestedCameraId);
       if (theCamera == null) {
-        throw new IOException();
+        throw new IOException("Camera.open() failed to return object from driver");
       }
       camera = theCamera;
     }
-    theCamera.setPreviewDisplay(holder);
 
     if (!initialized) {
       initialized = true;
@@ -95,7 +94,8 @@ public final class CameraManager {
       }
     }
 
-    Camera.Parameters parameters = theCamera.getParameters();
+    Camera cameraObject = theCamera.getCamera();
+    Camera.Parameters parameters = cameraObject.getParameters();
     String parametersFlattened = parameters == null ? null : parameters.flatten(); // Save these, temporarily
     try {
       configManager.setDesiredCameraParameters(theCamera, false);
@@ -105,10 +105,10 @@ public final class CameraManager {
       Log.i(TAG, "Resetting to saved camera params: " + parametersFlattened);
       // Reset:
       if (parametersFlattened != null) {
-        parameters = theCamera.getParameters();
+        parameters = cameraObject.getParameters();
         parameters.unflatten(parametersFlattened);
         try {
-          theCamera.setParameters(parameters);
+          cameraObject.setParameters(parameters);
           configManager.setDesiredCameraParameters(theCamera, true);
         } catch (RuntimeException re2) {
           // Well, darn. Give up
@@ -116,6 +116,7 @@ public final class CameraManager {
         }
       }
     }
+    cameraObject.setPreviewDisplay(holder);
 
   }
 
@@ -128,7 +129,7 @@ public final class CameraManager {
    */
   public synchronized void closeDriver() {
     if (camera != null) {
-      camera.release();
+      camera.getCamera().release();
       camera = null;
       // Make sure to clear these each time we close the camera, so that any scanning rect
       // requested by intent is forgotten.
@@ -141,11 +142,11 @@ public final class CameraManager {
    * Asks the camera hardware to begin drawing preview frames to the screen.
    */
   public synchronized void startPreview() {
-    Camera theCamera = camera;
+    OpenCamera theCamera = camera;
     if (theCamera != null && !previewing) {
-      theCamera.startPreview();
+      theCamera.getCamera().startPreview();
       previewing = true;
-      autoFocusManager = new AutoFocusManager(context, camera);
+      autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
     }
   }
 
@@ -158,7 +159,7 @@ public final class CameraManager {
       autoFocusManager = null;
     }
     if (camera != null && previewing) {
-      camera.stopPreview();
+      camera.getCamera().stopPreview();
       previewCallback.setHandler(null, 0);
       previewing = false;
     }
@@ -170,12 +171,13 @@ public final class CameraManager {
    * @param newSetting if {@code true}, light should be turned on if currently off. And vice versa.
    */
   public synchronized void setTorch(boolean newSetting) {
-    if (newSetting != configManager.getTorchState(camera)) {
-      if (camera != null) {
+    OpenCamera theCamera = camera;
+    if (theCamera != null) {
+      if (newSetting != configManager.getTorchState(theCamera.getCamera())) {
         if (autoFocusManager != null) {
           autoFocusManager.stop();
         }
-        configManager.setTorch(camera, newSetting);
+        configManager.setTorch(theCamera.getCamera(), newSetting);
         if (autoFocusManager != null) {
           autoFocusManager.start();
         }
@@ -192,10 +194,10 @@ public final class CameraManager {
    * @param message The what field of the message to be sent.
    */
   public synchronized void requestPreviewFrame(Handler handler, int message) {
-    Camera theCamera = camera;
+    OpenCamera theCamera = camera;
     if (theCamera != null && previewing) {
       previewCallback.setHandler(handler, message);
-      theCamera.setOneShotPreviewCallback(previewCallback);
+      theCamera.getCamera().setOneShotPreviewCallback(previewCallback);
     }
   }
 
