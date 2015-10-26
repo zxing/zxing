@@ -22,7 +22,9 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.WindowManager;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
@@ -47,6 +49,7 @@ public final class CameraManager {
   private final Context context;
   private final CameraConfigurationManager configManager;
   private Camera camera;
+  private int cameraId = -1;
   private AutoFocusManager autoFocusManager;
   private Rect framingRect;
   private Rect framingRectInPreview;
@@ -66,7 +69,7 @@ public final class CameraManager {
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
   }
-  
+
   /**
    * Opens the camera driver and initializes the hardware parameters.
    *
@@ -75,14 +78,37 @@ public final class CameraManager {
    */
   public synchronized void openDriver(SurfaceHolder holder) throws IOException {
     Camera theCamera = camera;
+    int theCameraId = cameraId;
     if (theCamera == null) {
-
-      theCamera = OpenCameraInterface.open(requestedCameraId);
-      if (theCamera == null) {
-        throw new IOException();
-      }
+      theCameraId = OpenCameraInterface.getCameraId(requestedCameraId);
+      theCamera = Camera.open(theCameraId);
       camera = theCamera;
+      cameraId = theCameraId;
     }
+
+    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    int rotation = manager.getDefaultDisplay().getRotation();
+
+    int degrees = 0;
+    switch (rotation) {
+      case Surface.ROTATION_0: degrees = 0; break;
+      case Surface.ROTATION_90: degrees = 90; break;
+      case Surface.ROTATION_180: degrees = 180; break;
+      case Surface.ROTATION_270: degrees = 270; break;
+    }
+
+    android.hardware.Camera.CameraInfo info =
+        new android.hardware.Camera.CameraInfo();
+    android.hardware.Camera.getCameraInfo(theCameraId, info);
+    int result;
+    if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+      result = (info.orientation + degrees) % 360;
+      result = (360 - result) % 360;  // compensate the mirror
+    } else {  // back-facing
+      result = (info.orientation - degrees + 360) % 360;
+    }
+    theCamera.setDisplayOrientation(result);
+
     theCamera.setPreviewDisplay(holder);
 
     if (!initialized) {
@@ -130,6 +156,7 @@ public final class CameraManager {
     if (camera != null) {
       camera.release();
       camera = null;
+      cameraId = -1;
       // Make sure to clear these each time we close the camera, so that any scanning rect
       // requested by intent is forgotten.
       framingRect = null;
@@ -227,7 +254,7 @@ public final class CameraManager {
     }
     return framingRect;
   }
-  
+
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
     int dim = 5 * resolution / 8; // Target 5/8 of each dimension
     if (dim < hardMin) {
@@ -267,7 +294,7 @@ public final class CameraManager {
     return framingRectInPreview;
   }
 
-  
+
   /**
    * Allows third party apps to specify the camera ID, rather than determine
    * it automatically based on available cameras and their orientation.
@@ -277,7 +304,7 @@ public final class CameraManager {
   public synchronized void setManualCameraId(int cameraId) {
     requestedCameraId = cameraId;
   }
-  
+
   /**
    * Allows third party apps to specify the scanning rectangle dimensions, rather than determine
    * them automatically based on screen resolution.

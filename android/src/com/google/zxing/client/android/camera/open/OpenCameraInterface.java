@@ -30,21 +30,22 @@ public final class OpenCameraInterface {
   public static final int NO_REQUESTED_CAMERA = -1;
 
   /**
-   * Opens the requested camera with {@link Camera#open(int)}, if one exists.
+   * Determines the camera id to open with {@link Camera#open(int)}, if one exists.
    *
    * @param cameraId camera ID of the camera to use. A negative value
    *  or {@link #NO_REQUESTED_CAMERA} means "no preference"
-   * @return handle to {@link Camera} that was opened
+   * @return the camera ID to use in {@link Camera#open(int)}
+   * @throws IllegalStateException if a preferrred camera id does not exist
    */
-  public static Camera open(int cameraId) {
-    
+  public static int getCameraId(int requestedCameraId) {
+
     int numCameras = Camera.getNumberOfCameras();
     if (numCameras == 0) {
       Log.w(TAG, "No cameras!");
-      return null;
+      return NO_REQUESTED_CAMERA;
     }
 
-    boolean explicitRequest = cameraId >= 0;
+    boolean explicitRequest = requestedCameraId >= 0;
 
     if (!explicitRequest) {
       // Select a camera if no explicit camera requested
@@ -57,25 +58,24 @@ public final class OpenCameraInterface {
         }
         index++;
       }
-      
-      cameraId = index;
+
+      requestedCameraId = index;
     }
 
-    Camera camera;
-    if (cameraId < numCameras) {
-      Log.i(TAG, "Opening camera #" + cameraId);
-      camera = Camera.open(cameraId);
+    if (requestedCameraId < numCameras) {
+      Log.i(TAG, "Using camera #" + requestedCameraId);
+      return requestedCameraId;
     } else {
       if (explicitRequest) {
-        Log.w(TAG, "Requested camera does not exist: " + cameraId);
-        camera = null;
+        IllegalStateException ex = new IllegalStateException(
+            "Requested camera does not exist: " + requestedCameraId);
+        Log.w(TAG, "Requested camera does not exist: " + requestedCameraId, ex);
+        throw ex;
       } else {
         Log.i(TAG, "No camera facing back; returning camera #0");
-        camera = Camera.open(0);
+        return 0;
       }
     }
-    
-    return camera;
   }
-  
+
 }
