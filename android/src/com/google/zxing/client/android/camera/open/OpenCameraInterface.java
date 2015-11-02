@@ -33,8 +33,9 @@ public final class OpenCameraInterface {
    * Opens the requested camera with {@link Camera#open(int)}, if one exists.
    *
    * @param cameraId camera ID of the camera to use. A negative value
-   *  or {@link #NO_REQUESTED_CAMERA} means "no preference"
-   * @return handle to {@link Camera} that was opened
+   *  or {@link #NO_REQUESTED_CAMERA} means "no preference", in which case a rear-facing
+   *  camera is returned if possible or else any camera
+   * @return handle to {@link OpenCamera} that was opened
    */
   public static OpenCamera open(int cameraId) {
 
@@ -47,9 +48,14 @@ public final class OpenCameraInterface {
     boolean explicitRequest = cameraId >= 0;
 
     Camera.CameraInfo selectedCameraInfo = null;
-    int index = 0;
-    while (index < numCameras) {
-      if (cameraId == NO_REQUESTED_CAMERA || index == cameraId) {
+    int index;
+    if (explicitRequest) {
+      index = cameraId;
+      selectedCameraInfo = new Camera.CameraInfo();
+      Camera.getCameraInfo(index, selectedCameraInfo);
+    } else {
+      index = 0;
+      while (index < numCameras) {
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         Camera.getCameraInfo(index, cameraInfo);
         CameraFacing reportedFacing = CameraFacing.values()[cameraInfo.facing];
@@ -57,8 +63,8 @@ public final class OpenCameraInterface {
           selectedCameraInfo = cameraInfo;
           break;
         }
+        index++;
       }
-      index++;
     }
 
     Camera camera;
