@@ -106,13 +106,13 @@
   <string name="preferences_disable_continuous_focus_title">Bez nepretržitého zaostrovania</string>
   <string name="preferences_disable_exposure_title">Bez expozície</string>
   <string name="preferences_disable_metering_title">Bez úpravy jasu</string>
-  <string name="preferences_front_light_auto">Automatický</string>
-  <string name="preferences_front_light_off">Neaktívne</string>
-  <string name="preferences_front_light_on">Aktívne</string>
+  <string name="preferences_front_light_auto">Automaticky</string>
+  <string name="preferences_front_light_off">Vypnuté</string>
+  <string name="preferences_front_light_on">Zapnuté</string>
   <string name="preferences_front_light_summary">Použiť prisvetlenie</string>
   <string name="preferences_front_light_title">Použiť predné svetlo</string>
   <string name="preferences_general_title">Všeobecné nastavenia</string>
-  <string name="preferences_history_summary">Uložiť si skeny v histórii</string>
+  <string name="preferences_history_summary">Uložiť skeny v histórii</string>
   <string name="preferences_history_title">Pridať do histórie</string>
   <string name="preferences_invert_scan_summary">Skenovať biele čiarové kódy na čiernom pozadí. Nie je k dispozícii na všetkých zariadeniach</string>
   <string name="preferences_invert_scan_title">Invertované skenovanie</string>
