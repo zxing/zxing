@@ -63,7 +63,7 @@ public final class Code39Writer extends OneDimensionalCodeWriter {
       }
     }
     boolean[] result = new boolean[codeWidth];
-    toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
+    toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
     int pos = appendPattern(result, 0, widths, true);
     int[] narrowWhite = {1};
     pos += appendPattern(result, pos, narrowWhite, false);
@@ -74,7 +74,7 @@ public final class Code39Writer extends OneDimensionalCodeWriter {
       pos += appendPattern(result, pos, widths, true);
       pos += appendPattern(result, pos, narrowWhite, false);
     }
-    toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
+    toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
     appendPattern(result, pos, widths, true);
     return result;
   }

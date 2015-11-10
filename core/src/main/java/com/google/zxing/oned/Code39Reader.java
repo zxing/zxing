@@ -37,7 +37,8 @@ import java.util.Map;
 public final class Code39Reader extends OneDReader {
 
   static final String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
-  private static final char[] ALPHABET = ALPHABET_STRING.toCharArray();
+  // Note this lacks '*' compared to ALPHABET_STRING
+  private static final String CHECK_DIGIT_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
 
   /**
    * These represent the encodings of characters, as patterns of wide and narrow bars.
@@ -52,7 +53,7 @@ public final class Code39Reader extends OneDReader {
       0x0A8, 0x0A2, 0x08A, 0x02A // $-%
   };
 
-  private static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
+  static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
 
   private final boolean usingCheckDigit;
   private final boolean extendedMode;
@@ -144,9 +145,9 @@ public final class Code39Reader extends OneDReader {
       int max = result.length() - 1;
       int total = 0;
       for (int i = 0; i < max; i++) {
-        total += ALPHABET_STRING.indexOf(decodeRowResult.charAt(i));
+        total += CHECK_DIGIT_STRING.indexOf(decodeRowResult.charAt(i));
       }
-      if (result.charAt(max) != ALPHABET[total % 43]) {
+      if (result.charAt(max) != CHECK_DIGIT_STRING.charAt(total % 43)) {
         throw ChecksumException.getChecksumInstance();
       }
       result.setLength(max);
@@ -258,7 +259,7 @@ public final class Code39Reader extends OneDReader {
   private static char patternToChar(int pattern) throws NotFoundException {
     for (int i = 0; i < CHARACTER_ENCODINGS.length; i++) {
       if (CHARACTER_ENCODINGS[i] == pattern) {
-        return ALPHABET[i];
+        return ALPHABET_STRING.charAt(i);
       }
     }
     throw NotFoundException.getNotFoundInstance();
