@@ -181,9 +181,9 @@ public final class Encoder {
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
   private static Mode chooseMode(String content, String encoding) {
-    if ("Shift_JIS".equals(encoding)) {
+    if ("Shift_JIS".equals(encoding) && isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
-      return isOnlyDoubleByteKanji(content) ? Mode.KANJI : Mode.BYTE;
+      return Mode.KANJI;
     }
     boolean hasNumeric = false;
     boolean hasAlphanumeric = false;
