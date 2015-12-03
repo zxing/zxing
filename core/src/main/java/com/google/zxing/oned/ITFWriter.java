@@ -50,7 +50,7 @@ public final class ITFWriter extends OneDimensionalCodeWriter {
   public boolean[] encode(String contents) {
     int length = contents.length();
     if (length % 2 != 0) {
-      throw new IllegalArgumentException("The lenght of the input should be even");
+      throw new IllegalArgumentException("The length of the input should be even");
     }
     if (length > 80) {
       throw new IllegalArgumentException(
