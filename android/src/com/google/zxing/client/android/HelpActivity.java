@@ -56,4 +56,9 @@ public final class HelpActivity extends Activity {
     return super.onKeyDown(keyCode, event);
   }
 
+  @Override
+  protected void onSaveInstanceState(Bundle icicle) {
+    super.onSaveInstanceState(icicle);
+    webView.saveState(icicle);
+  }
 }
