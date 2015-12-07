@@ -54,7 +54,7 @@ final class Validators {
   
   static void validateEmail(String email) throws GeneratorException {
     //FIXME: we can have a better check for email here.
-    if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+    if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
       throw new GeneratorException("Email is not valid.");
     }
   }
