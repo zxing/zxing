@@ -107,6 +107,9 @@ final class MaskUtil {
       if (i >= 0 && i < rowArray.length && rowArray[i] == 1) {
         return false;
       }
+      if(i<0 || i >= rowArray.length){
+        return false;
+      }
     }
     return true;
   }
@@ -114,6 +117,9 @@ final class MaskUtil {
   private static boolean isWhiteVertical(byte[][] array, int col, int from, int to) {
     for (int i = from; i < to; i++) {
       if (i >= 0 && i < array.length && array[i][col] == 1) {
+        return false;
+      }
+      if(i<0 || i >= array.length){
         return false;
       }
     }
