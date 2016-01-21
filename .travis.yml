@@ -1,19 +1,9 @@
 language: java
 sudo: false
-script: mvn -Ptravis ${JACOCO} test
-matrix:
- include:
-   # Covers Java 7, Open JDK, and code coverage
-   - jdk: openjdk7
-     env: JACOCO=-Pjacoco
-   # Covers Java 8, Oracle JDK
-   - jdk: oraclejdk8
-cache:
-  directories:
-    - $HOME/.m2
+jdk: oraclejdk8
+script: mvn -Ptravis test
 git:
   depth: 10
-after_success: if [ -n "$JACOCO" ]; then bash <(curl -s https://codecov.io/bash); fi
 env:
   global:
    # COVERITY_SCAN:
