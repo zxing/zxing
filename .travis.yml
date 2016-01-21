@@ -1,45 +1,19 @@
 language: java
 sudo: false
-install: mvn -T 2 -Ptravis -DskipTests=true -B -V install
-script:
-  - mvn -T 2 -Ptravis ${JACOCO} test
-  - find $HOME/.m2/repository/com/google/zxing -path "*SNAPSHOT/*" -delete
-  - find $HOME/.m2/repository/com/google/zxing -name "*SNAPSHOT" -type d -delete
-matrix:
- include:
-   # Covers Java 7, Open JDK, and code coverage
-   - jdk: openjdk7
-     env: JACOCO=-Pjacoco
-   # Covers Java 8, Oracle JDK, Android apps
-   - jdk: oraclejdk8
-     env: ANDROID_HOME=$HOME/android-sdk-linux
-     before_install: if [ ! -d $HOME/android-sdk-linux/platforms ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C $HOME; else ls -l $HOME/android-sdk-linux; fi
-cache:
-  directories:
-    - $HOME/.m2
-    - $HOME/android-sdk-linux
+jdk: oraclejdk8
+script: mvn -Ptravis test
 git:
   depth: 10
-after_success: if [ -n "$JACOCO" ]; then bash <(curl -s https://codecov.io/bash); fi
-
-# The Android SDK package android-sdk-linux.tar.bz2 above is built roughly like so:
-#
-# mkdir android-sdk-linux; cd android-sdk-linux
-# curl -O https://dl.google.com/android/repository/tools_r25.2.3-linux.zip
-# unzip *.zip; rm *.zip
-#
-# # Or different, more recent versions; see sdkmanager --list
-# ./tools/bin/sdkmanager "platforms;android-22" "build-tools;25.0.2"
-# # Accept license
-#
-# ./tools/bin/sdkmanager --update
-# # Accept license
-#
-# cp tools/source.properties ..
-#
-# ./tools/bin/sdkmanager --uninstall tools
-#
-# mkdir tools; mv ../source.properties tools
-#
-# cd ..
-# tar cf - android-sdk-linux | bzip2 -9 > android-sdk-linux.tar.bz2
+env:
+  global:
+   # COVERITY_SCAN:
+   - secure: "HmfK5Ya1l1/hWFk+RV5lwlrWAlv3FwyOFV1689JPtK9OBZAuDGmj0uskmLRWI7X6MdwHSpP93P5pADE1YbbqX2pZmhysBiLsGh8rmI+eTm/Q9h708qyRk3T2Yie49rfk5xlo1IN41dDt+3XZ0bEC7VEXNoCAyn9YMpZ/wOJiP/s="
+addons:
+  coverity_scan:
+    project:
+      name: "zxing/zxing"
+      description: "Build submitted via Travis CI"
+    notification_email: srowen@gmail.com
+    build_command_prepend: "mvn clean"
+    build_command: "mvn -DskipTests=true compile test-compile"
+    branch_pattern: coverity_scan
