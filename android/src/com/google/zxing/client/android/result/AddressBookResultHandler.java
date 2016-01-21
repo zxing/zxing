@@ -21,6 +21,7 @@ import com.google.zxing.client.result.AddressBookParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.telephony.PhoneNumberUtils;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -205,7 +206,7 @@ public final class AddressBookResultHandler extends ResultHandler {
     if (namesLength > 0) {
       // Bold the full name to make it stand out a bit.
       Spannable styled = new SpannableString(contents.toString());
-      styled.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, namesLength, 0);
+      styled.setSpan(new StyleSpan(Typeface.BOLD), 0, namesLength, 0);
       return styled;
     } else {
       return contents.toString();

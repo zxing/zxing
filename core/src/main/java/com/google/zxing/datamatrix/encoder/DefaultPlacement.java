@@ -60,7 +60,7 @@ public class DefaultPlacement {
   }
 
   final void setBit(int col, int row, boolean bit) {
-    bits[row * numcols + col] = bit ? (byte) 1 : (byte) 0;
+    bits[row * numcols + col] = (byte) (bit ? 1 : 0);
   }
 
   final boolean hasBit(int col, int row) {

@@ -103,8 +103,10 @@ final class MaskUtil {
   }
 
   private static boolean isWhiteHorizontal(byte[] rowArray, int from, int to) {
+    from = Math.max(from, 0);
+    to = Math.min(to, rowArray.length);
     for (int i = from; i < to; i++) {
-      if (i >= 0 && i < rowArray.length && rowArray[i] == 1) {
+      if (rowArray[i] == 1) {
         return false;
       }
     }
@@ -112,8 +114,10 @@ final class MaskUtil {
   }
 
   private static boolean isWhiteVertical(byte[][] array, int col, int from, int to) {
+    from = Math.max(from, 0);
+    to = Math.min(to, array.length);
     for (int i = from; i < to; i++) {
-      if (i >= 0 && i < array.length && array[i][col] == 1) {
+      if (array[i][col] == 1) {
         return false;
       }
     }

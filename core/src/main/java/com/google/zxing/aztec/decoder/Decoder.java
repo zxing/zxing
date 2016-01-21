@@ -271,7 +271,7 @@ public final class Decoder {
   boolean[] extractBits(BitMatrix matrix) {
     boolean compact = ddata.isCompact();
     int layers = ddata.getNbLayers();
-    int baseMatrixSize = compact ? 11 + layers * 4 : 14 + layers * 4; // not including alignment lines
+    int baseMatrixSize = (compact ? 11 : 14) + layers * 4; // not including alignment lines
     int[] alignmentMap = new int[baseMatrixSize];
     boolean[] rawbits = new boolean[totalBitsInLayer(layers, compact)];
 
@@ -290,7 +290,7 @@ public final class Decoder {
       }
     }
     for (int i = 0, rowOffset = 0; i < layers; i++) {
-      int rowSize = compact ? (layers - i) * 4 + 9 : (layers - i) * 4 + 12;
+      int rowSize = (layers - i) * 4 + (compact ? 9 : 12);
       // The top-left most point of this layer is <low, low> (not including alignment lines)
       int low = i * 2;
       // The bottom-right most point of this layer is <high, high> (not including alignment lines)

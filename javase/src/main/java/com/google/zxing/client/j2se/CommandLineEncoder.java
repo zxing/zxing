@@ -23,7 +23,7 @@ import com.google.zxing.common.BitMatrix;
 import com.beust.jcommander.JCommander;
 
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -50,7 +50,7 @@ public final class CommandLineEncoder {
     if (EncoderConfig.DEFAULT_OUTPUT_FILE_BASE.equals(outFileString)) {
       outFileString += '.' + config.imageFormat.toLowerCase(Locale.ENGLISH);
     }
-    Map<EncodeHintType, Object> hints = new HashMap<>();
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     if (config.errorCorrectionLevel != null) {
       hints.put(EncodeHintType.ERROR_CORRECTION, config.errorCorrectionLevel);
     }

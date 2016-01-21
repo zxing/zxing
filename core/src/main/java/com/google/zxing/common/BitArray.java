@@ -307,7 +307,7 @@ public final class BitArray implements Cloneable {
   public void reverse() {
     int[] newBits = new int[bits.length];
     // reverse all int's first
-    int len = ((size-1) / 32);
+    int len = (size - 1) / 32;
     int oldBitsLen = len + 1;
     for (int i = 0; i < oldBitsLen; i++) {
       long x = (long) bits[i];

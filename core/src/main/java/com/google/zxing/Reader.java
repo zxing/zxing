@@ -24,7 +24,7 @@ import java.util.Map;
  * decode a QR code. The decoder may optionally receive hints from the caller which may help
  * it decode more quickly or accurately.
  *
- * See {@link com.google.zxing.MultiFormatReader}, which attempts to determine what barcode
+ * See {@link MultiFormatReader}, which attempts to determine what barcode
  * format is present within the image as well, and then decodes it accordingly.
  *
  * @author Sean Owen
@@ -48,7 +48,7 @@ public interface Reader {
    * hints, each possibly associated to some data, which may help the implementation decode.
    *
    * @param image image of barcode to decode
-   * @param hints passed as a {@link java.util.Map} from {@link com.google.zxing.DecodeHintType}
+   * @param hints passed as a {@link java.util.Map} from {@link DecodeHintType}
    * to arbitrary data. The
    * meaning of the data depends upon the hint type. The implementation may or may not do
    * anything with these hints.

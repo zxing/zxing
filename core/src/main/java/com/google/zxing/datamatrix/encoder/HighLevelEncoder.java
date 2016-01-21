@@ -128,7 +128,7 @@ public final class HighLevelEncoder {
   private static char randomize253State(char ch, int codewordPosition) {
     int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
     int tempVariable = ch + pseudoRandom;
-    return tempVariable <= 254 ? (char) tempVariable : (char) (tempVariable - 254);
+    return (char) (tempVariable <= 254 ? tempVariable : tempVariable - 254);
   }
 
   /**

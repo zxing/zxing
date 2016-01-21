@@ -22,7 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Tests {@link com.google.zxing.client.result.GeoParsedResult}.
+ * Tests {@link GeoParsedResult}.
  *
  * @author Sean Owen
  */

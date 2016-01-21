@@ -110,7 +110,7 @@ final class AlignmentPatternFinder {
         if (image.get(j, i)) {
           // Black pixel
           if (currentState == 1) { // Counting black pixels
-            stateCount[currentState]++;
+            stateCount[1]++;
           } else { // Counting white pixels
             if (currentState == 2) { // A winner?
               if (foundPatternCross(stateCount)) { // Yes

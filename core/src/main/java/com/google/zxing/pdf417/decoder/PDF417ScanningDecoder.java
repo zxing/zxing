@@ -468,8 +468,8 @@ public final class PDF417ScanningDecoder {
     int moduleNumber = 0;
     int increment = leftToRight ? 1 : -1;
     boolean previousPixelValue = leftToRight;
-    while (((leftToRight && imageColumn < maxColumn) || (!leftToRight && imageColumn >= minColumn)) &&
-        moduleNumber < moduleBitCount.length) {
+    while ((leftToRight ? imageColumn < maxColumn : imageColumn >= minColumn) &&
+           moduleNumber < moduleBitCount.length) {
       if (image.get(imageColumn, imageRow) == previousPixelValue) {
         moduleBitCount[moduleNumber]++;
         imageColumn += increment;
@@ -479,7 +479,8 @@ public final class PDF417ScanningDecoder {
       }
     }
     if (moduleNumber == moduleBitCount.length ||
-        (((leftToRight && imageColumn == maxColumn) || (!leftToRight && imageColumn == minColumn)) && moduleNumber == moduleBitCount.length - 1)) {
+        ((imageColumn == (leftToRight ? maxColumn : minColumn)) &&
+         moduleNumber == moduleBitCount.length - 1)) {
       return moduleBitCount;
     }
     return null;
@@ -499,8 +500,8 @@ public final class PDF417ScanningDecoder {
     int increment = leftToRight ? -1 : 1;
     // there should be no black pixels before the start column. If there are, then we need to start earlier.
     for (int i = 0; i < 2; i++) {
-      while (((leftToRight && correctedStartColumn >= minColumn) || (!leftToRight && correctedStartColumn < maxColumn)) &&
-          leftToRight == image.get(correctedStartColumn, imageRow)) {
+      while ((leftToRight ? correctedStartColumn >= minColumn : correctedStartColumn < maxColumn) &&
+             leftToRight == image.get(correctedStartColumn, imageRow)) {
         if (Math.abs(codewordStartColumn - correctedStartColumn) > CODEWORD_SKEW_SIZE) {
           return codewordStartColumn;
         }

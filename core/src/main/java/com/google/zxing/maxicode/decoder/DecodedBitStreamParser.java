@@ -45,8 +45,6 @@ final class DecodedBitStreamParser {
   private static final char FS = '\u001C';
   private static final char GS = '\u001D';
   private static final char RS = '\u001E';
-  private static final NumberFormat NINE_DIGITS = new DecimalFormat("000000000");
-  private static final NumberFormat THREE_DIGITS = new DecimalFormat("000");
 
   private static final String[] SETS = {
     "\nABCDEFGHIJKLMNOPQRSTUVWXYZ"+ECI+FS+GS+RS+NS+' '+PAD+"\"#$%&'()*+,-./0123456789:"+SHIFTB+SHIFTC+SHIFTD+SHIFTE+LATCHB,
@@ -73,8 +71,9 @@ final class DecodedBitStreamParser {
         } else {
           postcode = getPostCode3(bytes);
         }
-        String country = THREE_DIGITS.format(getCountry(bytes));
-        String service = THREE_DIGITS.format(getServiceClass(bytes));
+        NumberFormat threeDigits = new DecimalFormat("000");
+        String country = threeDigits.format(getCountry(bytes));
+        String service = threeDigits.format(getServiceClass(bytes));
         result.append(getMessage(bytes, 10, 84));
         if (result.toString().startsWith("[)>"+RS+"01"+GS)) {
           result.insert(9, postcode + GS + country + GS + service + GS);
@@ -175,7 +174,7 @@ final class DecodedBitStreamParser {
           break;
         case NS:
           int nsval = (bytes[++i] << 24) + (bytes[++i] << 18) + (bytes[++i] << 12) + (bytes[++i] << 6) + bytes[++i];
-          sb.append(NINE_DIGITS.format(nsval));
+          sb.append(new DecimalFormat("000000000").format(nsval));
           break;
         case LOCK:
           shift = -1;

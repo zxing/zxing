@@ -379,11 +379,10 @@ final class PDF417HighLevelEncoder {
     if (count == 1 && startmode == TEXT_COMPACTION) {
       sb.append((char) SHIFT_TO_BYTE);
     } else {
-      boolean sixpack = ((count % 6) == 0);
-      if (sixpack) {
-        sb.append((char)LATCH_TO_BYTE);
+      if ((count % 6) == 0) {
+        sb.append((char) LATCH_TO_BYTE);
       } else {
-        sb.append((char)LATCH_TO_BYTE_PADDED);
+        sb.append((char) LATCH_TO_BYTE_PADDED);
       }
     }
 
@@ -534,7 +533,7 @@ final class PDF417HighLevelEncoder {
    */
   private static int determineConsecutiveBinaryCount(String msg, int startpos, Charset encoding)
       throws WriterException {
-    final CharsetEncoder encoder = encoding.newEncoder();
+    CharsetEncoder encoder = encoding.newEncoder();
     int len = msg.length();
     int idx = startpos;
     while (idx < len) {

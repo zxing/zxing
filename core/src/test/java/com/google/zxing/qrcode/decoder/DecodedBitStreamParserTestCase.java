@@ -21,7 +21,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Tests {@link com.google.zxing.qrcode.decoder.DecodedBitStreamParser}.
+ * Tests {@link DecodedBitStreamParser}.
  *
  * @author Sean Owen
  */
