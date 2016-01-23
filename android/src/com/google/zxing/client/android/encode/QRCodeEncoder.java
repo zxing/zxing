@@ -74,9 +74,9 @@ final class QRCodeEncoder {
     this.dimension = dimension;
     this.useVCard = useVCard;
     String action = intent.getAction();
-    if (action.equals(Intents.Encode.ACTION)) {
+    if (Intents.Encode.ACTION.equals(action)) {
       encodeContentsFromZXingIntent(intent);
-    } else if (action.equals(Intent.ACTION_SEND)) {
+    } else if (Intent.ACTION_SEND.equals(action)) {
       encodeContentsFromShareIntent(intent);
     }
   }
