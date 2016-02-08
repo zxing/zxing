@@ -19,6 +19,7 @@ package com.google.zxing.client.j2se;
 import com.beust.jcommander.JCommander;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,7 +56,21 @@ public final class CommandLineRunner {
       return;
     }
 
-    List<URI> inputs = config.inputPaths;
+    List<URI> inputs = new ArrayList<>(config.inputPaths.size());
+    for (String inputPath : config.inputPaths) {
+      URI uri;
+      try {
+        uri = new URI(inputPath);
+      } catch (URISyntaxException use) {
+        // Assume it must be a file
+        if (!Files.exists(Paths.get(inputPath))) {
+          throw use;
+        }
+        uri = new URI("file", inputPath, null);
+      }
+      inputs.add(uri);
+    }
+
     do {
       inputs = retainValid(expand(inputs), config.recursive);
     } while (config.recursive && isExpandable(inputs));

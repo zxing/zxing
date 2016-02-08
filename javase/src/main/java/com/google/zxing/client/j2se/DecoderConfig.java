@@ -21,7 +21,6 @@ import com.beust.jcommander.validators.PositiveInteger;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -80,7 +79,7 @@ final class DecoderConfig {
   boolean help;
 
   @Parameter(description = "(URIs to decode)", required = true, variableArity = true)
-  List<URI> inputPaths;
+  List<String> inputPaths;
 
   Map<DecodeHintType,?> buildHints() {
     List<BarcodeFormat> finalPossibleFormats = possibleFormats;
