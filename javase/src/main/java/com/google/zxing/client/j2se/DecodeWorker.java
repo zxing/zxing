@@ -34,6 +34,7 @@ import com.google.zxing.multi.MultipleBarcodeReader;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -149,21 +150,30 @@ final class DecodeWorker implements Callable<Integer> {
     if (config.brief) {
       System.out.println(uri + ": Success");
     } else {
-      for (Result result : results) {
+      StringWriter output = new StringWriter();
+      for (int resultIndex = 0; resultIndex < results.length; resultIndex++) {
+        Result result = results[resultIndex];
         ParsedResult parsedResult = ResultParser.parseResult(result);
-        System.out.println(uri +
+        output.write(uri +
             " (format: " + result.getBarcodeFormat() +
             ", type: " + parsedResult.getType() + "):\n" +
             "Raw result:\n" +
             result.getText() + "\n" +
             "Parsed result:\n" +
-            parsedResult.getDisplayResult());
-        System.out.println("Found " + result.getResultPoints().length + " result points.");
-        for (int i = 0; i < result.getResultPoints().length; i++) {
-          ResultPoint rp = result.getResultPoints()[i];
-          System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+            parsedResult.getDisplayResult() + "\n");
+        output.write("Found " + result.getResultPoints().length + " result points.\n");
+        for (int pointIndex = 0; pointIndex < result.getResultPoints().length; pointIndex++) {
+          ResultPoint rp = result.getResultPoints()[pointIndex];
+          output.write("  Point " + pointIndex + ": (" + rp.getX() + ',' + rp.getY() + ')');
+          if (pointIndex != result.getResultPoints().length - 1) {
+            output.write('\n');
+          }
+        }
+        if (resultIndex != results.length - 1) {
+          output.write('\n');
         }
       }
+      System.out.println(output.toString());
     }
 
     return results;
