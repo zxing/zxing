@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.share;
 
+import android.os.Build;
 import android.provider.ContactsContract;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.Contents;
@@ -29,7 +30,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
-import android.provider.Browser;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -121,7 +121,12 @@ public final class ShareActivity extends Activity {
     setContentView(R.layout.share);
 
     findViewById(R.id.share_contact_button).setOnClickListener(contactListener);
-    findViewById(R.id.share_bookmark_button).setOnClickListener(bookmarkListener);
+    if (Build.VERSION.SDK_INT >= 23) { // Marshmallow / 6.0
+      // Can't access bookmarks in 6.0+
+      findViewById(R.id.share_bookmark_button).setEnabled(false);
+    } else {
+      findViewById(R.id.share_bookmark_button).setOnClickListener(bookmarkListener);
+    }
     findViewById(R.id.share_app_button).setOnClickListener(appListener);
     clipboardButton = findViewById(R.id.share_clipboard_button);
     clipboardButton.setOnClickListener(clipboardListener);
@@ -140,7 +145,7 @@ public final class ShareActivity extends Activity {
       switch (requestCode) {
         case PICK_BOOKMARK:
         case PICK_APP:
-          showTextAsBarcode(intent.getStringExtra(Browser.BookmarkColumns.URL));
+          showTextAsBarcode(intent.getStringExtra("url")); // Browser.BookmarkColumns.URL
           break;
         case PICK_CONTACT:
           // Data field is content://contacts/people/984

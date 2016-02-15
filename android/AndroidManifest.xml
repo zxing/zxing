@@ -25,6 +25,7 @@
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.FLASHLIGHT"/>
   <uses-permission android:name="android.permission.READ_CONTACTS"/>
+  <!-- unavailable in API 23 -->
   <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
