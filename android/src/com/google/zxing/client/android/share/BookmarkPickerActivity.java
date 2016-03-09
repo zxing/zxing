@@ -19,7 +19,7 @@ package com.google.zxing.client.android.share;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.provider.Browser;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -38,6 +38,8 @@ public final class BookmarkPickerActivity extends ListActivity {
       "title", // Browser.BookmarkColumns.TITLE
       "url", // Browser.BookmarkColumns.URL
   };
+  // Copied from android.provider.Browser.BOOKMARKS_URI:
+  private static final Uri BOOKMARKS_URI = Uri.parse("content://browser/bookmarks");
 
   static final int TITLE_COLUMN = 0;
   static final int URL_COLUMN = 1;
@@ -49,7 +51,7 @@ public final class BookmarkPickerActivity extends ListActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    cursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
+    cursor = getContentResolver().query(BOOKMARKS_URI, BOOKMARK_PROJECTION,
         BOOKMARK_SELECTION, null, null);
     if (cursor == null) {
       Log.w(TAG, "No cursor returned for bookmark query");
