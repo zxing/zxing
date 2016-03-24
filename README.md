@@ -53,6 +53,7 @@ library implemented in Java, with ports to other languages.
 | [zxing_cpp.rb](https://github.com/glassechidna/zxing_cpp.rb)    | bindings for Ruby (not just JRuby), powered by [zxing-cpp](https://github.com/glassechidna/zxing-cpp)
 | [python-zxing](https://github.com/oostendo/python-zxing)        | bindings for Python
 | [ZXing .NET](http://zxingnet.codeplex.com/)                     | port to .NET and C#, and related Windows platform
+| [php-qrcode-detector-decoder](https://github.com/khanamiryan/php-qrcode-detector-decoder)                     | port to PHP
 
 ### Other related third-party open source projects
 
