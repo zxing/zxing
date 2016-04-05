@@ -21,7 +21,7 @@
  JAVA_OPTS="-Djava.awt.headless=true -Xmx960m -XX:+UseG1GC -XX:+UseStringDeduplication"
 -->
 
-<Server port="8005" shutdown="SHUTDOWN">
+<Server port="-1" shutdown="">
   <!--APR library loader. Documentation at /docs/apr.html -->
   <!--<Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />-->
   <!-- Prevent memory leaks due to use of particular java/javax APIs-->
