@@ -659,7 +659,7 @@ public final class PDF417 {
     //2. step: construct data codewords
     if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) { // +1 for symbol length CW
       throw new WriterException(
-          "Encoded message contains to many code words, message to big (" + msg.length() + " bytes)");
+          "Encoded message contains too many code words, message too big (" + msg.length() + " bytes)");
     }
     int n = sourceCodeWords + pad + 1;
     StringBuilder sb = new StringBuilder(n);
