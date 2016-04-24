@@ -338,6 +338,8 @@ public final class Decoder {
     for (int i = 0; i < 8; i++) {
       if (array[start + i]) {
         b |= 1 << (7 - i);
+      } else {
+        throw new IndexOutOfBoundsException();
       }
     }
     return b;
