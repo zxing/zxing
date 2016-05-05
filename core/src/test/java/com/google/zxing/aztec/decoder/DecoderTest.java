@@ -106,35 +106,28 @@ public final class DecoderTest extends Assert {
     new Decoder().decode(r);
   }
 
-  private static void assertEqualByteArrays(byte[] b1, byte[] b2) {
-    assertEquals(b1.length, b2.length);
-    for (int i = 0; i < b1.length; i++) {
-      assertEquals(b1[i], b2[i]);
-    }
-  }
-
   @Test
   public void testRawBytes() {
-    boolean bool0[] = {};
-    boolean bool1[] = { true };
-    boolean bool7[] = { true, false, true, false, true, false, true };
-    boolean bool8[] = { true, false, true, false, true, false, true, false };
-    boolean bool9[] = { true, false, true, false, true, false, true, false,
+    boolean[] bool0 = {};
+    boolean[] bool1 = { true };
+    boolean[] bool7 = { true, false, true, false, true, false, true };
+    boolean[] bool8 = { true, false, true, false, true, false, true, false };
+    boolean[] bool9 = { true, false, true, false, true, false, true, false,
                         true };
-    boolean bool16[] = { false, true, true, false, false, false, true, true,
+    boolean[] bool16 = { false, true, true, false, false, false, true, true,
                          true, true, false, false, false, false, false, true };
-    byte byte0[] = {};
-    byte byte1[] = { -128 };
-    byte byte7[] = { -86 };
-    byte byte8[] = { -86 };
-    byte byte9[] = { -86, -128 };
-    byte byte16[] = { 99, -63 };
+    byte[] byte0 = {};
+    byte[] byte1 = { -128 };
+    byte[] byte7 = { -86 };
+    byte[] byte8 = { -86 };
+    byte[] byte9 = { -86, -128 };
+    byte[] byte16 = { 99, -63 };
 
-    assertEqualByteArrays(byte0, Decoder.convertBoolArrayToByteArray(bool0));
-    assertEqualByteArrays(byte1, Decoder.convertBoolArrayToByteArray(bool1));
-    assertEqualByteArrays(byte7, Decoder.convertBoolArrayToByteArray(bool7));
-    assertEqualByteArrays(byte8, Decoder.convertBoolArrayToByteArray(bool8));
-    assertEqualByteArrays(byte9, Decoder.convertBoolArrayToByteArray(bool9));
-    assertEqualByteArrays(byte16, Decoder.convertBoolArrayToByteArray(bool16));
+    assertArrayEquals(byte0, Decoder.convertBoolArrayToByteArray(bool0));
+    assertArrayEquals(byte1, Decoder.convertBoolArrayToByteArray(bool1));
+    assertArrayEquals(byte7, Decoder.convertBoolArrayToByteArray(bool7));
+    assertArrayEquals(byte8, Decoder.convertBoolArrayToByteArray(bool8));
+    assertArrayEquals(byte9, Decoder.convertBoolArrayToByteArray(bool9));
+    assertArrayEquals(byte16, Decoder.convertBoolArrayToByteArray(bool16));
   }
 }

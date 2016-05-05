@@ -347,7 +347,7 @@ public final class Decoder {
   /**
    * Packs a bit array into bytes, most significant bit first
    */
-  public static byte[] convertBoolArrayToByteArray(boolean[] boolArr) {
+  static byte[] convertBoolArrayToByteArray(boolean[] boolArr) {
     byte[] byteArr = new byte[(boolArr.length + 7) / 8];
     for (int i = 0; i < byteArr.length; i++) {
       byteArr[i] = readByte(boolArr, 8 * i);
