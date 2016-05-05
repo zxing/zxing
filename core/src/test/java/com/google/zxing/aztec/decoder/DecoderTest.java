@@ -20,8 +20,9 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.aztec.AztecDetectorResult;
 import com.google.zxing.common.BitMatrix;
 import org.junit.Test;
+import org.junit.Assert;
 
-public final class DecoderTest {
+public final class DecoderTest extends Assert {
 
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
 
@@ -105,4 +106,28 @@ public final class DecoderTest {
     new Decoder().decode(r);
   }
 
+  @Test
+  public void testRawBytes() {
+    boolean[] bool0 = {};
+    boolean[] bool1 = { true };
+    boolean[] bool7 = { true, false, true, false, true, false, true };
+    boolean[] bool8 = { true, false, true, false, true, false, true, false };
+    boolean[] bool9 = { true, false, true, false, true, false, true, false,
+                        true };
+    boolean[] bool16 = { false, true, true, false, false, false, true, true,
+                         true, true, false, false, false, false, false, true };
+    byte[] byte0 = {};
+    byte[] byte1 = { -128 };
+    byte[] byte7 = { -86 };
+    byte[] byte8 = { -86 };
+    byte[] byte9 = { -86, -128 };
+    byte[] byte16 = { 99, -63 };
+
+    assertArrayEquals(byte0, Decoder.convertBoolArrayToByteArray(bool0));
+    assertArrayEquals(byte1, Decoder.convertBoolArrayToByteArray(bool1));
+    assertArrayEquals(byte7, Decoder.convertBoolArrayToByteArray(bool7));
+    assertArrayEquals(byte8, Decoder.convertBoolArrayToByteArray(bool8));
+    assertArrayEquals(byte9, Decoder.convertBoolArrayToByteArray(bool9));
+    assertArrayEquals(byte16, Decoder.convertBoolArrayToByteArray(bool16));
+  }
 }

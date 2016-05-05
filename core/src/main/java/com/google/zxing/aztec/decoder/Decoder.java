@@ -75,8 +75,9 @@ public final class Decoder {
     BitMatrix matrix = detectorResult.getBits();
     boolean[] rawbits = extractBits(matrix);
     boolean[] correctedBits = correctBits(rawbits);
+    byte[] rawBytes = convertBoolArrayToByteArray(correctedBits);
     String result = getEncodedData(correctedBits);
-    return new DecoderResult(null, result, null, null);
+    return new DecoderResult(rawBytes, result, null, null);
   }
 
   // This method is used for testing the high-level encoder
@@ -330,6 +331,28 @@ public final class Decoder {
       }
     }
     return res;
+  }
+
+  /**
+   * Reads a code of length 8 in an array of bits, padding with zeros
+   */
+  private static byte readByte(boolean[] rawbits, int startIndex) {
+    int n = rawbits.length - startIndex;
+    if (n >= 8) {
+      return (byte) readCode(rawbits, startIndex, 8);
+    }
+    return (byte) (readCode(rawbits, startIndex, n) << (8 - n));
+  }
+
+  /**
+   * Packs a bit array into bytes, most significant bit first
+   */
+  static byte[] convertBoolArrayToByteArray(boolean[] boolArr) {
+    byte[] byteArr = new byte[(boolArr.length + 7) / 8];
+    for (int i = 0; i < byteArr.length; i++) {
+      byteArr[i] = readByte(boolArr, 8 * i);
+    }
+    return byteArr;
   }
 
   private static int totalBitsInLayer(int layers, boolean compact) {
