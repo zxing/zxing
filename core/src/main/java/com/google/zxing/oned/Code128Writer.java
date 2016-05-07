@@ -49,6 +49,14 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   private static final int CODE_FNC_3 = 96;    // Code A, Code B
   private static final int CODE_FNC_4_B = 100; // Code B
 
+  // Results of minimal lookahead for code C
+  private enum CType {
+    UNCODABLE,
+    ONE_DIGIT,
+    TWO_DIGITS,
+    FNC_1
+  }
+
   @Override
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
@@ -176,50 +184,48 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     return result;
   }
 
-  // Returns 1 for FNC_1, 2 for a pair of digits, -1 for a single digit,
-  // 0 otherwise
-  private static int codeCLength(CharSequence value, int start) {
+  private static CType findCType(CharSequence value, int start) {
     int last = value.length();
     if (start >= last) {
-      return 0;
+      return CType.UNCODABLE;
     }
     char c = value.charAt(start);
     if (c == ESCAPE_FNC_1) {
-      return 1;
+      return CType.FNC_1;
     }
     if (c < '0' || c > '9') {
-      return 0;
+      return CType.UNCODABLE;
     }
-    if (start+1 >= last) {
-      return -1;
+    if (start + 1 >= last) {
+      return CType.ONE_DIGIT;
     }
-    c = value.charAt(start+1);
+    c = value.charAt(start + 1);
     if (c < '0' || c > '9') {
-      return -1;
+      return CType.ONE_DIGIT;
     }
-    return 2;
+    return CType.TWO_DIGITS;
   }
 
   private static int chooseCode(CharSequence value, int start, int oldCode) {
-    int codeLen = codeCLength(value, start);
-    if (codeLen <= 0) { // no choice
-      return CODE_CODE_B;
+    CType lookahead = findCType(value, start);
+    if (lookahead == CType.UNCODABLE || lookahead == CType.ONE_DIGIT) {
+      return CODE_CODE_B; // no choice
     }
     if (oldCode == CODE_CODE_C) { // can continue in code C
       return oldCode;
     }
     if (oldCode == CODE_CODE_B) {
-      if (codeLen == 1) {
-        return oldCode; // FNC_1, continue in code B
+      if (lookahead == CType.FNC_1) {
+        return oldCode; // can continue in code B
       }
       // Seen two consecutive digits, see what follows
-      codeLen = codeCLength(value, start+2);
-      if (codeLen <= 0) {
+      lookahead = findCType(value, start + 2);
+      if (lookahead == CType.UNCODABLE || lookahead == CType.ONE_DIGIT) {
         return oldCode; // not worth switching now
       }
-      if (codeLen == 1) { // two digits, then FNC_1...
-        codeLen = codeCLength(value, start+3);
-        if (codeLen == 2) { // ... then another pair of digits, so switch
+      if (lookahead == CType.FNC_1) { // two digits, then FNC_1...
+        lookahead = findCType(value, start + 3);
+        if (lookahead == CType.TWO_DIGITS) { // then two more digits, switch
           return CODE_CODE_C;
         } else {
           return CODE_CODE_B; // otherwise not worth switching
@@ -227,20 +233,20 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
       }
       // At this point, there are at least 4 consecutive digits.
       // Look ahead to choose whether to switch now or on the next round.
-      int index = start+4;
-      while ((codeLen = codeCLength(value, index)) == 2) {
+      int index = start + 4;
+      while ((lookahead = findCType(value, index)) == CType.TWO_DIGITS) {
         index += 2;
       }
-      if (codeLen == -1) { // odd number of digits, switch on next round
+      if (lookahead == CType.ONE_DIGIT) { // odd number of digits, switch later
         return CODE_CODE_B;
       }
       return CODE_CODE_C; // even number of digits, switch now
     }
     // Here oldCode == 0, which means we are choosing the initial code
-    if (codeLen == 1) { // FNC_1, look at what comes next
-      codeLen = codeCLength(value, start+1);
+    if (lookahead == CType.FNC_1) { // ignore FNC_1
+      lookahead = findCType(value, start + 1);
     }
-    if (codeLen == 2) { // two consecutive digits, start in code C
+    if (lookahead == CType.TWO_DIGITS) { // at least two digits, start in code C
       return CODE_CODE_C;
     }
     return CODE_CODE_B;

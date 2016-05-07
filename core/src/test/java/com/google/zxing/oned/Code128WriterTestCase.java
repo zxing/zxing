@@ -25,7 +25,6 @@ import com.google.zxing.Writer;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.ReaderException;
-import com.google.zxing.DecodeHintType;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.BitArray;
 
