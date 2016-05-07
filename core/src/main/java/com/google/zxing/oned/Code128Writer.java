@@ -93,13 +93,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     
     while (position < length) {
       //Select code to use
-      int requiredDigitCount = codeSet == CODE_CODE_C ? 2 : 4;
-      int newCodeSet;
-      if (isDigits(contents, position, requiredDigitCount)) {
-        newCodeSet = CODE_CODE_C;
-      } else {
-        newCodeSet = CODE_CODE_B;
-      }
+      int newCodeSet = chooseCode(contents, position, codeSet);
       
       //Get the pattern index
       int patternIndex;
@@ -182,19 +176,74 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     return result;
   }
 
-  private static boolean isDigits(CharSequence value, int start, int length) {
-    int end = start + length;
+  // Returns 1 for FNC_1, 2 for a pair of digits, -1 for a single digit,
+  // 0 otherwise
+  private static int codeCLength(CharSequence value, int start) {
     int last = value.length();
-    for (int i = start; i < end && i < last; i++) {
-      char c = value.charAt(i);
-      if (c < '0' || c > '9') {
-        if (c != ESCAPE_FNC_1) {
-          return false;
-        }
-        end++; // ignore FNC_1
-      }
+    if (start >= last) {
+      return 0;
     }
-    return end <= last; // end > last if we've run out of string
+    char c = value.charAt(start);
+    if (c == ESCAPE_FNC_1) {
+      return 1;
+    }
+    if (c < '0' || c > '9') {
+      return 0;
+    }
+    if (start+1 >= last) {
+      return -1;
+    }
+    c = value.charAt(start+1);
+    if (c < '0' || c > '9') {
+      return -1;
+    }
+    return 2;
+  }
+
+  private static int chooseCode(CharSequence value, int start, int oldCode) {
+    int codeLen = codeCLength(value, start);
+    if (codeLen <= 0) { // no choice
+      return CODE_CODE_B;
+    }
+    if (oldCode == CODE_CODE_C) { // can continue in code C
+      return oldCode;
+    }
+    if (oldCode == CODE_CODE_B) {
+      if (codeLen == 1) {
+        return oldCode; // FNC_1, continue in code B
+      }
+      // Seen two consecutive digits, see what follows
+      codeLen = codeCLength(value, start+2);
+      if (codeLen <= 0) {
+        return oldCode; // not worth switching now
+      }
+      if (codeLen == 1) { // two digits, then FNC_1...
+        codeLen = codeCLength(value, start+3);
+        if (codeLen == 2) { // ... then another pair of digits, so switch
+          return CODE_CODE_C;
+        } else {
+          return CODE_CODE_B; // otherwise not worth switching
+        }
+      }
+      // At this point, there are at least 4 consecutive digits.
+      // Look ahead to choose whether to switch now or on the next round.
+      int index = start+4;
+      while ((codeLen = codeCLength(value, index)) == 2) {
+        index += 2;
+      }
+      if (codeLen == -1) { // odd number of digits, switch on next round
+        return CODE_CODE_B;
+      }
+      return CODE_CODE_C; // even number of digits, switch now
+    }
+    // Here oldCode == 0, which means we are choosing the initial code
+    if (codeLen == 1) { // FNC_1, look at what comes next
+      codeLen = codeCLength(value, start+1);
+    }
+    if (codeLen == 2) { // two consecutive digits, start in code C
+      return CODE_CODE_C;
+    }
+    return CODE_CODE_B;
   }
 
 }
