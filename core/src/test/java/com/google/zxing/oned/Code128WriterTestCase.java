@@ -21,12 +21,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Writer;
-import com.google.zxing.Result;
-import com.google.zxing.WriterException;
 import com.google.zxing.ReaderException;
-import com.google.zxing.common.BitMatrix;
+import com.google.zxing.Result;
+import com.google.zxing.Writer;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.BitMatrix;
 
 public class Code128WriterTestCase extends Assert {
 
@@ -91,7 +91,8 @@ public class Code128WriterTestCase extends Assert {
     String expected = "1095817160526";
 
     BitMatrix encResult = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
-    Result rtResult = reader.decodeRow(0, matrixToArray(encResult), null);
+    BitArray row = encResult.getRow(0, null);
+    Result rtResult = reader.decodeRow(0, row, null);
     String actual = rtResult.getText();
     assertEquals(expected, actual);
   }
@@ -106,10 +107,6 @@ public class Code128WriterTestCase extends Assert {
 
     String actual = matrixToString(result);
     assertEquals(expected, actual);
-  }
-
-  private static BitArray matrixToArray(BitMatrix result) {
-    return result.getRow(0, null);
   }
 
   private static String matrixToString(BitMatrix result) {
