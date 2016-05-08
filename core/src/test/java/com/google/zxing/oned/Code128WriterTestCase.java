@@ -37,8 +37,8 @@ public class Code128WriterTestCase extends Assert {
   private static final String START_CODE_B = "11010010000";
   private static final String START_CODE_C = "11010011100";
   private static final String SWITCH_CODE_B = "10111101110";
-  public static final String QUIET_SPACE = "00000";
-  public static final String STOP = "1100011101011";
+  private static final String QUIET_SPACE = "00000";
+  private static final String STOP = "1100011101011";
 
   private Writer writer;
   private Code128Reader reader;

@@ -74,16 +74,14 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     testPDF417BlackBoxCountingResults(true);
   }
 
-  SummaryResults testPDF417BlackBoxCountingResults(boolean assertOnFailure) throws IOException {
+  private SummaryResults testPDF417BlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     Map<String,List<Path>> imageFiles = getImageFileLists();
     int testCount = testResults.size();
 
     int[] passedCounts = new int[testCount];
-    int[] misreadCounts = new int[testCount];
     int[] tryHarderCounts = new int[testCount];
-    int[] tryHaderMisreadCounts = new int[testCount];
 
     Path testBase = getTestBase();
 
@@ -144,8 +142,6 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     // Print the results of all tests first
     int totalFound = 0;
     int totalMustPass = 0;
-    int totalMisread = 0;
-    int totalMaxMisread = 0;
 
     int numberOfTests = imageFiles.keySet().size();
     for (int x = 0; x < testResults.size(); x++) {
@@ -153,18 +149,10 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       log.info(String.format("Rotation %d degrees:", (int) testResult.getRotation()));
       log.info(String.format(" %d of %d images passed (%d required)", passedCounts[x], numberOfTests,
           testResult.getMustPassCount()));
-      int failed = numberOfTests - passedCounts[x];
-      log.info(String
-          .format(" %d failed due to misreads, %d not detected", misreadCounts[x], failed - misreadCounts[x]));
       log.info(String.format(" %d of %d images passed with try harder (%d required)", tryHarderCounts[x],
           numberOfTests, testResult.getTryHarderCount()));
-      failed = numberOfTests - tryHarderCounts[x];
-      log.info(String.format(" %d failed due to misreads, %d not detected", tryHaderMisreadCounts[x], failed -
-          tryHaderMisreadCounts[x]));
       totalFound += passedCounts[x] + tryHarderCounts[x];
       totalMustPass += testResult.getMustPassCount() + testResult.getTryHarderCount();
-      totalMisread += misreadCounts[x] + tryHaderMisreadCounts[x];
-      totalMaxMisread += testResult.getMaxMisreads() + testResult.getMaxTryHarderMisreads();
     }
 
     int totalTests = numberOfTests * testCount * 2;
@@ -177,12 +165,6 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
       log.warning(String.format("--- Test failed by %d images", totalMustPass - totalFound));
     }
 
-    if (totalMisread < totalMaxMisread) {
-      log.warning(String.format("+++ Test expects too many misreads by %d images", totalMaxMisread - totalMisread));
-    } else if (totalMisread > totalMaxMisread) {
-      log.warning(String.format("--- Test had too many misreads by %d images", totalMisread - totalMaxMisread));
-    }
-
     // Then run through again and assert if any failed
     if (assertOnFailure) {
       for (int x = 0; x < testCount; x++) {
@@ -190,9 +172,6 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         String label = "Rotation " + testResult.getRotation() + " degrees: Too many images failed";
         assertTrue(label, passedCounts[x] >= testResult.getMustPassCount());
         assertTrue("Try harder, " + label, tryHarderCounts[x] >= testResult.getTryHarderCount());
-        label = "Rotation " + testResult.getRotation() + " degrees: Too many images misread";
-        assertTrue(label, misreadCounts[x] <= testResult.getMaxMisreads());
-        assertTrue("Try harder, " + label, tryHaderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
       }
     }
     return new SummaryResults(totalFound, totalMustPass, totalTests);

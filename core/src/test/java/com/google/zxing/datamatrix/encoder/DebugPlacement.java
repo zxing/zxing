@@ -22,15 +22,6 @@ final class DebugPlacement extends DefaultPlacement {
     super(codewords, numcols, numrows);
   }
 
-  public String toBitFieldString() {
-    byte[] bits = getBits();
-    StringBuilder sb = new StringBuilder(bits.length);
-    for (byte bit : bits) {
-      sb.append(bit == 1 ? '1' : '0');
-    }
-    return sb.toString();
-  }
-
   String[] toBitFieldStringArray() {
     byte[] bits = getBits();      
     int numrows = getNumrows();

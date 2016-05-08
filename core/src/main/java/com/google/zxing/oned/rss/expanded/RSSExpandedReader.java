@@ -216,9 +216,8 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     for (int i = currentRow; i < rows.size(); i++) {
       ExpandedRow row = rows.get(i);
       this.pairs.clear();
-      int size = collectedRows.size();
-      for (int j = 0; j < size; j++) {
-        this.pairs.addAll(collectedRows.get(j).getPairs());
+      for (ExpandedRow collectedRow : collectedRows) {
+        this.pairs.addAll(collectedRow.getPairs());
       }
       this.pairs.addAll(row.getPairs());
 
