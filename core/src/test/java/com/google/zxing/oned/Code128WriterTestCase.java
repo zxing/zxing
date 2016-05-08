@@ -32,8 +32,8 @@ public class Code128WriterTestCase extends Assert {
   private static final String FNC3 = "10111100010";
   private static final String FNC4 = "10111101110";
   private static final String START_CODE_B = "11010010000";
-  public static final String QUIET_SPACE = "00000";
-  public static final String STOP = "1100011101011";
+  private static final String QUIET_SPACE = "00000";
+  private static final String STOP = "1100011101011";
 
   private Writer writer;
 

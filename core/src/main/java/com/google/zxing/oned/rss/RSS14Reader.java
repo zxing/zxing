@@ -71,13 +71,9 @@ public final class RSS14Reader extends AbstractRSSReader {
     Pair rightPair = decodePair(row, true, rowNumber, hints);
     addOrTally(possibleRightPairs, rightPair);
     row.reverse();
-    int lefSize = possibleLeftPairs.size();
-    for (int i = 0; i < lefSize; i++) {
-      Pair left = possibleLeftPairs.get(i);
+    for (Pair left : possibleLeftPairs) {
       if (left.getCount() > 1) {
-        int rightSize = possibleRightPairs.size();
-        for (int j = 0; j < rightSize; j++) {
-          Pair right = possibleRightPairs.get(j);
+        for (Pair right : possibleRightPairs) {
           if (right.getCount() > 1) {
             if (checkChecksum(left, right)) {
               return constructResult(left, right);
