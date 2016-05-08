@@ -48,7 +48,7 @@ public abstract class AbstractExpandedDecoder {
     return information;
   }
 
-  final GeneralAppIdDecoder getGeneralDecoder() {
+  protected final GeneralAppIdDecoder getGeneralDecoder() {
     return generalDecoder;
   }
 
