@@ -151,7 +151,7 @@ public final class BitArray implements Cloneable {
    * @param end end of range, exclusive
    */
   public void setRange(int start, int end) {
-    if (end < start) {
+    if (end < start || start < 0 || end > size) {
       throw new IllegalArgumentException();
     }
     if (end == start) {
@@ -163,15 +163,8 @@ public final class BitArray implements Cloneable {
     for (int i = firstInt; i <= lastInt; i++) {
       int firstBit = i > firstInt ? 0 : start & 0x1F;
       int lastBit = i < lastInt ? 31 : end & 0x1F;
-      int mask;
-      if (firstBit == 0 && lastBit == 31) {
-        mask = -1;
-      } else {
-        mask = 0;
-        for (int j = firstBit; j <= lastBit; j++) {
-          mask |= 1 << j;
-        }
-      }
+      // Ones from firstBit to lastBit, inclusive
+      int mask = (2 << lastBit) - (1 << firstBit);
       bits[i] |= mask;
     }
   }
@@ -193,10 +186,10 @@ public final class BitArray implements Cloneable {
    * @param end end of range, exclusive
    * @param value if true, checks that bits in range are set, otherwise checks that they are not set
    * @return true iff all bits are set or not set in range, according to value argument
-   * @throws IllegalArgumentException if end is less than or equal to start
+   * @throws IllegalArgumentException if end is less than start or the range is not contained in the array
    */
   public boolean isRange(int start, int end, boolean value) {
-    if (end < start) {
+    if (end < start || start < 0 || end > size) {
       throw new IllegalArgumentException();
     }
     if (end == start) {
@@ -208,15 +201,8 @@ public final class BitArray implements Cloneable {
     for (int i = firstInt; i <= lastInt; i++) {
       int firstBit = i > firstInt ? 0 : start & 0x1F;
       int lastBit = i < lastInt ? 31 : end & 0x1F;
-      int mask;
-      if (firstBit == 0 && lastBit == 31) {
-        mask = -1;
-      } else {
-        mask = 0;
-        for (int j = firstBit; j <= lastBit; j++) {
-          mask |= 1 << j;
-        }
-      }
+      // Ones from firstBit to lastBit, inclusive
+      int mask = (2 << lastBit) - (1 << firstBit);
 
       // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
       // equals the mask, or we're looking for 0s and the masked portion is not all 0s
@@ -262,11 +248,11 @@ public final class BitArray implements Cloneable {
   }
 
   public void xor(BitArray other) {
-    if (bits.length != other.bits.length) {
+    if (size != other.size) {
       throw new IllegalArgumentException("Sizes don't match");
     }
     for (int i = 0; i < bits.length; i++) {
-      // The last byte could be incomplete (i.e. not have 8 bits in
+      // The last int could be incomplete (i.e. not have 32 bits in
       // it) but there is no problem since 0 XOR 0 == 0.
       bits[i] ^= other.bits[i];
     }
@@ -321,16 +307,12 @@ public final class BitArray implements Cloneable {
     // now correct the int's if the bit size isn't a multiple of 32
     if (size != oldBitsLen * 32) {
       int leftOffset = oldBitsLen * 32 - size;
-      int mask = 1;
-      for (int i = 0; i < 31 - leftOffset; i++) {
-        mask = (mask << 1) | 1;
-      }
-      int currentInt = (newBits[0] >> leftOffset) & mask;
+      int currentInt = (newBits[0] >>> leftOffset);
       for (int i = 1; i < oldBitsLen; i++) {
         int nextInt = newBits[i];
         currentInt |= nextInt << (32 - leftOffset);
         newBits[i - 1] = currentInt;
-        currentInt = (nextInt >> leftOffset) & mask;
+        currentInt = (nextInt >>> leftOffset);
       }
       newBits[oldBitsLen - 1] = currentInt;
     }
