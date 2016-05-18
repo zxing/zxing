@@ -244,9 +244,8 @@ public final class DecodeServlet extends HttpServlet {
 
   private static void consumeRemainder(InputStream is) {
     try {
-      int available;
-      while ((available = is.available()) > 0) {
-        is.read(REMAINDER_BUFFER, 0, available); // don't care about value, or collision
+      while (is.read(REMAINDER_BUFFER) > 0) {
+        // don't care about value, or collision
       }
     } catch (IOException | IndexOutOfBoundsException ioe) {
       // sun.net.www.http.ChunkedInputStream.read is throwing IndexOutOfBoundsException
@@ -280,7 +279,7 @@ public final class DecodeServlet extends HttpServlet {
       log.info("File upload was not multipart");
       errorResponse(request, response, "badimage");
     } else {
-      log.info("Decoding uploaded file");
+      log.info("Decoding uploaded file " + fileUploadPart);
       try (InputStream is = fileUploadPart.getInputStream()) {
         processStream(is, request, response);
       }
@@ -378,10 +377,10 @@ public final class DecodeServlet extends HttpServlet {
         try {
           throw savedException == null ? NotFoundException.getNotFoundInstance() : savedException;
         } catch (FormatException | ChecksumException e) {
-          log.info(e.getMessage());
+          log.info(e.toString());
           errorResponse(request, response, "format");
         } catch (ReaderException e) { // Including NotFoundException
-          log.info(e.getMessage());
+          log.info(e.toString());
           errorResponse(request, response, "notfound");
         }
         return;
