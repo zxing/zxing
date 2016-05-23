@@ -17,7 +17,6 @@
 package com.google.zxing.client.j2se;
 
 import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -63,7 +62,7 @@ public final class ImageReader {
     }
     String base64DataEncoded = uriString.substring(base64Start + BASE64TOKEN.length());
     String base64Data = URLDecoder.decode(base64DataEncoded, "UTF-8");
-    byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64Data);
+    byte[] imageBytes = Base64Decoder.getInstance().decode(base64Data);
     return ImageIO.read(new ByteArrayInputStream(imageBytes));
   }
 
