@@ -42,12 +42,8 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 18004:2006, 6.4.4 Table 5
    */
-  private static final char[] ALPHANUMERIC_CHARS = {
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
-      'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-      'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-      ' ', '$', '%', '*', '+', '-', '.', '/', ':'
-  };
+  private static final char[] ALPHANUMERIC_CHARS =
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:".toCharArray();
   private static final int GB2312_SUBSET = 1;
 
   private DecodedBitStreamParser() {
