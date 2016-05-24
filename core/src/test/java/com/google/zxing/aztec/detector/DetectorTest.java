@@ -24,6 +24,7 @@ import com.google.zxing.aztec.encoder.AztecCode;
 import com.google.zxing.aztec.encoder.Encoder;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
+import com.google.zxing.common.BitRegion;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -114,7 +115,7 @@ public final class DetectorTest extends Assert {
     for (int inputY = 0; inputY < width; inputY++) {
       for (int inputX = 0; inputX < width; inputX++) {
         if (input.get(inputX, inputY)) {
-          output.setRegion(inputX * factor, inputY * factor, factor, factor);
+          output.setRegion(new BitRegion(inputX * factor, inputY * factor, factor, factor));
         }
       }
     }

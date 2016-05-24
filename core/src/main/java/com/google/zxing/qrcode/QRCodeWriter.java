@@ -21,6 +21,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.BitRegion;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.Encoder;
@@ -107,7 +108,7 @@ public final class QRCodeWriter implements Writer {
       // Write the contents of this row of the barcode
       for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
         if (input.get(inputX, inputY) == 1) {
-          output.setRegion(outputX, outputY, multiple, multiple);
+          output.setRegion(new BitRegion(outputX, outputY, multiple, multiple));
         }
       }
     }

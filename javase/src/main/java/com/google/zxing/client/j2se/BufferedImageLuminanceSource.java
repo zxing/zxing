@@ -148,7 +148,7 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     g.drawImage(image, transform, null);
     g.dispose();
 
-    // Maintain the cropped region, but rotate it too.
+    // Maintain the cropped BitRegion, but rotate it too.
     int width = getWidth();
     return new BufferedImageLuminanceSource(rotatedImage, top, sourceWidth - (left + width), getHeight(), width);
   }

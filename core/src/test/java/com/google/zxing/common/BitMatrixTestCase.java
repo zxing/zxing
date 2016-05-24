@@ -48,7 +48,7 @@ public final class BitMatrixTestCase extends Assert {
   @Test
   public void testSetRegion() {
     BitMatrix matrix = new BitMatrix(5);
-    matrix.setRegion(1, 1, 3, 3);
+    matrix.setRegion(new BitRegion(1, 1, 3, 3));
     for (int y = 0; y < 5; y++) {
       for (int x = 0; x < 5; x++) {
         assertEquals(y >= 1 && y <= 3 && x >= 1 && x <= 3, matrix.get(x, y));
@@ -88,9 +88,9 @@ public final class BitMatrixTestCase extends Assert {
     BitMatrix matrix = new BitMatrix(320, 240);
     assertEquals(320, matrix.getWidth());
     assertEquals(240, matrix.getHeight());
-    matrix.setRegion(105, 22, 80, 12);
+    matrix.setRegion(new BitRegion(105, 22, 80, 12));
 
-    // Only bits in the region should be on
+    // Only bits in the BitRegion should be on
     for (int y = 0; y < 240; y++) {
       for (int x = 0; x < 320; x++) {
         assertEquals(y >= 22 && y < 34 && x >= 105 && x < 185, matrix.get(x, y));
@@ -157,9 +157,9 @@ public final class BitMatrixTestCase extends Assert {
   public void testParse() {
     BitMatrix emptyMatrix = new BitMatrix(3, 3);
     BitMatrix fullMatrix = new BitMatrix(3, 3);
-    fullMatrix.setRegion(0, 0, 3, 3);
+    fullMatrix.setRegion(new BitRegion(0, 0, 3, 3));
     BitMatrix centerMatrix = new BitMatrix(3, 3);
-    centerMatrix.setRegion(1, 1, 1, 1);
+    centerMatrix.setRegion(new BitRegion(1, 1, 1, 1));
     BitMatrix emptyMatrix24 = new BitMatrix(2, 4);
 
     assertEquals(emptyMatrix, BitMatrix.parse("   \n   \n   \n", "x", " "));
@@ -198,9 +198,9 @@ public final class BitMatrixTestCase extends Assert {
   public void testXOR() {
     BitMatrix emptyMatrix = new BitMatrix(3, 3);
     BitMatrix fullMatrix = new BitMatrix(3, 3);
-    fullMatrix.setRegion(0, 0, 3, 3);
+    fullMatrix.setRegion(new BitRegion(0, 0, 3, 3));
     BitMatrix centerMatrix = new BitMatrix(3, 3);
-    centerMatrix.setRegion(1, 1, 1, 1);
+    centerMatrix.setRegion(new BitRegion(1, 1, 1, 1));
     BitMatrix invertedCenterMatrix = fullMatrix.clone();
     invertedCenterMatrix.unset(1, 1);
     BitMatrix badMatrix = new BitMatrix(4, 4);

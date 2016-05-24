@@ -136,7 +136,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
      *  - form a triangle with 90° angle (checked by comparing top right/bottom left distance
      *    with pythagoras)
      *
-     * Note: we allow each point to be used for more than one code region: this might seem
+     * Note: we allow each point to be used for more than one code BitRegion: this might seem
      * counterintuitive at first, but the performance penalty is not that big. At this point,
      * we cannot make a good quality decision whether the three finders actually represent
      * a QR code, or are just by chance layouted so it looks like there might be a QR code there.

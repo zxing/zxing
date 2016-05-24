@@ -63,7 +63,7 @@ final class DecoderConfig {
   boolean recursive;
 
   @Parameter(names = "--crop",
-      description = " Only examine cropped region of input image(s)",
+      description = " Only examine cropped BitRegion of input image(s)",
       arity = 4,
       validateWith = PositiveInteger.class)
   List<Integer> crop;
