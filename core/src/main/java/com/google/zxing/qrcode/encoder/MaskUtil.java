@@ -76,7 +76,7 @@ final class MaskUtil {
       for (int x = 0; x < width; x++) {
         byte[] arrayY = array[y];  // We can at least optimize this access
         if (x + 6 < width &&
-            arrayY[x + 0] == 1 &&
+            arrayY[x] == 1 &&
             arrayY[x + 1] == 0 &&
             arrayY[x + 2] == 1 &&
             arrayY[x + 3] == 1 &&
@@ -87,7 +87,7 @@ final class MaskUtil {
           numPenalties++;
         }
         if (y + 6 < height &&
-            array[y + 0][x] == 1 &&
+            array[y][x] == 1 &&
             array[y + 1][x] == 0 &&
             array[y + 2][x] == 1 &&
             array[y + 3][x] == 1 &&
