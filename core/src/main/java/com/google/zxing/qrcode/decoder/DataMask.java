@@ -139,16 +139,4 @@ enum DataMask {
 
   abstract boolean isMasked(int i, int j);
 
-  /**
-   * @param reference a value between 0 and 7 indicating one of the eight possible
-   * data mask patterns a QR Code may use
-   * @return DataMask encapsulating the data mask pattern
-   */
-  static DataMask forReference(int reference) {
-    if (reference < 0 || reference > 7) {
-      throw new IllegalArgumentException();
-    }
-    return values()[reference];
-  }
-
 }

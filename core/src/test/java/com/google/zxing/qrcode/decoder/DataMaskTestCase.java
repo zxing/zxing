@@ -106,7 +106,7 @@ public final class DataMaskTestCase extends Assert {
   }
 
   private static void testMaskAcrossDimensions(int reference, MaskCondition condition) {
-    DataMask mask = DataMask.forReference(reference);
+    DataMask mask = DataMask.values()[reference];
     for (int version = 1; version <= 40; version++) {
       int dimension = 17 + 4 * version;
       testMask(mask, dimension, condition);
