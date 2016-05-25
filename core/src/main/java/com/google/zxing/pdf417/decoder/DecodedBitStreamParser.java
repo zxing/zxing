@@ -64,15 +64,11 @@ final class DecodedBitStreamParser {
   private static final int PS = 29;
   private static final int PAL = 29;
 
-  private static final char[] PUNCT_CHARS = {
-      ';', '<', '>', '@', '[', '\\', ']', '_', '`', '~', '!',
-      '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
-      '(', ')', '?', '{', '}', '\''};
+  private static final char[] PUNCT_CHARS =
+      ";<>@[\\]_`~!\r\t,:\n-.$/\"|*()?{}'".toCharArray();
 
-  private static final char[] MIXED_CHARS = {
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
-      '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
-      '=', '^'};
+  private static final char[] MIXED_CHARS =
+      "0123456789&\r\t,:#-.$/+%*=^".toCharArray();
 
   private static final Charset DEFAULT_ENCODING = Charset.forName("ISO-8859-1");
 

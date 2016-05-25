@@ -271,12 +271,7 @@ final class MatrixUtil {
   // - findMSBSet(1) => 1
   // - findMSBSet(255) => 8
   static int findMSBSet(int value) {
-    int numDigits = 0;
-    while (value != 0) {
-      value >>>= 1;
-      ++numDigits;
-    }
-    return numDigits;
+    return 32 - Integer.numberOfLeadingZeros(value);
   }
 
   // Calculate BCH (Bose-Chaudhuri-Hocquenghem) code for "value" using polynomial "poly". The BCH
