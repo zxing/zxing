@@ -446,7 +446,7 @@ public abstract class ResultHandler {
    * Like {@link #launchIntent(Intent)} but will tell you if it is not handle-able
    * via {@link ActivityNotFoundException}.
    *
-   * @throws ActivityNotFoundException
+   * @throws ActivityNotFoundException if Intent can't be handled
    */
   final void rawLaunchIntent(Intent intent) {
     if (intent != null) {

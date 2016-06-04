@@ -83,6 +83,9 @@ public abstract class AbstractRSSReader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
+  /**
+   * @deprecated call {@link MathUtils#sum(int[])}
+   */
   @Deprecated
   protected static int count(int[] array) {
     return MathUtils.sum(array);

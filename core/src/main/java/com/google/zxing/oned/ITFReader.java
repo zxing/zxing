@@ -179,7 +179,6 @@ public final class ITFReader extends OneDReader {
    * @param row row of black/white values to search
    * @return Array, containing index of start of 'start block' and end of
    *         'start block'
-   * @throws NotFoundException
    */
   int[] decodeStart(BitArray row) throws NotFoundException {
     int endStart = skipWhiteSpace(row);
@@ -208,7 +207,7 @@ public final class ITFReader extends OneDReader {
    *
    * @param row bit array representing the scanned barcode.
    * @param startPattern index into row of the start or end pattern.
-   * @throws NotFoundException if the quiet zone cannot be found, a ReaderException is thrown.
+   * @throws NotFoundException if the quiet zone cannot be found
    */
   private void validateQuietZone(BitArray row, int startPattern) throws NotFoundException {
 
@@ -252,7 +251,6 @@ public final class ITFReader extends OneDReader {
    * @param row row of black/white values to search
    * @return Array, containing index of start of 'end block' and end of 'end
    *         block'
-   * @throws NotFoundException
    */
   int[] decodeEnd(BitArray row) throws NotFoundException {
 

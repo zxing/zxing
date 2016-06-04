@@ -42,6 +42,9 @@ public final class PDF417Common {
   private PDF417Common() {
   }
 
+  /**
+   * @deprecated call {@link MathUtils#sum(int[])}
+   */
   @Deprecated
   public static int getBitCountSum(int[] moduleBitCount) {
     return MathUtils.sum(moduleBitCount);
