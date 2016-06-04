@@ -33,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Asynchronous task which actually runs benchmarks and collects timing.z
+ */
 public final class BenchmarkAsyncTask extends AsyncTask<Object,Object,String> {
 
   private static final String TAG = BenchmarkAsyncTask.class.getSimpleName();

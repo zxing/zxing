@@ -43,6 +43,9 @@ import com.google.gwt.user.client.ui.Widget;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main generator for the encoder web interface.
+ */
 public final class Generator implements EntryPoint {
 
   private final List<GeneratorSource> generators = new ArrayList<>();

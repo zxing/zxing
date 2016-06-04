@@ -29,6 +29,9 @@ package com.google.zxing.client.result;
 import java.util.Map;
 
 /**
+ * Represents a parsed result that encodes extended product information as encoded
+ * by the RSS format, like weight, price, dates, etc.
+ *
  * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
  * @author Agustín Delgado, Servinform, S.A.
  */

@@ -23,6 +23,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.detector.MathUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -209,7 +210,7 @@ public final class RSS14Reader extends AbstractRSSReader {
     }
 
     int numModules = outsideChar ? 16 : 15;
-    float elementWidth = (float) count(counters) / (float) numModules;
+    float elementWidth = (float) MathUtils.sum(counters) / (float) numModules;
 
     int[] oddCounts = this.getOddCounts();
     int[] evenCounts = this.getEvenCounts();
@@ -355,8 +356,8 @@ public final class RSS14Reader extends AbstractRSSReader {
 
   private void adjustOddEvenCounts(boolean outsideChar, int numModules) throws NotFoundException {
 
-    int oddSum = count(getOddCounts());
-    int evenSum = count(getEvenCounts());
+    int oddSum = MathUtils.sum(getOddCounts());
+    int evenSum = MathUtils.sum(getEvenCounts());
     int mismatch = oddSum + evenSum - numModules;
     boolean oddParityBad = (oddSum & 0x01) == (outsideChar ? 1 : 0);
     boolean evenParityBad = (evenSum & 0x01) == 1;

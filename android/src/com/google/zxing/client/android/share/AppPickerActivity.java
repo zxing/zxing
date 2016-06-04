@@ -25,6 +25,9 @@ import android.widget.ListView;
 
 import java.util.List;
 
+/**
+ * Activity for picking an installed application to share via Intent.
+ */
 public final class AppPickerActivity extends ListActivity {
 
   private AsyncTask<Object,Object,List<AppInfo>> backgroundTask;

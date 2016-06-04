@@ -18,6 +18,9 @@ package com.google.zxing.client.android.camera.open;
 
 import android.hardware.Camera;
 
+/**
+ * Represents an open {@link Camera} and its metadata, like facing direction and orientation.
+ */
 public final class OpenCamera {
   
   private final int index;

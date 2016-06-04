@@ -22,6 +22,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
+import com.google.zxing.common.detector.MathUtils;
 import com.google.zxing.pdf417.PDF417Common;
 import com.google.zxing.pdf417.decoder.ec.ErrorCorrection;
 
@@ -326,7 +327,7 @@ public final class PDF417ScanningDecoder {
     throw ChecksumException.getChecksumInstance();
   }
 
-  private static BarcodeValue[][] createBarcodeMatrix(DetectionResult detectionResult) throws FormatException {
+  private static BarcodeValue[][] createBarcodeMatrix(DetectionResult detectionResult) {
     BarcodeValue[][] barcodeMatrix =
         new BarcodeValue[detectionResult.getBarcodeRowCount()][detectionResult.getBarcodeColumnCount() + 2];
     for (int row = 0; row < barcodeMatrix.length; row++) {
@@ -417,7 +418,7 @@ public final class PDF417ScanningDecoder {
       return null;
     }
     int endColumn;
-    int codewordBitCount = PDF417Common.getBitCountSum(moduleBitCount);
+    int codewordBitCount = MathUtils.sum(moduleBitCount);
     if (leftToRight) {
       endColumn = startColumn + codewordBitCount;
     } else {

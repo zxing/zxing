@@ -26,6 +26,9 @@ public final class Intents {
   private Intents() {
   }
 
+  /**
+   * Constants related to the {@link Scan#ACTION} Intent.
+   */
   public static final class Scan {
     /**
      * Send this intent to open the Barcodes app in scanning mode, find a barcode, and return
@@ -174,6 +177,9 @@ public final class Intents {
     }
   }
 
+  /**
+   * Constants related to the scan history and retrieving history items.
+   */
   public static final class History {
 
     public static final String ITEM_NUMBER = "ITEM_NUMBER";
@@ -182,6 +188,9 @@ public final class Intents {
     }
   }
 
+  /**
+   * Constants related to the {@link Encode#ACTION} Intent.
+   */
   public static final class Encode {
     /**
      * Send this intent to encode a piece of data as a QR code and display it full screen, so
@@ -220,6 +229,9 @@ public final class Intents {
     }
   }
 
+  /**
+   * Constants related to the {@link SearchBookContents#ACTION} Intent.
+   */
   public static final class SearchBookContents {
     /**
      * Use Google Book Search to search the contents of the book provided.
@@ -240,6 +252,9 @@ public final class Intents {
     }
   }
 
+  /**
+   * Constants related to the {@link WifiConnect#ACTION} Intent.
+   */
   public static final class WifiConnect {
     /**
      * Internal intent used to trigger connection to a wi-fi network.
@@ -265,6 +280,9 @@ public final class Intents {
     }
   }
 
+  /**
+   * Constants related to the {@link Share#ACTION} Intent.
+   */
   public static final class Share {
     /**
      * Give the user a choice of items to encode as a barcode, then render it as a QR Code and

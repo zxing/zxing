@@ -19,6 +19,9 @@ package com.google.zxing.client.android.camera.open;
 import android.hardware.Camera;
 import android.util.Log;
 
+/**
+ * Abstraction over the {@link Camera} API that helps open them and return their metadata.
+ */
 public final class OpenCameraInterface {
 
   private static final String TAG = OpenCameraInterface.class.getName();

@@ -16,6 +16,7 @@
 
 package com.google.zxing.pdf417.decoder;
 
+import com.google.zxing.common.detector.MathUtils;
 import com.google.zxing.pdf417.PDF417Common;
 
 /**
@@ -56,7 +57,7 @@ final class PDF417CodewordDecoder {
   }
 
   private static int[] sampleBitCounts(int[] moduleBitCount) {
-    float bitCountSum = PDF417Common.getBitCountSum(moduleBitCount);
+    float bitCountSum = MathUtils.sum(moduleBitCount);
     int[] result = new int[PDF417Common.BARS_IN_MODULE];
     int bitCountIndex = 0;
     int sumPreviousBits = 0;
@@ -89,7 +90,7 @@ final class PDF417CodewordDecoder {
   }
 
   private static int getClosestDecodedValue(int[] moduleBitCount) {
-    int bitCountSum = PDF417Common.getBitCountSum(moduleBitCount);
+    int bitCountSum = MathUtils.sum(moduleBitCount);
     float[] bitCountRatios = new float[PDF417Common.BARS_IN_MODULE];
     for (int i = 0; i < bitCountRatios.length; i++) {
       bitCountRatios[i] = moduleBitCount[i] / (float) bitCountSum;

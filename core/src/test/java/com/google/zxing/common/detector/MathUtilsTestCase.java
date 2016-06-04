@@ -21,6 +21,8 @@ import org.junit.Test;
 
 public final class MathUtilsTestCase extends Assert {
 
+  private static final float EPSILON = 1.0E-8f;
+
   @Test
   public void testRound() {
     assertEquals(-1, MathUtils.round(-1.0f));
@@ -44,6 +46,23 @@ public final class MathUtilsTestCase extends Assert {
     assertEquals(Integer.MIN_VALUE, MathUtils.round(Float.NEGATIVE_INFINITY));
 
     assertEquals(0, MathUtils.round(Float.NaN));
+  }
+
+  @Test
+  public void testDistance() {
+    assertEquals((float) Math.sqrt(8.0), MathUtils.distance(1.0f, 2.0f, 3.0f, 4.0f), EPSILON);
+    assertEquals(0.0f, MathUtils.distance(1.0f, 2.0f, 1.0f, 2.0f), EPSILON);
+
+    assertEquals((float) Math.sqrt(8.0), MathUtils.distance(1, 2, 3, 4), EPSILON);
+    assertEquals(0.0f, MathUtils.distance(1, 2, 1, 2), EPSILON);
+  }
+
+  @Test
+  public void testSum() {
+    assertEquals(0, MathUtils.sum(new int[] {}));
+    assertEquals(1, MathUtils.sum(new int[] {1}));
+    assertEquals(4, MathUtils.sum(new int[] {1, 3}));
+    assertEquals(0, MathUtils.sum(new int[] {-1, 1}));
   }
 
 }

@@ -33,6 +33,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.detector.MathUtils;
 import com.google.zxing.oned.rss.AbstractRSSReader;
 import com.google.zxing.oned.rss.DataCharacter;
 import com.google.zxing.oned.rss.FinderPattern;
@@ -607,7 +608,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     }//counters[] has the pixels of the module
 
     int numModules = 17; //left and right data characters have all the same length
-    float elementWidth = (float) count(counters) / (float) numModules;
+    float elementWidth = (float) MathUtils.sum(counters) / (float) numModules;
 
     // Sanity check: element width for pattern and the character should match
     float expectedElementWidth = (pattern.getStartEnd()[1] - pattern.getStartEnd()[0]) / 15.0f;
@@ -691,8 +692,8 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
   private void adjustOddEvenCounts(int numModules) throws NotFoundException {
 
-    int oddSum = count(this.getOddCounts());
-    int evenSum = count(this.getEvenCounts());
+    int oddSum = MathUtils.sum(this.getOddCounts());
+    int evenSum = MathUtils.sum(this.getEvenCounts());
     int mismatch = oddSum + evenSum - numModules;
     boolean oddParityBad = (oddSum & 0x01) == 1;
     boolean evenParityBad = (evenSum & 0x01) == 0;

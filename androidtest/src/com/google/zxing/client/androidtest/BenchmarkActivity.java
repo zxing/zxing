@@ -23,6 +23,9 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * Activity that runs barcode scanning benchmarks.
+ */
 public final class BenchmarkActivity extends Activity {
 
   private View runBenchmarkButton;

@@ -72,11 +72,9 @@
       <property name="scope" value="protected"/>
     </module>
     -->
-    <!--
     <module name="JavadocType">
       <property name="scope" value="protected"/>
     </module>
-     -->
     <!--<module name="JavadocVariable"/>-->
     <module name="JavadocStyle">
       <property name="checkFirstSentence" value="false"/>

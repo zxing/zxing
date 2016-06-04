@@ -17,6 +17,8 @@
 package com.google.zxing.client.result;
 
 /**
+ * Represents a parsed result that encodes wifi network information, like SSID and password.
+ *
  * @author Vikram Aggarwal
  */
 public final class WifiParsedResult extends ParsedResult {

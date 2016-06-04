@@ -19,6 +19,8 @@ package com.google.zxing.client.result;
 import java.util.regex.Pattern;
 
 /**
+ * A simple result type encapsulating a URI that has no further interpretation.
+ *
  * @author Sean Owen
  */
 public final class URIParsedResult extends ParsedResult {

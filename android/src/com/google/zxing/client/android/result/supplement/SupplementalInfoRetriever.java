@@ -38,6 +38,10 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 
+/**
+ * Superclass of implementations which can asynchronously retrieve more information
+ * about a barcode scan.
+ */
 public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,Object> {
 
   private static final String TAG = "SupplementalInfo";

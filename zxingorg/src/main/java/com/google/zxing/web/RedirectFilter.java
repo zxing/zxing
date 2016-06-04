@@ -28,11 +28,24 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 
+/**
+ * A {@link Filter} which handles a few web app redirects, like redirecting {@code /} to the
+ * main page.
+ */
 @WebFilter("/*")
 public final class RedirectFilter implements Filter {
 
   private static final String OLD_JAVADOC_PREFIX = "/w/docs/javadoc";
+  private static final Collection<String> REDIRECT_WELCOME_PATHS = new HashSet<>();
+  static {
+    REDIRECT_WELCOME_PATHS.add("/");
+    REDIRECT_WELCOME_PATHS.add("/index.jspx");
+    REDIRECT_WELCOME_PATHS.add("/w/");
+    REDIRECT_WELCOME_PATHS.add("/w/index.jspx");
+  }
 
   @Override
   public void init(FilterConfig filterConfig) {
@@ -45,8 +58,7 @@ public final class RedirectFilter implements Filter {
                        FilterChain filterChain) throws IOException, ServletException {
     HttpServletRequest request = (HttpServletRequest) servletRequest;
     String requestURI = request.getRequestURI();
-    if ("/".equals(requestURI) || "/index.jspx".equals(requestURI) ||
-        "/w/".equals(requestURI) || "/w/index.jspx".equals(requestURI)) {
+    if (REDIRECT_WELCOME_PATHS.contains(requestURI)) {
       redirect(servletResponse, "/w/decode.jspx");
     } else if (requestURI.startsWith(OLD_JAVADOC_PREFIX)) {
       String withoutPrefix = requestURI.substring(OLD_JAVADOC_PREFIX.length());

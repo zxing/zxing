@@ -30,6 +30,11 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
+/**
+ * Implements support for barcode scanning preferences.
+ *
+ * @see PreferencesActivity
+ */
 public final class PreferencesFragment 
     extends PreferenceFragment 
     implements SharedPreferences.OnSharedPreferenceChangeListener {

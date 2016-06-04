@@ -18,6 +18,9 @@ package com.google.zxing.client.android.history;
 
 import com.google.zxing.Result;
 
+/**
+ * Represents one item in the scan history.
+ */
 public final class HistoryItem {
 
   private final Result result;

@@ -17,6 +17,9 @@
 package com.google.zxing.client.result;
 
 /**
+ * Represents a parsed result that encodes an SMS message, including recipients, subject
+ * and body text.
+ *
  * @author Sean Owen
  */
 public final class SMSParsedResult extends ParsedResult {

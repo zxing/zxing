@@ -34,7 +34,7 @@ import java.util.TimeZone;
  */
 public final class CalendarParsedResultTestCase extends Assert {
 
-  private static final double EPSILON = 0.0000000001;
+  private static final double EPSILON = 1.0E-10;
 
   private static DateFormat makeGMTFormat() {
     DateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'", Locale.ENGLISH);
