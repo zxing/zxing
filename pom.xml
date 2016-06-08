@@ -216,10 +216,6 @@
               <fileset>
                 <directory>.</directory>
                 <includes>
-                  <include>**/bin/**</include>
-                  <include>**/gen/**</include>
-                  <include>**/libs/*</include>
-                  <include>**/out/**</include>
                   <include>**/classes/**</include>
                   <include>**/gwt-unitCache/**</include>
                   <include>**/webapp/generator/**</include>
@@ -240,7 +236,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.0.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -343,18 +339,13 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.10</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
           <version>2.6</version>
         </plugin>
         <plugin>
           <groupId>com.simpligility.maven.plugins</groupId>
           <artifactId>android-maven-plugin</artifactId>
-          <version>4.4.1</version>
+          <version>4.4.2</version>
           <extensions>true</extensions>
           <executions>
             <execution>
@@ -426,7 +417,7 @@
           <configuration>
             <configLocation>src/checkstyle/checkstyle.xml</configLocation>
             <!-- Android generated files -->
-            <excludes>**/R.java,**/BuildConfig.java</excludes>
+            <excludes>**/R.java,**/BuildConfig.java,**/Manifest.java</excludes>
           </configuration>
           <executions>
             <execution>
@@ -507,7 +498,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.7.6.201602180812</version>
+          <version>0.7.7.201606060606</version>
           <executions>
             <execution>
               <goals>

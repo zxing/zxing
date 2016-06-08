@@ -43,6 +43,8 @@ public final class PDF417Common {
   }
 
   /**
+   * @param moduleBitCount values to sum
+   * @return sum of values
    * @deprecated call {@link MathUtils#sum(int[])}
    */
   @Deprecated

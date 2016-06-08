@@ -34,36 +34,6 @@
     <version>3.2.2-SNAPSHOT</version>
   </parent>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-androidtest</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.google.zxing</groupId>
-                  <artifactId>android-integration</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>                   
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>../androidtest/libs</outputDirectory>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
   <name>ZXing Android Integration lib</name>
   <description>Integration helper classes for Android applications wanting to create/scan barcodes</description>
 

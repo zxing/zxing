@@ -35,55 +35,6 @@
     <version>3.2.2-SNAPSHOT</version>
   </parent>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-android</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.google.zxing</groupId>
-                  <artifactId>core</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>                   
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>../android/libs</outputDirectory>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-androidtest</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.google.zxing</groupId>
-                  <artifactId>core</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>                   
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>../androidtest/libs</outputDirectory>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
   <name>ZXing Core</name>
   <description>Core barcode encoding/decoding library</description>
   

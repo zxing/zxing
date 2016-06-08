@@ -84,6 +84,8 @@ public abstract class AbstractRSSReader extends OneDReader {
   }
 
   /**
+   * @param array values to sum
+   * @return sum of values
    * @deprecated call {@link MathUtils#sum(int[])}
    */
   @Deprecated
