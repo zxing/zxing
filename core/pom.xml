@@ -35,6 +35,15 @@
     <version>3.2.2-SNAPSHOT</version>
   </parent>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.wvengen</groupId>
+        <artifactId>proguard-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
   <name>ZXing Core</name>
   <description>Core barcode encoding/decoding library</description>
   
