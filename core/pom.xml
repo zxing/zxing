@@ -40,6 +40,11 @@
       <plugin>
         <groupId>com.github.wvengen</groupId>
         <artifactId>proguard-maven-plugin</artifactId>
+        <configuration>
+          <options combine.children="append">
+            <option>-optimizations !code/simplification/cast,!code/allocation/variable,!field/*,!class/*,!method/*</option>
+          </options>
+        </configuration>
       </plugin>
     </plugins>
   </build>

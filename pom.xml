@@ -389,7 +389,7 @@
         <plugin>
           <groupId>com.github.wvengen</groupId>
           <artifactId>proguard-maven-plugin</artifactId>
-          <version>2.0.12</version>
+          <version>2.0.13</version>
           <executions>
             <execution>
               <phase>package</phase>
@@ -408,7 +408,6 @@
               <option>-keep class * { !private *; }</option>
               <option>-verbose</option>
               <option>-optimizationpasses 3</option>
-              <option>-optimizations !code/simplification/cast,!code/allocation/variable,!field/*,!class/*,!method/*</option>
             </options>
             <libs>
               <lib>${java.home}/lib/rt.jar</lib>
