@@ -1,6 +1,7 @@
 language: java
 sudo: false
-script: mvn -Ptravis ${JACOCO} test
+install: mvn -T 2 -Ptravis -DskipTests=true -B -V install
+script: mvn -T 2 -Ptravis ${JACOCO} test
 matrix:
  include:
    # Covers Java 7, Open JDK, and code coverage
