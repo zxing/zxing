@@ -279,8 +279,7 @@ public final class DecodeServlet extends HttpServlet {
       log.info("File upload was not multipart");
       errorResponse(request, response, "badimage");
     } else {
-      log.info("Decoding uploaded file " + fileUploadPart.getName() + " " +
-               fileUploadPart.getSubmittedFileName());
+      log.info("Decoding uploaded file " + fileUploadPart.getSubmittedFileName());
       try (InputStream is = fileUploadPart.getInputStream()) {
         processStream(is, request, response);
       }

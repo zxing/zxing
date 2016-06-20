@@ -62,7 +62,7 @@ public final class RedirectFilter implements Filter {
       redirect(servletResponse, "/w/decode.jspx");
     } else if (requestURI.startsWith(OLD_JAVADOC_PREFIX)) {
       String withoutPrefix = requestURI.substring(OLD_JAVADOC_PREFIX.length());
-      redirect(servletResponse, "http://zxing.github.io/zxing/apidocs" + withoutPrefix);
+      redirect(servletResponse, "https://zxing.github.io/zxing/apidocs" + withoutPrefix);
     } else {
       filterChain.doFilter(servletRequest, servletResponse);
     }

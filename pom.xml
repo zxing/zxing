@@ -96,6 +96,7 @@
     <java.version>1.7</java.version>
     <maven.version.min>3.2.1</maven.version.min>
     <proguard.version>5.2.1</proguard.version>
+    <proguard.plugin.version>2.0.13</proguard.plugin.version>
     <slf4j.version>1.7.21</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.2.2-SNAPSHOT</zxing.version>
@@ -389,7 +390,7 @@
         <plugin>
           <groupId>com.github.wvengen</groupId>
           <artifactId>proguard-maven-plugin</artifactId>
-          <version>2.0.13</version>
+          <version>${proguard.plugin.version}</version>
           <executions>
             <execution>
               <phase>package</phase>
