@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="android-core/src/main/java"/>
+	<classpathentry kind="src" path="android-integration/src/main/java"/>
+	<classpathentry kind="src" path="android/src"/>
+	<classpathentry kind="src" path="androidtest/src"/>
+	<classpathentry kind="src" path="core/src/main/java"/>
+	<classpathentry kind="src" path="core/src/test/java"/>
+	<classpathentry kind="src" path="glass/src"/>
+	<classpathentry kind="src" path="javase/src/main/java"/>
+	<classpathentry kind="src" path="zxing.appspot.com/src/main/java"/>
+	<classpathentry kind="src" path="zxingorg/src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

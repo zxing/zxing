@@ -55,8 +55,8 @@ final class AlignmentPatternFinder {
    * @param image image to search
    * @param startX left column from which to start searching
    * @param startY top row from which to start searching
-   * @param width width of region to search
-   * @param height height of region to search
+   * @param width width of BitRegion to search
+   * @param height height of BitRegion to search
    * @param moduleSize estimated module size so far
    */
   AlignmentPatternFinder(BitMatrix image,

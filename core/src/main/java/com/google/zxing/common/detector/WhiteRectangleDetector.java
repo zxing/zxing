@@ -22,9 +22,9 @@ import com.google.zxing.common.BitMatrix;
 
 /**
  * <p>
- * Detects a candidate barcode-like rectangular region within an image. It
+ * Detects a candidate barcode-like rectangular BitRegion within an image. It
  * starts around the center of the image, increases the size of the candidate
- * region until it finds a white rectangular region. By keeping track of the
+ * BitRegion until it finds a white rectangular BitRegion. By keeping track of the
  * last black points it encountered, it determines the corners of the barcode.
  * </p>
  *
@@ -70,13 +70,13 @@ public final class WhiteRectangleDetector {
 
   /**
    * <p>
-   * Detects a candidate barcode-like rectangular region within an image. It
+   * Detects a candidate barcode-like rectangular BitRegion within an image. It
    * starts around the center of the image, increases the size of the candidate
-   * region until it finds a white rectangular region.
+   * BitRegion until it finds a white rectangular BitRegion.
    * </p>
    *
    * @return {@link ResultPoint}[] describing the corners of the rectangular
-   *         region. The first and last points are opposed on the diagonal, as
+   *         BitRegion. The first and last points are opposed on the diagonal, as
    *         are the second and third. The first point will be the topmost
    *         point and the last, the bottommost. The second point will be
    *         leftmost and the third, the rightmost
@@ -272,7 +272,7 @@ public final class WhiteRectangleDetector {
    * @param x right most point
    * @param t top most point
    * @return {@link ResultPoint}[] describing the corners of the rectangular
-   *         region. The first and last points are opposed on the diagonal, as
+   *         BitRegion. The first and last points are opposed on the diagonal, as
    *         are the second and third. The first point will be the topmost
    *         point and the last, the bottommost. The second point will be
    *         leftmost and the third, the rightmost

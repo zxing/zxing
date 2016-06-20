@@ -21,6 +21,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.BitRegion;
 
 import java.util.Map;
 
@@ -84,7 +85,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     BitMatrix output = new BitMatrix(outputWidth, outputHeight);
     for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
       if (code[inputX]) {
-        output.setRegion(outputX, 0, multiple, outputHeight);
+        output.setRegion(new BitRegion(outputX, 0, multiple, outputHeight));
       }
     }
     return output;

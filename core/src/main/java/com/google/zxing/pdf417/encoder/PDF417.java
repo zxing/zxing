@@ -545,7 +545,7 @@ public final class PDF417 {
    * @param m the number of source codewords prior to the additional of the Symbol Length
    *          Descriptor and any pad codewords
    * @param k the number of error correction codewords
-   * @param c the number of columns in the symbol in the data region (excluding start, stop and
+   * @param c the number of columns in the symbol in the data BitRegion (excluding start, stop and
    *          row indicator codewords)
    * @return the number of rows in the symbol (r)
    */
@@ -563,7 +563,7 @@ public final class PDF417 {
    * @param m the number of source codewords prior to the additional of the Symbol Length
    *          Descriptor and any pad codewords
    * @param k the number of error correction codewords
-   * @param c the number of columns in the symbol in the data region (excluding start, stop and
+   * @param c the number of columns in the symbol in the data BitRegion (excluding start, stop and
    *          row indicator codewords)
    * @param r the number of rows in the symbol
    * @return the number of pad codewords

@@ -79,7 +79,7 @@ public abstract class GridSampler {
    * @param p3FromY point 3 image Y
    * @param p4FromX point 4 image X
    * @param p4FromY point 4 image Y
-   * @return {@link BitMatrix} representing a grid of points sampled from the image within a region
+   * @return {@link BitMatrix} representing a grid of points sampled from the image within a BitRegion
    *   defined by the "from" parameters
    * @throws NotFoundException if image can't be sampled, for example, if the transformation defined
    *   by the given points is invalid or results in sampling outside the image boundaries

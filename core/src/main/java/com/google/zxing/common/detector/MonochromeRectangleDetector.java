@@ -21,9 +21,9 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 
 /**
- * <p>A somewhat generic detector that looks for a barcode-like rectangular region within an image.
- * It looks within a mostly white region of an image for a region of black and white, but mostly
- * black. It returns the four corners of the region, as best it can determine.</p>
+ * <p>A somewhat generic detector that looks for a barcode-like rectangular BitRegion within an image.
+ * It looks within a mostly white BitRegion of an image for a BitRegion of black and white, but mostly
+ * black. It returns the four corners of the BitRegion, as best it can determine.</p>
  *
  * @author Sean Owen
  */
@@ -38,10 +38,10 @@ public final class MonochromeRectangleDetector {
   }
 
   /**
-   * <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
+   * <p>Detects a rectangular BitRegion of black and white -- mostly black -- with a BitRegion of mostly
    * white, in an image.</p>
    *
-   * @return {@link ResultPoint}[] describing the corners of the rectangular region. The first and
+   * @return {@link ResultPoint}[] describing the corners of the rectangular BitRegion. The first and
    *  last points are opposed on the diagonal, as are the second and third. The first point will be
    *  the topmost point and the last, the bottommost. The second point will be leftmost and the
    *  third, the rightmost
@@ -152,13 +152,13 @@ public final class MonochromeRectangleDetector {
   }
 
   /**
-   * Computes the start and end of a region of pixels, either horizontally or vertically, that could
+   * Computes the start and end of a BitRegion of pixels, either horizontally or vertically, that could
    * be part of a Data Matrix barcode.
    *
    * @param fixedDimension if scanning horizontally, this is the row (the fixed vertical location)
    *  where we are scanning. If scanning vertically it's the column, the fixed horizontal location
    * @param maxWhiteRun largest run of white pixels that can still be considered part of the
-   *  barcode region
+   *  barcode BitRegion
    * @param minDim minimum pixel location, horizontally or vertically, to consider
    * @param maxDim maximum pixel location, horizontally or vertically, to consider
    * @param horizontal if true, we're scanning left-right, instead of up-down

@@ -393,7 +393,7 @@ final class BitMatrixParser {
   }
   
   /**
-   * <p>Extracts the data region from a {@link BitMatrix} that contains
+   * <p>Extracts the data BitRegion from a {@link BitMatrix} that contains
    * alignment patterns.</p>
    * 
    * @param bitMatrix Original {@link BitMatrix} with alignment patterns

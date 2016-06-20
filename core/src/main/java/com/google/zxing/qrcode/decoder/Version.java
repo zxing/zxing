@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.BitRegion;
 
 /**
  * See ISO 18004:2006 Annex D
@@ -141,11 +142,11 @@ public final class Version {
     BitMatrix bitMatrix = new BitMatrix(dimension);
 
     // Top left finder pattern + separator + format
-    bitMatrix.setRegion(0, 0, 9, 9);
+    bitMatrix.setRegion(new BitRegion(0, 0, 9, 9));
     // Top right finder pattern + separator + format
-    bitMatrix.setRegion(dimension - 8, 0, 8, 9);
+    bitMatrix.setRegion(new BitRegion(dimension - 8, 0, 8, 9));
     // Bottom left finder pattern + separator + format
-    bitMatrix.setRegion(0, dimension - 8, 9, 8);
+    bitMatrix.setRegion(new BitRegion(0, dimension - 8, 9, 8));
 
     // Alignment patterns
     int max = alignmentPatternCenters.length;
@@ -156,20 +157,20 @@ public final class Version {
           // No alignment patterns near the three finder paterns
           continue;
         }
-        bitMatrix.setRegion(alignmentPatternCenters[y] - 2, i, 5, 5);
+        bitMatrix.setRegion(new BitRegion(alignmentPatternCenters[y] - 2, i, 5, 5));
       }
     }
 
     // Vertical timing pattern
-    bitMatrix.setRegion(6, 9, 1, dimension - 17);
+    bitMatrix.setRegion(new BitRegion(6, 9, 1, dimension - 17));
     // Horizontal timing pattern
-    bitMatrix.setRegion(9, 6, dimension - 17, 1);
+    bitMatrix.setRegion(new BitRegion(9, 6, dimension - 17, 1));
 
     if (versionNumber > 6) {
       // Version info, top right
-      bitMatrix.setRegion(dimension - 11, 0, 3, 6);
+      bitMatrix.setRegion(new BitRegion(dimension - 11, 0, 3, 6));
       // Version info, bottom left
-      bitMatrix.setRegion(0, dimension - 11, 6, 3);
+      bitMatrix.setRegion(new BitRegion(0, dimension - 11, 6, 3));
     }
 
     return bitMatrix;

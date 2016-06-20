@@ -297,7 +297,7 @@ public class Detector {
 
   /**
    * <p>This method traces a line from a point in the image, in the direction towards another point.
-   * It begins in a black region, and keeps going until it finds white, then black, then white again.
+   * It begins in a black BitRegion, and keeps going until it finds white, then black, then white again.
    * It reports the distance from the start to this point.</p>
    *
    * <p>This is used when figuring out how wide a finder pattern is, when the finder pattern
@@ -360,7 +360,7 @@ public class Detector {
   }
 
   /**
-   * <p>Attempts to locate an alignment pattern in a limited region of the image, which is
+   * <p>Attempts to locate an alignment pattern in a limited BitRegion of the image, which is
    * guessed to contain it. This method uses {@link AlignmentPattern}.</p>
    *
    * @param overallEstModuleSize estimated module size so far

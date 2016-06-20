@@ -22,6 +22,7 @@ import com.google.zxing.Writer;
 import com.google.zxing.aztec.encoder.AztecCode;
 import com.google.zxing.aztec.encoder.Encoder;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.BitRegion;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -87,7 +88,7 @@ public final class AztecWriter implements Writer {
       // Write the contents of this row of the barcode
       for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
         if (input.get(inputX, inputY)) {
-          output.setRegion(outputX, outputY, multiple, multiple);
+          output.setRegion(new BitRegion(outputX, outputY, multiple, multiple));
         }
       }
     }
