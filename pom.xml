@@ -667,7 +667,7 @@
     <site>
       <id>zxing.website</id>
       <name>ZXing documentation</name>
-      <url>http://zxing.github.io/zxing/</url>
+      <url>https://zxing.github.io/zxing/</url>
     </site>
   </distributionManagement>
 
