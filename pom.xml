@@ -199,6 +199,64 @@
           <version>2.10.4</version>
           <configuration>
             <javadocVersion>${java.version}</javadocVersion>
+            <groups>
+              <group>
+                <title>Common support code</title>
+                <packages>com.google.zxing:com.google.zxing.common*:com.google.zxing.client.result*</packages>
+              </group>
+              <group>
+                <title>One-dimensional barcode (UPC, EAN, etc) support</title>
+                <packages>com.google.zxing.oned</packages>
+              </group>
+              <group>
+                <title>QR Code support</title>
+                <packages>com.google.zxing.qrcode*</packages>
+              </group>
+              <group>
+                <title>Data Matrix support</title>
+                <packages>com.google.zxing.datamatrix*</packages>
+              </group>
+              <group>
+                <title>PDF417 barcode support</title>
+                <packages>com.google.zxing.pdf417*</packages>
+              </group>
+              <group>
+                <title>Aztec barcode support</title>
+                <packages>com.google.zxing.aztec*</packages>
+              </group>
+              <group>
+                <title>MaxiCode support</title>
+                <packages>com.google.zxing.maxicode*</packages>
+              </group>
+              <group>
+                <title>RSS barcode support</title>
+                <packages>com.google.zxing.oned.rss*</packages>
+              </group>
+              <group>
+                <title>Multiple barcode scanning support</title>
+                <packages>com.google.zxing.multi*</packages>
+              </group>
+              <group>
+                <title>Web-based decoder app</title>
+                <packages>com.google.zxing.web</packages>
+              </group>
+              <group>
+                <title>Web-based App Engine encoder app</title>
+                <packages>com.google.zxing.web.generator*</packages>
+              </group>
+              <group>
+                <title>JavaSE utilities and support</title>
+                <packages>com.google.zxing.client.j2se*</packages>
+              </group>
+              <group>
+                <title>Android Intent integration</title>
+                <packages>com.google.zxing.integration.android*</packages>
+              </group>
+              <group>
+                <title>Android common support</title>
+                <packages>com.google.zxing.client.android*</packages>
+              </group>
+            </groups>
           </configuration>
           <executions>
             <execution>
