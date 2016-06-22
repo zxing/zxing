@@ -26,11 +26,12 @@ import com.google.zxing.common.detector.WhiteRectangleDetector;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Comparator;
 
 /**
  * <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
@@ -42,12 +43,19 @@ public final class Detector {
 
   private final BitMatrix image;
   private final WhiteRectangleDetector rectangleDetector;
+  private final Boolean tryHarder;
 
   public Detector(BitMatrix image) throws NotFoundException {
     this.image = image;
     rectangleDetector = new WhiteRectangleDetector(image);
+    this.tryHarder = false;
   }
 
+  public Detector(BitMatrix image, Boolean tryHarder) throws NotFoundException {
+    this.image = image;
+    this.tryHarder = tryHarder;
+    rectangleDetector = new WhiteRectangleDetector(image, tryHarder);
+  }
   /**
    * <p>Detects a Data Matrix Code in an image.</p>
    *
@@ -66,10 +74,18 @@ public final class Detector {
     // as are B and C. Figure out which are the solid black lines
     // by counting transitions
     List<ResultPointsAndTransitions> transitions = new ArrayList<>(4);
-    transitions.add(transitionsBetween(pointA, pointB));
-    transitions.add(transitionsBetween(pointA, pointC));
-    transitions.add(transitionsBetween(pointB, pointD));
-    transitions.add(transitionsBetween(pointC, pointD));
+    if (tryHarder) {
+      transitions.add(transitionsBetweenWithComparison(pointA, pointB, distance(pointA, pointC), new Moves[]{Moves.BOTH_RIGHT, Moves.FIRST_RIGHT, Moves.SECOND_RIGHT}));
+      transitions.add(transitionsBetweenWithComparison(pointA, pointC, distance(pointA, pointB), new Moves[]{Moves.SECOND_UP, Moves.SECOND_DOWN, Moves.FIRST_DOWN, Moves.BOTH_DOWN}));
+      transitions.add(transitionsBetweenWithComparison(pointB, pointD, distance(pointA, pointB), new Moves[]{Moves.BOTH_UP, Moves.FIRST_UP, Moves.SECOND_UP}));
+      transitions.add(transitionsBetweenWithComparison(pointC, pointD, distance(pointA, pointC), new Moves[]{Moves.BOTH_LEFT, Moves.FIRST_LEFT, Moves.FIRST_RIGHT, Moves.SECOND_LEFT}));
+
+    } else {
+      transitions.add(transitionsBetween(pointA, pointB));
+      transitions.add(transitionsBetween(pointA, pointC));
+      transitions.add(transitionsBetween(pointB, pointD));
+      transitions.add(transitionsBetween(pointC, pointD));
+    }
     Collections.sort(transitions, new ResultPointsAndTransitionsComparator());
 
     // Sort by number of transitions. First two will be the two solid sides; last two
@@ -119,14 +135,24 @@ public final class Detector {
 
     // Which point didn't we find in relation to the "L" sides? that's the top right corner
     ResultPoint topRight;
+    Moves[] dimensionTopMoves;
+    Moves[] dimensionRightMoves;
     if (!pointCount.containsKey(pointA)) {
       topRight = pointA;
+      dimensionTopMoves = new Moves[]{Moves.SECOND_RIGHT, Moves.SECOND_LEFT, Moves.FIRST_RIGHT, Moves.BOTH_RIGHT};
+      dimensionRightMoves = new Moves[]{Moves.SECOND_UP,Moves.SECOND_DOWN, Moves.FIRST_DOWN, Moves.BOTH_DOWN};
     } else if (!pointCount.containsKey(pointB)) {
       topRight = pointB;
+      dimensionTopMoves = new Moves[]{Moves.SECOND_UP, Moves.SECOND_DOWN, Moves.FIRST_UP, Moves.BOTH_UP};
+      dimensionRightMoves = new Moves[]{Moves.SECOND_LEFT,Moves.SECOND_RIGHT, Moves.FIRST_RIGHT, Moves.BOTH_RIGHT};
     } else if (!pointCount.containsKey(pointC)) {
       topRight = pointC;
+      dimensionTopMoves = new Moves[]{Moves.SECOND_UP, Moves.SECOND_DOWN, Moves.FIRST_DOWN, Moves.BOTH_DOWN};
+      dimensionRightMoves = new Moves[]{Moves.SECOND_LEFT,Moves.SECOND_RIGHT, Moves.FIRST_LEFT, Moves.BOTH_LEFT};
     } else {
       topRight = pointD;
+      dimensionTopMoves = new Moves[]{Moves.SECOND_LEFT, Moves.SECOND_RIGHT, Moves.FIRST_LEFT, Moves.BOTH_LEFT};
+      dimensionRightMoves = new Moves[]{Moves.SECOND_UP,Moves.SECOND_DOWN, Moves.FIRST_UP, Moves.BOTH_UP};
     }
 
     // Next determine the dimension by tracing along the top or right side and counting black/white
@@ -137,21 +163,25 @@ public final class Detector {
     // The top right point is actually the corner of a module, which is one of the two black modules
     // adjacent to the white module at the top right. Tracing to that corner from either the top left
     // or bottom right should work here.
-    
-    int dimensionTop = transitionsBetween(topLeft, topRight).getTransitions();
-    int dimensionRight = transitionsBetween(bottomRight, topRight).getTransitions();
+    int dimensionTop = tryHarder ? transitionsBetweenWithComparison(topLeft, topRight, distance(topLeft, bottomLeft), dimensionTopMoves).getTransitions()
+                                 : transitionsBetween(topLeft, topRight).getTransitions();
+    int dimensionRight = tryHarder ? transitionsBetweenWithComparison(bottomRight, topRight, distance(topLeft, topRight), dimensionRightMoves).getTransitions()
+                                   : transitionsBetween(bottomRight, topRight).getTransitions();
     
     if ((dimensionTop & 0x01) == 1) {
       // it can't be odd, so, round... up?
       dimensionTop++;
     }
-    dimensionTop += 2;
-    
+
     if ((dimensionRight & 0x01) == 1) {
       // it can't be odd, so, round... up?
       dimensionRight++;
     }
-    dimensionRight += 2;
+
+    if(!tryHarder) {//in try harder upper right point is in the white module
+      dimensionTop += 2;
+      dimensionRight += 2;
+    }
 
     BitMatrix bits;
     ResultPoint correctedTopRight;
@@ -162,23 +192,26 @@ public final class Detector {
     if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {
       // The matrix is rectangular
 
-      correctedTopRight =
-          correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
-      if (correctedTopRight == null){
+      if (tryHarder) {
         correctedTopRight = topRight;
-      }
+      } else {
+        correctedTopRight =
+            correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
+        if (correctedTopRight == null){
+          correctedTopRight = topRight;
+        }
+        dimensionTop = transitionsBetween(topLeft, correctedTopRight).getTransitions();
+        dimensionRight = transitionsBetween(bottomRight, correctedTopRight).getTransitions();
 
-      dimensionTop = transitionsBetween(topLeft, correctedTopRight).getTransitions();
-      dimensionRight = transitionsBetween(bottomRight, correctedTopRight).getTransitions();
+        if ((dimensionTop & 0x01) == 1) {
+          // it can't be odd, so, round... up?
+          dimensionTop++;
+        }
 
-      if ((dimensionTop & 0x01) == 1) {
-        // it can't be odd, so, round... up?
-        dimensionTop++;
-      }
-
-      if ((dimensionRight & 0x01) == 1) {
-        // it can't be odd, so, round... up?
-        dimensionRight++;
+        if ((dimensionRight & 0x01) == 1) {
+          // it can't be odd, so, round... up?
+          dimensionRight++;
+        }
       }
 
       bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
@@ -186,19 +219,23 @@ public final class Detector {
     } else {
       // The matrix is square
         
-      int dimension = Math.min(dimensionRight, dimensionTop);
-      // correct top right point to match the white module
-      correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
-      if (correctedTopRight == null){
+      int dimensionCorrected;
+      if (tryHarder) {
         correctedTopRight = topRight;
-      }
-
-      // Redetermine the dimension using the corrected top right point
-      int dimensionCorrected = Math.max(transitionsBetween(topLeft, correctedTopRight).getTransitions(),
-                                transitionsBetween(bottomRight, correctedTopRight).getTransitions());
-      dimensionCorrected++;
-      if ((dimensionCorrected & 0x01) == 1) {
+        dimensionCorrected = Math.max(dimensionTop, dimensionRight);
+      } else {
+        int dimension = Math.min(dimensionRight, dimensionTop);
+        // correct top right point to match the white module
+        correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
+        if (correctedTopRight == null){
+          correctedTopRight = topRight;
+        }
+        // Redetermine the dimension using the corrected top right point
+        dimensionCorrected = Math.max(transitionsBetween(topLeft, correctedTopRight).getTransitions(), transitionsBetween(bottomRight, correctedTopRight).getTransitions());
         dimensionCorrected++;
+        if ((dimensionCorrected & 0x01) == 1) {
+          dimensionCorrected++;
+        }
       }
 
       bits = sampleGrid(image,
@@ -211,6 +248,81 @@ public final class Detector {
     }
 
     return new DetectorResult(bits, new ResultPoint[]{topLeft, bottomLeft, bottomRight, correctedTopRight});
+  }
+
+  /**
+   * <p>Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
+   * In order to determine the transitions we get many samples moving end points toward directions that are specified
+   * in towards argument. End points are moved for 1% of the specified length. Finally, returns the most popular transition
+   * result.</p>
+   *
+   * @param from {@link ResultPoint} of the first point
+   * @param to  {@link ResultPoint} of the second point
+   * @param length the length that is used to calculate the move of endpoints
+   * @param towards moves that used in sampling
+   * @return the calculated transitions
+   */
+  private ResultPointsAndTransitions transitionsBetweenWithComparison(final ResultPoint from, final ResultPoint to, final int length, final Moves[] towards){
+
+    int offset;
+    List<Moves> moves = Arrays.asList(towards);
+    List<Integer> dimentionResults = new ArrayList<>();
+    int transitions = transitionsBetween(from, to).getTransitions();
+    dimentionResults.add(transitions);
+    offset = (int) (length * (1 / 100.0));
+
+    if (moves.contains(Moves.BOTH_DOWN)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX(), from.getY() + offset),
+                                              new ResultPoint(to.getX(), to.getY() + offset)).getTransitions());
+    }
+    if (moves.contains(Moves.BOTH_UP)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX(), from.getY() - offset),
+                                              new ResultPoint(to.getX(), to.getY() - offset)).getTransitions());
+    }
+    if (moves.contains(Moves.FIRST_DOWN)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX(), from.getY() + offset),
+                                              new ResultPoint(to.getX(), to.getY())).getTransitions());
+    }
+    if (moves.contains(Moves.SECOND_DOWN)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX(), from.getY()),
+                                              new ResultPoint(to.getX(), to.getY() + offset)).getTransitions());
+    }
+    if (moves.contains(Moves.FIRST_UP)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX(), from.getY() - offset),
+                                              new ResultPoint(to.getX(), to.getY())).getTransitions());
+    }
+    if (moves.contains(Moves.SECOND_UP)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX(), from.getY()),
+                                              new ResultPoint(to.getX(), to.getY() - offset)).getTransitions());
+    }
+    if (moves.contains(Moves.BOTH_RIGHT)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX() + offset, from.getY()),
+                                              new ResultPoint(to.getX() + offset, to.getY())).getTransitions());
+    }
+    if (moves.contains(Moves.BOTH_LEFT)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX() - offset, from.getY()),
+                                              new ResultPoint(to.getX() - offset, to.getY())).getTransitions());
+    }
+    if (moves.contains(Moves.FIRST_RIGHT)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX() + offset, from.getY()),
+                                              new ResultPoint(to.getX(), to.getY())).getTransitions());
+    }
+    if (moves.contains(Moves.SECOND_RIGHT)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX(), from.getY()),
+                                              new ResultPoint(to.getX() + offset, to.getY())).getTransitions());
+    }
+    if (moves.contains(Moves.FIRST_LEFT)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX() - offset, from.getY()),
+                                              new ResultPoint(to.getX(), to.getY())).getTransitions());
+    }
+    if (moves.contains(Moves.SECOND_LEFT)) {
+      dimentionResults.add(transitionsBetween(new ResultPoint(from.getX(), from.getY()),
+                                              new ResultPoint(to.getX() - offset, to.getY())).getTransitions());
+    }
+
+    int mostPopularTransitions = getPopularElement(dimentionResults.toArray(new Integer[dimentionResults.size()]));
+
+    return new ResultPointsAndTransitions(from, to, mostPopularTransitions);
   }
 
   /**
@@ -374,13 +486,21 @@ public final class Detector {
     int ystep = fromY < toY ? 1 : -1;
     int xstep = fromX < toX ? 1 : -1;
     int transitions = 0;
+
+    List<Integer> transitionsLengths = new ArrayList<>();
+    int currentTransitionSize = 0;
     boolean inBlack = image.get(steep ? fromY : fromX, steep ? fromX : fromY);
     for (int x = fromX, y = fromY; x != toX; x += xstep) {
       boolean isBlack = image.get(steep ? y : x, steep ? x : y);
       if (isBlack != inBlack) {
         transitions++;
         inBlack = isBlack;
+        transitionsLengths.add(currentTransitionSize);
+        currentTransitionSize = 0;
+      } else {
+        currentTransitionSize++;
       }
+
       error += dy;
       if (error > 0) {
         if (y == toY) {
@@ -390,7 +510,85 @@ public final class Detector {
         error -= dx;
       }
     }
+
+    //if we are in try harder mode
+    if (tryHarder && transitions!=0) {
+
+      //if we count less than 7 transitions (8x8 is the smallest datamatrix) and the edge points are black we discard all transitions
+      if ((transitions < 7) && (image.get(steep ? fromY : fromX, steep ? fromX : fromY)) && (image.get(steep ? toY : toX, steep ? toX : toY))) {
+        return new ResultPointsAndTransitions(from, to, 0);
+      }
+
+      //validate transitions comparing lengths
+      int mostPopularLength = getPopularElement(transitionsLengths.toArray(new Integer[transitionsLengths.size()]));
+      for (int i =0; i<transitionsLengths.size(); i++) {
+        int currentTransitionLength = transitionsLengths.get(i);
+        //if current transition is less than 50% of the most popular length needs investigation
+        if (currentTransitionLength < (mostPopularLength * 50.0 / 100.0)) {
+
+          //look back for the first normal length
+          int backwardNormalLengthIndex = -1;
+          for (int bIdx = i-1; bIdx>=0; bIdx--) {
+            if ((transitionsLengths.get(bIdx) > (mostPopularLength * 80.0 / 100.0)) &&
+                (transitionsLengths.get(bIdx) < (mostPopularLength * 120.0 / 100.0))){
+              backwardNormalLengthIndex = bIdx;
+              break;
+            }
+          }
+
+          //look forward for the first normal length
+          int forwardNormalLengthIndex = transitionsLengths.size();
+          for (int fIdx = i+1; fIdx<transitionsLengths.size(); fIdx++) {
+            if ((transitionsLengths.get(fIdx) > (mostPopularLength * 80.0 / 100.0)) &&
+                    (transitionsLengths.get(fIdx) < (mostPopularLength * 120.0 / 100.0))){
+              forwardNormalLengthIndex = fIdx;
+              break;
+            }
+          }
+
+          //sum all lengths between normal modules
+          int sum = 0;
+          for (int j = backwardNormalLengthIndex+1; j < forwardNormalLengthIndex; j++) {
+            sum += transitionsLengths.get(j);
+          }
+          //the actual transitions are the result of sum / mostPopularLength rounding up to the int
+          int actualTransitionsInProblematicArea = Math.round(sum/(float)mostPopularLength);
+
+          //from counted transitions we reduce the transitions number of problematic area and add the actual transitions found in problematic area
+          transitions = (transitions - (forwardNormalLengthIndex - backwardNormalLengthIndex - 1)) + actualTransitionsInProblematicArea;
+
+          //correct index
+          i = forwardNormalLengthIndex;
+        }
+      }
+    }
+
     return new ResultPointsAndTransitions(from, to, transitions);
+  }
+
+  /**
+   * Returns the most popular element from an Integer array
+   */
+  public int getPopularElement(Integer[] a) {
+
+    int count = 1;
+    int tempCount;
+    int popular = a[0];
+    int temp ;
+    for (int i = 0; i < (a.length - 1); i++) {
+      temp = a[i];
+      tempCount = 0;
+      for (int j = 1; j < a.length; j++) {
+        if (temp == a[j]) {
+          tempCount++;
+        }
+      }
+      if (tempCount > count) {
+        popular = temp;
+        count = tempCount;
+      }
+    }
+    return popular;
   }
 
   /**
@@ -437,4 +635,21 @@ public final class Detector {
     }
   }
 
+  /**
+   * Available moves of two end points
+   */
+  private enum Moves {
+    BOTH_DOWN,
+    BOTH_UP,
+    BOTH_LEFT,
+    BOTH_RIGHT,
+    FIRST_UP,
+    FIRST_DOWN,
+    FIRST_LEFT,
+    FIRST_RIGHT,
+    SECOND_UP,
+    SECOND_DOWN,
+    SECOND_LEFT,
+    SECOND_RIGHT
+  }
 }
