@@ -219,191 +219,21 @@ public final class WhiteRectangleDetector {
       if (aBlackPointFoundOnBorder) {
         atLeastOneBlackPointFoundOnBorder = true;
       }
-
     }
 
     if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder) {
 
-      int maxSize = right - left;
-      int verticalMaxSize = down - up;
-
-      ResultPoint z = null;
-      ResultPoint z1 = null;
-      ResultPoint z2 = null;
-      boolean bordersChecked = false;
       //go up right
-      for (int i = 1, j = 2; (j<maxSize/2) && (j<verticalMaxSize/2); i++, j+=2) {
-        //in case of try harder mode a black point may exist in borders because of tolerance
-        //in that case the first point to check must be the black point in border line if any
-        if (tryHarder && !bordersChecked){
-          z1 = getBlackPointOnSegment(left, down, left + (maxSize / 2), down);
-          z2 = getBlackPointOnSegment(left, down, left, down - (verticalMaxSize / 2));
-          z1 = (z1 != null) && (isCornerPoint(z1, new ResultPoint(left, down), maxSize, verticalMaxSize)) ? z1: null;
-          z2 = (z2 != null) && (isCornerPoint(z2, new ResultPoint(left, down), verticalMaxSize, maxSize)) ? z2: null;
-          bordersChecked = true;
-        }
-        if(z == null) {
-          z = getBlackPointOnSegment(left, down - i, left + i, down);
-        }
-        if (z1 == null) {
-          z1 = getBlackPointOnSegment(left + j, down, left, down - i);
-        }
-        if (z2 == null) {
-          z2 = getBlackPointOnSegment(left, down - j, left + i, down);
-        }
-        if ((z != null) && (!tryHarder)) {
-          break;
-        } else if ((z1 != null) && (z2 != null) && tryHarder) {
-          //if we are not in black module get the middle
-          if(!inBlackModule(z1, z2)){
-            z = new ResultPoint((z1.getX() + z2.getX()) / 2, (z1.getY() + z2.getY()) / 2);
-            //decentralize point
-            z = decentralizePoint(z, left, right, up, down);
-          }else{//if we are in black module
-            //select the point that is in border line or construct a point that is closer to borders
-            z = inBorderLine(z1, left, right, up, down) ? z1 : (inBorderLine(z2,  left, right, up, down) ? z2 :
-                    new ResultPoint(z1.getX() < z2.getX() ? z1.getX() : z2.getX(), z1.getY() > z2.getY() ? z1.getY() : z2.getY()));
-          }
-          break;
-        }
-      }
-
-      if (z == null) {
-        throw NotFoundException.getNotFoundInstance();
-      }
-
-      ResultPoint t = null;
-      ResultPoint t1 = null;
-      ResultPoint t2 = null;
-      bordersChecked = false;
+      ResultPoint z = findEdgePoint(new ResultPoint(left, down), new ResultPoint(right,up));
       //go down right
-      for (int i = 1, j = 2; (j<maxSize/2) && (j<verticalMaxSize/2); i++, j+=2) {
-        //in case of try harder mode a black point may exist in borders because of tolerance
-        //in that case the first point to check must be the black point in border line if any
-        if (tryHarder && !bordersChecked){
-          t1 = getBlackPointOnSegment(left, up, left + (maxSize / 2), up);
-          t2 = getBlackPointOnSegment(left, up, left, up + (verticalMaxSize / 2));
-          t1 = (t1 != null) && (isCornerPoint(t1, new ResultPoint(left, up), maxSize, verticalMaxSize)) ? t1: null;
-          t2 = (t2 != null) && (isCornerPoint(t2, new ResultPoint(left, up), verticalMaxSize, maxSize)) ? t2: null;
-          bordersChecked = true;
-        }
-        if(t == null) {
-          t = getBlackPointOnSegment(left, up + i, left + i, up);
-        }
-        if (t1 == null) {
-          t1 = getBlackPointOnSegment(left + j, up, left, up + i);
-        }
-        if (t2 == null) {
-          t2 = getBlackPointOnSegment(left, up + j, left + i, up);
-        }
-        if ((t != null) && !tryHarder) {
-          break;
-        } else if ((t1 != null) && (t2 != null) && tryHarder) {
-          //if we are not in black module get the middle
-          if(!inBlackModule(t1, t2)){
-            t = new ResultPoint((t1.getX() + t2.getX()) / 2, (t1.getY() + t2.getY()) / 2);
-            //decentralize point
-            t = decentralizePoint(t, left, right, up, down);
-          }else{//if we are in black module
-            //select the point that is in border line or construct a point that is closer to borders
-            t = inBorderLine(t1, left, right, up, down) ? t1 : (inBorderLine(t2,  left, right, up, down) ? t2 :
-                    new ResultPoint(t1.getX() < t2.getX() ? t1.getX() : t2.getX(), t1.getY() < t2.getY() ? t1.getY() : t2.getY()));
-          }
-          break;
-        }
-      }
-
-      if (t == null) {
-        throw NotFoundException.getNotFoundInstance();
-      }
-
-      ResultPoint x = null;
-      ResultPoint x1 = null;
-      ResultPoint x2 = null;
-      bordersChecked = false;
+      ResultPoint t = findEdgePoint(new ResultPoint(left, up), new ResultPoint(right,down));
       //go down left
-      for (int i = 1, j = 2; (j<maxSize/2) && (j<verticalMaxSize/2); i++, j+=2) {
-        //in case of try harder mode a black point may exist in borders because of tolerance
-        //in that case the first point to check must be the black point in border line if any
-        if (tryHarder && !bordersChecked){
-          x1 = getBlackPointOnSegment(right, up, right - (maxSize / 2), up);
-          x2 = getBlackPointOnSegment(right, up, right, up + (verticalMaxSize / 2));
-          x1 = (x1 != null) && (isCornerPoint(x1, new ResultPoint(right, up), maxSize, verticalMaxSize)) ? x1: null;
-          x2 = (x2 != null) && (isCornerPoint(x2, new ResultPoint(right, up), verticalMaxSize, maxSize)) ? x2: null;
-          bordersChecked = true;
-        }
-        if(x == null) {
-          x = getBlackPointOnSegment(right, up + i, right - i, up);
-        }
-        if (x1 == null) {
-          x1 = getBlackPointOnSegment(right - j, up, right, up + i);
-        }
-        if (x2 == null) {
-          x2 = getBlackPointOnSegment(right, up + j, right - i, up);
-        }
-        if ((x != null) && !tryHarder) {
-          break;
-        } else if ((x1 != null) && (x2 != null) && tryHarder) {
-          //if we are not in black module get the middle
-          if (!inBlackModule(x1, x2)) {
-            x = new ResultPoint((x1.getX() + x2.getX()) / 2, (x1.getY() + x2.getY()) / 2);
-            //decentralize point
-            x = decentralizePoint(x, left, right, up, down);
-          } else {//if we are in black module
-            //select the point that is in border line or construct a point that is closer to borders
-            x = inBorderLine(x1, left, right, up, down) ? x1 : (inBorderLine(x2,  left, right, up, down) ? x2 :
-                    new ResultPoint(x1.getX() > x2.getX() ? x1.getX() : x2.getX(), x1.getY() < x2.getY() ? x1.getY() : x2.getY()));
-          }
-          break;
-        }
-      }
-
-      if (x == null) {
-        throw NotFoundException.getNotFoundInstance();
-      }
-
-      ResultPoint y = null;
-      ResultPoint y1 = null;
-      ResultPoint y2 = null;
-      bordersChecked = false;
+      ResultPoint x = findEdgePoint(new ResultPoint(right, up), new ResultPoint(left,down));
       //go up left
-      for (int i = 1, j = 2; (j<maxSize/2) && (j<verticalMaxSize/2); i++, j+=2) {
-        //in case of try harder mode a black point may exist in borders because of tolerance
-        //in that case the first point to check must be the black point in border line if any
-        if (tryHarder && !bordersChecked){
-          y1 = getBlackPointOnSegment(right, down, right - (maxSize / 2), down);
-          y2 = getBlackPointOnSegment(right, down, right, down - (verticalMaxSize / 2));
-          y1 = (y1 != null) && (isCornerPoint(y1, new ResultPoint(right, down), maxSize, verticalMaxSize)) ? y1: null;
-          y2 = (y2 != null) && (isCornerPoint(y2, new ResultPoint(right, down), verticalMaxSize, maxSize)) ? y2: null;
-          bordersChecked = true;
-        }
-        if (y == null) {
-          y = getBlackPointOnSegment(right, down - i, right - i, down);
-        }
-        if (y1 == null) {
-          y1 = getBlackPointOnSegment(right - j, down, right, down - i);
-        }
-        if (y2 == null) {
-          y2 = getBlackPointOnSegment(right, down - j, right - i, down);
-        }
-        if ((y != null) && !tryHarder) {
-          break;
-        } else if ((y1 != null) && (y2 != null) && tryHarder) {
-          //if we are not in black module get the middle
-          if (!inBlackModule(y1, y2)) {
-            y = new ResultPoint((y1.getX() + y2.getX()) / 2, (y1.getY() + y2.getY()) / 2);
-            //decentralize point
-            y = decentralizePoint(y, left, right, up, down);
-          } else {//if we are in black module
-            //select the point that is in border line or construct a point that is closer to borders
-            y = inBorderLine(y1, left, right, up, down) ? y1 : (inBorderLine(y2,  left, right, up, down) ? y2 :
-                    new ResultPoint(y1.getX() > y2.getX() ? y1.getX() : y2.getX(), y1.getY() > y2.getY() ? y1.getY() : y2.getY()));
-          }
-          break;
-        }
-      }
+      ResultPoint y = findEdgePoint(new ResultPoint(right, down), new ResultPoint(left,up));
 
-      if (y == null) {
+      //if an edge is not found
+      if(z == null || t == null || x == null || y == null) {
         throw NotFoundException.getNotFoundInstance();
       }
 
@@ -415,25 +245,81 @@ public final class WhiteRectangleDetector {
   }
 
   /**
+   * Return the edge point of DataMatrix that is closer to the corner point of rectangle passed as the first
+   * argument.
+   *
+   * @param edge {@link ResultPoint} that is the first corner point of the examined rectangle
+   * @param oppEdge {@link ResultPoint} that is the diagonal opposite corner point of the examined rectangle
+   * @return {@link ResultPoint} that is the edge of the DataMatrix closer to edge parameter
+   */
+  private ResultPoint findEdgePoint(ResultPoint edge, ResultPoint oppEdge) {
+
+    int maxSize = (int)Math.abs(edge.getX() - oppEdge.getX());
+    int verticalMaxSize = (int)Math.abs(edge.getY() - oppEdge.getY());
+
+    ResultPoint a = null;
+    ResultPoint a1 = null;
+    ResultPoint a2 = null;
+    boolean bordersChecked = false;
+    //go up right
+    for (int i = 1, j = 2; (j<maxSize/2) && (j<verticalMaxSize/2); i++, j+=2) {
+      //in case of try harder mode a black point may exist in borders because of tolerance
+      //in that case the first point to check must be the black point in border line if any
+      if (tryHarder && !bordersChecked){
+        a1 = getBlackPointOnSegment(edge.getX(), edge.getY(), edge.getX() < oppEdge.getX() ? edge.getX() + (maxSize / 2) : edge.getX() - (maxSize / 2), edge.getY());
+        a2 = getBlackPointOnSegment(edge.getX(), edge.getY(), edge.getX(), edge.getY() > oppEdge.getY() ?  edge.getY() - (verticalMaxSize / 2) : edge.getY() + (verticalMaxSize / 2));
+        a1 = (a1 != null) && (isCornerPoint(a1, edge, maxSize, verticalMaxSize)) ? a1: null;
+        a2 = (a2 != null) && (isCornerPoint(a2, edge, verticalMaxSize, maxSize)) ? a2: null;
+        bordersChecked = true;
+      }
+      if(a == null) {
+        a = getBlackPointOnSegment(edge.getX(), edge.getY() > oppEdge.getY() ? edge.getY() - i :  edge.getY() + i, edge.getX() < oppEdge.getX() ? edge.getX() + i : edge.getX() - i, edge.getY());
+      }
+      if (a1 == null) {
+        a1 = getBlackPointOnSegment(edge.getX() < oppEdge.getX() ? edge.getX() + j : edge.getX() - j, edge.getY(), edge.getX(), edge.getY() > oppEdge.getY() ? edge.getY() - i : edge.getY() + i);
+      }
+      if (a2 == null) {
+        a2 = getBlackPointOnSegment(edge.getX(), edge.getY() > oppEdge.getY() ? edge.getY() - j : edge.getY() + j, edge.getX() < oppEdge.getX() ? edge.getX() + i : edge.getX() - i, edge.getY());
+      }
+      if ((a != null) && (!tryHarder)) {
+        break;
+      } else if ((a1 != null) && (a2 != null) && tryHarder) {
+        //if we are not in black module get the middle
+        if(!inBlackModule(a1, a2)){
+          a = new ResultPoint((a1.getX() + a2.getX()) / 2, (a1.getY() + a2.getY()) / 2);
+          //decentralize point
+          a = decentralizePoint(a, edge, oppEdge);
+        }else{//if we are in black module
+          //select the point that is in border line or construct a point that is closer to borders
+          a = inBorderLine(a1, edge, oppEdge) ? a1 : (inBorderLine(a2, edge, oppEdge) ? a2 :
+                  new ResultPoint(edge.getX() < oppEdge.getX() ? Math.min(a1.getX(), a2.getX()) : Math.max(a1.getX(), a2.getX()), edge.getY() > oppEdge.getY() ? Math.max(a1.getY(),a2.getY()) : Math.min(a1.getY(),a2.getY())));
+        }
+        break;
+      }
+    }
+    return a;
+  }
+
+  /**
    * Returns true if a point is in one of the four border lines
    */
-  private boolean inBorderLine(ResultPoint a, int  left, int right, int up, int down) {
-    return (a.getX() == left) || (a.getX() == right) || (a.getY() == up) || (a.getY() == down);
+  private boolean inBorderLine(ResultPoint a, ResultPoint edge, ResultPoint oppEdge) {
+    return (a.getX() == edge.getX()) || (a.getX() == oppEdge.getX()) || (a.getY() == edge.getY()) || (a.getY() == oppEdge.getY());
   }
 
   /**
    * Decentralize black point according to it's position in image
    */
-  private ResultPoint decentralizePoint(ResultPoint a, int left, int right, int up, int down) {
+  private ResultPoint decentralizePoint(ResultPoint a, ResultPoint edge, ResultPoint oppEdge) {
 
     //while point is black
     while(image.get((int)a.getX(), (int)a.getY())){
-      a = new ResultPoint(right-a.getX() < left+a.getX()? a.getX()+CORR: a.getX()-CORR,
-              down-a.getY() < up+a.getY()? a.getY()+CORR: a.getY()-CORR);
+      a = new ResultPoint(edge.getX() > oppEdge.getX() ? a.getX()+CORR: a.getX()-CORR,
+              edge.getY() > oppEdge.getY()? a.getY()+CORR: a.getY()-CORR);
     }
     //actually two more points away because finally this point will be centered
-    return new ResultPoint(right-a.getX() < left+a.getX()? a.getX()+CORR+1: a.getX()-CORR-1,
-            down-a.getY() < up+a.getY()? a.getY()+CORR+1: a.getY()-CORR-1);
+    return new ResultPoint(edge.getX() > oppEdge.getX() ? a.getX()+CORR+1: a.getX()-CORR-1,
+            edge.getY() > oppEdge.getY()? a.getY()+CORR+1: a.getY()-CORR-1);
   }
 
   /**
