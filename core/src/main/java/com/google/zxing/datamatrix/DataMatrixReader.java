@@ -64,12 +64,13 @@ public final class DataMatrixReader implements Reader {
       throws NotFoundException, ChecksumException, FormatException {
     DecoderResult decoderResult;
     ResultPoint[] points;
+    boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = extractPureBits(image.getBlackMatrix());
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
     } else {
-      DetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect();
+      DetectorResult detectorResult = new Detector(image.getBlackMatrix(), tryHarder).detect();
       decoderResult = decoder.decode(detectorResult.getBits());
       points = detectorResult.getPoints();
     }
