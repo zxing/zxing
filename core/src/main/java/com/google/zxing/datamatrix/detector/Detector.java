@@ -164,7 +164,7 @@ public final class Detector {
 
       correctedTopRight =
           correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
-      if (correctedTopRight == null){
+      if (correctedTopRight == null) {
         correctedTopRight = topRight;
       }
 
@@ -189,7 +189,7 @@ public final class Detector {
       int dimension = Math.min(dimensionRight, dimensionTop);
       // correct top right point to match the white module
       correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
-      if (correctedTopRight == null){
+      if (correctedTopRight == null) {
         correctedTopRight = topRight;
       }
 
@@ -224,19 +224,19 @@ public final class Detector {
                                                  int dimensionTop,
                                                  int dimensionRight) {
 
-    float corr = distance(bottomLeft, bottomRight) / (float)dimensionTop;
+    float corr = distance(bottomLeft, bottomRight) / (float) dimensionTop;
     int norm = distance(topLeft, topRight);
     float cos = (topRight.getX() - topLeft.getX()) / norm;
     float sin = (topRight.getY() - topLeft.getY()) / norm;
 
-    ResultPoint c1 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
+    ResultPoint c1 = new ResultPoint(topRight.getX() + corr * cos, topRight.getY() + corr * sin);
 
-    corr = distance(bottomLeft, topLeft) / (float)dimensionRight;
+    corr = distance(bottomLeft, topLeft) / (float) dimensionRight;
     norm = distance(bottomRight, topRight);
     cos = (topRight.getX() - bottomRight.getX()) / norm;
     sin = (topRight.getY() - bottomRight.getY()) / norm;
 
-    ResultPoint c2 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
+    ResultPoint c2 = new ResultPoint(topRight.getX() + corr * cos, topRight.getY() + corr * sin);
 
     if (!isValid(c1)) {
       if (isValid(c2)) {
@@ -244,7 +244,7 @@ public final class Detector {
       }
       return null;
     }
-    if (!isValid(c2)){
+    if (!isValid(c2)) {
       return c1;
     }
 
@@ -253,7 +253,7 @@ public final class Detector {
     int l2 = Math.abs(dimensionTop - transitionsBetween(topLeft, c2).getTransitions()) +
     Math.abs(dimensionRight - transitionsBetween(bottomRight, c2).getTransitions());
 
-    if (l1 <= l2){
+    if (l1 <= l2) {
       return c1;
     }
 

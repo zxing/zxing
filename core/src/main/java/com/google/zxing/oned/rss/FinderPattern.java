@@ -50,7 +50,7 @@ public final class FinderPattern {
 
   @Override
   public boolean equals(Object o) {
-    if(!(o instanceof FinderPattern)) {
+    if (!(o instanceof FinderPattern)) {
       return false;
     }
     FinderPattern that = (FinderPattern) o;

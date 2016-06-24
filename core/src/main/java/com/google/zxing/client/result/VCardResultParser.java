@@ -146,14 +146,14 @@ public final class VCardResultParser extends ResultParser {
 
       int matchStart = i; // Found the start of a match here
 
-      while ((i = rawText.indexOf((int) '\n', i)) >= 0) { // Really, end in \r\n
+      while ((i = rawText.indexOf('\n', i)) >= 0) { // Really, end in \r\n
         if (i < rawText.length() - 1 &&           // But if followed by tab or space,
-            (rawText.charAt(i+1) == ' ' ||        // this is only a continuation
-             rawText.charAt(i+1) == '\t')) {
+            (rawText.charAt(i + 1) == ' ' ||        // this is only a continuation
+             rawText.charAt(i + 1) == '\t')) {
           i += 2; // Skip \n and continutation whitespace
         } else if (quotedPrintable &&             // If preceded by = in quoted printable
-                   ((i >= 1 && rawText.charAt(i-1) == '=') || // this is a continuation
-                    (i >= 2 && rawText.charAt(i-2) == '='))) {
+                   ((i >= 1 && rawText.charAt(i - 1) == '=') || // this is a continuation
+                    (i >= 2 && rawText.charAt(i - 2) == '='))) {
           i++; // Skip \n
         } else {
           break;
@@ -168,7 +168,7 @@ public final class VCardResultParser extends ResultParser {
         if (matches == null) {
           matches = new ArrayList<>(1); // lazy init
         }
-        if (i >= 1 && rawText.charAt(i-1) == '\r') {
+        if (i >= 1 && rawText.charAt(i - 1) == '\r') {
           i--; // Back up over \r, which really should be there
         }
         String element = rawText.substring(matchStart, i);
@@ -218,9 +218,9 @@ public final class VCardResultParser extends ResultParser {
           break;
         case '=':
           if (i < length - 2) {
-            char nextChar = value.charAt(i+1);
+            char nextChar = value.charAt(i + 1);
             if (nextChar != '\r' && nextChar != '\n') {
-              char nextNextChar = value.charAt(i+2);
+              char nextNextChar = value.charAt(i + 2);
               int firstDigit = parseHexDigit(nextChar);
               int secondDigit = parseHexDigit(nextNextChar);
               if (firstDigit >= 0 && secondDigit >= 0) {

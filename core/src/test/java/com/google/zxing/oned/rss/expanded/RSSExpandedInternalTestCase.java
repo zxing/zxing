@@ -84,7 +84,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
       rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
       //   the previous was the last pair
       fail(NotFoundException.class.getName() + " expected");
-    }catch(NotFoundException nfe){
+    } catch (NotFoundException nfe) {
       // ok
     }
   }

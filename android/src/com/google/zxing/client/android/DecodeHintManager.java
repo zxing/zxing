@@ -103,7 +103,7 @@ final class DecodeHintManager {
       String name = query.substring(pos, equ);
       name = name.replace('+', ' '); // Preemptively decode +
       name = Uri.decode(name);
-      String text = query.substring(equ+1, amp);
+      String text = query.substring(equ + 1, amp);
       text = text.replace('+', ' '); // Preemptively decode +
       text = Uri.decode(text);
       if (!map.containsKey(name)) {

@@ -86,7 +86,7 @@ final class InactivityTimer {
 
   private final class PowerStatusReceiver extends BroadcastReceiver {
     @Override
-    public void onReceive(Context context, Intent intent){
+    public void onReceive(Context context, Intent intent) {
       if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
         // 0 indicates that we're on battery
         boolean onBatteryNow = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) <= 0;

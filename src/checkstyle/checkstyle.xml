@@ -119,13 +119,15 @@
     <!-- See http://checkstyle.sf.net/config_whitespace.html -->
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>
-    <!-- <module name="NoWhitespaceAfter"/> -->
-    <!-- <module name="NoWhitespaceBefore"/> -->
     <!-- <module name="OperatorWrap"/> -->
     <module name="ParenPad"/>
     <module name="TypecastParenPad"/>
-    <!-- <module name="WhitespaceAfter"/> -->
-    <!-- <module name="WhitespaceAround"/> -->
+    <module name="WhitespaceAfter">
+      <property name="tokens" value="TYPECAST, SEMI"/>
+    </module>
+    <module name="WhitespaceAround">
+      <property name="allowEmptyConstructors" value="true"/>
+    </module>
     <module name="UnnecessaryParentheses"/>
 
 
@@ -154,11 +156,14 @@
     <module name="EqualsHashCode"/>
     <!--<module name="HiddenField"/>-->
     <module name="IllegalInstantiation"/>
+    <module name="IllegalType"/>
     <!-- <module name="InnerAssignment"/> -->
     <!-- <module name="MagicNumber"/> -->
     <!-- <module name="MissingSwitchDefault"/> -->
     <module name="MissingDeprecated"/>
     <module name="MissingOverride"/>
+    <module name="OneStatementPerLine"/>
+    <module name="MultipleVariableDeclarations"/>
     <module name="DefaultComesLast"/>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
@@ -178,7 +183,6 @@
     <!-- Miscellaneous other checks.                   -->
     <!-- See http://checkstyle.sf.net/config_misc.html -->
     <module name="ArrayTypeStyle"/>
-    <module name="MultipleVariableDeclarations"/>
     <!--<module name="FinalParameters"/>-->
     <!-- <module name="TodoComment"/> -->
     <module name="UpperEll"/>

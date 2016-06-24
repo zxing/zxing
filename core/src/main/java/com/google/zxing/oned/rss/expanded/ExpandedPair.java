@@ -49,7 +49,7 @@ final class ExpandedPair {
     this.mayBeLast = mayBeLast;
   }
 
-  boolean mayBeLast(){
+  boolean mayBeLast() {
     return this.mayBeLast;
   }
 

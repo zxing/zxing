@@ -41,7 +41,7 @@ public final class BinaryUtilTest extends Assert {
    private static final Pattern SPACE = Pattern.compile(" ");
 
   @Test
-  public void testBuildBitArrayFromString(){
+  public void testBuildBitArrayFromString() {
 
     CharSequence data = " ..X..X.. ..XXX... XXXXXXXX ........";
     check(data);
@@ -59,13 +59,13 @@ public final class BinaryUtilTest extends Assert {
     check(data);
   }
 
-  private static void check(CharSequence data){
+  private static void check(CharSequence data) {
     BitArray binary = BinaryUtil.buildBitArrayFromString(data);
     assertEquals(data, binary.toString());
   }
 
   @Test
-  public void testBuildBitArrayFromStringWithoutSpaces(){
+  public void testBuildBitArrayFromStringWithoutSpaces() {
     CharSequence data = " ..X..X.. ..XXX... XXXXXXXX ........";
     checkWithoutSpaces(data);
 
@@ -82,7 +82,7 @@ public final class BinaryUtilTest extends Assert {
     checkWithoutSpaces(data);
   }
 
-  private static void checkWithoutSpaces(CharSequence data){
+  private static void checkWithoutSpaces(CharSequence data) {
     CharSequence dataWithoutSpaces = SPACE.matcher(data).replaceAll("");
     BitArray binary = BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
     assertEquals(data, binary.toString());

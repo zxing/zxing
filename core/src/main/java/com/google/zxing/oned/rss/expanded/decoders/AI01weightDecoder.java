@@ -44,7 +44,7 @@ abstract class AI01weightDecoder extends AI01decoder {
     int weightNumeric = checkWeight(originalWeightNumeric);
 
     int currentDivisor = 100000;
-    for(int i = 0; i < 5; ++i){
+    for (int i = 0; i < 5; ++i) {
       if (weightNumeric / currentDivisor == 0) {
         buf.append('0');
       }

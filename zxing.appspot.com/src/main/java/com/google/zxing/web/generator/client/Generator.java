@@ -122,10 +122,10 @@ public final class Generator implements EntryPoint {
 
   void setupLeftPanel() {
     topPanel.setHTML(2, 0,
-        "<span id=\"errorMessageID\" class=\""+StylesDefs.ERROR_MESSAGE+"\"></span>");
+        "<span id=\"errorMessageID\" class=\"" + StylesDefs.ERROR_MESSAGE + "\"></span>");
 
     // fills up the list of generators
-    for(GeneratorSource generator: generators) {
+    for (GeneratorSource generator: generators) {
       genList.addItem(generator.getName());
       setGridStyle(generator.getWidget());
     }

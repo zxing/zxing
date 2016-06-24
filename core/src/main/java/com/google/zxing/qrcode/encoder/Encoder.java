@@ -383,7 +383,7 @@ public final class Encoder {
 
       int size = numDataBytesInBlock[0];
       byte[] dataBytes = new byte[size];
-      bits.toBytes(8*dataBytesOffset, dataBytes, 0, size);
+      bits.toBytes(8 * dataBytesOffset, dataBytes, 0, size);
       byte[] ecBytes = generateECBytes(dataBytes, numEcBytesInBlock[0]);
       blocks.add(new BlockPair(dataBytes, ecBytes));
 

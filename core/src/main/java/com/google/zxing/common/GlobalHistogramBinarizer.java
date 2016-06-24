@@ -118,7 +118,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
     byte[] localLuminances = source.getMatrix();
     for (int y = 0; y < height; y++) {
       int offset = y * width;
-      for (int x = 0; x< width; x++) {
+      for (int x = 0; x < width; x++) {
         int pixel = localLuminances[offset + x] & 0xff;
         if (pixel < blackPoint) {
           matrix.set(x, y);

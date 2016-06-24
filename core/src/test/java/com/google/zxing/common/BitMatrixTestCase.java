@@ -224,14 +224,14 @@ public final class BitMatrixTestCase extends Assert {
     try {
       emptyMatrix.clone().xor(badMatrix);
       fail();
-    } catch(IllegalArgumentException ex) {
+    } catch (IllegalArgumentException ex) {
       // good
     }
 
     try {
       badMatrix.clone().xor(emptyMatrix);
       fail();
-    } catch(IllegalArgumentException ex) {
+    } catch (IllegalArgumentException ex) {
       // good
     }
   }

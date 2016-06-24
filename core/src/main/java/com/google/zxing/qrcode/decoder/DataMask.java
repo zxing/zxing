@@ -81,7 +81,7 @@ enum DataMask {
   DATA_MASK_100() {
     @Override
     boolean isMasked(int i, int j) {
-      return (((i / 2) + (j /3)) & 0x01) == 0;
+      return (((i / 2) + (j / 3)) & 0x01) == 0;
     }
   },
 

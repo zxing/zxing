@@ -70,10 +70,10 @@ public final class GenericGF {
       x *= 2; // we're assuming the generator alpha is 2
       if (x >= size) {
         x ^= primitive;
-        x &= size-1;
+        x &= size - 1;
       }
     }
-    for (int i = 0; i < size-1; i++) {
+    for (int i = 0; i < size - 1; i++) {
       logTable[expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used

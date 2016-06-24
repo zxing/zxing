@@ -93,7 +93,7 @@ public final class CodaBarReader extends OneDReader {
       // Hack: We store the position in the alphabet table into a
       // StringBuilder, so that we can access the decoded patterns in
       // validatePattern. We'll translate to the actual characters later.
-      decodeRowResult.append((char)charOffset);
+      decodeRowResult.append((char) charOffset);
       nextStart += 8;
       // Stop as soon as we see the end character.
       if (decodeRowResult.length() > 1 &&
@@ -270,7 +270,7 @@ public final class CodaBarReader extends OneDReader {
         for (int j = i; j < i + 7; j++) {
           patternSize += counters[j];
         }
-        if (i == 1 || counters[i-1] >= patternSize / 2) {
+        if (i == 1 || counters[i - 1] >= patternSize / 2) {
           return i;
         }
       }

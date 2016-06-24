@@ -70,7 +70,7 @@ public final class MultiFormatOneDReader extends OneDReader {
       if (possibleFormats.contains(BarcodeFormat.RSS_14)) {
          readers.add(new RSS14Reader());
       }
-      if (possibleFormats.contains(BarcodeFormat.RSS_EXPANDED)){
+      if (possibleFormats.contains(BarcodeFormat.RSS_EXPANDED)) {
         readers.add(new RSSExpandedReader());
       }
     }

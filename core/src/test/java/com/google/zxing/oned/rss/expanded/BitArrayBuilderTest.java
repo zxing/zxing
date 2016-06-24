@@ -57,20 +57,20 @@ public final class BitArrayBuilderTest extends Assert {
 
   private static BitArray buildBitArray(int[][] pairValues) {
     List<ExpandedPair> pairs = new ArrayList<>();
-    for(int i = 0; i < pairValues.length; ++i){
+    for (int i = 0; i < pairValues.length; ++i) {
       int [] pair = pairValues[i];
 
       DataCharacter leftChar;
-      if(i == 0) {
+      if (i == 0) {
         leftChar = null;
       } else {
         leftChar = new DataCharacter(pair[0], 0);
       }
 
       DataCharacter rightChar;
-      if(i == 0) {
+      if (i == 0) {
         rightChar = new DataCharacter(pair[0], 0);
-      } else if(pair.length == 2) {
+      } else if (pair.length == 2) {
         rightChar = new DataCharacter(pair[1], 0);
       } else {
         rightChar = null;

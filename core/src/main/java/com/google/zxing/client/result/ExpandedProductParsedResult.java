@@ -91,12 +91,12 @@ public final class ExpandedProductParsedResult extends ParsedResult {
   }
 
   @Override
-  public boolean equals(Object o){
+  public boolean equals(Object o) {
     if (!(o instanceof ExpandedProductParsedResult)) {
       return false;
     }
 
-    ExpandedProductParsedResult other = (ExpandedProductParsedResult)o;
+    ExpandedProductParsedResult other = (ExpandedProductParsedResult) o;
 
     return equalsOrNull(productID, other.productID)
         && equalsOrNull(sscc, other.sscc)
@@ -118,7 +118,7 @@ public final class ExpandedProductParsedResult extends ParsedResult {
   }
 
   @Override
-  public int hashCode(){
+  public int hashCode() {
     int hash = 0;
     hash ^= hashNotNull(productID);
     hash ^= hashNotNull(sscc);

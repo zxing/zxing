@@ -50,7 +50,7 @@ public final class BinaryUtil {
     BitArray binary = new BitArray(SPACE.matcher(dotsAndXs).replaceAll("").length());
     int counter = 0;
 
-    for(int i = 0; i < dotsAndXs.length(); ++i){
+    for (int i = 0; i < dotsAndXs.length(); ++i) {
       if (i % 9 == 0) { // spaces
         if (dotsAndXs.charAt(i) != ' ') {
           throw new IllegalStateException("space expected");

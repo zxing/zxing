@@ -251,7 +251,7 @@ public final class RSS14Reader extends AbstractRSSReader {
       evenChecksumPortion += evenCounts[i];
       evenSum += evenCounts[i];
     }
-    int checksumPortion = oddChecksumPortion + 3*evenChecksumPortion;
+    int checksumPortion = oddChecksumPortion + 3 * evenChecksumPortion;
 
     if (outsideChar) {
       if ((oddSum & 0x01) != 0 || oddSum > 12 || oddSum < 4) {
@@ -403,7 +403,7 @@ public final class RSS14Reader extends AbstractRSSReader {
       }
       incrementOdd = true;
       incrementEven = true;
-    } else */if (mismatch == 1) {
+    } else */ if (mismatch == 1) {
       if (oddParityBad) {
         if (evenParityBad) {
           throw NotFoundException.getNotFoundInstance();
