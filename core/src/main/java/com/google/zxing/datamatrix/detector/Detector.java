@@ -178,7 +178,7 @@ public final class Detector {
       dimensionRight++;
     }
 
-    if(!tryHarder) {//in try harder upper right point is in the white module
+    if (!tryHarder) { //in try harder upper right point is in the white module
       dimensionTop += 2;
       dimensionRight += 2;
     }
@@ -191,13 +191,12 @@ public final class Detector {
     // rectangular if the bigger side is at least 7/4 times the other:
     if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {
       // The matrix is rectangular
-
       if (tryHarder) {
         correctedTopRight = topRight;
       } else {
         correctedTopRight =
             correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
-        if (correctedTopRight == null){
+        if (correctedTopRight == null) {
           correctedTopRight = topRight;
         }
         dimensionTop = transitionsBetween(topLeft, correctedTopRight).getTransitions();
@@ -218,7 +217,6 @@ public final class Detector {
           
     } else {
       // The matrix is square
-        
       int dimensionCorrected;
       if (tryHarder) {
         correctedTopRight = topRight;
@@ -227,7 +225,7 @@ public final class Detector {
         int dimension = Math.min(dimensionRight, dimensionTop);
         // correct top right point to match the white module
         correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
-        if (correctedTopRight == null){
+        if (correctedTopRight == null) {
           correctedTopRight = topRight;
         }
         // Redetermine the dimension using the corrected top right point
@@ -262,7 +260,7 @@ public final class Detector {
    * @param towards moves that used in sampling
    * @return the calculated transitions
    */
-  private ResultPointsAndTransitions transitionsBetweenWithComparison(final ResultPoint from, final ResultPoint to, final int length, final Moves[] towards){
+  private ResultPointsAndTransitions transitionsBetweenWithComparison(final ResultPoint from, final ResultPoint to, final int length, final Moves[] towards) {
 
     int offset;
     List<Moves> moves = Arrays.asList(towards);
@@ -336,19 +334,19 @@ public final class Detector {
                                                  int dimensionTop,
                                                  int dimensionRight) {
 
-    float corr = distance(bottomLeft, bottomRight) / (float)dimensionTop;
+    float corr = distance(bottomLeft, bottomRight) / (float) dimensionTop;
     int norm = distance(topLeft, topRight);
     float cos = (topRight.getX() - topLeft.getX()) / norm;
     float sin = (topRight.getY() - topLeft.getY()) / norm;
 
-    ResultPoint c1 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
+    ResultPoint c1 = new ResultPoint(topRight.getX() + corr * cos, topRight.getY() + corr * sin);
 
-    corr = distance(bottomLeft, topLeft) / (float)dimensionRight;
+    corr = distance(bottomLeft, topLeft) / (float) dimensionRight;
     norm = distance(bottomRight, topRight);
     cos = (topRight.getX() - bottomRight.getX()) / norm;
     sin = (topRight.getY() - bottomRight.getY()) / norm;
 
-    ResultPoint c2 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
+    ResultPoint c2 = new ResultPoint(topRight.getX() + corr * cos, topRight.getY() + corr * sin);
 
     if (!isValid(c1)) {
       if (isValid(c2)) {
@@ -356,7 +354,7 @@ public final class Detector {
       }
       return null;
     }
-    if (!isValid(c2)){
+    if (!isValid(c2)) {
       return c1;
     }
 
@@ -365,7 +363,7 @@ public final class Detector {
     int l2 = Math.abs(dimensionTop - transitionsBetween(topLeft, c2).getTransitions()) +
     Math.abs(dimensionRight - transitionsBetween(bottomRight, c2).getTransitions());
 
-    if (l1 <= l2){
+    if (l1 <= l2) {
       return c1;
     }
 
@@ -512,7 +510,7 @@ public final class Detector {
     }
 
     //if we are in try harder mode
-    if (tryHarder && transitions!=0) {
+    if (tryHarder && transitions != 0) {
 
       //if we count less than 7 transitions (8x8 is the smallest datamatrix) and the edge points are black we discard all transitions
       if ((transitions < 7) && (image.get(steep ? fromY : fromX, steep ? fromX : fromY)) && (image.get(steep ? toY : toX, steep ? toX : toY))) {
@@ -521,16 +519,16 @@ public final class Detector {
 
       //validate transitions comparing lengths
       int mostPopularLength = getPopularElement(transitionsLengths.toArray(new Integer[transitionsLengths.size()]));
-      for (int i =0; i<transitionsLengths.size(); i++) {
+      for (int i = 0; i < transitionsLengths.size(); i++) {
         int currentTransitionLength = transitionsLengths.get(i);
         //if current transition is less than 50% of the most popular length needs investigation
         if (currentTransitionLength < (mostPopularLength * 50.0 / 100.0)) {
 
           //look back for the first normal length
           int backwardNormalLengthIndex = -1;
-          for (int bIdx = i-1; bIdx>=0; bIdx--) {
+          for (int bIdx = i - 1; bIdx >= 0; bIdx--) {
             if ((transitionsLengths.get(bIdx) > (mostPopularLength * 80.0 / 100.0)) &&
-                (transitionsLengths.get(bIdx) < (mostPopularLength * 120.0 / 100.0))){
+                (transitionsLengths.get(bIdx) < (mostPopularLength * 120.0 / 100.0))) {
               backwardNormalLengthIndex = bIdx;
               break;
             }
@@ -538,9 +536,9 @@ public final class Detector {
 
           //look forward for the first normal length
           int forwardNormalLengthIndex = transitionsLengths.size();
-          for (int fIdx = i+1; fIdx<transitionsLengths.size(); fIdx++) {
+          for (int fIdx = i + 1; fIdx < transitionsLengths.size(); fIdx++) {
             if ((transitionsLengths.get(fIdx) > (mostPopularLength * 80.0 / 100.0)) &&
-                    (transitionsLengths.get(fIdx) < (mostPopularLength * 120.0 / 100.0))){
+                    (transitionsLengths.get(fIdx) < (mostPopularLength * 120.0 / 100.0))) {
               forwardNormalLengthIndex = fIdx;
               break;
             }
@@ -548,11 +546,11 @@ public final class Detector {
 
           //sum all lengths between normal modules
           int sum = 0;
-          for (int j = backwardNormalLengthIndex+1; j < forwardNormalLengthIndex; j++) {
+          for (int j = backwardNormalLengthIndex + 1; j < forwardNormalLengthIndex; j++) {
             sum += transitionsLengths.get(j);
           }
           //the actual transitions are the result of sum / mostPopularLength rounding up to the int
-          int actualTransitionsInProblematicArea = Math.round(sum/(float)mostPopularLength);
+          int actualTransitionsInProblematicArea = Math.round(sum / (float) mostPopularLength);
 
           //from counted transitions we reduce the transitions number of problematic area and add the actual transitions found in problematic area
           transitions = (transitions - (forwardNormalLengthIndex - backwardNormalLengthIndex - 1)) + actualTransitionsInProblematicArea;
