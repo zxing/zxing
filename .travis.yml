@@ -7,8 +7,10 @@ matrix:
    # Covers Java 7, Open JDK, and code coverage
    - jdk: openjdk7
      env: JACOCO=-Pjacoco
-   # Covers Java 8, Oracle JDK
+   # Covers Java 8, Oracle JDK, Android apps
    - jdk: oraclejdk8
+     env: ANDROID_HOME=$HOME/android-sdk-linux
+     before_install: curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C $HOME
 cache:
   directories:
     - $HOME/.m2
