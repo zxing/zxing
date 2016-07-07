@@ -44,10 +44,10 @@ final class PreviewCallback implements Camera.PreviewCallback {
     Point cameraResolution = configManager.getCameraResolution();
     Handler thePreviewHandler = previewHandler;
     if (cameraResolution != null && thePreviewHandler != null) {
+      previewHandler = null;//has a synchronize problem in a high performence device
       Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.x,
           cameraResolution.y, data);
       message.sendToTarget();
-      previewHandler = null;
     } else {
       Log.d(TAG, "Got preview callback, but no handler or resolution available");
     }
