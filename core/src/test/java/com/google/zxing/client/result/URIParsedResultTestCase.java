@@ -61,6 +61,7 @@ public final class URIParsedResultTestCase extends Assert {
     doTestNotUri("http://google.com?q=foo bar");
     doTestNotUri("12756.501");
     doTestNotUri("google.50");
+    doTestNotUri("foo.bar.bing.baz.foo.bar.bing.baz");
   }
 
   @Test

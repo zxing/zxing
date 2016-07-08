@@ -31,7 +31,7 @@ public final class URIResultParser extends ResultParser {
   // See http://www.ietf.org/rfc/rfc2396.txt
   private static final Pattern URL_WITH_PROTOCOL_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9+-.]+:");
   private static final Pattern URL_WITHOUT_PROTOCOL_PATTERN = Pattern.compile(
-      "([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}" + // host name elements
+      "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements; allow up to say 6 domain elements
       "(:\\d{1,5})?" + // maybe port
       "(/|\\?|$)"); // query, path or nothing
 
