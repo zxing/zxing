@@ -343,7 +343,7 @@
             <dependency>
               <groupId>org.apache.maven.scm</groupId>
               <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.9.4</version>
+              <version>1.9.5</version>
             </dependency>
           </dependencies>
           <configuration>
@@ -356,7 +356,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>1.9.4</version>
+          <version>1.9.5</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -499,7 +499,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
-          <version>3.0.3</version>
+          <version>3.0.4</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -678,12 +678,12 @@
 
   <name>ZXing</name>
   <description>Parent Maven project for ZXing modules</description>
-  <url>http://github.com/zxing/zxing</url>
+  <url>https://github.com/zxing/zxing</url>
   <inceptionYear>2007</inceptionYear>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -704,7 +704,7 @@
     </mailingList>
     <mailingList>
       <name>StackOverflow tag</name>
-      <archive>http://stackoverflow.com/questions/tagged/zxing</archive>
+      <archive>https://stackoverflow.com/questions/tagged/zxing</archive>
     </mailingList>
   </mailingLists>
   <scm>
