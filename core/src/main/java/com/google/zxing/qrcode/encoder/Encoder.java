@@ -107,7 +107,7 @@ public final class Encoder {
     appendBytes(content, mode, dataBits, encoding);
 
     Version version = null;
-    if ((hints != null) && hints.containsKey(EncodeHintType.QR_VERSION)) {
+    if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
       Version requestedVersion = Version.getVersionForNumber((Integer) hints.get(EncodeHintType.QR_VERSION));
       int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, requestedVersion);
       if (willFit(bitsNeeded, requestedVersion, ecLevel)) {
@@ -296,7 +296,7 @@ public final class Encoder {
       // getNumDataBytes = 196 - 130 = 66
       int numDataBytes = numBytes - numEcBytes;
       int totalInputBytes = (numInputBits + 7) / 8;
-      return (numDataBytes >= totalInputBytes);
+      return numDataBytes >= totalInputBytes;
   }
 
   /**
