@@ -106,21 +106,18 @@ public final class Encoder {
     BitArray dataBits = new BitArray();
     appendBytes(content, mode, dataBits, encoding);
 
-    // Hard part: need to know version to know how many bits length takes. But need to know how many
-    // bits it takes to know version. First we take a guess at version by assuming version will be
-    // the minimum, 1:
-
-    int provisionalBitsNeeded = headerBits.getSize()
-        + mode.getCharacterCountBits(Version.getVersionForNumber(1))
-        + dataBits.getSize();
-    Version provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
-
-    // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
-
-    int bitsNeeded = headerBits.getSize()
-        + mode.getCharacterCountBits(provisionalVersion)
-        + dataBits.getSize();
-    Version version = chooseVersion(bitsNeeded, ecLevel);
+    Version version = null;
+    if ((hints != null) && hints.containsKey(EncodeHintType.QR_VERSION)) {
+      Version requestedVersion = Version.getVersionForNumber((Integer) hints.get(EncodeHintType.QR_VERSION));
+      int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, requestedVersion);
+      if (willFit(bitsNeeded, requestedVersion, ecLevel)) {
+        version = requestedVersion;
+      } else {
+        throw new WriterException("Data too big for requested version");
+      }
+    } else {
+      version = recommendVersion(ecLevel, mode, headerBits, dataBits);
+    }
 
     BitArray headerAndDataBits = new BitArray();
     headerAndDataBits.appendBitArray(headerBits);
@@ -159,6 +156,36 @@ public final class Encoder {
     qrCode.setMatrix(matrix);
 
     return qrCode;
+  }
+
+  /**
+   * Decides the smallest version of QR code that will contain all of the provided data.
+   * @throws WriterException if the data cannot fit in any version
+   */
+  private static Version recommendVersion(ErrorCorrectionLevel ecLevel,
+                                          Mode mode,
+                                          BitArray headerBits,
+                                          BitArray dataBits) throws WriterException {
+    // Hard part: need to know version to know how many bits length takes. But need to know how many
+    // bits it takes to know version. First we take a guess at version by assuming version will be
+    // the minimum, 1:
+    int provisionalBitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, Version.getVersionForNumber(1));
+    Version provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
+
+    // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
+    int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, provisionalVersion);
+    Version version = chooseVersion(bitsNeeded, ecLevel);
+    return version;
+  }
+
+  private static int calculateBitsNeeded(Mode mode,
+                                         BitArray headerBits,
+                                         BitArray dataBits,
+                                         Version version) {
+    int bitsNeeded = headerBits.getSize()
+                     + mode.getCharacterCountBits(version)
+                     + dataBits.getSize();
+    return bitsNeeded;
   }
 
   /**
@@ -246,9 +273,21 @@ public final class Encoder {
   }
 
   private static Version chooseVersion(int numInputBits, ErrorCorrectionLevel ecLevel) throws WriterException {
-    // In the following comments, we use numbers of Version 7-H.
     for (int versionNum = 1; versionNum <= 40; versionNum++) {
       Version version = Version.getVersionForNumber(versionNum);
+      if (willFit(numInputBits, version, ecLevel)) {
+        return version;
+      }
+    }
+    throw new WriterException("Data too big");
+  }
+  
+  /**
+   * @return true if the number of input bits will fit in a code with the specified version and
+   * error correction level.
+   */
+  private static boolean willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
+      // In the following comments, we use numbers of Version 7-H.
       // numBytes = 196
       int numBytes = version.getTotalCodewords();
       // getNumECBytes = 130
@@ -257,11 +296,7 @@ public final class Encoder {
       // getNumDataBytes = 196 - 130 = 66
       int numDataBytes = numBytes - numEcBytes;
       int totalInputBytes = (numInputBits + 7) / 8;
-      if (numDataBytes >= totalInputBytes) {
-        return version;
-      }
-    }
-    throw new WriterException("Data too big");
+      return (numDataBytes >= totalInputBytes);
   }
 
   /**

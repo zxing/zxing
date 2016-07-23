@@ -22,11 +22,13 @@ import com.google.zxing.common.BitArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -125,6 +127,26 @@ public final class EncoderTestCase extends Assert {
           " 1 1 1 1 1 1 1 0 0 0 1 0 0 1 0 0 0 0 1 1 1\n" +
           ">>\n";
     assertEquals(expected, qrCode.toString());
+  }
+  
+  @Test
+  public void testEncodeWithVersion() throws WriterException {
+	  Map<EncodeHintType, Object> hints = new HashMap<>();
+	  hints.put(EncodeHintType.QR_VERSION, 7);
+	  QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
+	  assertTrue(qrCode.toString().contains(" version: 7\n"));
+  }
+  
+  @Test
+  public void testEncodeWithVersionTooSmall() throws WriterException {
+	  Map<EncodeHintType, Object> hints = new HashMap<>();
+	  hints.put(EncodeHintType.QR_VERSION, 3);
+	  try {
+		  Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints);
+		  fail();
+	  } catch (WriterException e) {
+		  assertEquals("Data too big for requested version", e.getMessage());
+	  }
   }
 
   @Test
