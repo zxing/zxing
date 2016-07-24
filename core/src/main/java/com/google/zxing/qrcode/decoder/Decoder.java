@@ -187,9 +187,8 @@ public final class Decoder {
     for (int i = 0; i < numCodewords; i++) {
       codewordsInts[i] = codewordBytes[i] & 0xFF;
     }
-    int numECCodewords = codewordBytes.length - numDataCodewords;
     try {
-      rsDecoder.decode(codewordsInts, numECCodewords);
+      rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
     } catch (ReedSolomonException ignored) {
       throw ChecksumException.getChecksumInstance();
     }

@@ -220,7 +220,6 @@ public final class Decoder {
       throw FormatException.getFormatInstance();
     }
     int offset = rawbits.length % codewordSize;
-    int numECCodewords = numCodewords - numDataCodewords;
 
     int[] dataWords = new int[numCodewords];
     for (int i = 0; i < numCodewords; i++, offset += codewordSize) {
@@ -229,7 +228,7 @@ public final class Decoder {
 
     try {
       ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(gf);
-      rsDecoder.decode(dataWords, numECCodewords);
+      rsDecoder.decode(dataWords, numCodewords - numDataCodewords);
     } catch (ReedSolomonException ex) {
       throw FormatException.getFormatInstance(ex);
     }
@@ -269,7 +268,7 @@ public final class Decoder {
    *
    * @return the array of bits
    */
-  boolean[] extractBits(BitMatrix matrix) {
+  private boolean[] extractBits(BitMatrix matrix) {
     boolean compact = ddata.isCompact();
     int layers = ddata.getNbLayers();
     int baseMatrixSize = (compact ? 11 : 14) + layers * 4; // not including alignment lines

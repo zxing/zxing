@@ -199,13 +199,11 @@ public final class Generator implements EntryPoint {
   }
 
   private static String getUrl(int sizeX, int sizeY, String ecLevel, String encoding, String content) {
-    StringBuilder result = new StringBuilder(100);
-    result.append("https://zxing.org/w/chart?cht=qr");
-    result.append("&chs=").append(sizeX).append('x').append(sizeY);
-    result.append("&chld=").append(ecLevel);
-    result.append("&choe=").append(encoding);
-    result.append("&chl=").append(URL.encodeQueryString(content));
-    return result.toString();
+    return "https://zxing.org/w/chart?cht=qr" +
+        "&chs=" + sizeX + 'x' + sizeY +
+        "&chld=" + ecLevel +
+        "&choe=" + encoding +
+        "&chl=" + URL.encodeQueryString(content);
   }
 
   private void generate() {

@@ -296,7 +296,7 @@ public final class BitArray implements Cloneable {
     int len = (size - 1) / 32;
     int oldBitsLen = len + 1;
     for (int i = 0; i < oldBitsLen; i++) {
-      long x = (long) bits[i];
+      long x = bits[i];
       x = ((x >>  1) & 0x55555555L) | ((x & 0x55555555L) <<  1);
       x = ((x >>  2) & 0x33333333L) | ((x & 0x33333333L) <<  2);
       x = ((x >>  4) & 0x0f0f0f0fL) | ((x & 0x0f0f0f0fL) <<  4);

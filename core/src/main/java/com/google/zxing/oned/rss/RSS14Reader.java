@@ -210,7 +210,7 @@ public final class RSS14Reader extends AbstractRSSReader {
     }
 
     int numModules = outsideChar ? 16 : 15;
-    float elementWidth = (float) MathUtils.sum(counters) / (float) numModules;
+    float elementWidth = MathUtils.sum(counters) / (float) numModules;
 
     int[] oddCounts = this.getOddCounts();
     int[] evenCounts = this.getEvenCounts();
@@ -218,7 +218,7 @@ public final class RSS14Reader extends AbstractRSSReader {
     float[] evenRoundingErrors = this.getEvenRoundingErrors();
 
     for (int i = 0; i < counters.length; i++) {
-      float value = (float) counters[i] / elementWidth;
+      float value = counters[i] / elementWidth;
       int count = (int) (value + 0.5f); // Round
       if (count < 1) {
         count = 1;
@@ -358,9 +358,6 @@ public final class RSS14Reader extends AbstractRSSReader {
 
     int oddSum = MathUtils.sum(getOddCounts());
     int evenSum = MathUtils.sum(getEvenCounts());
-    int mismatch = oddSum + evenSum - numModules;
-    boolean oddParityBad = (oddSum & 0x01) == (outsideChar ? 1 : 0);
-    boolean evenParityBad = (evenSum & 0x01) == 1;
 
     boolean incrementOdd = false;
     boolean decrementOdd = false;
@@ -391,6 +388,9 @@ public final class RSS14Reader extends AbstractRSSReader {
       }
     }
 
+    int mismatch = oddSum + evenSum - numModules;
+    boolean oddParityBad = (oddSum & 0x01) == (outsideChar ? 1 : 0);
+    boolean evenParityBad = (evenSum & 0x01) == 1;
     /*if (mismatch == 2) {
       if (!(oddParityBad && evenParityBad)) {
         throw ReaderException.getInstance();

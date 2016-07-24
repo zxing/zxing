@@ -193,14 +193,7 @@ public final class CalendarEventGenerator implements GeneratorSource {
     String dates = getDateTimeFields();
     String location = getLocationField();
     String description = getDescriptionField();
-    StringBuilder output = new StringBuilder();
-    output.append("BEGIN:VEVENT\r\n");
-    output.append(eventName);
-    output.append(dates);
-    output.append(location);
-    output.append(description);
-    output.append("END:VEVENT\r\n");
-    return output.toString();
+    return "BEGIN:VEVENT\r\n" + eventName + dates + location + description + "END:VEVENT\r\n";
   }
 
   private String getEventNameField() throws GeneratorException {
@@ -257,14 +250,8 @@ public final class CalendarEventGenerator implements GeneratorSource {
     // Specify end date as +1 day since it's exclusive
     Date date2PlusDay = new Date(date2.getTime() + 24 * 60 * 60 * 1000);
     DateTimeFormat isoFormatter = DateTimeFormat.getFormat("yyyyMMdd");
-    StringBuilder output = new StringBuilder();
-    output.append("DTSTART;VALUE=DATE:");
-    output.append(isoFormatter.format(date1));
-    output.append("\r\n");
-    output.append("DTEND;VALUE=DATE:");
-    output.append(isoFormatter.format(date2PlusDay));
-    output.append("\r\n");
-    return output.toString();
+    return "DTSTART;VALUE=DATE:" + isoFormatter.format(date1) + "\r\n" +
+        "DTEND;VALUE=DATE:" + isoFormatter.format(date2PlusDay) + "\r\n";
   }
 
   private String getDateTimeValues() throws GeneratorException {
@@ -286,14 +273,8 @@ public final class CalendarEventGenerator implements GeneratorSource {
       throw new GeneratorException("Ending date/time cannot be before starting date/time.");
     }
     DateTimeFormat isoFormatter = DateTimeFormat.getFormat("yyyyMMdd'T'HHmmss'Z'");
-    StringBuilder output = new StringBuilder();
-    output.append("DTSTART:");
-    output.append(isoFormatter.format(dateTime1));
-    output.append("\r\n");
-    output.append("DTEND:");
-    output.append(isoFormatter.format(dateTime2));
-    output.append("\r\n");
-    return output.toString();
+    return "DTSTART:" + isoFormatter.format(dateTime1) + "\r\n" +
+        "DTEND:" + isoFormatter.format(dateTime2) + "\r\n";
   }
 
   private static Date mergeDateAndTime(Date date, Date time) {

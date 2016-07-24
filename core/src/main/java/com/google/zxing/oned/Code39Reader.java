@@ -165,14 +165,14 @@ public final class Code39Reader extends OneDReader {
       resultString = result.toString();
     }
 
-    float left = (float) (start[1] + start[0]) / 2.0f;
+    float left = (start[1] + start[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
     return new Result(
         resultString,
         null,
         new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
+            new ResultPoint(left, rowNumber),
+            new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_39);
 
   }

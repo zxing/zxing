@@ -416,7 +416,7 @@ public final class Detector {
       return to;
     }
 
-    public int getTransitions() {
+    int getTransitions() {
       return transitions;
     }
     

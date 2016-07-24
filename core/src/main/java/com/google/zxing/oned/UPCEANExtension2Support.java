@@ -47,8 +47,8 @@ final class UPCEANExtension2Support {
         new Result(resultString,
                    null,
                    new ResultPoint[] {
-                       new ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0f, (float) rowNumber),
-                       new ResultPoint((float) end, (float) rowNumber),
+                       new ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0f, rowNumber),
+                       new ResultPoint(end, rowNumber),
                    },
                    BarcodeFormat.UPC_EAN_EXTENSION);
     if (extensionData != null) {
@@ -57,7 +57,7 @@ final class UPCEANExtension2Support {
     return extensionResult;
   }
 
-  int decodeMiddle(BitArray row, int[] startRange, StringBuilder resultString) throws NotFoundException {
+  private int decodeMiddle(BitArray row, int[] startRange, StringBuilder resultString) throws NotFoundException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;

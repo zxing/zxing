@@ -196,14 +196,14 @@ public abstract class UPCEANReader extends OneDReader {
       throw ChecksumException.getChecksumInstance();
     }
 
-    float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
-    float right = (float) (endRange[1] + endRange[0]) / 2.0f;
+    float left = (startGuardRange[1] + startGuardRange[0]) / 2.0f;
+    float right = (endRange[1] + endRange[0]) / 2.0f;
     BarcodeFormat format = getBarcodeFormat();
     Result decodeResult = new Result(resultString,
         null, // no natural byte representation for these barcodes
         new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
+            new ResultPoint(left, rowNumber),
+            new ResultPoint(right, rowNumber)},
         format);
 
     int extensionLength = 0;
@@ -268,7 +268,7 @@ public abstract class UPCEANReader extends OneDReader {
 
     int sum = 0;
     for (int i = length - 2; i >= 0; i -= 2) {
-      int digit = (int) s.charAt(i) - (int) '0';
+      int digit = s.charAt(i) - '0';
       if (digit < 0 || digit > 9) {
         throw FormatException.getFormatInstance();
       }
@@ -276,7 +276,7 @@ public abstract class UPCEANReader extends OneDReader {
     }
     sum *= 3;
     for (int i = length - 1; i >= 0; i -= 2) {
-      int digit = (int) s.charAt(i) - (int) '0';
+      int digit = s.charAt(i) - '0';
       if (digit < 0 || digit > 9) {
         throw FormatException.getFormatInstance();
       }
@@ -312,12 +312,12 @@ public abstract class UPCEANReader extends OneDReader {
                                         boolean whiteFirst,
                                         int[] pattern,
                                         int[] counters) throws NotFoundException {
-    int patternLength = pattern.length;
     int width = row.getSize();
-    boolean isWhite = whiteFirst;
     rowOffset = whiteFirst ? row.getNextUnset(rowOffset) : row.getNextSet(rowOffset);
     int counterPosition = 0;
     int patternStart = rowOffset;
+    int patternLength = pattern.length;
+    boolean isWhite = whiteFirst;
     for (int x = rowOffset; x < width; x++) {
       if (row.get(x) ^ isWhite) {
         counters[counterPosition]++;

@@ -259,8 +259,6 @@ public final class Detector {
                                         int[] pattern,
                                         int[] counters) {
     Arrays.fill(counters, 0, counters.length, 0);
-    int patternLength = pattern.length;
-    boolean isWhite = whiteFirst;
     int patternStart = column;
     int pixelDrift = 0;
 
@@ -270,6 +268,8 @@ public final class Detector {
     }
     int x = patternStart;
     int counterPosition = 0;
+    int patternLength = pattern.length;
+    boolean isWhite = whiteFirst;
     for (; x < width; x++) {
       boolean pixel = matrix.get(x, row);
       if (pixel ^ isWhite) {

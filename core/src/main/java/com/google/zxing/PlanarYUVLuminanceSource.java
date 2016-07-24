@@ -96,10 +96,9 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
     }
 
     // Otherwise copy one cropped row at a time.
-    byte[] yuv = yuvData;
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      System.arraycopy(yuv, inputOffset, matrix, outputOffset, width);
+      System.arraycopy(yuvData, inputOffset, matrix, outputOffset, width);
       inputOffset += dataWidth;
     }
     return matrix;

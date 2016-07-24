@@ -109,10 +109,9 @@ public final class RGBLuminanceSource extends LuminanceSource {
     }
 
     // Otherwise copy one cropped row at a time.
-    byte[] rgb = luminances;
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      System.arraycopy(rgb, inputOffset, matrix, outputOffset, width);
+      System.arraycopy(luminances, inputOffset, matrix, outputOffset, width);
       inputOffset += dataWidth;
     }
     return matrix;

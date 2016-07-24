@@ -26,7 +26,6 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.common.SummaryResults;
 import com.google.zxing.common.TestResult;
 
 import com.google.zxing.multi.MultipleBarcodeReader;
@@ -74,7 +73,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     testPDF417BlackBoxCountingResults(true);
   }
 
-  private SummaryResults testPDF417BlackBoxCountingResults(boolean assertOnFailure) throws IOException {
+  private void testPDF417BlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     Map<String,List<Path>> imageFiles = getImageFileLists();
@@ -174,7 +173,6 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         assertTrue("Try harder, " + label, tryHarderCounts[x] >= testResult.getTryHarderCount());
       }
     }
-    return new SummaryResults(totalFound, totalMustPass, totalTests);
   }
 
   private static PDF417ResultMetadata getMeta(Result result) {

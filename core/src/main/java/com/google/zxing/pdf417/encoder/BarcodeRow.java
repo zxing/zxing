@@ -49,7 +49,7 @@ final class BarcodeRow {
    * @param x The location in the bar
    * @param black Black if true, white if false;
    */
-  void set(int x, boolean black) {
+  private void set(int x, boolean black) {
     row[x] = (byte) (black ? 1 : 0);
   }
 

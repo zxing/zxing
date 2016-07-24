@@ -76,7 +76,7 @@ final class VCardContactEncoder extends ContactEncoder {
     return new String[] { newContents.toString(), newDisplayContents.toString() };
   }
 
-  static List<Map<String,Set<String>>> buildPhoneMetadata(Collection<String> phones, List<String> phoneTypes) {
+  private static List<Map<String,Set<String>>> buildPhoneMetadata(Collection<String> phones, List<String> phoneTypes) {
     if (phoneTypes == null || phoneTypes.isEmpty()) {
       return null;
     }

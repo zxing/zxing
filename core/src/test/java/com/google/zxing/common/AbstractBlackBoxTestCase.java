@@ -128,7 +128,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     testBlackBoxCountingResults(true);
   }
 
-  public final SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
+  private void testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     List<Path> imageFiles = getImageFiles();
@@ -246,7 +246,6 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
                    tryHaderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
       }
     }
-    return new SummaryResults(totalFound, totalMustPass, totalTests);
   }
 
   private boolean decode(BinaryBitmap source,

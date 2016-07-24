@@ -400,12 +400,16 @@ public final class EncoderTest extends Assert {
     try {
       Encoder.encode(alphabet, 25, 33);
       fail("Encode should have failed.  No such thing as 33 layers");
-    } catch (IllegalArgumentException expected) {}
+    } catch (IllegalArgumentException expected) {
+      // continue
+    }
 
     try {
       Encoder.encode(alphabet, 25, -1);
       fail("Encode should have failed.  Text can't fit in 1-layer compact");
-    } catch (IllegalArgumentException expected) {}
+    } catch (IllegalArgumentException expected) {
+      // continue
+    }
   }
 
   @Test
@@ -419,7 +423,9 @@ public final class EncoderTest extends Assert {
     try {
       Encoder.encode(data, 0, -4);
       fail("Encode should have failed.  Text can't fit in 1-layer compact");
-    } catch (IllegalArgumentException expected) {}
+    } catch (IllegalArgumentException expected) {
+      // continue
+    }
 
     // If we just try to encode it normally, it will go to a non-compact 4 layer
     AztecCode aztecCode = Encoder.encode(data, 0, Encoder.DEFAULT_AZTEC_LAYERS);

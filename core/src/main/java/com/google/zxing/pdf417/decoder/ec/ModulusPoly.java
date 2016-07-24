@@ -85,7 +85,6 @@ final class ModulusPoly {
       // Just return the x^0 coefficient
       return getCoefficient(0);
     }
-    int size = coefficients.length;
     if (a == 1) {
       // Just the sum of the coefficients
       int result = 0;
@@ -95,6 +94,7 @@ final class ModulusPoly {
       return result;
     }
     int result = coefficients[0];
+    int size = coefficients.length;
     for (int i = 1; i < size; i++) {
       result = field.add(field.multiply(a, result), coefficients[i]);
     }

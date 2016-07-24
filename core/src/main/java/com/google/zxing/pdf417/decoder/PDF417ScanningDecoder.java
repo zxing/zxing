@@ -126,7 +126,7 @@ public final class PDF417ScanningDecoder {
 
   private static DetectionResult merge(DetectionResultRowIndicatorColumn leftRowIndicatorColumn,
                                        DetectionResultRowIndicatorColumn rightRowIndicatorColumn)
-      throws NotFoundException, FormatException {
+      throws NotFoundException {
     if (leftRowIndicatorColumn == null && rightRowIndicatorColumn == null) {
       return null;
     }
@@ -140,7 +140,7 @@ public final class PDF417ScanningDecoder {
   }
 
   private static BoundingBox adjustBoundingBox(DetectionResultRowIndicatorColumn rowIndicatorColumn)
-      throws NotFoundException, FormatException {
+      throws NotFoundException {
     if (rowIndicatorColumn == null) {
       return null;
     }
@@ -431,7 +431,7 @@ public final class PDF417ScanningDecoder {
       startColumn = endColumn - codewordBitCount;
     }
     // TODO implement check for width and correction of black and white bars
-    // use start (and maybe stop pattern) to determine if blackbars are wider than white bars. If so, adjust.
+    // use start (and maybe stop pattern) to determine if black bars are wider than white bars. If so, adjust.
     // should probably done only for codewords with a lot more than 17 bits. 
     // The following fixes 10-1.png, which has wide black bars and small white bars
     //    for (int i = 0; i < moduleBitCount.length; i++) {

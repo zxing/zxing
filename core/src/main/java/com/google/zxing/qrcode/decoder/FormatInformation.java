@@ -141,7 +141,7 @@ final class FormatInformation {
 
   @Override
   public int hashCode() {
-    return (errorCorrectionLevel.ordinal() << 3) | (int) dataMask;
+    return (errorCorrectionLevel.ordinal() << 3) | dataMask;
   }
 
   @Override

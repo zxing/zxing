@@ -151,7 +151,7 @@ final class BitMatrixParser {
    * @param numColumns Number of columns in the mapping matrix
    * @return value of the given bit in the mapping matrix
    */
-  boolean readModule(int row, int column, int numRows, int numColumns) {
+  private boolean readModule(int row, int column, int numRows, int numColumns) {
     // Adjust the row and column indices based on boundary wrapping
     if (row < 0) {
       row += numRows;
@@ -176,7 +176,7 @@ final class BitMatrixParser {
    * @param numColumns Number of columns in the mapping matrix
    * @return byte from the utah shape
    */
-  int readUtah(int row, int column, int numRows, int numColumns) {
+  private int readUtah(int row, int column, int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(row - 2, column - 2, numRows, numColumns)) {
       currentByte |= 1;
@@ -221,7 +221,7 @@ final class BitMatrixParser {
    * @param numColumns Number of columns in the mapping matrix
    * @return byte from the Corner condition 1
    */
-  int readCorner1(int numRows, int numColumns) {
+  private int readCorner1(int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(numRows - 1, 0, numRows, numColumns)) {
       currentByte |= 1;
@@ -266,7 +266,7 @@ final class BitMatrixParser {
    * @param numColumns Number of columns in the mapping matrix
    * @return byte from the Corner condition 2
    */
-  int readCorner2(int numRows, int numColumns) {
+  private int readCorner2(int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(numRows - 3, 0, numRows, numColumns)) {
       currentByte |= 1;
@@ -311,7 +311,7 @@ final class BitMatrixParser {
    * @param numColumns Number of columns in the mapping matrix
    * @return byte from the Corner condition 3
    */
-  int readCorner3(int numRows, int numColumns) {
+  private int readCorner3(int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(numRows - 1, 0, numRows, numColumns)) {
       currentByte |= 1;
@@ -356,7 +356,7 @@ final class BitMatrixParser {
    * @param numColumns Number of columns in the mapping matrix
    * @return byte from the Corner condition 4
    */
-  int readCorner4(int numRows, int numColumns) {
+  private int readCorner4(int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(numRows - 3, 0, numRows, numColumns)) {
       currentByte |= 1;
@@ -399,7 +399,7 @@ final class BitMatrixParser {
    * @param bitMatrix Original {@link BitMatrix} with alignment patterns
    * @return BitMatrix that has the alignment patterns removed
    */
-  BitMatrix extractDataRegion(BitMatrix bitMatrix) {
+  private BitMatrix extractDataRegion(BitMatrix bitMatrix) {
     int symbolSizeRows = version.getSymbolSizeRows();
     int symbolSizeColumns = version.getSymbolSizeColumns();
     

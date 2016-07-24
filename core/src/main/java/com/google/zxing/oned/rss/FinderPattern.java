@@ -31,8 +31,8 @@ public final class FinderPattern {
     this.value = value;
     this.startEnd = startEnd;
     this.resultPoints = new ResultPoint[] {
-        new ResultPoint((float) start, (float) rowNumber),
-        new ResultPoint((float) end, (float) rowNumber),
+        new ResultPoint(start, rowNumber),
+        new ResultPoint(end, rowNumber),
     };
   }
 

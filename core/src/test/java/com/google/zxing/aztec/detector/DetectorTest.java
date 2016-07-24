@@ -101,7 +101,9 @@ public final class DetectorTest extends Assert {
           try {
             new Detector(makeLarger(copy, 3)).detect(false);
             fail("Should not reach here");
-          } catch (NotFoundException expected) { }
+          } catch (NotFoundException expected) {
+            // continue
+          }
         }
       }
     }

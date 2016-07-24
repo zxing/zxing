@@ -311,7 +311,7 @@ public final class CameraConfigurationUtils {
       Log.i(TAG, "Supported preview sizes: " + previewSizesString);
     }
 
-    double screenAspectRatio = (double) screenResolution.x / (double) screenResolution.y;
+    double screenAspectRatio = screenResolution.x / (double) screenResolution.y;
 
     // Remove sizes that are unsuitable
     Iterator<Camera.Size> it = supportedPreviewSizes.iterator();
@@ -327,7 +327,7 @@ public final class CameraConfigurationUtils {
       boolean isCandidatePortrait = realWidth < realHeight;
       int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
       int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
-      double aspectRatio = (double) maybeFlippedWidth / (double) maybeFlippedHeight;
+      double aspectRatio = maybeFlippedWidth / (double) maybeFlippedHeight;
       double distortion = Math.abs(aspectRatio - screenAspectRatio);
       if (distortion > MAX_ASPECT_DISTORTION) {
         it.remove();

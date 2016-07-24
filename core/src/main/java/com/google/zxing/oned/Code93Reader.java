@@ -116,14 +116,14 @@ public final class Code93Reader extends OneDReader {
 
     String resultString = decodeExtended(result);
 
-    float left = (float) (start[1] + start[0]) / 2.0f;
+    float left = (start[1] + start[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
     return new Result(
         resultString,
         null,
         new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
+            new ResultPoint(left, rowNumber),
+            new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_93);
 
   }
@@ -163,12 +163,12 @@ public final class Code93Reader extends OneDReader {
   }
 
   private static int toPattern(int[] counters) {
-    int max = counters.length;
     int sum = 0;
     for (int counter : counters) {
       sum += counter;
     }
     int pattern = 0;
+    int max = counters.length;
     for (int i = 0; i < max; i++) {
       int scaled = Math.round(counters[i] * 9.0f / sum);
       if (scaled < 1 || scaled > 4) {

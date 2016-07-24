@@ -517,7 +517,7 @@ public final class Code128Reader extends OneDReader {
       }
     }
 
-    float left = (float) (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
+    float left = (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
 
     int rawCodesSize = rawCodes.size();
@@ -530,8 +530,8 @@ public final class Code128Reader extends OneDReader {
         result.toString(),
         rawBytes,
         new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
+            new ResultPoint(left, rowNumber),
+            new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_128);
 
   }

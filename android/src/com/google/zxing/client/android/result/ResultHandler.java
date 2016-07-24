@@ -349,7 +349,7 @@ public abstract class ResultHandler {
     sendSMSFromUri("smsto:" + phoneNumber, body);
   }
 
-  final void sendSMSFromUri(String uri, String body) {
+  private void sendSMSFromUri(String uri, String body) {
     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
     putExtra(intent, "sms_body", body);
     // Exit the app once the SMS is sent
@@ -361,7 +361,7 @@ public abstract class ResultHandler {
     sendMMSFromUri("mmsto:" + phoneNumber, subject, body);
   }
 
-  final void sendMMSFromUri(String uri, String subject, String body) {
+  private void sendMMSFromUri(String uri, String subject, String body) {
     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
     // The Messaging app needs to see a valid subject or else it will treat this an an SMS.
     if (subject == null || subject.isEmpty()) {

@@ -31,9 +31,7 @@ import com.google.zxing.common.BitMatrix;
  */
 enum DataMask {
 
-  /**
-   * See ISO 18004:2006 6.8.1
-   */
+  // See ISO 18004:2006 6.8.1
 
   /**
    * 000: mask bits for which (x + y) mod 2 == 0

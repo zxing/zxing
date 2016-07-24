@@ -81,7 +81,7 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
   }
 
   private static String parseName(String name) {
-    int comma = name.indexOf((int) ',');
+    int comma = name.indexOf(',');
     if (comma >= 0) {
       // Format may be last,first; switch it around
       return name.substring(comma + 1) + ' ' + name.substring(0, comma);

@@ -52,7 +52,7 @@ final class InactivityTimer {
     inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
-  public synchronized void onPause() {
+  synchronized void onPause() {
     cancel();
     if (registered) {
       activity.unregisterReceiver(powerStatusReceiver);
@@ -62,7 +62,7 @@ final class InactivityTimer {
     }
   }
 
-  public synchronized void onResume() {
+  synchronized void onResume() {
     if (registered) {
       Log.w(TAG, "PowerStatusReceiver was already registered?");
     } else {

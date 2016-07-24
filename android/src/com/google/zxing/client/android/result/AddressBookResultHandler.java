@@ -83,17 +83,14 @@ public final class AddressBookResultHandler extends ResultHandler {
     super(activity, result);
     AddressBookParsedResult addressResult = (AddressBookParsedResult) result;
     String[] addresses = addressResult.getAddresses();
-    boolean hasAddress = addresses != null && addresses.length > 0 && addresses[0] != null && !addresses[0].isEmpty();
     String[] phoneNumbers = addressResult.getPhoneNumbers();
-    boolean hasPhoneNumber = phoneNumbers != null && phoneNumbers.length > 0;
     String[] emails = addressResult.getEmails();
-    boolean hasEmailAddress = emails != null && emails.length > 0;
 
     fields = new boolean[MAX_BUTTON_COUNT];
     fields[0] = true; // Add contact is always available
-    fields[1] = hasAddress;
-    fields[2] = hasPhoneNumber;
-    fields[3] = hasEmailAddress;
+    fields[1] = addresses != null && addresses.length > 0 && addresses[0] != null && !addresses[0].isEmpty();
+    fields[2] = phoneNumbers != null && phoneNumbers.length > 0;
+    fields[3] = emails != null && emails.length > 0;
 
     buttonCount = 0;
     for (int x = 0; x < MAX_BUTTON_COUNT; x++) {

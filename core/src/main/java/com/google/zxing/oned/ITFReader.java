@@ -126,8 +126,8 @@ public final class ITFReader extends OneDReader {
     return new Result(
         resultString,
         null, // no natural byte representation for these barcodes
-        new ResultPoint[] { new ResultPoint(startRange[1], (float) rowNumber),
-                            new ResultPoint(endRange[0], (float) rowNumber)},
+        new ResultPoint[] { new ResultPoint(startRange[1], rowNumber),
+                            new ResultPoint(endRange[0], rowNumber)},
         BarcodeFormat.ITF);
   }
 
@@ -180,7 +180,7 @@ public final class ITFReader extends OneDReader {
    * @return Array, containing index of start of 'start block' and end of
    *         'start block'
    */
-  int[] decodeStart(BitArray row) throws NotFoundException {
+  private int[] decodeStart(BitArray row) throws NotFoundException {
     int endStart = skipWhiteSpace(row);
     int[] startPattern = findGuardPattern(row, endStart, START_PATTERN);
 
@@ -252,7 +252,7 @@ public final class ITFReader extends OneDReader {
    * @return Array, containing index of start of 'end block' and end of 'end
    *         block'
    */
-  int[] decodeEnd(BitArray row) throws NotFoundException {
+  private int[] decodeEnd(BitArray row) throws NotFoundException {
 
     // For convenience, reverse the row and then
     // search from 'the start' for the end block

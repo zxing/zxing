@@ -672,11 +672,10 @@ public final class PDF417 {
 
     //3. step: Error correction
     String ec = PDF417ErrorCorrection.generateErrorCorrection(dataCodewords, errorCorrectionLevel);
-    String fullCodewords = dataCodewords + ec;
 
     //4. step: low-level encoding
     barcodeMatrix = new BarcodeMatrix(rows, cols);
-    encodeLowLevel(fullCodewords, cols, rows, errorCorrectionLevel, barcodeMatrix);
+    encodeLowLevel(dataCodewords + ec, cols, rows, errorCorrectionLevel, barcodeMatrix);
   }
 
   /**

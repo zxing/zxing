@@ -59,11 +59,11 @@ public class DefaultPlacement {
     return bits[row * numcols + col] == 1;
   }
 
-  final void setBit(int col, int row, boolean bit) {
+  private void setBit(int col, int row, boolean bit) {
     bits[row * numcols + col] = (byte) (bit ? 1 : 0);
   }
 
-  final boolean hasBit(int col, int row) {
+  private boolean hasBit(int col, int row) {
     return bits[row * numcols + col] >= 0;
   }
 

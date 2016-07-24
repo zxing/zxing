@@ -147,21 +147,21 @@ public final class CodaBarReader extends OneDReader {
     for (int i = 0; i < startOffset; i++) {
       runningCount += counters[i];
     }
-    float left = (float) runningCount;
+    float left = runningCount;
     for (int i = startOffset; i < nextStart - 1; i++) {
       runningCount += counters[i];
     }
-    float right = (float) runningCount;
+    float right = runningCount;
     return new Result(
         decodeRowResult.toString(),
         null,
         new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
+            new ResultPoint(left, rowNumber),
+            new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODABAR);
   }
 
-  void validatePattern(int start) throws NotFoundException {
+  private void validatePattern(int start) throws NotFoundException {
     // First, sum up the total size of our four categories of stripe sizes;
     int[] sizes = {0, 0, 0, 0};
     int[] counts = {0, 0, 0, 0};

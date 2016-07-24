@@ -52,13 +52,8 @@ final class BenchmarkItem {
 
   @Override
   public String toString() {
-    StringBuilder result = new StringBuilder(30);
-    result.append(decoded ? "DECODED " + format + ": " : "FAILED: ");
-    result.append(path);
-    result.append(" (");
-    result.append(getAverageTime());
-    result.append(" us average)");
-    return result.toString();
+    return (decoded ? "DECODED " + format + ": " : "FAILED: ") + path +
+        " (" + getAverageTime() + " us average)";
   }
 
   /**

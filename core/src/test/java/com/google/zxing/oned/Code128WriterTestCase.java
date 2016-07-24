@@ -21,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
@@ -86,7 +85,7 @@ public class Code128WriterTestCase extends Assert {
   }
 
   @Test
-  public void testRoundtrip() throws WriterException, ReaderException {
+  public void testRoundtrip() throws Exception {
     String toEncode = "\u00f1" + "10958" + "\u00f1" + "17160526";
     String expected = "1095817160526";
 

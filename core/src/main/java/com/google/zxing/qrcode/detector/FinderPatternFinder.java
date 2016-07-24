@@ -188,7 +188,7 @@ public class FinderPatternFinder {
    * figures the location of the center of this run.
    */
   private static float centerFromEnd(int[] stateCount, int end) {
-    return (float) (end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
+    return (end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
   }
 
   /**
@@ -494,7 +494,7 @@ public class FinderPatternFinder {
       centerJ = crossCheckHorizontal((int) centerJ, (int) centerI, stateCount[2], stateCountTotal);
       if (!Float.isNaN(centerJ) &&
           (!pureBarcode || crossCheckDiagonal((int) centerI, (int) centerJ, stateCount[2], stateCountTotal))) {
-        float estimatedModuleSize = (float) stateCountTotal / 7.0f;
+        float estimatedModuleSize = stateCountTotal / 7.0f;
         boolean found = false;
         for (int index = 0; index < possibleCenters.size(); index++) {
           FinderPattern center = possibleCenters.get(index);
@@ -571,7 +571,7 @@ public class FinderPatternFinder {
     // and that we need to keep looking. We detect this by asking if the estimated module sizes
     // vary too much. We arbitrarily say that when the total deviation from average exceeds
     // 5% of the total module size estimates, it's too much.
-    float average = totalModuleSize / (float) max;
+    float average = totalModuleSize / max;
     float totalDeviation = 0.0f;
     for (FinderPattern pattern : possibleCenters) {
       totalDeviation += Math.abs(pattern.getEstimatedModuleSize() - average);
@@ -603,7 +603,7 @@ public class FinderPatternFinder {
         totalModuleSize += size;
         square += size * size;
       }
-      float average = totalModuleSize / (float) startSize;
+      float average = totalModuleSize / startSize;
       float stdDev = (float) Math.sqrt(square / startSize - average * average);
 
       Collections.sort(possibleCenters, new FurthestFromAverageComparator(average));
@@ -627,7 +627,7 @@ public class FinderPatternFinder {
         totalModuleSize += possibleCenter.getEstimatedModuleSize();
       }
 
-      float average = totalModuleSize / (float) possibleCenters.size();
+      float average = totalModuleSize / possibleCenters.size();
 
       Collections.sort(possibleCenters, new CenterComparator(average));
 

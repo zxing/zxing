@@ -95,10 +95,9 @@ final class AI013x0x1xDecoder extends AI01weightDecoder {
 
   @Override
   protected void addWeightCode(StringBuilder buf, int weight) {
-    int lastAI = weight / 100000;
     buf.append('(');
     buf.append(this.firstAIdigits);
-    buf.append(lastAI);
+    buf.append(weight / 100000);
     buf.append(')');
   }
 

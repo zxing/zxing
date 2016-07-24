@@ -173,7 +173,7 @@ final class DecodeWorker implements Callable<Integer> {
           output.write('\n');
         }
       }
-      System.out.println(output.toString());
+      System.out.println(output);
     }
 
     return results;
