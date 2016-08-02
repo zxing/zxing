@@ -131,6 +131,7 @@ public final class Decoder {
         String str = getCharacter(shiftTable, code);
         if (str.startsWith("CTRL_")) {
           // Table changes
+          latchTable = shiftTable;  // after U/S B/S, return to Upper mode
           shiftTable = getTable(str.charAt(5));
           if (str.charAt(6) == 'L') {
             latchTable = shiftTable;
