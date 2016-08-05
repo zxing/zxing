@@ -131,7 +131,9 @@ public final class Decoder {
         String str = getCharacter(shiftTable, code);
         if (str.startsWith("CTRL_")) {
           // Table changes
-          latchTable = shiftTable;  // after U/S B/S, return to Upper mode
+          // ISO/IEC 24778:2008 prescibes ending a shift sequence in the mode from which it was invoked.
+          // That's including when that mode is a shift. Our test case dlusbs.png exercises that.
+          latchTable = shiftTable;  // Latch the current mode, so as to return to Upper after U/S B/S
           shiftTable = getTable(str.charAt(5));
           if (str.charAt(6) == 'L') {
             latchTable = shiftTable;
