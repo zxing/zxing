@@ -106,13 +106,12 @@ public final class Encoder {
     BitArray dataBits = new BitArray();
     appendBytes(content, mode, dataBits, encoding);
 
-    Version version = null;
+    Version version;
     if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
-      Version requestedVersion = Version.getVersionForNumber((Integer) hints.get(EncodeHintType.QR_VERSION));
-      int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, requestedVersion);
-      if (willFit(bitsNeeded, requestedVersion, ecLevel)) {
-        version = requestedVersion;
-      } else {
+      int versionNumber = Integer.parseInt(hints.get(EncodeHintType.QR_VERSION).toString());
+      version = Version.getVersionForNumber(versionNumber);
+      int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
+      if (!willFit(bitsNeeded, version, ecLevel)) {
         throw new WriterException("Data too big for requested version");
       }
     } else {
@@ -160,6 +159,7 @@ public final class Encoder {
 
   /**
    * Decides the smallest version of QR code that will contain all of the provided data.
+   *
    * @throws WriterException if the data cannot fit in any version
    */
   private static Version recommendVersion(ErrorCorrectionLevel ecLevel,
@@ -174,18 +174,14 @@ public final class Encoder {
 
     // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
     int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, provisionalVersion);
-    Version version = chooseVersion(bitsNeeded, ecLevel);
-    return version;
+    return chooseVersion(bitsNeeded, ecLevel);
   }
 
   private static int calculateBitsNeeded(Mode mode,
                                          BitArray headerBits,
                                          BitArray dataBits,
                                          Version version) {
-    int bitsNeeded = headerBits.getSize()
-                     + mode.getCharacterCountBits(version)
-                     + dataBits.getSize();
-    return bitsNeeded;
+    return headerBits.getSize() + mode.getCharacterCountBits(version) + dataBits.getSize();
   }
 
   /**

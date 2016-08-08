@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -131,22 +130,17 @@ public final class EncoderTestCase extends Assert {
   
   @Test
   public void testEncodeWithVersion() throws WriterException {
-	  Map<EncodeHintType, Object> hints = new HashMap<>();
-	  hints.put(EncodeHintType.QR_VERSION, 7);
-	  QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
-	  assertTrue(qrCode.toString().contains(" version: 7\n"));
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.QR_VERSION, 7);
+    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
+    assertTrue(qrCode.toString().contains(" version: 7\n"));
   }
   
-  @Test
+  @Test(expected = WriterException.class)
   public void testEncodeWithVersionTooSmall() throws WriterException {
-	  Map<EncodeHintType, Object> hints = new HashMap<>();
-	  hints.put(EncodeHintType.QR_VERSION, 3);
-	  try {
-		  Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints);
-		  fail();
-	  } catch (WriterException e) {
-		  assertEquals("Data too big for requested version", e.getMessage());
-	  }
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.QR_VERSION, 3);
+    Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints);
   }
 
   @Test
