@@ -405,7 +405,7 @@
         <plugin>
           <groupId>com.simpligility.maven.plugins</groupId>
           <artifactId>android-maven-plugin</artifactId>
-          <version>4.4.2</version>
+          <version>4.4.3</version>
           <extensions>true</extensions>
           <executions>
             <execution>
@@ -494,7 +494,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>1.11</version>
+          <version>1.12</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
