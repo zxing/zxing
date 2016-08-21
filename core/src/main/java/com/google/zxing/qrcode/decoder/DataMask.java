@@ -89,8 +89,7 @@ enum DataMask {
   DATA_MASK_101() {
     @Override
     boolean isMasked(int i, int j) {
-      int temp = i * j;
-      return (temp & 0x01) + (temp % 3) == 0;
+      return (i * j) % 6 == 0;
     }
   },
 
@@ -101,7 +100,7 @@ enum DataMask {
     @Override
     boolean isMasked(int i, int j) {
       int temp = i * j;
-      return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;
+      return ((temp + (temp % 3)) & 0x01) == 0;
     }
   },
 
@@ -111,7 +110,7 @@ enum DataMask {
   DATA_MASK_111() {
     @Override
     boolean isMasked(int i, int j) {
-      return ((((i + j) & 0x01) + ((i * j) % 3)) & 0x01) == 0;
+      return ((i + j + ((i * j) % 3)) & 0x01) == 0;
     }
   };
 
