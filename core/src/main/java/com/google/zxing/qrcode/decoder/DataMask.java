@@ -85,6 +85,7 @@ enum DataMask {
 
   /**
    * 101: mask bits for which xy mod 2 + xy mod 3 == 0
+   * equivalently, such that xy mod 6 == 0
    */
   DATA_MASK_101() {
     @Override
@@ -95,17 +96,18 @@ enum DataMask {
 
   /**
    * 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0
+   * equivalently, such that xy mod 6 < 3
    */
   DATA_MASK_110() {
     @Override
     boolean isMasked(int i, int j) {
-      int temp = i * j;
-      return ((temp + (temp % 3)) & 0x01) == 0;
+      return ((i * j) % 6) < 3;
     }
   },
 
   /**
    * 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0
+   * equivalently, such that (x + y + xy mod 3) mod 2 == 0
    */
   DATA_MASK_111() {
     @Override
