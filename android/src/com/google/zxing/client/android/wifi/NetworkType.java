@@ -26,7 +26,8 @@ enum NetworkType {
     if (networkTypeString == null) {
       return NO_PASSWORD;
     }
-    if ("WPA".equals(networkTypeString)) {
+    if ("WPA".equals(networkTypeString) ||
+        "WPA2".equals(networkTypeString)) {
       return WPA;
     }
     if ("WEP".equals(networkTypeString)) {
