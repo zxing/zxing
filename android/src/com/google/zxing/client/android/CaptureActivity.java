@@ -88,7 +88,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
 
-  public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
+  private static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 
   private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
       EnumSet.of(ResultMetadataType.ISSUE_NUMBER,

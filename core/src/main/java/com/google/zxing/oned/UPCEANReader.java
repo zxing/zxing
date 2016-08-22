@@ -132,7 +132,7 @@ public abstract class UPCEANReader extends OneDReader {
   }
 
   /**
-   * <p>Like {@link #decodeRow(int, BitArray, java.util.Map)}, but
+   * <p>Like {@link #decodeRow(int, BitArray, Map)}, but
    * allows caller to inform method about where the UPC/EAN start pattern is
    * found. This allows this to be computed once and reused across many implementations.</p>
    *

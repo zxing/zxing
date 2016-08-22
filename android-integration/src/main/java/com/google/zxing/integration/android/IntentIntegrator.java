@@ -97,7 +97,7 @@ import android.util.Log;
  * <h2>Enabling experimental barcode formats</h2>
  *
  * <p>Some formats are not enabled by default even when scanning with {@link #ALL_CODE_TYPES}, such as
- * PDF417. Use {@link #initiateScan(java.util.Collection)} with
+ * PDF417. Use {@link #initiateScan(Collection)} with
  * a collection containing the names of formats to scan for explicitly, like "PDF_417", to use such
  * formats.</p>
  *
@@ -332,8 +332,8 @@ public class IntentIntegrator {
    *
    * @param intent Intent to start.
    * @param code Request code for the activity
-   * @see android.app.Activity#startActivityForResult(Intent, int)
-   * @see android.app.Fragment#startActivityForResult(Intent, int)
+   * @see Activity#startActivityForResult(Intent, int)
+   * @see Fragment#startActivityForResult(Intent, int)
    */
   protected void startActivityForResult(Intent intent, int code) {
     if (fragment == null) {

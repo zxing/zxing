@@ -94,7 +94,7 @@ public final class MonochromeRectangleDetector {
    * @param bottom maximum value of y
    * @param maxWhiteRun maximum run of white pixels that can still be considered to be within
    *  the barcode
-   * @return a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
+   * @return a {@link ResultPoint} encapsulating the corner that was found
    * @throws NotFoundException if such a point cannot be found
    */
   private ResultPoint findCornerFromCenter(int centerX,

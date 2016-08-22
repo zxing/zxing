@@ -192,11 +192,8 @@ public final class WhiteRectangleDetector {
       int maxSize = right - left;
 
       ResultPoint z = null;
-      for (int i = 1; i < maxSize; i++) {
+      for (int i = 1; z == null && i < maxSize; i++) {
         z = getBlackPointOnSegment(left, down - i, left + i, down);
-        if (z != null) {
-          break;
-        }
       }
 
       if (z == null) {
@@ -205,11 +202,8 @@ public final class WhiteRectangleDetector {
 
       ResultPoint t = null;
       //go down right
-      for (int i = 1; i < maxSize; i++) {
+      for (int i = 1; t == null && i < maxSize; i++) {
         t = getBlackPointOnSegment(left, up + i, left + i, up);
-        if (t != null) {
-          break;
-        }
       }
 
       if (t == null) {
@@ -218,11 +212,8 @@ public final class WhiteRectangleDetector {
 
       ResultPoint x = null;
       //go down left
-      for (int i = 1; i < maxSize; i++) {
+      for (int i = 1; x == null && i < maxSize; i++) {
         x = getBlackPointOnSegment(right, up + i, right - i, up);
-        if (x != null) {
-          break;
-        }
       }
 
       if (x == null) {
@@ -231,11 +222,8 @@ public final class WhiteRectangleDetector {
 
       ResultPoint y = null;
       //go up left
-      for (int i = 1; i < maxSize; i++) {
+      for (int i = 1; y == null && i < maxSize; i++) {
         y = getBlackPointOnSegment(right, down - i, right - i, down);
-        if (y != null) {
-          break;
-        }
       }
 
       if (y == null) {

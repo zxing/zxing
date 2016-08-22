@@ -106,8 +106,7 @@ public final class ZXingTestActivity extends Activity {
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
     if (result != null) {
-      String contents = result.getContents();
-      if (contents != null) {
+      if (result.getContents() != null) {
         showDialog(R.string.result_succeeded, result.toString());
       } else {
         showDialog(R.string.result_failed, getString(R.string.result_failed_why));

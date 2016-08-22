@@ -166,7 +166,7 @@ public final class LocaleManager {
     return language;
   }
 
-  public static String getTranslatedAssetLanguage() {
+  static String getTranslatedAssetLanguage() {
     String language = getSystemLanguage();
     return TRANSLATED_HELP_ASSET_LANGUAGES.contains(language) ? language : DEFAULT_LANGUAGE;
   }
@@ -176,7 +176,7 @@ public final class LocaleManager {
     return tld == null ? DEFAULT_TLD : tld;
   }
 
-  public static String getCountry(Context context) {
+  private static String getCountry(Context context) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     String countryOverride = prefs.getString(PreferencesActivity.KEY_SEARCH_COUNTRY, "-");
     if (countryOverride != null && !countryOverride.isEmpty() && !"-".equals(countryOverride)) {
