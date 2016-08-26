@@ -307,14 +307,11 @@ public final class BitMatrix implements Cloneable {
       }
     }
 
-    int width = right - left;
-    int height = bottom - top;
-
-    if (width < 0 || height < 0) {
+    if (right < left || bottom < top) {
       return null;
     }
 
-    return new int[] {left, top, width, height};
+    return new int[] {left, top, right - left, bottom - top};
   }
 
   /**

@@ -127,16 +127,14 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     this.pairs.clear();
     this.startFromEven = false;
     try {
-      List<ExpandedPair> pairs = decodeRow2pairs(rowNumber, row);
-      return constructResult(pairs);
+      return constructResult(decodeRow2pairs(rowNumber, row));
     } catch (NotFoundException e) {
       // OK
     }
 
     this.pairs.clear();
     this.startFromEven = true;
-    List<ExpandedPair> pairs = decodeRow2pairs(rowNumber, row);
-    return constructResult(pairs);
+    return constructResult(decodeRow2pairs(rowNumber, row));
   }
 
   @Override

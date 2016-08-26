@@ -47,7 +47,7 @@ final class Base256Encoder implements Encoder {
     if (context.hasMoreCharacters() || mustPad) {
       if (dataCount <= 249) {
         buffer.setCharAt(0, (char) dataCount);
-      } else if (dataCount > 249 && dataCount <= 1555) {
+      } else if (dataCount <= 1555) {
         buffer.setCharAt(0, (char) ((dataCount / 250) + 249));
         buffer.insert(1, (char) (dataCount % 250));
       } else {
