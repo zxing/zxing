@@ -19,12 +19,51 @@ import com.google.zxing.FormatException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.aztec.AztecDetectorResult;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.DecoderResult;
 import org.junit.Test;
 import org.junit.Assert;
 
 public final class DecoderTest extends Assert {
 
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
+  
+  @Test
+  public void testAztecResult() throws FormatException {
+    BitMatrix matrix = BitMatrix.parse(
+        "X X X X X     X X X       X X X     X X X     \n" +
+        "X X X     X X X     X X X X     X X X     X X \n" +
+        "  X   X X       X   X   X X X X     X     X X \n" +
+        "  X   X X     X X     X     X   X       X   X \n" +
+        "  X X   X X         X               X X     X \n" +
+        "  X X   X X X X X X X X X X X X X X X     X   \n" +
+        "  X X X X X                       X   X X X   \n" +
+        "  X   X   X   X X X X X X X X X   X X X   X X \n" +
+        "  X   X X X   X               X   X X       X \n" +
+        "  X X   X X   X   X X X X X   X   X X X X   X \n" +
+        "  X X   X X   X   X       X   X   X   X X X   \n" +
+        "  X   X   X   X   X   X   X   X   X   X   X   \n" +
+        "  X X X   X   X   X       X   X   X X   X X   \n" +
+        "  X X X X X   X   X X X X X   X   X X X   X X \n" +
+        "X X   X X X   X               X   X   X X   X \n" +
+        "  X       X   X X X X X X X X X   X   X     X \n" +
+        "  X X   X X                       X X   X X   \n" +
+        "  X X X   X X X X X X X X X X X X X X   X X   \n" +
+        "X     X     X     X X   X X               X X \n" +
+        "X   X X X X X   X X X X X     X   X   X     X \n" +
+        "X X X   X X X X           X X X       X     X \n" +
+        "X X     X X X     X X X X     X X X     X X   \n" +
+        "    X X X     X X X       X X X     X X X X   \n",
+        "X ", "  ");
+    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 30, 2);
+    DecoderResult result = new Decoder().decode(r);
+    assertEquals("88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", result.getText());
+    assertArrayEquals(
+        new byte[] {-11, 85, 85, 117, 107, 90, -42, -75, -83, 107,
+            90, -42, -75, -83, 107, 90, -42, -75, -83, 107,
+            90, -42, -80},
+        result.getRawBytes());
+    assertEquals(180, result.getNumBits());
+  }
 
   /**
    * throws

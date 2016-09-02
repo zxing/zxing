@@ -77,7 +77,9 @@ public final class Decoder {
     boolean[] correctedBits = correctBits(rawbits);
     byte[] rawBytes = convertBoolArrayToByteArray(correctedBits);
     String result = getEncodedData(correctedBits);
-    return new DecoderResult(rawBytes, result, null, null);
+    DecoderResult decoderResult = new DecoderResult(rawBytes, result, null, null);
+    decoderResult.setNumBits(correctedBits.length);
+    return decoderResult;
   }
 
   // This method is used for testing the high-level encoder
