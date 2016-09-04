@@ -800,6 +800,10 @@
     </profile>
     <profile>
       <id>travis</id>
+      <properties>
+        <!-- dummy to make @{argLine} evaluate when not set by jacoco -->
+        <argLine/>
+      </properties>
       <build>
         <plugins>
           <plugin>
