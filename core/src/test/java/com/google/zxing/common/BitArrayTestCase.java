@@ -134,6 +134,17 @@ public final class BitArrayTestCase extends Assert {
   }
 
   @Test
+  public void testSetRange() {
+    BitArray array = new BitArray(64);
+    array.setRange(28, 36);
+    assertFalse(array.get(27));
+    for (int i = 28; i < 36; i++) {
+      assertTrue(array.get(i));
+    }
+    assertFalse(array.get(36));
+  }
+
+  @Test
   public void testClear() {
     BitArray array = new BitArray(32);
     for (int i = 0; i < 32; i++) {
@@ -143,6 +154,16 @@ public final class BitArrayTestCase extends Assert {
     for (int i = 0; i < 32; i++) {
       assertFalse(array.get(i));
     }
+  }
+
+  @Test
+  public void testFlip() {
+    BitArray array = new BitArray(32);
+    assertFalse(array.get(5));
+    array.flip(5);
+    assertTrue(array.get(5));
+    array.flip(5);
+    assertFalse(array.get(5));
   }
 
   @Test
@@ -187,6 +208,28 @@ public final class BitArrayTestCase extends Assert {
       int[] newBitsNew = newBitArray.getBitArray();
       assertTrue(arraysAreEqual(newBitsOriginal, newBitsNew, size / 32 + 1));
     }
+  }
+
+  @Test
+  public void testClone() {
+    BitArray array = new BitArray(32);
+    array.clone().set(0);
+    assertFalse(array.get(0));
+  }
+
+  @Test
+  public void testEquals() {
+    BitArray a = new BitArray(32);
+    BitArray b = new BitArray(32);
+    assertEquals(a, b);
+    assertEquals(a.hashCode(), b.hashCode());
+    assertNotEquals(a, new BitArray(31));
+    a.set(16);
+    assertNotEquals(a, new BitArray(31));
+    assertNotEquals(a.hashCode(), b.hashCode());
+    b.set(16);
+    assertEquals(a, b);
+    assertEquals(a.hashCode(), b.hashCode());
   }
 
   private static int[] reverseOriginal(int[] oldBits, int size) {

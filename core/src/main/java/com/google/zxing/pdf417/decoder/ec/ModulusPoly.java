@@ -201,6 +201,7 @@ final class ModulusPoly {
     return new ModulusPoly(field, product);
   }
 
+  /*
   ModulusPoly[] divide(ModulusPoly other) {
     if (!field.equals(other.field)) {
       throw new IllegalArgumentException("ModulusPolys do not have same ModulusGF field");
@@ -226,6 +227,7 @@ final class ModulusPoly {
 
     return new ModulusPoly[] { quotient, remainder };
   }
+   */
 
   @Override
   public String toString() {

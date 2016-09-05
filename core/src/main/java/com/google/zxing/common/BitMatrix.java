@@ -311,7 +311,7 @@ public final class BitMatrix implements Cloneable {
       return null;
     }
 
-    return new int[] {left, top, right - left, bottom - top};
+    return new int[] {left, top, right - left + 1, bottom - top + 1};
   }
 
   /**
