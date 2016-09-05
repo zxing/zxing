@@ -49,10 +49,24 @@ public final class PlanarYUVLuminanceSourceTestCase extends Assert {
   @Test
   public void testCrop() {
     PlanarYUVLuminanceSource source =
-        new PlanarYUVLuminanceSource(YUV, COLS, ROWS, 1, 1, COLS-2, ROWS-2, false);
-    for (int r = 0; r < ROWS-2; r++) {
-      assertEquals(Y, (r + 1) * COLS + 1, source.getRow(r, null), 0, COLS-2);
+        new PlanarYUVLuminanceSource(YUV, COLS, ROWS, 1, 1, COLS - 2, ROWS - 2, false);
+    assertTrue(source.isCropSupported());
+    byte[] cropMatrix = source.getMatrix();
+    for (int r = 0; r < ROWS - 2; r++) {
+      assertEquals(Y, (r + 1) * COLS + 1, cropMatrix, r * (COLS - 2), COLS - 2);
     }
+    for (int r = 0; r < ROWS - 2; r++) {
+      assertEquals(Y, (r + 1) * COLS + 1, source.getRow(r, null), 0, COLS - 2);
+    }
+  }
+
+  @Test
+  public void testThumbnail() {
+    PlanarYUVLuminanceSource source =
+        new PlanarYUVLuminanceSource(YUV, COLS, ROWS, 0, 0, COLS, ROWS, false);
+    assertArrayEquals(
+        new int[] { 0xFF000000, 0xFF010101, 0xFF030303, 0xFF000000, 0xFFFFFFFF, 0xFFFDFDFD },
+        source.renderThumbnail());
   }
 
   private static void assertEquals(byte[] expected, int expectedFrom,

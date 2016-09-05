@@ -261,7 +261,20 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }
 
-    Result result = barcodeReader.decode(source, hints);
+    // Try in 'pure' mode mostly to exercise PURE_BARCODE code paths for exceptions;
+    // not expected to pass, generally
+    Result result = null;
+    try {
+      Map<DecodeHintType,Object> pureHints = new EnumMap<>(hints);
+      pureHints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
+      result = barcodeReader.decode(source, pureHints);
+    } catch (ReaderException re) {
+      // continue
+    }
+
+    if (result == null) {
+      result = barcodeReader.decode(source, hints);
+    }
 
     if (expectedFormat != result.getBarcodeFormat()) {
       log.info(String.format("Format mismatch: expected '%s' but got '%s'%s",

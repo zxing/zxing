@@ -26,7 +26,9 @@ import com.google.zxing.common.BitMatrix;
  * black. It returns the four corners of the region, as best it can determine.</p>
  *
  * @author Sean Owen
+ * @deprecated without replacement since 3.3.0
  */
+@Deprecated
 public final class MonochromeRectangleDetector {
 
   private static final int MAX_MODULES = 32;
