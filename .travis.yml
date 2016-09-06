@@ -3,7 +3,8 @@ sudo: false
 install: mvn -T 2 -Ptravis -DskipTests=true -B -V install
 script:
   - mvn -T 2 -Ptravis ${JACOCO} test
-  - find $HOME/.m2/repository/com/google/zxing -name "*SNAPSHOT*" -exec rm {} \;
+  - find $HOME/.m2/repository/com/google/zxing -path "*SNAPSHOT/*" -delete
+  - find $HOME/.m2/repository/com/google/zxing -name "*SNAPSHOT" -type d -delete
 matrix:
  include:
    # Covers Java 7, Open JDK, and code coverage
