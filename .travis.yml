@@ -13,10 +13,11 @@ matrix:
    # Covers Java 8, Oracle JDK, Android apps
    - jdk: oraclejdk8
      env: ANDROID_HOME=$HOME/android-sdk-linux
-     before_install: curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C $HOME
+     before_install: if [ ! -d /tmp/android-sdk-linux/ ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C $HOME; fi
 cache:
   directories:
     - $HOME/.m2
+    - $HOME/android-sdk-linux
 git:
   depth: 10
 after_success: if [ -n "$JACOCO" ]; then bash <(curl -s https://codecov.io/bash); fi
