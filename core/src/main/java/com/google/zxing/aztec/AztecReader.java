@@ -95,7 +95,12 @@ public final class AztecReader implements Reader {
       }
     }
 
-    Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.AZTEC);
+    Result result = new Result(decoderResult.getText(),
+                               decoderResult.getRawBytes(),
+                               decoderResult.getNumBits(),
+                               points,
+                               BarcodeFormat.AZTEC,
+                               System.currentTimeMillis());
     
     List<byte[]> byteSegments = decoderResult.getByteSegments();
     if (byteSegments != null) {

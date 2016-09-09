@@ -167,7 +167,12 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
         newResultPoints[i] = new ResultPoint(oldPoint.getX() + xOffset, oldPoint.getY() + yOffset);
       }
     }
-    Result newResult = new Result(result.getText(), result.getRawBytes(), newResultPoints, result.getBarcodeFormat());
+    Result newResult = new Result(result.getText(),
+                                  result.getRawBytes(),
+                                  result.getNumBits(),
+                                  newResultPoints,
+                                  result.getBarcodeFormat(),
+                                  result.getTimestamp());
     newResult.putAllMetadata(result.getResultMetadata());
     return newResult;
   }
