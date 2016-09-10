@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2016 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.zxing.datamatrix;
+package com.google.zxing.maxicode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
-/**
- * @author bbrown@google.com (Brian Brown)
- */
-public final class DataMatrixBlackBox1TestCase extends AbstractBlackBoxTestCase {
+public final class Maxicode1TestCase extends AbstractBlackBoxTestCase {
 
-  public DataMatrixBlackBox1TestCase() {
-    super("src/test/resources/blackbox/datamatrix-1", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX);
-    addTest(21, 21, 0.0f);
-    addTest(21, 21, 90.0f);
-    addTest(21, 21, 180.0f);
-    addTest(21, 21, 270.0f);
+  public Maxicode1TestCase() {
+    super("src/test/resources/blackbox/maxicode-1", new MultiFormatReader(), BarcodeFormat.MAXICODE);
+    addTest(5, 5, 0.0f);
+    //addTest(5, 5, 90.0f);
+    //addTest(5, 5, 180.0f);
+    //addTest(5, 5, 270.0f);
   }
 
 }
