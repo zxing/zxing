@@ -65,15 +65,6 @@ public final class DecoderTest extends Assert {
     assertEquals(180, result.getNumBits());
   }
 
-  /**
-   * throws
-   * <pre>com.google.zxing.FormatException: com.google.zxing.common.reedsolomon.ReedSolomonException: Error locator degree does not match number of roots
-   *	at com.google.zxing.common.reedsolomon.ReedSolomonDecoder.findErrorLocations(ReedSolomonDecoder.java:158)
-   *	at com.google.zxing.common.reedsolomon.ReedSolomonDecoder.decode(ReedSolomonDecoder.java:77)
-   *	at com.google.zxing.aztec.decoder.Decoder.correctBits(Decoder.java:231)
-   *	at com.google.zxing.aztec.decoder.Decoder.decode(Decoder.java:77)
-   *	at com.google.zxing.aztec.decoder.DecoderTest.testDecodeBug1(DecoderTest.java:66)</pre>
-   */
   @Test(expected = FormatException.class)
   public void testDecodeTooManyErrors() throws FormatException {
     BitMatrix matrix = BitMatrix.parse(""
