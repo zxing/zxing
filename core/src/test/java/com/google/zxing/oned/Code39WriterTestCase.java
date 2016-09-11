@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 ZXing authors
+ * Copyright 2016 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,41 +23,22 @@ import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * @author dsbnatut@gmail.com (Kazuki Nishiura)
- * @author Sean Owen
- */
-public final class CodaBarWriterTestCase extends Assert {
+public final class Code39WriterTestCase extends Assert {
 
   @Test
   public void testEncode() throws WriterException {
-    doTest("B515-3/B",
-           "00000" +
-           "1001001011" + "0110101001" + "0101011001" + "0110101001" + "0101001101" +
-           "0110010101" + "01101101011" + "01001001011" +
-           "00000");
-  }
-
-  @Test
-  public void testEncode2() throws WriterException {
-    doTest("T123T",
-           "00000" +
-           "1011001001" + "0101011001" + "0101001011" + "0110010101" + "01011001001" +
-           "00000");
-  }
-
-  @Test
-  public void testAltStartEnd() throws WriterException {
-    assertEquals(encode("T123456789-$T"), encode("A123456789-$A"));
+    doTest("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+           "000001001011011010110101001011010110100101101101101001010101011001011011010110010101" +
+           "011011001010101010011011011010100110101011010011010101011001101011010101001101011010" +
+           "100110110110101001010101101001101101011010010101101101001010101011001101101010110010" +
+           "101101011001010101101100101100101010110100110101011011001101010101001011010110110010" +
+           "110101010011011010101010011011010110100101011010110010101101101100101010101001101011" +
+           "01101001101010101100110101010100101101101101001011010101100101101010010110110100000");
   }
 
   private static void doTest(String input, CharSequence expected) throws WriterException {
-    BitMatrix result = encode(input);
+    BitMatrix result = new Code39Writer().encode(input, BarcodeFormat.CODE_39, 0, 0);
     assertEquals(expected, BitMatrixTestCase.matrixToString(result));
-  }
-
-  private static BitMatrix encode(String input) throws WriterException {
-    return new CodaBarWriter().encode(input, BarcodeFormat.CODABAR, 0, 0);
   }
 
 }

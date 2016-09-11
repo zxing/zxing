@@ -264,6 +264,15 @@ public final class BitMatrixTestCase extends Assert {
     }
   }
 
+  public static String matrixToString(BitMatrix result) {
+    assertEquals(1, result.getHeight());
+    StringBuilder builder = new StringBuilder(result.getWidth());
+    for (int i = 0; i < result.getWidth(); i++) {
+      builder.append(result.get(i, 0) ? '1' : '0');
+    }
+    return builder.toString();
+  }
+
   private static void testXOR(BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix) {
     BitMatrix matrix = dataMatrix.clone();
     matrix.xor(flipMatrix);

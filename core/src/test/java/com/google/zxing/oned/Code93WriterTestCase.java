@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 ZXing authors
+ * Copyright 2016 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,28 +19,25 @@ package com.google.zxing.oned;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-
 import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * @author qwandor@google.com (Andrew Walbran)
- */
-public final class UPCAWriterTestCase extends Assert {
+public final class Code93WriterTestCase extends Assert {
 
   @Test
   public void testEncode() throws WriterException {
-    String testStr = "00010101000110110111011000100010110101111011110101010111001011101001001110110011011011001011100101000";
-    BitMatrix result = new UPCAWriter().encode("485963095124", BarcodeFormat.UPC_A, testStr.length(), 0);
-    assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
+    doTest("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+           "000001010111101101010001101001001101000101100101001100100101100010101011010001011001" +
+           "001011000101001101001000110101010110001010011001010001101001011001000101101101101001" +
+           "101100101101011001101001101100101101100110101011011001011001101001101101001110101000" +
+           "101001010010001010001001010000101001010001001001001001000101010100001000100101000010" +
+           "10100111010101000010101011110100000");
   }
 
-  @Test
-  public void testAddChecksumAndEncode() throws WriterException {
-    String testStr = "00010100110010010011011110101000110110001010111101010100010010010001110100111001011001101101100101000";
-    BitMatrix result = new UPCAWriter().encode("12345678901", BarcodeFormat.UPC_A, testStr.length(), 0);
-    assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
+  private static void doTest(String input, CharSequence expected) throws WriterException {
+    BitMatrix result = new Code93Writer().encode(input, BarcodeFormat.CODE_93, 0, 0);
+    assertEquals(expected, BitMatrixTestCase.matrixToString(result));
   }
 
 }

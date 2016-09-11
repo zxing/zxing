@@ -16,6 +16,7 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +57,7 @@ public class Code128WriterTestCase extends Assert {
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
-    String actual = matrixToString(result);
+    String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
   }
 
@@ -68,7 +69,7 @@ public class Code128WriterTestCase extends Assert {
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
-    String actual = matrixToString(result);
+    String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
   }
 
@@ -80,7 +81,7 @@ public class Code128WriterTestCase extends Assert {
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
-    String actual = matrixToString(result);
+    String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
   }
 
@@ -104,15 +105,9 @@ public class Code128WriterTestCase extends Assert {
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
-    String actual = matrixToString(result);
+    String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
   }
 
-  private static String matrixToString(BitMatrix result) {
-    StringBuilder builder = new StringBuilder(result.getWidth());
-    for (int i = 0; i < result.getWidth(); i++) {
-      builder.append(result.get(i, 0) ? '1' : '0');
-    }
-    return builder.toString();
-  }
+
 }

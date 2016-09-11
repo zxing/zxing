@@ -19,6 +19,7 @@ package com.google.zxing.oned;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,11 +30,9 @@ public final class EAN13WriterTestCase extends Assert {
 
   @Test
   public void testEncode() throws WriterException {
-    CharSequence testStr = "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
+    String testStr = "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
     BitMatrix result = new EAN13Writer().encode("5901234123457", BarcodeFormat.EAN_13, testStr.length(), 0);
-    for (int i = 0; i < testStr.length(); i++) {
-      assertEquals("Element " + i,  testStr.charAt(i) == '1', result.get(i, 0));
-    }
+    assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
 
 }

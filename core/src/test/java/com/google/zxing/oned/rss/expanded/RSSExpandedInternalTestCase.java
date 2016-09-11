@@ -28,9 +28,7 @@ package com.google.zxing.oned.rss.expanded;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +37,7 @@ import javax.imageio.ImageIO;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.NotFoundException;
+import com.google.zxing.common.AbstractBlackBoxTestCase;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.oned.rss.DataCharacter;
@@ -145,12 +144,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
   }
 
   private static BufferedImage readImage(String fileName) throws IOException {
-    Path path = Paths.get("src/test/resources/blackbox/rssexpanded-1/").resolve(fileName);
-    if (!Files.exists(path)) {
-      // Support running from project root too
-      path = Paths.get("core").resolve(path);
-    }
-
+    Path path = AbstractBlackBoxTestCase.buildTestBase("src/test/resources/blackbox/rssexpanded-1/").resolve(fileName);
     return ImageIO.read(path.toFile());
   }
 
