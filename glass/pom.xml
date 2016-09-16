@@ -39,7 +39,7 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.3.0-SNAPSHOT</version>
+    <version>3.3.0</version>
   </parent>
 
   <build>
