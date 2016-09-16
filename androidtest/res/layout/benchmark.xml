@@ -19,7 +19,6 @@
               android:layout_height="fill_parent"
               android:orientation="vertical">
   <Button android:id="@+id/benchmark_run"
-          style="@android:style/Widget.Holo.Button.Borderless"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
           android:text="@string/benchmark_run"/>
