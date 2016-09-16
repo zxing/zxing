@@ -19,7 +19,7 @@
 
   <groupId>com.google.zxing</groupId>
   <artifactId>zxing-parent</artifactId>
-  <version>3.3.0-SNAPSHOT</version>
+  <version>3.3.0</version>
   <packaging>pom</packaging>
 
   <dependencyManagement>
@@ -99,7 +99,7 @@
     <proguard.plugin.version>2.0.13</proguard.plugin.version>
     <slf4j.version>1.7.21</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
-    <zxing.version>3.3.0-SNAPSHOT</zxing.version>
+    <zxing.version>3.3.0</zxing.version>
   </properties>
 
   <build>
@@ -682,7 +682,7 @@
     <connection>scm:git:https://github.com/zxing/zxing.git</connection>
     <developerConnection>scm:git:https://github.com/zxing/zxing.git</developerConnection>
     <url>https://github.com/zxing/zxing</url>
-    <tag>HEAD</tag>
+    <tag>zxing-3.3.0</tag>
   </scm>
 
   <prerequisites>
@@ -773,7 +773,7 @@
       <id>travis</id>
       <properties>
         <!-- dummy to make @{argLine} evaluate when not set by jacoco -->
-        <argLine/>
+        <argLine />
       </properties>
       <build>
         <plugins>
