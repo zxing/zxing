@@ -25,6 +25,9 @@ import com.google.zxing.Result;
  *
  * <p>The fields can appear in any order. Only "S:" is required.</p>
  *
+ * <p>wpa2 Enterprise Format: WIFI:S:eduroam;U:username;P:password;E:PEAP;PH:MS-CHAPv2;;</p>
+ *
+ *
  * @author Vikram Aggarwal
  * @author Sean Owen
  */
@@ -45,7 +48,17 @@ public final class WifiResultParser extends ResultParser {
     if (type == null) {
       type = "nopass";
     }
+    String username = matchSinglePrefixedField("U:", rawText, ';', false);
+    String eap = matchSinglePrefixedField("E:", rawText, ';', false);
+    String eapauth = matchSinglePrefixedField("PH:", rawText, ';', false);
+
     boolean hidden = Boolean.parseBoolean(matchSinglePrefixedField("H:", rawText, ';', false));
+
+    if (eap != null && !eap.isEmpty()) {
+      //enterprise wifi
+      return new WifiParsedResult(eap, ssid, eapauth, username, pass, hidden);
+    }
+    //non enterprise
     return new WifiParsedResult(type, ssid, pass, hidden);
   }
 }

@@ -17,12 +17,11 @@
 package com.google.zxing.client.android.wifi;
 
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiEnterpriseConfig;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import java.util.regex.Pattern;
-
 import com.google.zxing.client.result.WifiParsedResult;
 
 /**
@@ -85,7 +84,12 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
         if (networkType == NetworkType.WEP) {
           changeNetworkWEP(wifiManager, theWifiResult);
         } else if (networkType == NetworkType.WPA) {
-          changeNetworkWPA(wifiManager, theWifiResult);
+          if (theWifiResult.getEAPauth().isEmpty()) {
+            changeNetworkWPA(wifiManager, theWifiResult);
+          } else {
+            //PEAP
+            changeNetworkWPAEnterprise(wifiManager, theWifiResult);
+          }
         }
       }
     }
@@ -158,6 +162,57 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
     config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
     config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
     config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+    updateNetwork(wifiManager, config);
+  }
+
+  // Adding a WPA2 Enterprise network
+  private static void changeNetworkWPAEnterprise(WifiManager wifiManager, WifiParsedResult wifiResult) {
+    Log.w(TAG, "WPA2 Enterprise, NOT implemented... yet.");
+
+    WifiConfiguration config = changeNetworkCommon(wifiResult);
+    // Hex passwords that are 64 bits long are not to be quoted.
+    config.preSharedKey = quoteNonHex(wifiResult.getPassword(), 64);
+    config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+    config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X); //Enterprise
+    config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
+
+    final String entEAP = wifiResult.getNetworkEncryption();
+    final String entPhase2 = wifiResult.getEAPauth();
+
+    //EAP
+    int eap;
+    if (entEAP == null) {
+      eap = WifiEnterpriseConfig.Eap.NONE;
+    } else if ("PEAP".equalsIgnoreCase(entEAP)) {
+      eap = WifiEnterpriseConfig.Eap.PEAP;
+    } else if ("PWD".equalsIgnoreCase(entEAP)) {
+      eap = WifiEnterpriseConfig.Eap.PWD;
+    } else if ("TLS".equalsIgnoreCase(entEAP)) {
+      eap = WifiEnterpriseConfig.Eap.TLS;
+    } else if ("TTLS".equalsIgnoreCase(entEAP)) {
+      eap = WifiEnterpriseConfig.Eap.TTLS;
+    } else {
+      eap = WifiEnterpriseConfig.Eap.NONE;
+    }
+    config.enterpriseConfig.setEapMethod(eap);
+
+    //Phase2 Authentication
+    int phase2Method;
+    if (entPhase2 == null) {
+      phase2Method = WifiEnterpriseConfig.Phase2.NONE;
+    } else if ("GTC".equalsIgnoreCase(entPhase2)) {
+      phase2Method = WifiEnterpriseConfig.Phase2.GTC;
+    } else if ("MSCHAP".equalsIgnoreCase(entPhase2) || "MS-CHAP".equalsIgnoreCase(entPhase2)) {
+      phase2Method = WifiEnterpriseConfig.Phase2.MSCHAP;
+    } else if ("MSCHAPv2".equalsIgnoreCase(entPhase2) || "MS-CHAPv2".equalsIgnoreCase(entPhase2)) {
+      phase2Method = WifiEnterpriseConfig.Phase2.MSCHAPV2;
+    } else if ("PAP".equalsIgnoreCase(entPhase2)) {
+      phase2Method = WifiEnterpriseConfig.Phase2.PAP;
+    } else {
+      phase2Method = WifiEnterpriseConfig.Phase2.NONE;
+    }
+    config.enterpriseConfig.setPhase2Method(phase2Method);
+
     updateNetwork(wifiManager, config);
   }
 

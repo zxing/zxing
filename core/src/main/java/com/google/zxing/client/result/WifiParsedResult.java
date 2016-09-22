@@ -27,6 +27,9 @@ public final class WifiParsedResult extends ParsedResult {
   private final String networkEncryption;
   private final String password;
   private final boolean hidden;
+  //enterprise wpa2 enhancement
+  private final String username;
+  private final String eapauth; //phase2 auth/inner auth
 
   public WifiParsedResult(String networkEncryption, String ssid, String password) {
     this(networkEncryption, ssid, password, false);
@@ -38,6 +41,18 @@ public final class WifiParsedResult extends ParsedResult {
     this.networkEncryption = networkEncryption;
     this.password = password;
     this.hidden = hidden;
+    this.username = "";
+    this.eapauth = "";
+  }
+
+  public WifiParsedResult(String networkEncryption, String eapauth, String ssid, String username, String password, boolean hidden) {
+    super(ParsedResultType.WIFI);
+    this.ssid = ssid;
+    this.networkEncryption = networkEncryption;
+    this.password = password;
+    this.hidden = hidden;
+    this.username = username;
+    this.eapauth = eapauth; //phase2Auth
   }
 
   public String getSsid() {
@@ -46,6 +61,14 @@ public final class WifiParsedResult extends ParsedResult {
 
   public String getNetworkEncryption() {
     return networkEncryption;
+  }
+
+  public String getEAPauth() {
+    return eapauth;
+  }
+
+  public String getUsername() {
+    return username;
   }
 
   public String getPassword() {
