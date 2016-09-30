@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 ZXing authors
+ * Copyright 2016 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,19 @@ import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * @author Ari Pollak
- */
-public final class EAN8WriterTestCase extends Assert {
+public final class UPCEWriterTestCase extends Assert {
 
   @Test
   public void testEncode() throws WriterException {
-    String testStr = "0001010001011010111101111010110111010101001110111001010001001011100101000";
-    BitMatrix result = new EAN8Writer().encode("96385074", BarcodeFormat.EAN_8, testStr.length(), 0);
+    String testStr = "0000000000010101110010100111000101101011110110111001011101010100000000000";
+    BitMatrix result = new UPCEWriter().encode("05096893", BarcodeFormat.UPC_E, testStr.length(), 0);
     assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
 
   @Test
   public void testAddChecksumAndEncode() throws WriterException {
-    String testStr = "0001010001011010111101111010110111010101001110111001010001001011100101000";
-    BitMatrix result = new EAN8Writer().encode("9638507", BarcodeFormat.EAN_8, testStr.length(), 0);
+    String testStr = "0000000000010101110010100111000101101011110110111001011101010100000000000";
+    BitMatrix result = new UPCEWriter().encode("0509689", BarcodeFormat.UPC_E, testStr.length(), 0);
     assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
 

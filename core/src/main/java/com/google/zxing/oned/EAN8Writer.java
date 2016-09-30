@@ -18,6 +18,7 @@ package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
@@ -55,9 +56,30 @@ public final class EAN8Writer extends UPCEANWriter {
    */
   @Override
   public boolean[] encode(String contents) {
-    if (contents.length() != 8) {
-      throw new IllegalArgumentException(
-          "Requested contents should be 8 digits long, but got " + contents.length());
+    int length = contents.length();
+    switch (length) {
+      case 7:
+        // No check digit present, calculate it and add it
+        int check;
+        try {
+          check = UPCEANReader.getStandardUPCEANChecksum(contents);
+        } catch (FormatException fe) {
+          throw new IllegalArgumentException(fe);
+        }
+        contents += check;
+        break;
+      case 8:
+        try {
+          if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
+            throw new IllegalArgumentException("Contents do not pass checksum");
+          }
+        } catch (FormatException ignored) {
+          throw new IllegalArgumentException("Illegal contents");
+        }
+        break;
+      default:
+        throw new IllegalArgumentException(
+            "Requested contents should be 8 digits long, but got " + length);
     }
 
     boolean[] result = new boolean[CODE_WIDTH];
@@ -66,14 +88,14 @@ public final class EAN8Writer extends UPCEANWriter {
     pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
 
     for (int i = 0; i <= 3; i++) {
-      int digit = Integer.parseInt(contents.substring(i, i + 1));
+      int digit = Character.digit(contents.charAt(i), 10);
       pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], false);
     }
 
     pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false);
 
     for (int i = 4; i <= 7; i++) {
-      int digit = Integer.parseInt(contents.substring(i, i + 1));
+      int digit = Character.digit(contents.charAt(i), 10);
       pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true);
     }
     appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
