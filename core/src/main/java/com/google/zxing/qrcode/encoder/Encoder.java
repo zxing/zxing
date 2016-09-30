@@ -78,7 +78,8 @@ public final class Encoder {
 
     // Determine what character encoding has been specified by the caller, if any
     String encoding = DEFAULT_BYTE_MODE_ENCODING;
-    if (hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET)) {
+    boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
+    if (hasEncodingHint) {
       encoding = hints.get(EncodeHintType.CHARACTER_SET).toString();
     }
 
@@ -91,7 +92,7 @@ public final class Encoder {
     BitArray headerBits = new BitArray();
 
     // Append ECI segment if applicable
-    if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.equals(encoding)) {
+    if (mode == Mode.BYTE && (hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.equals(encoding))) {
       CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
       if (eci != null) {
         appendECI(eci, headerBits);
