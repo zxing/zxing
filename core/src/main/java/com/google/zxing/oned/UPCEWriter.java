@@ -56,7 +56,7 @@ public final class UPCEWriter extends UPCEANWriter {
         // No check digit present, calculate it and add it
         int check;
         try {
-          check = UPCEANReader.getStandardUPCEANChecksum(contents);
+          check = UPCEANReader.getStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents));
         } catch (FormatException fe) {
           throw new IllegalArgumentException(fe);
         }
@@ -74,6 +74,11 @@ public final class UPCEWriter extends UPCEANWriter {
       default:
         throw new IllegalArgumentException(
             "Requested contents should be 8 digits long, but got " + length);
+    }
+
+    int firstDigit = Character.digit(contents.charAt(0), 10);
+    if (firstDigit != 0 && firstDigit != 1) {
+      throw new IllegalArgumentException("Number system must be 0 or 1");
     }
       
     int checkDigit = Character.digit(contents.charAt(7), 10);

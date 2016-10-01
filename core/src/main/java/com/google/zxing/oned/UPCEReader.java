@@ -173,7 +173,10 @@ public final class UPCEReader extends UPCEANReader {
         result.append(lastChar);
         break;
     }
-    result.append(upce.charAt(7));
+    // Only append check digit in conversion if supplied
+    if (upce.length() >= 8) {
+      result.append(upce.charAt(7));
+    }
     return result.toString();
   }
 
