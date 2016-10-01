@@ -30,14 +30,14 @@ public final class EAN13WriterTestCase extends Assert {
 
   @Test
   public void testEncode() throws WriterException {
-    String testStr = "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
+    String testStr = "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
     BitMatrix result = new EAN13Writer().encode("5901234123457", BarcodeFormat.EAN_13, testStr.length(), 0);
     assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
 
   @Test
   public void testAddChecksumAndEncode() throws WriterException {
-    String testStr = "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
+    String testStr = "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
     BitMatrix result = new EAN13Writer().encode("590123412345", BarcodeFormat.EAN_13, testStr.length(), 0);
     assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
