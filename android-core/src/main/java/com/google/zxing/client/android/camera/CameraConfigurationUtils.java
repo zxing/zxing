@@ -70,7 +70,6 @@ public final class CameraConfigurationUtils {
         focusMode = findSettableValue("focus mode",
                                       supportedFocusModes,
                                       Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
-                                      Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
                                       Camera.Parameters.FOCUS_MODE_AUTO);
       }
     }
