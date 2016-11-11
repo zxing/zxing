@@ -105,7 +105,7 @@ public final class LocaleManager {
   private static final Map<String,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD = GOOGLE_COUNTRY_TLD;
 
   private static final Collection<String> TRANSLATED_HELP_ASSET_LANGUAGES =
-      Arrays.asList("de", "en", "es", "fr", "it", "ja", "ko", "nl", "pt", "ru", "uk", "zh-rCN", "zh-rTW", "zh-rHK");
+      Arrays.asList("de", "en", "es", "fr", "it", "ja", "ko", "nl", "pt", "ru", "uk", "zh-rCN", "zh");
 
   private LocaleManager() {}
 
@@ -158,12 +158,11 @@ public final class LocaleManager {
     if (locale == null) {
       return DEFAULT_LANGUAGE;
     }
-    String language = locale.getLanguage();
     // Special case Chinese
-    if (Locale.SIMPLIFIED_CHINESE.getLanguage().equals(language)) {
-      return language + "-r" + getSystemCountry();
+    if (Locale.SIMPLIFIED_CHINESE.equals(locale)) {
+      return "zh-rCN";
     }
-    return language;
+    return locale.getLanguage();
   }
 
   static String getTranslatedAssetLanguage() {
