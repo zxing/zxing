@@ -26,17 +26,23 @@ public final class WifiParsedResult extends ParsedResult {
   private final String ssid;
   private final String networkEncryption;
   private final String password;
+  private final String username;
+  private final String phase2;
+  private final String anon;
   private final boolean hidden;
 
-  public WifiParsedResult(String networkEncryption, String ssid, String password) {
-    this(networkEncryption, ssid, password, false);
+  public WifiParsedResult(String networkEncryption, String ssid, String password, String username, String phase2, String anon) {
+    this(networkEncryption, ssid, password, username, phase2, anon, false);
   }
 
-  public WifiParsedResult(String networkEncryption, String ssid, String password, boolean hidden) {
+  public WifiParsedResult(String networkEncryption, String ssid, String password, String username, String phase2, String anon, boolean hidden) {
     super(ParsedResultType.WIFI);
     this.ssid = ssid;
     this.networkEncryption = networkEncryption;
     this.password = password;
+    this.username = username;
+    this.phase2 = phase2;
+    this.anon = anon;
     this.hidden = hidden;
   }
 
@@ -52,6 +58,18 @@ public final class WifiParsedResult extends ParsedResult {
     return password;
   }
 
+  public String getUsername() {
+        return username;
+  }
+
+  public String getPhase2() {
+      return phase2;
+  }
+
+  public String getAnon() {
+      return anon;
+  }
+
   public boolean isHidden() {
     return hidden;
   }
@@ -62,6 +80,9 @@ public final class WifiParsedResult extends ParsedResult {
     maybeAppend(ssid, result);
     maybeAppend(networkEncryption, result);
     maybeAppend(password, result);
+    maybeAppend(username, result);
+    maybeAppend(phase2, result);
+    maybeAppend(anon, result);
     maybeAppend(Boolean.toString(hidden), result);
     return result.toString();
   }

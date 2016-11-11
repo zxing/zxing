@@ -31,8 +31,10 @@
       <artifactId>android-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.android</groupId>
+      <groupId>android</groupId>
       <artifactId>android</artifactId>
+      <version>4.3_r2</version>
+        <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -48,6 +50,12 @@
       <plugin>
         <groupId>com.simpligility.maven.plugins</groupId>
         <artifactId>android-maven-plugin</artifactId>
+	<configuration>
+	     <sdk>
+      		<platform>18</platform>
+	     </sdk>
+		<dexCoreLibrary>true</dexCoreLibrary>
+	</configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

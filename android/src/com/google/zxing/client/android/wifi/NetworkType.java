@@ -20,6 +20,7 @@ enum NetworkType {
 
   WEP,
   WPA,
+  EAP,
   NO_PASSWORD;
 
   static NetworkType forIntentValue(String networkTypeString) {
@@ -32,6 +33,15 @@ enum NetworkType {
     }
     if ("WEP".equals(networkTypeString)) {
       return WEP;
+    }
+    if ("PEAP".equals(networkTypeString)) {
+        return EAP;
+    }
+    if ("TTLS".equals(networkTypeString)) {
+        return EAP;
+    }
+    if ("PWD".equals(networkTypeString)) {
+        return EAP;
     }
     if ("nopass".equals(networkTypeString)) {
       return NO_PASSWORD;
