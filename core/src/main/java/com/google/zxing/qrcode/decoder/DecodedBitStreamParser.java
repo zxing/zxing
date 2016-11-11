@@ -71,11 +71,15 @@ final class DecodedBitStreamParser {
         } else {
           mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
         }
-        if (mode != Mode.TERMINATOR) {
-          if (mode == Mode.FNC1_FIRST_POSITION || mode == Mode.FNC1_SECOND_POSITION) {
+        switch (mode) {
+          case TERMINATOR:
+            break;
+          case FNC1_FIRST_POSITION:
+          case FNC1_SECOND_POSITION:
             // We do little with FNC1 except alter the parsed result a bit according to the spec
             fc1InEffect = true;
-          } else if (mode == Mode.STRUCTURED_APPEND) {
+            break;
+          case STRUCTURED_APPEND:
             if (bits.available() < 16) {
               throw FormatException.getFormatInstance();
             }
@@ -83,39 +87,45 @@ final class DecodedBitStreamParser {
             // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
             symbolSequence = bits.readBits(8);
             parityData = bits.readBits(8);
-          } else if (mode == Mode.ECI) {
+            break;
+          case ECI:
             // Count doesn't apply to ECI
             int value = parseECIValue(bits);
             currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
             if (currentCharacterSetECI == null) {
               throw FormatException.getFormatInstance();
             }
-          } else {
+            break;
+          case HANZI:
             // First handle Hanzi mode which does not start with character count
-            if (mode == Mode.HANZI) {
-              //chinese mode contains a sub set indicator right after mode indicator
-              int subset = bits.readBits(4);
-              int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
-              if (subset == GB2312_SUBSET) {
-                decodeHanziSegment(bits, result, countHanzi);
-              }
-            } else {
-              // "Normal" QR code modes:
-              // How many characters will follow, encoded in this mode?
-              int count = bits.readBits(mode.getCharacterCountBits(version));
-              if (mode == Mode.NUMERIC) {
-                decodeNumericSegment(bits, result, count);
-              } else if (mode == Mode.ALPHANUMERIC) {
-                decodeAlphanumericSegment(bits, result, count, fc1InEffect);
-              } else if (mode == Mode.BYTE) {
-                decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
-              } else if (mode == Mode.KANJI) {
-                decodeKanjiSegment(bits, result, count);
-              } else {
-                throw FormatException.getFormatInstance();
-              }
+            // Chinese mode contains a sub set indicator right after mode indicator
+            int subset = bits.readBits(4);
+            int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
+            if (subset == GB2312_SUBSET) {
+              decodeHanziSegment(bits, result, countHanzi);
             }
-          }
+            break;
+          default:
+            // "Normal" QR code modes:
+            // How many characters will follow, encoded in this mode?
+            int count = bits.readBits(mode.getCharacterCountBits(version));
+            switch (mode) {
+              case NUMERIC:
+                decodeNumericSegment(bits, result, count);
+                break;
+              case ALPHANUMERIC:
+                decodeAlphanumericSegment(bits, result, count, fc1InEffect);
+                break;
+              case BYTE:
+                decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
+                break;
+              case KANJI:
+                decodeKanjiSegment(bits, result, count);
+                break;
+              default:
+                throw FormatException.getFormatInstance();
+            }
+            break;
         }
       } while (mode != Mode.TERMINATOR);
     } catch (IllegalArgumentException iae) {

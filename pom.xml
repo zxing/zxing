@@ -44,7 +44,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>19.0</version>
+        <version>20.0</version>
       </dependency>
       <dependency>
         <groupId>com.google.android</groupId>
@@ -95,7 +95,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.7</java.version>
     <maven.version.min>3.2.1</maven.version.min>
-    <proguard.version>5.2.1</proguard.version>
+    <proguard.version>5.3.1</proguard.version>
     <proguard.plugin.version>2.0.13</proguard.plugin.version>
     <slf4j.version>1.7.21</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
@@ -170,7 +170,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.5.1</version>
+          <version>3.6.0</version>
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>

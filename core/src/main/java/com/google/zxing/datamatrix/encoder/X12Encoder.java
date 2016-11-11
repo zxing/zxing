@@ -49,20 +49,28 @@ final class X12Encoder extends C40Encoder {
 
   @Override
   int encodeChar(char c, StringBuilder sb) {
-    if (c == '\r') {
-      sb.append('\0');
-    } else if (c == '*') {
-      sb.append('\1');
-    } else if (c == '>') {
-      sb.append('\2');
-    } else if (c == ' ') {
-      sb.append('\3');
-    } else if (c >= '0' && c <= '9') {
-      sb.append((char) (c - 48 + 4));
-    } else if (c >= 'A' && c <= 'Z') {
-      sb.append((char) (c - 65 + 14));
-    } else {
-      HighLevelEncoder.illegalCharacter(c);
+    switch (c) {
+      case '\r':
+        sb.append('\0');
+        break;
+      case '*':
+        sb.append('\1');
+        break;
+      case '>':
+        sb.append('\2');
+        break;
+      case ' ':
+        sb.append('\3');
+        break;
+      default:
+        if (c >= '0' && c <= '9') {
+          sb.append((char) (c - 48 + 4));
+        } else if (c >= 'A' && c <= 'Z') {
+          sb.append((char) (c - 65 + 14));
+        } else {
+          HighLevelEncoder.illegalCharacter(c);
+        }
+        break;
     }
     return 1;
   }

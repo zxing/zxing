@@ -212,16 +212,16 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
       return CODE_CODE_B; // no choice
     }
     if (oldCode == CODE_CODE_C) { // can continue in code C
-      return oldCode;
+      return CODE_CODE_C;
     }
     if (oldCode == CODE_CODE_B) {
       if (lookahead == CType.FNC_1) {
-        return oldCode; // can continue in code B
+        return CODE_CODE_B; // can continue in code B
       }
       // Seen two consecutive digits, see what follows
       lookahead = findCType(value, start + 2);
       if (lookahead == CType.UNCODABLE || lookahead == CType.ONE_DIGIT) {
-        return oldCode; // not worth switching now
+        return CODE_CODE_B; // not worth switching now
       }
       if (lookahead == CType.FNC_1) { // two digits, then FNC_1...
         lookahead = findCType(value, start + 3);

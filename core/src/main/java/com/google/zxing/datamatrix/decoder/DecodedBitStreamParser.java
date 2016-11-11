@@ -146,39 +146,49 @@ final class DecodedBitStreamParser {
           result.append('0');
         }
         result.append(value);
-      } else if (oneByte == 230) {  // Latch to C40 encodation
-        return Mode.C40_ENCODE;
-      } else if (oneByte == 231) {  // Latch to Base 256 encodation
-        return Mode.BASE256_ENCODE;
-      } else if (oneByte == 232) {
-        // FNC1
-        result.append((char) 29); // translate as ASCII 29
-      } else if (oneByte == 233 || oneByte == 234) {
-        // Structured Append, Reader Programming
-        // Ignore these symbols for now
-        //throw ReaderException.getInstance();
-      } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
-        upperShift = true;
-      } else if (oneByte == 236) {  // 05 Macro
-        result.append("[)>\u001E05\u001D");
-        resultTrailer.insert(0, "\u001E\u0004");
-      } else if (oneByte == 237) {  // 06 Macro
-        result.append("[)>\u001E06\u001D");
-        resultTrailer.insert(0, "\u001E\u0004");
-      } else if (oneByte == 238) {  // Latch to ANSI X12 encodation
-        return Mode.ANSIX12_ENCODE;
-      } else if (oneByte == 239) {  // Latch to Text encodation
-        return Mode.TEXT_ENCODE;
-      } else if (oneByte == 240) {  // Latch to EDIFACT encodation
-        return Mode.EDIFACT_ENCODE;
-      } else if (oneByte == 241) {  // ECI Character
-        // TODO(bbrown): I think we need to support ECI
-        //throw ReaderException.getInstance();
-        // Ignore this symbol for now
-      } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
-        // ... but work around encoders that end with 254, latch back to ASCII
-        if (oneByte != 254 || bits.available() != 0) {
-          throw FormatException.getFormatInstance();
+      } else {
+        switch (oneByte) {
+          case 230: // Latch to C40 encodation
+            return Mode.C40_ENCODE;
+          case 231: // Latch to Base 256 encodation
+            return Mode.BASE256_ENCODE;
+          case 232: // FNC1
+            result.append((char) 29); // translate as ASCII 29
+            break;
+          case 233: // Structured Append
+          case 234: // Reader Programming
+            // Ignore these symbols for now
+            //throw ReaderException.getInstance();
+            break;
+          case 235: // Upper Shift (shift to Extended ASCII)
+            upperShift = true;
+            break;
+          case 236: // 05 Macro
+            result.append("[)>\u001E05\u001D");
+            resultTrailer.insert(0, "\u001E\u0004");
+            break;
+          case 237: // 06 Macro
+            result.append("[)>\u001E06\u001D");
+            resultTrailer.insert(0, "\u001E\u0004");
+            break;
+          case 238: // Latch to ANSI X12 encodation
+            return Mode.ANSIX12_ENCODE;
+          case 239: // Latch to Text encodation
+            return Mode.TEXT_ENCODE;
+          case 240: // Latch to EDIFACT encodation
+            return Mode.EDIFACT_ENCODE;
+          case 241: // ECI Character
+            // TODO(bbrown): I think we need to support ECI
+            //throw ReaderException.getInstance();
+            // Ignore this symbol for now
+            break;
+          default:
+            // Not to be used in ASCII encodation
+            // but work around encoders that end with 254, latch back to ASCII
+            if (oneByte >= 242 && (oneByte != 254 || bits.available() != 0)) {
+              throw FormatException.getFormatInstance();
+            }
+            break;
         }
       }
     } while (bits.available() > 0);
@@ -245,12 +255,17 @@ final class DecodedBitStreamParser {
               } else {
                 result.append(c40char);
               }
-            } else if (cValue == 27) {  // FNC1
-              result.append((char) 29); // translate as ASCII 29
-            } else if (cValue == 30) {  // Upper Shift
-              upperShift = true;
             } else {
-              throw FormatException.getFormatInstance();
+              switch (cValue) {
+                case 27: // FNC1
+                  result.append((char) 29); // translate as ASCII 29
+                  break;
+                case 30: // Upper Shift
+                  upperShift = true;
+                  break;
+                default:
+                  throw FormatException.getFormatInstance();
+              }
             }
             shift = 0;
             break;
@@ -330,12 +345,17 @@ final class DecodedBitStreamParser {
               } else {
                 result.append(textChar);
               }
-            } else if (cValue == 27) {  // FNC1
-              result.append((char) 29); // translate as ASCII 29
-            } else if (cValue == 30) {  // Upper Shift
-              upperShift = true;
             } else {
-              throw FormatException.getFormatInstance();
+              switch (cValue) {
+                case 27: // FNC1
+                  result.append((char) 29); // translate as ASCII 29
+                  break;
+                case 30: // Upper Shift
+                  upperShift = true;
+                  break;
+                default:
+                  throw FormatException.getFormatInstance();
+              }
             }
             shift = 0;
             break;
@@ -383,20 +403,28 @@ final class DecodedBitStreamParser {
 
       for (int i = 0; i < 3; i++) {
         int cValue = cValues[i];
-        if (cValue == 0) {  // X12 segment terminator <CR>
-          result.append('\r');
-        } else if (cValue == 1) {  // X12 segment separator *
-          result.append('*');
-        } else if (cValue == 2) {  // X12 sub-element separator >
-          result.append('>');
-        } else if (cValue == 3) {  // space
-          result.append(' ');
-        } else if (cValue < 14) {  // 0 - 9
-          result.append((char) (cValue + 44));
-        } else if (cValue < 40) {  // A - Z
-          result.append((char) (cValue + 51));
-        } else {
-          throw FormatException.getFormatInstance();
+        switch (cValue) {
+          case 0: // X12 segment terminator <CR>
+            result.append('\r');
+            break;
+          case 1: // X12 segment separator *
+            result.append('*');
+            break;
+          case 2: // X12 sub-element separator >
+            result.append('>');
+            break;
+          case 3: // space
+            result.append(' ');
+            break;
+          default:
+            if (cValue < 14) {  // 0 - 9
+              result.append((char) (cValue + 44));
+            } else if (cValue < 40) {  // A - Z
+              result.append((char) (cValue + 51));
+            } else {
+              throw FormatException.getFormatInstance();
+            }
+            break;
         }
       }
     } while (bits.available() > 0);
