@@ -61,7 +61,7 @@ final class BarcodeValue {
     return PDF417Common.toIntArray(result);
   }
 
-  public Integer getConfidence(int value) {
+  Integer getConfidence(int value) {
     return values.get(value);
   }
 

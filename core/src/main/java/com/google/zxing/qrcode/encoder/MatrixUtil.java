@@ -298,7 +298,7 @@ final class MatrixUtil {
   // The return value is 0xc94 (1100 1001 0100)
   //
   // Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
-  // operations. We don't care if cofficients are positive or negative.
+  // operations. We don't care if coefficients are positive or negative.
   static int calculateBCHCode(int value, int poly) {
     if (poly == 0) {
       throw new IllegalArgumentException("0 polynomial");
@@ -459,19 +459,15 @@ final class MatrixUtil {
     }
     int index = version.getVersionNumber() - 1;
     int[] coordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
-    int numCoordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index].length;
-    for (int i = 0; i < numCoordinates; ++i) {
-      for (int j = 0; j < numCoordinates; ++j) {
-        int y = coordinates[i];
-        int x = coordinates[j];
-        if (x == -1 || y == -1) {
-          continue;
-        }
-        // If the cell is unset, we embed the position adjustment pattern here.
-        if (isEmpty(matrix.get(x, y))) {
-          // -2 is necessary since the x/y coordinates point to the center of the pattern, not the
-          // left top corner.
-          embedPositionAdjustmentPattern(x - 2, y - 2, matrix);
+    for (int y : coordinates) {
+      if (y >= 0) {
+        for (int x : coordinates) {
+          if (x >= 0 && isEmpty(matrix.get(x, y))) {
+            // If the cell is unset, we embed the position adjustment pattern here.
+            // -2 is necessary since the x/y coordinates point to the center of the pattern, not the
+            // left top corner.
+            embedPositionAdjustmentPattern(x - 2, y - 2, matrix);
+          }
         }
       }
     }

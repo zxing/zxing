@@ -140,7 +140,7 @@ public final class Code93Reader extends OneDReader {
 
     int counterPosition = 0;
     for (int i = rowOffset; i < width; i++) {
-      if (row.get(i) ^ isWhite) {
+      if (row.get(i) != isWhite) {
         theCounters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
@@ -148,9 +148,9 @@ public final class Code93Reader extends OneDReader {
             return new int[]{patternStart, i};
           }
           patternStart += theCounters[0] + theCounters[1];
-          System.arraycopy(theCounters, 2, theCounters, 0, patternLength - 2);
-          theCounters[patternLength - 2] = 0;
-          theCounters[patternLength - 1] = 0;
+          System.arraycopy(theCounters, 2, theCounters, 0, counterPosition - 1);
+          theCounters[counterPosition - 1] = 0;
+          theCounters[counterPosition] = 0;
           counterPosition--;
         } else {
           counterPosition++;

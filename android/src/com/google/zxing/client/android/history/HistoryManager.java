@@ -41,7 +41,6 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -299,8 +298,7 @@ public final class HistoryManager {
 
         // Add timestamp again, formatted
         long timestamp = cursor.getLong(3);
-        historyText.append('"').append(massageHistoryField(
-            format.format(new Date(timestamp)))).append("\",");
+        historyText.append('"').append(massageHistoryField(format.format(timestamp))).append("\",");
 
         // Above we're preserving the old ordering of columns which had formatted data in position 5
 

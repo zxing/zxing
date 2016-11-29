@@ -156,7 +156,7 @@ public final class Detector {
     BitMatrix bits;
     ResultPoint correctedTopRight;
 
-    // Rectanguar symbols are 6x16, 6x28, 10x24, 10x32, 14x32, or 14x44. If one dimension is more
+    // Rectangular symbols are 6x16, 6x28, 10x24, 10x32, 14x32, or 14x44. If one dimension is more
     // than twice the other, it's certainly rectangular, but to cut a bit more slack we accept it as
     // rectangular if the bigger side is at least 7/4 times the other:
     if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {

@@ -234,9 +234,7 @@ public final class Detector {
       result[3] = new ResultPoint(previousRowLoc[1], stopRow);
     }
     if (stopRow - startRow < BARCODE_MIN_HEIGHT) {
-      for (int i = 0; i < result.length; i++) {
-        result[i] = null;
-      }
+      Arrays.fill(result, null);
     }
     return result;
   }
@@ -271,7 +269,7 @@ public final class Detector {
     int patternLength = pattern.length;
     for (boolean isWhite = whiteFirst; x < width; x++) {
       boolean pixel = matrix.get(x, row);
-      if (pixel ^ isWhite) {
+      if (pixel != isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
@@ -279,9 +277,9 @@ public final class Detector {
             return new int[] {patternStart, x};
           }
           patternStart += counters[0] + counters[1];
-          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
-          counters[patternLength - 2] = 0;
-          counters[patternLength - 1] = 0;
+          System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
+          counters[counterPosition - 1] = 0;
+          counters[counterPosition] = 0;
           counterPosition--;
         } else {
           counterPosition++;
@@ -290,10 +288,9 @@ public final class Detector {
         isWhite = !isWhite;
       }
     }
-    if (counterPosition == patternLength - 1) {
-      if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
-        return new int[] {patternStart, x - 1};
-      }
+    if (counterPosition == patternLength - 1 &&
+        patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
+      return new int[] {patternStart, x - 1};
     }
     return null;
   }

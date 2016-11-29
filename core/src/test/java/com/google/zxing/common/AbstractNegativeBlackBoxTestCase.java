@@ -126,7 +126,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
    *
    * @param image The image to test
    * @param rotationInDegrees The amount of rotation to apply
-   * @return true if nothing found, false if a non-existant barcode was detected
+   * @return true if nothing found, false if a non-existent barcode was detected
    */
   private boolean checkForFalsePositives(BufferedImage image, float rotationInDegrees) {
     BufferedImage rotatedImage = rotateImage(image, rotationInDegrees);

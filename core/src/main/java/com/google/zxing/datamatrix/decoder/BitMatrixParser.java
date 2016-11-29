@@ -404,7 +404,7 @@ final class BitMatrixParser {
     int symbolSizeColumns = version.getSymbolSizeColumns();
     
     if (bitMatrix.getHeight() != symbolSizeRows) {
-      throw new IllegalArgumentException("Dimension of bitMarix must match the version size");
+      throw new IllegalArgumentException("Dimension of bitMatrix must match the version size");
     }
     
     int dataRegionSizeRows = version.getDataRegionSizeRows();

@@ -109,7 +109,7 @@ public final class PDF417Writer implements Writer {
     int aspectRatio = 4;
     byte[][] originalScale = encoder.getBarcodeMatrix().getScaledMatrix(1, aspectRatio);
     boolean rotated = false;
-    if ((height > width) ^ (originalScale[0].length < originalScale.length)) {
+    if ((height > width) != (originalScale[0].length < originalScale.length)) {
       originalScale = rotateArray(originalScale);
       rotated = true;
     }

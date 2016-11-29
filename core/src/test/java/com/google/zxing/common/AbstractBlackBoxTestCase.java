@@ -141,7 +141,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     int[] passedCounts = new int[testCount];
     int[] misreadCounts = new int[testCount];
     int[] tryHarderCounts = new int[testCount];
-    int[] tryHaderMisreadCounts = new int[testCount];
+    int[] tryHarderMisreadCounts = new int[testCount];
 
     for (Path testImage : imageFiles) {
       log.info(String.format("Starting %s", testImage));
@@ -186,7 +186,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
           if (decode(bitmap, rotation, expectedText, expectedMetadata, true)) {
             tryHarderCounts[x]++;
           } else {
-            tryHaderMisreadCounts[x]++;
+            tryHarderMisreadCounts[x]++;
           }
         } catch (ReaderException ignored) {
           log.fine(String.format("could not read at rotation %f w/TH", rotation));
@@ -212,10 +212,10 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
                              tryHarderCounts[x], imageFiles.size(), testResult.getTryHarderCount()));
       failed = imageFiles.size() - tryHarderCounts[x];
       log.info(String.format(" %d failed due to misreads, %d not detected",
-                             tryHaderMisreadCounts[x], failed - tryHaderMisreadCounts[x]));
+                             tryHarderMisreadCounts[x], failed - tryHarderMisreadCounts[x]));
       totalFound += passedCounts[x] + tryHarderCounts[x];
       totalMustPass += testResult.getMustPassCount() + testResult.getTryHarderCount();
-      totalMisread += misreadCounts[x] + tryHaderMisreadCounts[x];
+      totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
       totalMaxMisread += testResult.getMaxMisreads() + testResult.getMaxTryHarderMisreads();
     }
 
@@ -247,7 +247,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         assertTrue(label,
                    misreadCounts[x] <= testResult.getMaxMisreads());
         assertTrue("Try harder, " + label,
-                   tryHaderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
+                   tryHarderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
       }
     }
   }

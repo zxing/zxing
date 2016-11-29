@@ -48,36 +48,36 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     //each character is encoded by 9 of 0/1's
     int[] widths = new int[9];
 
-    //lenght of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
+    //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
     int codeWidth = (contents.length() + 2 + 2) * 9 + 1;
-
-    boolean[] result = new boolean[codeWidth];
 
     //start character (*)
     toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
-    int pos = appendPattern(result, 0, widths, true);
+
+    boolean[] result = new boolean[codeWidth];
+    int pos = appendPattern(result, 0, widths);
 
     for (int i = 0; i < length; i++) {
       int indexInString = Code93Reader.ALPHABET_STRING.indexOf(contents.charAt(i));
       toIntArray(Code93Reader.CHARACTER_ENCODINGS[indexInString], widths);
-      pos += appendPattern(result, pos, widths, true);
+      pos += appendPattern(result, pos, widths);
     }
 
     //add two checksums
     int check1 = computeChecksumIndex(contents, 20);
     toIntArray(Code93Reader.CHARACTER_ENCODINGS[check1], widths);
-    pos += appendPattern(result, pos, widths, true);
+    pos += appendPattern(result, pos, widths);
 
     //append the contents to reflect the first checksum added
     contents += Code93Reader.ALPHABET_STRING.charAt(check1);
 
     int check2 = computeChecksumIndex(contents, 15);
     toIntArray(Code93Reader.CHARACTER_ENCODINGS[check2], widths);
-    pos += appendPattern(result, pos, widths, true);
+    pos += appendPattern(result, pos, widths);
 
     //end character (*)
     toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
-    pos += appendPattern(result, pos, widths, true);
+    pos += appendPattern(result, pos, widths);
 
     //termination bar (single black bar)
     result[pos] = true;
@@ -92,7 +92,20 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     }
   }
 
+  /**
+   * @param target output to append to
+   * @param pos start position
+   * @param pattern pattern to append
+   * @param startColor unused
+   * @return 9
+   * @deprecated without replacement; intended as an internal-only method
+   */
+  @Deprecated
   protected static int appendPattern(boolean[] target, int pos, int[] pattern, boolean startColor) {
+    return appendPattern(target, pos, pattern);
+  }
+
+  private static int appendPattern(boolean[] target, int pos, int[] pattern) {
     for (int bit : pattern) {
       target[pos++] = bit != 0;
     }

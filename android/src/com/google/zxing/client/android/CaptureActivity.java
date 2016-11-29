@@ -67,7 +67,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 
@@ -557,7 +556,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
     TextView timeTextView = (TextView) findViewById(R.id.time_text_view);
-    timeTextView.setText(formatter.format(new Date(rawResult.getTimestamp())));
+    timeTextView.setText(formatter.format(rawResult.getTimestamp()));
 
 
     TextView metaTextView = (TextView) findViewById(R.id.meta_text_view);

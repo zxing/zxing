@@ -52,17 +52,17 @@ public final class CodaBarReader extends OneDReader {
       0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B, 0x00E, // -$:/.+ABCD
   };
 
-  // minimal number of characters that should be present (inclusing start and stop characters)
+  // minimal number of characters that should be present (including start and stop characters)
   // under normal circumstances this should be set to 3, but can be set higher
   // as a last-ditch attempt to reduce false positives.
   private static final int MIN_CHARACTER_LENGTH = 3;
 
   // official start and end patterns
   private static final char[] STARTEND_ENCODING = {'A', 'B', 'C', 'D'};
-  // some codabar generator allow the codabar string to be closed by every
+  // some Codabar generator allow the Codabar string to be closed by every
   // character. This will cause lots of false positives!
 
-  // some industries use a checksum standard but this is not part of the original codabar standard
+  // some industries use a checksum standard but this is not part of the original Codabar standard
   // for more information see : http://www.mecsw.com/specs/codabar.html
 
   // Keep some instance variables to avoid reallocations
@@ -238,7 +238,7 @@ public final class CodaBarReader extends OneDReader {
     boolean isWhite = true;
     int count = 0;
     while (i < end) {
-      if (row.get(i) ^ isWhite) { // that is, exactly one is true
+      if (row.get(i) != isWhite) {
         count++;
       } else {
         counterAppend(count);
