@@ -19,7 +19,7 @@
   <string name="app_picker_name">Aplicacions</string>
   <string name="bookmark_picker_name">Adreces d\'interès</string>
   <string name="button_add_calendar">Afegeix a l\'agenda</string>
-  <string name="button_add_contact">Afegeix el contact</string>
+  <string name="button_add_contact">Afegeix el contacte</string>
   <string name="button_book_search">Cerca el llibre</string>
   <string name="button_cancel">Cancel·la</string>
   <string name="button_custom_product_search">Cerca personalitzada</string>
