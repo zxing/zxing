@@ -186,11 +186,11 @@ public final class ExpandedProductResultParser extends ResultParser {
       char currentChar = rawTextAux.charAt(index);
       if (currentChar == ')') {
         return buf.toString();
-      } else if (currentChar >= '0' && currentChar <= '9') {
-        buf.append(currentChar);
-      } else {
+      }
+      if (currentChar < '0' || currentChar > '9') {
         return null;
       }
+      buf.append(currentChar);
     }
     return buf.toString();
   }
@@ -202,13 +202,12 @@ public final class ExpandedProductResultParser extends ResultParser {
     for (int index = 0; index < rawTextAux.length(); index++) {
       char c = rawTextAux.charAt(index);
       if (c == '(') {
-        // We look for a new AI. If it doesn't exist (ERROR), we coninue
+        // We look for a new AI. If it doesn't exist (ERROR), we continue
         // with the iteration
-        if (findAIvalue(index, rawTextAux) == null) {
-          buf.append('(');
-        } else {
+        if (findAIvalue(index, rawTextAux) != null) {
           break;
         }
+        buf.append('(');
       } else {
         buf.append(c);
       }

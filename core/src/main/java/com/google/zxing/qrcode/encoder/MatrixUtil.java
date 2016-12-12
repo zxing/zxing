@@ -174,8 +174,9 @@ final class MatrixUtil {
       boolean bit = typeInfoBits.get(typeInfoBits.getSize() - 1 - i);
 
       // Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
-      int x1 = TYPE_INFO_COORDINATES[i][0];
-      int y1 = TYPE_INFO_COORDINATES[i][1];
+      int[] coordinates = TYPE_INFO_COORDINATES[i];
+      int x1 = coordinates[0];
+      int y1 = coordinates[1];
       matrix.set(x1, y1, bit);
 
       if (i < 8) {
@@ -401,21 +402,20 @@ final class MatrixUtil {
     }
   }
 
-  // Note that we cannot unify the function with embedPositionDetectionPattern() despite they are
-  // almost identical, since we cannot write a function that takes 2D arrays in different sizes in
-  // C/C++. We should live with the fact.
   private static void embedPositionAdjustmentPattern(int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 5; ++y) {
+      int[] patternY = POSITION_ADJUSTMENT_PATTERN[y];
       for (int x = 0; x < 5; ++x) {
-        matrix.set(xStart + x, yStart + y, POSITION_ADJUSTMENT_PATTERN[y][x]);
+        matrix.set(xStart + x, yStart + y, patternY[x]);
       }
     }
   }
 
   private static void embedPositionDetectionPattern(int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 7; ++y) {
+      int[] patternY = POSITION_DETECTION_PATTERN[y];
       for (int x = 0; x < 7; ++x) {
-        matrix.set(xStart + x, yStart + y, POSITION_DETECTION_PATTERN[y][x]);
+        matrix.set(xStart + x, yStart + y, patternY[x]);
       }
     }
   }

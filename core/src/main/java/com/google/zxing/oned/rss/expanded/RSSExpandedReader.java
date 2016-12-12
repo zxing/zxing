@@ -241,7 +241,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  // Whether the pairs form a valid find pattern seqience,
+  // Whether the pairs form a valid find pattern sequence,
   // either complete or a prefix
   private static boolean isValidSequence(List<ExpandedPair> pairs) {
     for (int[] sequence : FINDER_PATTERN_SEQUENCES) {

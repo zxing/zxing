@@ -16,6 +16,8 @@
 
 package com.google.zxing.qrcode.encoder;
 
+import java.util.Arrays;
+
 /**
  * JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
  * -1, 0, and 1, I'm going to use less memory and go with bytes.
@@ -66,10 +68,8 @@ public final class ByteMatrix {
   }
 
   public void clear(byte value) {
-    for (int y = 0; y < height; ++y) {
-      for (int x = 0; x < width; ++x) {
-        bytes[y][x] = value;
-      }
+    for (byte[] aByte : bytes) {
+      Arrays.fill(aByte, value);
     }
   }
 
@@ -77,8 +77,9 @@ public final class ByteMatrix {
   public String toString() {
     StringBuilder result = new StringBuilder(2 * width * height + 2);
     for (int y = 0; y < height; ++y) {
+      byte[] bytesY = bytes[y];
       for (int x = 0; x < width; ++x) {
-        switch (bytes[y][x]) {
+        switch (bytesY[x]) {
           case 0:
             result.append(" 0");
             break;

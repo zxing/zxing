@@ -233,7 +233,8 @@ public final class PDF417ScanningDecoder {
 
   private static void adjustCodewordCount(DetectionResult detectionResult, BarcodeValue[][] barcodeMatrix)
       throws NotFoundException {
-    int[] numberOfCodewords = barcodeMatrix[0][1].getValue();
+    BarcodeValue barcodeMatrix01 = barcodeMatrix[0][1];
+    int[] numberOfCodewords = barcodeMatrix01.getValue();
     int calculatedNumberOfCodewords = detectionResult.getBarcodeColumnCount() *
         detectionResult.getBarcodeRowCount() -
         getNumberOfECCodeWords(detectionResult.getBarcodeECLevel());
@@ -241,10 +242,10 @@ public final class PDF417ScanningDecoder {
       if (calculatedNumberOfCodewords < 1 || calculatedNumberOfCodewords > PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
         throw NotFoundException.getNotFoundInstance();
       }
-      barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
+      barcodeMatrix01.setValue(calculatedNumberOfCodewords);
     } else if (numberOfCodewords[0] != calculatedNumberOfCodewords) {
       // The calculated one is more reliable as it is derived from the row indicator columns
-      barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
+      barcodeMatrix01.setValue(calculatedNumberOfCodewords);
     }
   }
 

@@ -151,8 +151,7 @@ final class DecodeWorker implements Callable<Integer> {
       System.out.println(uri + ": Success");
     } else {
       StringWriter output = new StringWriter();
-      for (int resultIndex = 0; resultIndex < results.length; resultIndex++) {
-        Result result = results[resultIndex];
+      for (Result result : results) {
         ParsedResult parsedResult = ResultParser.parseResult(result);
         output.write(uri +
             " (format: " + result.getBarcodeFormat() +
@@ -169,9 +168,7 @@ final class DecodeWorker implements Callable<Integer> {
             output.write('\n');
           }
         }
-        if (resultIndex != results.length - 1) {
-          output.write('\n');
-        }
+        output.write('\n');
       }
       System.out.println(output);
     }

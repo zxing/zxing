@@ -51,8 +51,9 @@ public final class Decoder {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
+      boolean[] imageI = image[i];
       for (int j = 0; j < dimension; j++) {
-        if (image[i][j]) {
+        if (imageI[j]) {
           bits.set(j, i);
         }
       }
