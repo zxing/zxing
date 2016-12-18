@@ -1,0 +1,387 @@
+[
+    {
+        "outputFile": "/Users/naw880/androidzx/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-hy-rAM/values-hy-rAM.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 102,
+                    "endOffset": 153
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 102,
+                        "endOffset": 153
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 158,
+                    "endColumn": 107,
+                    "endOffset": 261
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 158,
+                        "endColumn": 107,
+                        "endOffset": 261
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 266,
+                    "endColumn": 122,
+                    "endOffset": 384
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 266,
+                        "endColumn": 122,
+                        "endOffset": 384
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 389,
+                    "endColumn": 100,
+                    "endOffset": 485
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 389,
+                        "endColumn": 100,
+                        "endOffset": 485
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 490,
+                    "endColumn": 109,
+                    "endOffset": 595
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 490,
+                        "endColumn": 109,
+                        "endOffset": 595
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 600,
+                    "endColumn": 89,
+                    "endOffset": 685
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 600,
+                        "endColumn": 89,
+                        "endOffset": 685
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 690,
+                    "endColumn": 105,
+                    "endOffset": 791
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 690,
+                        "endColumn": 105,
+                        "endOffset": 791
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 796,
+                    "endColumn": 114,
+                    "endOffset": 906
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 796,
+                        "endColumn": 114,
+                        "endOffset": 906
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 911,
+                    "endColumn": 81,
+                    "endOffset": 988
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 911,
+                        "endColumn": 81,
+                        "endOffset": 988
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 993,
+                    "endColumn": 80,
+                    "endOffset": 1069
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 993,
+                        "endColumn": 80,
+                        "endOffset": 1069
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 1074,
+                    "endColumn": 84,
+                    "endOffset": 1154
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1074,
+                        "endColumn": 84,
+                        "endOffset": 1154
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 1159,
+                    "endColumn": 106,
+                    "endOffset": 1261
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1159,
+                        "endColumn": 106,
+                        "endOffset": 1261
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 1266,
+                    "endColumn": 106,
+                    "endOffset": 1368
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1266,
+                        "endColumn": 106,
+                        "endOffset": 1368
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 1373,
+                    "endColumn": 98,
+                    "endOffset": 1467
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1373,
+                        "endColumn": 98,
+                        "endOffset": 1467
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 1472,
+                    "endColumn": 109,
+                    "endOffset": 1577
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1472,
+                        "endColumn": 109,
+                        "endOffset": 1577
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 1582,
+                    "endColumn": 106,
+                    "endOffset": 1684
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1582,
+                        "endColumn": 106,
+                        "endOffset": 1684
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1689,
+                    "endColumn": 100,
+                    "endOffset": 1785
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1689,
+                        "endColumn": 100,
+                        "endOffset": 1785
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1790,
+                    "endColumn": 119,
+                    "endOffset": 1905
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1790,
+                        "endColumn": 119,
+                        "endOffset": 1905
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 1910,
+                    "endColumn": 98,
+                    "endOffset": 2004
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 1910,
+                        "endColumn": 98,
+                        "endOffset": 2004
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 2009,
+                    "endColumn": 100,
+                    "endOffset": 2105
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-hy-rAM/values-hy-rAM.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 2009,
+                        "endColumn": 100,
+                        "endOffset": 2105
+                    }
+                }
+            }
+        ]
+    }
+]

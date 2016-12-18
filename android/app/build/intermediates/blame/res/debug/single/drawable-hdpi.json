@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/drawable-hdpi/launcher_icon.png",
+        "source": "/Users/naw880/androidzx/app/src/main/res/drawable-hdpi/launcher_icon.png"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/drawable-hdpi/up.png",
+        "source": "/Users/naw880/androidzx/app/src/main/res/drawable-hdpi/up.png"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/drawable-hdpi/down_land.png",
+        "source": "/Users/naw880/androidzx/app/src/main/res/drawable-hdpi/down_land.png"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/drawable-hdpi/down.png",
+        "source": "/Users/naw880/androidzx/app/src/main/res/drawable-hdpi/down.png"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/drawable-hdpi/up_land.png",
+        "source": "/Users/naw880/androidzx/app/src/main/res/drawable-hdpi/up_land.png"
+    }
+]

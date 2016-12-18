@@ -1,0 +1,7 @@
+#Sat Dec 17 19:54:22 PST 2016
+base.0=/Users/naw880/androidzx/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_aa1d43ad8d9b5850c54479a0e90890e7dcb6d958
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=/Users/naw880/androidzx/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_fc3d2adad66befd2234b932b2da06d18438c8509/classes.dex
+base.1=/Users/naw880/androidzx/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_fc3d2adad66befd2234b932b2da06d18438c8509
+file.0=/Users/naw880/androidzx/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_aa1d43ad8d9b5850c54479a0e90890e7dcb6d958/classes.dex

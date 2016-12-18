@@ -1,0 +1,140 @@
+[
+    {
+        "outputFile": "/Users/naw880/androidzx/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 69,
+                    "endOffset": 120
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-night-v8/values-night-v8.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 69,
+                        "endOffset": 120
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 125,
+                    "endColumn": 83,
+                    "endOffset": 204
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-night-v8/values-night-v8.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 125,
+                        "endColumn": 83,
+                        "endOffset": 204
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 209,
+                    "endColumn": 83,
+                    "endOffset": 288
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-night-v8/values-night-v8.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 209,
+                        "endColumn": 83,
+                        "endOffset": 288
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 293,
+                    "endColumn": 95,
+                    "endOffset": 384
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-night-v8/values-night-v8.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 293,
+                        "endColumn": 95,
+                        "endOffset": 384
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 389,
+                    "endColumn": 101,
+                    "endOffset": 486
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-night-v8/values-night-v8.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 389,
+                        "endColumn": 101,
+                        "endOffset": 486
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 491,
+                    "endColumn": 101,
+                    "endOffset": 588
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-night-v8/values-night-v8.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 491,
+                        "endColumn": 101,
+                        "endOffset": 588
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 593,
+                    "endColumn": 93,
+                    "endOffset": 682
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-night-v8/values-night-v8.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 593,
+                        "endColumn": 93,
+                        "endOffset": 682
+                    }
+                }
+            }
+        ]
+    }
+]

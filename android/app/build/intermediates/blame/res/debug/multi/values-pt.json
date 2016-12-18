@@ -1,0 +1,2762 @@
+[
+    {
+        "outputFile": "/Users/naw880/androidzx/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-pt/values-pt.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 119,
+                    "endOffset": 170
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 119,
+                        "endOffset": 170
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 175,
+                    "endColumn": 107,
+                    "endOffset": 278
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 175,
+                        "endColumn": 107,
+                        "endOffset": 278
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 283,
+                    "endColumn": 122,
+                    "endOffset": 401
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 283,
+                        "endColumn": 122,
+                        "endOffset": 401
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 406,
+                    "endColumn": 105,
+                    "endOffset": 507
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 406,
+                        "endColumn": 105,
+                        "endOffset": 507
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 512,
+                    "endColumn": 106,
+                    "endOffset": 614
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 512,
+                        "endColumn": 106,
+                        "endOffset": 614
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 619,
+                    "endColumn": 88,
+                    "endOffset": 703
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 619,
+                        "endColumn": 88,
+                        "endOffset": 703
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 708,
+                    "endColumn": 100,
+                    "endOffset": 804
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 708,
+                        "endColumn": 100,
+                        "endOffset": 804
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 809,
+                    "endColumn": 117,
+                    "endOffset": 922
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 809,
+                        "endColumn": 117,
+                        "endOffset": 922
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 927,
+                    "endColumn": 82,
+                    "endOffset": 1005
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 927,
+                        "endColumn": 82,
+                        "endOffset": 1005
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 1010,
+                    "endColumn": 79,
+                    "endOffset": 1085
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1010,
+                        "endColumn": 79,
+                        "endOffset": 1085
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 1090,
+                    "endColumn": 86,
+                    "endOffset": 1172
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1090,
+                        "endColumn": 86,
+                        "endOffset": 1172
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 1177,
+                    "endColumn": 106,
+                    "endOffset": 1279
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1177,
+                        "endColumn": 106,
+                        "endOffset": 1279
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 1284,
+                    "endColumn": 111,
+                    "endOffset": 1391
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1284,
+                        "endColumn": 111,
+                        "endOffset": 1391
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 1396,
+                    "endColumn": 101,
+                    "endOffset": 1493
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1396,
+                        "endColumn": 101,
+                        "endOffset": 1493
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 1498,
+                    "endColumn": 107,
+                    "endOffset": 1601
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1498,
+                        "endColumn": 107,
+                        "endOffset": 1601
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 1606,
+                    "endColumn": 106,
+                    "endOffset": 1708
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1606,
+                        "endColumn": 106,
+                        "endOffset": 1708
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1713,
+                    "endColumn": 109,
+                    "endOffset": 1818
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1713,
+                        "endColumn": 109,
+                        "endOffset": 1818
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1823,
+                    "endColumn": 124,
+                    "endOffset": 1943
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1823,
+                        "endColumn": 124,
+                        "endOffset": 1943
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 1948,
+                    "endColumn": 99,
+                    "endOffset": 2043
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 1948,
+                        "endColumn": 99,
+                        "endOffset": 2043
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 2048,
+                    "endColumn": 52,
+                    "endOffset": 2096
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 2,
+                        "startOffset": 632,
+                        "endColumn": 50,
+                        "endOffset": 680
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 22,
+                    "startColumn": 4,
+                    "startOffset": 2101,
+                    "endColumn": 55,
+                    "endOffset": 2152
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 2,
+                        "startOffset": 683,
+                        "endColumn": 53,
+                        "endOffset": 734
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 23,
+                    "startColumn": 4,
+                    "startOffset": 2157,
+                    "endColumn": 58,
+                    "endOffset": 2211
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 2,
+                        "startOffset": 737,
+                        "endColumn": 56,
+                        "endOffset": 791
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 24,
+                    "startColumn": 4,
+                    "startOffset": 2216,
+                    "endColumn": 71,
+                    "endOffset": 2283
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 2,
+                        "startOffset": 794,
+                        "endColumn": 69,
+                        "endOffset": 861
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 25,
+                    "startColumn": 4,
+                    "startOffset": 2288,
+                    "endColumn": 64,
+                    "endOffset": 2348
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 2,
+                        "startOffset": 864,
+                        "endColumn": 62,
+                        "endOffset": 924
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 26,
+                    "startColumn": 4,
+                    "startOffset": 2353,
+                    "endColumn": 61,
+                    "endOffset": 2410
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 2,
+                        "startOffset": 927,
+                        "endColumn": 59,
+                        "endOffset": 984
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 27,
+                    "startColumn": 4,
+                    "startOffset": 2415,
+                    "endColumn": 50,
+                    "endOffset": 2461
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 2,
+                        "startOffset": 987,
+                        "endColumn": 48,
+                        "endOffset": 1033
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 28,
+                    "startColumn": 4,
+                    "startOffset": 2466,
+                    "endColumn": 79,
+                    "endOffset": 2541
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 24,
+                        "startColumn": 2,
+                        "startOffset": 1036,
+                        "endColumn": 77,
+                        "endOffset": 1111
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 29,
+                    "startColumn": 4,
+                    "startOffset": 2546,
+                    "endColumn": 53,
+                    "endOffset": 2595
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 25,
+                        "startColumn": 2,
+                        "startOffset": 1114,
+                        "endColumn": 51,
+                        "endOffset": 1163
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 30,
+                    "startColumn": 4,
+                    "startOffset": 2600,
+                    "endColumn": 54,
+                    "endOffset": 2650
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 26,
+                        "startColumn": 2,
+                        "startOffset": 1166,
+                        "endColumn": 52,
+                        "endOffset": 1216
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 31,
+                    "startColumn": 4,
+                    "startOffset": 2655,
+                    "endColumn": 64,
+                    "endOffset": 2715
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 27,
+                        "startColumn": 2,
+                        "startOffset": 1219,
+                        "endColumn": 62,
+                        "endOffset": 1279
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 32,
+                    "startColumn": 4,
+                    "startOffset": 2720,
+                    "endColumn": 49,
+                    "endOffset": 2765
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 28,
+                        "startColumn": 2,
+                        "startOffset": 1282,
+                        "endColumn": 47,
+                        "endOffset": 1327
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 33,
+                    "startColumn": 4,
+                    "startOffset": 2770,
+                    "endColumn": 40,
+                    "endOffset": 2806
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 29,
+                        "startColumn": 2,
+                        "startOffset": 1330,
+                        "endColumn": 38,
+                        "endOffset": 1366
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 34,
+                    "startColumn": 4,
+                    "startOffset": 2811,
+                    "endColumn": 63,
+                    "endOffset": 2870
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 30,
+                        "startColumn": 2,
+                        "startOffset": 1369,
+                        "endColumn": 61,
+                        "endOffset": 1428
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 35,
+                    "startColumn": 4,
+                    "startOffset": 2875,
+                    "endColumn": 66,
+                    "endOffset": 2937
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 31,
+                        "startColumn": 2,
+                        "startOffset": 1431,
+                        "endColumn": 64,
+                        "endOffset": 1493
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 36,
+                    "startColumn": 4,
+                    "startOffset": 2942,
+                    "endColumn": 75,
+                    "endOffset": 3013
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 32,
+                        "startColumn": 2,
+                        "startOffset": 1496,
+                        "endColumn": 73,
+                        "endOffset": 1567
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 37,
+                    "startColumn": 4,
+                    "startOffset": 3018,
+                    "endColumn": 56,
+                    "endOffset": 3070
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 33,
+                        "startColumn": 2,
+                        "startOffset": 1570,
+                        "endColumn": 54,
+                        "endOffset": 1622
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 38,
+                    "startColumn": 4,
+                    "startOffset": 3075,
+                    "endColumn": 58,
+                    "endOffset": 3129
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 34,
+                        "startColumn": 2,
+                        "startOffset": 1625,
+                        "endColumn": 56,
+                        "endOffset": 1679
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 39,
+                    "startColumn": 4,
+                    "startOffset": 3134,
+                    "endColumn": 73,
+                    "endOffset": 3203
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 35,
+                        "startColumn": 2,
+                        "startOffset": 1682,
+                        "endColumn": 71,
+                        "endOffset": 1751
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 40,
+                    "startColumn": 4,
+                    "startOffset": 3208,
+                    "endColumn": 68,
+                    "endOffset": 3272
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 36,
+                        "startColumn": 2,
+                        "startOffset": 1754,
+                        "endColumn": 66,
+                        "endOffset": 1818
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 41,
+                    "startColumn": 4,
+                    "startOffset": 3277,
+                    "endColumn": 72,
+                    "endOffset": 3345
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 37,
+                        "startColumn": 2,
+                        "startOffset": 1821,
+                        "endColumn": 70,
+                        "endOffset": 1889
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 42,
+                    "startColumn": 4,
+                    "startOffset": 3350,
+                    "endColumn": 56,
+                    "endOffset": 3402
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 38,
+                        "startColumn": 2,
+                        "startOffset": 1892,
+                        "endColumn": 54,
+                        "endOffset": 1944
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 43,
+                    "startColumn": 4,
+                    "startOffset": 3407,
+                    "endColumn": 59,
+                    "endOffset": 3462
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 39,
+                        "startColumn": 2,
+                        "startOffset": 1947,
+                        "endColumn": 57,
+                        "endOffset": 2002
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 44,
+                    "startColumn": 4,
+                    "startOffset": 3467,
+                    "endColumn": 49,
+                    "endOffset": 3512
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 40,
+                        "startColumn": 2,
+                        "startOffset": 2005,
+                        "endColumn": 47,
+                        "endOffset": 2050
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 45,
+                    "startColumn": 4,
+                    "startOffset": 3517,
+                    "endColumn": 61,
+                    "endOffset": 3574
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 41,
+                        "startColumn": 2,
+                        "startOffset": 2053,
+                        "endColumn": 59,
+                        "endOffset": 2110
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 46,
+                    "startColumn": 4,
+                    "startOffset": 3579,
+                    "endColumn": 55,
+                    "endOffset": 3630
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 42,
+                        "startColumn": 2,
+                        "startOffset": 2113,
+                        "endColumn": 53,
+                        "endOffset": 2164
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 47,
+                    "startColumn": 4,
+                    "startOffset": 3635,
+                    "endColumn": 66,
+                    "endOffset": 3697
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 43,
+                        "startColumn": 2,
+                        "startOffset": 2167,
+                        "endColumn": 64,
+                        "endOffset": 2229
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 48,
+                    "startColumn": 4,
+                    "startOffset": 3702,
+                    "endColumn": 61,
+                    "endOffset": 3759
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 44,
+                        "startColumn": 2,
+                        "startOffset": 2232,
+                        "endColumn": 59,
+                        "endOffset": 2289
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 49,
+                    "startColumn": 4,
+                    "startOffset": 3764,
+                    "endColumn": 69,
+                    "endOffset": 3829
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 45,
+                        "startColumn": 2,
+                        "startOffset": 2292,
+                        "endColumn": 67,
+                        "endOffset": 2357
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 50,
+                    "startColumn": 4,
+                    "startOffset": 3834,
+                    "endColumn": 61,
+                    "endOffset": 3891
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 46,
+                        "startColumn": 2,
+                        "startOffset": 2360,
+                        "endColumn": 59,
+                        "endOffset": 2417
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 51,
+                    "startColumn": 4,
+                    "startOffset": 3896,
+                    "endColumn": 53,
+                    "endOffset": 3945
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 47,
+                        "startColumn": 2,
+                        "startOffset": 2420,
+                        "endColumn": 51,
+                        "endOffset": 2469
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 52,
+                    "startColumn": 4,
+                    "startOffset": 3950,
+                    "endColumn": 55,
+                    "endOffset": 4001
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 48,
+                        "startColumn": 2,
+                        "startOffset": 2472,
+                        "endColumn": 53,
+                        "endOffset": 2523
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 53,
+                    "startColumn": 4,
+                    "startOffset": 4006,
+                    "endColumn": 65,
+                    "endOffset": 4067
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 49,
+                        "startColumn": 2,
+                        "startOffset": 2526,
+                        "endColumn": 63,
+                        "endOffset": 2587
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 54,
+                    "startColumn": 4,
+                    "startOffset": 4072,
+                    "endColumn": 63,
+                    "endOffset": 4131
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 50,
+                        "startColumn": 2,
+                        "startOffset": 2590,
+                        "endColumn": 61,
+                        "endOffset": 2649
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 55,
+                    "startColumn": 4,
+                    "startOffset": 4136,
+                    "endColumn": 76,
+                    "endOffset": 4208
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 51,
+                        "startColumn": 2,
+                        "startOffset": 2652,
+                        "endColumn": 74,
+                        "endOffset": 2724
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 56,
+                    "startColumn": 4,
+                    "startOffset": 4213,
+                    "endColumn": 47,
+                    "endOffset": 4256
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 52,
+                        "startColumn": 2,
+                        "startOffset": 2727,
+                        "endColumn": 45,
+                        "endOffset": 2770
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 57,
+                    "startColumn": 4,
+                    "startOffset": 4261,
+                    "endColumn": 90,
+                    "endOffset": 4347
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 53,
+                        "startColumn": 2,
+                        "startOffset": 2773,
+                        "endColumn": 88,
+                        "endOffset": 2859
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 58,
+                    "startColumn": 4,
+                    "startOffset": 4352,
+                    "endColumn": 57,
+                    "endOffset": 4405
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 54,
+                        "startColumn": 2,
+                        "startOffset": 2862,
+                        "endColumn": 55,
+                        "endOffset": 2915
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 59,
+                    "startColumn": 4,
+                    "startOffset": 4410,
+                    "endColumn": 51,
+                    "endOffset": 4457
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 55,
+                        "startColumn": 2,
+                        "startOffset": 2918,
+                        "endColumn": 49,
+                        "endOffset": 2965
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 60,
+                    "startColumn": 4,
+                    "startOffset": 4462,
+                    "endColumn": 58,
+                    "endOffset": 4516
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 56,
+                        "startColumn": 2,
+                        "startOffset": 2968,
+                        "endColumn": 56,
+                        "endOffset": 3022
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 61,
+                    "startColumn": 4,
+                    "startOffset": 4521,
+                    "endColumn": 56,
+                    "endOffset": 4573
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 57,
+                        "startColumn": 2,
+                        "startOffset": 3025,
+                        "endColumn": 54,
+                        "endOffset": 3077
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 62,
+                    "startColumn": 4,
+                    "startOffset": 4578,
+                    "endColumn": 43,
+                    "endOffset": 4617
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 58,
+                        "startColumn": 2,
+                        "startOffset": 3080,
+                        "endColumn": 41,
+                        "endOffset": 3119
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 63,
+                    "startColumn": 4,
+                    "startOffset": 4622,
+                    "endColumn": 50,
+                    "endOffset": 4668
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 59,
+                        "startColumn": 2,
+                        "startOffset": 3122,
+                        "endColumn": 48,
+                        "endOffset": 3168
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 64,
+                    "startColumn": 4,
+                    "startOffset": 4673,
+                    "endColumn": 55,
+                    "endOffset": 4724
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 60,
+                        "startColumn": 2,
+                        "startOffset": 3171,
+                        "endColumn": 53,
+                        "endOffset": 3222
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 65,
+                    "startColumn": 4,
+                    "startOffset": 4729,
+                    "endColumn": 51,
+                    "endOffset": 4776
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 61,
+                        "startColumn": 2,
+                        "startOffset": 3225,
+                        "endColumn": 49,
+                        "endOffset": 3272
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 66,
+                    "startColumn": 4,
+                    "startOffset": 4781,
+                    "endColumn": 97,
+                    "endOffset": 4874
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 62,
+                        "startColumn": 2,
+                        "startOffset": 3275,
+                        "endColumn": 95,
+                        "endOffset": 3368
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 67,
+                    "startColumn": 4,
+                    "startOffset": 4879,
+                    "endColumn": 146,
+                    "endOffset": 5021
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 63,
+                        "startColumn": 2,
+                        "startOffset": 3371,
+                        "endColumn": 144,
+                        "endOffset": 3513
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 68,
+                    "startColumn": 4,
+                    "startOffset": 5026,
+                    "endColumn": 54,
+                    "endOffset": 5076
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 64,
+                        "startColumn": 2,
+                        "startOffset": 3516,
+                        "endColumn": 52,
+                        "endOffset": 3566
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 69,
+                    "startColumn": 4,
+                    "startOffset": 5081,
+                    "endColumn": 53,
+                    "endOffset": 5130
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 65,
+                        "startColumn": 2,
+                        "startOffset": 3569,
+                        "endColumn": 51,
+                        "endOffset": 3618
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 70,
+                    "startColumn": 4,
+                    "startOffset": 5135,
+                    "endColumn": 55,
+                    "endOffset": 5186
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 66,
+                        "startColumn": 2,
+                        "startOffset": 3621,
+                        "endColumn": 53,
+                        "endOffset": 3672
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 71,
+                    "startColumn": 4,
+                    "startOffset": 5191,
+                    "endColumn": 100,
+                    "endOffset": 5287
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 67,
+                        "startColumn": 2,
+                        "startOffset": 3675,
+                        "endColumn": 98,
+                        "endOffset": 3771
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 72,
+                    "startColumn": 4,
+                    "startOffset": 5292,
+                    "endColumn": 50,
+                    "endOffset": 5338
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 68,
+                        "startColumn": 2,
+                        "startOffset": 3774,
+                        "endColumn": 48,
+                        "endOffset": 3820
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 73,
+                    "startColumn": 4,
+                    "startOffset": 5343,
+                    "endColumn": 49,
+                    "endOffset": 5388
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 69,
+                        "startColumn": 2,
+                        "startOffset": 3823,
+                        "endColumn": 47,
+                        "endOffset": 3868
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 74,
+                    "startColumn": 4,
+                    "startOffset": 5393,
+                    "endColumn": 131,
+                    "endOffset": 5520
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 70,
+                        "startColumn": 2,
+                        "startOffset": 3871,
+                        "endColumn": 129,
+                        "endOffset": 3998
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 75,
+                    "startColumn": 4,
+                    "startOffset": 5525,
+                    "endColumn": 42,
+                    "endOffset": 5563
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 71,
+                        "startColumn": 2,
+                        "startOffset": 4001,
+                        "endColumn": 40,
+                        "endOffset": 4039
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 76,
+                    "startColumn": 4,
+                    "startOffset": 5568,
+                    "endColumn": 51,
+                    "endOffset": 5615
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 72,
+                        "startColumn": 2,
+                        "startOffset": 4042,
+                        "endColumn": 49,
+                        "endOffset": 4089
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 77,
+                    "startColumn": 4,
+                    "startOffset": 5620,
+                    "endColumn": 53,
+                    "endOffset": 5669
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 73,
+                        "startColumn": 2,
+                        "startOffset": 4092,
+                        "endColumn": 51,
+                        "endOffset": 4141
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 78,
+                    "startColumn": 4,
+                    "startOffset": 5674,
+                    "endColumn": 154,
+                    "endOffset": 5824
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 74,
+                        "startColumn": 2,
+                        "startOffset": 4144,
+                        "endColumn": 152,
+                        "endOffset": 4294
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 79,
+                    "startColumn": 4,
+                    "startOffset": 5829,
+                    "endColumn": 60,
+                    "endOffset": 5885
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 75,
+                        "startColumn": 2,
+                        "startOffset": 4297,
+                        "endColumn": 58,
+                        "endOffset": 4353
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 80,
+                    "startColumn": 4,
+                    "startOffset": 5890,
+                    "endColumn": 53,
+                    "endOffset": 5939
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 76,
+                        "startColumn": 2,
+                        "startOffset": 4356,
+                        "endColumn": 51,
+                        "endOffset": 4405
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 81,
+                    "startColumn": 4,
+                    "startOffset": 5944,
+                    "endColumn": 95,
+                    "endOffset": 6035
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 77,
+                        "startColumn": 2,
+                        "startOffset": 4408,
+                        "endColumn": 93,
+                        "endOffset": 4499
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 82,
+                    "startColumn": 4,
+                    "startOffset": 6040,
+                    "endColumn": 88,
+                    "endOffset": 6124
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 78,
+                        "startColumn": 2,
+                        "startOffset": 4502,
+                        "endColumn": 86,
+                        "endOffset": 4586
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 83,
+                    "startColumn": 4,
+                    "startOffset": 6129,
+                    "endColumn": 74,
+                    "endOffset": 6199
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 79,
+                        "startColumn": 2,
+                        "startOffset": 4589,
+                        "endColumn": 72,
+                        "endOffset": 4659
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 84,
+                    "startColumn": 4,
+                    "startOffset": 6204,
+                    "endColumn": 47,
+                    "endOffset": 6247
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 80,
+                        "startColumn": 2,
+                        "startOffset": 4662,
+                        "endColumn": 45,
+                        "endOffset": 4705
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 85,
+                    "startColumn": 4,
+                    "startOffset": 6252,
+                    "endColumn": 54,
+                    "endOffset": 6302
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 81,
+                        "startColumn": 2,
+                        "startOffset": 4708,
+                        "endColumn": 52,
+                        "endOffset": 4758
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 86,
+                    "startColumn": 4,
+                    "startOffset": 6307,
+                    "endColumn": 73,
+                    "endOffset": 6376
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 82,
+                        "startColumn": 2,
+                        "startOffset": 4761,
+                        "endColumn": 71,
+                        "endOffset": 4830
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 87,
+                    "startColumn": 4,
+                    "startOffset": 6381,
+                    "endColumn": 77,
+                    "endOffset": 6454
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 83,
+                        "startColumn": 2,
+                        "startOffset": 4833,
+                        "endColumn": 75,
+                        "endOffset": 4906
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 88,
+                    "startColumn": 4,
+                    "startOffset": 6459,
+                    "endColumn": 142,
+                    "endOffset": 6597
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 84,
+                        "startColumn": 2,
+                        "startOffset": 4909,
+                        "endColumn": 140,
+                        "endOffset": 5047
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 89,
+                    "startColumn": 4,
+                    "startOffset": 6602,
+                    "endColumn": 82,
+                    "endOffset": 6680
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 85,
+                        "startColumn": 2,
+                        "startOffset": 5050,
+                        "endColumn": 80,
+                        "endOffset": 5128
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 90,
+                    "startColumn": 4,
+                    "startOffset": 6685,
+                    "endColumn": 49,
+                    "endOffset": 6730
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 86,
+                        "startColumn": 2,
+                        "startOffset": 5131,
+                        "endColumn": 47,
+                        "endOffset": 5176
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 91,
+                    "startColumn": 4,
+                    "startOffset": 6735,
+                    "endColumn": 86,
+                    "endOffset": 6817
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 87,
+                        "startColumn": 2,
+                        "startOffset": 5179,
+                        "endColumn": 84,
+                        "endOffset": 5261
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 92,
+                    "startColumn": 4,
+                    "startOffset": 6822,
+                    "endColumn": 98,
+                    "endOffset": 6916
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 88,
+                        "startColumn": 2,
+                        "startOffset": 5264,
+                        "endColumn": 96,
+                        "endOffset": 5358
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 93,
+                    "startColumn": 4,
+                    "startOffset": 6921,
+                    "endColumn": 77,
+                    "endOffset": 6994
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 89,
+                        "startColumn": 2,
+                        "startOffset": 5361,
+                        "endColumn": 75,
+                        "endOffset": 5434
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 94,
+                    "startColumn": 4,
+                    "startOffset": 6999,
+                    "endColumn": 96,
+                    "endOffset": 7091
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 90,
+                        "startColumn": 2,
+                        "startOffset": 5437,
+                        "endColumn": 94,
+                        "endOffset": 5529
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 95,
+                    "startColumn": 4,
+                    "startOffset": 7096,
+                    "endColumn": 103,
+                    "endOffset": 7195
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 91,
+                        "startColumn": 2,
+                        "startOffset": 5532,
+                        "endColumn": 101,
+                        "endOffset": 5631
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 96,
+                    "startColumn": 4,
+                    "startOffset": 7200,
+                    "endColumn": 69,
+                    "endOffset": 7265
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 92,
+                        "startColumn": 2,
+                        "startOffset": 5634,
+                        "endColumn": 67,
+                        "endOffset": 5699
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 97,
+                    "startColumn": 4,
+                    "startOffset": 7270,
+                    "endColumn": 99,
+                    "endOffset": 7365
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 93,
+                        "startColumn": 2,
+                        "startOffset": 5702,
+                        "endColumn": 97,
+                        "endOffset": 5797
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 98,
+                    "startColumn": 4,
+                    "startOffset": 7370,
+                    "endColumn": 142,
+                    "endOffset": 7508
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 94,
+                        "startColumn": 2,
+                        "startOffset": 5800,
+                        "endColumn": 140,
+                        "endOffset": 5938
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 99,
+                    "startColumn": 4,
+                    "startOffset": 7513,
+                    "endColumn": 97,
+                    "endOffset": 7606
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 95,
+                        "startColumn": 2,
+                        "startOffset": 5941,
+                        "endColumn": 95,
+                        "endOffset": 6034
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 100,
+                    "startColumn": 4,
+                    "startOffset": 7611,
+                    "endColumn": 80,
+                    "endOffset": 7687
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 96,
+                        "startColumn": 2,
+                        "startOffset": 6037,
+                        "endColumn": 78,
+                        "endOffset": 6113
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 101,
+                    "startColumn": 4,
+                    "startOffset": 7692,
+                    "endColumn": 74,
+                    "endOffset": 7762
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 97,
+                        "startColumn": 2,
+                        "startOffset": 6116,
+                        "endColumn": 72,
+                        "endOffset": 6186
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 102,
+                    "startColumn": 4,
+                    "startOffset": 7767,
+                    "endColumn": 64,
+                    "endOffset": 7827
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 98,
+                        "startColumn": 2,
+                        "startOffset": 6189,
+                        "endColumn": 62,
+                        "endOffset": 6249
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 103,
+                    "startColumn": 4,
+                    "startOffset": 7832,
+                    "endColumn": 76,
+                    "endOffset": 7904
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 99,
+                        "startColumn": 2,
+                        "startOffset": 6252,
+                        "endColumn": 74,
+                        "endOffset": 6324
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 104,
+                    "startColumn": 4,
+                    "startOffset": 7909,
+                    "endColumn": 70,
+                    "endOffset": 7975
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 100,
+                        "startColumn": 2,
+                        "startOffset": 6327,
+                        "endColumn": 68,
+                        "endOffset": 6393
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 105,
+                    "startColumn": 4,
+                    "startOffset": 7980,
+                    "endColumn": 64,
+                    "endOffset": 8040
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 101,
+                        "startColumn": 2,
+                        "startOffset": 6396,
+                        "endColumn": 62,
+                        "endOffset": 6456
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 106,
+                    "startColumn": 4,
+                    "startOffset": 8045,
+                    "endColumn": 116,
+                    "endOffset": 8157
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 102,
+                        "startColumn": 2,
+                        "startOffset": 6459,
+                        "endColumn": 114,
+                        "endOffset": 6571
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 107,
+                    "startColumn": 4,
+                    "startOffset": 8162,
+                    "endColumn": 108,
+                    "endOffset": 8266
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 103,
+                        "startColumn": 2,
+                        "startOffset": 6574,
+                        "endColumn": 106,
+                        "endOffset": 6678
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 108,
+                    "startColumn": 4,
+                    "startOffset": 8271,
+                    "endColumn": 105,
+                    "endOffset": 8372
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 104,
+                        "startColumn": 2,
+                        "startOffset": 6681,
+                        "endColumn": 103,
+                        "endOffset": 6782
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 109,
+                    "startColumn": 4,
+                    "startOffset": 8377,
+                    "endColumn": 87,
+                    "endOffset": 8460
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 105,
+                        "startColumn": 2,
+                        "startOffset": 6785,
+                        "endColumn": 85,
+                        "endOffset": 6868
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 110,
+                    "startColumn": 4,
+                    "startOffset": 8465,
+                    "endColumn": 80,
+                    "endOffset": 8541
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 106,
+                        "startColumn": 2,
+                        "startOffset": 6871,
+                        "endColumn": 78,
+                        "endOffset": 6947
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 111,
+                    "startColumn": 4,
+                    "startOffset": 8546,
+                    "endColumn": 74,
+                    "endOffset": 8616
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 107,
+                        "startColumn": 2,
+                        "startOffset": 6950,
+                        "endColumn": 72,
+                        "endOffset": 7020
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 112,
+                    "startColumn": 4,
+                    "startOffset": 8621,
+                    "endColumn": 67,
+                    "endOffset": 8684
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 108,
+                        "startColumn": 2,
+                        "startOffset": 7023,
+                        "endColumn": 65,
+                        "endOffset": 7086
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 113,
+                    "startColumn": 4,
+                    "startOffset": 8689,
+                    "endColumn": 63,
+                    "endOffset": 8748
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 109,
+                        "startColumn": 2,
+                        "startOffset": 7089,
+                        "endColumn": 61,
+                        "endOffset": 7148
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 114,
+                    "startColumn": 4,
+                    "startOffset": 8753,
+                    "endColumn": 60,
+                    "endOffset": 8809
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 110,
+                        "startColumn": 2,
+                        "startOffset": 7151,
+                        "endColumn": 58,
+                        "endOffset": 7207
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 115,
+                    "startColumn": 4,
+                    "startOffset": 8814,
+                    "endColumn": 175,
+                    "endOffset": 8985
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 111,
+                        "startColumn": 2,
+                        "startOffset": 7210,
+                        "endColumn": 173,
+                        "endOffset": 7381
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 116,
+                    "startColumn": 4,
+                    "startOffset": 8990,
+                    "endColumn": 74,
+                    "endOffset": 9060
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 112,
+                        "startColumn": 2,
+                        "startOffset": 7384,
+                        "endColumn": 72,
+                        "endOffset": 7454
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 117,
+                    "startColumn": 4,
+                    "startOffset": 9065,
+                    "endColumn": 74,
+                    "endOffset": 9135
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 113,
+                        "startColumn": 2,
+                        "startOffset": 7457,
+                        "endColumn": 72,
+                        "endOffset": 7527
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 118,
+                    "startColumn": 4,
+                    "startOffset": 9140,
+                    "endColumn": 87,
+                    "endOffset": 9223
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 114,
+                        "startColumn": 2,
+                        "startOffset": 7530,
+                        "endColumn": 85,
+                        "endOffset": 7613
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 119,
+                    "startColumn": 4,
+                    "startOffset": 9228,
+                    "endColumn": 74,
+                    "endOffset": 9298
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 115,
+                        "startColumn": 2,
+                        "startOffset": 7616,
+                        "endColumn": 72,
+                        "endOffset": 7686
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 120,
+                    "startColumn": 4,
+                    "startOffset": 9303,
+                    "endColumn": 153,
+                    "endOffset": 9452
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 116,
+                        "startColumn": 2,
+                        "startOffset": 7689,
+                        "endColumn": 151,
+                        "endOffset": 7838
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 121,
+                    "startColumn": 4,
+                    "startOffset": 9457,
+                    "endColumn": 74,
+                    "endOffset": 9527
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 117,
+                        "startColumn": 2,
+                        "startOffset": 7841,
+                        "endColumn": 72,
+                        "endOffset": 7911
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 122,
+                    "startColumn": 4,
+                    "startOffset": 9532,
+                    "endColumn": 58,
+                    "endOffset": 9586
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 118,
+                        "startColumn": 2,
+                        "startOffset": 7914,
+                        "endColumn": 56,
+                        "endOffset": 7968
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 123,
+                    "startColumn": 4,
+                    "startOffset": 9591,
+                    "endColumn": 80,
+                    "endOffset": 9667
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 119,
+                        "startColumn": 2,
+                        "startOffset": 7971,
+                        "endColumn": 78,
+                        "endOffset": 8047
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 124,
+                    "startColumn": 4,
+                    "startOffset": 9672,
+                    "endColumn": 62,
+                    "endOffset": 9730
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 120,
+                        "startColumn": 2,
+                        "startOffset": 8050,
+                        "endColumn": 60,
+                        "endOffset": 8108
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 125,
+                    "startColumn": 4,
+                    "startOffset": 9735,
+                    "endColumn": 134,
+                    "endOffset": 9865
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 121,
+                        "startColumn": 2,
+                        "startOffset": 8111,
+                        "endColumn": 132,
+                        "endOffset": 8241
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 126,
+                    "startColumn": 4,
+                    "startOffset": 9870,
+                    "endColumn": 84,
+                    "endOffset": 9950
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 122,
+                        "startColumn": 2,
+                        "startOffset": 8244,
+                        "endColumn": 82,
+                        "endOffset": 8324
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 127,
+                    "startColumn": 4,
+                    "startOffset": 9955,
+                    "endColumn": 76,
+                    "endOffset": 10027
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 123,
+                        "startColumn": 2,
+                        "startOffset": 8327,
+                        "endColumn": 74,
+                        "endOffset": 8399
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 128,
+                    "startColumn": 4,
+                    "startOffset": 10032,
+                    "endColumn": 111,
+                    "endOffset": 10139
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 124,
+                        "startColumn": 2,
+                        "startOffset": 8402,
+                        "endColumn": 109,
+                        "endOffset": 8509
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 129,
+                    "startColumn": 4,
+                    "startOffset": 10144,
+                    "endColumn": 68,
+                    "endOffset": 10208
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 125,
+                        "startColumn": 2,
+                        "startOffset": 8512,
+                        "endColumn": 66,
+                        "endOffset": 8576
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 130,
+                    "startColumn": 4,
+                    "startOffset": 10213,
+                    "endColumn": 134,
+                    "endOffset": 10343
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 126,
+                        "startColumn": 2,
+                        "startOffset": 8579,
+                        "endColumn": 132,
+                        "endOffset": 8709
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 131,
+                    "startColumn": 4,
+                    "startOffset": 10348,
+                    "endColumn": 84,
+                    "endOffset": 10428
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 127,
+                        "startColumn": 2,
+                        "startOffset": 8712,
+                        "endColumn": 82,
+                        "endOffset": 8792
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 132,
+                    "startColumn": 4,
+                    "startOffset": 10433,
+                    "endColumn": 60,
+                    "endOffset": 10489
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 128,
+                        "startColumn": 2,
+                        "startOffset": 8795,
+                        "endColumn": 58,
+                        "endOffset": 8851
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 133,
+                    "startColumn": 4,
+                    "startOffset": 10494,
+                    "endColumn": 74,
+                    "endOffset": 10564
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 129,
+                        "startColumn": 2,
+                        "startOffset": 8854,
+                        "endColumn": 72,
+                        "endOffset": 8924
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 134,
+                    "startColumn": 4,
+                    "startOffset": 10569,
+                    "endColumn": 75,
+                    "endOffset": 10640
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 130,
+                        "startColumn": 2,
+                        "startOffset": 8927,
+                        "endColumn": 73,
+                        "endOffset": 8998
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 135,
+                    "startColumn": 4,
+                    "startOffset": 10645,
+                    "endColumn": 78,
+                    "endOffset": 10719
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 131,
+                        "startColumn": 2,
+                        "startOffset": 9001,
+                        "endColumn": 76,
+                        "endOffset": 9075
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 136,
+                    "startColumn": 4,
+                    "startOffset": 10724,
+                    "endColumn": 74,
+                    "endOffset": 10794
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 132,
+                        "startColumn": 2,
+                        "startOffset": 9078,
+                        "endColumn": 72,
+                        "endOffset": 9148
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 137,
+                    "startColumn": 4,
+                    "startOffset": 10799,
+                    "endColumn": 56,
+                    "endOffset": 10851
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 133,
+                        "startColumn": 2,
+                        "startOffset": 9151,
+                        "endColumn": 54,
+                        "endOffset": 9203
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 138,
+                    "startColumn": 4,
+                    "startOffset": 10856,
+                    "endColumn": 61,
+                    "endOffset": 10913
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 134,
+                        "startColumn": 2,
+                        "startOffset": 9206,
+                        "endColumn": 59,
+                        "endOffset": 9263
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 139,
+                    "startColumn": 4,
+                    "startOffset": 10918,
+                    "endColumn": 62,
+                    "endOffset": 10976
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 135,
+                        "startColumn": 2,
+                        "startOffset": 9266,
+                        "endColumn": 60,
+                        "endOffset": 9324
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 140,
+                    "startColumn": 4,
+                    "startOffset": 10981,
+                    "endColumn": 68,
+                    "endOffset": 11045
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 136,
+                        "startColumn": 2,
+                        "startOffset": 9327,
+                        "endColumn": 66,
+                        "endOffset": 9391
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 141,
+                    "startColumn": 4,
+                    "startOffset": 11050,
+                    "endColumn": 64,
+                    "endOffset": 11110
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 137,
+                        "startColumn": 2,
+                        "startOffset": 9394,
+                        "endColumn": 62,
+                        "endOffset": 9454
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 142,
+                    "startColumn": 4,
+                    "startOffset": 11115,
+                    "endColumn": 53,
+                    "endOffset": 11164
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 138,
+                        "startColumn": 2,
+                        "startOffset": 9457,
+                        "endColumn": 51,
+                        "endOffset": 9506
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 143,
+                    "startColumn": 4,
+                    "startOffset": 11169,
+                    "endColumn": 68,
+                    "endOffset": 11233
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 139,
+                        "startColumn": 2,
+                        "startOffset": 9509,
+                        "endColumn": 66,
+                        "endOffset": 9573
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 144,
+                    "startColumn": 4,
+                    "startOffset": 11238,
+                    "endColumn": 57,
+                    "endOffset": 11291
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 140,
+                        "startColumn": 2,
+                        "startOffset": 9576,
+                        "endColumn": 55,
+                        "endOffset": 9629
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 145,
+                    "startColumn": 4,
+                    "startOffset": 11296,
+                    "endColumn": 100,
+                    "endOffset": 11392
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pt/values-pt.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 2048,
+                        "endColumn": 100,
+                        "endOffset": 2144
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 146,
+                    "startColumn": 4,
+                    "startOffset": 11397,
+                    "endColumn": 82,
+                    "endOffset": 11475
+                },
+                "from": {
+                    "file": "/Users/naw880/androidzx/app/src/main/res/values-pt/strings.xml",
+                    "position": {
+                        "startLine": 141,
+                        "startColumn": 2,
+                        "startOffset": 9632,
+                        "endColumn": 80,
+                        "endOffset": 9710
+                    }
+                }
+            }
+        ]
+    }
+]

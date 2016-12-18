@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Aplicacions</string>
+  <string name="bookmark_picker_name">Adreces d\'interès</string>
+  <string name="button_add_calendar">Afegeix a l\'agenda</string>
+  <string name="button_add_contact">Afegeix el contacte</string>
+  <string name="button_book_search">Cerca el llibre</string>
+  <string name="button_cancel">Cancel·la</string>
+  <string name="button_custom_product_search">Cerca personalitzada</string>
+  <string name="button_dial">Marca el número</string>
+  <string name="button_email">Envia un correu electrònic</string>
+  <string name="button_get_directions">Obté direccions</string>
+  <string name="button_mms">Envia MMS</string>
+  <string name="button_ok">D\'acord</string>
+  <string name="button_open_browser">Obre el navegador</string>
+  <string name="button_product_search">Cerca un producte</string>
+  <string name="button_search_book_contents">Cerca continguts</string>
+  <string name="button_share_app">Aplicació</string>
+  <string name="button_share_bookmark">Adreça d\'interès</string>
+  <string name="button_share_by_email">Comparteix per correu-e</string>
+  <string name="button_share_by_sms">Comparteix per SMS</string>
+  <string name="button_share_clipboard">Porta-retalls</string>
+  <string name="button_share_contact">Contacte</string>
+  <string name="button_show_map">Mostra el mapa</string>
+  <string name="button_sms">Envia SMS</string>
+  <string name="button_web_search">Cerca al web</string>
+  <string name="button_wifi">Connecta a la xarxa</string>
+  <string name="contents_contact">Informació de contacte</string>
+  <string name="contents_email">Adreça electrònica</string>
+  <string name="contents_location">Coordenades geogràfiques</string>
+  <string name="contents_phone">Número de telèfon</string>
+  <string name="contents_sms">Adreça SMS</string>
+  <string name="contents_text">Text pla</string>
+  <string name="history_clear_one_history_text">Neteja</string>
+  <string name="history_clear_text">Neteja l\'historial</string>
+  <string name="history_email_title">Historial del Barcode Scanner</string>
+  <string name="history_empty">Buit</string>
+  <string name="history_empty_detail">No escaneja codis de barres s\'han registrat encara</string>
+  <string name="history_send">Envia l\'historial</string>
+  <string name="history_title">Historial</string>
+  <string name="menu_encode_mecard">Utilitza MECARD</string>
+  <string name="menu_encode_vcard">Utilitza vCard</string>
+  <string name="menu_help">Ajuda</string>
+  <string name="menu_history">Historial</string>
+  <string name="menu_settings">Configuració</string>
+  <string name="menu_share">Comparteix</string>
+  <string name="msg_bulk_mode_scanned">Mode en bloc: codi de barres escanejat i desat</string>
+  <string name="msg_camera_framework_bug">S\'ha produït un problema amb la càmera de l\'Android. Potser haureu de reiniciar el dispositiu.</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metadadades</string>
+  <string name="msg_default_mms_subject">Hola</string>
+  <string name="msg_default_status">Poseu un codi de barres dins el rectable per escanejar-lo.</string>
+  <string name="msg_default_time">Hora</string>
+  <string name="msg_default_type">Tipus</string>
+  <string name="msg_encode_contents_failed">No es pot codificar un codi de barres amb les dades proporcionades.</string>
+  <string name="msg_error">Error</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">No es pot executar l\'aplicació sol·licitada. És possible que el contingut del codi de barres no sigui vàlid.</string>
+  <string name="msg_invalid_value">Valor no vàlid</string>
+  <string name="msg_redirect">Redirecciona</string>
+  <string name="msg_sbc_book_not_searchable">No es pot cercar en aquest llibre.</string>
+  <string name="msg_sbc_failed">Hi ha hagut un problema en fer la cerca.</string>
+  <string name="msg_sbc_no_page_returned">No s\'ha retornat cap pàgina</string>
+  <string name="msg_sbc_page">Pàgina</string>
+  <string name="msg_sbc_results">Resultats</string>
+  <string name="msg_sbc_searching_book">S\'està cercant el llibre\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Fragment no disponible</string>
+  <string name="msg_share_explanation">Podeu compartir dades mostrant un codi de barres a la pantalla i escanejant-lo amb un altre dispositiu.</string>
+  <string name="msg_share_text">O escriviu un text i pitgeu Retorn</string>
+  <string name="msg_sure">N\'esteu segur?</string>
+  <string name="msg_unmount_usb">La targeta SD no es troba disponible.</string>
+  <string name="preferences_actions_title">En trobar un codi de barres\u2026</string>
+  <string name="preferences_auto_focus_title">Utilitzeu l\'enfocament automàtic</string>
+  <string name="preferences_auto_open_web_title">Obrir pàgines web automàticament</string>
+  <string name="preferences_bulk_mode_summary">Escaneja i desa molts codis de barres de forma contínua</string>
+  <string name="preferences_bulk_mode_title">Mode d\'escaneig en bloc</string>
+  <string name="preferences_copy_to_clipboard_title">Copia al porta-retalls</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Substitucions: %s = contingut, %f = format, %t = tipus</string>
+  <string name="preferences_custom_product_search_title">URL de cerca personalitzat</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">Producte 1D</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Matriu de dades</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">Codis QR</string>
+  <string name="preferences_device_bug_workarounds_title">Solucions provisionals de dispositius d\'errors</string>
+  <string name="preferences_disable_barcode_scene_mode_title">No la manera d\'escena de codi de barres</string>
+  <string name="preferences_disable_continuous_focus_summary">Utilitzeu només la manera d\'enfocament estàndard</string>
+  <string name="preferences_disable_continuous_focus_title">No enfocament continu</string>
+  <string name="preferences_disable_exposure_title">No hi ha exposició</string>
+  <string name="preferences_disable_metering_title">No dosificadora</string>
+  <string name="preferences_front_light_auto">Automàtic</string>
+  <string name="preferences_front_light_off">Inactiu</string>
+  <string name="preferences_front_light_on">Actiu</string>
+  <string name="preferences_front_light_summary">Millora l\'escaneig amb poca llum en alguns dispositius, però pot produir enlluernament. No funciona en tots els dispositius.</string>
+  <string name="preferences_front_light_title">Usa el llum frontal</string>
+  <string name="preferences_general_title">Configuració general</string>
+  <string name="preferences_history_summary">Emmagatzemi les seves exploracions de la història</string>
+  <string name="preferences_history_title">Afegir a la Història</string>
+  <string name="preferences_invert_scan_summary">Escanejar codis de barres blanques sobre fons negre. No disponible en alguns dispositius.</string>
+  <string name="preferences_invert_scan_title">Invertir exploració</string>
+  <string name="preferences_name">Configuració</string>
+  <string name="preferences_orientation_title">No hi ha rotació automàtica</string>
+  <string name="preferences_play_beep_title">Beep</string>
+  <string name="preferences_remember_duplicates_summary">Desa diversos escanejos del mateix codi de barres a l\'historial</string>
+  <string name="preferences_remember_duplicates_title">Recorda els duplicats</string>
+  <string name="preferences_result_title">Configuració dels resultats</string>
+  <string name="preferences_scanning_title">En escanejar codis de barres, descodifica\u2026</string>
+  <string name="preferences_search_country">Cerca per país</string>
+  <string name="preferences_supplemental_summary">Intenta obtenir més informació sobre els continguts del codi de barres</string>
+  <string name="preferences_supplemental_title">Aconsegueix més informació</string>
+  <string name="preferences_vibrate_title">Vibració</string>
+  <string name="result_address_book">S\'ha trobat informació de contacte</string>
+  <string name="result_calendar">S\'ha trobat un esdeveniment</string>
+  <string name="result_email_address">S\'ha trobat una adreça electrònica</string>
+  <string name="result_geo">S\'han trobat coordenades geogràfiques</string>
+  <string name="result_isbn">S\'ha trobat un llibre</string>
+  <string name="result_product">S\'ha trobat un producte</string>
+  <string name="result_sms">S\'ha trobat una adreça SMS</string>
+  <string name="result_tel">S\'ha trobat un número de telèfon</string>
+  <string name="result_text">S\'ha trobat text pla</string>
+  <string name="result_uri">S\'ha trobat un URL</string>
+  <string name="result_wifi">S\'ha trobat configuració WLAN</string>
+  <string name="sbc_name">Cerca a Google Llibres</string>
+  <string name="wifi_changing_network">Sollicitant connexió a la xarxa\u2026</string>
+</resources>

@@ -1,0 +1,271 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:16:1-200:12
+	package
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:17:5-46
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:20:5-32
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+	android:versionCode
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:19:5-30
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:16:11-69
+	android:installLocation
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:18:5-35
+uses-sdk
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.support:appcompat-v7:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:animated-vector-drawable:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/AndroidManifest.xml:5:5-44
+MERGED from [com.android.support:support-vector-drawable:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:support-v4:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/AndroidManifest.xml:20:5-43
+	tools:overrideLibrary
+		ADDED from [com.android.support:appcompat-v7:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/AndroidManifest.xml:23:9-75
+	android:targetSdkVersion
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:24:9-38
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:23:9-35
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.CAMERA
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:26:5-65
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:26:22-62
+uses-permission#android.permission.INTERNET
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:27:5-67
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:27:22-64
+uses-permission#android.permission.VIBRATE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:28:5-66
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:28:22-63
+uses-permission#android.permission.FLASHLIGHT
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:29:5-69
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:29:22-66
+uses-permission#android.permission.READ_CONTACTS
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:30:5-72
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:30:22-69
+uses-permission#com.android.browser.permission.READ_HISTORY_BOOKMARKS
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:32:5-93
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:32:22-90
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:33:5-81
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:33:22-78
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:34:5-76
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:34:22-73
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:35:5-76
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:35:22-73
+uses-feature#android.hardware.camera.any
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:37:5-64
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:37:19-61
+uses-feature#android.hardware.camera.autofocus
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:38:5-40:36
+	android:required
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:40:9-33
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:39:9-57
+uses-feature#android.hardware.camera.flash
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:41:5-43:36
+	android:required
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:43:9-33
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:42:9-53
+uses-feature#android.hardware.screen.landscape
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:44:5-70
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:44:19-67
+uses-feature#android.hardware.wifi
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:45:5-47:36
+	android:required
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:47:9-33
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:46:9-45
+android:uses-permission#android.permission.READ_PHONE_STATE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:49:5-83
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:49:30-80
+android:uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:50:5-88
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:50:30-85
+application
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:52:5-198:19
+MERGED from [com.android.support:appcompat-v7:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:animated-vector-drawable:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-vector-drawable:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-v4:23.4.0] /Users/naw880/androidzx/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/AndroidManifest.xml:22:5-20
+	android:label
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:55:9-41
+	android:allowBackup
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:53:9-35
+	android:icon
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:54:9-47
+	android:theme
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:56:9-70
+	android:logo
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:57:9-47
+activity#com.google.zxing.client.android.CaptureActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:58:9-123:20
+	android:clearTaskOnLaunch
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:60:13-45
+	android:screenOrientation
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:61:13-56
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:62:13-42
+	android:windowSoftInputMode
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:64:13-60
+	android:theme
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:63:13-48
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:59:13-44
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:65:13-69:29
+action#android.intent.action.MAIN
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:66:17-69
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:66:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:68:17-77
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:68:27-74
+intent-filter#android.intent.category.DEFAULT+com.google.zxing.client.android.SCAN
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:70:13-74:29
+action#com.google.zxing.client.android.SCAN
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:71:17-79
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:71:25-76
+category#android.intent.category.DEFAULT
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:73:17-76
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:73:27-73
+intent-filter#android.intent.action.VIEW+android.intent.category.BROWSABLE+android.intent.category.DEFAULT
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:76:13-86:29
+action#android.intent.action.VIEW
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:77:17-69
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:77:25-66
+category#android.intent.category.BROWSABLE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:80:17-78
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:80:27-75
+data
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:82:17-85:45
+	android:path
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:84:21-41
+	android:host
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:83:21-53
+	android:scheme
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:85:21-42
+activity#com.google.zxing.client.android.PreferencesActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:124:9-127:45
+	android:label
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:126:13-53
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:127:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:125:13-48
+activity#com.google.zxing.client.android.encode.EncodeActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:128:9-152:20
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:130:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:129:13-50
+intent-filter#android.intent.category.DEFAULT+com.google.zxing.client.android.ENCODE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:131:13-135:29
+action#com.google.zxing.client.android.ENCODE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:132:17-81
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:132:25-78
+intent-filter#android.intent.action.SEND+android.intent.category.DEFAULT
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:137:13-143:29
+action#android.intent.action.SEND
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:138:17-69
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:138:25-66
+activity#com.google.zxing.client.android.book.SearchBookContentsActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:153:9-163:20
+	android:screenOrientation
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:156:13-56
+	android:label
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:155:13-45
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:157:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:154:13-60
+intent-filter#android.intent.category.DEFAULT+com.google.zxing.client.android.SEARCH_BOOK_CONTENTS
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:158:13-162:29
+action#com.google.zxing.client.android.SEARCH_BOOK_CONTENTS
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:159:17-95
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:159:25-92
+activity#com.google.zxing.client.android.share.ShareActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:164:9-172:20
+	android:screenOrientation
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:166:13-45
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:167:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:165:13-48
+intent-filter#android.intent.category.DEFAULT+com.google.zxing.client.android.SHARE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:168:13-171:29
+action#com.google.zxing.client.android.SHARE
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:169:17-80
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:169:25-77
+activity#com.google.zxing.client.android.history.HistoryActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:173:9-176:45
+	android:label
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:175:13-50
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:176:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:174:13-52
+activity#com.google.zxing.client.android.share.BookmarkPickerActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:177:9-180:45
+	android:label
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:179:13-57
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:180:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:178:13-57
+activity#com.google.zxing.client.android.share.AppPickerActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:181:9-184:45
+	android:label
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:183:13-52
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:184:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:182:13-52
+activity#com.google.zxing.client.android.HelpActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:185:9-189:45
+	android:screenOrientation
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:188:13-45
+	android:label
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:187:13-46
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:189:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:186:13-41
+activity#com.google.zxing.client.android.StopActivity
+ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:190:9-197:20
+	android:screenOrientation
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:191:13-45
+	android:stateNotNeeded
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:192:13-42
+	android:name
+		ADDED from /Users/naw880/androidzx/app/src/main/AndroidManifest.xml:190:19-47

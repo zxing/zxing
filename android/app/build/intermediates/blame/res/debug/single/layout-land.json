@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/layout-land/encode.xml",
+        "source": "/Users/naw880/androidzx/app/src/main/res/layout-land/encode.xml"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/layout-land/share.xml",
+        "source": "/Users/naw880/androidzx/app/src/main/res/layout-land/share.xml"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/layout-land/activity_stop.xml",
+        "source": "/Users/naw880/androidzx/app/src/main/res/layout-land/activity_stop.xml"
+    }
+]

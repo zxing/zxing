@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/menu/capture.xml",
+        "source": "/Users/naw880/androidzx/app/src/main/res/menu/capture.xml"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/menu/stop.xml",
+        "source": "/Users/naw880/androidzx/app/src/main/res/menu/stop.xml"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/menu/encode.xml",
+        "source": "/Users/naw880/androidzx/app/src/main/res/menu/encode.xml"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/menu/help.xml",
+        "source": "/Users/naw880/androidzx/app/src/main/res/menu/help.xml"
+    },
+    {
+        "merged": "/Users/naw880/androidzx/app/build/intermediates/res/merged/debug/menu/history.xml",
+        "source": "/Users/naw880/androidzx/app/src/main/res/menu/history.xml"
+    }
+]

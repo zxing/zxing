@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/preferences_scanning_title">
+    <CheckBoxPreference
+        android:key="preferences_decode_1D_product"
+        android:defaultValue="true"
+        android:title="@string/preferences_decode_1D_product_title"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_1D_industrial"
+        android:defaultValue="true"
+        android:title="@string/preferences_decode_1D_industrial_title"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_QR"
+        android:defaultValue="true"
+        android:title="@string/preferences_decode_QR_title"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_Data_Matrix"
+        android:defaultValue="true"
+        android:title="@string/preferences_decode_Data_Matrix_title"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_Aztec"
+        android:defaultValue="false"
+        android:title="@string/preferences_decode_Aztec_title"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_PDF417"
+        android:defaultValue="false"
+        android:title="@string/preferences_decode_PDF417_title"/>
+  </PreferenceCategory>
+  <PreferenceCategory android:title="@string/preferences_actions_title">
+    <CheckBoxPreference
+        android:key="preferences_play_beep"
+        android:defaultValue="true"
+        android:title="@string/preferences_play_beep_title"/>
+    <CheckBoxPreference
+        android:key="preferences_vibrate"
+        android:defaultValue="false"
+        android:title="@string/preferences_vibrate_title"/>
+    <CheckBoxPreference
+        android:key="preferences_copy_to_clipboard"
+        android:defaultValue="true"
+        android:title="@string/preferences_copy_to_clipboard_title"/>
+    <CheckBoxPreference
+        android:key="preferences_auto_open_web"
+        android:defaultValue="false"
+        android:title="@string/preferences_auto_open_web_title"/>
+    <CheckBoxPreference
+        android:key="preferences_remember_duplicates"
+        android:defaultValue="false"
+        android:title="@string/preferences_remember_duplicates_title"
+        android:summary="@string/preferences_remember_duplicates_summary"/>
+    <CheckBoxPreference
+        android:key="preferences_history"
+        android:defaultValue="true"
+        android:title="@string/preferences_history_title"
+        android:summary="@string/preferences_history_summary"/>
+    <CheckBoxPreference
+        android:key="preferences_supplemental"
+        android:defaultValue="true"
+        android:title="@string/preferences_supplemental_title"
+        android:summary="@string/preferences_supplemental_summary"/>
+  </PreferenceCategory>
+  <PreferenceCategory android:title="@string/preferences_general_title">
+    <ListPreference
+        android:entries="@array/preferences_front_light_options"
+        android:entryValues="@array/preferences_front_light_values"
+        android:key="preferences_front_light_mode"
+        android:defaultValue="OFF"
+        android:title="@string/preferences_front_light_title"
+        android:summary="@string/preferences_front_light_summary"/>
+    <CheckBoxPreference
+        android:key="preferences_auto_focus"
+        android:defaultValue="true"
+        android:title="@string/preferences_auto_focus_title"/>
+    <CheckBoxPreference
+        android:key="preferences_invert_scan"
+        android:defaultValue="false"
+        android:title="@string/preferences_invert_scan_title"
+        android:summary="@string/preferences_invert_scan_summary"/>
+    <CheckBoxPreference
+        android:key="preferences_bulk_mode"
+        android:defaultValue="false"
+        android:title="@string/preferences_bulk_mode_title"
+        android:summary="@string/preferences_bulk_mode_summary"/>
+    <CheckBoxPreference
+        android:key="preferences_orientation"
+        android:defaultValue="true"
+        android:title="@string/preferences_orientation_title"/>
+  </PreferenceCategory>
+  <PreferenceCategory android:title="@string/preferences_result_title">
+    <EditTextPreference
+        android:key="preferences_custom_product_search"
+        android:title="@string/preferences_custom_product_search_title"
+        android:summary="@string/preferences_custom_product_search_summary"/>
+    <ListPreference
+        android:key="preferences_search_country"
+        android:defaultValue="-"
+        android:entries="@array/country_codes"
+        android:entryValues="@array/country_codes"
+        android:title="@string/preferences_search_country"/>
+  </PreferenceCategory>
+  <PreferenceCategory android:title="@string/preferences_device_bug_workarounds_title">
+    <CheckBoxPreference
+        android:key="preferences_disable_continuous_focus"
+        android:defaultValue="true"
+        android:title="@string/preferences_disable_continuous_focus_title"
+        android:summary="@string/preferences_disable_continuous_focus_summary"/>
+    <CheckBoxPreference
+        android:key="preferences_disable_exposure"
+        android:defaultValue="true"
+        android:title="@string/preferences_disable_exposure_title"/>
+    <CheckBoxPreference
+        android:key="preferences_disable_metering"
+        android:defaultValue="true"
+        android:title="@string/preferences_disable_metering_title"/>
+    <CheckBoxPreference
+        android:key="preferences_disable_barcode_scene_mode"
+        android:defaultValue="true"
+        android:title="@string/preferences_disable_barcode_scene_mode_title"/>
+  </PreferenceCategory>
+</PreferenceScreen>
