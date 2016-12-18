@@ -3,7 +3,7 @@ package com.google.zxing.client.android;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class LicenceActivity extends AppCompatActivity {
+public class LicenseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
