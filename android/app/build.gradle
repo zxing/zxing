@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.google.zxing.client.android"
-        minSdkVersion 16
+        minSdkVersion 10
         targetSdkVersion 25
     }
 

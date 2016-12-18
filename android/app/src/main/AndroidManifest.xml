@@ -21,7 +21,7 @@
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="22" />
+        android:targetSdkVersion="25" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -168,7 +168,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".LicenceActivity"
+        <activity android:name=".LicenseActivity"
             android:label="@string/menu_license"
             android:screenOrientation="user"
             android:stateNotNeeded="true">
@@ -194,16 +194,6 @@
             android:label="@string/menu_help"
             android:screenOrientation="user"
             android:stateNotNeeded="true" />
-        <activity
-            android:name=".LicenseActivity"
-            android:label="@string/menu_license"
-            android:screenOrientation="user"
-            android:stateNotNeeded="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-        </activity>
         <activity
             android:name=".StopActivity"
             android:screenOrientation="user"
