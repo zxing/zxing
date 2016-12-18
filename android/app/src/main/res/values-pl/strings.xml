@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Barcode Scanner</string>
+  <string name="app_name">Koch Zap</string>
   <string name="app_picker_name">Aplikacje</string>
   <string name="bookmark_picker_name">Zakładki</string>
   <string name="button_add_calendar">Dodaj do kalendarza</string>
@@ -144,4 +144,5 @@
   <string name="prezap">To Koch Industries produktu.</string>
   <string name="zap">To Koch Industries produktu, nie należy go kupić.</string>
   <string name="postzap">Proszę nie kupić.</string>
+  <string name="menu_warranty">Gwarancja</string>
 </resources>

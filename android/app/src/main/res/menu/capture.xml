@@ -40,4 +40,9 @@
       android:icon="@android:drawable/ic_menu_info_details"
       android:orderInCategory="5"
       android:showAsAction="withText"/>
+  <item android:id="@+id/menu_warranty"
+      android:title="@string/menu_warranty"
+      android:icon="@android:drawable/ic_menu_info_details"
+      android:orderInCategory="6"
+      android:showAsAction="withText"/>
 </menu>

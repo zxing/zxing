@@ -14,13 +14,13 @@
  limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.zxing.client.android"
+    package="com.kochzap"
     android:installLocation="auto"
     android:versionCode="107"
     android:versionName="4.7.7">
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="11"
         android:targetSdkVersion="25" />
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -33,6 +33,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera.any" />
     <uses-feature
@@ -65,7 +68,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.google.zxing.client.android.SCAN" />
+                <action android:name="com.kochzap.SCAN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -126,7 +129,7 @@
             android:name=".encode.EncodeActivity"
             android:stateNotNeeded="true">
             <intent-filter>
-                <action android:name="com.google.zxing.client.android.ENCODE" />
+                <action android:name="com.kochzap.ENCODE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -153,7 +156,7 @@
             android:screenOrientation="sensorLandscape"
             android:stateNotNeeded="true">
             <intent-filter>
-                <action android:name="com.google.zxing.client.android.SEARCH_BOOK_CONTENTS" />
+                <action android:name="com.kochzap.SEARCH_BOOK_CONTENTS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -163,17 +166,8 @@
             android:screenOrientation="user"
             android:stateNotNeeded="true">
             <intent-filter>
-                <action android:name="com.google.zxing.client.android.SHARE" />
+                <action android:name="com.kochzap.SHARE" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".LicenseActivity"
-            android:label="@string/menu_license"
-            android:screenOrientation="user"
-            android:stateNotNeeded="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -199,7 +193,8 @@
             android:screenOrientation="user"
             android:stateNotNeeded="true">
             <intent-filter>
-                <action android:name="com.google.zxing.client.android.VIEW" />
+                <action android:name="com.kochzap.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

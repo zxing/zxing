@@ -144,4 +144,5 @@
   <string name="prezap">Это Koch Industries продукта.</string>
   <string name="zap">Это Koch Industries продукта, пожалуйста, не покупайте его.</string>
   <string name="postzap">Пожалуйста, не покупайте его.</string>
+  <string name="menu_warranty">Гарантия</string>
 </resources>

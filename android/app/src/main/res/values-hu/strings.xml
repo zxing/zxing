@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Barcode Scanner</string>
+  <string name="app_name">Koch Zap</string>
   <string name="app_picker_name">Alkalmazások</string>
   <string name="bookmark_picker_name">Könyvjelzők</string>
   <string name="button_add_calendar">Hozzáadás a naptárhoz</string>
@@ -49,7 +49,7 @@
   <string name="contents_text">Egyszerű szöveg</string>
   <string name="history_clear_one_history_text">Törlése</string>
   <string name="history_clear_text">Előzmények törlése</string>
-  <string name="history_email_title">Barcode Scanner előzmények</string>
+  <string name="history_email_title">Koch Zap előzmények</string>
   <string name="history_empty">Üres</string>
   <string name="history_empty_detail">Még nincs rögzítve vonalkód-szkennelés</string>
   <string name="history_send">Előzmények küldése</string>
@@ -144,4 +144,5 @@
   <string name="prezap">Ez egy Koch Industries termék.</string>
   <string name="zap">Ez egy Koch Industries termék, ne vegye meg.</string>
   <string name="postzap">Kérjük, ne vegye meg.</string>
+  <string name="menu_warranty">Szavatosság</string>
 </resources>

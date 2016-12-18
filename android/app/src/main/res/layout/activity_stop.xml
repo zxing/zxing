@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.google.zxing.client.android.StopActivity">
+    tools:context="com.kochzap.StopActivity">
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/prezaptext"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:lineSpacingExtra="10sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="false"
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@color/red"
         android:text="@string/prezap"/>
 
     <ImageView

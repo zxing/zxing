@@ -303,7 +303,7 @@
   - Many small updates to the Android app, Barcode Scanner, including rare bug fixes and translation updates.
     The 2.1 release corresponds substantially to v4.3.1.
   - Many ports of Java updates to C++ port
-  
+
 2.2 (14 May 2013)
 
   - Retire Symbian port
@@ -363,3 +363,13 @@
   - BS 4.7.6 release with Android API 23 support
   - TIFF support in online decoder
   - Many small bug fixes, typo fixes and project build improvements
+
+3.3.0A (18 December 2016i)
+  - Replacing the Android app with a newer gradle wrapped version of the same code.
+  - Keeping version at 3.3.0 for now as nothing else is changing (except notes like these).
+  - Setting version to Alpha 2
+  - Add Companies class with list of bad companies
+  - Modify CaptureActivity to check for scanned products from companies on the bad comanies list
+  - Add StopActivity to nag the user not to buy Kock merchandise and show the red thumbs down
+  - Fiddled with licensing a bit, added a few translations, probably not needed but interesting.
+  - Broke the scheduling stuff

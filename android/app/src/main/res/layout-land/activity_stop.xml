@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/half_padding"
     android:paddingRight="@dimen/half_padding"
     android:paddingTop="@dimen/standard_padding"
-    tools:context="com.google.zxing.client.android.StopActivity">
+    tools:context="com.virtualsoundnw.zxing.client.android.StopActivity">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/prezaptext"

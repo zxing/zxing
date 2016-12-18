@@ -1,19 +1,27 @@
 apply plugin: 'com.android.application'
 android {
+    signingConfigs {
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
-
     defaultConfig {
-        applicationId "com.google.zxing.client.android"
+        applicationId "com.kochzap"
         minSdkVersion 10
         targetSdkVersion 25
+        versionCode 2
+        versionName 'Alpha'
+        signingConfig signingConfigs.release
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            debuggable false
+            jniDebuggable false
+            signingConfig signingConfigs.release
         }
+    }
+    productFlavors {
     }
 }
 
@@ -21,4 +29,5 @@ dependencies {
     compile files('libs/core-3.3.0.jar')
     compile files('libs/android-core-3.3.0.jar')
     compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
 }

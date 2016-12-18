@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (C) 2012 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +15,19 @@
  -->
 <resources>
 
-  <style name="ResultButton" parent="@android:style/Widget.Holo.Button.Borderless.Small">
-    <item name="android:layout_width">0dip</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_weight">1</item>
-  </style>
-  <style name="ShareButton" parent="@android:style/Widget.Holo.Button.Borderless.Small">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-  </style>
+    <style name="ResultButton" parent="@android:style/Widget.Holo.Button.Borderless.Small">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="ShareButton" parent="@android:style/Widget.Holo.Button.Borderless.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

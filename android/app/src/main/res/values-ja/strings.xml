@@ -144,4 +144,5 @@
   <string name="prezap">これは、コーク・インダストリーズ製品です。</string>
   <string name="zap">これはコーク・インダストリーズ製品である、それを購入しないでください。</string>
   <string name="postzap">それを購入しないでください。</string>
+  <string name="menu_warranty">" 保証"</string>
 </resources>
