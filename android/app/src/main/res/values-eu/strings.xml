@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Erabili vCard</string>
   <string name="menu_help">Laguntza</string>
   <string name="menu_history">Historia</string>
+  <string name="menu_license">Lizentzia</string>
   <string name="menu_settings">Ezarpenak</string>
   <string name="menu_share">Partekatu</string>
   <string name="msg_bulk_mode_scanned">Handizkako modua: barra-kodea eskaneatuta eta gordeta</string>
@@ -140,4 +141,7 @@
   <string name="result_wifi">WLAN konfigurazioa aurkitu da</string>
   <string name="sbc_name">Google Book bilaketa</string>
   <string name="wifi_changing_network">Sarerako konexioa eskatzen\u2026</string>
+  <string name="prezap">Este es un producto de Koch Industries.</string>
+  <string name="zap">Este es un producto de Koch Industries, por favor no lo compre.</string>
+  <string name="postzap">Por favor, no lo compre.</string>
 </resources>

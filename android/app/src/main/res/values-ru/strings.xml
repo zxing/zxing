@@ -141,4 +141,7 @@
   <string name="result_wifi">Найдена конфигурация сети</string>
   <string name="sbc_name">Поиск книг Google</string>
   <string name="wifi_changing_network">Запрос подключения к сети\u2026</string>
+  <string name="prezap">Это Koch Industries продукта.</string>
+  <string name="zap">Это Koch Industries продукта, пожалуйста, не покупайте его.</string>
+  <string name="postzap">Пожалуйста, не покупайте его.</string>
 </resources>

@@ -141,4 +141,7 @@
   <string name="result_wifi">ネットワーク設定が見つかりました</string>
   <string name="sbc_name">Googleブックス</string>
   <string name="wifi_changing_network">ネットワークへ接続しています…</string>
+  <string name="prezap">これは、コーク・インダストリーズ製品です。</string>
+  <string name="zap">これはコーク・インダストリーズ製品である、それを購入しないでください。</string>
+  <string name="postzap">それを購入しないでください。</string>
 </resources>

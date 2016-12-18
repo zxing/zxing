@@ -141,4 +141,7 @@
   <string name="result_wifi">พบการกำหนดค่า WLAN</string>
   <string name="sbc_name">ค้นหาหนังสือจาก Google</string>
   <string name="wifi_changing_network">กำลังร้องขอการเชื่อมต่อกับเครือข่าย\u2026</string>
+  <string name="prezap">นี้เป็นผลิตภัณฑ์ที่ Koch Industries</string>
+  <string name="zap">นี้เป็นอุตสาหกรรมสินค้า Koch โปรดอย่าซื้อมัน</string>
+  <string name="postzap">กรุณาอย่าซื้อมัน</string>
 </resources>

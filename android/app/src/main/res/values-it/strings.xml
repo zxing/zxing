@@ -141,4 +141,7 @@
   <string name="result_wifi">Configurazione WLAN trovata</string>
   <string name="sbc_name">Ricerca Google Book</string>
   <string name="wifi_changing_network">Richiesta di connessione alla rete\u2026</string>
+  <string name="prezap">Questo è un Koch Industries prodotto.</string>
+  <string name="zap">Si tratta di un prodotto Koch Industries, si prega di non comprarlo.</string>
+  <string name="postzap">Si prega di non comprarlo.</string>
 </resources>

@@ -141,4 +141,7 @@
   <string name="result_wifi">मिला WLAN विन्यास</string>
   <string name="sbc_name">Google पुस्तक खोज</string>
   <string name="wifi_changing_network">नेटवर्क के लिए कनेक्शन का अनुरोध कर रहा है \u2026</string>
+  <string name="prezap">यह एक कोच इंडस्ट्रीज उत्पाद है।</string>
+  <string name="zap">यह एक कोच इंडस्ट्रीज उत्पाद है, इसे खरीद नहीं है कृपया।</string>
+  <string name="postzap">कृपया इसे खरीद नहीं है।</string>
 </resources>
