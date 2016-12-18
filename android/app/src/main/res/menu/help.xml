@@ -35,4 +35,8 @@
         android:icon="@android:drawable/ic_menu_help"
         android:orderInCategory="4"
         android:showAsAction="withText"/>
-</menu>
+  <item android:id="@+id/menu_license"
+      android:title="@string/menu_license"
+      android:icon="@android:drawable/ic_menu_help"
+      android:orderInCategory="4"
+      android:showAsAction="withText"/></menu>

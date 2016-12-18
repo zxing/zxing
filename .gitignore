@@ -2,6 +2,6 @@ target
 private
 .idea
 *.iml
-android/.gradle
-android/build
 android/app/build
+android/build
+android/.gradle

@@ -376,7 +376,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         startActivity(intent);
         break;
       case R.id.menu_license:
-        intent.setClassName(this, LicenceActivity.class.getName());
+        intent.setClassName(this, LicenseActivity.class.getName());
         startActivity(intent);
         break;
       default:

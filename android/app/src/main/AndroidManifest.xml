@@ -51,7 +51,7 @@
         android:icon="@drawable/launcher_icon"
         android:label="@string/app_name"
         android:logo="@drawable/launcher_icon"
-        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
+        android:theme="@style/Theme.AppCompat.Light">
         <activity
             android:name=".CaptureActivity"
             android:clearTaskOnLaunch="true"
@@ -194,6 +194,16 @@
             android:label="@string/menu_help"
             android:screenOrientation="user"
             android:stateNotNeeded="true" />
+        <activity
+            android:name=".LicenseActivity"
+            android:label="@string/menu_license"
+            android:screenOrientation="user"
+            android:stateNotNeeded="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".StopActivity"
             android:screenOrientation="user"
