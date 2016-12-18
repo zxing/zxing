@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">VCard kullanın</string>
   <string name="menu_help">Yardım</string>
   <string name="menu_history">Geçmiş</string>
+  <string name="menu_license">Lisans</string>
   <string name="menu_settings">Ayarlar</string>
   <string name="menu_share">Paylaş</string>
   <string name="msg_bulk_mode_scanned">Toplu modu: taranan ve kaydedilen barkodlar</string>

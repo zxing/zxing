@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">vCardを使用</string>
   <string name="menu_help">ヘルプ</string>
   <string name="menu_history">履歴</string>
+  <string name="menu_license">ライセンス</string>
   <string name="menu_settings">設定</string>
   <string name="menu_share">共有</string>
   <string name="msg_bulk_mode_scanned">連続スキャン:スキャン結果を保存しました</string>

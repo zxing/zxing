@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">使用 vCard</string>
   <string name="menu_help">說明</string>
   <string name="menu_history">記錄</string>
+  <string name="menu_license">執照</string>
   <string name="menu_settings">設定</string>
   <string name="menu_share">分享</string>
   <string name="msg_bulk_mode_scanned">大量掃描模式：條碼掃描並儲存</string>

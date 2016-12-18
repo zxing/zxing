@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">vCard का प्रयोग करें</string>
   <string name="menu_help">मदद</string>
   <string name="menu_history">इतिहास</string>
+  <string name="menu_license">लाइसेंसस</string>
   <string name="menu_settings">सेटिंग्स</string>
   <string name="menu_share">शेयर</string>
   <string name="msg_bulk_mode_scanned">थोक मोड: बारकोड स्कैन और बचाया</string>

@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">ใช้ vCard</string>
   <string name="menu_help">ช่วยเหลือ</string>
   <string name="menu_history">ประวัติ</string>
+  <string name="menu_license">การอนุญาตติ</string>
   <string name="menu_settings">การตั้งค่า</string>
   <string name="menu_share">แบ่งปัน</string>
   <string name="msg_bulk_mode_scanned">โหมดเป็นกลุ่ม: บาร์โค้ดที่สแกนและบันทึกไว้</string>

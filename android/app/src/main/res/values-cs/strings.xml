@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Použij vCard</string>
   <string name="menu_help">Pomoc!</string>
   <string name="menu_history">Historie</string>
+  <string name="menu_license">Licence</string>
   <string name="menu_settings">Nastavení</string>
   <string name="menu_share">Sdílet</string>
   <string name="msg_bulk_mode_scanned">Dávkový režim: čárové kódy naskenované a uložené</string>

@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Използвай vCard формат</string>
   <string name="menu_help">Помощ</string>
   <string name="menu_history">История</string>
+  <string name="menu_license">Разрешително</string>
   <string name="menu_settings">Настройки</string>
   <string name="menu_share">Сподели</string>
   <string name="msg_bulk_mode_scanned">Масов режим: баркодът е сканиран и записан</string>

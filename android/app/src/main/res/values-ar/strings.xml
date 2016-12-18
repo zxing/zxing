@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">استخدام vCard</string>
   <string name="menu_help">تعليمات</string>
   <string name="menu_history">سجل</string>
+  <string name="menu_license">رخصة</string>
   <string name="menu_settings">إعدادات</string>
   <string name="menu_share">مشاركة</string>
   <string name="msg_bulk_mode_scanned">معظم الدراسي : الباركود الممسوحة ضوئيا وحفظها</string>

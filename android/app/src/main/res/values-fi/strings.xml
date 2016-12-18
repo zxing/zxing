@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Käytä vCard:ia</string>
   <string name="menu_help">Ohje</string>
   <string name="menu_history">Historia</string>
+  <string name="menu_license">Lisenssi</string>
   <string name="menu_settings">Asetukset</string>
   <string name="menu_share">Jaa</string>
   <string name="msg_bulk_mode_scanned">Toistotila: viivakoodi luettu ja tallennetttu</string>

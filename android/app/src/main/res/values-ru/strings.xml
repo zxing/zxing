@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Использовать vCard</string>
   <string name="menu_help">Помощь</string>
   <string name="menu_history">История</string>
+  <string name="menu_license">лицензия</string>
   <string name="menu_settings">Настройки</string>
   <string name="menu_share">Поделиться</string>
   <string name="msg_bulk_mode_scanned">Массовый режим: штрих-код распознан и сохранен</string>

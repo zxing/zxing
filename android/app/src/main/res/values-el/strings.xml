@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Χρησιμοποιήστε vCard</string>
   <string name="menu_help">Βοήθεια</string>
   <string name="menu_history">Ιστορικό</string>
+  <string name="menu_license">Άδεια</string>
   <string name="menu_settings">Ρυθμίσεις</string>
   <string name="menu_share">Κοινή χρήση</string>
   <string name="msg_bulk_mode_scanned">Μαζική λειτουργία: barcode σκαναρίστηκε και αποθηκεύτηκε</string>

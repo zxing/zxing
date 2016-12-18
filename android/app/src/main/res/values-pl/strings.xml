@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Użyj vCard</string>
   <string name="menu_help">Pomoc</string>
   <string name="menu_history">Historia</string>
+  <string name="menu_license">Licencja</string>
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_share">Udostępnij</string>
   <string name="msg_bulk_mode_scanned">Tryb zbiorczy: skanowanie i zapisywanie kodów kreskowych w trybie ciągłym</string>

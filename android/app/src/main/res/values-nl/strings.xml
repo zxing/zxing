@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">vCard gebruiken</string>
   <string name="menu_help">Help</string>
   <string name="menu_history">Geschiedenis</string>
+  <string name="menu_license">Licentie</string>
   <string name="menu_settings">Instellingen</string>
   <string name="menu_share">Delen</string>
   <string name="msg_bulk_mode_scanned">Bulkmodus: barcode gescand en opgeslagen</string>

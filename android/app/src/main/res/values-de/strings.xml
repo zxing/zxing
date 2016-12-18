@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">vCard verwenden</string>
   <string name="menu_help">Hilfe</string>
   <string name="menu_history">Verlauf</string>
+  <string name="menu_license">Lizenz</string>
   <string name="menu_settings">Einstellungen</string>
   <string name="menu_share">Senden</string>
   <string name="msg_bulk_mode_scanned">Bulk-Modus: Barcode gescannt und gespeichert</string>

@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">使用vCard</string>
   <string name="menu_help">帮助</string>
   <string name="menu_history">历史记录</string>
+  <string name="menu_license">执照</string>
   <string name="menu_settings">设置</string>
   <string name="menu_share">创建二维码</string>
   <string name="msg_bulk_mode_scanned">批量扫描模式：条码已扫描并保存</string>

@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Brug vCard</string>
   <string name="menu_help">Hjælp</string>
   <string name="menu_history">Historik</string>
+  <string name="menu_license">Licens</string>
   <string name="menu_settings">Indstillinger</string>
   <string name="menu_share">Del</string>
   <string name="msg_bulk_mode_scanned">Massetilstand: stregkode scannet og gemt</string>

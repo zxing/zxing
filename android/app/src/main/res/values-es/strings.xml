@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Usar vCard</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_history">Historial</string>
+  <string name="menu_license">Licencia</string>
   <string name="menu_settings">Configuración</string>
   <string name="menu_share">Compartir</string>
   <string name="msg_bulk_mode_scanned">Modo Masivo: código de barras escaneado y guardado</string>

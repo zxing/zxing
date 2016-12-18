@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">vCard használata</string>
   <string name="menu_help">Súgó</string>
   <string name="menu_history">Előzmények</string>
+  <string name="menu_license">Engedély</string>
   <string name="menu_settings">Beállítások</string>
   <string name="menu_share">Megosztás</string>
   <string name="msg_bulk_mode_scanned">Tömeges beolvasás: vonalkód beszkennelve és mentve</string>

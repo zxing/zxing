@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Використовуйте vCard</string>
   <string name="menu_help">Допомога</string>
   <string name="menu_history">Історія</string>
+  <string name="menu_license">ліцензія</string>
   <string name="menu_settings">Налаштування</string>
   <string name="menu_share">Поділитись</string>
   <string name="msg_bulk_mode_scanned">Масовий режим: зберігати історію сканування</string>

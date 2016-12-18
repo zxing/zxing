@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Folosește vCard</string>
   <string name="menu_help">Ajutor</string>
   <string name="menu_history">Istoric</string>
+  <string name="menu_license">Licență</string>
   <string name="menu_settings">Configurări</string>
   <string name="menu_share">Distribuie</string>
   <string name="msg_bulk_mode_scanned">Scanare continuă: cod de bare scanat și salvat</string>

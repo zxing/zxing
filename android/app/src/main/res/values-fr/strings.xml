@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Utiliser vCard</string>
   <string name="menu_help">Aide</string>
   <string name="menu_history">Historique</string>
+  <string name="menu_license">Licence</string>
   <string name="menu_settings">Paramètres</string>
   <string name="menu_share">Partager</string>
   <string name="msg_bulk_mode_scanned">Balayage en rafale\u00A0: code-barres balayés et enregistrés</string>

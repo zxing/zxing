@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">השתמש vCard</string>
   <string name="menu_help">עזרה</string>
   <string name="menu_history">היסטוריה</string>
+  <string name="menu_license">רִשָׁיוֹן</string>
   <string name="menu_settings">הגדרות</string>
   <string name="menu_share">שתף</string>
   <string name="msg_bulk_mode_scanned">מצב קבוצה: ברקוד נסרק ונשמר</string>

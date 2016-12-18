@@ -58,6 +58,7 @@
   <string name="menu_encode_vcard">Uporaba vCard</string>
   <string name="menu_help">Pomoč</string>
   <string name="menu_history">Zgodovina</string>
+  <string name="menu_license">Licenca</string>
   <string name="menu_settings">Nastavitve</string>
   <string name="menu_share">Deli</string>
   <string name="msg_bulk_mode_scanned">Slikanje na debelo: črtna koda prebrana in shranjena</string>
