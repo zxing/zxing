@@ -46,9 +46,6 @@
         android:name="android.hardware.wifi"
         android:required="false" />
 
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/launcher_icon"
@@ -171,6 +168,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".LicenceActivity"
+            android:label="@string/menu_license"
+            android:screenOrientation="user"
+            android:stateNotNeeded="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".history.HistoryActivity"
             android:label="@string/history_title"
@@ -193,12 +199,10 @@
             android:screenOrientation="user"
             android:stateNotNeeded="true">
             <intent-filter>
-                <action android:name="com.google.zxing.client.android.SCAN" />
-
+                <action android:name="com.google.zxing.client.android.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".LicenceActivity"></activity>
     </application>
 
 </manifest>

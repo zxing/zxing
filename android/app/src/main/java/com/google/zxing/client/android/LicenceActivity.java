@@ -8,6 +8,6 @@ public class LicenceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_licence);
+        setContentView(R.layout.activity_license);
     }
 }
