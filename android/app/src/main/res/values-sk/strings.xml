@@ -145,4 +145,5 @@
   <string name="zap">Jedná sa o Koch Industries tovaru, prosím, nekupujte to.</string>
   <string name="postzap">Prosím, nekupujte to.</string>
   <string name="menu_warranty">Záruka</string>
+  <string name="menu_stop">Prestať</string>
 </resources>

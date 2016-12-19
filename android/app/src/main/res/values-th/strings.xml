@@ -145,4 +145,5 @@
   <string name="zap">นี้เป็นอุตสาหกรรมสินค้า Koch โปรดอย่าซื้อมัน</string>
   <string name="postzap">กรุณาอย่าซื้อมัน</string>
   <string name="menu_warranty">การประกัน</string>
+  <string name="menu_stop">หยุด</string>
 </resources>

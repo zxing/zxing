@@ -145,4 +145,5 @@
   <string name="zap">यह एक कोच इंडस्ट्रीज उत्पाद है, इसे खरीद नहीं है कृपया।</string>
   <string name="postzap">कृपया इसे खरीद नहीं है।</string>
   <string name="menu_warranty">गारंटी</string>
+  <string name="menu_stop">रुकें</string>
 </resources>

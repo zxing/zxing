@@ -145,4 +145,5 @@
   <string name="zap">Bu Koch Industries ürünüdür, onu satın almayın lütfen.</string>
   <string name="postzap">Onu satın almayın lütfen.</string>
   <string name="menu_warranty">Garanti</string>
+  <string name="menu_stop">Dur</string>
 </resources>

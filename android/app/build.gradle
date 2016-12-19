@@ -6,19 +6,29 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.kochzap"
-        minSdkVersion 10
+        minSdkVersion 11
         targetSdkVersion 25
         versionCode 2
         versionName 'Alpha'
-        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             debuggable false
             jniDebuggable false
-            signingConfig signingConfigs.release
+            renderscriptDebuggable false
+            pseudoLocalesEnabled false
+            proguardFile 'proguard-rules.txt'
+            zipAlignEnabled true
+        }
+        debug {
+            debuggable true
+            jniDebuggable false
+            renderscriptDebuggable true
+            minifyEnabled false
+            pseudoLocalesEnabled true
+            proguardFile '/Users/naw880/Library/Android/sdk/tools/proguard/proguard-android.txt'
         }
     }
     productFlavors {

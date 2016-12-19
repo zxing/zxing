@@ -145,4 +145,5 @@
   <string name="zap">Si tratta di un prodotto Koch Industries, si prega di non comprarlo.</string>
   <string name="postzap">Si prega di non comprarlo.</string>
   <string name="menu_warranty">Garanzia</string>
+  <string name="menu_stop">Stop</string>
 </resources>

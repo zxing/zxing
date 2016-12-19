@@ -145,4 +145,5 @@
   <string name="zap">هذا هو كوتش للصناعات المنتج، من فضلك لا شرائه.</string>
   <string name="postzap">من فضلك لا شرائه.</string>
   <string name="menu_warranty">ضمان</string>
+  <string name="menu_stop">توقف</string>
 </resources>

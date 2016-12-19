@@ -145,4 +145,5 @@
   <string name="zap">Tämä on Koch Industries tuote, älä osta sitä.</string>
   <string name="postzap">Älä osta sitä.</string>
   <string name="menu_warranty">Takuu</string>
+  <string name="menu_stop">Stop</string>
 </resources>

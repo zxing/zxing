@@ -145,4 +145,5 @@
   <string name="zap">Це Koch Industries продукту, будь ласка, не купуйте його.</string>
   <string name="postzap">Будь ласка, не купуйте його.</string>
   <string name="menu_warranty">гарантія</string>
+  <string name="menu_stop">СТОП</string>
 </resources>

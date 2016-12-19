@@ -145,4 +145,5 @@
   <string name="zap">이것은 코흐 산업 제품이며, 그것을 구입하지 마십시오.</string>
   <string name="postzap">그것을 구입하지 마십시오.</string>
   <string name="menu_warranty">보증</string>
+  <string name="menu_stop">중지</string>
 </resources>

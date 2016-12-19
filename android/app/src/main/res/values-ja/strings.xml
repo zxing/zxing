@@ -145,4 +145,5 @@
   <string name="zap">これはコーク・インダストリーズ製品である、それを購入しないでください。</string>
   <string name="postzap">それを購入しないでください。</string>
   <string name="menu_warranty">" 保証"</string>
+  <string name="menu_stop">やめる</string>
 </resources>

@@ -145,4 +145,5 @@
   <string name="zap">这是科氏工业集团的产品，请不要购买它。</string>
   <string name="postzap">请不要购买。</string>
   <string name="menu_warranty">保证</string>
+  <string name="menu_stop">停止</string>
 </resources>
