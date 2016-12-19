@@ -21,6 +21,8 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
@@ -28,6 +30,7 @@ import com.google.zxing.client.android.camera.open.OpenCamera;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
@@ -66,6 +69,11 @@ public final class CameraManager {
     this.context = context;
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
+  }
+
+
+  public synchronized void openDriver(CameraInitListener initListener, SurfaceHolder holder) {
+    new CameraHandlerThread(this).openDriver(initListener, holder);
   }
 
   synchronized void openDriver() throws IOException {
@@ -387,11 +395,7 @@ public final class CameraManager {
       cameraManagerWeakReference = new WeakReference<>(manager);
     }
 
-    public synchronized void openDriver(CameraInitListener initListener, SurfaceHolder holder) {
-      new CameraHandlerThread(this).openDriver(initListener, holder);
-    }
-
-    void openDriver(final CameraInitListener listener, SurfaceHolder surfaceHolder) {
+    void openDriver(final CameraInitListener listener, final SurfaceHolder surfaceHolder) {
       final WeakReference<SurfaceHolder> mH = new WeakReference<>(surfaceHolder);
       mHandler.post(new Runnable() {
         @Override
@@ -431,6 +435,9 @@ public final class CameraManager {
     }
   }
 
+  /**
+   * An interface used to listen to changes in the camera init states.
+   */
   public interface CameraInitListener {
     void onStartInit();
 
