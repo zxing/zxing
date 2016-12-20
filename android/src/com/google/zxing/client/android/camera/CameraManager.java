@@ -59,6 +59,7 @@ public final class CameraManager {
   private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
   private int requestedFramingRectWidth;
   private int requestedFramingRectHeight;
+  private CameraHandlerThread mCameraHandlerThread;
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
    * clear the handler so it will only receive one message.
@@ -69,11 +70,12 @@ public final class CameraManager {
     this.context = context;
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
+    mCameraHandlerThread = new CameraHandlerThread(this);
   }
 
 
   public synchronized void openDriver(CameraInitListener initListener, SurfaceHolder holder) {
-    new CameraHandlerThread(this).openDriver(initListener, holder);
+    mCameraHandlerThread.openDriver(initListener, holder);
   }
 
   synchronized void openDriver() throws IOException {
