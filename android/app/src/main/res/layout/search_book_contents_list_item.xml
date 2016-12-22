@@ -14,7 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<com.virtualsoundnw.zxing.client.android.book.SearchBookContentsListItem
+<com.kochzap.book.SearchBookContentsListItem
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
@@ -37,4 +37,4 @@
             android:singleLine="false"
             android:textIsSelectable="false"/>
 
-</com.virtualsoundnw.zxing.client.android.book.SearchBookContentsListItem>
+</com.kochzap.book.SearchBookContentsListItem>
