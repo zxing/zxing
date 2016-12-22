@@ -5,4 +5,5 @@ private
 android/app/build
 android/build
 android/.gradle
-android/app/*.apk
+android/app/app-release.apk
+android/app/app-debug.apk
