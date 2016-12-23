@@ -8,8 +8,8 @@ android {
         applicationId "com.kochzap"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 2
-        versionName 'Alpha'
+        versionCode 200
+        versionName '5.0.0 Beta'
     }
     buildTypes {
         release {

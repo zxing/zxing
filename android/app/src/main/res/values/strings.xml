@@ -148,5 +148,5 @@
     <string name="zap">This is a Koch Industries Product, please do not buy it.</string>
     <string name="postzap">Please do not buy it.</string>
     <string name="scan">Scan Product</string>
-    <string name="boycott_banner_ad_unit_id">ca-app-pub-2317372194650381/6497488972</string>
+    <string name="boycott_banner_ad_unit_id" translatable="false">ca-app-pub-2317372194650381/6497488972</string>
 </resources>

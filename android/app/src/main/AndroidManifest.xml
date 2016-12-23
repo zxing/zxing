@@ -16,8 +16,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kochzap"
     android:installLocation="auto"
-    android:versionCode="107"
-    android:versionName="4.7.7">
+    android:versionCode="200"
+    android:versionName="5.0.0 Beta">
 
     <uses-sdk
         android:minSdkVersion="11"
