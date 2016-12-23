@@ -186,6 +186,12 @@
             android:screenOrientation="user"
             android:stateNotNeeded="true" />
         <activity
+            android:name=".StartActivity"
+            android:label="@string/menu_start"
+            android:screenOrientation="user"
+            android:stateNotNeeded="true">
+        </activity>
+        <activity
             android:name=".StopActivity"
             android:label="@string/menu_stop"
             android:screenOrientation="user"

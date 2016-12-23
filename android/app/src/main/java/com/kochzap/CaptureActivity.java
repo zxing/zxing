@@ -83,13 +83,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
 
-  private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
-  private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
-
-  private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
-
-  private static final int HISTORY_REQUEST_CODE = 0x0000bacc;
-
   private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
       EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
                  ResultMetadataType.SUGGESTED_PRICE,
@@ -285,7 +278,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if (dataString == null) {
       return false;
     }
-    for (String url : ZXING_URLS) {
+    for (String url : Constants.ZXING_URLS) {
       if (dataString.startsWith(url)) {
         return true;
       }
@@ -369,7 +362,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         break;
       case R.id.menu_history:
         intent.setClassName(this, HistoryActivity.class.getName());
-        startActivityForResult(intent, HISTORY_REQUEST_CODE);
+        startActivityForResult(intent, Constants.HISTORY_REQUEST_CODE);
         break;
       case R.id.menu_settings:
         intent.setClassName(this, PreferencesActivity.class.getName());
@@ -387,7 +380,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    if (resultCode == RESULT_OK && requestCode == HISTORY_REQUEST_CODE && historyManager != null) {
+    if (resultCode == RESULT_OK && requestCode == Constants.HISTORY_REQUEST_CODE && historyManager != null) {
       int itemNumber = intent.getIntExtra(Intents.History.ITEM_NUMBER, -1);
       if (itemNumber >= 0) {
         HistoryItem historyItem = historyManager.buildHistoryItem(itemNumber);
@@ -473,7 +466,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                   Toast.LENGTH_SHORT).show();
           maybeSetClipboard(resultHandler);
           // Wait a moment or else it will scan the same barcode continuously about 3 times
-          restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
+          restartPreviewAfterDelay(Constants.BULK_MODE_SCAN_DELAY_MS);
         } else {
           handleDecodeInternally(rawResult, resultHandler, barcode);
         }
@@ -486,7 +479,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       intent.putExtra("scan",rawResult.toString());
       intent.putExtra("company",Companies.companyFromScan(rawResult.toString()));
       startActivity(intent);
-    };
+    }
   }
 
   /**
@@ -629,10 +622,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     long resultDurationMS;
     if (getIntent() == null) {
-      resultDurationMS = DEFAULT_INTENT_RESULT_DURATION_MS;
+      resultDurationMS = Constants.DEFAULT_INTENT_RESULT_DURATION_MS;
     } else {
       resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
-                                                  DEFAULT_INTENT_RESULT_DURATION_MS);
+              Constants.DEFAULT_INTENT_RESULT_DURATION_MS);
     }
 
     if (resultDurationMS > 0) {
