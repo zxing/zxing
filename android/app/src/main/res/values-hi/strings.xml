@@ -146,4 +146,6 @@
   <string name="postzap">कृपया इसे खरीद नहीं है।</string>
   <string name="menu_warranty">गारंटी</string>
   <string name="menu_stop">रुकें</string>
+  <string name="menu_start">प्रारंभ</string>
+  <string name="scan">स्कैन उत्पाद</string>
 </resources>

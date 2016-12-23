@@ -61,6 +61,7 @@
     <string name="menu_warranty">Warranty</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_share">Share</string>
+    <string name="menu_start">Start</string>
     <string name="menu_stop">Stop</string>
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
@@ -145,4 +146,5 @@
     <string name="prezap">This is a Koch Industries Product.</string>
     <string name="zap">This is a Koch Industries Product, please do not buy it.</string>
     <string name="postzap">Please do not buy it.</string>
+    <string name="scan">Scan Product</string>
 </resources>

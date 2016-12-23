@@ -25,14 +25,4 @@
         android:icon="@android:drawable/ic_menu_sort_alphabetically"
         android:orderInCategory="2"
         android:showAsAction="withText|ifRoom"/>
-  <item android:id="@+id/menu_license"
-      android:title="@string/menu_license"
-      android:icon="@android:drawable/ic_menu_info_details"
-      android:orderInCategory="3"
-      android:showAsAction="withText"/>
-  <item android:id="@+id/menu_warranty"
-      android:title="@string/menu_warranty"
-      android:icon="@android:drawable/ic_menu_info_details"
-      android:orderInCategory="4"
-      android:showAsAction="withText"/>
 </menu>

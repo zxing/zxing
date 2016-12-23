@@ -146,4 +146,6 @@
   <string name="postzap">Onu satın almayın lütfen.</string>
   <string name="menu_warranty">Garanti</string>
   <string name="menu_stop">Dur</string>
+  <string name="menu_start">Başlama</string>
+  <string name="scan">Ürünü Tara</string>
 </resources>

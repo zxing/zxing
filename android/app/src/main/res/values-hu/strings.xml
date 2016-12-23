@@ -145,5 +145,7 @@
   <string name="zap">Ez egy Koch Industries termék, ne vegye meg.</string>
   <string name="postzap">Kérjük, ne vegye meg.</string>
   <string name="menu_warranty">Szavatosság</string>
-  <string name="menu_stop">" Állj meg"</string>
+  <string name="menu_stop">Állj meg</string>
+  <string name="menu_start">Indítás</string>
+  <string name="scan">Scan Product</string>
 </resources>

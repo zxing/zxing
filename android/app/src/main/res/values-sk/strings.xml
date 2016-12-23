@@ -146,4 +146,6 @@
   <string name="postzap">Prosím, nekupujte to.</string>
   <string name="menu_warranty">Záruka</string>
   <string name="menu_stop">Prestať</string>
+  <string name="menu_start">štart</string>
+  <string name="scan">Scan Product</string>
 </resources>

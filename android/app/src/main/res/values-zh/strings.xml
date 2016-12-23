@@ -146,4 +146,6 @@
   <string name="postzap">請不要購買。</string>
   <string name="menu_warranty">保證</string>
   <string name="menu_stop">停止</string>
+  <string name="menu_start">開始</string>
+  <string name="scan">掃描產品</string>
 </resources>

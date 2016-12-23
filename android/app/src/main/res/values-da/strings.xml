@@ -145,5 +145,7 @@
   <string name="zap">Dette er en Koch Industries Produkt, skal du ikke købe det.</string>
   <string name="postzap">Vær venlig ikke at købe det.</string>
   <string name="menu_warranty">Garanti</string>
-  <string name="menu_stop">" Stop"</string>
+  <string name="menu_stop">Stop</string>
+  <string name="menu_start">Starte</string>
+  <string name="scan">Scan Product</string>
 </resources>

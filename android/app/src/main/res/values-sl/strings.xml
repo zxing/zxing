@@ -145,5 +145,7 @@
   <string name="zap">To je Koch Industries izdelka, vas prosimo, da ga ne bi kupil.</string>
   <string name="postzap">Prosim, ne da kupiti.</string>
   <string name="menu_warranty">Garancija</string>
-  <string name="menu_stop">" Stop"</string>
+  <string name="menu_stop">Stop</string>
+  <string name="menu_start">Začetek</string>
+  <string name="scan">Scan Izdelka</string>
 </resources>

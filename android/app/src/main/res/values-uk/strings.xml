@@ -146,4 +146,6 @@
   <string name="postzap">Будь ласка, не купуйте його.</string>
   <string name="menu_warranty">гарантія</string>
   <string name="menu_stop">СТОП</string>
+  <string name="menu_start">старт</string>
+  <string name="scan">сканування продукту</string>
 </resources>

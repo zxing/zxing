@@ -146,4 +146,6 @@
   <string name="postzap">Älä osta sitä.</string>
   <string name="menu_warranty">Takuu</string>
   <string name="menu_stop">Stop</string>
+  <string name="menu_start">Alku</string>
+  <string name="scan">Scan Product</string>
 </resources>

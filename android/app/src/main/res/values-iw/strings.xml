@@ -146,4 +146,6 @@
   <string name="postzap">נא לא קונה את זה.</string>
   <string name="menu_warranty">אַחֲרָיוּת</string>
   <string name="menu_stop">תפסיק</string>
+  <string name="menu_start">הַתחָלָה</string>
+  <string name="scan">מוצרי סריקה</string>
 </resources>

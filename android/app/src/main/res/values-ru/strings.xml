@@ -145,5 +145,7 @@
   <string name="zap">Это Koch Industries продукта, пожалуйста, не покупайте его.</string>
   <string name="postzap">Пожалуйста, не покупайте его.</string>
   <string name="menu_warranty">Гарантия</string>
-  <string name="menu_stop">" Стоп"</string>
+  <string name="menu_stop">Стоп</string>
+  <string name="menu_start">Начало</string>
+  <string name="scan">сканирование продукта</string>
 </resources>

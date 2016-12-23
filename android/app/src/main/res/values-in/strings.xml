@@ -144,6 +144,8 @@
   <string name="prezap">Ini adalah Produk Koch Industries.</string>
   <string name="zap">Ini adalah Industries Produk Koch, jangan membelinya.</string>
   <string name="postzap">Jangan membelinya.</string>
-  <string name="menu_warranty">" Jaminan"</string>
-  <string name="menu_stop">\" Berhenti\"</string>
+  <string name="menu_warranty">Jaminan</string>
+  <string name="menu_stop">Berhenti</string>
+  <string name="menu_start">Mulai</string>
+  <string name="scan">Produk Memindai</string>
 </resources>

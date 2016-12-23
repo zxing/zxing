@@ -146,4 +146,6 @@
   <string name="postzap">من فضلك لا شرائه.</string>
   <string name="menu_warranty">ضمان</string>
   <string name="menu_stop">توقف</string>
+  <string name="menu_start">بداية</string>
+  <string name="scan">تفحص المنتج</string>
 </resources>

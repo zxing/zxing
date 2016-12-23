@@ -144,6 +144,8 @@
   <string name="prezap">Dit is een Koch Industries Product.</string>
   <string name="zap">Dit is een Koch Industries product, aarzel dan niet kopen.</string>
   <string name="postzap">Gelieve niet te kopen.</string>
-  <string name="menu_warranty">" Garantie"</string>
+  <string name="menu_warranty">Garantie</string>
   <string name="menu_stop">Stop</string>
+  <string name="menu_start">Begin</string>
+  <string name="scan">Scan Product</string>
 </resources>

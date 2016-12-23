@@ -146,4 +146,6 @@
   <string name="postzap">Por favor, não comprá-lo.</string>
   <string name="menu_warranty">Garantia</string>
   <string name="menu_stop">Pare</string>
+  <string name="menu_start">Começar</string>
+  <string name="scan">Digitalizar Produto</string>
 </resources>

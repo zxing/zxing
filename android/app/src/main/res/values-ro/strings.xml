@@ -146,4 +146,6 @@
   <string name="postzap">Vă rugăm să nu-l cumpere.</string>
   <string name="menu_warranty">Garanţie</string>
   <string name="menu_stop">Stop</string>
+  <string name="menu_start">Start</string>
+  <string name="scan">Produs de Scanare</string>
 </resources>

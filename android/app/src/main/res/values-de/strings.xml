@@ -146,4 +146,6 @@
   <string name="postzap">Vær venlig ikke at købe det.</string>
   <string name="menu_warranty">" Garantie"</string>
   <string name="menu_stop">Halt</string>
+  <string name="menu_start">Anfang</string>
+  <string name="scan">Produkt Scannen</string>
 </resources>

@@ -146,4 +146,6 @@
   <string name="postzap">Por favor, no lo compre.</string>
   <string name="menu_warranty">Bermea</string>
   <string name="menu_stop">Gelditu</string>
+  <string name="menu_start">Hasiera</string>
+  <string name="scan">Scan Produktuen</string>
 </resources>

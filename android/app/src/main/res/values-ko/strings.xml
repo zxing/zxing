@@ -146,4 +146,6 @@
   <string name="postzap">그것을 구입하지 마십시오.</string>
   <string name="menu_warranty">보증</string>
   <string name="menu_stop">중지</string>
+  <string name="menu_start">스타트</string>
+  <string name="scan">스캔 제품</string>
 </resources>

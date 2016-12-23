@@ -146,4 +146,6 @@
   <string name="postzap">Si us plau, no ho compri.</string>
   <string name="menu_warranty">Garantia</string>
   <string name="menu_stop">Aturar</string>
+  <string name="menu_start">Començar</string>
+  <string name="scan">Scan Producte</string>
 </resources>
