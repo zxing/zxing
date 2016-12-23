@@ -9,13 +9,27 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
+import android.widget.ImageView;
 import com.kochzap.history.HistoryActivity;
+import com.kochzap.share.Companies;
 import com.kochzap.share.ShareActivity;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class StartActivity extends AppCompatActivity {
+
+
+    private ImageView thumb;
+    private ImageView thumb1;
+    private ImageView thumb2;
+
+    private static int tUp = R.drawable.up;
+    private static int tDown = R.drawable.down;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +41,17 @@ public class StartActivity extends AppCompatActivity {
         String company = myIntent.getStringExtra("company");
         String scan = myIntent.getStringExtra("scan");
 
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            tUp = R.drawable.up;
+            tDown = R.drawable.down;
+        } else {
+            tUp = R.drawable.up_land;
+            tDown = R.drawable.down_land;
+        }
+
         showAd();
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -44,6 +67,24 @@ public class StartActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.capture, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void onClick(View v){
+        //respond to clicks
+
+        if(v.getId()== R.id.scan_button){
+            //scan
+
+            thumb.setImageResource(R.drawable.fist);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                thumb1.setImageResource(R.drawable.fist);
+                thumb2.setImageResource(R.drawable.fist);
+            }
+            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            scanIntegrator.initiateScan();
+
+
+        }
     }
 
     @Override
@@ -74,6 +115,74 @@ public class StartActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+/*
+            case Constants.REQUEST_INVITE:
+                //if (resultCode == RESULT_OK) {
+                // Check how many invitations were sent and log a message
+                // The ids array contains the unique invitation ids for each invitation sent
+                // (one for each contact select by the user). You can use these for analytics
+                // as the ID will be consistent on the sending and receiving devices.
+                //String[] ids = AppInviteInvitation.getInvitationIds(resultCode, intent);
+                //}
+                break;
+
+            case RESULT_CANCELED:
+                // The account picker dialog closed without selecting an account.
+                // Notify users that they must pick an account to proceed.
+                Toast.makeText(this, R.string.pick_account, Toast.LENGTH_SHORT).show();
+                break;
+*/
+            default:
+                //retrieve scan result
+                IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
+                if (scanningResult != null) {
+                    //we have a result
+
+                    String company = scanningResult.getContents();
+                    if (company != null && company.length() > 5) {
+                        company = company.substring(0, 6);
+
+                        if (Companies.containscompany(company)) {
+                            thumb.setImageResource(tDown);
+                            thumb.setImageResource(R.drawable.fist);
+                            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                thumb1.setImageResource(R.drawable.fist);
+                                thumb2.setImageResource(R.drawable.fist);
+                            }
+                        } else {
+                            thumb.setImageResource(R.drawable.fist);
+                            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                thumb1.setImageResource(R.drawable.fist);
+                                thumb2.setImageResource(R.drawable.fist);
+                            }
+                            thumb.setImageResource(tUp);
+                        }
+
+
+                    } else {
+                        note("No scan data received.");
+                    }
+                } else {
+                    note("No scan data received.");
+                }
+                break;
+        }
+    }
+
+    public void note(String msg) {
+        Toast toast = Toast.makeText(getApplicationContext(),
+                msg, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+
 
     private class AdTrack {
 

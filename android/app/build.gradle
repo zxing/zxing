@@ -40,4 +40,5 @@ dependencies {
     compile files('libs/android-core-3.3.0.jar')
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.google.android.gms:play-services-ads:9.8.0'
+    compile files('libs/android-integration-3.3.1.jar')
 }

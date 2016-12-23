@@ -357,7 +357,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         startActivity(intent);
         break;
       case R.id.menu_share:
-        intent.setClassName(this, ShareActivity.class.getName());
         startActivity(intent);
         break;
       case R.id.menu_history:
