@@ -21,7 +21,7 @@
       android:orderInCategory="1"
       android:showAsAction="withText|ifRoom"/>
     <item android:id="@+id/menu_start"
-        android:title="@string/menu_start"
+        android:title="@string/scan"
         android:icon="@android:drawable/ic_menu_search"
         android:orderInCategory="2"
         android:showAsAction="withText|ifRoom"/>

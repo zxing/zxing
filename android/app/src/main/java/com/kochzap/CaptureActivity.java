@@ -43,6 +43,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -135,6 +136,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ambientLightManager = new AmbientLightManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    if (!startScanning()) {
+      Intent intent = new Intent(Intent.ACTION_VIEW);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      intent.setClassName(this, StartActivity.class.getName());
+      startActivity(intent);
+    }
   }
 
   @Override
@@ -475,10 +482,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.setClassName(this, StopActivity.class.getName());
-      intent.putExtra("scan",rawResult.toString());
-      intent.putExtra("company",Companies.companyFromScan(rawResult.toString()));
+      intent.putExtra("scan", rawResult.toString());
+      intent.putExtra("company", Companies.companyFromScan(rawResult.toString()));
       startActivity(intent);
     }
+  }
+
+
+  synchronized boolean startScanning() {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    return prefs.getBoolean(PreferencesActivity.KEY_START_SCAN, false);
   }
 
   /**

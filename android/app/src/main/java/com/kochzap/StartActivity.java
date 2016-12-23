@@ -65,7 +65,6 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
         return true;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();

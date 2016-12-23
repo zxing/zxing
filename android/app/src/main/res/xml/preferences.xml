@@ -15,6 +15,12 @@
  limitations under the License.
  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/menu_start">
+  <CheckBoxPreference
+      android:key="preferences_start_scan"
+      android:defaultValue="false"
+      android:title="@string/scan"/>
+  </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_scanning_title">
     <CheckBoxPreference
         android:key="preferences_decode_1D_product"

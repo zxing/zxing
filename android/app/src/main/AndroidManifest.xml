@@ -20,7 +20,7 @@
     android:versionName="4.7.7">
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="11"
         android:targetSdkVersion="25" />
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -187,7 +187,7 @@
             android:stateNotNeeded="true" />
         <activity
             android:name=".StartActivity"
-            android:label="@string/menu_start"
+            android:label="@string/scan"
             android:screenOrientation="user"
             android:stateNotNeeded="true">
         </activity>
