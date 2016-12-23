@@ -148,4 +148,5 @@
   <string name="menu_stop">หยุด</string>
   <string name="menu_start">เริ่มต้น</string>
   <string name="scan">สแกนสินค้า</string>
+  <string name="collective">กำปั้นยก</string>
 </resources>

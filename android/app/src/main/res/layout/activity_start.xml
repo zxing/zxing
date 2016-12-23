@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_stop"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.kochzap.StartActivity">
     <Button android:id="@+id/scan_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:text="@string/scan"
         android:textSize="30sp"/>
 
     <ImageView
         android:id="@+id/thumb"
         android:layout_width="fill_parent"
-        android:layout_height="400sp"
+        android:layout_height="264sp"
         android:layout_margin="5dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/fist" />
-</RelativeLayout>
+        android:src="@drawable/fist"
+        android:contentDescription="@string/collective" />
+
+    <com.google.android.gms.ads.AdView android:id="@+id/BoycottAdView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="LARGE_BANNER"
+        ads:adUnitId="@string/boycott_banner_ad_unit_id" />
+</LinearLayout>
