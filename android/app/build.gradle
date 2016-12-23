@@ -38,5 +38,5 @@ android {
 dependencies {
     compile files('libs/core-3.3.0.jar')
     compile files('libs/android-core-3.3.0.jar')
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
 }
