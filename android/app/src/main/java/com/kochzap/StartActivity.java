@@ -6,10 +6,12 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -20,8 +22,7 @@ import com.kochzap.share.ShareActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class StartActivity extends AppCompatActivity {
-
+public class StartActivity extends AppCompatActivity implements OnClickListener {
 
     private ImageView thumb;
     private ImageView thumb1;
@@ -30,6 +31,7 @@ public class StartActivity extends AppCompatActivity {
     private static int tUp = R.drawable.up;
     private static int tDown = R.drawable.down;
 
+    public Button scanBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +43,15 @@ public class StartActivity extends AppCompatActivity {
         String company = myIntent.getStringExtra("company");
         String scan = myIntent.getStringExtra("scan");
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            tUp = R.drawable.up;
-            tDown = R.drawable.down;
-        } else {
-            tUp = R.drawable.up_land;
-            tDown = R.drawable.down_land;
+        scanBtn = (Button) findViewById(R.id.scan_button);
+
+        thumb = (ImageView) findViewById(R.id.thumb);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            thumb1 = (ImageView) findViewById(R.id.thumb1);
+            thumb2 = (ImageView) findViewById(R.id.thumb2);
         }
+        scanBtn.setOnClickListener(this);
 
         showAd();
     }
@@ -82,8 +86,6 @@ public class StartActivity extends AppCompatActivity {
             }
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
-
-
         }
     }
 
@@ -151,21 +153,17 @@ public class StartActivity extends AppCompatActivity {
 
                         if (Companies.containscompany(company)) {
                             thumb.setImageResource(tDown);
-                            thumb.setImageResource(R.drawable.fist);
                             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                thumb1.setImageResource(R.drawable.fist);
-                                thumb2.setImageResource(R.drawable.fist);
+                                thumb1.setImageResource(tDown);
+                                thumb2.setImageResource(tDown);
                             }
                         } else {
-                            thumb.setImageResource(R.drawable.fist);
-                            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                thumb1.setImageResource(R.drawable.fist);
-                                thumb2.setImageResource(R.drawable.fist);
-                            }
                             thumb.setImageResource(tUp);
+                            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                thumb1.setImageResource(tUp);
+                                thumb2.setImageResource(tUp);
+                            }
                         }
-
-
                     } else {
                         note("No scan data received.");
                     }

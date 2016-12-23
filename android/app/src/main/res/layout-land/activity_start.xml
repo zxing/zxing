@@ -26,7 +26,7 @@
         android:paddingTop="@dimen/half_padding"
         android:weightSum="1">
         <ImageView
-            android:id="@+id/thumb0"
+            android:id="@+id/thumb"
             android:layout_width="156dp"
             android:layout_height="156sp"
             android:layout_margin="2dp"
