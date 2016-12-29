@@ -114,6 +114,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
   private AmbientLightManager ambientLightManager;
+  private boolean facingFront;
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -147,6 +148,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   protected void onResume() {
     super.onResume();
     
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    facingFront = sharedPreferences.getBoolean("FacingFront", false);
+    initializeCaptureActivity();
+  }
+
+  private void initializeCaptureActivity() {
     // historyManager must be initialized here to update the history preference
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
@@ -156,6 +163,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
     // off screen.
     cameraManager = new CameraManager(getApplication());
+    if (facingFront) {
+      cameraManager.setManualCameraId(1);
+    } else {
+      cameraManager.setManualCameraId(0);
+    }
 
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
@@ -297,8 +309,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return false;
   }
 
-  @Override
-  protected void onPause() {
+  private void stopCamera() {
     if (handler != null) {
       handler.quitSynchronously();
       handler = null;
@@ -313,6 +324,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(this);
     }
+  }
+
+  @Override
+  protected void onPause() {
+    stopCamera();
     super.onPause();
   }
 
@@ -363,6 +379,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Intent intent = new Intent(Intent.ACTION_VIEW);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     switch (item.getItemId()) {
+      case R.id.menu_camera:
+        stopCamera();
+        facingFront = !facingFront;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.edit().putBoolean("FacingFront", facingFront).apply();
+        initializeCaptureActivity();
+        break;
       case R.id.menu_share:
         intent.setClassName(this, ShareActivity.class.getName());
         startActivity(intent);
