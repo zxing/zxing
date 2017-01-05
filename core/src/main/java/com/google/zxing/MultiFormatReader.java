@@ -111,6 +111,7 @@ public final class MultiFormatReader implements Reader {
           formats.contains(BarcodeFormat.CODE_93) ||
           formats.contains(BarcodeFormat.CODE_128) ||
           formats.contains(BarcodeFormat.ITF) ||
+          formats.contains(BarcodeFormat.STF) ||
           formats.contains(BarcodeFormat.RSS_14) ||
           formats.contains(BarcodeFormat.RSS_EXPANDED);
       // Put 1D readers upfront in "normal" mode

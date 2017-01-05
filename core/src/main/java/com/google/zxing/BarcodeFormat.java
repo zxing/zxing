@@ -65,6 +65,9 @@ public enum BarcodeFormat {
   /** RSS EXPANDED */
   RSS_EXPANDED,
 
+  /** STF (Standard Two of Five) 1D format. A.K.A. Non-Interleaved 2-of-5 */
+  STF,
+
   /** UPC-A 1D format. */
   UPC_A,
 

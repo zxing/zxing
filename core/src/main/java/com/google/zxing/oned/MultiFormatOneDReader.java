@@ -64,6 +64,9 @@ public final class MultiFormatOneDReader extends OneDReader {
       if (possibleFormats.contains(BarcodeFormat.ITF)) {
          readers.add(new ITFReader());
       }
+      if (possibleFormats.contains(BarcodeFormat.STF)) {
+         readers.add(new STFReader());
+      }
       if (possibleFormats.contains(BarcodeFormat.CODABAR)) {
          readers.add(new CodaBarReader());
       }
