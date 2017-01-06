@@ -97,7 +97,7 @@
     <maven.version.min>3.2.1</maven.version.min>
     <proguard.version>5.3.2</proguard.version>
     <proguard.plugin.version>2.0.13</proguard.plugin.version>
-    <slf4j.version>1.7.21</slf4j.version>
+    <slf4j.version>1.7.22</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.3.1-SNAPSHOT</zxing.version>
   </properties>
@@ -362,7 +362,7 @@
           </executions>
           <configuration>
             <sdk>
-              <platform>24</platform>
+              <platform>25</platform>
             </sdk>
             <proguard>
               <skip>true</skip>
