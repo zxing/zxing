@@ -40,11 +40,21 @@ public final class BitMatrix implements Cloneable {
   private final int rowSize;
   private final int[] bits;
 
-  // A helper to construct a square matrix.
+  /**
+   * Creates an empty square {@link BitMatrix}.
+   *
+   * @param dimension height and width
+   */
   public BitMatrix(int dimension) {
     this(dimension, dimension);
   }
 
+  /**
+   * Creates an empty {@link BitMatrix}.
+   *
+   * @param width bit matrix width
+   * @param height bit matrix height
+   */
   public BitMatrix(int width, int height) {
     if (width < 1 || height < 1) {
       throw new IllegalArgumentException("Both dimensions must be greater than 0");
@@ -60,6 +70,27 @@ public final class BitMatrix implements Cloneable {
     this.height = height;
     this.rowSize = rowSize;
     this.bits = bits;
+  }
+
+  /**
+   * Interprets a 2D array of booleans as a {@link BitMatrix}, where "true" means an "on" bit.
+   *
+   * @param image bits of the image, as a row-major 2D array. Elements are arrays representing rows
+   * @return {@link BitMatrix} representation of image
+   */
+  public static BitMatrix parse(boolean[][] image) {
+    int height = image.length;
+    int width = image[0].length;
+    BitMatrix bits = new BitMatrix(width, height);
+    for (int i = 0; i < height; i++) {
+      boolean[] imageI = image[i];
+      for (int j = 0; j < width; j++) {
+        if (imageI[j]) {
+          bits.set(j, i);
+        }
+      }
+    }
+    return bits;
   }
 
   public static BitMatrix parse(String stringRepresentation, String setString, String unsetString) {
