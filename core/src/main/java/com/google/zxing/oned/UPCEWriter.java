@@ -35,6 +35,11 @@ public final class UPCEWriter extends UPCEANWriter {
       (7 * 6) + // bars
       6; // end guard
 
+  public static void main(String[] args) throws Exception {
+    BitMatrix bm = new UPCEWriter().encode("12345670", BarcodeFormat.UPC_E, 200, 100, null);
+    System.out.println(bm);
+  }
+
   @Override
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
@@ -82,7 +87,7 @@ public final class UPCEWriter extends UPCEANWriter {
     }
       
     int checkDigit = Character.digit(contents.charAt(7), 10);
-    int parities = UPCEReader.CHECK_DIGIT_ENCODINGS[checkDigit];
+    int parities = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
     boolean[] result = new boolean[CODE_WIDTH];
     int pos = 0;
 
