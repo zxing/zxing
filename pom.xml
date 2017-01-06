@@ -362,7 +362,7 @@
           </executions>
           <configuration>
             <sdk>
-              <platform>25</platform>
+              <platform>24</platform>
             </sdk>
             <proguard>
               <skip>true</skip>
