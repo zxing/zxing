@@ -14,7 +14,7 @@
  limitations under the License.
  -->
 <resources>
-    <string name="app_name">Koch Zap</string>
+    <string name="app_name">KochZap</string>
     <string name="app_picker_name">Applications</string>
     <string name="bookmark_picker_name">Bookmarks</string>
     <string name="button_add_calendar">Add to calendar</string>
@@ -49,7 +49,7 @@
     <string name="contents_text">Plain text</string>
     <string name="history_clear_text">Clear history</string>
     <string name="history_clear_one_history_text">Clear</string>
-    <string name="history_email_title">Koch Zap history</string>
+    <string name="history_email_title">KochZap history</string>
     <string name="history_empty">Empty</string>
     <string name="history_empty_detail">No barcode scans have been recorded</string>
     <string name="history_send">Send history</string>

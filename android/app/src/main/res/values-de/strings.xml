@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Koch Zap</string>
+  <string name="app_name">KochZap</string>
   <string name="app_picker_name">Anwendungen</string>
   <string name="bookmark_picker_name">Lesezeichen</string>
   <string name="button_add_calendar">Termin hinzufügen</string>
@@ -49,7 +49,7 @@
   <string name="contents_text">Text</string>
   <string name="history_clear_one_history_text">Löschen</string>
   <string name="history_clear_text">Verlauf löschen</string>
-  <string name="history_email_title">Koch Zap Verlauf</string>
+  <string name="history_email_title">KochZap Verlauf</string>
   <string name="history_empty">Leer</string>
   <string name="history_empty_detail">Es wurden keine Barcodes aufgezeichnet.</string>
   <string name="history_send">Verlauf senden</string>

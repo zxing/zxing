@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Koch Zap</string>
+  <string name="app_name">KochZap</string>
   <string name="app_picker_name">Εφαρμογές</string>
   <string name="bookmark_picker_name">Σελιδοδείκτες</string>
   <string name="button_add_calendar">Προσθήκη στο ημερολόγιο</string>
@@ -49,7 +49,7 @@
   <string name="contents_text">Απλό κείμενο</string>
   <string name="history_clear_one_history_text">Διαγραφή</string>
   <string name="history_clear_text">Διαγραφή ιστορικού</string>
-  <string name="history_email_title">Ιστορικό Koch Zap</string>
+  <string name="history_email_title">Ιστορικό KochZap</string>
   <string name="history_empty">Κενό</string>
   <string name="history_empty_detail">Δεν έχουν καταγραφεί σαρώσεις barcode</string>
   <string name="history_send">Αποστολή ιστορικού</string>

@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Koch Zap</string>
+  <string name="app_name">KochZap</string>
   <string name="app_picker_name">Aplicativos</string>
   <string name="bookmark_picker_name">Favoritos</string>
   <string name="button_add_calendar">Adicionar ao calendário</string>
@@ -49,7 +49,7 @@
   <string name="contents_text">Texto simples</string>
   <string name="history_clear_one_history_text">Limpar</string>
   <string name="history_clear_text">Limpar histórico</string>
-  <string name="history_email_title">Histórico do Koch Zap</string>
+  <string name="history_email_title">Histórico do KochZap</string>
   <string name="history_empty">Vazio</string>
   <string name="history_empty_detail">Nenhum código de barras foram registrados</string>
   <string name="history_send">Enviar histórico</string>

@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Koch Zap</string>
+  <string name="app_name">KochZap</string>
   <string name="app_picker_name">Applikationer</string>
   <string name="bookmark_picker_name">Bokmärken</string>
   <string name="button_add_calendar">Lägg till i kalender</string>

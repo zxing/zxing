@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Koch Zap</string>
+  <string name="app_name">KochZap</string>
   <string name="app_picker_name">Aplikasi</string>
   <string name="bookmark_picker_name">Bookmarks</string>
   <string name="button_add_calendar">Tambah ke kalendar</string>
@@ -49,7 +49,7 @@
   <string name="contents_text">Teks biasa</string>
   <string name="history_clear_one_history_text">Hapus</string>
   <string name="history_clear_text">Hapus riwayat</string>
-  <string name="history_email_title">Riwayat Koch Zap</string>
+  <string name="history_email_title">Riwayat KochZap</string>
   <string name="history_empty">Kosong</string>
   <string name="history_empty_detail">Tidak ada pemindaian barcode yang pernah dicatat</string>
   <string name="history_send">Kirim riwayat</string>

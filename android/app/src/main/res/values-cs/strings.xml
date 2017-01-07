@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Koch Zap</string>
+  <string name="app_name">KochZap</string>
   <string name="app_picker_name">Aplikace</string>
   <string name="bookmark_picker_name">Záložky</string>
   <string name="button_add_calendar">Přidat do kalendáře</string>
@@ -49,7 +49,7 @@
   <string name="contents_text">Ostatní</string>
   <string name="history_clear_one_history_text">Vyčistit</string>
   <string name="history_clear_text">Vyčistit historii</string>
-  <string name="history_email_title">Koch Zap historie</string>
+  <string name="history_email_title">KochZap historie</string>
   <string name="history_empty">Prázdný</string>
   <string name="history_empty_detail">Žádný čárové kódy nebyly ještě zaznamenány</string>
   <string name="history_send">Zaslat historii</string>

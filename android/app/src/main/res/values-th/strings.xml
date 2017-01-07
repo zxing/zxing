@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Koch Zap</string>
+  <string name="app_name">KochZap</string>
   <string name="app_picker_name">แอพพลิเคชั่น</string>
   <string name="bookmark_picker_name">บุ๊คมาร์ก</string>
   <string name="button_add_calendar">เพิ่มไปยังปฏิทิน</string>
@@ -49,7 +49,7 @@
   <string name="contents_text">ข้อความธรรมดา</string>
   <string name="history_clear_one_history_text">ล้าง</string>
   <string name="history_clear_text">ล้างประวัติ</string>
-  <string name="history_email_title">ประวัติ Koch Zap</string>
+  <string name="history_email_title">ประวัติ KochZap</string>
   <string name="history_empty">ว่าง</string>
   <string name="history_empty_detail">ไม่มีบาร์โค้ดที่ถูกบันทึกไว้</string>
   <string name="history_send">ส่งประวัติ</string>
