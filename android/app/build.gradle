@@ -8,13 +8,13 @@ android {
         applicationId "com.kochzap"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 200
-        versionName '5.0.0 Beta'
+        versionCode 201
+        versionName '5.0.1 Beta'
     }
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             debuggable false
             jniDebuggable false
             renderscriptDebuggable false
