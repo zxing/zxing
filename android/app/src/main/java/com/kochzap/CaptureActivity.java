@@ -33,11 +33,13 @@ import com.kochzap.result.supplement.SupplementalInfoRetriever;
 import com.kochzap.share.ShareActivity;
 import com.kochzap.share.Companies;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,10 +47,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -122,6 +127,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return cameraManager;
   }
 
+  final private static int MY_PERMISSIONS_REQUEST_CAMERA = 23;
+  
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
@@ -136,14 +143,71 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ambientLightManager = new AmbientLightManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    if (!startScanning()) {
-      Intent intent = new Intent(Intent.ACTION_VIEW);
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.setClassName(this, StartActivity.class.getName());
-      startActivity(intent);
+    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      // From 6.0 (Marshmallow, version 23) on, need to ask permission
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+              != PackageManager.PERMISSION_GRANTED) {
+
+        // Should we show an explanation?
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.CAMERA)) {
+
+          // Show an explanation to the user *asynchronously* -- don't block
+          // this thread waiting for the user's response! After the user
+          // sees the explanation, try again to request the permission.
+
+        } else {
+          // No explanation needed, we can request the permission.
+
+          ActivityCompat.requestPermissions(this,
+                  new String[]{Manifest.permission.CAMERA},
+                  MY_PERMISSIONS_REQUEST_CAMERA);
+          // MY_PERMISSIONS_REQUEST_CAMERA is an
+          // app-defined int constant. The callback method gets the
+          // result of the request.
+        }
+      }
+    } else {
+      if (!startScanning()) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        intent.setClassName(this, StartActivity.class.getName());
+        startActivity(intent);
+      }
     }
   }
 
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode,
+                                         String permissions[], int[] grantResults) {
+    switch (requestCode) {
+      case MY_PERMISSIONS_REQUEST_CAMERA: {
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+          if (!startScanning()) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+            intent.setClassName(this, StartActivity.class.getName());
+            startActivity(intent);
+          }
+          // permission was granted, yay! Do the
+          // camera-related task you need to do.
+
+        } else {
+
+          // permission denied, boo! Disable the
+          // functionality that depends on this permission.
+        }
+        return;
+      }
+    }
+  }
+  
+  
+  
   @Override
   protected void onResume() {
     super.onResume();
