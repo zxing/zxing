@@ -151,7 +151,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // Should we show an explanation?
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.CAMERA)) {
-
+          Intent intent = new Intent(Intent.ACTION_VIEW);
+          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+          intent.setClassName(this, StartActivity.class.getName());
+          startActivity(intent);
           // Show an explanation to the user *asynchronously* -- don't block
           // this thread waiting for the user's response! After the user
           // sees the explanation, try again to request the permission.
