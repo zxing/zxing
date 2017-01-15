@@ -149,4 +149,5 @@
   <string name="menu_start">Początek</string>
   <string name="scan">Skanowanie Produktu</string>
   <string name="collective">Raised Fist</string>
+  <string name="need_camera_to_scan">Potrzebują aparatu do skanowania</string>
 </resources>

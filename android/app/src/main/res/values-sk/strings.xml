@@ -149,4 +149,5 @@
   <string name="menu_start">štart</string>
   <string name="scan">Scan Product</string>
   <string name="collective">Raised Fist</string>
+  <string name="need_camera_to_scan">Potrebujem fotoaparát pre skenovanie</string>
 </resources>

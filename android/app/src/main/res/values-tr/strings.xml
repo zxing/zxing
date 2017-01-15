@@ -149,4 +149,5 @@
   <string name="menu_start">Başlama</string>
   <string name="scan">Ürünü Tara</string>
   <string name="collective">Yükseltilmiş Yumruk</string>
+  <string name="need_camera_to_scan">Taramak için kameraya ihtiyacımız var</string>
 </resources>

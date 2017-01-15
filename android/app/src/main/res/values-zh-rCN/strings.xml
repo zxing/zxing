@@ -149,4 +149,5 @@
   <string name="menu_start">开始</string>
   <string name="scan">扫描产品</string>
   <string name="collective">被举的拳头</string>
+  <string name="need_camera_to_scan">需要相机扫描</string>
 </resources>

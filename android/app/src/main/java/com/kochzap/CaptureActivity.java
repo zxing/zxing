@@ -30,7 +30,6 @@ import com.kochzap.result.ResultButtonListener;
 import com.kochzap.result.ResultHandler;
 import com.kochzap.result.ResultHandlerFactory;
 import com.kochzap.result.supplement.SupplementalInfoRetriever;
-import com.kochzap.share.ShareActivity;
 import com.kochzap.share.Companies;
 
 import android.Manifest;
@@ -45,7 +44,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -128,7 +126,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   final private static int MY_PERMISSIONS_REQUEST_CAMERA = 23;
-  
+
+  private boolean cameraPermission = false;
+  private boolean resumed = false;
+
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
@@ -151,24 +152,28 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // Should we show an explanation?
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.CAMERA)) {
-          Intent intent = new Intent(Intent.ACTION_VIEW);
-          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-          intent.setClassName(this, StartActivity.class.getName());
-          startActivity(intent);
+          String needCamera = getString(R.string.need_camera_to_scan);
+          Toast.makeText(this, needCamera, Toast.LENGTH_LONG).show();
+          //Intent intent = new Intent(Intent.ACTION_VIEW);
+          //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+          //intent.setClassName(this, StartActivity.class.getName());
+          //startActivity(intent);
           // Show an explanation to the user *asynchronously* -- don't block
           // this thread waiting for the user's response! After the user
           // sees the explanation, try again to request the permission.
-
-        } else {
-          // No explanation needed, we can request the permission.
-
           ActivityCompat.requestPermissions(this,
                   new String[]{Manifest.permission.CAMERA},
                   MY_PERMISSIONS_REQUEST_CAMERA);
           // MY_PERMISSIONS_REQUEST_CAMERA is an
           // app-defined int constant. The callback method gets the
           // result of the request.
-        }
+
+        } else {
+          // No explanation needed, we can request the permission.
+          ActivityCompat.requestPermissions(this,
+                  new String[]{Manifest.permission.CAMERA},
+                  MY_PERMISSIONS_REQUEST_CAMERA);
+       }
       }
     } else {
       if (!startScanning()) {
@@ -200,9 +205,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           // camera-related task you need to do.
 
         } else {
-
           // permission denied, boo! Disable the
           // functionality that depends on this permission.
+          Intent intent = new Intent(Intent.ACTION_VIEW);
+          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+          intent.setClassName(this, StartActivity.class.getName());
+          startActivity(intent);
         }
         return;
       }
@@ -248,7 +256,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Intent intent = getIntent();
 
     copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true)
-        && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
+            && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
 
     source = IntentSource.NONE;
     sourceUrl = null;
@@ -262,41 +270,43 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       String dataString = intent.getDataString();
 
       if (Intents.Scan.ACTION.equals(action)) {
+        if (!cameraPermission &&
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED)) {
+        } else {
+          // Scan the formats the intent requested, and return the result to the calling activity.
+          source = IntentSource.NATIVE_APP_INTENT;
+          decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
+          decodeHints = DecodeHintManager.parseDecodeHints(intent);
 
-        // Scan the formats the intent requested, and return the result to the calling activity.
-        source = IntentSource.NATIVE_APP_INTENT;
-        decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
-        decodeHints = DecodeHintManager.parseDecodeHints(intent);
+          if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
+            int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
+            int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
+            if (width > 0 && height > 0) {
+              cameraManager.setManualFramingRect(width, height);
+            }
+          }
 
-        if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
-          int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
-          int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
-          if (width > 0 && height > 0) {
-            cameraManager.setManualFramingRect(width, height);
+          if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
+            int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
+            if (cameraId >= 0) {
+              cameraManager.setManualCameraId(cameraId);
+            }
+          }
+
+          String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
+          if (customPromptMessage != null) {
+            statusView.setText(customPromptMessage);
           }
         }
-
-        if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
-          int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
-          if (cameraId >= 0) {
-            cameraManager.setManualCameraId(cameraId);
-          }
-        }
-        
-        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
-        if (customPromptMessage != null) {
-          statusView.setText(customPromptMessage);
-        }
-
       } else if (dataString != null &&
-                 dataString.contains("http://www.google") &&
-                 dataString.contains("/m/products/scan")) {
+              dataString.contains("http://www.google") &&
+              dataString.contains("/m/products/scan")) {
 
         // Scan only products and send the result to mobile Product Search.
         source = IntentSource.PRODUCT_SEARCH_LINK;
         sourceUrl = dataString;
         decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
-
       } else if (isZXingURL(dataString)) {
 
         // Scan formats requested in query string (all formats if none specified).
@@ -310,9 +320,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
 
       }
-
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
-
     }
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
@@ -325,6 +333,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // Install the callback and wait for surfaceCreated() to init the camera.
       surfaceHolder.addCallback(this);
     }
+    resumed = true;
   }
 
   private int getCurrentOrientation() {
@@ -376,6 +385,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(this);
     }
+    resumed = false;
     super.onPause();
   }
 

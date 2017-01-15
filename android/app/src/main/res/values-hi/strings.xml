@@ -149,4 +149,5 @@
   <string name="menu_start">प्रारंभ</string>
   <string name="scan">स्कैन उत्पाद</string>
   <string name="collective">उठाया मुट्ठी</string>
+  <string name="need_camera_to_scan">स्कैन करने के लिए कैमरे की आवश्यकता</string>
 </resources>

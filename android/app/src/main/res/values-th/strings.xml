@@ -149,4 +149,5 @@
   <string name="menu_start">เริ่มต้น</string>
   <string name="scan">สแกนสินค้า</string>
   <string name="collective">กำปั้นยก</string>
+  <string name="need_camera_to_scan">ต้องการกล้องที่จะสแกน</string>
 </resources>

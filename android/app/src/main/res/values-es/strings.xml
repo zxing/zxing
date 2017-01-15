@@ -149,4 +149,5 @@
   <string name="menu_start">Comienzo</string>
   <string name="scan">Escanear producto</string>
   <string name="collective">Puño Levantado</string>
+  <string name="need_camera_to_scan">Necesita una cámara para escanear</string>
 </resources>

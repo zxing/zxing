@@ -149,4 +149,5 @@
   <string name="menu_start">הַתחָלָה</string>
   <string name="scan">מוצרי סריקה</string>
   <string name="collective">אגרוף מונף</string>
+  <string name="need_camera_to_scan">צריך מצלמה לסרוק</string>
 </resources>

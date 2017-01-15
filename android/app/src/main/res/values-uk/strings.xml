@@ -149,4 +149,5 @@
   <string name="menu_start">старт</string>
   <string name="scan">сканування продукту</string>
   <string name="collective">вихований кулак</string>
+  <string name="need_camera_to_scan">Потрібна камера для сканування</string>
 </resources>

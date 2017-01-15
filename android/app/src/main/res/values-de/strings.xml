@@ -149,4 +149,5 @@
   <string name="menu_start">Anfang</string>
   <string name="scan">Produkt Scannen</string>
   <string name="collective">Angehobene Faust</string>
+  <string name="need_camera_to_scan">Brauchen Sie Kamera zum Scannen</string>
 </resources>

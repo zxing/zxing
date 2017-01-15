@@ -149,4 +149,5 @@
   <string name="menu_start">Indítás</string>
   <string name="scan">Scan Product</string>
   <string name="collective">Emelt Fist</string>
+  <string name="need_camera_to_scan">Kell kamera beolvasni</string>
 </resources>

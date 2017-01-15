@@ -149,4 +149,5 @@
   <string name="menu_start">스타트</string>
   <string name="scan">스캔 제품</string>
   <string name="collective">제기 주먹</string>
+  <string name="need_camera_to_scan">카메라를 스캔해야합니다.</string>
 </resources>
