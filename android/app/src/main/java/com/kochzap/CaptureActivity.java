@@ -809,21 +809,28 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Log.w(TAG, "initCamera() while already open -- late SurfaceView callback?");
       return;
     }
-    try {
-      cameraManager.openDriver(surfaceHolder);
-      // Creating the handler starts the preview, which can also throw a RuntimeException.
-      if (handler == null) {
-        handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
+
+    // prior to 6.0 (M) we do not need to ask permission
+    if ((android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) ||
+      // From 6.0 (Marshmallow, version 23) on, need to ask permission
+      (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+              == PackageManager.PERMISSION_GRANTED)) {
+      try {
+        cameraManager.openDriver(surfaceHolder);
+        // Creating the handler starts the preview, which can also throw a RuntimeException.
+        if (handler == null) {
+          handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
+        }
+        decodeOrStoreSavedBitmap(null, null);
+      } catch (IOException ioe) {
+        Log.w(TAG, ioe);
+        displayFrameworkBugMessageAndExit();
+      } catch (RuntimeException e) {
+        // Barcode Scanner has seen crashes in the wild of this variety:
+        // java.?lang.?RuntimeException: Fail to connect to camera service
+        Log.w(TAG, "Unexpected error initializing camera", e);
+        displayFrameworkBugMessageAndExit();
       }
-      decodeOrStoreSavedBitmap(null, null);
-    } catch (IOException ioe) {
-      Log.w(TAG, ioe);
-      displayFrameworkBugMessageAndExit();
-    } catch (RuntimeException e) {
-      // Barcode Scanner has seen crashes in the wild of this variety:
-      // java.?lang.?RuntimeException: Fail to connect to camera service
-      Log.w(TAG, "Unexpected error initializing camera", e);
-      displayFrameworkBugMessageAndExit();
     }
   }
 
