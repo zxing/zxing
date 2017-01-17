@@ -10,23 +10,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="com.kochzap.StartActivity">
+
     <Button android:id="@+id/scan_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/scan"
-        android:textSize="30sp"/>
+        android:textSize="30dp"/>
+
+    <ImageView
+        android:id="@+id/household"
+        android:layout_width="344dp"
+        android:layout_height="180dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/household"
+        android:contentDescription="@string/collective" />
 
     <ImageView
         android:id="@+id/thumb"
         android:layout_width="fill_parent"
-        android:layout_height="264sp"
+        android:layout_height="264dp"
         android:layout_margin="5dp"
         android:src="@drawable/fist"
         android:contentDescription="@string/collective" />
 
-    <com.google.android.gms.ads.AdView android:id="@+id/BoycottAdView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ads:adSize="LARGE_BANNER"
-        ads:adUnitId="@string/boycott_banner_ad_unit_id" />
 </LinearLayout>

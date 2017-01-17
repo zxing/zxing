@@ -1,6 +1,9 @@
 package com.kochzap;
 
-import android.app.Activity;
+/* Prominent notice:
+    This file has been modified from the original zxing code for the
+    KochZap app.
+ */
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import android.widget.ImageView;
 import com.kochzap.history.HistoryActivity;
 import com.kochzap.share.Companies;
@@ -52,8 +53,6 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
             thumb2 = (ImageView) findViewById(R.id.thumb2);
         }
         scanBtn.setOnClickListener(this);
-
-        showAd();
     }
 
     @Override
@@ -177,37 +176,5 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
         Toast toast = Toast.makeText(getApplicationContext(),
                 msg, Toast.LENGTH_SHORT);
         toast.show();
-    }
-
-
-
-    private class AdTrack {
-
-        public Activity ctx;
-        public AdView adView, adView1, adView2;
-        public AdRequest adRequest, adRequest1, adRequest2;
-
-        AdTrack(Activity context, AdView adVw, AdRequest adReq) {
-            this.ctx = context;
-            this.adView = adVw;
-            this.adRequest = adReq;
-        }
-    }
-
-    private AdTrack adTrack, adTrack1, adTrack2;
-
-    private void showAd() {
-        if (adTrack == null || adTrack.ctx != this) {
-            // need a new ad
-            AdView mAdView = (AdView) findViewById(R.id.BoycottAdView);
-            AdRequest adRequest = new AdRequest.Builder()
-                    .build();
-            mAdView.loadAd(adRequest);
-            // OK, load this ad for this context
-            adTrack = new AdTrack(this, mAdView, adRequest);
-        } else {
-            // already fetched the ad for this context, just load it again
-            adTrack.adView.loadAd(adTrack.adRequest);
-        }
     }
 }

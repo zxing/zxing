@@ -373,3 +373,17 @@
   - Add StopActivity to nag the user not to buy Kock merchandise and show the red thumbs down
   - Fiddled with licensing a bit, added a few translations, probably not needed but interesting.
   - Broke the scheduling stuff
+5.0.0 (November 2016)
+  - Adding KochZap Activities: start and stop, with hooks in CaptureActivity
+  - Added graphics and some string resources
+5.0.1 (December 2016)
+  - Cleaned up, some bug fixing
+ 
+5.0.2 (December 2016)
+  - Get permissions for camera working
+5.0.3 (January 2017)
+  - Permissions bug fixes
+5.0.4 (January 2017)
+  - Permissions bug fixes, I believe it is working now
+5.0.5
+  - First cut of new logo graphics, portrait only & not properly sized yet.

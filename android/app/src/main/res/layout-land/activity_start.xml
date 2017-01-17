@@ -17,27 +17,37 @@
         android:text="@string/scan"
         android:textSize="30sp"/>
 
+    <ImageView
+        android:id="@+id/household"
+        android:layout_width="575dp"
+        android:layout_height="63dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/household"
+        android:contentDescription="@string/collective" />
+
     <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="156sp"
+        android:layout_height="156dp"
         android:paddingBottom="@dimen/half_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
         android:paddingTop="@dimen/half_padding"
         android:weightSum="1">
+
         <ImageView
             android:id="@+id/thumb"
             android:layout_width="156dp"
-            android:layout_height="156sp"
+            android:layout_height="156dp"
             android:layout_margin="2dp"
             android:src="@drawable/fist"
             android:contentDescription="@string/collective"
             android:adjustViewBounds="false"
             android:layout_weight="0.36" />
+
         <ImageView
             android:id="@+id/thumb1"
             android:layout_width="154dp"
-            android:layout_height="156sp"
+            android:layout_height="156dp"
             android:layout_margin="2dp"
             android:src="@drawable/fist"
             android:contentDescription="@string/collective"
@@ -46,16 +56,10 @@
         <ImageView
             android:id="@+id/thumb2"
             android:layout_width="158dp"
-            android:layout_height="156sp"
+            android:layout_height="156dp"
             android:layout_margin="2dp"
             android:src="@drawable/fist"
             android:contentDescription="@string/collective"
             android:layout_weight="0.29" />
     </LinearLayout>
-
-    <com.google.android.gms.ads.AdView android:id="@+id/BoycottAdView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/boycott_banner_ad_unit_id" />
 </LinearLayout>

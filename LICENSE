@@ -1,4 +1,4 @@
-                                 Apache License
+﻿                                 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
 
@@ -175,6 +175,10 @@
 
    END OF TERMS AND CONDITIONS
 
+   APPENDIX: Prominent notice:
+    This file has been modified from the original zxing licence for the
+    KochZap app.
+	
    APPENDIX: How to apply the Apache License to your work.
 
       To apply the Apache License to your work, attach the following
@@ -208,6 +212,7 @@ Copyright (c) 2005 Sun Microsystems, Inc.
 Copyright © 2010-2014 University of Manchester
 Copyright © 2010-2015 Stian Soiland-Reyes
 Copyright © 2015 Peter Hull
+Copyright © 2017 David Dawes
 All Rights Reserved.
 
 Redistribution and use in source and binary forms, with or without

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/* Prominent notice:
+    This file has been modified from the original zxing code for the
+    KochZap app.
+ */
+
 package com.kochzap;
 
 import com.google.zxing.BarcodeFormat;

@@ -12,16 +12,27 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--->
+
+
+ Prominent notice:
+    This file has been modified from the original zxing code for the
+    KochZap app.
+  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kochzap"
     android:installLocation="auto"
-    android:versionCode="204"
-    android:versionName="5.0.4 Beta">
+    android:versionCode="205"
+    android:versionName="5.0.5 Beta">
 
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="25" />
+
+    <supports-screens android:smallScreens="true"
+    android:normalScreens="true"
+    android:largeScreens="true"
+    android:xlargeScreens="true"
+    android:anyDensity="true"/>
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
