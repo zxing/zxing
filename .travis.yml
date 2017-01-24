@@ -26,17 +26,20 @@ after_success: if [ -n "$JACOCO" ]; then bash <(curl -s https://codecov.io/bash)
 #
 # mkdir android-sdk-linux; cd android-sdk-linux
 # curl -O https://dl.google.com/android/repository/tools_r25.2.3-linux.zip
-# unzip *.zip
-# rm *.zip
+# unzip *.zip; rm *.zip
 #
-# # Or different, more recent versions:
+# # Or different, more recent versions; see sdkmanager --list
 # ./tools/bin/sdkmanager "platforms;android-22" "build-tools;25.0.2"
 # # Accept license
 #
-# ./tools/bin/sdkmanager --uninstall tools
-#
 # ./tools/bin/sdkmanager --update
 # # Accept license
+#
+# cp tools/source.properties ..
+#
+# ./tools/bin/sdkmanager --uninstall tools
+#
+# mkdir tools; mv ../source.properties tools
 #
 # cd ..
 # tar cf - android-sdk-linux | bzip2 -9 > android-sdk-linux.tar.bz2
