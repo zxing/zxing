@@ -355,6 +355,7 @@
           </executions>
           <configuration>
             <sdk>
+              <path>${env.ANDROID_HOME}</path>
               <platform>${android.platform}</platform>
             </sdk>
             <proguard>
