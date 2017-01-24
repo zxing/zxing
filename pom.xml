@@ -47,12 +47,6 @@
         <version>21.0</version>
       </dependency>
       <dependency>
-        <groupId>com.google.android</groupId>
-        <artifactId>android</artifactId>
-        <version>4.1.1.4</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
         <groupId>com.google.zxing</groupId>
         <artifactId>core</artifactId>
         <version>${zxing.version}</version>
@@ -84,8 +78,7 @@
   <modules>
     <module>core</module>
     <module>javase</module>
-    <module>android-core</module>
-    <module>android-integration</module>
+    <!-- android modules are activated by a profile below -->
     <module>zxing.appspot.com</module>
     <module>zxingorg</module>
   </modules>
@@ -100,6 +93,7 @@
     <slf4j.version>1.7.22</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.3.1-SNAPSHOT</zxing.version>
+    <android.platform>22</android.platform>
   </properties>
 
   <build>
@@ -176,7 +170,6 @@
             <target>${java.version}</target>
             <compilerArgs>
               <arg>-Xlint:all</arg>
-              <arg>-Werror</arg>
             </compilerArgs>
           </configuration>
         </plugin>
@@ -362,7 +355,7 @@
           </executions>
           <configuration>
             <sdk>
-              <platform>24</platform>
+              <platform>${android.platform}</platform>
             </sdk>
             <proguard>
               <skip>true</skip>
@@ -716,10 +709,23 @@
         </property>
       </activation>
       <modules>
+        <module>android-core</module>
+        <module>android-integration</module>
         <module>android</module>
         <module>androidtest</module>
         <module>glass</module>
       </modules>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>${android.platform}</version>
+            <scope>system</scope>
+            <systemPath>${env.ANDROID_HOME}/platforms/android-${android.platform}/android.jar</systemPath>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
     </profile>
     <profile>
       <id>release</id>
