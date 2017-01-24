@@ -358,6 +358,12 @@
               <path>${env.ANDROID_HOME}</path>
               <platform>${android.platform}</platform>
             </sdk>
+            <artifactSet>
+              <excludes>
+                <!-- Make sure Android SDK jar isn't included -->
+                <exclude>com.google.android:android</exclude>
+              </excludes>
+            </artifactSet>
             <proguard>
               <skip>true</skip>
             </proguard>
