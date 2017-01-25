@@ -66,8 +66,7 @@ public class Companies {
             "796433",
             "796845",
             "798527",
-            "887814",
-            "978043"
+            "887814"
     };
 
 
@@ -113,7 +112,6 @@ public class Companies {
         coName.put("796845", "Georgia Pacific Vanity Fair");
         coName.put("798527", "Georgia Pacific Vanity Fair");
         coName.put("887814", "Georgia Pacific Mardi Gras");
-        coName.put("978043", "Lightning THief book test case");
     }
 
     public static boolean containscompany(String co) {

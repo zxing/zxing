@@ -3,17 +3,15 @@
 This is a fork off of the regular zxing open source project.
 ####Added to the fork
 Fork specific additions:
-Added a scan activity with a scan button and some logos.
 Added list of bad companies, susidiaries of Koch Industries to the best of our abilities.
-When scanning a product, if the company (first 6 digits) matches one of the Kock Industries
-companies we stop normal operation and pull up the "Stop" activity. The stop page shows a 
-red thumbs down and asks the user not to buy the Koch Indstries prooduct.
+When scanning a product, if the company (first 6 digits) matches one of the Kock Brother's Industries
+companies we stop normal operation and pull up the "Stop" page. The stop page shws a red thums down and
+asks the user not to buy the Koch Indstries prooduct.
 Modified privacy, I turned on Google Analytics so I noted that.
 Modified license a little to include KochZap references, since that does not need to be localized.
 I did end up having to add strings to all 30+ locales, and used Google translate for that.
 ###Broken:
-Schedule from QR Code - part of schedule did not compile so I commented bits out. Does not work.
-#From here on out it is the original pre-fork zxing README.
+	Schedule from QR Code - part of schedule did not compile so I commented bits out. Does not work.
 ##Get Started Developing
 To get started, please visit: https://github.com/zxing/zxing/wiki/Getting-Started-Developing
 
