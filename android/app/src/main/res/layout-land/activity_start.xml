@@ -4,62 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/half_padding"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/half_padding"
+    android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="com.kochzap.StartActivity">
 
-    <Button android:id="@+id/scan_button"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/scan"
-        android:textSize="30sp"/>
-
-    <ImageView
-        android:id="@+id/household"
-        android:layout_width="575dp"
-        android:layout_height="63dp"
-        android:layout_margin="5dp"
-        android:src="@drawable/household"
-        android:contentDescription="@string/collective" />
-
-    <LinearLayout android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="156dp"
-        android:paddingBottom="@dimen/half_padding"
-        android:paddingLeft="@dimen/half_padding"
-        android:paddingRight="@dimen/half_padding"
-        android:paddingTop="@dimen/half_padding"
-        android:weightSum="1">
-
-        <ImageView
-            android:id="@+id/thumb"
-            android:layout_width="156dp"
-            android:layout_height="156dp"
-            android:layout_margin="2dp"
-            android:src="@drawable/fist"
-            android:contentDescription="@string/collective"
-            android:adjustViewBounds="false"
-            android:layout_weight="0.36" />
+        android:orientation="horizontal"
+        android:weightSum="7"
+        tools:context="com.kochzap.StartActivity">
 
         <ImageView
             android:id="@+id/thumb1"
-            android:layout_width="154dp"
-            android:layout_height="156dp"
-            android:layout_margin="2dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/imageadjustdp"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
             android:src="@drawable/fist"
+            android:layout_weight="1"
             android:contentDescription="@string/collective"
-            android:layout_weight="0.38" />
+            android:layout_width="wrap_content"
+            android:paddingLeft="@dimen/zero_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:elevation="1dp"
+            android:paddingEnd="@dimen/zero_padding"
+            android:paddingStart="@dimen/zero_padding"
+            android:cropToPadding="false"
+            android:layout_marginEnd="@dimen/zero_margin"
+            android:layout_marginStart="@dimen/zero_margin"
+            android:adjustViewBounds="true" />
+
+        <Button android:id="@+id/scan_button"
+            android:layout_height="131dp"
+            android:layout_marginTop="@dimen/zero_margin"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
+            android:text="@string/scan"
+            android:layout_weight="5"
+            android:textSize="36sp"
+            android:layout_width="wrap_content" />
 
         <ImageView
             android:id="@+id/thumb2"
-            android:layout_width="158dp"
-            android:layout_height="156dp"
-            android:layout_margin="2dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/imageadjustdp"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
             android:src="@drawable/fist"
+            android:layout_weight="1"
             android:contentDescription="@string/collective"
-            android:layout_weight="0.29" />
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true" />
+
     </LinearLayout>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
+        android:layout_marginTop="@dimen/zero_margin"
+        android:layout_marginBottom="@dimen/zero_margin"
+        android:layout_marginRight="@dimen/zero_margin"
+        android:layout_marginLeft="@dimen/zero_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/logos_land"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/zero_margin"
+        android:layout_marginBottom="@dimen/zero_margin"
+        android:layout_marginRight="@dimen/zero_margin"
+        android:layout_marginLeft="@dimen/zero_margin"
+        android:src="@drawable/logos_land"
+        android:contentDescription="@string/collective"
+        android:adjustViewBounds="true" />
+
+    </ScrollView>
+
 </LinearLayout>

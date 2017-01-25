@@ -14,10 +14,21 @@
  limitations under the License.
  -->
 <resources>
-    <dimen name="standard_padding">8dp</dimen>
-    <dimen name="half_padding">4dp</dimen>
+    <dimen name="standard_margin">2dp</dimen>
+    <dimen name="half_margin">1dp</dimen>
+    <dimen name="zero_margin">0dp</dimen>
+    <dimen name="standard_buffer">2dp</dimen>
+    <dimen name="half_buffer">1dp</dimen>
+    <dimen name="zero_buffer">0dp</dimen>
+    <dimen name="standard_padding">2dp</dimen>
+    <dimen name="half_padding">1dp</dimen>
+    <dimen name="zero_padding">0dp</dimen>
+    <dimen name="twodp">2dp</dimen>
+    <dimen name="onedp">1dp</dimen>
+    <dimen name="zerodp">0dp</dimen>
+    <dimen name="imageadjustdp">6dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">4dp</dimen>
-    <dimen name="activity_vertical_margin">8dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">1dp</dimen>
+    <dimen name="activity_vertical_margin">1dp</dimen>
+    <dimen name="fab_margin">4dp</dimen>
 </resources>

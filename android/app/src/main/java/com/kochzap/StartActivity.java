@@ -46,11 +46,14 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
 
         scanBtn = (Button) findViewById(R.id.scan_button);
 
-        thumb = (ImageView) findViewById(R.id.thumb);
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             thumb1 = (ImageView) findViewById(R.id.thumb1);
+            thumb1.setOnClickListener(this);
             thumb2 = (ImageView) findViewById(R.id.thumb2);
+            thumb2.setOnClickListener(this);
+        } else {
+            thumb = (ImageView) findViewById(R.id.thumb);
+            thumb.setOnClickListener(this);
         }
         scanBtn.setOnClickListener(this);
     }
@@ -74,13 +77,17 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
     public void onClick(View v){
         //respond to clicks
 
-        if(v.getId()== R.id.scan_button){
+        if((v.getId()== R.id.scan_button) ||
+                (v.getId()== R.id.thumb) ||
+                (v.getId()== R.id.thumb1) ||
+                (v.getId()== R.id.thumb2)){
             //scan
 
-            thumb.setImageResource(R.drawable.fist);
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 thumb1.setImageResource(R.drawable.fist);
                 thumb2.setImageResource(R.drawable.fist);
+            } else {
+                thumb.setImageResource(R.drawable.fist);
             }
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
@@ -150,16 +157,18 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
                         company = company.substring(0, 6);
 
                         if (Companies.containscompany(company)) {
-                            thumb.setImageResource(tDown);
                             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                                 thumb1.setImageResource(tDown);
                                 thumb2.setImageResource(tDown);
+                            } else {
+                                thumb.setImageResource(tDown);
                             }
                         } else {
-                            thumb.setImageResource(tUp);
                             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                                 thumb1.setImageResource(tUp);
                                 thumb2.setImageResource(tUp);
+                            } else {
+                                thumb.setImageResource(tUp);
                             }
                         }
                     } else {

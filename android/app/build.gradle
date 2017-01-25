@@ -1,15 +1,13 @@
 apply plugin: 'com.android.application'
 android {
-    signingConfigs {
-    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.kochzap"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 208
-        versionName '5.0.8 Beta'
+        versionCode 209
+        versionName '5.0.9 Beta'
     }
     buildTypes {
         release {

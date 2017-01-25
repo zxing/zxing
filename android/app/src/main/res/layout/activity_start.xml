@@ -9,42 +9,80 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="com.kochzap.StartActivity">
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:weightSum="7"
         tools:context="com.kochzap.StartActivity">
-
-        <Button android:id="@+id/scan_button"
-            android:layout_width="170dp"
-            android:layout_height="180dp"
-            android:layout_margin="0dp"
-            android:text="@string/scan"
-            android:textSize="30dp"/>
 
         <ImageView
             android:id="@+id/thumb"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
-            android:layout_margin="5dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/imageadjustdp"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/imageadjustdp"
             android:src="@drawable/fist"
-            android:contentDescription="@string/collective" />
+            android:layout_weight="1"
+            android:contentDescription="@string/collective"
+            android:layout_width="wrap_content"
+            android:paddingLeft="@dimen/zero_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:paddingStart="@dimen/zero_padding"
+            android:cropToPadding="false"
+            android:layout_marginEnd="@dimen/zero_margin"
+            android:layout_marginStart="@dimen/zero_margin"
+            android:adjustViewBounds="true" />
+
+        <Button android:id="@+id/scan_button"
+            android:layout_height="124dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
+            android:paddingLeft="@dimen/zero_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:paddingStart="@dimen/zero_padding"
+            android:text="@string/scan"
+            android:layout_weight="5"
+            android:textSize="20dp"
+            android:layout_width="wrap_content" />
+
+        <ImageView
+            android:id="@+id/thumb1"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/imageadjustdp"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
+            android:src="@drawable/fist"
+            android:layout_weight="1"
+            android:contentDescription="@string/collective"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true" />
+
     </LinearLayout>
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/household"
-            android:layout_width="360dp"
-            android:layout_height="180dp"
-            android:layout_margin="5dp"
+            android:id="@+id/logos_land"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/zero_margin"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
             android:src="@drawable/logos"
-            android:contentDescription="@string/collective" />
+            android:contentDescription="@string/collective"
+            android:adjustViewBounds="true" />
+
 
     </ScrollView>
 
