@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,26 +10,42 @@
     android:orientation="vertical"
     tools:context="com.kochzap.StartActivity">
 
-    <Button android:id="@+id/scan_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/scan"
-        android:textSize="30dp"/>
-
-    <ImageView
-        android:id="@+id/household"
-        android:layout_width="344dp"
-        android:layout_height="180dp"
-        android:layout_margin="5dp"
-        android:src="@drawable/household"
-        android:contentDescription="@string/collective" />
-
-    <ImageView
-        android:id="@+id/thumb"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="264dp"
-        android:layout_margin="5dp"
-        android:src="@drawable/fist"
-        android:contentDescription="@string/collective" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:context="com.kochzap.StartActivity">
+
+        <Button android:id="@+id/scan_button"
+            android:layout_width="170dp"
+            android:layout_height="180dp"
+            android:layout_margin="0dp"
+            android:text="@string/scan"
+            android:textSize="30dp"/>
+
+        <ImageView
+            android:id="@+id/thumb"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/fist"
+            android:contentDescription="@string/collective" />
+    </LinearLayout>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/household"
+            android:layout_width="360dp"
+            android:layout_height="180dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/logos"
+            android:contentDescription="@string/collective" />
+
+    </ScrollView>
 
 </LinearLayout>
