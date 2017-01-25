@@ -20,7 +20,7 @@
 
         <ImageView
             android:id="@+id/thumb1"
-            android:layout_height="120dp"
+            android:layout_height="69dp"
             android:layout_marginTop="@dimen/imageadjustdp"
             android:layout_marginBottom="@dimen/zero_margin"
             android:layout_marginRight="@dimen/zero_margin"
@@ -40,7 +40,7 @@
             android:adjustViewBounds="true" />
 
         <Button android:id="@+id/scan_button"
-            android:layout_height="131dp"
+            android:layout_height="80dp"
             android:layout_marginTop="@dimen/zero_margin"
             android:layout_marginBottom="@dimen/zero_margin"
             android:layout_marginRight="@dimen/zero_margin"
@@ -52,7 +52,7 @@
 
         <ImageView
             android:id="@+id/thumb2"
-            android:layout_height="120dp"
+            android:layout_height="69dp"
             android:layout_marginTop="@dimen/imageadjustdp"
             android:layout_marginBottom="@dimen/zero_margin"
             android:layout_marginRight="@dimen/zero_margin"

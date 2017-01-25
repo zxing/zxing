@@ -25,7 +25,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class StartActivity extends AppCompatActivity implements OnClickListener {
 
-    private ImageView thumb;
     private ImageView thumb1;
     private ImageView thumb2;
 
@@ -46,15 +45,10 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
 
         scanBtn = (Button) findViewById(R.id.scan_button);
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            thumb1 = (ImageView) findViewById(R.id.thumb1);
-            thumb1.setOnClickListener(this);
-            thumb2 = (ImageView) findViewById(R.id.thumb2);
-            thumb2.setOnClickListener(this);
-        } else {
-            thumb = (ImageView) findViewById(R.id.thumb);
-            thumb.setOnClickListener(this);
-        }
+        thumb1 = (ImageView) findViewById(R.id.thumb1);
+        thumb1.setOnClickListener(this);
+        thumb2 = (ImageView) findViewById(R.id.thumb2);
+        thumb2.setOnClickListener(this);
         scanBtn.setOnClickListener(this);
     }
 
@@ -78,17 +72,12 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
         //respond to clicks
 
         if((v.getId()== R.id.scan_button) ||
-                (v.getId()== R.id.thumb) ||
                 (v.getId()== R.id.thumb1) ||
                 (v.getId()== R.id.thumb2)){
             //scan
+            thumb1.setImageResource(R.drawable.fist);
+            thumb2.setImageResource(R.drawable.fist);
 
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                thumb1.setImageResource(R.drawable.fist);
-                thumb2.setImageResource(R.drawable.fist);
-            } else {
-                thumb.setImageResource(R.drawable.fist);
-            }
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
         }
@@ -157,19 +146,11 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
                         company = company.substring(0, 6);
 
                         if (Companies.containscompany(company)) {
-                            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                thumb1.setImageResource(tDown);
-                                thumb2.setImageResource(tDown);
-                            } else {
-                                thumb.setImageResource(tDown);
-                            }
+                            thumb1.setImageResource(tDown);
+                            thumb2.setImageResource(tDown);
                         } else {
-                            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                thumb1.setImageResource(tUp);
-                                thumb2.setImageResource(tUp);
-                            } else {
-                                thumb.setImageResource(tUp);
-                            }
+                            thumb1.setImageResource(tUp);
+                            thumb2.setImageResource(tUp);
                         }
                     } else {
                         note("No scan data received.");

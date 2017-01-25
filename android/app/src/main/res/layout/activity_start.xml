@@ -17,8 +17,8 @@
         tools:context="com.kochzap.StartActivity">
 
         <ImageView
-            android:id="@+id/thumb"
-            android:layout_height="120dp"
+            android:id="@+id/thumb1"
+            android:layout_height="116dp"
             android:layout_marginTop="@dimen/imageadjustdp"
             android:layout_marginBottom="@dimen/zero_margin"
             android:layout_marginRight="@dimen/zero_margin"
@@ -38,7 +38,7 @@
 
         <Button android:id="@+id/scan_button"
             android:layout_height="124dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="@dimen/zero_margin"
             android:layout_marginRight="@dimen/zero_margin"
             android:layout_marginLeft="@dimen/zero_margin"
@@ -52,8 +52,8 @@
             android:layout_width="wrap_content" />
 
         <ImageView
-            android:id="@+id/thumb1"
-            android:layout_height="120dp"
+            android:id="@+id/thumb2"
+            android:layout_height="116dp"
             android:layout_marginTop="@dimen/imageadjustdp"
             android:layout_marginBottom="@dimen/zero_margin"
             android:layout_marginRight="@dimen/zero_margin"
