@@ -150,4 +150,5 @@
   <string name="scan">스캔 제품</string>
   <string name="collective">제기 주먹</string>
   <string name="need_camera_to_scan">카메라를 스캔해야합니다.</string>
+  <string name="logos">제품 로고 이미지</string>
 </resources>

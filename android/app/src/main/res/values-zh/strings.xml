@@ -150,4 +150,5 @@
   <string name="scan">掃描產品</string>
   <string name="collective">被舉的拳頭</string>
   <string name="need_camera_to_scan">需要相機掃描</string>
+  <string name="logos">產品標誌圖片</string>
 </resources>

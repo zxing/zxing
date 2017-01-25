@@ -150,4 +150,5 @@
   <string name="scan">сканирование продукта</string>
   <string name="collective">Воспитанный кулак</string>
   <string name="need_camera_to_scan">Нужна камера для сканирования</string>
+  <string name="logos">Логотип продукта Изображения</string>
 </resources>

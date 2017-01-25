@@ -150,4 +150,5 @@
   <string name="scan">Scan Produit</string>
   <string name="collective">Poing Levé</string>
   <string name="need_camera_to_scan">Besoin d\'un appareil photo pour numériser</string>
+  <string name="logos">Logo du produit</string>
 </resources>

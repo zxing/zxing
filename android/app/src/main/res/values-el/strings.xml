@@ -150,4 +150,5 @@
   <string name="scan">σάρωση Προϊόν</string>
   <string name="collective">υψωμένη γροθιά</string>
   <string name="need_camera_to_scan">Ανάγκη κάμερα για σάρωση</string>
+  <string name="logos">Λογότυπο του προϊόντος Εικόνες</string>
 </resources>

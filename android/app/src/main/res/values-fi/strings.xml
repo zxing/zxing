@@ -150,4 +150,5 @@
   <string name="scan">Scan Product</string>
   <string name="collective">Raised Fist</string>
   <string name="need_camera_to_scan">Tarve kamera skannaa</string>
+  <string name="logos">Tuotteen logo Kuvat</string>
 </resources>
