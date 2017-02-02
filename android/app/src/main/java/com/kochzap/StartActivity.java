@@ -28,10 +28,10 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
     private ImageView thumb1;
     private ImageView thumb2;
 
-    private static int tUp = R.drawable.up;
-    private static int tDown = R.drawable.down;
+    private static int tUp = R.drawable.button_up;
+    private static int tDown = R.drawable.button_down;
 
-    public Button scanBtn;
+    public ImageView scanBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +43,8 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
         String company = myIntent.getStringExtra("company");
         String scan = myIntent.getStringExtra("scan");
 
-        scanBtn = (Button) findViewById(R.id.scan_button);
+        scanBtn = (ImageView) findViewById(R.id.scan_button);
 
-        thumb1 = (ImageView) findViewById(R.id.thumb1);
-        thumb1.setOnClickListener(this);
-        thumb2 = (ImageView) findViewById(R.id.thumb2);
-        thumb2.setOnClickListener(this);
         scanBtn.setOnClickListener(this);
     }
 
@@ -71,13 +67,9 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
     public void onClick(View v){
         //respond to clicks
 
-        if((v.getId()== R.id.scan_button) ||
-                (v.getId()== R.id.thumb1) ||
-                (v.getId()== R.id.thumb2)){
-            //scan
-            thumb1.setImageResource(R.drawable.fist);
-            thumb2.setImageResource(R.drawable.fist);
-
+        if(v.getId()== R.id.scan_button){
+              //scan
+            scanBtn.setImageResource(R.drawable.fist);
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
         }
@@ -146,11 +138,9 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
                         company = company.substring(0, 6);
 
                         if (Companies.containscompany(company)) {
-                            thumb1.setImageResource(tDown);
-                            thumb2.setImageResource(tDown);
+                            scanBtn.setImageResource(tDown);
                         } else {
-                            thumb1.setImageResource(tUp);
-                            thumb2.setImageResource(tUp);
+                            scanBtn.setImageResource(tUp);
                         }
                     } else {
                         note("No scan data received.");
