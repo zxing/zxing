@@ -28,40 +28,25 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/prezaptext"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/moredp"
+        android:gravity="center"
+        android:paddingBottom="@dimen/half_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
         android:paddingTop="@dimen/moredp"
         android:textSize="30sp"
         android:lineSpacingExtra="10sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="false"
         android:textColor="@color/red"
         android:text="@string/prezap"/>
 
-    <ImageView android:id="@+id/scan_button1"
-        android:src="@drawable/button_down"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/zero_margin"
-        android:layout_marginBottom="@dimen/zero_margin"
-        android:layout_marginRight="@dimen/zero_margin"
-        android:layout_marginLeft="@dimen/zero_margin"
-        android:paddingLeft="@dimen/zero_padding"
-        android:paddingRight="@dimen/zero_padding"
-        android:paddingEnd="@dimen/zero_padding"
-        android:paddingStart="@dimen/zero_padding"
-        android:text="@string/scan"
-        android:layout_width="fill_parent" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/postzaptext"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/moredp"
+        android:gravity="center"
+        android:paddingBottom="@dimen/standard_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
         android:paddingTop="@dimen/moredp"
@@ -69,25 +54,26 @@
         android:lineSpacingExtra="10sp"
         android:textColor="@color/red"
         android:text="@string/postzap"
-        android:layout_below="@+id/down"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="21dp" />
+        android:layout_marginTop="24dp" />
 
-    <ImageView android:id="@+id/scan_button2"
-        android:src="@drawable/button_down"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/zero_margin"
-        android:layout_marginBottom="@dimen/zero_margin"
-        android:layout_marginRight="@dimen/zero_margin"
-        android:layout_marginLeft="@dimen/zero_margin"
-        android:paddingLeft="@dimen/zero_padding"
-        android:paddingRight="@dimen/zero_padding"
-        android:paddingEnd="@dimen/zero_padding"
-        android:paddingStart="@dimen/zero_padding"
-        android:text="@string/scan"
-        android:layout_width="fill_parent" />
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/logos_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/zero_margin"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
+            android:src="@drawable/logos"
+            android:contentDescription="@string/collective"
+            android:adjustViewBounds="true" />
+
+
+    </ScrollView>
 
 </LinearLayout>

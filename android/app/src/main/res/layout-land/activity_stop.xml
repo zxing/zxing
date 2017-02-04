@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_stop"
     android:layout_width="match_parent"
@@ -10,10 +10,49 @@
     android:paddingTop="@dimen/standard_padding"
     tools:context="com.kochzap.StopActivity">
 
+    <ImageView
+        android:id="@+id/down"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/half_padding"
+        android:paddingLeft="@dimen/half_padding"
+        android:paddingRight="@dimen/half_padding"
+        android:paddingTop="@dimen/half_padding"
+        android:src="@drawable/button_down_land" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_textandscroll"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/standard_padding"
+        android:paddingLeft="@dimen/half_padding"
+        android:paddingRight="@dimen/half_padding"
+        android:paddingTop="@dimen/standard_padding"
+        tools:context="com.kochzap.StopActivity">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/prezaptext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+
+        android:paddingBottom="@dimen/half_padding"
+        android:paddingLeft="@dimen/half_padding"
+        android:paddingRight="@dimen/half_padding"
+        android:paddingTop="@dimen/half_padding"
+        android:textSize="28sp"
+        android:lineSpacingExtra="2sp"
+        android:textColor="@color/red"
+        android:text="@string/prezap"
+        android:layout_marginTop="21dp" />
+
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/postzaptext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:paddingBottom="@dimen/half_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
@@ -22,39 +61,58 @@
         android:lineSpacingExtra="2dp"
         android:textColor="@color/red"
         android:text="@string/postzap"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/down" />
+        android:layout_marginBottom="36dp" />
 
-    <ImageView
-        android:id="@+id/down"
-        android:layout_width="fill_parent"
-        android:layout_height="160dp"
-        android:paddingBottom="@dimen/half_padding"
-        android:paddingLeft="@dimen/half_padding"
-        android:paddingRight="@dimen/half_padding"
-        android:paddingTop="@dimen/half_padding"
-        android:src="@drawable/button_down_land"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/zero_margin"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginEnd="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
+            android:layout_marginStart="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginTop="@dimen/zero_margin"
+            android:padding="@dimen/zero_padding"
+            android:paddingBottom="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:paddingLeft="@dimen/zero_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingStart="@dimen/zero_padding"
+            android:paddingTop="@dimen/zero_padding">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/prezaptext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/half_padding"
-        android:paddingLeft="@dimen/half_padding"
-        android:paddingRight="@dimen/half_padding"
-        android:paddingTop="@dimen/half_padding"
-        android:textSize="24sp"
-        android:lineSpacingExtra="2sp"
-        android:textColor="@color/red"
-        android:text="@string/prezap"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/down" />
+            <ImageView
+                android:id="@+id/logos_scroll"
+                android:src="@drawable/logos_land"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:contentDescription="@string/logos"
+                android:cropToPadding="false"
+                android:layout_margin="@dimen/zero_margin"
+                tools:layout_margin="@dimen/zero_margin"
+                android:layout_marginBottom="@dimen/zero_margin"
+                android:layout_marginEnd="@dimen/zero_margin"
+                android:layout_marginLeft="@dimen/zero_margin"
+                android:layout_marginRight="@dimen/zero_margin"
+                android:layout_marginStart="@dimen/zero_margin"
+                android:layout_marginTop="@dimen/zero_margin"
+                android:padding="@dimen/zero_padding"
+                android:paddingBottom="@dimen/zero_padding"
+                android:paddingEnd="@dimen/zero_padding"
+                android:paddingLeft="@dimen/zero_padding"
+                android:paddingRight="@dimen/zero_padding"
+                android:paddingStart="@dimen/zero_padding"
+                android:paddingTop="@dimen/zero_padding"
+                tools:scaleType="centerInside"
+                android:isScrollContainer="true"
+                android:adjustViewBounds="true">
+            </ImageView>
 
-</RelativeLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_stop"
     android:layout_width="match_parent"
@@ -8,40 +8,41 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.kochzap.StopActivity">
+    tools:context="com.kochzap.StopActivity"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/down"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:src="@drawable/button_down"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/zero_margin"
+        android:layout_marginBottom="@dimen/zero_margin"
+        android:layout_marginRight="@dimen/zero_margin"
+        android:layout_marginLeft="@dimen/zero_margin" />
+
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/prezaptext"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:textSize="30sp"
         android:lineSpacingExtra="10sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="false"
         android:textColor="@android:color/holo_red_dark"
         android:text="@string/prezap"/>
 
-    <ImageView
-        android:id="@+id/down"
-        android:layout_width="fill_parent"
-        android:layout_height="240sp"
-        android:src="@drawable/button_down"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/prezaptext"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/postzaptext"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:paddingBottom="@dimen/standard_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
@@ -50,9 +51,25 @@
         android:lineSpacingExtra="10sp"
         android:textColor="@android:color/holo_red_dark"
         android:text="@string/postzap"
-        android:layout_below="@+id/down"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="23dp" />
+        android:layout_marginTop="24dp" />
 
-</RelativeLayout>
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/logos_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/zero_margin"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
+            android:src="@drawable/logos"
+            android:contentDescription="@string/collective"
+            android:adjustViewBounds="true" />
+
+    </ScrollView>
+
+</LinearLayout>

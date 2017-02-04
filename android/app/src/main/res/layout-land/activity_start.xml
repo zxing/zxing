@@ -14,20 +14,20 @@
     android:layout_marginStart="@dimen/half_margin">
     >
 
-        <ImageView android:id="@+id/scan_button"
-            android:src="@drawable/button_fist_land"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:paddingLeft="@dimen/zero_padding"
-            android:paddingRight="@dimen/zero_padding"
-            android:paddingEnd="@dimen/zero_padding"
-            android:paddingStart="@dimen/zero_padding"
-            android:text="@string/scan"
-            android:layout_width="wrap_content"
-            android:layout_marginEnd="@dimen/half_margin"
-            android:layout_marginRight="@dimen/half_margin"
-            android:contentDescription="@string/app_name" />
+    <ImageView android:id="@+id/scan_button"
+        android:src="@drawable/button_fist_land"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:paddingLeft="@dimen/zero_padding"
+        android:paddingRight="@dimen/zero_padding"
+        android:paddingEnd="@dimen/zero_padding"
+        android:paddingStart="@dimen/zero_padding"
+        android:text="@string/scan"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="@dimen/half_margin"
+        android:layout_marginRight="@dimen/half_margin"
+        android:contentDescription="@string/app_name" />
 
     <ScrollView
         android:id="@+id/scroll"
@@ -52,7 +52,7 @@
             android:id="@+id/logos_scroll"
             android:src="@drawable/logos_land"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scaleType="center"
             android:contentDescription="@string/logos"
             android:cropToPadding="false"
@@ -75,6 +75,7 @@
             android:isScrollContainer="true"
             android:adjustViewBounds="true">
         </ImageView>
+
     </ScrollView>
 
 </LinearLayout>
