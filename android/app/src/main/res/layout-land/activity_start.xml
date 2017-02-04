@@ -1,64 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/standard_margin"
+    android:paddingLeft="@dimen/standard_margin"
+    android:paddingRight="@dimen/standard_margin"
+    android:paddingTop="@dimen/standard_margin"
     android:orientation="vertical"
-    tools:context="com.kochzap.StartActivity">
+    tools:context="com.kochzap.StartActivity"
+    android:layout_marginLeft="@dimen/half_margin"
+    android:layout_marginStart="@dimen/half_margin">
+    >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:context="com.kochzap.StartActivity">
 
         <ImageView android:id="@+id/scan_button"
             android:src="@drawable/button_fist_land"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_marginTop="@dimen/zero_margin"
-            android:layout_marginBottom="@dimen/zero_margin"
-            android:layout_marginRight="@dimen/zero_margin"
-            android:layout_marginLeft="@dimen/zero_margin"
             android:paddingLeft="@dimen/zero_padding"
             android:paddingRight="@dimen/zero_padding"
             android:paddingEnd="@dimen/zero_padding"
             android:paddingStart="@dimen/zero_padding"
             android:text="@string/scan"
-            android:textSize="36sp"
-            android:layout_width="fill_parent" />
-
-    </LinearLayout>
-
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/scroll"
-        android:layout_marginTop="@dimen/zero_margin"
-        android:layout_marginBottom="@dimen/zero_margin"
-        android:layout_marginRight="@dimen/zero_margin"
-        android:layout_marginLeft="@dimen/zero_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+            android:layout_width="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="@dimen/half_margin"
+            android:layout_marginRight="@dimen/half_margin"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentStart="false"
+            android:contentDescription="@string/app_name" />
 
     <ImageView
-        android:id="@+id/logos_land"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/zero_margin"
-        android:layout_marginBottom="@dimen/zero_margin"
-        android:layout_marginRight="@dimen/zero_margin"
-        android:layout_marginLeft="@dimen/zero_margin"
+        android:id="@+id/scroll"
         android:src="@drawable/logos_land"
-        android:contentDescription="@string/collective"
-        android:adjustViewBounds="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/logos"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/scan_button"
+        android:layout_toEndOf="@+id/scan_button"
+        android:cropToPadding="false">
 
-    </ScrollView>
+    </ImageView>
 
-</LinearLayout>
+</RelativeLayout>

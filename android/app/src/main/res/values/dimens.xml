@@ -26,6 +26,7 @@
     <dimen name="twodp">2dp</dimen>
     <dimen name="onedp">1dp</dimen>
     <dimen name="zerodp">0dp</dimen>
+    <dimen name="moredp">10dp</dimen>
     <dimen name="imageadjustdp">6dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">1dp</dimen>

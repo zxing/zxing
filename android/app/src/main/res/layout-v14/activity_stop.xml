@@ -28,7 +28,7 @@
         android:id="@+id/down"
         android:layout_width="fill_parent"
         android:layout_height="240sp"
-        android:src="@drawable/down"
+        android:src="@drawable/button_down"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"

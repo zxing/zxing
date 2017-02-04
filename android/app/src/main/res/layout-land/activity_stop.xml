@@ -35,7 +35,7 @@
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
         android:paddingTop="@dimen/half_padding"
-        android:src="@drawable/down_land"
+        android:src="@drawable/button_down_land"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
