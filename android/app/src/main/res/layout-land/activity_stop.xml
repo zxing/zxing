@@ -10,10 +10,42 @@
     android:paddingTop="@dimen/standard_padding"
     tools:context="com.kochzap.StopActivity">
 
+    <ImageView
+        android:id="@+id/down"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/half_padding"
+        android:paddingLeft="@dimen/half_padding"
+        android:paddingRight="@dimen/half_padding"
+        android:paddingTop="@dimen/half_padding"
+        android:src="@drawable/button_down_land"
+        android:layout_alignParentLeft="true"
+        />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/prezaptext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+
+        android:paddingBottom="@dimen/half_padding"
+        android:paddingLeft="@dimen/half_padding"
+        android:paddingRight="@dimen/half_padding"
+        android:paddingTop="@dimen/half_padding"
+        android:textSize="28sp"
+        android:lineSpacingExtra="2sp"
+        android:textColor="@color/red"
+        android:text="@string/prezap"
+        android:layout_marginTop="21dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/down"
+        android:layout_toLeftOf="@+id/downright" />
+
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/postzaptext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:paddingBottom="@dimen/half_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
@@ -22,39 +54,20 @@
         android:lineSpacingExtra="2dp"
         android:textColor="@color/red"
         android:text="@string/postzap"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/down" />
+        android:layout_marginBottom="36dp"
+        android:layout_alignBottom="@+id/down"
+        android:layout_toRightOf="@+id/down"
+        android:layout_toLeftOf="@+id/downright" />
 
     <ImageView
-        android:id="@+id/down"
-        android:layout_width="fill_parent"
-        android:layout_height="160dp"
+        android:id="@+id/downright"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:paddingBottom="@dimen/half_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
         android:paddingTop="@dimen/half_padding"
-        android:src="@drawable/down_land"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/prezaptext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/half_padding"
-        android:paddingLeft="@dimen/half_padding"
-        android:paddingRight="@dimen/half_padding"
-        android:paddingTop="@dimen/half_padding"
-        android:textSize="24sp"
-        android:lineSpacingExtra="2sp"
-        android:textColor="@color/red"
-        android:text="@string/prezap"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/down" />
+        android:src="@drawable/button_down_land"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

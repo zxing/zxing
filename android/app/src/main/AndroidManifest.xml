@@ -75,11 +75,6 @@
             android:theme="@style/CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="com.kochzap.SCAN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -202,6 +197,10 @@
             android:label="@string/scan"
             android:screenOrientation="user"
             android:stateNotNeeded="true">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".StopActivity"
