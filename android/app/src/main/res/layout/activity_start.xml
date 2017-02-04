@@ -40,7 +40,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/logos_land"
+            android:id="@+id/logos_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/zero_margin"

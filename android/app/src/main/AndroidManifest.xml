@@ -21,8 +21,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kochzap"
     android:installLocation="auto"
-    android:versionCode="209"
-    android:versionName="5.0.9 Beta">
+    android:versionCode="210"
+    android:versionName="5.0.10 Beta">
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -75,13 +75,7 @@
             android:theme="@style/CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="com.kochzap.SCAN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
@@ -202,6 +196,10 @@
             android:label="@string/scan"
             android:screenOrientation="user"
             android:stateNotNeeded="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".StopActivity"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,12 +8,11 @@
     android:paddingLeft="@dimen/standard_margin"
     android:paddingRight="@dimen/standard_margin"
     android:paddingTop="@dimen/standard_margin"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="com.kochzap.StartActivity"
     android:layout_marginLeft="@dimen/half_margin"
     android:layout_marginStart="@dimen/half_margin">
     >
-
 
         <ImageView android:id="@+id/scan_button"
             android:src="@drawable/button_fist_land"
@@ -26,27 +25,56 @@
             android:paddingStart="@dimen/zero_padding"
             android:text="@string/scan"
             android:layout_width="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_marginEnd="@dimen/half_margin"
             android:layout_marginRight="@dimen/half_margin"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentStart="false"
             android:contentDescription="@string/app_name" />
 
-    <ImageView
+    <ScrollView
         android:id="@+id/scroll"
-        android:src="@drawable/logos_land"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:scaleType="fitCenter"
-        android:contentDescription="@string/logos"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/scan_button"
-        android:layout_toEndOf="@+id/scan_button"
-        android:cropToPadding="false">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/zero_margin"
+        android:layout_marginBottom="@dimen/zero_margin"
+        android:layout_marginEnd="@dimen/zero_margin"
+        android:layout_marginLeft="@dimen/zero_margin"
+        android:layout_marginStart="@dimen/zero_margin"
+        android:layout_marginRight="@dimen/zero_margin"
+        android:layout_marginTop="@dimen/zero_margin"
+        android:padding="@dimen/zero_padding"
+        android:paddingBottom="@dimen/zero_padding"
+        android:paddingEnd="@dimen/zero_padding"
+        android:paddingLeft="@dimen/zero_padding"
+        android:paddingRight="@dimen/zero_padding"
+        android:paddingStart="@dimen/zero_padding"
+        android:paddingTop="@dimen/zero_padding">
 
-    </ImageView>
+        <ImageView
+            android:id="@+id/logos_scroll"
+            android:src="@drawable/logos_land"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:contentDescription="@string/logos"
+            android:cropToPadding="false"
+            android:layout_margin="@dimen/zero_margin"
+            tools:layout_margin="@dimen/zero_margin"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginEnd="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginStart="@dimen/zero_margin"
+            android:layout_marginTop="@dimen/zero_margin"
+            android:padding="@dimen/zero_padding"
+            android:paddingBottom="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:paddingLeft="@dimen/zero_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingStart="@dimen/zero_padding"
+            android:paddingTop="@dimen/zero_padding"
+            tools:scaleType="centerInside"
+            android:isScrollContainer="true"
+            android:adjustViewBounds="true">
+        </ImageView>
+    </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>
