@@ -150,5 +150,6 @@
     <string name="scan">Scan Product</string>
     <string name="need_camera_to_scan">Need camera to scan</string>
     <string name="logos">Product Logo Images</string>
+    <string name="menu_capture">Capture UPC</string>
     <string name="boycott_banner_ad_unit_id" translatable="false">ca-app-pub-2317372194650381/6497488972</string>
 </resources>

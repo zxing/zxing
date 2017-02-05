@@ -21,10 +21,12 @@ import android.view.Display;
 import android.view.MenuInflater;
 import android.view.WindowManager;
 import com.google.zxing.WriterException;
+import com.kochzap.CaptureActivity;
 import com.kochzap.Contents;
 import com.kochzap.FinishListener;
 import com.kochzap.Intents;
 import com.kochzap.R;
+import com.kochzap.StartActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -109,6 +111,18 @@ public final class EncodeActivity extends Activity {
         startActivity(intent);
         finish();
         return true;
+      case R.id.menu_start:
+        intent = getIntent();
+        intent.setClassName(this, StartActivity.class.getName());
+        startActivity(intent);
+          finish();
+          return true;
+      case R.id.menu_capture:
+        intent = getIntent();
+        intent.setClassName(this, CaptureActivity.class.getName());
+        startActivity(intent);
+          finish();
+          return true;
       default:
         return false;
     }

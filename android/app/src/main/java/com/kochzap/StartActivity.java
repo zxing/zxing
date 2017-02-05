@@ -82,6 +82,10 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
         switch (item.getItemId()) {
             case R.id.menu_start:
                 break;
+            case R.id.menu_capture:
+                intent.setClassName(this, CaptureActivity.class.getName());
+                startActivity(intent);
+                break;
             case R.id.menu_share:
                 intent.setClassName(this, ShareActivity.class.getName());
                 startActivity(intent);
