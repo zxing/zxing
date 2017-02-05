@@ -9,6 +9,7 @@
     android:paddingRight="@dimen/half_padding"
     android:paddingTop="@dimen/standard_padding"
     tools:context="com.kochzap.StopActivity">
+
     <ImageView
         android:id="@+id/down"
         android:layout_width="wrap_content"
@@ -17,7 +18,8 @@
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
         android:paddingTop="@dimen/half_padding"
-        android:src="@drawable/button_down_land" />
+        android:src="@drawable/button_down_land"
+        android:contentDescription="@string/app_name" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -25,10 +27,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/standard_padding"
+        android:paddingBottom="@dimen/zero_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
-        android:paddingTop="@dimen/standard_padding"
+        android:paddingTop="@dimen/half_padding"
         tools:context="com.kochzap.StopActivity">
 
         <android.support.v7.widget.AppCompatTextView
@@ -60,7 +62,7 @@
             android:lineSpacingExtra="2dp"
             android:textColor="@android:color/holo_red_dark"
             android:text="@string/postzap"
-            android:layout_marginBottom="36dp" />
+            android:layout_marginBottom="@dimen/standard_margin" />
 
         <ScrollView
             android:id="@+id/scroll"
@@ -79,13 +81,14 @@
             android:paddingLeft="@dimen/zero_padding"
             android:paddingRight="@dimen/zero_padding"
             android:paddingStart="@dimen/zero_padding"
-            android:paddingTop="@dimen/zero_padding">
+            android:paddingTop="@dimen/zero_padding"
+            android:contentDescription="@string/logos" >
 
             <ImageView
                 android:id="@+id/logos_scroll"
                 android:src="@drawable/logos_land"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:scaleType="center"
                 android:contentDescription="@string/logos"
                 android:cropToPadding="false"

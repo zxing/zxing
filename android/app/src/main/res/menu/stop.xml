@@ -40,5 +40,5 @@
         android:title="@string/menu_help"
         android:icon="@android:drawable/ic_menu_help"
         android:orderInCategory="5"
-        android:showAsAction="withText"/>
+        app:showAsAction="withText"/>
 </menu>

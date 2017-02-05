@@ -51,19 +51,16 @@
         <ImageView
             android:id="@+id/logos_scroll"
             android:src="@drawable/logos_land"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="center"
+            android:layout_margin="@dimen/zero_margin"
+            android:layout_marginTop="@dimen/zero_margin"
+            android:layout_marginBottom="@dimen/zero_margin"
+            android:layout_marginRight="@dimen/zero_margin"
+            android:layout_marginLeft="@dimen/zero_margin"
+            tools:layout_margin="@dimen/zero_margin"
             android:contentDescription="@string/logos"
             android:cropToPadding="false"
-            android:layout_margin="@dimen/zero_margin"
-            tools:layout_margin="@dimen/zero_margin"
-            android:layout_marginBottom="@dimen/zero_margin"
-            android:layout_marginEnd="@dimen/zero_margin"
-            android:layout_marginLeft="@dimen/zero_margin"
-            android:layout_marginRight="@dimen/zero_margin"
-            android:layout_marginStart="@dimen/zero_margin"
-            android:layout_marginTop="@dimen/zero_margin"
             android:padding="@dimen/zero_padding"
             android:paddingBottom="@dimen/zero_padding"
             android:paddingEnd="@dimen/zero_padding"
@@ -71,10 +68,8 @@
             android:paddingRight="@dimen/zero_padding"
             android:paddingStart="@dimen/zero_padding"
             android:paddingTop="@dimen/zero_padding"
-            tools:scaleType="centerInside"
             android:isScrollContainer="true"
-            android:adjustViewBounds="true">
-        </ImageView>
+            android:adjustViewBounds="true" />
 
     </ScrollView>
 

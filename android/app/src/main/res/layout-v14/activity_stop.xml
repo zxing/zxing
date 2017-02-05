@@ -7,13 +7,13 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/zero_margin"
     tools:context="com.kochzap.StopActivity"
     android:orientation="vertical">
     <ImageView
         android:id="@+id/down"
         android:layout_width="fill_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:src="@drawable/button_down"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -22,7 +22,8 @@
         android:layout_marginTop="@dimen/zero_margin"
         android:layout_marginBottom="@dimen/zero_margin"
         android:layout_marginRight="@dimen/zero_margin"
-        android:layout_marginLeft="@dimen/zero_margin" />
+        android:layout_marginLeft="@dimen/zero_margin"
+        android:contentDescription="@string/app_name" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/prezaptext"
@@ -51,7 +52,7 @@
         android:lineSpacingExtra="10sp"
         android:textColor="@android:color/holo_red_dark"
         android:text="@string/postzap"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="@dimen/standard_margin" />
 
     <ScrollView
         android:id="@+id/scroll"
@@ -67,7 +68,7 @@
             android:layout_marginRight="@dimen/zero_margin"
             android:layout_marginLeft="@dimen/zero_margin"
             android:src="@drawable/logos"
-            android:contentDescription="@string/collective"
+            android:contentDescription="@string/logos"
             android:adjustViewBounds="true" />
 
     </ScrollView>

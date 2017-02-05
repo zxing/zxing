@@ -25,9 +25,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class StartActivity extends AppCompatActivity implements OnClickListener {
 
-    private ImageView thumb1;
-    private ImageView thumb2;
-
     private static int tUp = R.drawable.button_up;
     private static int tDown = R.drawable.button_down;
 
@@ -37,6 +34,13 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        if (getResources().getConfiguration().orientation  == Configuration.ORIENTATION_LANDSCAPE ) {
+            tUp = R.drawable.button_up_land;
+            tDown = R.drawable.button_down_land;
+        } else {
+            tUp = R.drawable.button_up;
+            tDown = R.drawable.button_down;
+        }
 
         // getIntent() is a method from the started activity
         Intent myIntent = getIntent(); // gets the previously created intent
@@ -60,7 +64,7 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.capture, menu);
+        menuInflater.inflate(R.menu.start, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -69,7 +73,12 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
 
         if(v.getId()== R.id.scan_button){
               //scan
-            scanBtn.setImageResource(R.drawable.fist);
+            if (getResources().getConfiguration().orientation  == Configuration.ORIENTATION_LANDSCAPE ) {
+                scanBtn.setImageResource(R.drawable.button_fist_land);
+            } else {
+                scanBtn.setImageResource(R.drawable.button_fist);
+            }
+
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
         }

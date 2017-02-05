@@ -18,7 +18,8 @@
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
         android:paddingTop="@dimen/half_padding"
-        android:src="@drawable/button_down_land" />
+        android:src="@drawable/button_down_land"
+        android:contentDescription="@string/app_name" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -26,10 +27,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/standard_padding"
+        android:paddingBottom="@dimen/zero_padding"
         android:paddingLeft="@dimen/half_padding"
         android:paddingRight="@dimen/half_padding"
-        android:paddingTop="@dimen/standard_padding"
+        android:paddingTop="@dimen/half_padding"
         tools:context="com.kochzap.StopActivity">
 
     <android.support.v7.widget.AppCompatTextView
@@ -45,8 +46,7 @@
         android:textSize="28sp"
         android:lineSpacingExtra="2sp"
         android:textColor="@color/red"
-        android:text="@string/prezap"
-        android:layout_marginTop="21dp" />
+        android:text="@string/prezap" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/postzaptext"
@@ -61,7 +61,7 @@
         android:lineSpacingExtra="2dp"
         android:textColor="@color/red"
         android:text="@string/postzap"
-        android:layout_marginBottom="36dp" />
+        android:layout_marginBottom="@dimen/standard_margin" />
 
         <ScrollView
             android:id="@+id/scroll"
@@ -107,7 +107,7 @@
                 android:paddingTop="@dimen/zero_padding"
                 tools:scaleType="centerInside"
                 android:isScrollContainer="true"
-                android:adjustViewBounds="true">
+                android:adjustViewBounds="true" >
             </ImageView>
 
         </ScrollView>

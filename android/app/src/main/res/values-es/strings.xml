@@ -151,4 +151,5 @@
   <string name="collective">Puño Levantado</string>
   <string name="need_camera_to_scan">Necesita una cámara para escanear</string>
   <string name="logos">Imágenes del logotipo del producto</string>
+  <string name="menu_capture">Captura UPC</string>
 </resources>

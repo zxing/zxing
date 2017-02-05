@@ -151,4 +151,5 @@
   <string name="collective">育てられた拳</string>
   <string name="need_camera_to_scan">スキャンするカメラが必要</string>
   <string name="logos">製品ロゴ画像</string>
+  <string name="menu_capture">キャプチャUPC</string>
 </resources>
