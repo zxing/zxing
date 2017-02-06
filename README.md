@@ -80,7 +80,7 @@ on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
 
 ## Etcetera
 
-[![Build Status](https://travis-ci.org/zxing/zxing.png?branch=master)](https://travis-ci.org/zxing/zxing)
+[![Build Status](https://travis-ci.org/zxing/zxing.svg?branch=master)](https://travis-ci.org/zxing/zxing)
 [![Coverity Status](https://scan.coverity.com/projects/1924/badge.svg)](https://scan.coverity.com/projects/1924)
 [![codecov.io](https://codecov.io/github/zxing/zxing/coverage.svg?branch=master)](https://codecov.io/github/zxing/zxing?branch=master)
 
