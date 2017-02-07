@@ -142,7 +142,7 @@
   <string name="sbc_name">Пошук книг Google</string>
   <string name="wifi_changing_network">Запит підключення до мережі\u2026</string>
   <string name="prezap">Це Koch Industries продукту.</string>
-  <string name="zap">Це Koch Industries продукту, будь ласка, не купуйте його.</string>
+  <string name="zap">Не купуйте товар!</string>
   <string name="postzap">Будь ласка, не купуйте його.</string>
   <string name="menu_warranty">гарантія</string>
   <string name="menu_stop">СТОП</string>
@@ -151,5 +151,6 @@
   <string name="collective">вихований кулак</string>
   <string name="need_camera_to_scan">Потрібна камера для сканування</string>
   <string name="logos">Логотип продукту Зображення</string>
-  <string name="menu_capture">захоплення СКП</string>
+  <string name="menu_capture">Pодовий сканування</string>
+  <string name="good">OK, щоб купити.</string>
 </resources>

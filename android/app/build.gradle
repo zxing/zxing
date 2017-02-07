@@ -6,8 +6,8 @@ android {
         applicationId "com.kochzap"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 211
-        versionName '5.0.11 Beta'
+        versionCode 212
+        versionName '5.0.12 Beta'
     }
     buildTypes {
         release {
@@ -18,6 +18,7 @@ android {
             renderscriptDebuggable false
             pseudoLocalesEnabled false
             proguardFile 'proguard-rules.txt'
+            proguardFile 'E:/Android/sdk/tools/proguard/proguard-android-optimize.txt'
             zipAlignEnabled true
         }
         debug {
@@ -26,7 +27,7 @@ android {
             renderscriptDebuggable true
             minifyEnabled false
             pseudoLocalesEnabled true
-            proguardFile '/Users/naw880/Library/Android/sdk/tools/proguard/proguard-android.txt'
+            proguardFile 'E:/Android/sdk/tools/proguard/proguard-android.txt'
         }
     }
     productFlavors {
@@ -36,6 +37,6 @@ android {
 dependencies {
     compile files('libs/core-3.3.0.jar')
     compile files('libs/android-core-3.3.0.jar')
-    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.1'
     compile files('libs/android-integration-3.3.1.jar')
 }

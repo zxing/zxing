@@ -72,7 +72,7 @@ public class Companies {
 
     private static LinkedList<String> companies = new LinkedList<>();
 
-    Companies() {
+    public Companies() {
         init();
     }
 

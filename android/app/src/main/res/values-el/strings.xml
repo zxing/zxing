@@ -142,7 +142,7 @@
   <string name="sbc_name">Αναζήτηση βιβλίων Google</string>
   <string name="wifi_changing_network">Αίτηση σύνδεσης με το δίκτυο\u2026</string>
   <string name="prezap">Αυτό είναι ένα Koch Industries προϊόντων.</string>
-  <string name="zap">Αυτό είναι ένα Koch Industries προϊόν, παρακαλώ μην το αγοράσει.</string>
+  <string name="zap">Μην αγοράζετε το στοιχείο!</string>
   <string name="postzap">Παρακαλώ μην το αγοράσει.</string>
   <string name="menu_warranty">Εγγύηση</string>
   <string name="menu_stop">Στάση</string>
@@ -151,5 +151,6 @@
   <string name="collective">υψωμένη γροθιά</string>
   <string name="need_camera_to_scan">Ανάγκη κάμερα για σάρωση</string>
   <string name="logos">Λογότυπο του προϊόντος Εικόνες</string>
-  <string name="menu_capture">συλλάβει UPC</string>
+  <string name="menu_capture">Generic σάρωση</string>
+  <string name="good">OK για να αγοράσει.</string>
 </resources>

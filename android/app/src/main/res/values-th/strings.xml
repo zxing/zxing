@@ -142,7 +142,7 @@
   <string name="sbc_name">ค้นหาหนังสือจาก Google</string>
   <string name="wifi_changing_network">กำลังร้องขอการเชื่อมต่อกับเครือข่าย\u2026</string>
   <string name="prezap">นี้เป็นผลิตภัณฑ์ที่ Koch Industries</string>
-  <string name="zap">นี้เป็นอุตสาหกรรมสินค้า Koch โปรดอย่าซื้อมัน</string>
+  <string name="zap">อย่าซื้อสินค้า!</string>
   <string name="postzap">กรุณาอย่าซื้อมัน</string>
   <string name="menu_warranty">การประกัน</string>
   <string name="menu_stop">หยุด</string>
@@ -151,5 +151,6 @@
   <string name="collective">กำปั้นยก</string>
   <string name="need_camera_to_scan">ต้องการกล้องที่จะสแกน</string>
   <string name="logos">สินค้าโลโก้รูปภาพ</string>
-  <string name="menu_capture">จับ UPC</string>
+  <string name="menu_capture">สแกนทั่วไป</string>
+  <string name="good">ตกลงที่จะซื้อ</string>
 </resources>

@@ -142,7 +142,7 @@
   <string name="sbc_name">Iskanje z Google Book Search</string>
   <string name="wifi_changing_network">Priključevanje na omrežje\u2026</string>
   <string name="prezap">To je Koch Industries izdelka.</string>
-  <string name="zap">To je Koch Industries izdelka, vas prosimo, da ga ne bi kupil.</string>
+  <string name="zap">Ne kupujejo postavko!</string>
   <string name="postzap">Prosim, ne da kupiti.</string>
   <string name="menu_warranty">Garancija</string>
   <string name="menu_stop">Stop</string>
@@ -151,5 +151,6 @@
   <string name="collective">Raised Fist</string>
   <string name="need_camera_to_scan">Potreba kamero za skeniranje</string>
   <string name="logos">Logo izdelku Slike</string>
-  <string name="menu_capture">Capture UPC</string>
+  <string name="menu_capture">Generic skeniranje</string>
+  <string name="good">OK za nakup.</string>
 </resources>

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * A Generator for contact informations, output is in MeCard format.
+ * A Generator for contact information, output is in MeCard format.
  * 
  * @author Yohann Coppel
  * @author Sean Owen
