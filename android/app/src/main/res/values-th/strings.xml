@@ -151,6 +151,6 @@
   <string name="collective">กำปั้นยก</string>
   <string name="need_camera_to_scan">ต้องการกล้องที่จะสแกน</string>
   <string name="logos">สินค้าโลโก้รูปภาพ</string>
-  <string name="menu_capture">จับ UPC</string>
+  <string name="menu_capture">สแกนทั่วไป</string>
   <string name="good">ตกลงที่จะซื้อ</string>
 </resources>

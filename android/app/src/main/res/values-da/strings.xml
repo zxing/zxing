@@ -151,6 +151,6 @@
   <string name="collective">Hævet Fist</string>
   <string name="need_camera_to_scan">Behov kamera til at scanne</string>
   <string name="logos">Produkt Logo billeder</string>
-  <string name="menu_capture">Capture UPC</string>
+  <string name="menu_capture">Generisk scanning</string>
   <string name="good">OK til at købe.</string>
 </resources>

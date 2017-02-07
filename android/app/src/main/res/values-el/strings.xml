@@ -151,6 +151,6 @@
   <string name="collective">υψωμένη γροθιά</string>
   <string name="need_camera_to_scan">Ανάγκη κάμερα για σάρωση</string>
   <string name="logos">Λογότυπο του προϊόντος Εικόνες</string>
-  <string name="menu_capture">συλλάβει UPC</string>
+  <string name="menu_capture">Generic σάρωση</string>
   <string name="good">OK για να αγοράσει.</string>
 </resources>

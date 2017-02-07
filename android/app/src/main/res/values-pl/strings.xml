@@ -151,6 +151,6 @@
   <string name="collective">Raised Fist</string>
   <string name="need_camera_to_scan">Potrzebują aparatu do skanowania</string>
   <string name="logos">Logo wyrobów Obrazy</string>
-  <string name="menu_capture">Przechwytywanie UPC</string>
+  <string name="menu_capture">Generic skanowania</string>
   <string name="good">OK, aby kupić.</string>
 </resources>

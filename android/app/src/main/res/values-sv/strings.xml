@@ -151,6 +151,6 @@
   <string name="collective">Raised Fist</string>
   <string name="need_camera_to_scan">Behöver kamera för att skanna</string>
   <string name="logos">Produkt Logo bilder</string>
-  <string name="menu_capture">Fånga UPC</string>
+  <string name="menu_capture">Generiskt avsöknings</string>
   <string name="good">OK att köpa.</string>
 </resources>

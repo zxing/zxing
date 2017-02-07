@@ -151,6 +151,6 @@
   <string name="collective">제기 주먹</string>
   <string name="need_camera_to_scan">카메라를 스캔해야합니다.</string>
   <string name="logos">제품 로고 이미지</string>
-  <string name="menu_capture">UPC 캡처</string>
+  <string name="menu_capture">일반 스캔</string>
   <string name="good">구매 OK.</string>
 </resources>

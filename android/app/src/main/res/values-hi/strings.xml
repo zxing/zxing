@@ -151,6 +151,6 @@
   <string name="collective">उठाया मुट्ठी</string>
   <string name="need_camera_to_scan">स्कैन करने के लिए कैमरे की आवश्यकता</string>
   <string name="logos">उत्पाद लोगो छवियाँ</string>
-  <string name="menu_capture">कब्जा UPC</string>
+  <string name="menu_capture">जेनेरिक स्कैन</string>
   <string name="good">खरीदने के लिए ठीक है।</string>
 </resources>

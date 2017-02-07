@@ -151,6 +151,6 @@
   <string name="collective">القبضة رفعت</string>
   <string name="need_camera_to_scan"> تحتاج الكاميرا لمسح</string>
   <string name="logos">شعار المنتج صور</string>
-  <string name="menu_capture">القبض على UPC</string>
   <string name="good">موافق للشراء.</string>
+  <string name="menu_capture">مسح عام</string>
 </resources>

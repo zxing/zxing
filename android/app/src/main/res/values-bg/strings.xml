@@ -151,6 +151,6 @@
   <string name="collective">Отгледан Fist</string>
   <string name="need_camera_to_scan">Нуждаете се от камера, за да сканирате</string>
   <string name="logos">Каталог Logo Images</string>
-  <string name="menu_capture">Уловете UPC</string>
+  <string name="menu_capture">Generic сканиране</string>
   <string name="good">OK, за да купуват.</string>
 </resources>

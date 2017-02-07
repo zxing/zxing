@@ -151,6 +151,6 @@
   <string name="collective">вихований кулак</string>
   <string name="need_camera_to_scan">Потрібна камера для сканування</string>
   <string name="logos">Логотип продукту Зображення</string>
-  <string name="menu_capture">захоплення СКП</string>
+  <string name="menu_capture">Pодовий сканування</string>
   <string name="good">OK, щоб купити.</string>
 </resources>

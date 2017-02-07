@@ -151,6 +151,6 @@
   <string name="collective">Punho Levantado</string>
   <string name="need_camera_to_scan">Precisa de câmera para digitalizar</string>
   <string name="logos">Imagens do logotipo do produto</string>
-  <string name="menu_capture">Captura UPC</string>
+  <string name="menu_capture">Varredura genérica</string>
   <string name="good">OK para comprar.</string>
 </resources>

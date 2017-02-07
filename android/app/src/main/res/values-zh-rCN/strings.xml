@@ -151,6 +151,6 @@
   <string name="collective">被举的拳头</string>
   <string name="need_camera_to_scan">需要相机扫描</string>
   <string name="logos">产品标志图片</string>
-  <string name="menu_capture">捕獲UPC</string>
+  <string name="menu_capture">通用掃描</string>
   <string name="good">可以購買。</string>
 </resources>

@@ -151,6 +151,6 @@
   <string name="collective">Fist Ridicat</string>
   <string name="need_camera_to_scan">Aparat de fotografiat au nevoie pentru a scana</string>
   <string name="logos">Logo produs Imagini</string>
-  <string name="menu_capture">Captura UPC</string>
+  <string name="menu_capture">Scanare generic</string>
   <string name="good">OK pentru a cumpăra.</string>
 </resources>

@@ -151,6 +151,6 @@
   <string name="collective">Raised Fist</string>
   <string name="need_camera_to_scan">Potrebujem fotoaparát pre skenovanie</string>
   <string name="logos">Produkt Logo Images</string>
-  <string name="menu_capture">Zachyťte UPC</string>
+  <string name="menu_capture">Generic skenovanie</string>
   <string name="good">OK kúpiť.</string>
 </resources>

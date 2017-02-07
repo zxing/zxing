@@ -151,6 +151,6 @@
   <string name="collective">Raised Fist</string>
   <string name="need_camera_to_scan">Necessita càmera per escanejar</string>
   <string name="logos">Logotip del producte Imatges</string>
-  <string name="menu_capture">capturar la UPC</string>
+  <string name="menu_capture">Exploració genèrica</string>
   <string name="good">OK per comprar.</string>
 </resources>

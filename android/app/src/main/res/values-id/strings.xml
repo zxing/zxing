@@ -151,6 +151,6 @@
   <string name="collective">Dibesarkan Fist</string>
   <string name="need_camera_to_scan">Membutuhkan kamera untuk memindai</string>
   <string name="logos">Termék Logo Képek</string>
-  <string name="menu_capture">Menangkap UPC</string>
+  <string name="menu_capture">Pemindaian generik</string>
   <string name="good">OK untuk membeli.</string>
 </resources>

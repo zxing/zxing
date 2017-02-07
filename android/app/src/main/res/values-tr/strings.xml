@@ -151,6 +151,6 @@
   <string name="collective">Yükseltilmiş Yumruk</string>
   <string name="need_camera_to_scan">Taramak için kameraya ihtiyacımız var</string>
   <string name="logos">Ürün Logosu Resimleri</string>
-  <string name="menu_capture">Yakalama UPC</string>
+  <string name="menu_capture">Genel tarama</string>
   <string name="good">Tamam satın almak.</string>
 </resources>

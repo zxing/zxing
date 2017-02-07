@@ -150,7 +150,7 @@
   <string name="collective">אגרוף מונף</string>
   <string name="need_camera_to_scan">צריך מצלמה לסרוק</string>
   <string name="logos">תמונות לוגו מוצר</string>
-  <string name="menu_capture">לכידת UPC</string>
   <string name="good">אישור כדי לקנות.</string>
   <string name="zap">אל תקנו פריט!</string>
+  <string name="menu_capture">סריקה גנרי</string>
 </resources>

@@ -151,6 +151,6 @@
   <string name="collective">Raised Fist</string>
   <string name="need_camera_to_scan">Noodzaak camera te scannen</string>
   <string name="logos">Product Logo Images</string>
-  <string name="menu_capture">Capture UPC</string>
+  <string name="menu_capture">Generic scan</string>
   <string name="good">OK om te kopen.</string>
 </resources>
