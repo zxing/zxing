@@ -142,7 +142,7 @@
   <string name="sbc_name">Google Book Search</string>
   <string name="wifi_changing_network">Begär anslutning till nätverk\u2026</string>
   <string name="prezap">Detta är en Koch Industries Produkt.</string>
-  <string name="zap">Detta är en Koch Industries Produkt, ska du inte köpa den.</string>
+  <string name="zap">Köp inte objekt!</string>
   <string name="postzap">Vänligen inte köpa den.</string>
   <string name="menu_warranty">Garanti</string>
   <string name="menu_stop">Sluta</string>
@@ -152,4 +152,5 @@
   <string name="need_camera_to_scan">Behöver kamera för att skanna</string>
   <string name="logos">Produkt Logo bilder</string>
   <string name="menu_capture">Fånga UPC</string>
+  <string name="good">OK att köpa.</string>
 </resources>

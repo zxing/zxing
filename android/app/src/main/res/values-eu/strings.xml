@@ -142,7 +142,7 @@
   <string name="sbc_name">Google Book bilaketa</string>
   <string name="wifi_changing_network">Sarerako konexioa eskatzen\u2026</string>
   <string name="prezap">Este es un producto de Koch Industries.</string>
-  <string name="zap">Este es un producto de Koch Industries, por favor no lo compre.</string>
+  <string name="zap">Ez elementua erosi!</string>
   <string name="postzap">Por favor, no lo compre.</string>
   <string name="menu_warranty">Bermea</string>
   <string name="menu_stop">Gelditu</string>
@@ -152,4 +152,5 @@
   <string name="need_camera_to_scan">Beharrezkoa kamera eskaneatzeko</string>
   <string name="logos">Produktu logotipoa Irudiak</string>
   <string name="menu_capture">Atera UPC</string>
+  <string name="good">OK erosi.</string>
 </resources>

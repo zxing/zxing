@@ -142,7 +142,7 @@
   <string name="sbc_name">Google Kitap Arama</string>
   <string name="wifi_changing_network">Ağa bir bağlantı isteğinde\u2026</string>
   <string name="prezap">Bu Koch Industries ürünüdür.</string>
-  <string name="zap">Bu Koch Industries ürünüdür, onu satın almayın lütfen.</string>
+  <string name="zap">Öğe almayın!</string>
   <string name="postzap">Onu satın almayın lütfen.</string>
   <string name="menu_warranty">Garanti</string>
   <string name="menu_stop">Dur</string>
@@ -152,4 +152,5 @@
   <string name="need_camera_to_scan">Taramak için kameraya ihtiyacımız var</string>
   <string name="logos">Ürün Logosu Resimleri</string>
   <string name="menu_capture">Yakalama UPC</string>
+  <string name="good">Tamam satın almak.</string>
 </resources>

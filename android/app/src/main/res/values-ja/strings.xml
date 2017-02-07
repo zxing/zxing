@@ -142,7 +142,7 @@
   <string name="sbc_name">Googleブックス</string>
   <string name="wifi_changing_network">ネットワークへ接続しています…</string>
   <string name="prezap">これは、コーク・インダストリーズ製品です。</string>
-  <string name="zap">これはコーク・インダストリーズ製品である、それを購入しないでください。</string>
+  <string name="zap">アイテムを購入しないでください！</string>
   <string name="postzap">それを購入しないでください。</string>
   <string name="menu_warranty">" 保証"</string>
   <string name="menu_stop">やめる</string>
@@ -152,4 +152,5 @@
   <string name="need_camera_to_scan">スキャンするカメラが必要</string>
   <string name="logos">製品ロゴ画像</string>
   <string name="menu_capture">キャプチャUPC</string>
+  <string name="good">買うためにOK。</string>
 </resources>

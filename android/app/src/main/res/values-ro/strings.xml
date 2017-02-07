@@ -142,7 +142,7 @@
   <string name="sbc_name">Căutare Google Cărți</string>
   <string name="wifi_changing_network">Solicită conexiune la rețea\u2026</string>
   <string name="prezap">Acesta este un produs Koch Industries.</string>
-  <string name="zap">Acesta este un produs Industries Koch, vă rugăm să nu-l cumpere.</string>
+  <string name="zap">Nu cumpara articol!</string>
   <string name="postzap">Vă rugăm să nu-l cumpere.</string>
   <string name="menu_warranty">Garanţie</string>
   <string name="menu_stop">Stop</string>
@@ -152,4 +152,5 @@
   <string name="need_camera_to_scan">Aparat de fotografiat au nevoie pentru a scana</string>
   <string name="logos">Logo produs Imagini</string>
   <string name="menu_capture">Captura UPC</string>
+  <string name="good">OK pentru a cumpăra.</string>
 </resources>

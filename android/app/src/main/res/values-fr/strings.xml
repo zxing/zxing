@@ -142,7 +142,7 @@
   <string name="sbc_name">Recherche Google Livres</string>
   <string name="wifi_changing_network">Demande de connexion au réseau\u2026</string>
   <string name="prezap">Ceci est un produit Koch Industries.</string>
-  <string name="zap">Ceci est un produit Koch Industries, s\'il vous plaît ne pas l\'acheter.</string>
+  <string name="zap">Ne pas acheter l\'article!</string>
   <string name="postzap">S\'il vous plaît ne pas l\'acheter.</string>
   <string name="menu_warranty">Garantie</string>
   <string name="menu_stop">Arrêtez</string>
@@ -152,4 +152,5 @@
   <string name="need_camera_to_scan">Besoin d\'un appareil photo pour numériser</string>
   <string name="logos">Logo du produit</string>
   <string name="menu_capture">Capture UPC</string>
+  <string name="good">OK pour acheter.</string>
 </resources>
