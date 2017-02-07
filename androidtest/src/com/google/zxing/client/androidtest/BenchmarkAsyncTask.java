@@ -42,11 +42,11 @@ public final class BenchmarkAsyncTask extends AsyncTask<Object,Object,String> {
   private static final int RUNS = 10;
 
   private final BenchmarkActivity benchmarkActivity;
-  private final String path;
+  private final File file;
 
-  BenchmarkAsyncTask(BenchmarkActivity benchmarkActivity, String path) {
+  BenchmarkAsyncTask(BenchmarkActivity benchmarkActivity, File file) {
     this.benchmarkActivity = benchmarkActivity;
-    this.path = path;
+    this.file = file;
   }
 
   @Override
@@ -57,7 +57,7 @@ public final class BenchmarkAsyncTask extends AsyncTask<Object,Object,String> {
     System.gc();
 
     List<BenchmarkItem> items = new ArrayList<>();
-    walkTree(reader, path, items);
+    walkTree(reader, file, items);
 
     int count = 0;
     int time = 0;
@@ -76,27 +76,31 @@ public final class BenchmarkAsyncTask extends AsyncTask<Object,Object,String> {
     benchmarkActivity.onBenchmarkDone(totals);
   }
 
-  private static void walkTree(MultiFormatReader reader, String currentPath, List<BenchmarkItem> items) {
-    File file = new File(currentPath);
-    if (file.isDirectory()) {
-      String[] files = file.list();
-      Arrays.sort(files);
-      for (String fileName : files) {
-        walkTree(reader, file.getAbsolutePath() + '/' + fileName, items);
+  private static void walkTree(MultiFormatReader reader,
+                               File fileOrDir,
+                               List<BenchmarkItem> items) {
+    Log.i(TAG, "Decoding " + fileOrDir);
+    if (fileOrDir.isDirectory()) {
+      File[] files = fileOrDir.listFiles();
+      if (files != null) {
+        Arrays.sort(files);
+        for (File file : files) {
+          walkTree(reader, file, items);
+        }
       }
     } else {
-      BenchmarkItem item = decode(reader, currentPath);
+      BenchmarkItem item = decode(reader, fileOrDir);
       if (item != null) {
         items.add(item);
       }
     }
   }
 
-  private static BenchmarkItem decode(MultiFormatReader reader, String path) {
+  private static BenchmarkItem decode(MultiFormatReader reader, File file) {
 
-    Bitmap imageBitmap = BitmapFactory.decodeFile(path);
+    Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
     if (imageBitmap == null) {
-      Log.e(TAG, "Couldn't open " + path);
+      Log.e(TAG, "Couldn't open " + file);
       return null;
     }
 
@@ -107,7 +111,7 @@ public final class BenchmarkAsyncTask extends AsyncTask<Object,Object,String> {
 
     RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
 
-    BenchmarkItem item = new BenchmarkItem(path, RUNS);
+    BenchmarkItem item = new BenchmarkItem(file, RUNS);
     for (int x = 0; x < RUNS; x++) {
       boolean success;
       Result result = null;

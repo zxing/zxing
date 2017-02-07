@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
+ * <p>Implements Reed-Solomon encoding, as the name implies.</p>
  *
  * @author Sean Owen
  * @author William Rucklidge

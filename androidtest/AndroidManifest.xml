@@ -21,8 +21,9 @@
           android:installLocation="auto">
 
   <uses-permission android:name="android.permission.CAMERA"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-  <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="24"/>
+  <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="22"/>
 
   <uses-feature android:name="android.hardware.camera.any"/>
 

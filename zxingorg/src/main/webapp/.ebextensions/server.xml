@@ -18,7 +18,7 @@
 
 <!-- Additional config:
  JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
- JAVA_OPTS="-Djava.awt.headless=true -Xmx800m -XX:+UseG1GC -XX:+UseStringDeduplication XX:+UseCompressedOops -XX:-OmitStackTraceInFastThrow"
+ JAVA_OPTS="-Djava.awt.headless=true -Xmx640m -XX:+UseG1GC -XX:-OmitStackTraceInFastThrow"
 -->
 
 <Server port="-1" shutdown="">

@@ -16,21 +16,23 @@
 
 package com.google.zxing.client.androidtest;
 
+import java.io.File;
+
 import com.google.zxing.BarcodeFormat;
 
 final class BenchmarkItem {
 
-  private final String path;
+  private final File file;
   private final int[] times;
   private int position;
   private boolean decoded;
   private BarcodeFormat format;
 
-  BenchmarkItem(String path, int runs) {
+  BenchmarkItem(File file, int runs) {
     if (runs <= 0) {
       throw new IllegalArgumentException();
     }
-    this.path = path;
+    this.file = file;
     times = new int[runs];
     position = 0;
     decoded = false;
@@ -52,7 +54,7 @@ final class BenchmarkItem {
 
   @Override
   public String toString() {
-    return (decoded ? "DECODED " + format + ": " : "FAILED: ") + path +
+    return (decoded ? "DECODED " + format + ": " : "FAILED: ") + file +
         " (" + getAverageTime() + " us average)";
   }
 

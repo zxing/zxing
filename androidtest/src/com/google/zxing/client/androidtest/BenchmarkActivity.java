@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.androidtest;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,7 +39,8 @@ public final class BenchmarkActivity extends Activity {
     public void onClick(View v) {
       if (benchmarkTask == null) {
         String path = Environment.getExternalStorageDirectory().getPath() + "/zxingbenchmark";
-        benchmarkTask = new BenchmarkAsyncTask(BenchmarkActivity.this, path);
+        File dir = new File(path, "zxingbenchmark");
+        benchmarkTask = new BenchmarkAsyncTask(BenchmarkActivity.this, dir);
         runBenchmarkButton.setEnabled(false);
         textView.setText(R.string.benchmark_running);
         benchmarkTask.execute(AsyncTask.THREAD_POOL_EXECUTOR);
