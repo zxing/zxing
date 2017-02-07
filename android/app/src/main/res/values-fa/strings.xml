@@ -140,4 +140,17 @@
   <string name="result_wifi">پيكربندي WLAN يافته شده</string>
   <string name="sbc_name">جستجو در گوگل بوك</string>
   <string name="wifi_changing_network">درخواست اتصال به شبكه\u2026</string>
+  <string name="collective">مشت مطرح</string>
+  <string name="good">OK برای خرید.</string>
+  <string name="logos">محصولات لوگو تصاویر</string>
+  <string name="menu_capture">اسکن عمومی</string>
+  <string name="menu_license">مجوز</string>
+  <string name="menu_start">شروع</string>
+  <string name="menu_stop">متوقف کردن</string>
+  <string name="menu_warranty">گارانتی</string>
+  <string name="need_camera_to_scan">نیاز به دوربین برای اسکن</string>
+  <string name="postzap">لطفا آن را خریداری نیست.</string>
+  <string name="scan">محصول اسکن</string>
+  <string name="zap">هنوز مورد خرید نیست!</string>
+  <string name="prezap">این محصول صنایع کخ است.</string>
 </resources>
