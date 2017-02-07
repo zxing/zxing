@@ -57,17 +57,7 @@ public final class Decoder {
    */
   public DecoderResult decode(boolean[][] image, Map<DecodeHintType,?> hints)
       throws ChecksumException, FormatException {
-    int dimension = image.length;
-    BitMatrix bits = new BitMatrix(dimension);
-    for (int i = 0; i < dimension; i++) {
-      boolean[] imageI = image[i];
-      for (int j = 0; j < dimension; j++) {
-        if (imageI[j]) {
-          bits.set(j, i);
-        }
-      }
-    }
-    return decode(bits, hints);
+    return decode(BitMatrix.parse(image), hints);
   }
 
   public DecoderResult decode(BitMatrix bits) throws ChecksumException, FormatException {
