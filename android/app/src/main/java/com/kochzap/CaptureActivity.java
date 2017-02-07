@@ -439,31 +439,35 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     switch (item.getItemId()) {
       case R.id.menu_start:
         intent.setClassName(this, StartActivity.class.getName());
         startActivity(intent);
-        break;
+        finish();
+        return true;
       case R.id.menu_share:
         startActivity(intent);
-        break;
+        finish();
+        return true;
       case R.id.menu_history:
         intent.setClassName(this, HistoryActivity.class.getName());
         startActivityForResult(intent, Constants.HISTORY_REQUEST_CODE);
-        break;
+        finish();
+        return true;
       case R.id.menu_settings:
         intent.setClassName(this, PreferencesActivity.class.getName());
         startActivity(intent);
-        break;
+        finish();
+        return true;
       case R.id.menu_help:
         intent.setClassName(this, HelpActivity.class.getName());
         startActivity(intent);
-        break;
+        finish();
+        return true;
       default:
         return super.onOptionsItemSelected(item);
     }
-    return true;
   }
 
   @Override
@@ -560,7 +564,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         }
         break;
     }
-    if (Companies.containsscan(rawResult.toString())) {
+/*    if (Companies.containsscan(rawResult.toString())) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.setClassName(this, StopActivity.class.getName());
@@ -568,6 +572,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       intent.putExtra("company", Companies.companyFromScan(rawResult.toString()));
       startActivity(intent);
     }
+*/
   }
 
 

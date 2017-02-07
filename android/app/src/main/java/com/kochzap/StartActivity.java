@@ -6,6 +6,7 @@ package com.kochzap;
  */
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ImageView;
+
+import com.google.zxing.Result;
 import com.kochzap.history.HistoryActivity;
 import com.kochzap.share.Companies;
 import com.kochzap.share.ShareActivity;
@@ -25,30 +28,22 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class StartActivity extends AppCompatActivity implements OnClickListener {
 
-    private static int tUp = R.drawable.button_up;
-    private static int tDown = R.drawable.button_down;
-
     public ImageView scanBtn;
+
+    private Companies cos = new Companies();
+
+    private enum result {
+        NONE, FAIL, PASS
+    }
+
+    private static result lastResult = result.NONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        if (getResources().getConfiguration().orientation  == Configuration.ORIENTATION_LANDSCAPE ) {
-            tUp = R.drawable.button_up_land;
-            tDown = R.drawable.button_down_land;
-        } else {
-            tUp = R.drawable.button_up;
-            tDown = R.drawable.button_down;
-        }
-
-        // getIntent() is a method from the started activity
-        Intent myIntent = getIntent(); // gets the previously created intent
-        String company = myIntent.getStringExtra("company");
-        String scan = myIntent.getStringExtra("scan");
-
         scanBtn = (ImageView) findViewById(R.id.scan_button);
-
+        setKochzapBar();
         scanBtn.setOnClickListener(this);
     }
 
@@ -68,17 +63,10 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void onClick(View v){
+    public void onClick(View v) {
         //respond to clicks
 
-        if(v.getId()== R.id.scan_button){
-              //scan
-            if (getResources().getConfiguration().orientation  == Configuration.ORIENTATION_LANDSCAPE ) {
-                scanBtn.setImageResource(R.drawable.button_fist_land);
-            } else {
-                scanBtn.setImageResource(R.drawable.button_fist);
-            }
-
+        if (v.getId() == R.id.scan_button) {
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
         }
@@ -151,19 +139,55 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
                         company = company.substring(0, 6);
 
                         if (Companies.containscompany(company)) {
-                            scanBtn.setImageResource(tDown);
+                            lastResult = result.FAIL;
                         } else {
-                            scanBtn.setImageResource(tUp);
+                            lastResult = result.PASS;
                         }
                     } else {
                         note("No scan data received.");
+                        lastResult = result.NONE;
                     }
                 } else {
+                    lastResult = result.NONE;
                     note("No scan data received.");
                 }
+                setKochzapBar();
                 break;
         }
     }
+
+    private void setKochzapBar() {
+        switch (lastResult) {
+            case FAIL:
+                fixTitle(Color.RED, getString(R.string.zap));
+                setScanBtn(R.drawable.button_down, R.drawable.button_down_land);
+                break;
+            case PASS:
+                fixTitle(Color.GREEN, getString(R.string.good));
+                setScanBtn(R.drawable.button_up, R.drawable.button_up_land);
+                break;
+            case NONE:
+            default:
+                fixTitle(Color.BLACK, getString(R.string.app_name));
+                setScanBtn(R.drawable.button_fist, R.drawable.button_fist_land);
+                break;
+        }
+    }
+
+    void setScanBtn(int port, int land) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            scanBtn.setImageResource(land);
+        } else {
+            scanBtn.setImageResource(port);
+        }
+    }
+
+    private void fixTitle(int color, String titleString) {
+        setTitleColor(color);
+        setTitle(titleString);
+    }
+
+
 
     public void note(String msg) {
         Toast toast = Toast.makeText(getApplicationContext(),

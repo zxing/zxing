@@ -87,9 +87,8 @@
                 android:src="@drawable/logos_land"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:scaleType="center"
+                android:scaleType="fitCenter"
                 android:contentDescription="@string/logos"
-                android:cropToPadding="false"
                 android:layout_margin="@dimen/zero_margin"
                 tools:layout_margin="@dimen/zero_margin"
                 android:layout_marginBottom="@dimen/zero_margin"
@@ -106,8 +105,9 @@
                 android:paddingStart="@dimen/zero_padding"
                 android:paddingTop="@dimen/zero_padding"
                 tools:scaleType="centerInside"
-                android:isScrollContainer="true"
-                android:adjustViewBounds="true" >
+                android:adjustViewBounds="true"
+                android:cropToPadding="false"
+                android:isScrollContainer="true">
             </ImageView>
 
         </ScrollView>
