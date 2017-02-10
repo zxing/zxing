@@ -282,7 +282,7 @@ public final class VCardResultParser extends ResultParser {
         result.add(value);
       }
     }
-    return result.toArray(new String[lists.size()]);
+    return result.toArray(new String[result.size()]);
   }
   
   private static String[] toTypes(Collection<List<String>> lists) {
@@ -291,23 +291,26 @@ public final class VCardResultParser extends ResultParser {
     }
     List<String> result = new ArrayList<>(lists.size());
     for (List<String> list : lists) {
-      String type = null;
-      for (int i = 1; i < list.size(); i++) {
-        String metadatum = list.get(i);
-        int equals = metadatum.indexOf('=');
-        if (equals < 0) {
-          // take the whole thing as a usable label
-          type = metadatum;
-          break;
+      String value = list.get(0);
+      if (value != null && !value.isEmpty()) {
+        String type = null;
+        for (int i = 1; i < list.size(); i++) {
+          String metadatum = list.get(i);
+          int equals = metadatum.indexOf('=');
+          if (equals < 0) {
+            // take the whole thing as a usable label
+            type = metadatum;
+            break;
+          }
+          if ("TYPE".equalsIgnoreCase(metadatum.substring(0, equals))) {
+            type = metadatum.substring(equals + 1);
+            break;
+          }
         }
-        if ("TYPE".equalsIgnoreCase(metadatum.substring(0, equals))) {
-          type = metadatum.substring(equals + 1);
-          break;
-        }
+        result.add(type);
       }
-      result.add(type);
     }
-    return result.toArray(new String[lists.size()]);
+    return result.toArray(new String[result.size()]);
   }
 
   private static boolean isLikeVCardDate(CharSequence value) {
