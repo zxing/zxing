@@ -181,12 +181,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
        }
       }
     } else {
-      if (!startScanning()) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.setClassName(this, StartActivity.class.getName());
         startActivity(intent);
-      }
     }
   }
 
@@ -197,18 +195,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     switch (requestCode) {
       case MY_PERMISSIONS_REQUEST_CAMERA: {
         // If request is cancelled, the result arrays are empty.
-        if (grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-          if (!startScanning()) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-            intent.setClassName(this, StartActivity.class.getName());
-            startActivity(intent);
-          }
           // permission was granted, yay! Do the
           // camera-related task you need to do.
-
         } else {
           // permission denied, boo! Disable the
           // functionality that depends on this permission.
@@ -573,12 +564,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       startActivity(intent);
     }
 */
-  }
-
-
-  synchronized boolean startScanning() {
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    return prefs.getBoolean(PreferencesActivity.KEY_START_SCAN, false);
   }
 
   /**

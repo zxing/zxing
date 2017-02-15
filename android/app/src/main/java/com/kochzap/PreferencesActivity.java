@@ -27,8 +27,6 @@ import android.os.Bundle;
  */
 public final class PreferencesActivity extends Activity {
 
-  public static final String KEY_START_SCAN = "preferences_start_scan";
-
   public static final String KEY_DECODE_1D_PRODUCT = "preferences_decode_1D_product";
   public static final String KEY_DECODE_1D_INDUSTRIAL = "preferences_decode_1D_industrial";
   public static final String KEY_DECODE_QR = "preferences_decode_QR";

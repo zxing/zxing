@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 android {
+    
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.kochzap"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 212
-        versionName '5.0.12 Beta'
+        versionCode 300
+        versionName '5.1 Beta'
     }
     buildTypes {
         release {
@@ -18,16 +19,17 @@ android {
             renderscriptDebuggable false
             pseudoLocalesEnabled false
             proguardFile 'proguard-rules.txt'
-            proguardFile 'E:/Android/sdk/tools/proguard/proguard-android-optimize.txt'
+            proguardFile 'C:/Users/Ron/AppData/Local/Android/sdk/tools/proguard/proguard-android-optimize.txt'
             zipAlignEnabled true
         }
+
         debug {
             debuggable true
             jniDebuggable false
             renderscriptDebuggable true
             minifyEnabled false
             pseudoLocalesEnabled true
-            proguardFile 'E:/Android/sdk/tools/proguard/proguard-android.txt'
+            proguardFile 'C:/Users/Ron/AppData/Local/Android/sdk/tools/proguard/proguard-android.txt'
         }
     }
     productFlavors {
