@@ -18,7 +18,7 @@ package com.kochzap.result;
 
 import com.google.zxing.Result;
 import com.kochzap.R;
-import com.kochzap.share.Companies;
+import com.kochzap.util.Companies;
 import com.google.zxing.client.result.ExpandedProductParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;

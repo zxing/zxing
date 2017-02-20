@@ -1,4 +1,4 @@
-package com.kochzap.share;
+package com.kochzap.util;
 
         import java.util.Arrays;
         import java.util.HashMap;
@@ -11,6 +11,7 @@ package com.kochzap.share;
  */
 
 public class Companies {
+    static public String lastscan;
 
     static private final Map<String, String> coName = new HashMap<String, String>();
 
