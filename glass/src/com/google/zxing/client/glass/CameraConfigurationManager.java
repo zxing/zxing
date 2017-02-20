@@ -24,6 +24,7 @@ import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 /**
  * @author Sean Owen
  */
+@SuppressWarnings("deprecation") // camera APIs
 final class CameraConfigurationManager {
 
   private static final String TAG = "CameraConfiguration";

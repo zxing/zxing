@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+@SuppressWarnings("deprecation") // camera APIs
 final class PreviewCallback implements Camera.PreviewCallback {
 
   private static final String TAG = PreviewCallback.class.getSimpleName();

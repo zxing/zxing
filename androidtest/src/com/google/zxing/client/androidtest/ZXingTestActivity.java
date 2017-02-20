@@ -45,6 +45,7 @@ import java.nio.charset.Charset;
 /**
  * Main test app activity.
  */
+@SuppressWarnings("deprecation") // camera APIs
 public final class ZXingTestActivity extends Activity {
 
   private static final String TAG = ZXingTestActivity.class.getSimpleName();
