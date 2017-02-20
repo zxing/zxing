@@ -35,7 +35,7 @@ import com.kochzap.result.ResultButtonListener;
 import com.kochzap.result.ResultHandler;
 import com.kochzap.result.ResultHandlerFactory;
 import com.kochzap.result.supplement.SupplementalInfoRetriever;
-import com.kochzap.share.Companies;
+import com.kochzap.util.Companies;
 
 import android.Manifest;
 import android.app.Activity;

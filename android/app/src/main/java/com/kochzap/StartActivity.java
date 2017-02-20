@@ -21,7 +21,7 @@ import android.widget.ImageView;
 
 import com.google.zxing.Result;
 import com.kochzap.history.HistoryActivity;
-import com.kochzap.share.Companies;
+import com.kochzap.util.Companies;
 import com.kochzap.share.ShareActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
