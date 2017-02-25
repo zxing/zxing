@@ -4,10 +4,15 @@ package com.kochzap;
     This file has been modified from the original zxing code for the
     KochZap app.
  */
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View.OnClickListener;
@@ -30,6 +35,11 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
 
     public ImageView scanBtn;
 
+    private boolean cameraPermission = false;
+    final private static int MY_PERMISSIONS_REQUEST_CAMERA = 23;
+    private boolean zapPending = false;
+    private boolean scanPending = false;
+
     private Companies cos = new Companies();
 
     private enum result {
@@ -49,10 +59,18 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        intent.setClassName(this, CaptureActivity.class.getName());
-        startActivity(intent);
+
+        cameraPermission = checkPermission();
+        if (cameraPermission) {
+            zapPending = false;
+            scanPending = false;
+
+            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            scanIntegrator.initiateScan();
+        } else {
+            zapPending = true;
+            scanPending = false;
+        }
         return true;
     }
 
@@ -67,8 +85,16 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
         //respond to clicks
 
         if (v.getId() == R.id.scan_button) {
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
+            cameraPermission = checkPermission();
+            if (cameraPermission) {
+                scanPending = false;
+                zapPending = false;
+                IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+                scanIntegrator.initiateScan();
+            } else {
+                zapPending = true;
+                scanPending = false;
+            }
         }
     }
 
@@ -80,8 +106,14 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
             case R.id.menu_start:
                 break;
             case R.id.menu_capture:
-                intent.setClassName(this, CaptureActivity.class.getName());
-                startActivity(intent);
+                cameraPermission = checkPermission();
+                if (cameraPermission) {
+                    intent.setClassName(this, CaptureActivity.class.getName());
+                    startActivity(intent);
+                } else {
+                    scanPending = true;
+                    zapPending = false;
+                }
                 break;
             case R.id.menu_share:
                 intent.setClassName(this, ShareActivity.class.getName());
@@ -104,6 +136,88 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
         }
         return true;
     }
+
+
+    private boolean checkPermission() {
+        if (cameraPermission) {
+            // already got it? No need to repeat.
+            return true;
+        }
+
+        // not sure if we have permission? CTHen check.
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // From 6.0 (Marshmallow, version 23) on, need to ask permission
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // No permission yet, either exlain and ask or just ask
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.CAMERA)) {
+                    String needCamera = getString(R.string.need_camera_to_scan);
+                    Toast.makeText(this, needCamera, Toast.LENGTH_LONG).show();
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.CAMERA},
+                            MY_PERMISSIONS_REQUEST_CAMERA);
+                    // MY_PERMISSIONS_REQUEST_CAMERA is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                    return false;
+
+                } else {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.CAMERA},
+                            MY_PERMISSIONS_REQUEST_CAMERA);
+                    return false;
+                }
+            } else {
+                // Android OS says permission has been granted, we are done here
+                return true;
+            }
+        } else {
+            // Android OS before Marshmallow was approved at install, no check needed.
+            return true;
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    cameraPermission = true;
+
+                    if (zapPending) {
+                        zapPending = false;
+                        scanPending = false;
+                        IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+                        scanIntegrator.initiateScan();
+                    } else {
+                        if (scanPending) {
+                            zapPending = false;
+                            scanPending = false;
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                            intent.setClassName(this, CaptureActivity.class.getName());
+                            startActivity(intent);
+                        }
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 

@@ -130,11 +130,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return cameraManager;
   }
 
-  final private static int MY_PERMISSIONS_REQUEST_CAMERA = 23;
-
-  private boolean cameraPermission = false;
-  private boolean resumed = false;
-
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
@@ -149,72 +144,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ambientLightManager = new AmbientLightManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      // From 6.0 (Marshmallow, version 23) on, need to ask permission
-      if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-              != PackageManager.PERMISSION_GRANTED) {
-
-        // Should we show an explanation?
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA)) {
-          String needCamera = getString(R.string.need_camera_to_scan);
-          Toast.makeText(this, needCamera, Toast.LENGTH_LONG).show();
-          //Intent intent = new Intent(Intent.ACTION_VIEW);
-          //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-          //intent.setClassName(this, StartActivity.class.getName());
-          //startActivity(intent);
-          // Show an explanation to the user *asynchronously* -- don't block
-          // this thread waiting for the user's response! After the user
-          // sees the explanation, try again to request the permission.
-          ActivityCompat.requestPermissions(this,
-                  new String[]{Manifest.permission.CAMERA},
-                  MY_PERMISSIONS_REQUEST_CAMERA);
-          // MY_PERMISSIONS_REQUEST_CAMERA is an
-          // app-defined int constant. The callback method gets the
-          // result of the request.
-
-        } else {
-          // No explanation needed, we can request the permission.
-          ActivityCompat.requestPermissions(this,
-                  new String[]{Manifest.permission.CAMERA},
-                  MY_PERMISSIONS_REQUEST_CAMERA);
-       }
-      }
-    } else {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        intent.setClassName(this, StartActivity.class.getName());
-        startActivity(intent);
-    }
   }
 
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode,
-                                         String permissions[], int[] grantResults) {
-    switch (requestCode) {
-      case MY_PERMISSIONS_REQUEST_CAMERA: {
-        // If request is cancelled, the result arrays are empty.
-        if (grantResults.length > 0 &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-          // permission was granted, yay! Do the
-          // camera-related task you need to do.
-        } else {
-          // permission denied, boo! Disable the
-          // functionality that depends on this permission.
-          Intent intent = new Intent(Intent.ACTION_VIEW);
-          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-          intent.setClassName(this, StartActivity.class.getName());
-          startActivity(intent);
-        }
-        return;
-      }
-    }
-  }
-  
-  
-  
   @Override
   protected void onResume() {
     super.onResume();
@@ -266,34 +197,29 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       String dataString = intent.getDataString();
 
       if (Intents.Scan.ACTION.equals(action)) {
-        if (!cameraPermission &&
-                (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED)) {
-        } else {
-          // Scan the formats the intent requested, and return the result to the calling activity.
-          source = IntentSource.NATIVE_APP_INTENT;
-          decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
-          decodeHints = DecodeHintManager.parseDecodeHints(intent);
+        // Scan the formats the intent requested, and return the result to the calling activity.
+        source = IntentSource.NATIVE_APP_INTENT;
+        decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
+        decodeHints = DecodeHintManager.parseDecodeHints(intent);
 
-          if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
-            int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
-            int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
-            if (width > 0 && height > 0) {
-              cameraManager.setManualFramingRect(width, height);
-            }
+        if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
+          int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
+          int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
+          if (width > 0 && height > 0) {
+            cameraManager.setManualFramingRect(width, height);
           }
+        }
 
-          if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
-            int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
-            if (cameraId >= 0) {
-              cameraManager.setManualCameraId(cameraId);
-            }
+        if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
+          int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
+          if (cameraId >= 0) {
+            cameraManager.setManualCameraId(cameraId);
           }
+        }
 
-          String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
-          if (customPromptMessage != null) {
-            statusView.setText(customPromptMessage);
-          }
+        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
+        if (customPromptMessage != null) {
+          statusView.setText(customPromptMessage);
         }
       } else if (dataString != null &&
               dataString.contains("http://www.google") &&
@@ -329,7 +255,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // Install the callback and wait for surfaceCreated() to init the camera.
       surfaceHolder.addCallback(this);
     }
-    resumed = true;
   }
 
   private int getCurrentOrientation() {
@@ -381,7 +306,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(this);
     }
-    resumed = false;
     super.onPause();
   }
 
@@ -805,29 +729,23 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       return;
     }
 
-    // prior to 6.0 (M) we do not need to ask permission
-    if ((android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) ||
-      // From 6.0 (Marshmallow, version 23) on, need to ask permission
-      (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-              == PackageManager.PERMISSION_GRANTED)) {
       try {
-        cameraManager.openDriver(surfaceHolder);
-        // Creating the handler starts the preview, which can also throw a RuntimeException.
-        if (handler == null) {
-          handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
-        }
-        decodeOrStoreSavedBitmap(null, null);
-      } catch (IOException ioe) {
-        Log.w(TAG, ioe);
-        displayFrameworkBugMessageAndExit();
-      } catch (RuntimeException e) {
-        // Barcode Scanner has seen crashes in the wild of this variety:
-        // java.?lang.?RuntimeException: Fail to connect to camera service
-        Log.w(TAG, "Unexpected error initializing camera", e);
-        displayFrameworkBugMessageAndExit();
+      cameraManager.openDriver(surfaceHolder);
+      // Creating the handler starts the preview, which can also throw a RuntimeException.
+      if (handler == null) {
+        handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
       }
+      decodeOrStoreSavedBitmap(null, null);
+    } catch (IOException ioe) {
+      Log.w(TAG, ioe);
+      displayFrameworkBugMessageAndExit();
+    } catch (RuntimeException e) {
+      // Barcode Scanner has seen crashes in the wild of this variety:
+      // java.?lang.?RuntimeException: Fail to connect to camera service
+      Log.w(TAG, "Unexpected error initializing camera", e);
+      displayFrameworkBugMessageAndExit();
     }
-  }
+   }
 
   private void displayFrameworkBugMessageAndExit() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
