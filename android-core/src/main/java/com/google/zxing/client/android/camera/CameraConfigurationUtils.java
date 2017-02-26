@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android.camera;
 
-import android.annotation.TargetApi;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
@@ -37,7 +36,7 @@ import java.util.regex.Pattern;
  *
  * @author Sean Owen
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+@SuppressWarnings("deprecation") // camera APIs
 public final class CameraConfigurationUtils {
 
   private static final String TAG = "CameraConfiguration";

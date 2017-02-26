@@ -22,6 +22,7 @@ import android.util.Log;
 /**
  * Abstraction over the {@link Camera} API that helps open them and return their metadata.
  */
+@SuppressWarnings("deprecation") // camera APIs
 public final class OpenCameraInterface {
 
   private static final String TAG = OpenCameraInterface.class.getName();

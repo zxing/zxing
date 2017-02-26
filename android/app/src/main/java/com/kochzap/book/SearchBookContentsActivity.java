@@ -24,8 +24,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -91,10 +89,6 @@ public final class SearchBookContentsActivity extends Activity {
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-
-    // Make sure that expired cookies are removed on launch.
-    CookieSyncManager.createInstance(this);
-    CookieManager.getInstance().removeExpiredCookie();
 
     Intent intent = getIntent();
     if (intent == null || !Intents.SearchBookContents.ACTION.equals(intent.getAction())) {
