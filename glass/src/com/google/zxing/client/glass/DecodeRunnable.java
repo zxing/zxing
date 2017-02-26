@@ -39,6 +39,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * @author Sean Owen
  */
+@SuppressWarnings("deprecation") // camera APIs
 final class DecodeRunnable implements Runnable, Camera.PreviewCallback {
 
   private static final String TAG = DecodeRunnable.class.getSimpleName();

@@ -42,6 +42,7 @@ import java.io.IOException;
 /**
  * @author Sean Owen
  */
+@SuppressWarnings("deprecation") // camera APIs
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
