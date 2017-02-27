@@ -105,20 +105,20 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
                                                  int height,
                                                  int[][] blackPoints,
                                                  BitMatrix matrix) {
+    int maxYOffset = height - BLOCK_SIZE;
+    int maxXOffset = width - BLOCK_SIZE;
     for (int y = 0; y < subHeight; y++) {
       int yoffset = y << BLOCK_SIZE_POWER;
-      int maxYOffset = height - BLOCK_SIZE;
       if (yoffset > maxYOffset) {
         yoffset = maxYOffset;
       }
+      int top = cap(y, 2, subHeight - 3);
       for (int x = 0; x < subWidth; x++) {
         int xoffset = x << BLOCK_SIZE_POWER;
-        int maxXOffset = width - BLOCK_SIZE;
         if (xoffset > maxXOffset) {
           xoffset = maxXOffset;
         }
         int left = cap(x, 2, subWidth - 3);
-        int top = cap(y, 2, subHeight - 3);
         int sum = 0;
         for (int z = -2; z <= 2; z++) {
           int[] blackRow = blackPoints[top + z];
@@ -163,16 +163,16 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
                                               int subHeight,
                                               int width,
                                               int height) {
+    int maxYOffset = height - BLOCK_SIZE;
+    int maxXOffset = width - BLOCK_SIZE;
     int[][] blackPoints = new int[subHeight][subWidth];
     for (int y = 0; y < subHeight; y++) {
       int yoffset = y << BLOCK_SIZE_POWER;
-      int maxYOffset = height - BLOCK_SIZE;
       if (yoffset > maxYOffset) {
         yoffset = maxYOffset;
       }
       for (int x = 0; x < subWidth; x++) {
         int xoffset = x << BLOCK_SIZE_POWER;
-        int maxXOffset = width - BLOCK_SIZE;
         if (xoffset > maxXOffset) {
           xoffset = maxXOffset;
         }
