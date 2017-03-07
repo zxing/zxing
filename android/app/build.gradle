@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 android {
-    
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -8,7 +7,7 @@ android {
         minSdkVersion 11
         targetSdkVersion 25
         versionCode 300
-        versionName '5.1 Beta'
+        versionName '5.11 Beta'
     }
     buildTypes {
         release {
@@ -22,7 +21,6 @@ android {
             proguardFile 'C:/Users/Ron/AppData/Local/Android/sdk/tools/proguard/proguard-android-optimize.txt'
             zipAlignEnabled true
         }
-
         debug {
             debuggable true
             jniDebuggable false
@@ -31,6 +29,7 @@ android {
             pseudoLocalesEnabled true
             proguardFile 'C:/Users/Ron/AppData/Local/Android/sdk/tools/proguard/proguard-android.txt'
         }
+
     }
     productFlavors {
     }

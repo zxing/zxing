@@ -2,27 +2,59 @@ body {
   background-color: #000000;
   color: #FFFFFF;
 }
+
 img {
   margin: 3px;
 }
+
+.imgfull {
+  max-width: 100%;
+  height: auto;
+  margin: .5em auto;
+}
+.imghalf {
+  max-width: 66%;
+  height: auto;
+  margin: .5em auto;
+}
+
+.imageright {
+    max-width: 50%;
+    height: auto;
+    float:right;
+    margin: .5em;
+}
+.imageleft {
+    max-width: 50%;
+    height: auto;
+    float:right;
+    margin: .5em;
+
+}
+
 li {
   padding-top: 3px;
   padding-bottom: 3px;
   margin-left: -3px;
 }
+
 ul.touchable li {
   padding-top: 8px;
   padding-bottom: 8px;
 }
+
 a:link {
   color: #FFFFFF;
 }
+
 a:visited {
   color: #C0C0C0;
 }
+
 td {
   vertical-align: top;
 }
+
 p.imgcenter {
   text-align:center;
 }
