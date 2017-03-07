@@ -43,12 +43,12 @@ import java.util.logging.Logger;
  *
  * @author Sean Owen
  */
-@WebFilter("/w/decode")
+@WebFilter({"/w/decode", "/w/chart"})
 public final class DoSFilter implements Filter {
 
   private static final Logger log = Logger.getLogger(DoSFilter.class.getName());
 
-  private static final int MAX_ACCESSES_PER_IP_PER_TIME = 10;
+  private static final int MAX_ACCESSES_PER_IP_PER_TIME = 100;
   private static final int MAX_RECENT_ACCESS_MAP_SIZE = 100_000;
 
   private final Map<String,AtomicInteger> numRecentAccesses;
