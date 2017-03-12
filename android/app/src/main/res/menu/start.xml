@@ -16,6 +16,11 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item android:id="@+id/menu_help"
+      android:title="@string/menu_help"
+      android:icon="@android:drawable/ic_menu_help"
+      android:orderInCategory="5"
+      app:showAsAction="withText"/>
   <item android:id="@+id/menu_share"
       android:title="@string/menu_share"
       android:icon="@android:drawable/ic_menu_share"
@@ -36,9 +41,4 @@
       android:icon="@android:drawable/ic_menu_camera"
       android:orderInCategory="4"
       app:showAsAction="withText"/>
-  <item android:id="@+id/menu_help"
-        android:title="@string/menu_help"
-        android:icon="@android:drawable/ic_menu_help"
-        android:orderInCategory="5"
-        app:showAsAction="withText"/>
 </menu>

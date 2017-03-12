@@ -61,7 +61,7 @@ public final class WifiResultHandler extends ResultHandler {
   public void handleButtonPress(int index) {
     if (index == 0) {
       WifiParsedResult wifiResult = (WifiParsedResult) getResult();
-      WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+      WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
       if (wifiManager == null) {
         Log.w(TAG, "No WifiManager available from device");
         return;
