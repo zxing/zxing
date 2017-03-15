@@ -216,8 +216,8 @@ public final class HttpHelper {
   private static int safelyConnect(HttpURLConnection connection) throws IOException {
     try {
       connection.connect();
-    } catch (NullPointerException | IllegalArgumentException | IndexOutOfBoundsException | SecurityException e) {
-      // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
+    } catch (RuntimeException e) {
+      // These are, generally, Android bugs
       throw new IOException(e);
     }
     try {
