@@ -18,6 +18,7 @@ android {
             renderscriptDebuggable false
             pseudoLocalesEnabled false
             proguardFile 'proguard-rules.txt'
+            //proguardFile 'C:/Users/DavidDawes/AppData/Local/Android/sdk/tools/proguard/proguard-android-optimize.txt'
             proguardFile 'C:/Users/Ron/AppData/Local/Android/sdk/tools/proguard/proguard-android-optimize.txt'
             zipAlignEnabled true
         }
@@ -27,6 +28,7 @@ android {
             renderscriptDebuggable true
             minifyEnabled false
             pseudoLocalesEnabled true
+            //proguardFile 'C:/Users/DavidDawes/AppData/Local/Android/sdk/tools/proguard/proguard-android-optimize.txt'
             proguardFile 'C:/Users/Ron/AppData/Local/Android/sdk/tools/proguard/proguard-android.txt'
         }
 

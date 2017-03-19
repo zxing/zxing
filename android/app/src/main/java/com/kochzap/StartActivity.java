@@ -60,18 +60,26 @@ public class StartActivity extends AppCompatActivity implements OnClickListener 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        cameraPermission = checkPermission();
-        if (cameraPermission) {
-            zapPending = false;
-            scanPending = false;
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            // do something on back.
+            this.finish();
+            return true;
+        }
 
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
+
+        if (cameraPermission) {
+                zapPending = false;
+                scanPending = false;
+
+                IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+                scanIntegrator.initiateScan();
+                return true;
         } else {
             zapPending = true;
             scanPending = false;
         }
-        return true;
+        // let the system handle it?
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
