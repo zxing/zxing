@@ -17,6 +17,7 @@ img {
   max-width: 66%;
   height: auto;
   margin: .5em auto;
+  padding-left: 1em;
 }
 
 .imageright {
