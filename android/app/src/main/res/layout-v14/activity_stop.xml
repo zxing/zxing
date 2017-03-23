@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/zero_margin"
-    tools:context="com.kochzap.StopActivity"
+    tools:context="com.coact.kochzap.StopActivity"
     android:orientation="vertical">
     <ImageView
         android:id="@+id/down"

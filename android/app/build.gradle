@@ -3,7 +3,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.kochzap"
+        applicationId "com.coact.kochzap"
         minSdkVersion 11
         targetSdkVersion 25
         versionCode 300

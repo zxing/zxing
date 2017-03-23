@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/zero_margin"
-    tools:context="com.kochzap.StopActivity">
+    tools:context="com.coact.kochzap.StopActivity">
     <ImageView android:id="@+id/scan_button0"
         android:src="@drawable/button_down"
         android:scaleType="fitCenter"

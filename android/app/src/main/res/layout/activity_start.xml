@@ -8,13 +8,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.kochzap.StartActivity">
+    tools:context="com.coact.kochzap.StartActivity">
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="7"
-        tools:context="com.kochzap.StartActivity">
+        tools:context="com.coact.kochzap.StartActivity">
 
         <ImageView android:id="@+id/scan_button"
             android:src="@drawable/button_fist"

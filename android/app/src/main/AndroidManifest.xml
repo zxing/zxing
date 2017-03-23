@@ -19,7 +19,7 @@
     KochZap app.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kochzap"
+    package="com.coact.kochzap"
     android:installLocation="auto"
     android:versionCode="211"
     android:versionName="5.0.11 Beta">
@@ -75,7 +75,7 @@
             android:theme="@style/CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
-                <action android:name="com.kochzap.SCAN" />
+                <action android:name="com.coact.kochzap.SCAN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
@@ -135,7 +135,7 @@
             android:name=".encode.EncodeActivity"
             android:stateNotNeeded="true">
             <intent-filter>
-                <action android:name="com.kochzap.ENCODE" />
+                <action android:name="com.coact.kochzap.ENCODE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -160,7 +160,7 @@
             android:screenOrientation="sensorLandscape"
             android:stateNotNeeded="true">
             <intent-filter>
-                <action android:name="com.kochzap.SEARCH_BOOK_CONTENTS" />
+                <action android:name="com.coact.kochzap.SEARCH_BOOK_CONTENTS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -170,7 +170,7 @@
             android:screenOrientation="user"
             android:stateNotNeeded="true">
             <intent-filter>
-                <action android:name="com.kochzap.SHARE" />
+                <action android:name="com.coact.kochzap.SHARE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

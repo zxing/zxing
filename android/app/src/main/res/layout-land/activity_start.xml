@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/standard_margin"
     android:paddingTop="@dimen/standard_margin"
     android:orientation="horizontal"
-    tools:context="com.kochzap.StartActivity"
+    tools:context="com.coact.kochzap.StartActivity"
     android:layout_marginLeft="@dimen/half_margin"
     android:layout_marginStart="@dimen/half_margin">
     >
