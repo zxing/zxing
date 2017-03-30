@@ -93,7 +93,7 @@
   <string name="preferences_bulk_mode_title">連続スキャンモード</string>
   <string name="preferences_copy_to_clipboard_title">ｸﾘｯﾌﾟﾎﾞｰﾄﾞにｺﾋﾟｰ</string>
   <string name="preferences_custom_product_search_summary" formatted="false">引数：％s=コンテンツ、％f=フォーマット、％t=タイプ</string>
-  <string name="preferences_custom_product_search_title">カスタムサーチ URL</string>
+  <string name="preferences_custom_product_search_title">カスタムサーチURL</string>
   <string name="preferences_decode_1D_industrial_title">1次元バーコード（産業用）</string>
   <string name="preferences_decode_1D_product_title">1次元バーコード（商品用）</string>
   <string name="preferences_decode_Aztec_title">Aztec Code</string>
@@ -136,7 +136,7 @@
   <string name="result_sms">SMSアドレスが見つかりました</string>
   <string name="result_tel">電話番号が見つかりました</string>
   <string name="result_text">テキストデータが見つかりました</string>
-  <string name="result_uri">URL が見つかりました</string>
+  <string name="result_uri">URLが見つかりました</string>
   <string name="result_wifi">ネットワーク設定が見つかりました</string>
   <string name="sbc_name">Googleブックス</string>
   <string name="wifi_changing_network">ネットワークへ接続しています…</string>
