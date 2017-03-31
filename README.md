@@ -1,5 +1,9 @@
 <img align="right" src="https://raw.github.com/wiki/zxing/zxing/zxing-logo.png"/>
 
+<a href="https://travis-ci.org/zxing/zxing">
+<img src="https://travis-ci.org/zxing/zxing.svg?branch=master"/></a>
+
+
 ##Get Started Developing
 To get started, please visit: https://github.com/zxing/zxing/wiki/Getting-Started-Developing
 
