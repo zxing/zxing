@@ -92,8 +92,10 @@ final class PDF417CodewordDecoder {
   private static int getClosestDecodedValue(int[] moduleBitCount) {
     int bitCountSum = MathUtils.sum(moduleBitCount);
     float[] bitCountRatios = new float[PDF417Common.BARS_IN_MODULE];
-    for (int i = 0; i < bitCountRatios.length; i++) {
-      bitCountRatios[i] = moduleBitCount[i] / (float) bitCountSum;
+    if (bitCountSum > 1) {
+      for (int i = 0; i < bitCountRatios.length; i++) {
+        bitCountRatios[i] = moduleBitCount[i] / (float) bitCountSum;
+      }
     }
     float bestMatchError = Float.MAX_VALUE;
     int bestMatch = -1;
