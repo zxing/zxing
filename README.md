@@ -1,7 +1,7 @@
 <img align="right" src="https://raw.github.com/wiki/zxing/zxing/zxing-logo.png"/>
-##Forked
+## Forked
 This is a fork off of the regular zxing open source project.
-####Added to the fork
+#### Added to the fork
 Fork specific additions:
 Added list of bad companies, susidiaries of Koch Industries to the best of our abilities.
 When scanning a product, if the company (first 6 digits) matches one of the Kock Brother's Industries
@@ -10,9 +10,9 @@ asks the user not to buy the Koch Indstries prooduct.
 Modified privacy, I turned on Google Analytics so I noted that.
 Modified license a little to include KochZap references, since that does not need to be localized.
 I did end up having to add strings to all 30+ locales, and used Google translate for that.
-###Broken:
+### Broken:
 	Schedule from QR Code - part of schedule did not compile so I commented bits out. Does not work.
-##Get Started Developing
+## Get Started Developing
 To get started, please visit: https://github.com/zxing/zxing/wiki/Getting-Started-Developing
 
 ZXing ("zebra crossing") is an open-source, multi-format 1D/2D barcode image processing
