@@ -87,7 +87,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.7</java.version>
-    <maven.version.min>3.2.1</maven.version.min>
     <proguard.version>5.3.3</proguard.version>
     <proguard.plugin.version>2.0.14</proguard.plugin.version>
     <slf4j.version>1.7.25</slf4j.version>
@@ -148,7 +147,7 @@
                   <requireUpperBoundDeps />
                   <dependencyConvergence />
                   <requireMavenVersion>
-                    <version>${maven.version.min}</version>
+                    <version>3.2.5</version>
                   </requireMavenVersion>
                   <requireJavaVersion>
                     <version>${java.version}</version>
@@ -684,10 +683,6 @@
     <url>https://github.com/zxing/zxing</url>
     <tag>HEAD</tag>
   </scm>
-
-  <prerequisites>
-    <maven>${maven.version.min}</maven>
-  </prerequisites>
 
   <distributionManagement>
     <repository>
