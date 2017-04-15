@@ -63,6 +63,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -164,8 +165,8 @@ public final class DecodeServlet extends HttpServlet {
       try {
         BufferedImage image = ImageReader.readDataURIImage(imageURI);
         processImage(image, request, response);
-      } catch (IOException ioe) {
-        log.info(ioe.toString());
+      } catch (IOException | IllegalStateException e) {
+        log.info(e.toString());
         errorResponse(request, response, "badurl");
       }
       return;
@@ -421,7 +422,12 @@ public final class DecodeServlet extends HttpServlet {
     String text = bundle.getString("response.error." + key + ".text");
     request.setAttribute("title", title);
     request.setAttribute("text", text);
-    request.getRequestDispatcher("response.jspx").forward(request, response);
+    RequestDispatcher dispatcher = request.getRequestDispatcher("response.jspx");
+    if (dispatcher == null) {
+      log.warning("Can't obtain RequestDispatcher");
+    } else {
+      dispatcher.forward(request, response);
+    }
   }
 
 }

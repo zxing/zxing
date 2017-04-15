@@ -29,9 +29,10 @@ final class Java8Base64Decoder extends Base64Decoder {
           .getMethod("getDecoder").invoke(null);
       return (byte[]) Class.forName("java.util.Base64$Decoder")
           .getMethod("decode", String.class).invoke(decoder, s);
-    } catch (IllegalAccessException | InvocationTargetException |
-             NoSuchMethodException | ClassNotFoundException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | ClassNotFoundException e) {
       throw new IllegalStateException(e);
+    } catch (InvocationTargetException ite) {
+      throw new IllegalStateException(ite.getCause());
     }
   }
 }
