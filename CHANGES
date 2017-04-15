@@ -363,3 +363,7 @@
   - BS 4.7.6 release with Android API 23 support
   - TIFF support in online decoder
   - Many small bug fixes, typo fixes and project build improvements
+
+3.4.0 (?)
+
+  - Removed Google Glass, ZXing Test apps
