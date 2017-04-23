@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.j2se;
 
+import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 
 import javax.imageio.ImageIO;
@@ -62,14 +63,15 @@ public final class MatrixToImageWriter {
     BufferedImage image = new BufferedImage(width, height, config.getBufferedImageColorModel());
     int onColor = config.getPixelOnColor();
     int offColor = config.getPixelOffColor();
-    int[] pixels = new int[width * height];
-    int index = 0;
+    int[] rowPixels = new int[width];
+    BitArray row = new BitArray(width);
     for (int y = 0; y < height; y++) {
+      row = matrix.getRow(y, row);
       for (int x = 0; x < width; x++) {
-          pixels[index++] = matrix.get(x, y) ? onColor : offColor;
+        rowPixels[x] = row.get(x) ? onColor : offColor;
       }
+      image.setRGB(0, y, width, 1, rowPixels, 0, width);
     }
-    image.setRGB(0, 0, width, height, pixels, 0, width);
     return image;
   }
 
