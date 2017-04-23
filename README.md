@@ -26,9 +26,9 @@ library implemented in Java, with ports to other languages.
 | ------------------- | -----------
 | core                | The core image decoding library, and test code
 | javase              | JavaSE-specific client code
-| android             | Android client Barcode Scanner [![Barcode Scanner](http://www.android.com/images/brand/android_app_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
+| android             | Android client Barcode Scanner [![Barcode Scanner](https://www.android.com/images/brand/android_app_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
 | android-integration | Supports integration with Barcode Scanner via `Intent`
-| android-core        | Android-related code shared among `android`, `androidtest`, `glass`
+| android-core        | Android-related code shared among `android`, other Android apps
 | zxingorg            | The source behind `zxing.org`
 | zxing.appspot.com   | The source behind web-based barcode generator at `zxing.appspot.com`
 
@@ -51,7 +51,7 @@ library implemented in Java, with ports to other languages.
 | [zxing_cpp.rb](https://github.com/glassechidna/zxing_cpp.rb)    | bindings for Ruby (not just JRuby), powered by [zxing-cpp](https://github.com/glassechidna/zxing-cpp)
 | [jsqrcode](https://github.com/LazarSoft/jsqrcode)               | port to JavaScript
 | [python-zxing](https://github.com/oostendo/python-zxing)        | bindings for Python
-| [ZXing .NET](http://zxingnet.codeplex.com/)                     | port to .NET and C#, and related Windows platform
+| [ZXing .NET](https://zxingnet.codeplex.com/)                     | port to .NET and C#, and related Windows platform
 | [php-qrcode-detector-decoder](https://github.com/khanamiryan/php-qrcode-detector-decoder)                     | port to PHP
 | [ZXing Delphi](https://github.com/Spelt/ZXing.Delphi)          |  Port to native Delphi object pascal, targeted at Firemonkey compatible devices (IOS/Android/Win/OSX) and VCL.
 
@@ -74,7 +74,7 @@ library implemented in Java, with ports to other languages.
 ## Contacting
 
 Post to the [discussion forum](https://groups.google.com/group/zxing) or tag a question with [`zxing`
-on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
+on StackOverflow](https://stackoverflow.com/questions/tagged/zxing).
 
 ## Etcetera
 
@@ -84,4 +84,4 @@ on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
 
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
 
-Optimized with [![JProfiler](http://www.ej-technologies.com/images/banners/jprofiler_small.png)](http://www.ej-technologies.com/products/jprofiler/overview.html)
+Optimized with [![JProfiler](https://www.ej-technologies.com/images/banners/jprofiler_small.png)](https://www.ej-technologies.com/products/jprofiler/overview.html)
