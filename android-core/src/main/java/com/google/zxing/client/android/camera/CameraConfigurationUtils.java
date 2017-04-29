@@ -284,23 +284,7 @@ public final class CameraConfigurationUtils {
       return new Point(defaultSize.width, defaultSize.height);
     }
 
-    // Sort by size, descending
     List<Camera.Size> supportedPreviewSizes = new ArrayList<>(rawSupportedSizes);
-    Collections.sort(supportedPreviewSizes, new Comparator<Camera.Size>() {
-      @Override
-      public int compare(Camera.Size a, Camera.Size b) {
-        int aPixels = a.height * a.width;
-        int bPixels = b.height * b.width;
-        if (bPixels < aPixels) {
-          return -1;
-        }
-        if (bPixels > aPixels) {
-          return 1;
-        }
-        return 0;
-      }
-    });
-
     if (Log.isLoggable(TAG, Log.INFO)) {
       StringBuilder previewSizesString = new StringBuilder();
       for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
@@ -339,6 +323,22 @@ public final class CameraConfigurationUtils {
         return exactPoint;
       }
     }
+    
+    // Sort by size, descending
+    Collections.sort(supportedPreviewSizes, new Comparator<Camera.Size>() {
+      @Override
+      public int compare(Camera.Size a, Camera.Size b) {
+        int aPixels = a.height * a.width;
+        int bPixels = b.height * b.width;
+        if (bPixels < aPixels) {
+          return -1;
+        }
+        if (bPixels > aPixels) {
+          return 1;
+        }
+        return 0;
+      }
+    });
 
     // If no exact match, use largest preview size. This was not a great idea on older devices because
     // of the additional computation needed. We're likely to get here on newer Android 4+ devices, where
