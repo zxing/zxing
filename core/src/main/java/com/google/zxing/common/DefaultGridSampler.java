@@ -49,7 +49,7 @@ public final class DefaultGridSampler extends GridSampler {
                               int dimensionY,
                               PerspectiveTransform transform) throws NotFoundException {
     if (dimensionX <= 0 || dimensionY <= 0) {
-      throw NotFoundException.getNotFoundInstance();      
+      throw NotFoundException.getNotFoundInstance();
     }
     BitMatrix bits = new BitMatrix(dimensionX, dimensionY);
     float[] points = new float[2 * dimensionX];

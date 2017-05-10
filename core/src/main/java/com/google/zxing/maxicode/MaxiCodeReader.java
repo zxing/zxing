@@ -97,12 +97,12 @@ public final class MaxiCodeReader implements Reader {
    * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
    */
   private static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
-    
+
     int[] enclosingRectangle = image.getEnclosingRectangle();
     if (enclosingRectangle == null) {
       throw NotFoundException.getNotFoundInstance();
     }
-    
+
     int left = enclosingRectangle[0];
     int top = enclosingRectangle[1];
     int width = enclosingRectangle[2];

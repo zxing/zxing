@@ -73,7 +73,7 @@ final class EncoderContext {
   public char getCurrent() {
     return msg.charAt(pos);
   }
-  
+
   public StringBuilder getCodewords() {
     return codewords;
   }
@@ -89,7 +89,7 @@ final class EncoderContext {
   public int getCodewordCount() {
     return this.codewords.length();
   }
-  
+
   public int getNewEncoding() {
     return newEncoding;
   }
@@ -113,7 +113,7 @@ final class EncoderContext {
   public int getRemainingCharacters() {
     return getTotalMessageCharCount() - pos;
   }
-  
+
   public SymbolInfo getSymbolInfo() {
     return symbolInfo;
   }

@@ -163,19 +163,19 @@ public final class HighLevelEncoder {
       int pairCode;
       int nextChar = index + 1 < text.length ? text[index + 1] : 0;
       switch (text[index]) {
-        case '\r':  
-          pairCode = nextChar == '\n' ? 2 : 0; 
+        case '\r':
+          pairCode = nextChar == '\n' ? 2 : 0;
           break;
-        case '.' :  
-          pairCode = nextChar == ' '  ? 3 : 0; 
+        case '.' :
+          pairCode = nextChar == ' ' ? 3 : 0;
           break;
-        case ',' :  
-          pairCode = nextChar == ' ' ? 4 : 0; 
+        case ',' :
+          pairCode = nextChar == ' ' ? 4 : 0;
           break;
-        case ':' :  
-          pairCode = nextChar == ' ' ? 5 : 0; 
+        case ':' :
+          pairCode = nextChar == ' ' ? 5 : 0;
           break;
-        default:    
+        default:
           pairCode = 0;
       }
       if (pairCode > 0) {

@@ -119,9 +119,9 @@ public class SymbolInfo {
   }
 
   public static SymbolInfo lookup(int dataCodewords,
-                                  SymbolShapeHint shape, 
-                                  Dimension minSize, 
-                                  Dimension maxSize, 
+                                  SymbolShapeHint shape,
+                                  Dimension minSize,
+                                  Dimension maxSize,
                                   boolean fail) {
     for (SymbolInfo symbol : symbols) {
       if (shape == SymbolShapeHint.FORCE_SQUARE && symbol.rectangular) {
@@ -207,11 +207,11 @@ public class SymbolInfo {
   public int getInterleavedBlockCount() {
     return dataCapacity / rsBlockData;
   }
-  
+
   public final int getDataCapacity() {
     return dataCapacity;
   }
-  
+
   public final int getErrorCodewords() {
     return errorCodewords;
   }

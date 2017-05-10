@@ -137,16 +137,16 @@ public final class Detector {
     // The top right point is actually the corner of a module, which is one of the two black modules
     // adjacent to the white module at the top right. Tracing to that corner from either the top left
     // or bottom right should work here.
-    
+
     int dimensionTop = transitionsBetween(topLeft, topRight).getTransitions();
     int dimensionRight = transitionsBetween(bottomRight, topRight).getTransitions();
-    
+
     if ((dimensionTop & 0x01) == 1) {
       // it can't be odd, so, round... up?
       dimensionTop++;
     }
     dimensionTop += 2;
-    
+
     if ((dimensionRight & 0x01) == 1) {
       // it can't be odd, so, round... up?
       dimensionRight++;
@@ -182,10 +182,10 @@ public final class Detector {
       }
 
       bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
-          
+
     } else {
       // The matrix is square
-        
+
       int dimension = Math.min(dimensionRight, dimensionTop);
       // correct top right point to match the white module
       correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
@@ -419,7 +419,7 @@ public final class Detector {
     int getTransitions() {
       return transitions;
     }
-    
+
     @Override
     public String toString() {
       return from + "/" + to + '/' + transitions;

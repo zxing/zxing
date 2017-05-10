@@ -34,30 +34,30 @@ final class ExpandedRow {
     this.rowNumber = rowNumber;
     this.wasReversed = wasReversed;
   }
-  
+
   List<ExpandedPair> getPairs() {
     return this.pairs;
   }
-  
+
   int getRowNumber() {
     return this.rowNumber;
   }
-  
+
   boolean isReversed() {
     return this.wasReversed;
   }
-  
+
   boolean isEquivalent(List<ExpandedPair> otherPairs) {
     return this.pairs.equals(otherPairs);
   }
-  
+
   @Override
   public String toString() {
     return "{ " + pairs + " }";
   }
-  
-  /** 
-   * Two rows are equal if they contain the same pairs in the same order. 
+
+  /**
+   * Two rows are equal if they contain the same pairs in the same order.
    */
   @Override
   public boolean equals(Object o) {

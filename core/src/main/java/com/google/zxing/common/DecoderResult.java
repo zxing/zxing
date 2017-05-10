@@ -136,17 +136,17 @@ public final class DecoderResult {
   public void setOther(Object other) {
     this.other = other;
   }
-  
+
   public boolean hasStructuredAppend() {
     return structuredAppendParity >= 0 && structuredAppendSequenceNumber >= 0;
   }
-  
+
   public int getStructuredAppendParity() {
     return structuredAppendParity;
   }
-  
+
   public int getStructuredAppendSequenceNumber() {
     return structuredAppendSequenceNumber;
   }
-  
+
 }

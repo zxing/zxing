@@ -41,7 +41,7 @@ public abstract class GridSampler {
    * ought to be appropriate for the entire platform, and all uses of this library
    * in the whole lifetime of the JVM. For instance, an Android activity can swap in
    * an implementation that takes advantage of native platform libraries.
-   * 
+   *
    * @param newGridSampler The platform-specific object to install.
    */
   public static void setGridSampler(GridSampler newGridSampler) {
@@ -95,7 +95,7 @@ public abstract class GridSampler {
                                        float p2FromX, float p2FromY,
                                        float p3FromX, float p3FromY,
                                        float p4FromX, float p4FromY) throws NotFoundException;
-  
+
   public abstract BitMatrix sampleGrid(BitMatrix image,
                                        int dimensionX,
                                        int dimensionY,

@@ -76,17 +76,17 @@ public final class Detector {
 
     // 3. Get the size of the matrix and other parameters from the bull's eye
     extractParameters(bullsEyeCorners);
-    
+
     // 4. Sample the grid
     BitMatrix bits = sampleGrid(image,
-                                bullsEyeCorners[shift % 4], 
+                                bullsEyeCorners[shift % 4],
                                 bullsEyeCorners[(shift + 1) % 4],
-                                bullsEyeCorners[(shift + 2) % 4], 
+                                bullsEyeCorners[(shift + 2) % 4],
                                 bullsEyeCorners[(shift + 3) % 4]);
 
     // 5. Get the corners of the matrix.
     ResultPoint[] corners = getMatrixCornerPoints(bullsEyeCorners);
-    
+
     return new AztecDetectorResult(bits, corners, compact, nbDataBlocks, nbLayers);
   }
 
@@ -105,13 +105,13 @@ public final class Detector {
     // Get the bits around the bull's eye
     int[] sides = {
         sampleLine(bullsEyeCorners[0], bullsEyeCorners[1], length), // Right side
-        sampleLine(bullsEyeCorners[1], bullsEyeCorners[2], length), // Bottom 
+        sampleLine(bullsEyeCorners[1], bullsEyeCorners[2], length), // Bottom
         sampleLine(bullsEyeCorners[2], bullsEyeCorners[3], length), // Left side
-        sampleLine(bullsEyeCorners[3], bullsEyeCorners[0], length)  // Top 
+        sampleLine(bullsEyeCorners[3], bullsEyeCorners[0], length)  // Top
     };
 
-    // bullsEyeCorners[shift] is the corner of the bulls'eye that has three 
-    // orientation marks.  
+    // bullsEyeCorners[shift] is the corner of the bulls'eye that has three
+    // orientation marks.
     // sides[shift] is the row/column that goes from the corner with three
     // orientation marks to the corner with two.
     shift = getRotation(sides, length);
@@ -130,11 +130,11 @@ public final class Detector {
         parameterData += ((side >> 2) & (0x1f << 5)) + ((side >> 1) & 0x1F);
       }
     }
-    
+
     // Corrects parameter data using RS.  Returns just the data portion
     // without the error correction.
     int correctedData = getCorrectedParameterData(parameterData, compact);
-    
+
     if (compact) {
       // 8 bits:  2 bits layers and 6 bits data blocks
       nbLayers = (correctedData >> 6) + 1;
@@ -222,25 +222,25 @@ public final class Detector {
     }
     return result;
   }
-  
+
   /**
    * Finds the corners of a bull-eye centered on the passed point.
    * This returns the centers of the diagonal points just outside the bull's eye
    * Returns [topRight, bottomRight, bottomLeft, topLeft]
-   * 
+   *
    * @param pCenter Center point
    * @return The corners of the bull-eye
    * @throws NotFoundException If no valid bull-eye can be found
    */
   private ResultPoint[] getBullsEyeCorners(Point pCenter) throws NotFoundException {
-    
+
     Point pina = pCenter;
     Point pinb = pCenter;
     Point pinc = pCenter;
     Point pind = pCenter;
 
     boolean color = true;
-    
+
     for (nbCenterLayers = 1; nbCenterLayers < 9; nbCenterLayers++) {
       Point pouta = getFirstDifferent(pina, color, 1, -1);
       Point poutb = getFirstDifferent(pinb, color, 1, 1);
@@ -269,9 +269,9 @@ public final class Detector {
     if (nbCenterLayers != 5 && nbCenterLayers != 7) {
       throw NotFoundException.getNotFoundInstance();
     }
-    
+
     compact = nbCenterLayers == 5;
-    
+
     // Expand the square by .5 pixel in each direction so that we're on the border
     // between the white square and the black square
     ResultPoint pinax = new ResultPoint(pina.getX() + 0.5f, pina.getY() - 0.5f);
@@ -319,7 +319,7 @@ public final class Detector {
       pointD = getFirstDifferent(new Point(cx - 7, cy - 7), false, -1, -1).toResultPoint();
 
     }
-    
+
     //Compute the center of the rectangle
     int cx = MathUtils.round((pointA.getX() + pointD.getX() + pointB.getX() + pointC.getX()) / 4.0f);
     int cy = MathUtils.round((pointA.getY() + pointD.getY() + pointB.getY() + pointC.getY()) / 4.0f);
@@ -341,7 +341,7 @@ public final class Detector {
       pointC = getFirstDifferent(new Point(cx - 7, cy + 7), false, -1, 1).toResultPoint();
       pointD = getFirstDifferent(new Point(cx - 7, cy - 7), false, -1, -1).toResultPoint();
     }
-    
+
     // Recompute the center of the rectangle
     cx = MathUtils.round((pointA.getX() + pointD.getX() + pointB.getX() + pointC.getX()) / 4.0f);
     cy = MathUtils.round((pointA.getY() + pointD.getY() + pointB.getY() + pointC.getY()) / 4.0f);
@@ -369,7 +369,7 @@ public final class Detector {
                                ResultPoint topRight,
                                ResultPoint bottomRight,
                                ResultPoint bottomLeft) throws NotFoundException {
-      
+
     GridSampler sampler = GridSampler.getInstance();
     int dimension = getDimension();
 

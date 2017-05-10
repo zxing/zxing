@@ -95,7 +95,7 @@ public enum EncodeHintType {
    * (Type {@link Integer}, or {@link String} representation of the integer value).
    */
    AZTEC_LAYERS,
-   
+
    /**
     * Specifies the exact version of QR code to be encoded.
     * (Type {@link Integer}, or {@link String} representation of the integer value).

@@ -49,11 +49,11 @@ public final class DataMatrixWriter implements Writer {
     if (contents.isEmpty()) {
       throw new IllegalArgumentException("Found empty contents");
     }
-    
+
     if (format != BarcodeFormat.DATA_MATRIX) {
       throw new IllegalArgumentException("Can only encode DATA_MATRIX, but got " + format);
     }
-    
+
     if (width < 0 || height < 0) {
       throw new IllegalArgumentException("Requested dimensions are too small: " + width + 'x' + height);
     }

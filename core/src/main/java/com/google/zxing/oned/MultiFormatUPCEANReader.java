@@ -94,7 +94,7 @@ public final class MultiFormatUPCEANReader extends OneDReader {
       boolean ean13MayBeUPCA =
           result.getBarcodeFormat() == BarcodeFormat.EAN_13 &&
               result.getText().charAt(0) == '0';
-      @SuppressWarnings("unchecked")      
+      @SuppressWarnings("unchecked")
       Collection<BarcodeFormat> possibleFormats =
           hints == null ? null : (Collection<BarcodeFormat>) hints.get(DecodeHintType.POSSIBLE_FORMATS);
       boolean canReturnUPCA = possibleFormats == null || possibleFormats.contains(BarcodeFormat.UPC_A);

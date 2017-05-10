@@ -67,7 +67,7 @@ public final class Code93Reader extends OneDReader {
       throws NotFoundException, ChecksumException, FormatException {
 
     int[] start = findAsteriskPattern(row);
-    // Read off white space    
+    // Read off white space
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
 

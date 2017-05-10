@@ -19,15 +19,15 @@ package com.google.zxing.aztec.encoder;
 import com.google.zxing.common.BitArray;
 
 abstract class Token {
-  
+
   static final Token EMPTY = new SimpleToken(null, 0, 0);
-  
+
   private final Token previous;
-  
+
   Token(Token previous) {
     this.previous = previous;
   }
-  
+
   final Token getPrevious() {
     return previous;
   }

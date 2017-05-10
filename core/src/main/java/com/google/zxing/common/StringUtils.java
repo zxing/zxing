@@ -39,7 +39,7 @@ public final class StringUtils {
       SHIFT_JIS.equalsIgnoreCase(PLATFORM_DEFAULT_ENCODING) ||
       EUC_JP.equalsIgnoreCase(PLATFORM_DEFAULT_ENCODING);
 
-  private StringUtils() {}
+  private StringUtils() { }
 
   /**
    * @param bytes bytes encoding a string, whose encoding should be guessed

@@ -98,13 +98,13 @@ final class PDF417HighLevelEncoder {
    * identifier for a user defined Extended Channel Interpretation (ECI)
    */
   private static final int ECI_USER_DEFINED = 925;
-  
+
   /**
    * identifier for a general purpose ECO format
    */
   private static final int ECI_GENERAL_PURPOSE = 926;
-  
-  /** 
+
+  /**
    * identifier for an ECI of a character set of code page
    */
   private static final int ECI_CHARSET = 927;

@@ -31,7 +31,7 @@ final class MatrixUtil {
     // do nothing
   }
 
-  private static final int[][] POSITION_DETECTION_PATTERN =  {
+  private static final int[][] POSITION_DETECTION_PATTERN = {
       {1, 1, 1, 1, 1, 1, 1},
       {1, 0, 0, 0, 0, 0, 1},
       {1, 0, 1, 1, 1, 0, 1},

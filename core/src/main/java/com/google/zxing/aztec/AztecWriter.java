@@ -30,7 +30,7 @@ import java.util.Map;
  * Renders an Aztec code as a {@link BitMatrix}.
  */
 public final class AztecWriter implements Writer {
-  
+
   private static final Charset DEFAULT_CHARSET = Charset.forName("ISO-8859-1");
 
   @Override

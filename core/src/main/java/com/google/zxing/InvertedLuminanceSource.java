@@ -19,7 +19,7 @@ package com.google.zxing;
 /**
  * A wrapper implementation of {@link LuminanceSource} which inverts the luminances it returns -- black becomes
  * white and vice versa, and each value becomes (255-value).
- * 
+ *
  * @author Sean Owen
  */
 public final class InvertedLuminanceSource extends LuminanceSource {
@@ -51,7 +51,7 @@ public final class InvertedLuminanceSource extends LuminanceSource {
     }
     return invertedMatrix;
   }
-  
+
   @Override
   public boolean isCropSupported() {
     return delegate.isCropSupported();
