@@ -22,9 +22,9 @@ import java.util.Formatter;
  * @author Guenther Grau
  */
 class DetectionResultColumn {
-  
+
   private static final int MAX_NEARBY_DISTANCE = 5;
-  
+
   private final BoundingBox boundingBox;
   private final Codeword[] codewords;
 

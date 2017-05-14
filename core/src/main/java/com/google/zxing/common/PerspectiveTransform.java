@@ -85,7 +85,7 @@ public final class PerspectiveTransform {
 
   public void transformPoints(float[] xValues, float[] yValues) {
     int n = xValues.length;
-    for (int i = 0; i < n; i ++) {
+    for (int i = 0; i < n; i++) {
       float x = xValues[i];
       float y = yValues[i];
       float denominator = a13 * x + a23 * y + a33;

@@ -80,7 +80,7 @@ public final class UPCEWriter extends UPCEANWriter {
     if (firstDigit != 0 && firstDigit != 1) {
       throw new IllegalArgumentException("Number system must be 0 or 1");
     }
-      
+
     int checkDigit = Character.digit(contents.charAt(7), 10);
     int parities = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
     boolean[] result = new boolean[CODE_WIDTH];
@@ -100,5 +100,5 @@ public final class UPCEWriter extends UPCEANWriter {
 
     return result;
   }
-  
+
 }

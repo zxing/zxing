@@ -96,7 +96,7 @@ final class UPCEANExtension5Support {
     if (extensionChecksum(resultString.toString()) != checkDigit) {
       throw NotFoundException.getNotFoundInstance();
     }
-    
+
     return rowOffset;
   }
 

@@ -78,5 +78,5 @@ final class ASCIIEncoder implements Encoder {
     }
     throw new IllegalArgumentException("not digits: " + digit1 + digit2);
   }
-  
+
 }

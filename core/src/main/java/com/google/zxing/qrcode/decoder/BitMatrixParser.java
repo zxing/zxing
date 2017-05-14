@@ -221,7 +221,7 @@ final class BitMatrixParser {
    * This flag has effect only on the {@link #readFormatInformation()} and the
    * {@link #readVersion()}. Before proceeding with {@link #readCodewords()} the
    * {@link #mirror()} method should be called.
-   * 
+   *
    * @param mirror Whether to read version and format information mirrored.
    */
   void setMirror(boolean mirror) {
@@ -236,7 +236,7 @@ final class BitMatrixParser {
       for (int y = x + 1; y < bitMatrix.getHeight(); y++) {
         if (bitMatrix.get(x, y) != bitMatrix.get(y, x)) {
           bitMatrix.flip(y, x);
-          bitMatrix.flip(x, y);          
+          bitMatrix.flip(x, y);
         }
       }
     }

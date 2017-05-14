@@ -78,7 +78,7 @@ public enum CharacterSetECI {
   CharacterSetECI(int value) {
     this(new int[] {value});
   }
-  
+
   CharacterSetECI(int value, String... otherEncodingNames) {
     this.values = new int[] {value};
     this.otherEncodingNames = otherEncodingNames;

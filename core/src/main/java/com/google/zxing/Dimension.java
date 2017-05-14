@@ -23,7 +23,7 @@ public final class Dimension {
 
   private final int width;
   private final int height;
-  
+
   public Dimension(int width, int height) {
     if (width < 0 || height < 0) {
       throw new IllegalArgumentException();
@@ -40,7 +40,7 @@ public final class Dimension {
     return height;
   }
 
-  @Override 
+  @Override
   public boolean equals(Object other) {
     if (other instanceof Dimension) {
       Dimension d = (Dimension) other;
@@ -49,7 +49,7 @@ public final class Dimension {
     return false;
   }
 
-  @Override 
+  @Override
   public int hashCode() {
       return width * 32713 + height;
   }

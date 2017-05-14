@@ -62,8 +62,8 @@ final class DetectionResult {
   // we should be able to estimate the row height and use it as a hint for the row number
   // we should also fill the rows top to bottom and bottom to top
   /**
-   * @return number of codewords which don't have a valid row number. Note that the count is not accurate as codewords 
-   * will be counted several times. It just serves as an indicator to see when we can stop adjusting row numbers 
+   * @return number of codewords which don't have a valid row number. Note that the count is not accurate as codewords
+   * will be counted several times. It just serves as an indicator to see when we can stop adjusting row numbers
    */
   private int adjustRowNumbers() {
     int unadjustedCount = adjustRowNumbersByRow();

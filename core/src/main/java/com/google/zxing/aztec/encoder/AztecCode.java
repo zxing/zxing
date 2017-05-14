@@ -20,7 +20,7 @@ import com.google.zxing.common.BitMatrix;
 
 /**
  * Aztec 2D code representation
- * 
+ *
  * @author Rustam Abdullaev
  */
 public final class AztecCode {
@@ -52,14 +52,14 @@ public final class AztecCode {
   public void setSize(int size) {
     this.size = size;
   }
-  
+
   /**
    * @return number of levels
    */
   public int getLayers() {
     return layers;
   }
-  
+
   public void setLayers(int layers) {
     this.layers = layers;
   }

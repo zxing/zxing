@@ -42,7 +42,7 @@ public class DefaultPlacement {
     this.bits = new byte[numcols * numrows];
     Arrays.fill(this.bits, (byte) -1); //Initialize with "not set" value
   }
-  
+
   final int getNumrows() {
     return numrows;
   }
@@ -96,7 +96,7 @@ public class DefaultPlacement {
       } while (row >= 0 && (col < numcols));
       row++;
       col += 3;
-            
+
             /* and then sweep downward diagonally, inserting successive characters, ... */
       do {
         if ((row >= 0) && (col < numcols) && !hasBit(col, row)) {
@@ -107,10 +107,10 @@ public class DefaultPlacement {
       } while ((row < numrows) && (col >= 0));
       row += 3;
       col++;
-            
+
             /* ...until the entire array is scanned */
     } while ((row < numrows) || (col < numcols));
-        
+
         /* Lastly, if the lower righthand corner is untouched, fill in fixed pattern */
     if (!hasBit(numcols - 1, numrows - 1)) {
       setBit(numcols - 1, numrows - 1, true);

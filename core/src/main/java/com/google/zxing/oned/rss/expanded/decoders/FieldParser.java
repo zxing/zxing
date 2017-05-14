@@ -160,7 +160,7 @@ final class FieldParser {
     { "391", VARIABLE_LENGTH, 18},
     { "392", VARIABLE_LENGTH, 15},
     { "393", VARIABLE_LENGTH, 18},
-    { "703", VARIABLE_LENGTH, 30}
+    { "703", VARIABLE_LENGTH, 30},
   };
 
   private static final Object [][] FOUR_DIGIT_DATA_LENGTH = {

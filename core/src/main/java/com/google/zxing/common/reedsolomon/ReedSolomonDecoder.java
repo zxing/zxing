@@ -123,7 +123,7 @@ public final class ReedSolomonDecoder {
       }
 
       t = q.multiply(tLast).addOrSubtract(tLastLast);
-      
+
       if (r.getDegree() >= rLast.getDegree()) {
         throw new IllegalStateException("Division algorithm failed to reduce polynomial?");
       }

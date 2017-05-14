@@ -47,7 +47,7 @@ public final class PDF417ScanningDecoder {
 
   // TODO don't pass in minCodewordWidth and maxCodewordWidth, pass in barcode columns for start and stop pattern
   // columns. That way width can be deducted from the pattern column.
-  // This approach also allows to detect more details about the barcode, e.g. if a bar type (white or black) is wider 
+  // This approach also allows to detect more details about the barcode, e.g. if a bar type (white or black) is wider
   // than it should be. This can happen if the scanner used a bad blackpoint.
   public static DecoderResult decode(BitMatrix image,
                                      ResultPoint imageTopLeft,
@@ -285,7 +285,7 @@ public final class PDF417ScanningDecoder {
    * for these ambiguous codewords instead of treating it as an erasure. The problem is that we don't know which of
    * the ambiguous values to choose. We try decode using the first value, and if that fails, we use another of the
    * ambiguous values and try to decode again. This usually only happens on very hard to read and decode barcodes,
-   * so decoding the normal barcodes is not affected by this. 
+   * so decoding the normal barcodes is not affected by this.
    *
    * @param erasureArray contains the indexes of erasures
    * @param ambiguousIndexes array with the indexes that have more than one most likely value
@@ -433,7 +433,7 @@ public final class PDF417ScanningDecoder {
     }
     // TODO implement check for width and correction of black and white bars
     // use start (and maybe stop pattern) to determine if black bars are wider than white bars. If so, adjust.
-    // should probably done only for codewords with a lot more than 17 bits. 
+    // should probably done only for codewords with a lot more than 17 bits.
     // The following fixes 10-1.png, which has wide black bars and small white bars
     //    for (int i = 0; i < moduleBitCount.length; i++) {
     //      if (i % 2 == 0) {

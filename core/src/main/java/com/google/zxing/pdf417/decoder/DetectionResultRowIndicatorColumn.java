@@ -52,7 +52,7 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     ResultPoint bottom = isLeft ? boundingBox.getBottomLeft() : boundingBox.getBottomRight();
     int firstRow = imageRowToCodewordIndex((int) top.getY());
     int lastRow = imageRowToCodewordIndex((int) bottom.getY());
-    // We need to be careful using the average row height. Barcode could be skewed so that we have smaller and 
+    // We need to be careful using the average row height. Barcode could be skewed so that we have smaller and
     // taller rows
     //float averageRowHeight = (lastRow - firstRow) / (float) barcodeMetadata.getRowCount();
     int barcodeRow = -1;

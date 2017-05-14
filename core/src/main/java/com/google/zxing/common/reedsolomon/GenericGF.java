@@ -153,14 +153,14 @@ public final class GenericGF {
   public int getSize() {
     return size;
   }
-  
+
   public int getGeneratorBase() {
     return generatorBase;
   }
-  
+
   @Override
   public String toString() {
     return "GF(0x" + Integer.toHexString(primitive) + ',' + size + ')';
   }
-  
+
 }

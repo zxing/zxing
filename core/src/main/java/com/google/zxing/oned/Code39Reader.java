@@ -106,7 +106,7 @@ public final class Code39Reader extends OneDReader {
     result.setLength(0);
 
     int[] start = findAsteriskPattern(row, theCounters);
-    // Read off white space    
+    // Read off white space
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
 

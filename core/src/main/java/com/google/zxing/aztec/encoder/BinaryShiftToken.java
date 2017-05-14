@@ -19,10 +19,10 @@ package com.google.zxing.aztec.encoder;
 import com.google.zxing.common.BitArray;
 
 final class BinaryShiftToken extends Token {
-  
+
   private final short binaryShiftStart;
   private final short binaryShiftByteCount;
-  
+
   BinaryShiftToken(Token previous,
                    int binaryShiftStart,
                    int binaryShiftByteCount) {
@@ -34,7 +34,7 @@ final class BinaryShiftToken extends Token {
   @Override
   public void appendTo(BitArray bitArray, byte[] text) {
     for (int i = 0; i < binaryShiftByteCount; i++) {
-      if (i == 0 || (i == 31 && binaryShiftByteCount <= 62))  {
+      if (i == 0 || (i == 31 && binaryShiftByteCount <= 62)) {
         // We need a header before the first character, and before
         // character 31 when the total byte code is <= 62
         bitArray.appendBits(31, 5);  // BINARY_SHIFT

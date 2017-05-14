@@ -27,7 +27,7 @@ import java.util.Map;
 
 /**
  * This object renders a CODE128 code as a {@link BitMatrix}.
- * 
+ *
  * @author erik.barbara@gmail.com (Erik Barbara)
  */
 public final class Code128Writer extends OneDimensionalCodeWriter {
@@ -92,17 +92,17 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
         }
       }
     }
-    
+
     Collection<int[]> patterns = new ArrayList<>(); // temporary storage for patterns
     int checkSum = 0;
     int checkWeight = 1;
     int codeSet = 0; // selected code (CODE_CODE_B or CODE_CODE_C)
     int position = 0; // position in contents
-    
+
     while (position < length) {
       //Select code to use
       int newCodeSet = chooseCode(contents, position, codeSet);
-      
+
       //Get the pattern index
       int patternIndex;
       if (newCodeSet == codeSet) {
@@ -148,24 +148,24 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
         }
         codeSet = newCodeSet;
       }
-      
+
       // Get the pattern
       patterns.add(Code128Reader.CODE_PATTERNS[patternIndex]);
-      
+
       // Compute checksum
       checkSum += patternIndex * checkWeight;
       if (position != 0) {
         checkWeight++;
       }
     }
-    
+
     // Compute and append checksum
     checkSum %= 103;
     patterns.add(Code128Reader.CODE_PATTERNS[checkSum]);
-    
+
     // Append stop code
     patterns.add(Code128Reader.CODE_PATTERNS[CODE_STOP]);
-    
+
     // Compute code width
     int codeWidth = 0;
     for (int[] pattern : patterns) {
@@ -173,14 +173,14 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
         codeWidth += width;
       }
     }
-    
+
     // Compute result
     boolean[] result = new boolean[codeWidth];
     int pos = 0;
     for (int[] pattern : patterns) {
       pos += appendPattern(result, pos, pattern, true);
     }
-    
+
     return result;
   }
 

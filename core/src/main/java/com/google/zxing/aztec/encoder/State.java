@@ -26,7 +26,7 @@ import com.google.zxing.common.BitArray;
  * Note that a state is immutable.
  */
 final class State {
-  
+
   static final State INITIAL_STATE = new State(Token.EMPTY, HighLevelEncoder.MODE_UPPER, 0, 0);
 
   // The current mode of the encoding (or the mode to which we'll return if
@@ -53,19 +53,19 @@ final class State {
     //     binaryShiftByteCount <= 62 ? 20 : 21);
     //assert this.bitCount == token.getTotalBitCount() + binaryShiftBitCount;
   }
-  
+
   int getMode() {
     return mode;
   }
-  
+
   Token getToken() {
     return token;
   }
-  
+
   int getBinaryShiftByteCount() {
     return binaryShiftByteCount;
   }
-  
+
   int getBitCount() {
     return bitCount;
   }
@@ -104,7 +104,7 @@ final class State {
     Token token = this.token;
     int mode = this.mode;
     int bitCount = this.bitCount;
-    if (this.mode == HighLevelEncoder.MODE_PUNCT || this.mode == HighLevelEncoder.MODE_DIGIT)  {
+    if (this.mode == HighLevelEncoder.MODE_PUNCT || this.mode == HighLevelEncoder.MODE_DIGIT) {
       //assert binaryShiftByteCount == 0;
       int latch = HighLevelEncoder.LATCH_TABLE[mode][HighLevelEncoder.MODE_UPPER];
       token = token.add(latch & 0xFFFF, latch >> 16);
