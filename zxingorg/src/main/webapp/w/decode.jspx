@@ -51,6 +51,7 @@
           <li>Data Matrix</li>
           <li>Aztec ('beta' quality)</li>
           <li>PDF 417 ('alpha' quality)</li>
+          <li>MaxiCode</li>
         </ul></td>
       </tr></table>
 

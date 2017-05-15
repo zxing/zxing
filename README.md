@@ -14,7 +14,7 @@ library implemented in Java, with ports to other languages.
 | UPC-E      | Code 93       | Data Matrix
 | EAN-8      | Code 128      | Aztec (beta)
 | EAN-13     | Codabar       | PDF 417 (beta)
-|            | ITF           |
+|            | ITF           | MaxiCode
 |            | RSS-14        |
 |            | RSS-Expanded  |
 
