@@ -38,16 +38,19 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.EnumMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
  * A reimplementation of the
  * <a href="https://google-developers.appspot.com/chart/infographics/docs/qr_codes">
- *   Google Chart Server's QR code encoder</a>, which is now deprecated.
+ * Google Chart Server's QR code encoder</a>, which is now deprecated. See
+ * <a href="https://github.com/zxing/zxing/wiki/Chart-Server-Parameters">the chart server
+ * parameters wiki page</a> for docs.
  *
  * @author Sean Owen
  */
-@WebServlet("/w/chart")
+@WebServlet({"/w/chart", "/w/chart.png", "/w/chart.gif", "/w/chart.jpg", "/w/chart.jpeg"})
 public final class ChartServlet extends HttpServlet {
 
   private static final int MAX_DIMENSION = 4096;
@@ -64,7 +67,7 @@ public final class ChartServlet extends HttpServlet {
     doEncode(request, response, true);
   }
 
-  private static void doEncode(ServletRequest request, HttpServletResponse response, boolean isPost)
+  private static void doEncode(HttpServletRequest request, HttpServletResponse response, boolean isPost)
       throws IOException {
 
     ChartServletRequestParameters parameters;
@@ -95,11 +98,39 @@ public final class ChartServlet extends HttpServlet {
       return;
     }
 
+    String requestURI = request.getRequestURI();
+    int lastDot = requestURI.lastIndexOf('.');
+    String imageFormat;
+    if (lastDot > 0) {
+      imageFormat = requestURI.substring(lastDot + 1).toUpperCase(Locale.ROOT);
+      // Special-case jpg -> JPEG
+      if ("JPG".equals(imageFormat)) {
+        imageFormat = "JPEG";
+      }
+    } else {
+      imageFormat = "PNG";
+    }
+    
+    String contentType;
+    switch (imageFormat) {
+      case "PNG":
+        contentType = "image/png";
+        break;
+      case "JPEG":
+        contentType = "image/jpeg";
+        break;
+      case "GIF":
+        contentType = "image/gif";
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown format " + imageFormat);
+    }
+    
     ByteArrayOutputStream pngOut = new ByteArrayOutputStream();
-    MatrixToImageWriter.writeToStream(matrix, "PNG", pngOut);
+    MatrixToImageWriter.writeToStream(matrix, imageFormat, pngOut);
     byte[] pngData = pngOut.toByteArray();
 
-    response.setContentType("image/png");
+    response.setContentType(contentType);
     response.setContentLength(pngData.length);
     response.setHeader("Cache-Control", "public");
     response.getOutputStream().write(pngData);
