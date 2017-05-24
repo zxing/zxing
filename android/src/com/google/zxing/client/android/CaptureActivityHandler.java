@@ -77,64 +77,66 @@ public final class CaptureActivityHandler extends Handler {
 
   @Override
   public void handleMessage(Message message) {
-    switch (message.what) {
-      case R.id.restart_preview:
-        restartPreviewAndDecode();
-        break;
-      case R.id.decode_succeeded:
-        state = State.SUCCESS;
-        Bundle bundle = message.getData();
-        Bitmap barcode = null;
-        float scaleFactor = 1.0f;
-        if (bundle != null) {
-          byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
-          if (compressedBitmap != null) {
-            barcode = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, null);
-            // Mutable copy:
-            barcode = barcode.copy(Bitmap.Config.ARGB_8888, true);
+      if (message.what == R.id.restart_preview) {
+          restartPreviewAndDecode();
+
+      } else if (message.what == R.id.decode_succeeded) {
+          state = State.SUCCESS;
+          Bundle bundle = message.getData();
+          Bitmap barcode = null;
+          float scaleFactor = 1.0f;
+          if (bundle != null) {
+              byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
+              if (compressedBitmap != null) {
+                  barcode = BitmapFactory
+                          .decodeByteArray(compressedBitmap, 0, compressedBitmap.length, null);
+                  // Mutable copy:
+                  barcode = barcode.copy(Bitmap.Config.ARGB_8888, true);
+              }
+              scaleFactor = bundle.getFloat(DecodeThread.BARCODE_SCALED_FACTOR);
           }
-          scaleFactor = bundle.getFloat(DecodeThread.BARCODE_SCALED_FACTOR);          
-        }
-        activity.handleDecode((Result) message.obj, barcode, scaleFactor);
-        break;
-      case R.id.decode_failed:
-        // We're decoding as fast as possible, so when one decode fails, start another.
-        state = State.PREVIEW;
-        cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-        break;
-      case R.id.return_scan_result:
-        activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-        activity.finish();
-        break;
-      case R.id.launch_product_query:
-        String url = (String) message.obj;
+          activity.handleDecode((Result) message.obj, barcode, scaleFactor);
 
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        intent.setData(Uri.parse(url));
+      } else if (message.what ==
+              R.id.decode_failed) {// We're decoding as fast as possible, so when one decode fails, start another.
+          state = State.PREVIEW;
+          cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
 
-        ResolveInfo resolveInfo =
-            activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        String browserPackageName = null;
-        if (resolveInfo != null && resolveInfo.activityInfo != null) {
-          browserPackageName = resolveInfo.activityInfo.packageName;
-          Log.d(TAG, "Using browser in package " + browserPackageName);
-        }
+      } else if (message.what == R.id.return_scan_result) {
+          activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
+          activity.finish();
 
-        // Needed for default Android browser / Chrome only apparently
-        if ("com.android.browser".equals(browserPackageName) || "com.android.chrome".equals(browserPackageName)) {
-          intent.setPackage(browserPackageName);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
-        }
+      } else if (message.what == R.id.launch_product_query) {
+          String url = (String) message.obj;
 
-        try {
-          activity.startActivity(intent);
-        } catch (ActivityNotFoundException ignored) {
-          Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
-        }
-        break;
-    }
+          Intent intent = new Intent(Intent.ACTION_VIEW);
+          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+          intent.setData(Uri.parse(url));
+
+          ResolveInfo resolveInfo =
+                  activity.getPackageManager()
+                          .resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+          String browserPackageName = null;
+          if (resolveInfo != null && resolveInfo.activityInfo != null) {
+              browserPackageName = resolveInfo.activityInfo.packageName;
+              Log.d(TAG, "Using browser in package " + browserPackageName);
+          }
+
+          // Needed for default Android browser / Chrome only apparently
+          if ("com.android.browser".equals(browserPackageName) ||
+                  "com.android.chrome".equals(browserPackageName)) {
+              intent.setPackage(browserPackageName);
+              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
+          }
+
+          try {
+              activity.startActivity(intent);
+          } catch (ActivityNotFoundException ignored) {
+              Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
+          }
+
+      }
   }
 
   public void quitSynchronously() {
