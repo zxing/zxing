@@ -59,7 +59,8 @@ class C40Encoder implements Encoder {
       if ((count % 3) == 0) {
         int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
         if (newMode != getEncodingMode()) {
-          context.signalEncoderChange(newMode);
+          // Return to ASCII encodation, which will actually handle latch to new mode
+          context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
           break;
         }
       }

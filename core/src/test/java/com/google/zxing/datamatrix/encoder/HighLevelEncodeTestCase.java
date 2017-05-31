@@ -349,6 +349,13 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("236 185 185 29 196 196 129 56", visualized);
   }
 
+  @Test
+  public void testEncodingWithStartAsX12AndLatchToEDIFACTInTheMiddle() {
+
+    String visualized = encodeHighLevel("*MEMANT-1F-MESTECH");
+    assertEquals("238 10 99 164 204 254 240 82 220 70 180 209 83 80 80 200", visualized);
+  }
+
   @Ignore
   @Test  
   public void testDataURL() {
