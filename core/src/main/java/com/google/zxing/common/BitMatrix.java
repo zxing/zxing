@@ -159,7 +159,10 @@ public final class BitMatrix implements Cloneable {
    */
   public boolean get(int x, int y) {
     int offset = y * rowSize + (x / 32);
-    return ((bits[offset] >>> (x & 0x1f)) & 1) != 0;
+    if(offset<bits.length)
+      return ((bits[offset] >>> (x & 0x1f)) & 1) != 0;
+    else
+      return false;
   }
 
   /**
@@ -170,12 +173,12 @@ public final class BitMatrix implements Cloneable {
    */
   public void set(int x, int y) {
     int offset = y * rowSize + (x / 32);
-    bits[offset] |= 1 << (x & 0x1f);
+    if(offset<bits.length) bits[offset] |= 1 << (x & 0x1f);
   }
 
   public void unset(int x, int y) {
     int offset = y * rowSize + (x / 32);
-    bits[offset] &= ~(1 << (x & 0x1f));
+    if(offset<bits.length) bits[offset] &= ~(1 << (x & 0x1f));
   }
 
   /**
@@ -186,7 +189,7 @@ public final class BitMatrix implements Cloneable {
    */
   public void flip(int x, int y) {
     int offset = y * rowSize + (x / 32);
-    bits[offset] ^= 1 << (x & 0x1f);
+    if(offset<bits.length) bits[offset] ^= 1 << (x & 0x1f);
   }
 
   /**

@@ -230,7 +230,37 @@ public final class Version {
         new Version(29, 16, 36, 14, 16,
             new ECBlocks(24, new ECB(1, 32))),
         new Version(30, 16, 48, 14, 22,
-            new ECBlocks(28, new ECB(1, 49)))
+            new ECBlocks(28, new ECB(1, 49))),
+
+        // extended forms as specified in
+        // AIM-D - Symbology Specification – Data Matrix Rectangular Extension (DMRE)
+        // Revision 1.0 September 22, 2014
+        new Version(31, 8, 48, 6, 22,
+            new ECBlocks(15, new ECB(1, 18))),
+        new Version(32, 8, 64, 6, 14,
+            new ECBlocks(18, new ECB(1, 24))),
+        new Version(33, 12, 48, 10, 22,
+            new ECBlocks(23, new ECB(1, 32))),
+        new Version(34, 12, 64, 10, 14,
+            new ECBlocks(27, new ECB(1, 43))),
+        new Version(35, 16, 64, 14, 14,
+            new ECBlocks(36, new ECB(1, 62))),
+        new Version(36, 24, 32, 22, 14,
+            new ECBlocks(28, new ECB(1, 49))),
+        new Version(37, 24, 36, 22, 16,
+            new ECBlocks(33, new ECB(1, 55))),
+        new Version(38, 24, 48, 22, 22,
+            new ECBlocks(41, new ECB(1, 80))),
+        new Version(39, 24, 64, 22, 14,
+            new ECBlocks(46, new ECB(1, 108))),
+        new Version(40, 26, 32, 24, 14,
+            new ECBlocks(32, new ECB(1, 52))),
+        new Version(41, 26, 40, 24, 18,
+            new ECBlocks(38, new ECB(1, 70))),
+        new Version(42, 26, 48, 24, 22,
+            new ECBlocks(42, new ECB(1, 90))),
+        new Version(43, 26, 64, 24, 14,
+            new ECBlocks(50, new ECB(1, 118)))
     };
   }
 

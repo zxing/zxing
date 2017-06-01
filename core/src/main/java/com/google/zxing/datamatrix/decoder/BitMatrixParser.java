@@ -136,7 +136,7 @@ final class BitMatrixParser {
       }
     } while ((row < numRows) || (column < numColumns));
 
-    if (resultOffset != version.getTotalCodewords()) {
+    if (resultOffset != version.getTotalCodewords() && resultOffset != version.getTotalCodewords()-1) {
       throw FormatException.getFormatInstance();
     }
     return result;
