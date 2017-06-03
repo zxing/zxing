@@ -141,6 +141,7 @@ public class IntentIntegrator {
   
   private final Activity activity;
   private final Fragment fragment;
+  private final android.support.v4.app.Fragment fragmentV4;
 
   private String title;
   private String message;
@@ -155,6 +156,7 @@ public class IntentIntegrator {
   public IntentIntegrator(Activity activity) {
     this.activity = activity;
     this.fragment = null;
+    this.fragmentV4 = null;
     initializeConfiguration();
   }
 
@@ -166,6 +168,20 @@ public class IntentIntegrator {
   public IntentIntegrator(Fragment fragment) {
     this.activity = fragment.getActivity();
     this.fragment = fragment;
+    this.fragmentV4 = null;
+    initializeConfiguration();
+  }
+
+  /**
+   * @param fragment {@link android.support.v4.app.Fragment} invoking the integration.
+   *  {@link #startActivityForResult(Intent, int)} will be called on the
+   *  {@link android.support.v4.app.Fragment} instead of an {@link Activity} or
+   *  {@link Fragment}.
+   */
+  public IntentIntegrator(android.support.v4.app.Fragment fragment) {
+    this.activity = fragment.getActivity();
+    this.fragment = null;
+    this.fragmentV4 = fragment;
     initializeConfiguration();
   }
 
@@ -336,10 +352,12 @@ public class IntentIntegrator {
    * @see Fragment#startActivityForResult(Intent, int)
    */
   protected void startActivityForResult(Intent intent, int code) {
-    if (fragment == null) {
-      activity.startActivityForResult(intent, code);
-    } else {
+    if (fragment != null) {
       fragment.startActivityForResult(intent, code);
+    } else if (fragmentV4 != null) {
+      fragmentV4.startActivityForResult(intent, code);
+    } else {
+      activity.startActivityForResult(intent, code);
     }
   }
   
@@ -384,10 +402,12 @@ public class IntentIntegrator {
         Uri uri = Uri.parse("market://details?id=" + packageName);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         try {
-          if (fragment == null) {
-            activity.startActivity(intent);
-          } else {
+          if (fragment != null) {
             fragment.startActivity(intent);
+          } else if (fragmentV4 != null) {
+            fragmentV4.startActivity(intent);
+          } else {
+            activity.startActivity(intent);
           }
         } catch (ActivityNotFoundException anfe) {
           // Hmm, market is not installed
@@ -468,10 +488,12 @@ public class IntentIntegrator {
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     attachMoreExtras(intent);
-    if (fragment == null) {
-      activity.startActivity(intent);
-    } else {
+    if (fragment != null) {
       fragment.startActivity(intent);
+    } else if (fragmentV4 != null) {
+      fragmentV4.startActivity(intent);
+    } else {
+      activity.startActivity(intent);
     }
     return null;
   }
