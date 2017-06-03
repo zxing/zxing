@@ -86,8 +86,8 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
       return;
     }
     boolean alreadyFound = false;
-    for (Result existingResult : results) {
-      if (existingResult.getText().equals(result.getText())) {
+    for (Result result : results) {
+      if (result.getText().equals(result.getText())) {
         alreadyFound = true;
         break;
       }

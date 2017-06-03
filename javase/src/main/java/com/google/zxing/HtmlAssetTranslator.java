@@ -87,7 +87,7 @@ public final class HtmlAssetTranslator {
                                                               CharSequence languageArg) throws IOException {
     if ("all".equals(languageArg)) {
       Collection<String> languages = new ArrayList<>();
-      DirectoryStream.Filter<Path> fileFilter = new DirectoryStream.Filter<Path>() {
+      DirectoryStream.Filter<Path> filter = new DirectoryStream.Filter<Path>() {
         @Override
         public boolean accept(Path entry) {
           String fileName = entry.getFileName().toString();
@@ -95,7 +95,7 @@ public final class HtmlAssetTranslator {
               fileName.startsWith("html-") && !"html-en".equals(fileName);
         }
       };
-      try (DirectoryStream<Path> dirs = Files.newDirectoryStream(assetsDir, fileFilter)) {
+      try (DirectoryStream<Path> dirs = Files.newDirectoryStream(assetsDir, filter)) {
         for (Path languageDir : dirs) {
           languages.add(languageDir.getFileName().toString().substring(5));
         }
