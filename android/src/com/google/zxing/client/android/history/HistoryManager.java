@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.history;
 
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.SQLException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -112,6 +113,9 @@ public final class HistoryManager {
         Result result = new Result(text, null, null, BarcodeFormat.valueOf(format), timestamp);
         items.add(new HistoryItem(result, display, details));
       }
+    } catch (CursorIndexOutOfBoundsException cioobe) {
+      Log.w(TAG, cioobe);
+      // continue
     } finally {
       close(cursor, db);
     }
