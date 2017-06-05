@@ -101,4 +101,10 @@ public enum EncodeHintType {
     * (Type {@link Integer}, or {@link String} representation of the integer value).
     */
    QR_VERSION,
+
+   /**
+    * Specifies the QR code remove padding.
+    * (Type {@link Boolean} representation of the boolean value).
+    */
+   PADDING_REMOVAL,
 }

@@ -36,6 +36,7 @@ import java.util.Map;
 public final class QRCodeWriter implements Writer {
 
   private static final int QUIET_ZONE_SIZE = 4;
+  private static final boolean REMOVE_PADDING = false;
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
@@ -66,6 +67,7 @@ public final class QRCodeWriter implements Writer {
 
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
     int quietZone = QUIET_ZONE_SIZE;
+    boolean removePadding = REMOVE_PADDING;
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
         errorCorrectionLevel = ErrorCorrectionLevel.valueOf(hints.get(EncodeHintType.ERROR_CORRECTION).toString());
@@ -73,15 +75,18 @@ public final class QRCodeWriter implements Writer {
       if (hints.containsKey(EncodeHintType.MARGIN)) {
         quietZone = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
       }
+      if (hints.containsKey(EncodeHintType.PADDING_REMOVAL)) {
+        removePadding = Boolean.parseBoolean(hints.get(EncodeHintType.PADDING_REMOVAL).toString());
+      }
     }
 
     QRCode code = Encoder.encode(contents, errorCorrectionLevel, hints);
-    return renderResult(code, width, height, quietZone);
+    return renderResult(code, width, height, quietZone, removePadding);
   }
 
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-  private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone) {
+  private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone, boolean removePadding) {
     ByteMatrix input = code.getMatrix();
     if (input == null) {
       throw new IllegalStateException();
@@ -100,6 +105,16 @@ public final class QRCodeWriter implements Writer {
     // handle all the padding from 100x100 (the actual QR) up to 200x160.
     int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
     int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
+    if (removePadding) {
+      if (leftPadding > 0) {
+        outputWidth = outputWidth - 2 * leftPadding;
+        leftPadding = 0;
+      }
+      if (topPadding > 0) {
+        outputHeight = outputHeight - 2 * topPadding;
+        topPadding = 0;
+      }
+    }
 
     BitMatrix output = new BitMatrix(outputWidth, outputHeight);
 
