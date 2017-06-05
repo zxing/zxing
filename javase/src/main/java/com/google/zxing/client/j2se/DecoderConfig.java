@@ -58,6 +58,10 @@ final class DecoderConfig {
       description = "Only output one line per file, omitting the contents")
   boolean brief;
 
+  @Parameter(names = "--json",
+      description = "Output JSON")
+  boolean json;
+
   @Parameter(names = "--recursive",
       description = "Descend into subdirectories")
   boolean recursive;

@@ -149,9 +149,40 @@ final class DecodeWorker implements Callable<Integer> {
 
     if (config.brief) {
       System.out.println(uri + ": Success");
+    } else if (config.json) {
+      StringWriter output = new StringWriter();
+      output.write("[");
+      for (int resultIndex = 0; resultIndex < results.length; resultIndex++) {
+        Result result = results[resultIndex];
+        ParsedResult parsedResult = ResultParser.parseResult(result);
+        output.write("{");
+          output.write("\"uri\":\"" + uri + "\"");
+          output.write(",");
+          output.write("\"format\":\"" + result.getBarcodeFormat() + "\"");
+          output.write(",");
+          output.write("\"type\":\"" + parsedResult.getType() + "\"");
+          output.write(",");
+          output.write("\"raw\":\"" + result.getText() + "\"");
+          output.write(",");
+          output.write("\"text\":\"" + parsedResult.getDisplayResult() + "\"");
+          output.write(",");
+          output.write("\"points\":[");
+            for (int pointIndex = 0; pointIndex < result.getResultPoints().length; pointIndex++) {
+              ResultPoint rp = result.getResultPoints()[pointIndex];
+              output.write("[" + rp.getX() + ',' + rp.getY() + ']');
+              if (pointIndex != result.getResultPoints().length - 1) {
+                output.write(',');
+              }
+            }
+          output.write("]");
+        output.write("}");
+      }
+      output.write("]");
+      System.out.println(output);
     } else {
       StringWriter output = new StringWriter();
-      for (Result result : results) {
+      for (int resultIndex = 0; resultIndex < results.length; resultIndex++) {
+        Result result = results[resultIndex];
         ParsedResult parsedResult = ResultParser.parseResult(result);
         output.write(uri +
             " (format: " + result.getBarcodeFormat() +
@@ -168,7 +199,9 @@ final class DecodeWorker implements Callable<Integer> {
             output.write('\n');
           }
         }
-        output.write('\n');
+        if (resultIndex != results.length - 1) {
+          output.write('\n');
+        }
       }
       System.out.println(output);
     }
