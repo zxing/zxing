@@ -64,7 +64,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -719,22 +718,27 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Log.w(TAG, "initCamera() while already open -- late SurfaceView callback?");
       return;
     }
-    try {
-      cameraManager.openDriver(surfaceHolder);
-      // Creating the handler starts the preview, which can also throw a RuntimeException.
-      if (handler == null) {
-        handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
+    cameraManager.openDriver(new CameraManager.CameraInitListener() {
+      @Override
+      public void onStartInit() {
+
       }
-      decodeOrStoreSavedBitmap(null, null);
-    } catch (IOException ioe) {
-      Log.w(TAG, ioe);
-      displayFrameworkBugMessageAndExit();
-    } catch (RuntimeException e) {
-      // Barcode Scanner has seen crashes in the wild of this variety:
-      // java.?lang.?RuntimeException: Fail to connect to camera service
-      Log.w(TAG, "Unexpected error initializing camera", e);
-      displayFrameworkBugMessageAndExit();
-    }
+
+      @Override
+      public void onInit() {
+        // Creating the handler starts the preview, which can also throw a RuntimeException.
+        if (handler == null) {
+          handler = new CaptureActivityHandler(CaptureActivity.this, decodeFormats,
+                  decodeHints, characterSet, cameraManager);
+        }
+        decodeOrStoreSavedBitmap(null, null);
+      }
+
+      @Override
+      public void onError() {
+        displayFrameworkBugMessageAndExit();
+      }
+    }, surfaceHolder);
   }
 
   private void displayFrameworkBugMessageAndExit() {

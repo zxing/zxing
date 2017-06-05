@@ -21,6 +21,8 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
@@ -28,6 +30,7 @@ import com.google.zxing.client.android.camera.open.OpenCamera;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
@@ -57,6 +60,7 @@ public final class CameraManager {
   private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
   private int requestedFramingRectWidth;
   private int requestedFramingRectHeight;
+  private CameraHandlerThread mCameraHandlerThread;
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
    * clear the handler so it will only receive one message.
@@ -67,6 +71,56 @@ public final class CameraManager {
     this.context = context;
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
+    mCameraHandlerThread = new CameraHandlerThread(this);
+  }
+
+
+  public synchronized void openDriver(CameraInitListener initListener, SurfaceHolder holder) {
+    mCameraHandlerThread.openDriver(initListener, holder);
+  }
+
+  synchronized void openDriver() throws IOException {
+    OpenCamera theCamera = camera;
+    if (theCamera == null) {
+      theCamera = OpenCameraInterface.open(requestedCameraId);
+      if (theCamera == null) {
+        throw new IOException("Camera.open() failed to return object from driver");
+      }
+      camera = theCamera;
+    }
+
+    if (!initialized) {
+      initialized = true;
+      configManager.initFromCameraParameters(theCamera);
+      if (requestedFramingRectWidth > 0 && requestedFramingRectHeight > 0) {
+        setManualFramingRect(requestedFramingRectWidth, requestedFramingRectHeight);
+        requestedFramingRectWidth = 0;
+        requestedFramingRectHeight = 0;
+      }
+    }
+
+    Camera cameraObject = theCamera.getCamera();
+    Camera.Parameters parameters = cameraObject.getParameters();
+    String parametersFlattened = parameters == null ? null : parameters.flatten(); // Save these, temporarily
+    try {
+      configManager.setDesiredCameraParameters(theCamera, false);
+    } catch (RuntimeException re) {
+      // Driver failed
+      Log.w(TAG, "Camera rejected parameters. Setting only minimal safe-mode parameters");
+      Log.i(TAG, "Resetting to saved camera params: " + parametersFlattened);
+      // Reset:
+      if (parametersFlattened != null) {
+        parameters = cameraObject.getParameters();
+        parameters.unflatten(parametersFlattened);
+        try {
+          cameraObject.setParameters(parameters);
+          configManager.setDesiredCameraParameters(theCamera, true);
+        } catch (RuntimeException re2) {
+          // Well, darn. Give up
+          Log.w(TAG, "Camera rejected even safe-mode parameters! No configuration");
+        }
+      }
+    }
   }
   
   /**
@@ -330,4 +384,68 @@ public final class CameraManager {
                                         rect.width(), rect.height(), false);
   }
 
+
+  private static class CameraHandlerThread extends HandlerThread {
+    Handler mHandler = null;
+    private Handler mainThreadHandler;
+    private WeakReference<CameraManager> cameraManagerWeakReference;
+
+    CameraHandlerThread(CameraManager manager) {
+      super("CameraHandlerThread");
+      start();
+      mHandler = new Handler(getLooper());
+      mainThreadHandler = new Handler(Looper.getMainLooper());
+      cameraManagerWeakReference = new WeakReference<>(manager);
+    }
+
+    void openDriver(final CameraInitListener listener, final SurfaceHolder surfaceHolder) {
+      final WeakReference<SurfaceHolder> mH = new WeakReference<>(surfaceHolder);
+      mHandler.post(new Runnable() {
+        @Override
+        public void run() {
+          final CameraManager manager = cameraManagerWeakReference.get();
+          if (manager != null) {
+            try {
+              listener.onStartInit();
+              manager.openDriver();
+            } catch (IOException e) {
+              mainThreadHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                  listener.onError();
+                }
+              });
+              return;
+            }
+            mainThreadHandler.post(new Runnable() {
+              @Override
+              public void run() {
+                SurfaceHolder sh = mH.get();
+                if (sh != null && manager.camera != null) {
+                  try {
+                    manager.camera.getCamera().setPreviewDisplay(sh);
+                    listener.onInit();
+                  } catch (IOException e) {
+                    listener.onError();
+                    e.printStackTrace();
+                  }
+                }
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * An interface used to listen to changes in the camera init states.
+   */
+  public interface CameraInitListener {
+    void onStartInit();
+
+    void onInit();
+
+    void onError();
+  }
 }
