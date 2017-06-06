@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">条码扫描器</string>
+  <string name="app_picker_name">应用</string>
+  <string name="bookmark_picker_name">书签</string>
+  <string name="button_add_calendar">添加事件至日历</string>
+  <string name="button_add_contact">添加联系人</string>
+  <string name="button_book_search">打开图书搜索</string>
+  <string name="button_cancel">取消</string>
+  <string name="button_custom_product_search">自定义搜索</string>
+  <string name="button_dial">拨号</string>
+  <string name="button_email">发送email</string>
+  <string name="button_get_directions">获取地址</string>
+  <string name="button_mms">发送彩信</string>
+  <string name="button_ok">确定</string>
+  <string name="button_open_browser">打开浏览器</string>
+  <string name="button_product_search">打开产品搜索</string>
+  <string name="button_search_book_contents">搜索图书内容</string>
+  <string name="button_share_app">共享应用</string>
+  <string name="button_share_bookmark">分享书签</string>
+  <string name="button_share_by_email">通过email分享</string>
+  <string name="button_share_by_sms">通过短信分享</string>
+  <string name="button_share_clipboard">分享剪切板</string>
+  <string name="button_share_contact">分享联系人</string>
+  <string name="button_show_map">显示地图</string>
+  <string name="button_sms">发送短信</string>
+  <string name="button_web_search">网页搜索</string>
+  <string name="button_wifi">连接到网络</string>
+  <string name="contents_contact">联系人信息</string>
+  <string name="contents_email">Email地址</string>
+  <string name="contents_location">地理坐标</string>
+  <string name="contents_phone">电话号码</string>
+  <string name="contents_sms">短信地址</string>
+  <string name="contents_text">纯文本</string>
+  <string name="history_clear_one_history_text">删除</string>
+  <string name="history_clear_text">删除历史</string>
+  <string name="history_email_title">条码扫描器历史</string>
+  <string name="history_empty">空的</string>
+  <string name="history_empty_detail">没有条码扫描已记录</string>
+  <string name="history_send">发送历史</string>
+  <string name="history_title">历史</string>
+  <string name="menu_encode_mecard">使用MECARD</string>
+  <string name="menu_encode_vcard">使用vCard</string>
+  <string name="menu_help">帮助</string>
+  <string name="menu_history">历史</string>
+  <string name="menu_settings">设置</string>
+  <string name="menu_share">分享</string>
+  <string name="msg_bulk_mode_scanned">批量扫描：找到条码，已保存</string>
+  <string name="msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
+  <string name="msg_default_format">格式</string>
+  <string name="msg_default_meta">元数据</string>
+  <string name="msg_default_mms_subject">Hi</string>
+  <string name="msg_default_status">请将条码置于取景框内扫描。  </string>
+  <string name="msg_default_time">时间</string>
+  <string name="msg_default_type">类型</string>
+  <string name="msg_encode_contents_failed">无法根据已有数据生成条码。   </string>
+  <string name="msg_error">错误</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">抱歉，无法打开所需软件。 条码内容可能无效。</string>
+  <string name="msg_invalid_value">值无效</string>
+  <string name="msg_redirect">重定向</string>
+  <string name="msg_sbc_book_not_searchable">抱歉，无法找到此图书。</string>
+  <string name="msg_sbc_failed">抱歉，搜索时遇到错误。</string>
+  <string name="msg_sbc_no_page_returned">无页面返回</string>
+  <string name="msg_sbc_page">页面</string>
+  <string name="msg_sbc_results">结果</string>
+  <string name="msg_sbc_searching_book">搜索图书…</string>
+  <string name="msg_sbc_snippet_unavailable">摘录不可用</string>
+  <string name="msg_share_explanation">您可以通过在自己的手机上显示条码，并使用其它手机扫描此条码的方式进行分享</string>
+  <string name="msg_share_text">或键入一些文字</string>
+  <string name="msg_sure">你肯定吗？</string>
+  <string name="msg_unmount_usb">抱歉，SD卡不可访问。</string>
+  <string name="preferences_actions_title">找到条码时</string>
+  <string name="preferences_auto_focus_title">使用自动对焦</string>
+  <string name="preferences_auto_open_web_title">自动打开网页</string>
+  <string name="preferences_bulk_mode_summary">连续扫描并保存多个条形码</string>
+  <string name="preferences_bulk_mode_title">批量扫描模式</string>
+  <string name="preferences_copy_to_clipboard_title">复制到剪切板</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">替换：％s=内容，％f=格式，％t=类型</string>
+  <string name="preferences_custom_product_search_title">自定义搜索网址</string>
+  <string name="preferences_decode_1D_industrial_title">1D工业</string>
+  <string name="preferences_decode_1D_product_title">1D产品</string>
+  <string name="preferences_decode_Aztec_title">阿兹台克人</string>
+  <string name="preferences_decode_Data_Matrix_title">扫描 DM码</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">扫描 QR码</string>
+  <string name="preferences_device_bug_workarounds_title">设备问题解决办法</string>
+  <string name="preferences_disable_barcode_scene_mode_title">没有条形码的场景模式</string>
+  <string name="preferences_disable_continuous_focus_summary">只使用标准对焦模式</string>
+  <string name="preferences_disable_continuous_focus_title">没有持续关注</string>
+  <string name="preferences_disable_exposure_title">无曝光</string>
+  <string name="preferences_disable_metering_title">无计量</string>
+  <string name="preferences_front_light_auto">自动</string>
+  <string name="preferences_front_light_off">待用</string>
+  <string name="preferences_front_light_on">活跃</string>
+  <string name="preferences_front_light_summary">前灯可用时，打开前灯</string>
+  <string name="preferences_front_light_title">前灯</string>
+  <string name="preferences_general_title">一般设置</string>
+  <string name="preferences_invert_scan_summary">黑色背景上的白色条形码扫描。在某些设备上。</string>
+  <string name="preferences_invert_scan_title">反向扫描</string>
+  <string name="preferences_name">设置</string>
+  <string name="preferences_orientation_title">没有自动旋转</string>
+  <string name="preferences_play_beep_title">提示音</string>
+  <string name="preferences_remember_duplicates_summary">在历史记录中保存重复记录</string>
+  <string name="preferences_remember_duplicates_title">记住重复</string>
+  <string name="preferences_result_title">结果设置</string>
+  <string name="preferences_scanning_title">条码类型选择</string>
+  <string name="preferences_search_country">搜索国家</string>
+  <string name="preferences_supplemental_summary">尝试检索关于条码内容的更多信息</string>
+  <string name="preferences_supplemental_title">检索更多信息</string>
+  <string name="preferences_vibrate_title">振动</string>
+  <string name="result_address_book">找到联系人信息</string>
+  <string name="result_calendar">找到日历事件</string>
+  <string name="result_email_address">找到email地址</string>
+  <string name="result_geo">找到地理坐标</string>
+  <string name="result_isbn">找到图书</string>
+  <string name="result_product">找到产品</string>
+  <string name="result_sms">找到短信地址</string>
+  <string name="result_tel">找到电话号码</string>
+  <string name="result_text">找到纯文本</string>
+  <string name="result_uri">找到URL</string>
+  <string name="result_wifi">发现网络配置</string>
+  <string name="sbc_name">Google图书搜索</string>
+  <string name="wifi_changing_network">请求连接到网络\u2026</string>
+</resources>
