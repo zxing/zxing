@@ -64,6 +64,9 @@ public enum BarcodeFormat {
 
   /** RSS EXPANDED */
   RSS_EXPANDED,
+  
+  /** Text Oriented 2D barcode */
+  TO_CODE,
 
   /** UPC-A 1D format. */
   UPC_A,
