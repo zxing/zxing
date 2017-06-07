@@ -238,7 +238,7 @@ final class DecodedBitStreamParser {
       // upon decoding. I have seen ISO-8859-1 used as well as
       // Shift_JIS -- without anything like an ECI designator to
       // give a hint.
-      encoding = StringUtils.guessEncoding(readBytes, hints);
+      encoding = StringUtils.guessEncoding(readBytes, hints, "ISO8859_1");
     } else {
       encoding = currentCharacterSetECI.name();
     }

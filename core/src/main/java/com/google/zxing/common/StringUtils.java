@@ -49,6 +49,18 @@ public final class StringUtils {
    *  default encoding if none of these can possibly be correct
    */
   public static String guessEncoding(byte[] bytes, Map<DecodeHintType,?> hints) {
+    return guessEncoding(bytes, hints, PLATFORM_DEFAULT_ENCODING);
+  }
+
+  /**
+   * @param bytes bytes encoding a string, whose encoding should be guessed
+   * @param hints decode hints if applicable
+   * @param other encoding to return if none of the guessing succeeds.
+   * @return name of guessed encoding; at the moment will only guess one of:
+   *  {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the other
+   *  encoding if none of these can possibly be correct
+   */
+  public static String guessEncoding(byte[] bytes, Map<DecodeHintType,?> hints, String other) {
     if (hints != null && hints.containsKey(DecodeHintType.CHARACTER_SET)) {
       return hints.get(DecodeHintType.CHARACTER_SET).toString();
     }
@@ -204,7 +216,7 @@ public final class StringUtils {
       return UTF8;
     }
     // Otherwise, we take a wild guess with platform encoding
-    return PLATFORM_DEFAULT_ENCODING;
+    return other;
   }
 
 }
