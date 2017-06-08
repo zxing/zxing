@@ -31,16 +31,16 @@
 
   <Service name="Catalina">
 
-    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-" maxThreads="10" minSpareThreads="2"/>
+    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-" maxThreads="4" minSpareThreads="1"/>
 
     <Connector port="80" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
                redirectPort="443" 
-               server="Apache" compression="4096"
+               server="Apache" compression="8192"
                executor="tomcatThreadPool"
                URIEncoding="UTF-8"/>
 
     <Connector port="443" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
-               server="Apache" compression="4096"
+               server="Apache" compression="8192"
                executor="tomcatThreadPool"
                SSLEnabled="true" scheme="https" secure="true"
                keyAlias="zxingorg" 

@@ -162,12 +162,21 @@ public final class DecodeServlet extends HttpServlet {
     
     // Shortcut for data URI
     if ("data".equals(imageURI.getScheme())) {
+      BufferedImage image = null;
       try {
-        BufferedImage image = ImageReader.readDataURIImage(imageURI);
-        processImage(image, request, response);
+        image = ImageReader.readDataURIImage(imageURI);
       } catch (IOException | IllegalStateException e) {
         log.info(e.toString());
         errorResponse(request, response, "badurl");
+      }
+      if (image == null) {
+        errorResponse(request, response, "badimage");
+        return;
+      }
+      try {
+        processImage(image, request, response);
+      } finally {
+        image.flush();
       }
       return;
     }
@@ -304,14 +313,19 @@ public final class DecodeServlet extends HttpServlet {
       errorResponse(request, response, "badimage");
       return;
     }
-    if (image.getHeight() <= 1 || image.getWidth() <= 1 ||
-        image.getHeight() * image.getWidth() > MAX_PIXELS) {
-      log.info("Dimensions out of bounds: " + image.getWidth() + 'x' + image.getHeight());
-      errorResponse(request, response, "badimage");
-      return;
+    try {
+      int height = image.getHeight();
+      int width = image.getWidth();
+      if (height <= 1 || width <= 1 || height * width > MAX_PIXELS) {
+        log.info("Dimensions out of bounds: " + width + 'x' + height);
+        errorResponse(request, response, "badimage");
+        return;
+      }
+
+      processImage(image, request, response);
+    } finally {
+      image.flush();
     }
-    
-    processImage(image, request, response);
   }
   
   private static void processImage(BufferedImage image,
