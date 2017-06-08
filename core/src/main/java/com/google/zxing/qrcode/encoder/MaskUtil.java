@@ -110,6 +110,9 @@ final class MaskUtil {
       if (rowArray[i] == 1) {
         return false;
       }
+      if(i<0 || i >= rowArray.length){
+        return false;
+      }
     }
     return true;
   }
@@ -119,6 +122,9 @@ final class MaskUtil {
     to = Math.min(to, array.length);
     for (int i = from; i < to; i++) {
       if (array[i][col] == 1) {
+        return false;
+      }
+      if(i<0 || i >= array.length){
         return false;
       }
     }
