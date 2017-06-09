@@ -54,6 +54,7 @@ library implemented in Java, with ports to other languages.
 | [ZXing .NET](https://github.com/micjahn/ZXing.Net)                     | port to .NET and C#, and related Windows platform
 | [php-qrcode-detector-decoder](https://github.com/khanamiryan/php-qrcode-detector-decoder)                     | port to PHP
 | [ZXing Delphi](https://github.com/Spelt/ZXing.Delphi)          |  Port to native Delphi object pascal, targeted at Firemonkey compatible devices (IOS/Android/Win/OSX) and VCL.
+| [ZXingObjC](https://github.com/TheLevelUp/ZXingObjC)            | Port to Objective-C
 
 
 ### Other related third-party open source projects
