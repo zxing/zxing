@@ -92,8 +92,7 @@ public final class HttpHelper {
       case XML:
         contentTypes = "application/xml,text/*,*/*";
         break;
-      case TEXT:
-      default:
+      default: // Includes TEXT
         contentTypes = "text/*,*/*";
     }
     return downloadViaHttp(uri, contentTypes, maxChars);

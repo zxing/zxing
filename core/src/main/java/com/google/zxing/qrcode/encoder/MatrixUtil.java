@@ -27,10 +27,6 @@ import com.google.zxing.qrcode.decoder.Version;
  */
 final class MatrixUtil {
 
-  private MatrixUtil() {
-    // do nothing
-  }
-
   private static final int[][] POSITION_DETECTION_PATTERN = {
       {1, 1, 1, 1, 1, 1, 1},
       {1, 0, 0, 0, 0, 0, 1},
@@ -119,6 +115,10 @@ final class MatrixUtil {
   private static final int TYPE_INFO_POLY = 0x537;
   private static final int TYPE_INFO_MASK_PATTERN = 0x5412;
 
+  private MatrixUtil() {
+    // do nothing
+  }
+  
   // Set all cells to -1.  -1 means that the cell is empty (not set yet).
   //
   // JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding

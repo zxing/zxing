@@ -44,7 +44,7 @@ public class Code128WriterTestCase extends Assert {
   private Code128Reader reader;
 
   @Before
-  public void setup() {
+  public void setUp() {
     writer = new Code128Writer();
     reader = new Code128Reader();
   }

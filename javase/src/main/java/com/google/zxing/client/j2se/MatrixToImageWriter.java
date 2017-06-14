@@ -115,7 +115,7 @@ public final class MatrixToImageWriter {
   }
 
   /**
-   * As {@link #writeToFile(BitMatrix, String, File)}, but allows customization of the output.
+   * As {@link #writeToPath(BitMatrix, String, Path)}, but allows customization of the output.
    *
    * @param matrix {@link BitMatrix} to write
    * @param format image format

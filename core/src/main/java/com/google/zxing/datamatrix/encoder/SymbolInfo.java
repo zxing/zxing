@@ -63,15 +63,6 @@ public class SymbolInfo {
 
   private static SymbolInfo[] symbols = PROD_SYMBOLS;
 
-  /**
-   * Overrides the symbol info set used by this class. Used for testing purposes.
-   *
-   * @param override the symbol info set to use
-   */
-  public static void overrideSymbolSet(SymbolInfo[] override) {
-    symbols = override;
-  }
-
   private final boolean rectangular;
   private final int dataCapacity;
   private final int errorCodewords;
@@ -80,6 +71,15 @@ public class SymbolInfo {
   private final int dataRegions;
   private final int rsBlockData;
   private final int rsBlockError;
+
+  /**
+   * Overrides the symbol info set used by this class. Used for testing purposes.
+   *
+   * @param override the symbol info set to use
+   */
+  public static void overrideSymbolSet(SymbolInfo[] override) {
+    symbols = override;
+  }
 
   public SymbolInfo(boolean rectangular, int dataCapacity, int errorCodewords,
                     int matrixWidth, int matrixHeight, int dataRegions) {

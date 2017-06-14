@@ -56,7 +56,7 @@ public final class MatrixToImageWriterTestCase extends Assert {
     matrix.set(0, 1);
     matrix.set(1, 2);
     
-    BufferedImage newImage = null;
+    BufferedImage newImage;
     Path tempFile = Files.createTempFile(null, "." + format);
     try {
       MatrixToImageWriter.writeToPath(matrix, format, tempFile, config);

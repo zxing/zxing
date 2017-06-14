@@ -59,20 +59,15 @@ public final class StringUtils {
     boolean canBeShiftJIS = true;
     boolean canBeUTF8 = true;
     int utf8BytesLeft = 0;
-    //int utf8LowChars = 0;
     int utf2BytesChars = 0;
     int utf3BytesChars = 0;
     int utf4BytesChars = 0;
     int sjisBytesLeft = 0;
-    //int sjisLowChars = 0;
     int sjisKatakanaChars = 0;
-    //int sjisDoubleBytesChars = 0;
     int sjisCurKatakanaWordLength = 0;
     int sjisCurDoubleBytesWordLength = 0;
     int sjisMaxKatakanaWordLength = 0;
     int sjisMaxDoubleBytesWordLength = 0;
-    //int isoLowChars = 0;
-    //int isoHighChars = 0;
     int isoHighOther = 0;
 
     boolean utf8bom = bytes.length > 3 &&
@@ -115,24 +110,16 @@ public final class StringUtils {
               }
             }
           }
-        } //else {
-          //utf8LowChars++;
-        //}
+        }
       }
 
       // ISO-8859-1 stuff
       if (canBeISO88591) {
         if (value > 0x7F && value < 0xA0) {
           canBeISO88591 = false;
-        } else if (value > 0x9F) {
-          if (value < 0xC0 || value == 0xD7 || value == 0xF7) {
-            isoHighOther++;
-          } //else {
-            //isoHighChars++;
-          //}
-        } //else {
-          //isoLowChars++;
-        //}
+        } else if (value > 0x9F && (value < 0xC0 || value == 0xD7 || value == 0xF7)) {
+          isoHighOther++;
+        }
       }
 
       // Shift_JIS stuff

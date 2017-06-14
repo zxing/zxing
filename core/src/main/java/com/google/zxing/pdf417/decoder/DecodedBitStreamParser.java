@@ -607,18 +607,13 @@ final class DecodedBitStreamParser {
             break;
         }
       }
-      if (count % MAX_NUMERIC_CODEWORDS == 0 ||
-          code == NUMERIC_COMPACTION_MODE_LATCH ||
-          end) {
+      if ((count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) && count > 0) {
         // Re-invoking Numeric Compaction mode (by using codeword 902
         // while in Numeric Compaction mode) serves  to terminate the
         // current Numeric Compaction mode grouping as described in 5.4.4.2,
         // and then to start a new one grouping.
-        if (count > 0) {
-          String s = decodeBase900toBase10(numericCodewords, count);
-          result.append(s);
-          count = 0;
-        }
+        result.append(decodeBase900toBase10(numericCodewords, count));
+        count = 0;
       }
     }
     return codeIndex;
