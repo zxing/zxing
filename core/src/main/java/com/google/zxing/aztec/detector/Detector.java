@@ -36,6 +36,13 @@ import com.google.zxing.common.reedsolomon.ReedSolomonException;
  */
 public final class Detector {
 
+  private static final int[] EXPECTED_CORNER_BITS = {
+      0xee0,  // 07340  XXX .XX X.. ...
+      0x1dc,  // 00734  ... XXX .XX X..
+      0x83b,  // 04073  X.. ... XXX .XX
+      0x707,  // 03407 .XX X.. ... XXX
+  };
+
   private final BitMatrix image;
 
   private boolean compact;
@@ -145,13 +152,6 @@ public final class Detector {
       nbDataBlocks = (correctedData & 0x7FF) + 1;
     }
   }
-
-  private static final int[] EXPECTED_CORNER_BITS = {
-      0xee0,  // 07340  XXX .XX X.. ...
-      0x1dc,  // 00734  ... XXX .XX X..
-      0x83b,  // 04073  X.. ... XXX .XX
-      0x707,  // 03407 .XX X.. ... XXX
-  };
 
   private static int getRotation(int[] sides, int length) throws NotFoundException {
     // In a normal pattern, we expect to See
