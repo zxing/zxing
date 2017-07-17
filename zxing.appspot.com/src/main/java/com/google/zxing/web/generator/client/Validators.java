@@ -28,7 +28,7 @@ final class Validators {
   }
 
   static String filterNumber(String number) {
-    return number.replaceAll("[ \\.,\\-\\(\\)]", "");
+    return number.replaceAll("[ .,\\-()]", "");
   }
   
   static void validateNumber(String number) throws GeneratorException {

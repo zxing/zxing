@@ -51,7 +51,7 @@ public final class SearchBookContentsActivity extends Activity {
 
   private static final String TAG = SearchBookContentsActivity.class.getSimpleName();
 
-  private static final Pattern TAG_PATTERN = Pattern.compile("\\<.*?\\>");
+  private static final Pattern TAG_PATTERN = Pattern.compile("<.*?>");
   private static final Pattern LT_ENTITY_PATTERN = Pattern.compile("&lt;");
   private static final Pattern GT_ENTITY_PATTERN = Pattern.compile("&gt;");
   private static final Pattern QUOTE_ENTITY_PATTERN = Pattern.compile("&#39;");

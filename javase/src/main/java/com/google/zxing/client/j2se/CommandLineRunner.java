@@ -49,7 +49,8 @@ public final class CommandLineRunner {
 
   public static void main(String[] args) throws Exception {
     DecoderConfig config = new DecoderConfig();
-    JCommander jCommander = new JCommander(config, args);
+    JCommander jCommander = new JCommander(config);
+    jCommander.parse(args);
     jCommander.setProgramName(CommandLineRunner.class.getSimpleName());
     if (config.help) {
       jCommander.usage();

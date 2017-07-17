@@ -126,14 +126,14 @@ public final class ChartServlet extends HttpServlet {
         throw new IllegalArgumentException("Unknown format " + imageFormat);
     }
     
-    ByteArrayOutputStream pngOut = new ByteArrayOutputStream();
-    MatrixToImageWriter.writeToStream(matrix, imageFormat, pngOut);
-    byte[] pngData = pngOut.toByteArray();
+    ByteArrayOutputStream imageOut = new ByteArrayOutputStream(1024);
+    MatrixToImageWriter.writeToStream(matrix, imageFormat, imageOut);
+    byte[] imageData = imageOut.toByteArray();
 
     response.setContentType(contentType);
-    response.setContentLength(pngData.length);
+    response.setContentLength(imageData.length);
     response.setHeader("Cache-Control", "public");
-    response.getOutputStream().write(pngData);
+    response.getOutputStream().write(imageData);
   }
 
   private static ChartServletRequestParameters doParseParameters(ServletRequest request, boolean readBody)
