@@ -76,7 +76,7 @@ public final class PDF417Writer implements Writer {
         margin = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
       }
       if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
-        errorCorrectionLevel = Integer.parseInt(hints.get(EncodeHintType.ERROR_CORRECTION).getBits());
+        errorCorrectionLevel = hints.get(EncodeHintType.ERROR_CORRECTION).getBits();
       }
       if (hints.containsKey(EncodeHintType.CHARACTER_SET)) {
         Charset encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
