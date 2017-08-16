@@ -82,6 +82,13 @@ public final class DoSFilter implements Filter {
             bannedIPAddresses.clear();
           }
         }, 0L, TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
+    timer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            System.gc();
+          }
+        }, 0L, TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
   }
 
   @Override

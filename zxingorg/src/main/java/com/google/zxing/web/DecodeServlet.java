@@ -83,7 +83,7 @@ import javax.servlet.http.Part;
 @MultipartConfig(
     maxFileSize = 1L << 26, // ~64MB
     maxRequestSize = 1L << 26, // ~64MB
-    fileSizeThreshold = 1 << 20, // ~1MB
+    fileSizeThreshold = 1 << 23, // ~8MB
     location = "/tmp")
 @WebServlet(value = "/w/decode", loadOnStartup = 1)
 public final class DecodeServlet extends HttpServlet {
