@@ -1,8 +1,8 @@
 language: java
 sudo: false
-install: mvn -T 2 -Ptravis -DskipTests=true -B -V install
+install: mvn -Ptravis -DskipTests=true -B -V install
 script:
-  - mvn -T 2 -Ptravis ${JACOCO} test
+  - mvn -Ptravis ${JACOCO} test
   - find $HOME/.m2/repository/com/google/zxing -path "*SNAPSHOT/*" -delete
   - find $HOME/.m2/repository/com/google/zxing -name "*SNAPSHOT" -type d -delete
 matrix:
