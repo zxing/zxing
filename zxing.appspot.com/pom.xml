@@ -64,4 +64,23 @@
   <name>ZXing Appspot-based encoder</name>
   <description>GWT-based encoder app hosted at zxing.appspot.com</description>
 
+  <profiles>
+    <profile>
+      <id>travis</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+            <version>${gwt.version}</version>
+            <configuration>
+              <!-- don't build in parallel on Travis -->
+              <localWorkers>1</localWorkers>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>
