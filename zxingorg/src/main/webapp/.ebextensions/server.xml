@@ -17,13 +17,12 @@
 -->
 
 <!-- Additional config:
- JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
- JAVA_OPTS="-Djava.awt.headless=true -Xmx640m -XX:+UseG1GC -XX:-OmitStackTraceInFastThrow"
+JAVA_OPTS="-Djava.security.egd=file:/dev/urandom -Djava.awt.headless=true -Xmx320m -Xmx320m -XX:+UseG1GC"
 -->
 
 <Server port="-1" shutdown="">
   <!--APR library loader. Documentation at /docs/apr.html -->
-  <!--<Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />-->
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
   <!-- Prevent memory leaks due to use of particular java/javax APIs-->
   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
@@ -43,9 +42,13 @@
                server="Apache" compression="8192"
                executor="tomcatThreadPool"
                SSLEnabled="true" scheme="https" secure="true"
-               keyAlias="zxingorg" 
-               keystoreFile="" keystorePass=""
-               URIEncoding="UTF-8" />
+               URIEncoding="UTF-8">
+      <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol"/>
+      <SSLHostConfig certificateKeyFile=""
+                     certificateFile=""
+                     certificateKeyPassword=""
+                     caCertificateFile=""/>
+    </Connector>
 
     <Engine name="Catalina" defaultHost="localhost">
 
