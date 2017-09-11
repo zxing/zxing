@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
+import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.LocaleManager;
 
 import java.util.List;
@@ -54,7 +55,7 @@ final class BrowseBookListener implements AdapterView.OnItemClickListener {
           LocaleManager.getBookSearchCountryTLD(activity) +
           "/books?id=" + volumeId + "&pg=" + pageId + "&vq=" + query;
       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(readBookURI));
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);                    
+      intent.addFlags(Intents.FLAG_NEW_DOC);
       activity.startActivity(intent);
     }
   }

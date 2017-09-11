@@ -21,7 +21,6 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
 
 import android.app.Activity;
-import android.telephony.PhoneNumberUtils;
 
 /**
  * Offers relevant actions for telephone numbers.
@@ -72,7 +71,7 @@ public final class TelResultHandler extends ResultHandler {
   public CharSequence getDisplayContents() {
     String contents = getResult().getDisplayResult();
     contents = contents.replace("\r", "");
-    return PhoneNumberUtils.formatNumber(contents);
+    return formatPhone(contents);
   }
 
   @Override

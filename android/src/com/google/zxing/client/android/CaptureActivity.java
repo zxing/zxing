@@ -361,7 +361,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.addFlags(Intents.FLAG_NEW_DOC);
     switch (item.getItemId()) {
       case R.id.menu_share:
         intent.setClassName(this, ShareActivity.class.getName());
@@ -642,7 +642,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
         // the deprecated intent is retired.
         Intent intent = new Intent(getIntent().getAction());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        intent.addFlags(Intents.FLAG_NEW_DOC);
         intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
         intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
         byte[] rawBytes = rawResult.getRawBytes();

@@ -22,7 +22,6 @@ import com.google.zxing.client.result.ParsedResult;
 
 import android.app.Activity;
 import android.graphics.Typeface;
-import android.telephony.PhoneNumberUtils;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
@@ -183,7 +182,7 @@ public final class AddressBookResultHandler extends ResultHandler {
     if (numbers != null) {
       for (String number : numbers) {
         if (number != null) {
-          ParsedResult.maybeAppend(PhoneNumberUtils.formatNumber(number), contents);
+          ParsedResult.maybeAppend(formatPhone(number), contents);
         }
       }
     }

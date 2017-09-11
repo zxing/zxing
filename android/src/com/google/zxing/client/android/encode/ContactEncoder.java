@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.android.encode;
 
+import android.telephony.PhoneNumberUtils;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -91,6 +93,11 @@ abstract class ContactEncoder {
         uniques.add(trimmed);
       }
     }
+  }
+
+  static String formatPhone(String phoneData) {
+    // Just collect the call to a deprecated method in one place
+    return PhoneNumberUtils.formatNumber(phoneData);
   }
 
 }

@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import com.google.zxing.client.android.Intents;
 
 /**
  * This class is only needed because I can't successfully send an ACTION_PICK intent to
@@ -52,19 +53,16 @@ public final class BookmarkPickerActivity extends ListActivity {
   protected void onResume() {
     super.onResume();
     titleURLs.clear();
-    Cursor cursor = getContentResolver().query(BOOKMARKS_URI, BOOKMARK_PROJECTION,
-        BOOKMARK_SELECTION, null, null);
-    if (cursor == null) {
-      Log.w(TAG, "No cursor returned for bookmark query");
-      finish();
-      return;
-    }
-    try {
+    try (Cursor cursor = getContentResolver().query(BOOKMARKS_URI, BOOKMARK_PROJECTION,
+             BOOKMARK_SELECTION, null, null)) {
+      if (cursor == null) {
+        Log.w(TAG, "No cursor returned for bookmark query");
+        finish();
+        return;
+      }
       while (cursor.moveToNext()) {
         titleURLs.add(new String[] { cursor.getString(0), cursor.getString(1) });
       }
-    } finally {
-      cursor.close();
     }
     setListAdapter(new BookmarkAdapter(this, titleURLs));
   }
@@ -74,7 +72,7 @@ public final class BookmarkPickerActivity extends ListActivity {
   protected void onListItemClick(ListView l, View view, int position, long id) {
     String[] titleURL = titleURLs.get(position);
     Intent intent = new Intent();
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.addFlags(Intents.FLAG_NEW_DOC);
     intent.putExtra("title", titleURL[0]); // Browser.BookmarkColumns.TITLE
     intent.putExtra("url", titleURL[1]); // Browser.BookmarkColumns.URL
     setResult(RESULT_OK, intent);

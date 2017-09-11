@@ -144,21 +144,11 @@ public final class HttpHelper {
   private static CharSequence consume(URLConnection connection, int maxChars) throws IOException {
     String encoding = getEncoding(connection);
     StringBuilder out = new StringBuilder();
-    Reader in = null;
-    try {
-      in = new InputStreamReader(connection.getInputStream(), encoding);
+    try (Reader in = new InputStreamReader(connection.getInputStream(), encoding)) {
       char[] buffer = new char[1024];
       int charsRead;
       while (out.length() < maxChars && (charsRead = in.read(buffer)) > 0) {
         out.append(buffer, 0, charsRead);
-      }
-    } finally {
-      if (in != null) {
-        try {
-          in.close();
-        } catch (IOException | NullPointerException ioe) {
-          // continue
-        }
       }
     }
     return out;

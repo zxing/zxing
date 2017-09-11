@@ -39,7 +39,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,29 +81,24 @@ public final class HistoryManager {
 
   public boolean hasHistoryItems() {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;
-    Cursor cursor = null;
-    try {
-      db = helper.getReadableDatabase();
-      cursor = db.query(DBHelper.TABLE_NAME, COUNT_COLUMN, null, null, null, null, null);
+    try (SQLiteDatabase db = helper.getReadableDatabase();
+         Cursor cursor = db.query(DBHelper.TABLE_NAME, COUNT_COLUMN, null, null, null, null, null)) {
       cursor.moveToFirst();
       return cursor.getInt(0) > 0;
     } catch (SQLException sqle) {
       Log.w(TAG, sqle);
       return false;
-    } finally {
-      close(cursor, db);
     }
   }
 
   public List<HistoryItem> buildHistoryItems() {
     SQLiteOpenHelper helper = new DBHelper(activity);
     List<HistoryItem> items = new ArrayList<>();
-    SQLiteDatabase db = null;
-    Cursor cursor = null;
-    try {
-      db = helper.getReadableDatabase();
-      cursor = db.query(DBHelper.TABLE_NAME, COLUMNS, null, null, null, null, DBHelper.TIMESTAMP_COL + " DESC");
+    try (SQLiteDatabase db = helper.getReadableDatabase();
+         Cursor cursor = db.query(DBHelper.TABLE_NAME,
+                                  COLUMNS,
+                                  null, null, null, null,
+                                  DBHelper.TIMESTAMP_COL + " DESC")) {
       while (cursor.moveToNext()) {
         String text = cursor.getString(0);
         String display = cursor.getString(1);
@@ -115,20 +110,17 @@ public final class HistoryManager {
       }
     } catch (CursorIndexOutOfBoundsException cioobe) {
       Log.w(TAG, cioobe);
-      // continue
-    } finally {
-      close(cursor, db);
     }
     return items;
   }
 
   public HistoryItem buildHistoryItem(int number) {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;
-    Cursor cursor = null;
-    try {
-      db = helper.getReadableDatabase();
-      cursor = db.query(DBHelper.TABLE_NAME, COLUMNS, null, null, null, null, DBHelper.TIMESTAMP_COL + " DESC");
+    try (SQLiteDatabase db = helper.getReadableDatabase();
+         Cursor cursor = db.query(DBHelper.TABLE_NAME,
+                                  COLUMNS,
+                                  null, null, null, null,
+                                  DBHelper.TIMESTAMP_COL + " DESC")) {
       cursor.move(number + 1);
       String text = cursor.getString(0);
       String display = cursor.getString(1);
@@ -137,27 +129,20 @@ public final class HistoryManager {
       String details = cursor.getString(4);
       Result result = new Result(text, null, null, BarcodeFormat.valueOf(format), timestamp);
       return new HistoryItem(result, display, details);
-    } finally {
-      close(cursor, db);
     }
   }
   
   public void deleteHistoryItem(int number) {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;
-    Cursor cursor = null;
-    try {
-      db = helper.getWritableDatabase();      
-      cursor = db.query(DBHelper.TABLE_NAME,
-                        ID_COL_PROJECTION,
-                        null, null, null, null,
-                        DBHelper.TIMESTAMP_COL + " DESC");
+    try (SQLiteDatabase db = helper.getWritableDatabase();
+         Cursor cursor = db.query(DBHelper.TABLE_NAME,
+                                  ID_COL_PROJECTION,
+                                  null, null, null, null,
+                                  DBHelper.TIMESTAMP_COL + " DESC")) {
       cursor.move(number + 1);
       db.delete(DBHelper.TABLE_NAME, DBHelper.ID_COL + '=' + cursor.getString(0), null);
     } catch (SQLException sqle) {
       Log.w(TAG, sqle);
-    } finally {
-      close(cursor, db);
     }
   }
 
@@ -181,13 +166,9 @@ public final class HistoryManager {
     values.put(DBHelper.TIMESTAMP_COL, System.currentTimeMillis());
 
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;
-    try {
-      db = helper.getWritableDatabase();      
+    try (SQLiteDatabase db = helper.getWritableDatabase()) {
       // Insert the new entry into the DB.
       db.insert(DBHelper.TABLE_NAME, DBHelper.TIMESTAMP_COL, values);
-    } finally {
-      close(null, db);
     }
   }
 
@@ -195,18 +176,15 @@ public final class HistoryManager {
     // As we're going to do an update only we don't need need to worry
     // about the preferences; if the item wasn't saved it won't be udpated
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;    
-    Cursor cursor = null;
-    try {
-      db = helper.getWritableDatabase();
-      cursor = db.query(DBHelper.TABLE_NAME,
-                        ID_DETAIL_COL_PROJECTION,
-                        DBHelper.TEXT_COL + "=?",
-                        new String[] { itemID },
-                        null,
-                        null,
-                        DBHelper.TIMESTAMP_COL + " DESC",
-                        "1");
+    try (SQLiteDatabase db = helper.getWritableDatabase();
+         Cursor cursor = db.query(DBHelper.TABLE_NAME,
+                                  ID_DETAIL_COL_PROJECTION,
+                                  DBHelper.TEXT_COL + "=?",
+                                  new String[] { itemID },
+                                  null,
+                                  null,
+                                  DBHelper.TIMESTAMP_COL + " DESC",
+                                  "1")) {
       String oldID = null;
       String oldDetails = null;
       if (cursor.moveToNext()) {
@@ -229,35 +207,25 @@ public final class HistoryManager {
           db.update(DBHelper.TABLE_NAME, values, DBHelper.ID_COL + "=?", new String[] { oldID });
         }
       }
-
-    } finally {
-      close(cursor, db);
     }
   }
 
   private void deletePrevious(String text) {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;
-    try {
-      db = helper.getWritableDatabase();      
+    try (SQLiteDatabase db = helper.getWritableDatabase()) {
       db.delete(DBHelper.TABLE_NAME, DBHelper.TEXT_COL + "=?", new String[] { text });
     } catch (SQLException sqle) {
       Log.w(TAG, sqle);
-    } finally {
-      close(null, db);
     }
   }
 
   public void trimHistory() {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;
-    Cursor cursor = null;
-    try {
-      db = helper.getWritableDatabase();      
-      cursor = db.query(DBHelper.TABLE_NAME,
-                        ID_COL_PROJECTION,
-                        null, null, null, null,
-                        DBHelper.TIMESTAMP_COL + " DESC");
+    try (SQLiteDatabase db = helper.getWritableDatabase();
+         Cursor cursor = db.query(DBHelper.TABLE_NAME,
+                                  ID_COL_PROJECTION,
+                                  null, null, null, null,
+                                  DBHelper.TIMESTAMP_COL + " DESC")) {
       cursor.move(MAX_ITEMS);
       while (cursor.moveToNext()) {
         String id = cursor.getString(0);
@@ -265,12 +233,7 @@ public final class HistoryManager {
         db.delete(DBHelper.TABLE_NAME, DBHelper.ID_COL + '=' + id, null);
       }
     } catch (SQLException sqle) {
-      // We're seeing an error here when called in CaptureActivity.onCreate() in rare cases
-      // and don't understand it. First theory is that it's transient so can be safely ignored.
       Log.w(TAG, sqle);
-      // continue
-    } finally {
-      close(cursor, db);
     }
   }
 
@@ -291,15 +254,11 @@ public final class HistoryManager {
    */
   CharSequence buildHistory() {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;
-    Cursor cursor = null;
-    try {
-      db = helper.getWritableDatabase();
-      cursor = db.query(DBHelper.TABLE_NAME,
-                        COLUMNS,
-                        null, null, null, null,
-                        DBHelper.TIMESTAMP_COL + " DESC");
-
+    try (SQLiteDatabase db = helper.getWritableDatabase();
+         Cursor cursor = db.query(DBHelper.TABLE_NAME,
+                                  COLUMNS,
+                                  null, null, null, null,
+                                  DBHelper.TIMESTAMP_COL + " DESC")) {
       DateFormat format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
       StringBuilder historyText = new StringBuilder(1000);
       while (cursor.moveToNext()) {
@@ -318,21 +277,15 @@ public final class HistoryManager {
         historyText.append('"').append(massageHistoryField(cursor.getString(4))).append("\"\r\n");
       }
       return historyText;
-    } finally {
-      close(cursor, db);
     }
   }
   
   void clearHistory() {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = null;
-    try {
-      db = helper.getWritableDatabase();      
+    try (SQLiteDatabase db = helper.getWritableDatabase()) {
       db.delete(DBHelper.TABLE_NAME, null, null);
     } catch (SQLException sqle) {
       Log.w(TAG, sqle);
-    } finally {
-      close(null, db);
     }
   }
 
@@ -344,36 +297,17 @@ public final class HistoryManager {
       return null;
     }
     File historyFile = new File(historyRoot, "history-" + System.currentTimeMillis() + ".csv");
-    OutputStreamWriter out = null;
-    try {
-      out = new OutputStreamWriter(new FileOutputStream(historyFile), Charset.forName("UTF-8"));
+    try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(historyFile), StandardCharsets.UTF_8)) {
       out.write(history);
       return Uri.parse("file://" + historyFile.getAbsolutePath());
     } catch (IOException ioe) {
       Log.w(TAG, "Couldn't access file " + historyFile + " due to " + ioe);
       return null;
-    } finally {
-      if (out != null) {
-        try {
-          out.close();
-        } catch (IOException ioe) {
-          // do nothing
-        }
-      }
     }
   }
 
   private static String massageHistoryField(String value) {
     return value == null ? "" : DOUBLE_QUOTE.matcher(value).replaceAll("\"\"");
-  }
-  
-  private static void close(Cursor cursor, SQLiteDatabase database) {
-    if (cursor != null) {
-      cursor.close();
-    }
-    if (database != null) {
-      database.close();
-    }
   }
 
 }

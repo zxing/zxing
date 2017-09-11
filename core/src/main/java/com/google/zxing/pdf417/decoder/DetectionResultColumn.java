@@ -79,18 +79,17 @@ class DetectionResultColumn {
 
   @Override
   public String toString() {
-    Formatter formatter = new Formatter();
-    int row = 0;
-    for (Codeword codeword : codewords) {
-      if (codeword == null) {
-        formatter.format("%3d:    |   %n", row++);
-        continue;
+    try (Formatter formatter = new Formatter()) {
+      int row = 0;
+      for (Codeword codeword : codewords) {
+        if (codeword == null) {
+          formatter.format("%3d:    |   %n", row++);
+          continue;
+        }
+        formatter.format("%3d: %3d|%3d%n", row++, codeword.getRowNumber(), codeword.getValue());
       }
-      formatter.format("%3d: %3d|%3d%n", row++, codeword.getRowNumber(), codeword.getValue());
+      return formatter.toString();
     }
-    String result = formatter.toString();
-    formatter.close();
-    return result;
   }
 
 }

@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.ListView;
+import com.google.zxing.client.android.Intents;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public final class AppPickerActivity extends ListActivity {
     if (position >= 0 && position < adapter.getCount()) {
       String packageName = ((AppInfo) adapter.getItem(position)).getPackageName();
       Intent intent = new Intent();
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      intent.addFlags(Intents.FLAG_NEW_DOC);
       intent.putExtra("url", "market://details?id=" + packageName); // Browser.BookmarkColumns.URL
       setResult(RESULT_OK, intent);
     } else {

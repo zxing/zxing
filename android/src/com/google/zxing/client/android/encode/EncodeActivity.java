@@ -40,7 +40,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -150,22 +149,12 @@ public final class EncodeActivity extends Activity {
       Log.w(TAG, "Could not delete " + barcodeFile);
       // continue anyway
     }
-    FileOutputStream fos = null;
-    try {
-      fos = new FileOutputStream(barcodeFile);
+    try (FileOutputStream fos = new FileOutputStream(barcodeFile)) {
       bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
-    } catch (FileNotFoundException fnfe) {
-      Log.w(TAG, "Couldn't access file " + barcodeFile + " due to " + fnfe);
+    } catch (IOException ioe) {
+      Log.w(TAG, "Couldn't access file " + barcodeFile + " due to " + ioe);
       showErrorMessage(R.string.msg_unmount_usb);
       return;
-    } finally {
-      if (fos != null) {
-        try {
-          fos.close();
-        } catch (IOException ioe) {
-          // do nothing
-        }
-      }
     }
 
     Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
@@ -173,7 +162,7 @@ public final class EncodeActivity extends Activity {
     intent.putExtra(Intent.EXTRA_TEXT, contents);
     intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + barcodeFile.getAbsolutePath()));
     intent.setType("image/png");
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.addFlags(Intents.FLAG_NEW_DOC);
     startActivity(Intent.createChooser(intent, null));
   }
 

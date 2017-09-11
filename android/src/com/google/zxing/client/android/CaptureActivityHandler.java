@@ -110,7 +110,7 @@ public final class CaptureActivityHandler extends Handler {
         String url = (String) message.obj;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        intent.addFlags(Intents.FLAG_NEW_DOC);
         intent.setData(Uri.parse(url));
 
         ResolveInfo resolveInfo =
@@ -122,10 +122,13 @@ public final class CaptureActivityHandler extends Handler {
         }
 
         // Needed for default Android browser / Chrome only apparently
-        if ("com.android.browser".equals(browserPackageName) || "com.android.chrome".equals(browserPackageName)) {
-          intent.setPackage(browserPackageName);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
+        switch (browserPackageName) {
+          case "com.android.browser":
+          case "com.android.chrome":
+            intent.setPackage(browserPackageName);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
+            break;
         }
 
         try {

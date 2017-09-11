@@ -175,11 +175,8 @@ public final class SearchBookContentsActivity extends Activity {
         }
         CharSequence content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.JSON);
         return new JSONObject(content.toString());
-      } catch (IOException ioe) {
+      } catch (IOException | JSONException ioe) {
         Log.w(TAG, "Error accessing book search", ioe);
-        return null;
-      } catch (JSONException je) {
-        Log.w(TAG, "Error accessing book search", je);
         return null;
       }
     }

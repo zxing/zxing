@@ -26,17 +26,17 @@ enum NetworkType {
     if (networkTypeString == null) {
       return NO_PASSWORD;
     }
-    if ("WPA".equals(networkTypeString) ||
-        "WPA2".equals(networkTypeString)) {
-      return WPA;
+    switch (networkTypeString) {
+      case "WPA":
+      case "WPA2":
+        return WPA;
+      case "WEP":
+        return WEP;
+      case "nopass":
+        return NO_PASSWORD;
+      default:
+        throw new IllegalArgumentException(networkTypeString);
     }
-    if ("WEP".equals(networkTypeString)) {
-      return WEP;
-    }
-    if ("nopass".equals(networkTypeString)) {
-      return NO_PASSWORD;
-    }
-    throw new IllegalArgumentException(networkTypeString);
   }
 
 }

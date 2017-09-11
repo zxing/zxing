@@ -610,23 +610,22 @@ public final class PDF417ScanningDecoder {
   }
 
   public static String toString(BarcodeValue[][] barcodeMatrix) {
-    Formatter formatter = new Formatter();
-    for (int row = 0; row < barcodeMatrix.length; row++) {
-      formatter.format("Row %2d: ", row);
-      for (int column = 0; column < barcodeMatrix[row].length; column++) {
-        BarcodeValue barcodeValue = barcodeMatrix[row][column];
-        if (barcodeValue.getValue().length == 0) {
-          formatter.format("        ", (Object[]) null);
-        } else {
-          formatter.format("%4d(%2d)", barcodeValue.getValue()[0],
-              barcodeValue.getConfidence(barcodeValue.getValue()[0]));
+    try (Formatter formatter = new Formatter()) {
+      for (int row = 0; row < barcodeMatrix.length; row++) {
+        formatter.format("Row %2d: ", row);
+        for (int column = 0; column < barcodeMatrix[row].length; column++) {
+          BarcodeValue barcodeValue = barcodeMatrix[row][column];
+          if (barcodeValue.getValue().length == 0) {
+            formatter.format("        ", (Object[]) null);
+          } else {
+            formatter.format("%4d(%2d)", barcodeValue.getValue()[0],
+                barcodeValue.getConfidence(barcodeValue.getValue()[0]));
+          }
         }
+        formatter.format("%n");
       }
-      formatter.format("%n");
+      return formatter.toString();
     }
-    String result = formatter.toString();
-    formatter.close();
-    return result;
   }
 
 }

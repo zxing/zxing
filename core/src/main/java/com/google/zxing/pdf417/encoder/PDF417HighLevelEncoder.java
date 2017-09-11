@@ -26,6 +26,7 @@ import com.google.zxing.common.CharacterSetECI;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -126,7 +127,7 @@ final class PDF417HighLevelEncoder {
   private static final byte[] MIXED = new byte[128];
   private static final byte[] PUNCTUATION = new byte[128];
 
-  private static final Charset DEFAULT_ENCODING = Charset.forName("ISO-8859-1");
+  private static final Charset DEFAULT_ENCODING = StandardCharsets.ISO_8859_1;
 
   private PDF417HighLevelEncoder() {
   }

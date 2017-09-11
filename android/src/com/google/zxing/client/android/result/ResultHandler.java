@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.result;
 
+import android.telephony.PhoneNumberUtils;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.android.Intents;
@@ -450,7 +451,7 @@ public abstract class ResultHandler {
    */
   final void rawLaunchIntent(Intent intent) {
     if (intent != null) {
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      intent.addFlags(Intents.FLAG_NEW_DOC);
       Log.d(TAG, "Launching intent: " + intent + " with extras: " + intent.getExtras());
       activity.startActivity(intent);
     }
@@ -508,6 +509,11 @@ public abstract class ResultHandler {
     }
     // Replace %s last as it might contain itself %f or %t
     return url.replace("%s", text);
+  }
+
+  static String formatPhone(String phoneData) {
+    // Just collect the call to a deprecated method in one place
+    return PhoneNumberUtils.formatNumber(phoneData);
   }
 
 }

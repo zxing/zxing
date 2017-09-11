@@ -128,7 +128,7 @@ public final class HistoryActivity extends ListActivity {
           builder.show();
         } else {
           Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+          intent.addFlags(Intents.FLAG_NEW_DOC);
           String subject = getResources().getString(R.string.history_email_title);
           intent.putExtra(Intent.EXTRA_SUBJECT, subject);
           intent.putExtra(Intent.EXTRA_TEXT, subject);

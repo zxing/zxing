@@ -138,6 +138,10 @@ public class IntentIntegrator {
           BS_PACKAGE                  // Barcode Scanner          
           // What else supports this intent?
       );
+
+  // Should be FLAG_ACTIVITY_NEW_DOCUMENT in API 21+.
+  // Defined once here because the current value is deprecated, so generates just one warning
+  private static final int FLAG_NEW_DOC = Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
   
   private final Activity activity;
   private final Fragment fragment;
@@ -320,7 +324,7 @@ public class IntentIntegrator {
     }
     intentScan.setPackage(targetAppPackage);
     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intentScan.addFlags(FLAG_NEW_DOC);
     attachMoreExtras(intentScan);
     startActivityForResult(intentScan, REQUEST_CODE);
     return null;
@@ -466,7 +470,7 @@ public class IntentIntegrator {
     }
     intent.setPackage(targetAppPackage);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.addFlags(FLAG_NEW_DOC);
     attachMoreExtras(intent);
     if (fragment == null) {
       activity.startActivity(intent);

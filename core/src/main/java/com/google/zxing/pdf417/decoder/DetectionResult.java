@@ -271,26 +271,25 @@ final class DetectionResult {
     if (rowIndicatorColumn == null) {
       rowIndicatorColumn = detectionResultColumns[barcodeColumnCount + 1];
     }
-    Formatter formatter = new Formatter();
-    for (int codewordsRow = 0; codewordsRow < rowIndicatorColumn.getCodewords().length; codewordsRow++) {
-      formatter.format("CW %3d:", codewordsRow);
-      for (int barcodeColumn = 0; barcodeColumn < barcodeColumnCount + 2; barcodeColumn++) {
-        if (detectionResultColumns[barcodeColumn] == null) {
-          formatter.format("    |   ");
-          continue;
+    try (Formatter formatter = new Formatter()) {
+      for (int codewordsRow = 0; codewordsRow < rowIndicatorColumn.getCodewords().length; codewordsRow++) {
+        formatter.format("CW %3d:", codewordsRow);
+        for (int barcodeColumn = 0; barcodeColumn < barcodeColumnCount + 2; barcodeColumn++) {
+          if (detectionResultColumns[barcodeColumn] == null) {
+            formatter.format("    |   ");
+            continue;
+          }
+          Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
+          if (codeword == null) {
+            formatter.format("    |   ");
+            continue;
+          }
+          formatter.format(" %3d|%3d", codeword.getRowNumber(), codeword.getValue());
         }
-        Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
-        if (codeword == null) {
-          formatter.format("    |   ");
-          continue;
-        }
-        formatter.format(" %3d|%3d", codeword.getRowNumber(), codeword.getValue());
+        formatter.format("%n");
       }
-      formatter.format("%n");
+      return formatter.toString();
     }
-    String result = formatter.toString();
-    formatter.close();
-    return result;
   }
 
 }

@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.android;
 
+import android.content.Intent;
+
 /**
  * This class provides the constants to use when sending an Intent to Barcode Scanner.
  * These strings are effectively API and cannot be changed.
@@ -128,14 +130,14 @@ public final class Intents {
     public static final String RESULT = "SCAN_RESULT";
 
     /**
-     * Call {@link android.content.Intent#getStringExtra(String)} with {@link #RESULT_FORMAT}
+     * Call {@link android.content.Intent#getStringExtra(String)} with {@code RESULT_FORMAT}
      * to determine which barcode format was found.
      * See {@link com.google.zxing.BarcodeFormat} for possible values.
      */
     public static final String RESULT_FORMAT = "SCAN_RESULT_FORMAT";
 
     /**
-     * Call {@link android.content.Intent#getStringExtra(String)} with {@link #RESULT_UPC_EAN_EXTENSION}
+     * Call {@link android.content.Intent#getStringExtra(String)} with {@code RESULT_UPC_EAN_EXTENSION}
      * to return the content of any UPC extension barcode that was also found. Only applicable
      * to {@link com.google.zxing.BarcodeFormat#UPC_A} and {@link com.google.zxing.BarcodeFormat#EAN_13}
      * formats.
@@ -143,20 +145,20 @@ public final class Intents {
     public static final String RESULT_UPC_EAN_EXTENSION = "SCAN_RESULT_UPC_EAN_EXTENSION";
 
     /**
-     * Call {@link android.content.Intent#getByteArrayExtra(String)} with {@link #RESULT_BYTES}
+     * Call {@link android.content.Intent#getByteArrayExtra(String)} with {@code RESULT_BYTES}
      * to get a {@code byte[]} of raw bytes in the barcode, if available.
      */
     public static final String RESULT_BYTES = "SCAN_RESULT_BYTES";
 
     /**
      * Key for the value of {@link com.google.zxing.ResultMetadataType#ORIENTATION}, if available.
-     * Call {@link android.content.Intent#getIntArrayExtra(String)} with {@link #RESULT_ORIENTATION}.
+     * Call {@link android.content.Intent#getIntArrayExtra(String)} with {@code RESULT_ORIENTATION}.
      */
     public static final String RESULT_ORIENTATION = "SCAN_RESULT_ORIENTATION";
 
     /**
      * Key for the value of {@link com.google.zxing.ResultMetadataType#ERROR_CORRECTION_LEVEL}, if available.
-     * Call {@link android.content.Intent#getStringExtra(String)} with {@link #RESULT_ERROR_CORRECTION_LEVEL}.
+     * Call {@link android.content.Intent#getStringExtra(String)} with {@code RESULT_ERROR_CORRECTION_LEVEL}.
      */
     public static final String RESULT_ERROR_CORRECTION_LEVEL = "SCAN_RESULT_ERROR_CORRECTION_LEVEL";
 
@@ -293,4 +295,9 @@ public final class Intents {
     private Share() {
     }
   }
+
+  // Not the best place for this, but, better than a new class
+  // Should be FLAG_ACTIVITY_NEW_DOCUMENT in API 21+.
+  // Defined once here because the current value is deprecated, so generates just one warning
+  public static final int FLAG_NEW_DOC = Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
 }

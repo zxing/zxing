@@ -24,6 +24,7 @@ import com.google.zxing.pdf417.PDF417ResultMetadata;
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -70,8 +71,6 @@ final class DecodedBitStreamParser {
   private static final char[] MIXED_CHARS =
       "0123456789&\r\t,:#-.$/+%*=^".toCharArray();
 
-  private static final Charset DEFAULT_ENCODING = Charset.forName("ISO-8859-1");
-
   /**
    * Table containing values for the exponent of 900.
    * This is used in the numeric compaction decode algorithm.
@@ -94,7 +93,7 @@ final class DecodedBitStreamParser {
 
   static DecoderResult decode(int[] codewords, String ecLevel) throws FormatException {
     StringBuilder result = new StringBuilder(codewords.length * 2);
-    Charset encoding = DEFAULT_ENCODING;
+    Charset encoding = StandardCharsets.ISO_8859_1;
     // Get compaction mode
     int codeIndex = 1;
     int code = codewords[codeIndex++];
