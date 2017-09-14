@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public final class Code39Reader extends OneDReader {
 
-  private static final String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
+  static final String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
 
   /**
    * These represent the encodings of characters, as patterns of wide and narrow bars.
