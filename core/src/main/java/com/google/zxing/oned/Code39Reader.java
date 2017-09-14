@@ -297,17 +297,17 @@ public final class Code39Reader extends OneDReader {
             } else if (next >= 'F' && next <= 'J') {
               decodedChar = (char) (next - 11);
             } else if (next >= 'K' && next <= 'O') {
-              decodedChar = (char)(next + 16);
+              decodedChar = (char) (next + 16);
             } else if (next >= 'P' && next <= 'T') {
-              decodedChar = (char)(next + 43);
+              decodedChar = (char) (next + 43);
             } else if (next == 'U') {
-              decodedChar = (char)0;
+              decodedChar = (char) 0;
             } else if (next == 'V') {
               decodedChar = '@';
             } else if (next == 'W') {
               decodedChar = '`';
             } else if (next == 'X' || next == 'Y' || next == 'Z') {
-              decodedChar = (char)127;
+              decodedChar = (char) 127;
             } else {
               throw FormatException.getFormatInstance();
             }
