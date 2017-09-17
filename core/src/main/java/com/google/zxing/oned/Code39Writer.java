@@ -57,7 +57,7 @@ public final class Code39Writer extends OneDimensionalCodeWriter {
         length = contents.length();
         if (length > 80) {
           throw new IllegalArgumentException(
-              "Requested contents should be less than 80 digits long, but got " + length + " (extended full ascii mode)");
+              "Requested contents should be less than 80 digits long, but got " + length + " (extended full ASCII mode)");
         }
         break;
       }
@@ -96,67 +96,53 @@ public final class Code39Writer extends OneDimensionalCodeWriter {
     }
   }
 
-  private static String tryToConvertToExtendedMode(String contents) throws IllegalArgumentException {
+  private static String tryToConvertToExtendedMode(String contents) {
      int length = contents.length();
      StringBuilder extendedContent = new StringBuilder();
      for (int i = 0; i < length; i++) {
-       int character = (int)contents.charAt(i);
+       char character = contents.charAt(i);
        switch (character) {
-         case 0:
+         case '\u0000':
            extendedContent.append("%U");
            break;
-         case 32:
-           extendedContent.append(" ");
+         case ' ':
+         case '-':
+         case '.':
+           extendedContent.append(character);
            break;
-         case 45:
-           extendedContent.append("-");
-           break;
-         case 46:
-           extendedContent.append(".");
-           break;
-         case 64:
+         case '@':
            extendedContent.append("%V");
            break;
-         case 96:
+         case '`':
            extendedContent.append("%W");
            break;
          default:
-           if (character > 0 &&
-               character < 27) {
-             extendedContent.append("$");
+           if (character > 0 && character < 27) {
+             extendedContent.append('$');
              extendedContent.append((char)('A' + (character - 1)));
-           }
-           else if (character > 26 && character < 32) {
-             extendedContent.append("%");
+           } else if (character > 26 && character < ' ') {
+             extendedContent.append('%');
              extendedContent.append((char)('A' + (character - 27)));
-           }
-           else if ((character > 32 && character < 45) || character == 47 || character == 58) {
-             extendedContent.append("/");
+           } else if ((character > ' ' && character < '-') || character == '/' || character == ':') {
+             extendedContent.append('/');
              extendedContent.append((char)('A' + (character - 33)));
-           }
-           else if (character > 47 && character < 58) {
+           } else if (character > '/' && character < ':') {
              extendedContent.append((char)('0' + (character - 48)));
-           }
-           else if (character > 58 && character < 64) {
-             extendedContent.append("%");
+           } else if (character > ':' && character < '@') {
+             extendedContent.append('%');
              extendedContent.append((char)('F' + (character - 59)));
-           }
-           else if (character > 64 && character < 91) {
+           } else if (character > '@' && character < '[') {
              extendedContent.append((char)('A' + (character - 65)));
-           }
-           else if (character > 90 && character < 96) {
-             extendedContent.append("%");
+           } else if (character > 'Z' && character < '`') {
+             extendedContent.append('%');
              extendedContent.append((char)('K' + (character - 91)));
-           }
-           else if (character > 96 && character < 123) {
-             extendedContent.append("+");
+           } else if (character > '`' && character < '{') {
+             extendedContent.append('+');
              extendedContent.append((char)('A' + (character - 97)));
-           }
-           else if (character > 122 && character < 128) {
-             extendedContent.append("%");
+           } else if (character > 'z' && character < 128) {
+             extendedContent.append('%');
              extendedContent.append((char)('P' + (character - 123)));
-           }
-           else {
+           } else {
              throw new IllegalArgumentException("Requested content contains a non-encodable character: '" + contents.charAt(i) + "'");
            }
            break;
