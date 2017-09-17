@@ -119,29 +119,29 @@ public final class Code39Writer extends OneDimensionalCodeWriter {
          default:
            if (character > 0 && character < 27) {
              extendedContent.append('$');
-             extendedContent.append((char)('A' + (character - 1)));
+             extendedContent.append((char) ('A' + (character - 1)));
            } else if (character > 26 && character < ' ') {
              extendedContent.append('%');
-             extendedContent.append((char)('A' + (character - 27)));
+             extendedContent.append((char) ('A' + (character - 27)));
            } else if ((character > ' ' && character < '-') || character == '/' || character == ':') {
              extendedContent.append('/');
-             extendedContent.append((char)('A' + (character - 33)));
+             extendedContent.append((char) ('A' + (character - 33)));
            } else if (character > '/' && character < ':') {
-             extendedContent.append((char)('0' + (character - 48)));
+             extendedContent.append((char) ('0' + (character - 48)));
            } else if (character > ':' && character < '@') {
              extendedContent.append('%');
-             extendedContent.append((char)('F' + (character - 59)));
+             extendedContent.append((char) ('F' + (character - 59)));
            } else if (character > '@' && character < '[') {
-             extendedContent.append((char)('A' + (character - 65)));
+             extendedContent.append((char) ('A' + (character - 65)));
            } else if (character > 'Z' && character < '`') {
              extendedContent.append('%');
-             extendedContent.append((char)('K' + (character - 91)));
+             extendedContent.append((char) ('K' + (character - 91)));
            } else if (character > '`' && character < '{') {
              extendedContent.append('+');
-             extendedContent.append((char)('A' + (character - 97)));
+             extendedContent.append((char) ('A' + (character - 97)));
            } else if (character > 'z' && character < 128) {
              extendedContent.append('%');
-             extendedContent.append((char)('P' + (character - 123)));
+             extendedContent.append((char) ('P' + (character - 123)));
            } else {
              throw new IllegalArgumentException("Requested content contains a non-encodable character: '" + contents.charAt(i) + "'");
            }
