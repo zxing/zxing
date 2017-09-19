@@ -83,19 +83,17 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     // Check content
     for (int i = 0; i < length; i++) {
       char c = contents.charAt(i);
-      if (c > '~') {
-        switch (c) {
-          case ESCAPE_FNC_1:
-          case ESCAPE_FNC_2:
-          case ESCAPE_FNC_3:
-          case ESCAPE_FNC_4:
-            break;
-          default:
-            if (c > 127) {
-              // support for FNC4 isn't implemented, no full Latin-1 character set available at the moment
-              throw new IllegalArgumentException("Bad character in input: " + c);
-            }
-        }
+      switch (c) {
+        case ESCAPE_FNC_1:
+        case ESCAPE_FNC_2:
+        case ESCAPE_FNC_3:
+        case ESCAPE_FNC_4:
+          break;
+        default:
+          if (c > 127) {
+            // support for FNC4 isn't implemented, no full Latin-1 character set available at the moment
+            throw new IllegalArgumentException("Bad character in input: " + c);
+          }
       }
     }
 
