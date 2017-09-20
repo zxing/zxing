@@ -103,13 +103,13 @@
   <string name="preferences_disable_continuous_focus_title">Ikke bruk vedvarende fokus</string>
   <string name="preferences_disable_exposure_title">Ingen eksponering</string>
   <string name="preferences_disable_metering_title">Ingen lysmåling</string>
-  <string name="preferences_front_light_summary">Forbedrer skanning i dunkel belysning på enkelte mobiler, men kan gi et gjenskinn. Virker ikke på alle mobiler.</string>
   <string name="preferences_front_light_title">Bruk frontlyset</string>
   <string name="preferences_front_light_auto">Automatisk</string>
   <string name="preferences_front_light_off">Av</string>
   <string name="preferences_front_light_on">På</string>
   <string name="preferences_front_light_summary">Bedrer skanning i dårlig lys på noen telefoner, men kan gi gjenskinn. Utilgjengelig på noen enheter.</string>
-  <string name="preferences_front_light_title">Bruk frontlys</string>
+  <string name="preferences_general_title">Generelle innstillinger</string>
+  <string name="preferences_history_title">Legg til i loggen</string>
   <string name="preferences_invert_scan_title">Skann negativt</string>
   <string name="preferences_invert_scan_summary">Skanner etter hvite strekkoder på svart bakgrunn. Utilgjengelig på noen enheter.</string>
   <string name="preferences_name">Innstillinger</string>
