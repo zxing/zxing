@@ -124,7 +124,7 @@
   <string name="preferences_supplemental_summary">Forsøk å finne mere info om strekkodeinnholdet.</string>
   <string name="preferences_supplemental_title">Finn more info</string>
   <string name="preferences_vibrate_title">Vibrer</string>
-  <string name="result_address_book">Fant kontactinfo</string>
+  <string name="result_address_book">Fant kontaktinfo</string>
   <string name="result_calendar">Fant kalenderhendelse</string>
   <string name="result_email_address">Fant E-postadresse</string>
   <string name="result_geo">Fant geografiske koordinater</string>
