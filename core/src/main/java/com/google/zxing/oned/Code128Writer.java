@@ -32,8 +32,10 @@ import java.util.Map;
  */
 public final class Code128Writer extends OneDimensionalCodeWriter {
 
+  private static final int CODE_START_A = 103;
   private static final int CODE_START_B = 104;
   private static final int CODE_START_C = 105;
+  private static final int CODE_CODE_A = 101;
   private static final int CODE_CODE_B = 100;
   private static final int CODE_CODE_C = 99;
   private static final int CODE_STOP = 106;
@@ -47,6 +49,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   private static final int CODE_FNC_1 = 102;   // Code A, Code B, Code C
   private static final int CODE_FNC_2 = 97;    // Code A, Code B
   private static final int CODE_FNC_3 = 96;    // Code A, Code B
+  private static final int CODE_FNC_4_A = 101; // Code A
   private static final int CODE_FNC_4_B = 100; // Code B
 
   // Results of minimal lookahead for code C
@@ -80,16 +83,17 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     // Check content
     for (int i = 0; i < length; i++) {
       char c = contents.charAt(i);
-      if (c < ' ' || c > '~') {
-        switch (c) {
-          case ESCAPE_FNC_1:
-          case ESCAPE_FNC_2:
-          case ESCAPE_FNC_3:
-          case ESCAPE_FNC_4:
-            break;
-          default:
+      switch (c) {
+        case ESCAPE_FNC_1:
+        case ESCAPE_FNC_2:
+        case ESCAPE_FNC_3:
+        case ESCAPE_FNC_4:
+          break;
+        default:
+          if (c > 127) {
+            // support for FNC4 isn't implemented, no full Latin-1 character set available at the moment
             throw new IllegalArgumentException("Bad character in input: " + c);
-        }
+          }
       }
     }
 
@@ -119,15 +123,30 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
             patternIndex = CODE_FNC_3;
             break;
           case ESCAPE_FNC_4:
-            patternIndex = CODE_FNC_4_B; // FIXME if this ever outputs Code A
+            if (codeSet == CODE_CODE_A) {
+              patternIndex = CODE_FNC_4_A;
+            } else {
+              patternIndex = CODE_FNC_4_B;
+            }
             break;
           default:
             // Then handle normal characters otherwise
-            if (codeSet == CODE_CODE_B) {
-              patternIndex = contents.charAt(position) - ' ';
-            } else { // CODE_CODE_C
-              patternIndex = Integer.parseInt(contents.substring(position, position + 2));
-              position++; // Also incremented below
+            switch (codeSet) {
+              case CODE_CODE_A:
+                patternIndex = contents.charAt(position) - ' ';
+                if (patternIndex < 0) {
+                  // everything below a space character comes behind the underscore in the code patterns table
+                  patternIndex += '`';
+                }
+                break;
+              case CODE_CODE_B:
+                patternIndex = contents.charAt(position) - ' ';
+                break;
+              default:
+                // CODE_CODE_C
+                patternIndex = Integer.parseInt(contents.substring(position, position + 2));
+                position++; // Also incremented below
+                break;
             }
         }
         position++;
@@ -136,11 +155,16 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
         // Do we have a code set?
         if (codeSet == 0) {
           // No, we don't have a code set
-          if (newCodeSet == CODE_CODE_B) {
-            patternIndex = CODE_START_B;
-          } else {
-            // CODE_CODE_C
-            patternIndex = CODE_START_C;
+          switch (newCodeSet) {
+            case CODE_CODE_A:
+              patternIndex = CODE_START_A;
+              break;
+            case CODE_CODE_B:
+              patternIndex = CODE_START_B;
+              break;
+            default:
+              patternIndex = CODE_START_C;
+              break;
           }
         } else {
           // Yes, we have a code set
@@ -208,7 +232,17 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
 
   private static int chooseCode(CharSequence value, int start, int oldCode) {
     CType lookahead = findCType(value, start);
-    if (lookahead == CType.UNCODABLE || lookahead == CType.ONE_DIGIT) {
+    if (lookahead == CType.ONE_DIGIT) {
+       return CODE_CODE_B;
+    }
+    if (lookahead == CType.UNCODABLE) {
+      if (start < value.length()) {
+        char c = value.charAt(start);
+        if (c < ' ' || (oldCode == CODE_CODE_A && c < '`')) {
+          // can continue in code A, encodes ASCII 0 to 95
+          return CODE_CODE_A;
+        }
+      }
       return CODE_CODE_B; // no choice
     }
     if (oldCode == CODE_CODE_C) { // can continue in code C
