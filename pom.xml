@@ -74,8 +74,8 @@
     <module>core</module>
     <module>javase</module>
     <!-- android modules are activated by a profile below -->
-    <module>zxing.appspot.com</module>
     <module>zxingorg</module>
+    <!-- appspot app activated by a profile below -->
   </modules>
 
   <properties>
@@ -709,6 +709,7 @@
         <property>
           <name>env.ANDROID_HOME</name>
         </property>
+        <jdk>[,9)</jdk> <!-- Android won't necessarily work with JDK 9 -->
       </activation>
       <modules>
         <module>android-core</module>
@@ -808,6 +809,15 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>appspot</id>
+      <activation>
+        <jdk>[,9)</jdk> <!-- Appspot won't work with JDK 9 -->
+      </activation>
+      <modules>
+         <module>zxing.appspot.com</module>
+      </modules>
     </profile>
   </profiles>
 

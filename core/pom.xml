@@ -42,7 +42,7 @@
     <profile>
       <id>proguard-library</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <jdk>[,9)</jdk> <!-- Proguard won't work with JDK 9 -->
       </activation>
       <build>
         <plugins>
