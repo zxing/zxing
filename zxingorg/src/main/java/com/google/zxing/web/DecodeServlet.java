@@ -447,6 +447,7 @@ public final class DecodeServlet extends HttpServlet {
     if (dispatcher == null) {
       log.warning("Can't obtain RequestDispatcher");
     } else {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       dispatcher.forward(request, response);
     }
   }
