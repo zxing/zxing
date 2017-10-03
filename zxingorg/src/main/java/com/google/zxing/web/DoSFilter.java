@@ -26,14 +26,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
 
 /**
  * A simplistic {@link Filter} that rejects requests from hosts that are sending too many
@@ -44,51 +39,13 @@ import java.util.logging.Logger;
 @WebFilter({"/w/decode", "/w/chart"})
 public final class DoSFilter implements Filter {
 
-  private static final Logger log = Logger.getLogger(DoSFilter.class.getName());
-
-  private static final int MAX_ACCESSES_PER_IP_PER_TIME = 50;
-  private static final long MAX_ACCESSES_TIME_MS = TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES);
-  private static final int MAX_RECENT_ACCESS_MAP_SIZE = 10_000;
-
-  private final Map<String,AtomicLong> numRecentAccesses;
   private Timer timer;
-
-  public DoSFilter() {
-    numRecentAccesses = new LinkedHashMap<String,AtomicLong>() {
-      @Override
-      protected boolean removeEldestEntry(Map.Entry<String,AtomicLong> eldest) {
-        return size() > MAX_RECENT_ACCESS_MAP_SIZE;
-      }
-    };
-  }
+  private DoSTracker sourceAddrTracker;
 
   @Override
   public void init(FilterConfig filterConfig) {
     timer = new Timer("DoSFilter");
-    timer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            synchronized (numRecentAccesses) {
-              // Periodically reduce allowed accesses per IP
-              Iterator<Map.Entry<String,AtomicLong>> accessIt = numRecentAccesses.entrySet().iterator();
-              while (accessIt.hasNext()) {
-                Map.Entry<String,AtomicLong> entry = accessIt.next();
-                AtomicLong count = entry.getValue();
-                // If number of accesses is below the threshold, remove it entirely
-                if (count.get() <= MAX_ACCESSES_PER_IP_PER_TIME) {
-                  accessIt.remove();
-                } else {
-                  // Else it exceeded the max, so log it (again)
-                  log.warning("Possible DoS attack from " + entry.getKey() + " (" + count + " outstanding)");
-                  // Reduce count of accesses held against the IP
-                  count.getAndAdd(-MAX_ACCESSES_PER_IP_PER_TIME);
-                }
-              }
-              log.info("Tracking accesses from " + numRecentAccesses.size() + " IPs");
-            }
-          }
-        }, MAX_ACCESSES_TIME_MS, MAX_ACCESSES_TIME_MS);
+    sourceAddrTracker = new DoSTracker(timer, 500, TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES), 10_000);
     timer.scheduleAtFixedRate(
         new TimerTask() {
           @Override
@@ -115,18 +72,7 @@ public final class DoSFilter implements Filter {
     if (remoteIPAddress == null) {
       remoteIPAddress = request.getRemoteAddr();
     }
-    if (remoteIPAddress == null) {
-      return true;
-    }
-    AtomicLong count;
-    synchronized (numRecentAccesses) {
-      count = numRecentAccesses.get(remoteIPAddress);
-      if (count == null) {
-        count = new AtomicLong();
-        numRecentAccesses.put(remoteIPAddress, count);
-      }
-    }
-    return count.incrementAndGet() > MAX_ACCESSES_PER_IP_PER_TIME;
+    return sourceAddrTracker.isBanned(remoteIPAddress);
   }
 
   @Override

@@ -59,6 +59,8 @@ import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -107,6 +109,8 @@ public final class DecodeServlet extends HttpServlet {
   }
 
   private Iterable<String> blockedURLSubstrings;
+  private Timer timer;
+  private DoSTracker destHostTracker;
 
   @Override
   public void init(ServletConfig servletConfig) throws ServletException {
@@ -124,6 +128,16 @@ public final class DecodeServlet extends HttpServlet {
         throw new ServletException(ioe);
       }
       log.info("Blocking URIs containing: " + blockedURLSubstrings);
+    }
+
+    timer = new Timer("DecodeServlet");
+    destHostTracker = new DoSTracker(timer, 500, TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES), 10_000);
+  }
+
+  @Override
+  public void destroy() {
+    if (timer != null) {
+      timer.cancel();
     }
   }
 
@@ -195,6 +209,10 @@ public final class DecodeServlet extends HttpServlet {
       log.info("URI was not valid: " + imageURIString);
       errorResponse(request, response, "badurl");
       return;
+    }
+
+    if (destHostTracker.isBanned(imageURL.getHost())) {
+      errorResponse(request, response, "badurl");
     }
 
     HttpURLConnection connection;
