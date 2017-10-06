@@ -168,8 +168,8 @@ public final class DecodeServlet extends HttpServlet {
       if (imageURI.getScheme() == null) {
         imageURI = new URI("http://" + imageURIString);
       }
-    } catch (URISyntaxException urise) {
-      log.info("URI " + imageURIString + " was not valid: " + urise);
+    } catch (URISyntaxException e) {
+      log.info("Error " + e + " while parsing URI: " + imageURIString);
       errorResponse(request, response, "badurl");
       return;
     }
@@ -180,10 +180,11 @@ public final class DecodeServlet extends HttpServlet {
       try {
         image = ImageReader.readDataURIImage(imageURI);
       } catch (IOException | IllegalStateException e) {
-        log.info(e.toString());
+        log.info("Error " + e + " while reading data URI: " + imageURIString);
         errorResponse(request, response, "badurl");
       }
       if (image == null) {
+        log.info("Couldn't read data URI: " + imageURIString);
         errorResponse(request, response, "badimage");
         return;
       }
@@ -199,19 +200,20 @@ public final class DecodeServlet extends HttpServlet {
     try {
       imageURL = imageURI.toURL();
     } catch (MalformedURLException ignored) {
-      log.info("URI was not valid: " + imageURIString);
+      log.info("URI is not a URL: " + imageURIString);
       errorResponse(request, response, "badurl");
       return;
     }
 
     String protocol = imageURL.getProtocol();
     if (!"http".equalsIgnoreCase(protocol) && !"https".equalsIgnoreCase(protocol)) {
-      log.info("URI was not valid: " + imageURIString);
+      log.info("URL protocol was not valid: " + imageURIString);
       errorResponse(request, response, "badurl");
       return;
     }
 
     if (destHostTracker.isBanned(imageURL.getHost())) {
+      log.info("Temporarily not requesting from host: " + imageURIString);
       errorResponse(request, response, "badurl");
     }
 
@@ -219,12 +221,13 @@ public final class DecodeServlet extends HttpServlet {
     try {
       connection = (HttpURLConnection) imageURL.openConnection();
     } catch (IllegalArgumentException ignored) {
-      log.info("URI could not be opened: " + imageURL);
+      log.info("URL could not be opened: " + imageURIString);
       errorResponse(request, response, "badurl");
       return;
     }
 
     connection.setAllowUserInteraction(false);
+    connection.setInstanceFollowRedirects(true);
     connection.setReadTimeout(5000);
     connection.setConnectTimeout(5000);
     connection.setRequestProperty(HttpHeaders.USER_AGENT, "zxing.org");
@@ -238,7 +241,7 @@ public final class DecodeServlet extends HttpServlet {
       //  javax.net.ssl.SSLPeerUnverifiedException,
       //  org.apache.http.NoHttpResponseException,
       //  org.apache.http.client.ClientProtocolException,
-      log.info(e.toString());
+      log.info("Error " + e + " connecting to " + imageURIString);
       errorResponse(request, response, "badurl");
       return;
     }
@@ -246,30 +249,30 @@ public final class DecodeServlet extends HttpServlet {
     try (InputStream is = connection.getInputStream()) {
       try {
         if (connection.getResponseCode() != HttpServletResponse.SC_OK) {
-          log.info("Unsuccessful return code: " + connection.getResponseCode());
+          log.info("Unsuccessful return code " + connection.getResponseCode() + " from " + imageURIString);
           errorResponse(request, response, "badurl");
           return;
         }
         if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
-          log.info("Too large");
+          log.info("Too large: " + imageURIString);
           errorResponse(request, response, "badimage");
           return;
         }
         // Assume we'll only handle image/* content types
         String contentType = connection.getContentType();
         if (contentType != null && !contentType.startsWith("image/")) {
-          log.info("Wrong content type: " + contentType);
+          log.info("Wrong content type " + contentType + ": " + imageURIString);
           errorResponse(request, response, "badimage");
           return;
         }
 
-        log.info("Decoding " + imageURL);
+        log.info("Decoding " + imageURIString);
         processStream(is, request, response);
       } finally {
         consumeRemainder(is);
       }
     } catch (IOException ioe) {
-      log.info(ioe.toString());
+      log.info("Error " + ioe + " processing " + imageURIString);
       errorResponse(request, response, "badurl");
     } finally {
       connection.disconnect();
