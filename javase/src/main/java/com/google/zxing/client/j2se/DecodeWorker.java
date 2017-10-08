@@ -160,15 +160,16 @@ final class DecodeWorker implements Callable<Integer> {
             result.getText() + "\n" +
             "Parsed result:\n" +
             parsedResult.getDisplayResult() + "\n");
-        output.write("Found " + result.getResultPoints().length + " result points.\n");
-        for (int pointIndex = 0; pointIndex < result.getResultPoints().length; pointIndex++) {
-          ResultPoint rp = result.getResultPoints()[pointIndex];
-          if (rp == null) {
-            continue;
-          }
-          output.write("  Point " + pointIndex + ": (" + rp.getX() + ',' + rp.getY() + ')');
-          if (pointIndex != result.getResultPoints().length - 1) {
-            output.write('\n');
+        ResultPoint[] resultPoints = result.getResultPoints();
+        int numResultPoints = resultPoints.length;
+        output.write("Found " + numResultPoints + " result points.\n");
+        for (int pointIndex = 0; pointIndex < numResultPoints; pointIndex++) {
+          ResultPoint rp = resultPoints[pointIndex];
+          if (rp != null) {
+            output.write("  Point " + pointIndex + ": (" + rp.getX() + ',' + rp.getY() + ')');
+            if (pointIndex != numResultPoints - 1) {
+              output.write('\n');
+            }
           }
         }
         output.write('\n');
