@@ -303,7 +303,7 @@ public final class DecodeServlet extends HttpServlet {
       return;
     } catch (IOException ioe) {
       log.info(ioe.toString());
-      errorResponse(request, response, "badurl");
+      errorResponse(request, response, "badimage");
       return;
     }
     Part fileUploadPart = null;
