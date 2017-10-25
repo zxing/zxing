@@ -364,6 +364,10 @@
   - TIFF support in online decoder
   - Many small bug fixes, typo fixes and project build improvements
 
-3.4.0 (?)
+3.3.1 (26 Oct 2017)
 
+  - Various fixes to Code 128, 39 encoding; DataMatrix decoding
+  - Improvements to speed and robustness of zxing.org decoder
+  - Java 9 support
+  - Various translation updates for Barcode Scanner
   - Removed Google Glass, ZXing Test apps
