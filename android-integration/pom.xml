@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>android-integration</artifactId>
-  <version>3.3.1-SNAPSHOT</version>
+  <version>3.3.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -31,7 +31,7 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.3.1-SNAPSHOT</version>
+    <version>3.3.2-SNAPSHOT</version>
   </parent>
 
   <name>ZXing Android Integration lib</name>
