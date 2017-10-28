@@ -12,7 +12,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Barcode Scanner+</string>
+  <string name="app_name">Barcode Scanner</string>
   <string name="app_picker_name">Applikasjoner</string>
   <string name="bookmark_picker_name">Bokmerker</string>
   <string name="button_add_calendar">Legg til i kalender</string>
