@@ -230,7 +230,6 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
   public FinderPatternInfo[] findMulti(Map<DecodeHintType,?> hints) throws NotFoundException {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    boolean pureBarcode = hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE);
     BitMatrix image = getImage();
     int maxI = image.getHeight();
     int maxJ = image.getWidth();
@@ -265,7 +264,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
         } else { // White pixel
           if ((currentState & 1) == 0) { // Counting black pixels
             if (currentState == 4) { // A winner?
-              if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j, pureBarcode)) { // Yes
+              if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j)) { // Yes
                 // Clear state to start looking again
                 currentState = 0;
                 stateCount[0] = 0;
@@ -291,7 +290,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
       } // for j=...
 
       if (foundPatternCross(stateCount)) {
-        handlePossibleCenter(stateCount, i, maxJ, pureBarcode);
+        handlePossibleCenter(stateCount, i, maxJ);
       } // end if foundPatternCross
     } // for i=iSkip-1 ...
     FinderPattern[][] patternInfo = selectMutipleBestPatterns();
