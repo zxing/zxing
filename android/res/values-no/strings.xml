@@ -118,7 +118,6 @@
   <string name="preferences_remember_duplicates_title">Husk duplikater</string>
   <string name="preferences_orientation_title">Ingen automatisk rotasjon.</string>
   <string name="preferences_result_title">Resultatinnstillinger</string>
-  <string name="preferences_scan_title">Skanningsinnstillinger</string>
   <string name="preferences_scanning_title">Mens strekkoder skannes, les\u2026</string>
   <string name="preferences_search_country">Søk etter land</string>
   <string name="preferences_supplemental_summary">Prøv å hente mer informasjon om strekkodens innhold</string>
