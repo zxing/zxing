@@ -375,6 +375,15 @@ public class FinderPatternFinder {
   }
 
   /**
+   * @deprecated only exists for backwards compatibility
+   * @see #handlePossibleCenter(int[], int, int)
+   */
+  @Deprecated
+  protected final boolean handlePossibleCenter(int[] stateCount, int i, int j, boolean pureBarcode) {
+    return handlePossibleCenter(stateCount, i, j);
+  }
+
+  /**
    * <p>This is called when a horizontal scan finds a possible alignment pattern. It will
    * cross check with a vertical scan, and if successful, will, ah, cross-cross-check
    * with another horizontal scan. This is needed primarily to locate the real horizontal
