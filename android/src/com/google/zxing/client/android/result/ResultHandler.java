@@ -201,7 +201,7 @@ public abstract class ResultHandler {
     // Only use the first name in the array, if present.
     Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, ContactsContract.Contacts.CONTENT_URI);
     intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-    putExtra(intent, ContactsContract.Intents.Insert.NAME, names != null ? names[0] : null);
+    putExtra(intent, ContactsContract.Intents.Insert.NAME, names != null && names.length > 0 ? names[0] : null);
 
     putExtra(intent, ContactsContract.Intents.Insert.PHONETIC_NAME, pronunciation);
 
@@ -270,7 +270,7 @@ public abstract class ResultHandler {
     if (note != null) {
       aggregatedNotes.append('\n').append(note);
     }
-    if (geo != null) {
+    if (geo != null && geo.length >= 2) {
       aggregatedNotes.append('\n').append(geo[0]).append(',').append(geo[1]);
     }
 

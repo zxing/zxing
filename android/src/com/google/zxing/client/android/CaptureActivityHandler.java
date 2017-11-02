@@ -122,13 +122,15 @@ public final class CaptureActivityHandler extends Handler {
         }
 
         // Needed for default Android browser / Chrome only apparently
-        switch (browserPackageName) {
-          case "com.android.browser":
-          case "com.android.chrome":
-            intent.setPackage(browserPackageName);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
-            break;
+        if (browserPackageName != null) {
+          switch (browserPackageName) {
+            case "com.android.browser":
+            case "com.android.chrome":
+              intent.setPackage(browserPackageName);
+              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
+              break;
+          }
         }
 
         try {
