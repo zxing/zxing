@@ -722,7 +722,8 @@
             <artifactId>android</artifactId>
             <version>${android.platform}</version>
             <scope>system</scope>
-            <systemPath>${env.ANDROID_HOME}/platforms/android-${android.platform}/android.jar</systemPath>
+            <!-- ANDROID_HOME must be absolute, but redundant leading / may help Gradle Spring Boot plugin -->
+            <systemPath>/${env.ANDROID_HOME}/platforms/android-${android.platform}/android.jar</systemPath>
           </dependency>
         </dependencies>
       </dependencyManagement>
