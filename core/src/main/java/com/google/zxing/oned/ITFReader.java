@@ -45,9 +45,10 @@ import java.util.Map;
 public final class ITFReader extends OneDReader {
 
   private static final float MAX_AVG_VARIANCE = 0.38f;
-  private static final float MAX_INDIVIDUAL_VARIANCE = 0.78f;
+  private static final float MAX_INDIVIDUAL_VARIANCE = 0.5f;
 
-  private static final int W = 3; // Pixel width of a wide line
+  private static final int W = 3; // Pixel width of a 3x wide line
+  private static final int w = 2; // Pixel width of a 2x wide line
   private static final int N = 1; // Pixed width of a narrow line
 
   /** Valid ITF lengths. Anything longer than the largest value is also allowed. */
@@ -63,12 +64,27 @@ public final class ITFReader extends OneDReader {
    * searching for the END_PATTERN
    */
   private static final int[] START_PATTERN = {N, N, N, N};
-  private static final int[] END_PATTERN_REVERSED = {N, N, W};
+  private static final int[][] END_PATTERN_REVERSED = {
+      {N, N, w}, // 2x
+      {N, N, W}  // 3x
+  };
+
+  // See ITFWriter.PATTERNS
 
   /**
    * Patterns of Wide / Narrow lines to indicate each digit
    */
-  static final int[][] PATTERNS = {
+  private static final int[][] PATTERNS = {
+      {N, N, w, w, N}, // 0
+      {w, N, N, N, w}, // 1
+      {N, w, N, N, w}, // 2
+      {w, w, N, N, N}, // 3
+      {N, N, w, N, w}, // 4
+      {w, N, w, N, N}, // 5
+      {N, w, w, N, N}, // 6
+      {N, N, N, w, w}, // 7
+      {w, N, N, w, N}, // 8
+      {N, w, N, w, N}, // 9
       {N, N, W, W, N}, // 0
       {W, N, N, N, W}, // 1
       {N, W, N, N, W}, // 2
@@ -259,7 +275,12 @@ public final class ITFReader extends OneDReader {
     row.reverse();
     try {
       int endStart = skipWhiteSpace(row);
-      int[] endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED);
+      int[] endPattern;
+      try {
+        endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[0]);
+      } catch (NotFoundException nfe) {
+        endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[1]);
+      }
 
       // The start & end patterns must be pre/post fixed by a quiet zone. This
       // zone must be at least 10 times the width of a narrow line.
@@ -340,10 +361,13 @@ public final class ITFReader extends OneDReader {
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = i;
+      } else if (variance == bestVariance) {
+        // if we find a second 'best match' with the same variance, we can not reliably report to have a suitable match
+        bestMatch = -1;
       }
     }
     if (bestMatch >= 0) {
-      return bestMatch;
+      return bestMatch % 10;
     } else {
       throw NotFoundException.getNotFoundInstance();
     }
