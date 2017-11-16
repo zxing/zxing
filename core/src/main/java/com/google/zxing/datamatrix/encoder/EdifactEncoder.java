@@ -66,7 +66,7 @@ final class EdifactEncoder implements Encoder {
         context.updateSymbolInfo();
         int available = context.getSymbolInfo().getDataCapacity() - context.getCodewordCount();
         int remaining = context.getRemainingCharacters();
-        if (remaining == 0 && available <= 2) {
+        if (remaining <= available && available <= 2) {
           return; //No unlatch
         }
       }
