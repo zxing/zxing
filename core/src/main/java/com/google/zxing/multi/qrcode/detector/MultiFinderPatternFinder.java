@@ -240,7 +240,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
     // image, and then account for the center being 3 modules in size. This gives the smallest
     // number of pixels the center could be, so skip this often. When trying harder, look for all
     // QR versions regardless of how dense they are.
-    int iSkip = (int) (maxI / (MAX_MODULES * 4.0f) * 3);
+    int iSkip = (3 * maxI) / (4 * MAX_MODULES);
     if (iSkip < MIN_SKIP || tryHarder) {
       iSkip = MIN_SKIP;
     }
