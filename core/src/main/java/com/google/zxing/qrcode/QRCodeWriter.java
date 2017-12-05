@@ -21,9 +21,11 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
+import com.google.zxing.qrcode.encoder.MQRCode;
+import com.google.zxing.qrcode.encoder.MQREncoder;
 import com.google.zxing.qrcode.encoder.QRCode;
 
 import java.util.Map;
@@ -36,6 +38,7 @@ import java.util.Map;
 public final class QRCodeWriter implements Writer {
 
   private static final int QUIET_ZONE_SIZE = 4;
+  private static final int MICRO_QUIET_ZONE_SIZE = 2;
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
@@ -55,7 +58,7 @@ public final class QRCodeWriter implements Writer {
       throw new IllegalArgumentException("Found empty contents");
     }
 
-    if (format != BarcodeFormat.QR_CODE) {
+    if (format != BarcodeFormat.QR_CODE && format != BarcodeFormat.MICRO_QR_CODE) {
       throw new IllegalArgumentException("Can only encode QR_CODE, but got " + format);
     }
 
@@ -65,24 +68,38 @@ public final class QRCodeWriter implements Writer {
     }
 
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
-    int quietZone = QUIET_ZONE_SIZE;
-    if (hints != null) {
-      if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
-        errorCorrectionLevel = ErrorCorrectionLevel.valueOf(hints.get(EncodeHintType.ERROR_CORRECTION).toString());
+    if (format == BarcodeFormat.QR_CODE) {
+      int quietZone = QUIET_ZONE_SIZE;
+      if (hints != null) {
+        if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+          errorCorrectionLevel = ErrorCorrectionLevel.valueOf(hints.get(EncodeHintType.ERROR_CORRECTION).toString());
+        }
+        if (hints.containsKey(EncodeHintType.MARGIN)) {
+          quietZone = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
+        }
       }
-      if (hints.containsKey(EncodeHintType.MARGIN)) {
-        quietZone = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
-      }
-    }
 
-    QRCode code = Encoder.encode(contents, errorCorrectionLevel, hints);
-    return renderResult(code, width, height, quietZone);
+      QRCode code = Encoder.encode(contents, errorCorrectionLevel, hints);
+      return renderResult(code.getMatrix(), width, height, quietZone);
+    } else {
+      int quietZone = MICRO_QUIET_ZONE_SIZE;
+      if (hints != null) {
+        if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+          errorCorrectionLevel = ErrorCorrectionLevel.valueOf(hints.get(EncodeHintType.ERROR_CORRECTION).toString());
+        }
+        if (hints.containsKey(EncodeHintType.MARGIN)) {
+          quietZone = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
+        }
+      }
+
+      MQRCode code = MQREncoder.encode(contents, errorCorrectionLevel, hints);
+      return renderResult(code.getMatrix(), width, height, quietZone);
+    }
   }
 
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-  private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone) {
-    ByteMatrix input = code.getMatrix();
+  private static BitMatrix renderResult(ByteMatrix input, int width, int height, int quietZone) {
     if (input == null) {
       throw new IllegalStateException();
     }

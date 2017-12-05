@@ -70,6 +70,7 @@ public final class MultiFormatWriter implements Writer {
         writer = new UPCAWriter();
         break;
       case QR_CODE:
+      case MICRO_QR_CODE:
         writer = new QRCodeWriter();
         break;
       case CODE_39:

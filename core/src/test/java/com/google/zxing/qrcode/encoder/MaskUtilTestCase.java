@@ -257,4 +257,58 @@ public final class MaskUtilTestCase extends Assert {
     };
     assertTrue(TestGetDataMaskBitInternal(7, mask7));
   }
+
+
+  private static boolean TestGetDataMaskBitMicroQRInternal(int maskPattern, int[][] expected) {
+    for (int x = 0; x < 6; ++x) {
+      for (int y = 0; y < 6; ++y) {
+        if ((expected[y][x] == 1) != MaskUtil.getDataMaskBitMicro(maskPattern, x, y)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  // See mask patterns on the page 114 of JISX0510:2004.
+  @Test
+  public void testGetDataMaskBitMicroQR() {
+    int[][] mask0 = {
+            {1, 1, 1, 1, 1, 1},
+            {0, 0, 0, 0, 0, 0},
+            {1, 1, 1, 1, 1, 1},
+            {0, 0, 0, 0, 0, 0},
+            {1, 1, 1, 1, 1, 1},
+            {0, 0, 0, 0, 0, 0},
+    };
+    assertTrue(TestGetDataMaskBitMicroQRInternal(0, mask0));
+    int[][] mask1 = {
+            {1, 1, 1, 0, 0, 0},
+            {1, 1, 1, 0, 0, 0},
+            {0, 0, 0, 1, 1, 1},
+            {0, 0, 0, 1, 1, 1},
+            {1, 1, 1, 0, 0, 0},
+            {1, 1, 1, 0, 0, 0},
+    };
+    assertTrue(TestGetDataMaskBitMicroQRInternal(1, mask1));
+    int[][] mask2 = {
+            {1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 0, 0, 0},
+            {1, 1, 0, 1, 1, 0},
+            {1, 0, 1, 0, 1, 0},
+            {1, 0, 1, 1, 0, 1},
+            {1, 0, 0, 0, 1, 1},
+    };
+    assertTrue(TestGetDataMaskBitMicroQRInternal(2, mask2));
+    int[][] mask3 = {
+            {1, 0, 1, 0, 1, 0},
+            {0, 0, 0, 1, 1, 1},
+            {1, 0, 0, 0, 1, 1},
+            {0, 1, 0, 1, 0, 1},
+            {1, 1, 1, 0, 0, 0},
+            {0, 1, 1, 1, 0, 0},
+    };
+    assertTrue(TestGetDataMaskBitMicroQRInternal(3, mask3));
+  }
+
 }

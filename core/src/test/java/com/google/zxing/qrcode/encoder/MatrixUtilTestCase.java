@@ -308,4 +308,49 @@ public final class MatrixUtilTestCase extends Assert {
     MatrixUtil.makeTypeInfoBits(ErrorCorrectionLevel.M, 5, bits);
     assertEquals(" X......X X..XXX.", bits.toString());
   }
+
+  /// Micro QR
+
+  @Test
+  public void testMicroQREmbedBasicPatterns1() throws WriterException {
+    // Version 1.
+    ByteMatrix matrix = new ByteMatrix(11, 11);
+    MatrixUtil.clearMatrix(matrix);
+    MatrixUtil.embedBasicPatternsMicro(matrix);
+    String expected =
+            " 1 1 1 1 1 1 1 0 1 0 1\n" +
+            " 1 0 0 0 0 0 1 0      \n" +
+            " 1 0 1 1 1 0 1 0      \n" +
+            " 1 0 1 1 1 0 1 0      \n" +
+            " 1 0 1 1 1 0 1 0      \n" +
+            " 1 0 0 0 0 0 1 0      \n" +
+            " 1 1 1 1 1 1 1 0      \n" +
+            " 0 0 0 0 0 0 0 0      \n" +
+            " 1                    \n" +
+            " 0                    \n" +
+            " 1                    \n";
+    assertEquals(expected, matrix.toString());
+  }
+
+  @Test
+  public void testMicroQREmbedTypeInfo() throws WriterException {
+    // Type info bits = 100101100011100.
+    ByteMatrix matrix = new ByteMatrix(11, 11);
+    MatrixUtil.clearMatrix(matrix);
+    MatrixUtil.embedTypeInfoMicro(0, 3, matrix);
+    String expected =
+            "                      \n" +
+            "                 0    \n" +
+            "                 0    \n" +
+            "                 1    \n" +
+            "                 1    \n" +
+            "                 1    \n" +
+            "                 0    \n" +
+            "                 0    \n" +
+            "   1 0 0 1 0 1 1 0    \n" +
+            "                      \n" +
+            "                      \n";
+    assertEquals(expected, matrix.toString());
+  }
+
 }

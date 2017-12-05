@@ -59,6 +59,9 @@ public enum BarcodeFormat {
   /** QR Code 2D barcode format. */
   QR_CODE,
 
+  /** Micro QR Code 2D barcode format. */
+  MICRO_QR_CODE,
+  
   /** RSS 14 */
   RSS_14,
 

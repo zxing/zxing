@@ -204,7 +204,7 @@ public final class Encoder {
    * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
-  private static Mode chooseMode(String content, String encoding) {
+  static Mode chooseMode(String content, String encoding) {
     if ("Shift_JIS".equals(encoding) && isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
       return Mode.KANJI;
@@ -397,6 +397,8 @@ public final class Encoder {
       throw new WriterException("Number of bits and data bytes does not match");
     }
 
+    boolean isHalfByteAtTail = (bits.getSize() % 8) == 4;
+
     // Step 1.  Divide data bytes into blocks and generate error correction bytes for them. We'll
     // store the divided data bytes blocks and error correction bytes blocks into "blocks".
     int dataBytesOffset = 0;
@@ -434,7 +436,12 @@ public final class Encoder {
       for (BlockPair block : blocks) {
         byte[] dataBytes = block.getDataBytes();
         if (i < dataBytes.length) {
-          result.appendBits(dataBytes[i], 8);
+          if (i == (dataBytes.length - 1) && isHalfByteAtTail) {
+            // The last byte for MicroQR M1 & M3 consists of 4 bits data, not 8 bits.
+            result.appendBits(dataBytes[i] >> 4, 4);
+          } else {
+            result.appendBits(dataBytes[i], 8);
+          }
         }
       }
     }
