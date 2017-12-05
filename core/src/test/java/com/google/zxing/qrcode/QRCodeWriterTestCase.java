@@ -104,6 +104,7 @@ public final class QRCodeWriterTestCase extends Assert {
   }
 
   private static void compareToGoldenFile(String contents,
+                                          BarcodeFormat format,
                                           ErrorCorrectionLevel ecLevel,
                                           int resolution,
                                           String fileName) throws WriterException, IOException {
@@ -116,7 +117,7 @@ public final class QRCodeWriterTestCase extends Assert {
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.ERROR_CORRECTION, ecLevel);
     Writer writer = new QRCodeWriter();
-    BitMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
+    BitMatrix generatedResult = writer.encode(contents, format, resolution,
         resolution, hints);
 
     assertEquals(resolution, generatedResult.getWidth());
@@ -129,8 +130,10 @@ public final class QRCodeWriterTestCase extends Assert {
   // and the pixel dimensions matches exactly. 
   @Test
   public void testRegressionTest() throws Exception {
-    compareToGoldenFile("http://www.google.com/", ErrorCorrectionLevel.M, 99,
+    compareToGoldenFile("http://www.google.com/", BarcodeFormat.QR_CODE, ErrorCorrectionLevel.M, 99,
         "renderer-test-01.png");
+    compareToGoldenFile("21245", BarcodeFormat.MICRO_QR_CODE, ErrorCorrectionLevel.L, 99,
+            "renderer-test-mqr-01.png");
   }
 
 }

@@ -189,6 +189,34 @@ final class MaskUtil {
   }
 
   /**
+   * Return the mask bit for "getMaskPattern" at "x" and "y".
+   * See Annex1 2.5.2 of JISX0510:2004 for mask pattern conditions.
+   */
+  static boolean getDataMaskBitMicro(int maskPattern, int x, int y) {
+    int intermediate;
+    int temp;
+    switch (maskPattern) {
+      case 0:
+        intermediate = y & 0x1;
+        break;
+      case 1:
+        intermediate = ((y / 2) + (x / 3)) & 0x1;
+        break;
+      case 2:
+        temp = y * x;
+        intermediate = ((temp & 0x1) + (temp % 3)) & 0x1;
+        break;
+      case 3:
+        temp = y * x;
+        intermediate = ((temp % 3) + ((y + x) & 0x1)) & 0x1;
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid mask pattern: " + maskPattern);
+    }
+    return intermediate == 0;
+  }
+
+  /**
    * Helper function for applyMaskPenaltyRule1. We need this for doing this calculation in both
    * vertical and horizontal orders respectively.
    */

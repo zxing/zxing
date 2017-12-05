@@ -19,6 +19,7 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.decoder.MQRVersion;
 import com.google.zxing.qrcode.decoder.Version;
 
 /**
@@ -114,6 +115,7 @@ final class MatrixUtil {
   // From Appendix C in JISX0510:2004 (p.65).
   private static final int TYPE_INFO_POLY = 0x537;
   private static final int TYPE_INFO_MASK_PATTERN = 0x5412;
+  private static final int MQR_TYPE_INFO_MASK_PATTERN = 0x4445;
 
   private MatrixUtil() {
     // do nothing
@@ -470,6 +472,142 @@ final class MatrixUtil {
           }
         }
       }
+    }
+  }
+
+  /// Micro QR methods
+
+  // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
+  // success, store the result in "matrix" and return true.
+  static void buildMatrixMicro(BitArray dataBits,
+                               ErrorCorrectionLevel ecLevel,
+                               MQRVersion version,
+                               int maskPattern,
+                               ByteMatrix matrix) throws WriterException {
+    clearMatrix(matrix);
+    embedBasicPatternsMicro(matrix);
+    // Type information appear with any version.
+    embedTypeInfoMicro(version.getECBlocksForLevel(ecLevel).getTypeInfo(), maskPattern, matrix);
+    // Data should be embedded at end.
+    embedDataBitsMicro(dataBits, maskPattern, matrix);
+  }
+
+  static void embedBasicPatternsMicro(ByteMatrix matrix) throws WriterException {
+    // Left top corner.
+    embedPositionDetectionPattern(0, 0, matrix);
+
+    // Embed horizontal separation patterns around the squares.
+    int hspWidth = 8;
+    // Left top corner.
+    embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
+
+    // Embed vertical separation patterns around the squares.
+    int vspSize = 7;
+    // Left top corner.
+    embedVerticalSeparationPattern(vspSize, 0, matrix);
+
+    // Timing patterns should be embedded after position adj. patterns.
+    embedTimingPatternsMicro(matrix);
+  }
+
+  static void embedTypeInfoMicro(int typeInfo, int maskPattern, ByteMatrix matrix) throws WriterException {
+    BitArray typeInfoBits = new BitArray();
+    makeTypeInfoBitsMicro(typeInfo, maskPattern, typeInfoBits);
+
+    for (int i = 0; i < typeInfoBits.getSize(); ++i) {
+      boolean bit = typeInfoBits.get(typeInfoBits.getSize() - i - 1);
+      if (i < 8) {
+        // Vertical.
+        int x = 8;
+        int y = i + 1;
+        matrix.set(x, y, bit);
+      } else {
+        // Horizontal.
+        int x = 7 - (i - 8);
+        int y = 8;
+        matrix.set(x, y, bit);
+      }
+    }
+  }
+
+  // Make bit vector of type information. On success, store the result in "bits" and return true.
+  // Encode error correction level and mask pattern.
+  // See Annex1 2.6 of JISX0510:2004 (p.115) for details.
+  static void makeTypeInfoBitsMicro(int typeInfo, int maskPattern, BitArray bits)
+          throws WriterException {
+    if (!MQRCode.isValidMaskPattern(maskPattern)) {
+      throw new WriterException("Invalid mask pattern");
+    }
+    int typeInfoVal = (typeInfo << 2) | maskPattern;
+    bits.appendBits(typeInfoVal, 5);
+
+    int bchCode = calculateBCHCode(typeInfoVal, TYPE_INFO_POLY);
+    bits.appendBits(bchCode, 10);
+
+    BitArray maskBits = new BitArray();
+    maskBits.appendBits(MQR_TYPE_INFO_MASK_PATTERN, 15);
+    bits.xor(maskBits);
+
+    if (bits.getSize() != 15) {  // Just in case.
+      throw new WriterException("should not happen but we got: " + bits.getSize());
+    }
+  }
+
+  private static void embedTimingPatternsMicro(ByteMatrix matrix) {
+    for (int i = 8; i < matrix.getWidth(); ++i) {
+      int bit = (i + 1) % 2;
+      // Horizontal line.
+      if (isEmpty(matrix.get(i, 0))) {
+        matrix.set(i, 0, bit);
+      }
+      // Vertical line.
+      if (isEmpty(matrix.get(0, i))) {
+        matrix.set(0, i, bit);
+      }
+    }
+  }
+
+  // Embed "dataBits" using "getMaskPattern". The difference between "embedDataBits" and
+  // this method is mask pattern and skipping vertical timing pattern.
+  private static void embedDataBitsMicro(BitArray dataBits, int maskPattern, ByteMatrix matrix) throws WriterException {
+    int bitIndex = 0;
+    int direction = -1;
+    // Start from the right bottom cell.
+    int x = matrix.getWidth() - 1;
+    int y = matrix.getHeight() - 1;
+    while (x > 0) {
+      while (y >= 0 && y < matrix.getHeight()) {
+        for (int i = 0; i < 2; ++i) {
+          int xx = x - i;
+          // Skip the cell if it's not empty.
+          if (!isEmpty(matrix.get(xx, y))) {
+            continue;
+          }
+          boolean bit;
+          if (bitIndex < dataBits.getSize()) {
+            bit = dataBits.get(bitIndex);
+            ++bitIndex;
+          } else {
+            // Padding bit. If there is no bit left, we'll fill the left cells with 0, as described
+            // in 8.4.9 of JISX0510:2004 (p. 24).
+            bit = false;
+          }
+
+          // Skip masking if mask_pattern is -1.
+          if (maskPattern != -1 && MaskUtil.getDataMaskBitMicro(maskPattern, xx, y)) {
+            bit = !bit;
+          }
+          matrix.set(xx, y, bit);
+        }
+        y += direction;
+      }
+      direction = -direction;  // Reverse the direction.
+      y += direction;
+      x -= 2;  // Move to the left.
+    }
+    // All bits should be consumed.
+    if (bitIndex != dataBits.getSize()) {
+      throw new WriterException("Not all bits consumed: " + bitIndex + '/' + dataBits.getSize());
     }
   }
 

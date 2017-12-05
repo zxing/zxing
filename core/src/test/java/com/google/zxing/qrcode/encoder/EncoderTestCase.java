@@ -602,4 +602,31 @@ public final class EncoderTestCase extends Assert {
     }
   }
 
+  /// Micro QR
+
+  @Test
+  public void testMQREncode() throws WriterException {
+    MQRCode qrCode = MQREncoder.encode("123", ErrorCorrectionLevel.L, null);
+    String expected =
+            "<<\n" +
+            " mode: NUMERIC\n" +
+            " ecLevel: L\n" +
+            " version: 1\n" +
+            " maskPattern: 1\n" +
+            " matrix:\n" +
+            " 1 1 1 1 1 1 1 0 1 0 1\n" +
+            " 1 0 0 0 0 0 1 0 0 0 0\n" +
+            " 1 0 1 1 1 0 1 0 1 1 1\n" +
+            " 1 0 1 1 1 0 1 0 0 1 1\n" +
+            " 1 0 1 1 1 0 1 0 0 0 1\n" +
+            " 1 0 0 0 0 0 1 0 1 1 0\n" +
+            " 1 1 1 1 1 1 1 0 1 0 0\n" +
+            " 0 0 0 0 0 0 0 0 1 0 0\n" +
+            " 1 1 0 0 0 0 0 1 0 0 0\n" +
+            " 0 1 0 0 1 1 1 1 1 0 1\n" +
+            " 1 0 0 1 1 1 1 1 1 0 1\n" +
+            ">>\n";
+    assertEquals(expected, qrCode.toString());
+  }
+
 }
