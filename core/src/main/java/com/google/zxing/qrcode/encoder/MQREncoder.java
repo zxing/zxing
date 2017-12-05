@@ -137,10 +137,14 @@ public final class MQREncoder {
     case NUMERIC:
       break;
     case ALPHANUMERIC:
+      headerBits -= 1;
+      break;
     case BYTE:
       headerBits -= 1;
       break;
     case KANJI:
+      headerBits -= 2;
+      break;
     default:
       headerBits -= 2;
     }
