@@ -76,6 +76,17 @@ public final class Encoder {
                               ErrorCorrectionLevel ecLevel,
                               Map<EncodeHintType,?> hints) throws WriterException {
 
+    // This will store the header information, like mode and
+    // length, as well as "header" segments like an ECI segment.
+    BitArray headerBits = new BitArray();
+
+    // Append the FNC1 mode header for GS1 formatted data if applicable
+    boolean hasGS1FormatHint = hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT);
+    if (hasGS1FormatHint && Boolean.valueOf(hints.get(EncodeHintType.GS1_FORMAT).toString())) {
+      // GS1 formatted codes are prefixed with a FNC1 in first position mode header
+      appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
+    }
+
     // Determine what character encoding has been specified by the caller, if any
     String encoding = DEFAULT_BYTE_MODE_ENCODING;
     boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
@@ -86,10 +97,6 @@ public final class Encoder {
     // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
     // multiple modes / segments even if that were more efficient. Twould be nice.
     Mode mode = chooseMode(content, encoding);
-
-    // This will store the header information, like mode and
-    // length, as well as "header" segments like an ECI segment.
-    BitArray headerBits = new BitArray();
 
     // Append ECI segment if applicable
     if (mode == Mode.BYTE && (hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.equals(encoding))) {
