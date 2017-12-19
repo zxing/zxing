@@ -56,6 +56,7 @@ library implemented in Java, with ports to other languages.
 | [ZXing Delphi](https://github.com/Spelt/ZXing.Delphi)          |  Port to native Delphi object pascal, targeted at Firemonkey compatible devices (IOS/Android/Win/OSX) and VCL.
 | [ZXingObjC](https://github.com/TheLevelUp/ZXingObjC)            | Port to Objective-C
 | [php-zxing](https://github.com/dsiddharth2/php-zxing)           | PHP wrapper to Zxing Java library
+| [zxing-ts](https://github.com/odahcam/zxing-ts)                 | TypeScript port of ZXing library
 
 
 ### Other related third-party open source projects
