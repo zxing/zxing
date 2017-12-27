@@ -155,8 +155,8 @@ public final class DataMatrixWriter implements Writer {
   /**
    * Convert the ByteMatrix to BitMatrix.
    *
-   * @param reqHeight The final height of the image (in pixels) with the Datamatrix code
-   * @param reqWidth The final width of the image (in pixels) with the Datamatrix code
+   * @param reqHeight The requested height of the image (in pixels) with the Datamatrix code
+   * @param reqWidth The requested width of the image (in pixels) with the Datamatrix code
    * @param matrix The input matrix.
    * @return The output matrix.
    */
