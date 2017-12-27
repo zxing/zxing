@@ -38,7 +38,6 @@ import java.util.Map;
  */
 public final class DataMatrixWriter implements Writer {
 
-
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
     return encode(contents, format, width, height, null);
@@ -90,8 +89,7 @@ public final class DataMatrixWriter implements Writer {
     String codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo);
 
     //3. step: Module placement in Matrix
-    DefaultPlacement placement =
-            new DefaultPlacement(codewords, symbolInfo.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
+    DefaultPlacement placement = new DefaultPlacement(codewords, symbolInfo.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
     placement.place();
 
     //4. step: low-level encoding
@@ -157,6 +155,8 @@ public final class DataMatrixWriter implements Writer {
   /**
    * Convert the ByteMatrix to BitMatrix.
    *
+   * @param reqHeight The final height of the image (in pixels) with the Datamatrix code
+   * @param reqWidth The final width of the image (in pixels) with the Datamatrix code
    * @param matrix The input matrix.
    * @return The output matrix.
    */
@@ -175,7 +175,8 @@ public final class DataMatrixWriter implements Writer {
 
     // remove padding if requested width and height are too small
     if (reqHeight < matrixHeight || reqWidth < matrixWidth) {
-      leftPadding = topPadding = 0 ;
+      leftPadding = 0;
+      topPadding = 0;
       output = new BitMatrix(matrixWidth, matrixHeight);
     } else {
       output = new BitMatrix(reqWidth, reqHeight);
