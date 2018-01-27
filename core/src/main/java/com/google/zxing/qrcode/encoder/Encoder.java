@@ -92,7 +92,10 @@ public final class Encoder {
     BitArray headerBits = new BitArray();
 
     // Append ECI segment if applicable
-    if (mode == Mode.BYTE && (hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.equals(encoding))) {
+    boolean hasECIHint = hints != null && hints.containsKey(EncodeHintType.QR_ECI_FLG);
+    if (mode == Mode.BYTE
+            && (hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.equals(encoding))
+            && (!hasECIHint || Boolean.valueOf(hints.get(EncodeHintType.QR_ECI_FLG).toString()))) {
       CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
       if (eci != null) {
         appendECI(eci, headerBits);
