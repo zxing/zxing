@@ -741,35 +741,82 @@ public final class EncoderTestCase extends Assert {
     hints.put(EncodeHintType.QR_ECI_FLG, "false");
     // Numeric and Nihon in Kanji
     QRCode qrCode = Encoder.encode("1\u65e5\u672c", ErrorCorrectionLevel.M, hints);
+    verifyByteModeWithOutECIEncodedData(qrCode);
+  }
+
+  @Test
+  public void testEncodeByteModeWithECI() throws WriterException {
+    Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.CHARACTER_SET, "Shift_JIS");
+    hints.put(EncodeHintType.QR_ECI_FLG, "true");
+    // Numeric and Nihon in Kanji
+    QRCode qrCode = Encoder.encode("1\u65e5\u672c", ErrorCorrectionLevel.M, hints);
+    verifyByteModeWithECIEncodedData(qrCode);
+  }
+
+  private void verifyByteModeWithOutECIEncodedData(QRCode qrCode) {
     String expected =
-            "<<\n" +
-                    " mode: BYTE\n" +
-                    " ecLevel: M\n" +
-                    " version: 1\n" +
-                    " maskPattern: 0\n" +
-                    " matrix:\n" +
-                    " 1 1 1 1 1 1 1 0 0 1 1 1 0 0 1 1 1 1 1 1 1\n" +
-                    " 1 0 0 0 0 0 1 0 1 0 0 1 1 0 1 0 0 0 0 0 1\n" +
-                    " 1 0 1 1 1 0 1 0 0 1 1 1 1 0 1 0 1 1 1 0 1\n" +
-                    " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 1 1 1 0 1\n" +
-                    " 1 0 1 1 1 0 1 0 1 1 0 0 1 0 1 0 1 1 1 0 1\n" +
-                    " 1 0 0 0 0 0 1 0 0 1 0 0 1 0 1 0 0 0 0 0 1\n" +
-                    " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
-                    " 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0\n" +
-                    " 1 0 1 0 1 0 1 0 0 1 0 1 0 0 0 0 1 0 0 1 0\n" +
-                    " 1 1 1 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 0\n" +
-                    " 1 0 1 1 0 1 1 1 1 0 0 0 1 0 0 0 1 1 0 0 0\n" +
-                    " 1 1 1 1 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0\n" +
-                    " 0 0 0 1 1 0 1 1 0 1 0 0 1 0 1 0 1 1 0 0 1\n" +
-                    " 0 0 0 0 0 0 0 0 1 1 0 1 0 1 0 1 0 1 1 0 1\n" +
-                    " 1 1 1 1 1 1 1 0 0 1 1 1 0 1 1 1 0 0 0 0 1\n" +
-                    " 1 0 0 0 0 0 1 0 0 0 1 1 1 1 0 1 1 1 1 0 0\n" +
-                    " 1 0 1 1 1 0 1 0 1 0 0 1 0 1 1 1 0 1 1 1 1\n" +
-                    " 1 0 1 1 1 0 1 0 0 1 0 0 0 0 1 1 0 0 0 1 0\n" +
-                    " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 0 0 1 0 0 0 1\n" +
-                    " 1 0 0 0 0 0 1 0 0 1 1 0 0 0 1 0 1 0 0 1 0\n" +
-                    " 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 0 0 1 0 1 1\n" +
-                    ">>\n";
+      "<<\n" +
+          " mode: BYTE\n" +
+          " ecLevel: M\n" +
+          " version: 1\n" +
+          " maskPattern: 0\n" +
+          " matrix:\n" +
+          " 1 1 1 1 1 1 1 0 0 1 1 1 0 0 1 1 1 1 1 1 1\n" +
+          " 1 0 0 0 0 0 1 0 1 0 0 1 1 0 1 0 0 0 0 0 1\n" +
+          " 1 0 1 1 1 0 1 0 0 1 1 1 1 0 1 0 1 1 1 0 1\n" +
+          " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 1 1 1 0 1\n" +
+          " 1 0 1 1 1 0 1 0 1 1 0 0 1 0 1 0 1 1 1 0 1\n" +
+          " 1 0 0 0 0 0 1 0 0 1 0 0 1 0 1 0 0 0 0 0 1\n" +
+          " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+          " 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0\n" +
+          " 1 0 1 0 1 0 1 0 0 1 0 1 0 0 0 0 1 0 0 1 0\n" +
+          " 1 1 1 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 0\n" +
+          " 1 0 1 1 0 1 1 1 1 0 0 0 1 0 0 0 1 1 0 0 0\n" +
+          " 1 1 1 1 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0\n" +
+          " 0 0 0 1 1 0 1 1 0 1 0 0 1 0 1 0 1 1 0 0 1\n" +
+          " 0 0 0 0 0 0 0 0 1 1 0 1 0 1 0 1 0 1 1 0 1\n" +
+          " 1 1 1 1 1 1 1 0 0 1 1 1 0 1 1 1 0 0 0 0 1\n" +
+          " 1 0 0 0 0 0 1 0 0 0 1 1 1 1 0 1 1 1 1 0 0\n" +
+          " 1 0 1 1 1 0 1 0 1 0 0 1 0 1 1 1 0 1 1 1 1\n" +
+          " 1 0 1 1 1 0 1 0 0 1 0 0 0 0 1 1 0 0 0 1 0\n" +
+          " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 0 0 1 0 0 0 1\n" +
+          " 1 0 0 0 0 0 1 0 0 1 1 0 0 0 1 0 1 0 0 1 0\n" +
+          " 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 0 0 1 0 1 1\n" +
+          ">>\n";
+    assertEquals(expected, qrCode.toString());
+  }
+
+  private void verifyByteModeWithECIEncodedData(QRCode qrCode) {
+    String expected =
+      "<<\n" +
+          " mode: BYTE\n" +
+          " ecLevel: M\n" +
+          " version: 1\n" +
+          " maskPattern: 0\n" +
+          " matrix:\n" +
+          " 1 1 1 1 1 1 1 0 0 1 0 1 1 0 1 1 1 1 1 1 1\n" +
+          " 1 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 0 0 0 0 1\n" +
+          " 1 0 1 1 1 0 1 0 0 1 0 0 1 0 1 0 1 1 1 0 1\n" +
+          " 1 0 1 1 1 0 1 0 0 1 1 1 1 0 1 0 1 1 1 0 1\n" +
+          " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1\n" +
+          " 1 0 0 0 0 0 1 0 0 1 1 0 1 0 1 0 0 0 0 0 1\n" +
+          " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+          " 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0\n" +
+          " 1 0 1 0 1 0 1 0 0 0 0 1 0 0 0 0 1 0 0 1 0\n" +
+          " 1 1 0 1 0 0 0 1 0 0 1 0 0 0 1 1 0 1 0 0 0\n" +
+          " 1 1 1 0 1 1 1 1 0 0 1 0 1 0 0 0 1 1 0 1 1\n" +
+          " 0 1 1 0 0 0 0 0 1 1 1 0 0 0 1 1 0 1 0 1 0\n" +
+          " 0 1 1 1 0 0 1 1 0 0 0 0 1 0 1 0 1 1 1 0 1\n" +
+          " 0 0 0 0 0 0 0 0 1 0 0 1 0 1 0 0 1 1 1 1 0\n" +
+          " 1 1 1 1 1 1 1 0 0 1 1 1 0 1 1 0 0 1 1 1 1\n" +
+          " 1 0 0 0 0 0 1 0 0 0 1 1 1 1 0 0 1 1 0 1 0\n" +
+          " 1 0 1 1 1 0 1 0 1 0 0 1 0 1 1 1 1 1 0 1 1\n" +
+          " 1 0 1 1 1 0 1 0 0 1 1 0 0 0 1 1 1 0 1 0 0\n" +
+          " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1\n" +
+          " 1 0 0 0 0 0 1 0 0 0 1 0 0 0 1 0 0 1 1 0 1\n" +
+          " 1 1 1 1 1 1 1 0 1 1 0 0 1 0 1 0 0 0 0 1 1\n" +
+          ">>\n";
     assertEquals(expected, qrCode.toString());
   }
 
