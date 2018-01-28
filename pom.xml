@@ -119,10 +119,6 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
     </plugins>
@@ -823,6 +819,20 @@
       <modules>
          <module>zxing.appspot.com</module>
       </modules>
+    </profile>
+    <profile>
+      <id>checkstyle</id>
+      <activation>
+        <jdk>[1.8,)</jdk> <!-- won't work with JDK 7 -->
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
