@@ -16,8 +16,6 @@
 
 package com.google.zxing.client.android.history;
 
-import android.database.CursorIndexOutOfBoundsException;
-import android.database.SQLException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.Intents;
@@ -28,6 +26,8 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -169,6 +169,8 @@ public final class HistoryManager {
     try (SQLiteDatabase db = helper.getWritableDatabase()) {
       // Insert the new entry into the DB.
       db.insert(DBHelper.TABLE_NAME, DBHelper.TIMESTAMP_COL, values);
+    } catch (SQLException sqle) {
+      Log.w(TAG, sqle);
     }
   }
 
@@ -207,6 +209,8 @@ public final class HistoryManager {
           db.update(DBHelper.TABLE_NAME, values, DBHelper.ID_COL + "=?", new String[] { oldID });
         }
       }
+    } catch (SQLException sqle) {
+      Log.w(TAG, sqle);
     }
   }
 
@@ -253,14 +257,14 @@ public final class HistoryManager {
    * </ol>
    */
   CharSequence buildHistory() {
+    StringBuilder historyText = new StringBuilder(1000);
     SQLiteOpenHelper helper = new DBHelper(activity);
-    try (SQLiteDatabase db = helper.getWritableDatabase();
+    try (SQLiteDatabase db = helper.getReadableDatabase();
          Cursor cursor = db.query(DBHelper.TABLE_NAME,
                                   COLUMNS,
                                   null, null, null, null,
                                   DBHelper.TIMESTAMP_COL + " DESC")) {
       DateFormat format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-      StringBuilder historyText = new StringBuilder(1000);
       while (cursor.moveToNext()) {
 
         historyText.append('"').append(massageHistoryField(cursor.getString(0))).append("\",");
@@ -276,8 +280,10 @@ public final class HistoryManager {
 
         historyText.append('"').append(massageHistoryField(cursor.getString(4))).append("\"\r\n");
       }
-      return historyText;
+    } catch (SQLException sqle) {
+      Log.w(TAG, sqle);
     }
+    return historyText;
   }
   
   void clearHistory() {
