@@ -183,7 +183,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.0.0-M1</version>
+          <version>3.0.0</version>
           <configuration>
             <javadocVersion>${java.version}</javadocVersion>
             <quiet>true</quiet>
@@ -426,7 +426,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.6</version>
+          <version>3.7</version>
           <inherited>false</inherited>
         </plugin>
         <plugin>
@@ -442,7 +442,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>2.17</version>
+          <version>3.0.0</version>
           <configuration>
             <configLocation>src/checkstyle/checkstyle.xml</configLocation>
             <!-- Android generated files -->
@@ -461,7 +461,7 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>6.19</version>
+              <version>8.7</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -521,7 +521,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.7.9</version>
+          <version>0.8.0</version>
           <executions>
             <execution>
               <goals>
