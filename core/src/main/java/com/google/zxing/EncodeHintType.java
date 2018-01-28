@@ -107,4 +107,10 @@ public enum EncodeHintType {
    * {@link String } value).
    */
   GS1_FORMAT,
+
+  /**
+   * Set whether to add ECI segment of QR code. (type {@link Boolean}, or "true" or "false"
+   * {@link String } value).
+   */
+  QR_ECI_FLG,
 }
