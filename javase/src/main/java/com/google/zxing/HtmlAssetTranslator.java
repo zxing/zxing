@@ -84,7 +84,7 @@ public final class HtmlAssetTranslator {
   }
 
   private static Collection<String> parseLanguagesToTranslate(Path assetsDir,
-                                                              CharSequence languageArg) throws IOException {
+                                                              String languageArg) throws IOException {
     if ("all".equals(languageArg)) {
       Collection<String> languages = new ArrayList<>();
       DirectoryStream.Filter<Path> fileFilter = new DirectoryStream.Filter<Path>() {
