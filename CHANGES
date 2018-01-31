@@ -371,3 +371,10 @@
   - Java 9 support
   - Various translation updates for Barcode Scanner
   - Removed Google Glass, ZXing Test apps
+
+3.3.2 (31 Jan 2018)
+
+  - Add workaround for Gradle + Android build issues
+  - Minor DataMatrix bug fixes
+  - Improve WPA2 wi-fi configuration support in Barcode Scanner
+  - Various translation updates and minor improvements
