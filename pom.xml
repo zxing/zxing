@@ -41,26 +41,28 @@
         <version>${slf4j.version}</version>
         <scope>runtime</scope>
       </dependency>
+
       <dependency>
         <groupId>com.google.zxing</groupId>
-        <artifactId>core</artifactId>
+        <artifactId>zxing-core</artifactId>
         <version>${zxing.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.zxing</groupId>
-        <artifactId>android-core</artifactId>
+        <artifactId>zxing-android-core</artifactId>
         <version>${zxing.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.zxing</groupId>
-        <artifactId>android-integration</artifactId>
+        <artifactId>zxing-android-integration</artifactId>
         <version>${zxing.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.zxing</groupId>
-        <artifactId>javase</artifactId>
+        <artifactId>zxing-javase</artifactId>
         <version>${zxing.version}</version>
       </dependency>
+
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>

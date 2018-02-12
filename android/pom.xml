@@ -17,18 +17,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>android</artifactId>
+  <artifactId>zxing-android</artifactId>
   <version>4.7.7</version>
   <packaging>apk</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.google.zxing</groupId>
-      <artifactId>core</artifactId>
+      <artifactId>zxing-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.zxing</groupId>
-      <artifactId>android-core</artifactId>
+      <artifactId>zxing-android-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.android</groupId>
