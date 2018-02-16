@@ -66,26 +66,25 @@
         <groupId>biz.aQute.bnd</groupId>
         <artifactId>bnd-maven-plugin</artifactId>
         <version>3.5.0</version>
-
         <executions>
-        	<execution>
-                <goals>
-                	<goal>bnd-process</goal>
-                </goals>
-                </execution>
+          <execution>
+            <goals>
+              <goal>bnd-process</goal>
+            </goals>
+          </execution>
         </executions>
-        </plugin>
-
-        <plugin>
-        	<groupId>org.apache.maven.plugins</groupId>
-        	<artifactId>maven-jar-plugin</artifactId>
-        	<configuration>
-                <archive>
-                	<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-                </archive>
-        	</configuration>
-        </plugin>
-	</plugins>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>  
   
 </project>
