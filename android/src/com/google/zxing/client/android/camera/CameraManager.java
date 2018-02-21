@@ -21,6 +21,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.os.Build;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
@@ -145,6 +146,12 @@ public final class CameraManager {
   public synchronized void startPreview() {
     OpenCamera theCamera = camera;
     if (theCamera != null && !previewing) {
+      if (Build.MODEL.equals("Nexus 4") && Build.VERSION.SDK_INT >= 14) {
+        //Workaround for low framerate on Nexus 4 https://stackoverflow.com/questions/14131900/extreme-camera-lag-on-nexus-4
+        Camera.Parameters params = theCamera.getCamera().getParameters();
+        params.setRecordingHint(true);
+        theCamera.getCamera().setParameters(params);
+      }
       theCamera.getCamera().startPreview();
       previewing = true;
       autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
