@@ -66,6 +66,11 @@ final class EdifactEncoder implements Encoder {
         context.updateSymbolInfo();
         int available = context.getSymbolInfo().getDataCapacity() - context.getCodewordCount();
         int remaining = context.getRemainingCharacters();
+        // The following two lines are a hack inspired by the 'fix' from https://sourceforge.net/p/barcode4j/svn/221/
+        if (remaining > available) {
+          context.updateSymbolInfo(context.getCodewordCount() + 1);
+          available = context.getSymbolInfo().getDataCapacity() - context.getCodewordCount();
+        }
         if (remaining <= available && available <= 2) {
           return; //No unlatch
         }
