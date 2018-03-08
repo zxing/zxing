@@ -46,7 +46,7 @@ public final class DecodeThread extends Thread {
   private Handler handler;
   private final CountDownLatch handlerInitLatch;
 
-  DecodeThread(CameraManager cameraManager,
+  public DecodeThread(CameraManager cameraManager,
                Handler callback,
                Collection<BarcodeFormat> decodeFormats,
                Map<DecodeHintType, ?> baseHints,

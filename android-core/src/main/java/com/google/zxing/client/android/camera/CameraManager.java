@@ -237,6 +237,15 @@ public final class CameraManager {
     return framingRect;
   }
 
+  public Point getPreviewSize() {
+    final Point previewSize = configManager.getPreviewSizeOnScreen();
+    if (previewSize == null) {
+      // Called early, before init even finished
+      return null;
+    }
+    return new Point(previewSize);
+  }
+
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
     int dim = 5 * resolution / 8; // Target 5/8 of each dimension
     if (dim < hardMin) {

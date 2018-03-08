@@ -21,6 +21,7 @@ import android.net.Uri;
 import com.google.zxing.BarcodeFormat;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -28,31 +29,35 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-final class DecodeFormatManager {
+/**
+ * Stores different formats supported by the core library.
+ */
+public final class DecodeFormatManager {
 
   private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
-  static final Set<BarcodeFormat> PRODUCT_FORMATS;
-  static final Set<BarcodeFormat> INDUSTRIAL_FORMATS;
-  private static final Set<BarcodeFormat> ONE_D_FORMATS;
-  static final Set<BarcodeFormat> QR_CODE_FORMATS = EnumSet.of(BarcodeFormat.QR_CODE);
-  static final Set<BarcodeFormat> DATA_MATRIX_FORMATS = EnumSet.of(BarcodeFormat.DATA_MATRIX);
-  static final Set<BarcodeFormat> AZTEC_FORMATS = EnumSet.of(BarcodeFormat.AZTEC);
-  static final Set<BarcodeFormat> PDF417_FORMATS = EnumSet.of(BarcodeFormat.PDF_417);
+  public static final Set<BarcodeFormat> PRODUCT_FORMATS;
+  public static final Set<BarcodeFormat> INDUSTRIAL_FORMATS;
+  public static final Set<BarcodeFormat> ONE_D_FORMATS;
+  public static final Set<BarcodeFormat> QR_CODE_FORMATS = Collections.unmodifiableSet(EnumSet.of(BarcodeFormat.QR_CODE));
+  public static final Set<BarcodeFormat> DATA_MATRIX_FORMATS = Collections.unmodifiableSet(EnumSet.of(BarcodeFormat.DATA_MATRIX));
+  public static final Set<BarcodeFormat> AZTEC_FORMATS = Collections.unmodifiableSet(EnumSet.of(BarcodeFormat.AZTEC));
+  public static final Set<BarcodeFormat> PDF417_FORMATS = Collections.unmodifiableSet(EnumSet.of(BarcodeFormat.PDF_417));
   static {
-    PRODUCT_FORMATS = EnumSet.of(BarcodeFormat.UPC_A,
+    PRODUCT_FORMATS = Collections.unmodifiableSet(EnumSet.of(BarcodeFormat.UPC_A,
                                  BarcodeFormat.UPC_E,
                                  BarcodeFormat.EAN_13,
                                  BarcodeFormat.EAN_8,
                                  BarcodeFormat.RSS_14,
-                                 BarcodeFormat.RSS_EXPANDED);
-    INDUSTRIAL_FORMATS = EnumSet.of(BarcodeFormat.CODE_39,
+                                 BarcodeFormat.RSS_EXPANDED));
+    INDUSTRIAL_FORMATS = Collections.unmodifiableSet(EnumSet.of(BarcodeFormat.CODE_39,
                                     BarcodeFormat.CODE_93,
                                     BarcodeFormat.CODE_128,
                                     BarcodeFormat.ITF,
-                                    BarcodeFormat.CODABAR);
-    ONE_D_FORMATS = EnumSet.copyOf(PRODUCT_FORMATS);
-    ONE_D_FORMATS.addAll(INDUSTRIAL_FORMATS);
+                                    BarcodeFormat.CODABAR));
+    final EnumSet<BarcodeFormat> oneDFormats = EnumSet.copyOf(PRODUCT_FORMATS);
+    oneDFormats.addAll(INDUSTRIAL_FORMATS);
+    ONE_D_FORMATS = Collections.unmodifiableSet(oneDFormats);
   }
   private static final Map<String,Set<BarcodeFormat>> FORMATS_FOR_MODE;
   static {
@@ -67,7 +72,7 @@ final class DecodeFormatManager {
 
   private DecodeFormatManager() {}
 
-  static Set<BarcodeFormat> parseDecodeFormats(Intent intent) {
+  public static Set<BarcodeFormat> parseDecodeFormats(Intent intent) {
     Iterable<String> scanFormats = null;
     CharSequence scanFormatsString = intent.getStringExtra(Intents.Scan.FORMATS);
     if (scanFormatsString != null) {
@@ -76,7 +81,7 @@ final class DecodeFormatManager {
     return parseDecodeFormats(scanFormats, intent.getStringExtra(Intents.Scan.MODE));
   }
 
-  static Set<BarcodeFormat> parseDecodeFormats(Uri inputUri) {
+  public static Set<BarcodeFormat> parseDecodeFormats(Uri inputUri) {
     List<String> formats = inputUri.getQueryParameters(Intents.Scan.FORMATS);
     if (formats != null && formats.size() == 1 && formats.get(0) != null) {
       formats = Arrays.asList(COMMA_PATTERN.split(formats.get(0)));
