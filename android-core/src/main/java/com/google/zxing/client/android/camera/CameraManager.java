@@ -172,7 +172,7 @@ public final class CameraManager {
   }
 
   /**
-   * Convenience method for {@link com.google.zxing.client.android.CaptureActivity}
+   * Convenience method for an {@link android.app.Activity}.
    *
    * @param newSetting if {@code true}, light should be turned on if currently off. And vice versa.
    */
@@ -236,7 +236,7 @@ public final class CameraManager {
     }
     return framingRect;
   }
-  
+
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
     int dim = 5 * resolution / 8; // Target 5/8 of each dimension
     if (dim < hardMin) {
