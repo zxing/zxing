@@ -19,12 +19,16 @@
 
   <artifactId>android-core</artifactId>
   <version>3.3.3-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>aar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.zxing</groupId>
+      <artifactId>core</artifactId>
     </dependency>
   </dependencies>
 
@@ -33,6 +37,16 @@
     <artifactId>zxing-parent</artifactId>
     <version>3.3.3-SNAPSHOT</version>
   </parent>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>com.simpligility.maven.plugins</groupId>
+        <artifactId>android-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 
   <name>ZXing Android Core</name>
   <description>Code common to Android applications</description>
