@@ -17,7 +17,10 @@
 package com.google.zxing.client.android;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import com.google.zxing.client.android.camera.CameraConfiguration;
+import com.google.zxing.client.android.camera.FrontLightMode;
 
 /**
  * The main settings activity.
@@ -59,6 +62,18 @@ public final class PreferencesActivity extends Activity {
   protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
     getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferencesFragment()).commit();
+  }
+
+  static CameraConfiguration readConfig(SharedPreferences prefs) {
+    final CameraConfiguration config = new CameraConfiguration();
+    config.autoFocus = prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, config.autoFocus);
+    config.continuousFocus = prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, config.continuousFocus);
+    config.invertScan = prefs.getBoolean(PreferencesActivity.KEY_INVERT_SCAN, config.invertScan);
+    config.barcodeSceneMode = prefs.getBoolean(PreferencesActivity.KEY_DISABLE_BARCODE_SCENE_MODE, config.barcodeSceneMode);
+    config.metering = prefs.getBoolean(PreferencesActivity.KEY_DISABLE_METERING, config.metering);
+    config.exposure = prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, config.exposure);
+    config.frontLightMode = FrontLightMode.parse(prefs.getString(PreferencesActivity.KEY_FRONT_LIGHT_MODE, FrontLightMode.OFF.toString()));
+    return config;
   }
 
   // Apparently this will be necessary when targeting API 19+:

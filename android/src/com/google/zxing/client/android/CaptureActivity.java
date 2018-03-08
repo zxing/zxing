@@ -151,11 +151,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
 
+    final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     // CameraManager must be initialized here, not in onCreate(). This is necessary because we don't
     // want to open the camera driver and measure the screen size if we're going to show the help on
     // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
     // off screen.
-    cameraManager = new CameraManager(getApplication());
+    cameraManager = new CameraManager(getApplication(), PreferencesActivity.readConfig(prefs));
 
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
@@ -165,8 +166,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     handler = null;
     lastResult = null;
-
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
       setRequestedOrientation(getCurrentOrientation());
