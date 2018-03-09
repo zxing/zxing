@@ -46,7 +46,7 @@ public final class CameraManager {
   private static final int MAX_FRAME_WIDTH = 1200; // = 5/8 * 1920
   private static final int MAX_FRAME_HEIGHT = 675; // = 5/8 * 1080
 
-  private final Context context;
+  private final CameraConfiguration config;
   private final CameraConfigurationManager configManager;
   private OpenCamera camera;
   private AutoFocusManager autoFocusManager;
@@ -63,12 +63,17 @@ public final class CameraManager {
    */
   private final PreviewCallback previewCallback;
 
-  public CameraManager(Context context) {
-    this.context = context;
-    this.configManager = new CameraConfigurationManager(context);
+  public CameraManager(Context context, CameraConfiguration config) {
+    // Don't allow change configuration after creation
+    this.config = config.copy();
+    this.configManager = new CameraConfigurationManager(context, this.config);
     previewCallback = new PreviewCallback(configManager);
   }
-  
+
+  public CameraConfiguration getConfig() {
+    return config.copy();
+  }
+
   /**
    * Opens the camera driver and initializes the hardware parameters.
    *
@@ -147,7 +152,7 @@ public final class CameraManager {
     if (theCamera != null && !previewing) {
       theCamera.getCamera().startPreview();
       previewing = true;
-      autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
+      autoFocusManager = new AutoFocusManager(theCamera.getCamera(), config.autoFocus);
     }
   }
 
@@ -167,7 +172,7 @@ public final class CameraManager {
   }
 
   /**
-   * Convenience method for {@link com.google.zxing.client.android.CaptureActivity}
+   * Convenience method for an {@link android.app.Activity}.
    *
    * @param newSetting if {@code true}, light should be turned on if currently off. And vice versa.
    */
@@ -181,7 +186,7 @@ public final class CameraManager {
       }
       configManager.setTorch(theCamera.getCamera(), newSetting);
       if (wasAutoFocusManager) {
-        autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
+        autoFocusManager = new AutoFocusManager(theCamera.getCamera(), config.autoFocus);
         autoFocusManager.start();
       }
     }
@@ -231,7 +236,16 @@ public final class CameraManager {
     }
     return framingRect;
   }
-  
+
+  public Point getPreviewSize() {
+    final Point previewSize = configManager.getPreviewSizeOnScreen();
+    if (previewSize == null) {
+      // Called early, before init even finished
+      return null;
+    }
+    return new Point(previewSize);
+  }
+
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
     int dim = 5 * resolution / 8; // Target 5/8 of each dimension
     if (dim < hardMin) {

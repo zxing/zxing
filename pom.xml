@@ -49,6 +49,7 @@
       <dependency>
         <groupId>com.google.zxing</groupId>
         <artifactId>android-core</artifactId>
+        <type>aar</type>
         <version>${zxing.version}</version>
       </dependency>
       <dependency>

@@ -14,8 +14,4 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<resources>
-  <item type="id" name="launch_product_query"/>
-  <item type="id" name="restart_preview"/>
-  <item type="id" name="return_scan_result"/>
-</resources>
+<manifest package="com.google.zxing.client.androidcore"/>

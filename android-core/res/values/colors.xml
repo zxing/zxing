@@ -15,7 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <item type="id" name="launch_product_query"/>
-  <item type="id" name="restart_preview"/>
-  <item type="id" name="return_scan_result"/>
+  <color name="possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
+  <color name="result_view">#b0000000</color>
+  <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
+  <color name="viewfinder_mask">#60000000</color>
 </resources>
