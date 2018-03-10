@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2014 ZXing authors
 
@@ -98,7 +98,7 @@
   <string name="preferences_decode_1D_product_title">一維產品條碼</string>
   <string name="preferences_decode_Aztec_title">Aztec 條碼</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix 條碼</string>
-  <string name="preferences_decode_PDF417_title">PDF417 條碼（β）</string>
+  <string name="preferences_decode_PDF417_title">PDF417 條碼 (Beta)</string>
   <string name="preferences_decode_QR_title">QR Code</string>
   <string name="preferences_device_bug_workarounds_title">裝置 Bug 解決方案</string>
   <string name="preferences_disable_barcode_scene_mode_title">取消條碼場景模式</string>
