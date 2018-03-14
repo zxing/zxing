@@ -64,7 +64,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
 
   public PDF417BlackBox4TestCase() {
     super("src/test/resources/blackbox/pdf417-4", null, BarcodeFormat.PDF_417);
-    testResults.add(new TestResult(2, 2, 0, 0, 0.0f));
+    testResults.add(new TestResult(3, 3, 0, 0, 0.0f));
   }
 
   @Test
