@@ -74,10 +74,10 @@ final class DecodedBitStreamParser {
   private static final int PAL = 29;
 
   private static final char[] PUNCT_CHARS =
-    ";<>@[\\]_`~!\r\t,:\n-.$/\"|*()?{}'".toCharArray();
+      ";<>@[\\]_`~!\r\t,:\n-.$/\"|*()?{}'".toCharArray();
 
   private static final char[] MIXED_CHARS =
-    "0123456789&\r\t,:#-.$/+%*=^".toCharArray();
+      "0123456789&\r\t,:#-.$/+%*=^".toCharArray();
 
   /**
    * Table containing values for the exponent of 900.
@@ -124,7 +124,7 @@ final class DecodedBitStreamParser {
           break;
         case ECI_CHARSET:
           CharacterSetECI charsetECI =
-            CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
+              CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
           encoding = Charset.forName(charsetECI.name());
           break;
         case ECI_GENERAL_PURPOSE:
@@ -164,8 +164,8 @@ final class DecodedBitStreamParser {
     return decoderResult;
   }
 
-  protected static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
-    throws FormatException {
+  static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
+      throws FormatException {
     if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
       // we must have at least two bytes left for the segment index
       throw FormatException.getFormatInstance();
@@ -175,7 +175,7 @@ final class DecodedBitStreamParser {
       segmentIndexArray[i] = codewords[codeIndex];
     }
     resultMetadata.setSegmentIndex(Integer.parseInt(decodeBase900toBase10(segmentIndexArray,
-      NUMBER_OF_SEQUENCE_CODEWORDS)));
+        NUMBER_OF_SEQUENCE_CODEWORDS)));
 
     StringBuilder fileId = new StringBuilder();
     codeIndex = textCompaction(codewords, codeIndex, fileId);
