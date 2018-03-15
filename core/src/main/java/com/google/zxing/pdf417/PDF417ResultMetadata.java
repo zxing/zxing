@@ -31,9 +31,11 @@ public final class PDF417ResultMetadata {
   private long fileSize = -1;
   private long timestamp = -1;
   private int checksum = -1;
+  private int[] optionalData;
 
   /**
    * The Segment ID represents the segment of the whole file distributed over different symbols.
+   *
    * @return File segment index
    */
   public int getSegmentIndex() {
@@ -46,6 +48,7 @@ public final class PDF417ResultMetadata {
 
   /**
    * Is the same for each related PDF417 symbol
+   *
    * @return File ID
    */
   public String getFileId() {
@@ -57,19 +60,20 @@ public final class PDF417ResultMetadata {
   }
 
   /**
-   * @deprecated use dedicated already parsed fields
    * @return always null
+   * @deprecated use dedicated already parsed fields
    */
   @Deprecated
   public int[] getOptionalData() {
-    return null;
+    return optionalData;
   }
 
   /**
-   * @deprecated no replacement
+   * @deprecated parse and use new fields
    */
   @Deprecated
   public void setOptionalData(int[] optionalData) {
+    this.optionalData = optionalData;
   }
 
 
@@ -113,6 +117,7 @@ public final class PDF417ResultMetadata {
 
   /**
    * Filename of the encoded file
+   *
    * @return filename
    */
   public String getFileName() {
@@ -125,6 +130,7 @@ public final class PDF417ResultMetadata {
 
   /**
    * filesize in bytes of the encoded file
+   *
    * @return filesize in bytes, -1 if not set
    */
   public long getFileSize() {
@@ -135,10 +141,11 @@ public final class PDF417ResultMetadata {
     this.fileSize = fileSize;
   }
 
- /**
-  * 16-bit CRC checksum using CCITT-16
-  * @return crc checksum, -1 if not set
-  */
+  /**
+   * 16-bit CRC checksum using CCITT-16
+   *
+   * @return crc checksum, -1 if not set
+   */
   public int getChecksum() {
     return checksum;
   }
@@ -149,10 +156,11 @@ public final class PDF417ResultMetadata {
 
   /**
    * unix epock timestamp, elapsed seconds since 1970-01-01
+   *
    * @return elapsed seconds, -1 if not set
    */
   public long getTimestamp() {
-      return timestamp;
+    return timestamp;
   }
 
   public void setTimestamp(long timestamp) {

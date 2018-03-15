@@ -73,16 +73,17 @@ final class DecodedBitStreamParser {
   private static final int PAL = 29;
 
   private static final char[] PUNCT_CHARS =
-      ";<>@[\\]_`~!\r\t,:\n-.$/\"|*()?{}'".toCharArray();
+    ";<>@[\\]_`~!\r\t,:\n-.$/\"|*()?{}'".toCharArray();
 
   private static final char[] MIXED_CHARS =
-      "0123456789&\r\t,:#-.$/+%*=^".toCharArray();
+    "0123456789&\r\t,:#-.$/+%*=^".toCharArray();
 
   /**
    * Table containing values for the exponent of 900.
    * This is used in the numeric compaction decode algorithm.
    */
   private static final BigInteger[] EXP900;
+
   static {
     EXP900 = new BigInteger[16];
     EXP900[0] = BigInteger.ONE;
@@ -122,7 +123,7 @@ final class DecodedBitStreamParser {
           break;
         case ECI_CHARSET:
           CharacterSetECI charsetECI =
-              CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
+            CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
           encoding = Charset.forName(charsetECI.name());
           break;
         case ECI_GENERAL_PURPOSE:
@@ -131,7 +132,7 @@ final class DecodedBitStreamParser {
           break;
         case ECI_USER_DEFINED:
           // Can't do anything with user ECI; skip its 1 character
-          codeIndex ++;
+          codeIndex++;
           break;
         case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
           codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
@@ -163,7 +164,7 @@ final class DecodedBitStreamParser {
   }
 
   protected static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
-      throws FormatException {
+    throws FormatException {
     if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
       // we must have at least two bytes left for the segment index
       throw FormatException.getFormatInstance();
@@ -173,64 +174,80 @@ final class DecodedBitStreamParser {
       segmentIndexArray[i] = codewords[codeIndex];
     }
     resultMetadata.setSegmentIndex(Integer.parseInt(decodeBase900toBase10(segmentIndexArray,
-        NUMBER_OF_SEQUENCE_CODEWORDS)));
+      NUMBER_OF_SEQUENCE_CODEWORDS)));
 
     StringBuilder fileId = new StringBuilder();
     codeIndex = textCompaction(codewords, codeIndex, fileId);
     resultMetadata.setFileId(fileId.toString());
 
-    while (codeIndex < codewords[0]) {
-        switch (codewords[codeIndex]) {
-            case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-                codeIndex++;
-                switch (codewords[codeIndex]) {
-                    case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
-                        StringBuilder fileName = new StringBuilder();
-                        codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
-                        resultMetadata.setFileName(fileName.toString());
-                        break;
-                    case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
-                        StringBuilder sender = new StringBuilder();
-                        codeIndex = textCompaction(codewords, codeIndex + 1, sender);
-                        resultMetadata.setSender(sender.toString());
-                        break;
-                    case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
-                        StringBuilder addressee = new StringBuilder();
-                        codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
-                        resultMetadata.setAddressee(addressee.toString());
-                        break;
-                    case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
-                        StringBuilder segmentCount = new StringBuilder();
-                        codeIndex = numericCompaction(codewords, codeIndex + 1, segmentCount);
-                        resultMetadata.setSegmentCount(Integer.parseInt(segmentCount.toString()));
-                        break;
-                    case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
-                        StringBuilder timestamp = new StringBuilder();
-                        codeIndex = numericCompaction(codewords, codeIndex + 1, timestamp);
-                        resultMetadata.setTimestamp(Long.parseLong(timestamp.toString()));
-                        break;
-                    case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
-                        StringBuilder checksum = new StringBuilder();
-                        codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
-                        resultMetadata.setChecksum(Integer.parseInt(checksum.toString()));
-                        break;
-                    case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
-                        StringBuilder fileSize = new StringBuilder();
-                        codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
-                        resultMetadata.setFileSize(Long.parseLong(fileSize.toString()));
-                        break;
-                    default:
-                        throw FormatException.getFormatInstance();
-                }
+    int optionalFieldsStart = -1;
+    if (codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
+      optionalFieldsStart = codeIndex + 1;
+    }
 
-                break;
-            case MACRO_PDF417_TERMINATOR:
-                codeIndex++;
-                resultMetadata.setLastSegment(true);
-                break;
+    while (codeIndex < codewords[0]) {
+      switch (codewords[codeIndex]) {
+        case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+          codeIndex++;
+          switch (codewords[codeIndex]) {
+            case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
+              StringBuilder fileName = new StringBuilder();
+              codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
+              resultMetadata.setFileName(fileName.toString());
+              break;
+            case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
+              StringBuilder sender = new StringBuilder();
+              codeIndex = textCompaction(codewords, codeIndex + 1, sender);
+              resultMetadata.setSender(sender.toString());
+              break;
+            case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
+              StringBuilder addressee = new StringBuilder();
+              codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
+              resultMetadata.setAddressee(addressee.toString());
+              break;
+            case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
+              StringBuilder segmentCount = new StringBuilder();
+              codeIndex = numericCompaction(codewords, codeIndex + 1, segmentCount);
+              resultMetadata.setSegmentCount(Integer.parseInt(segmentCount.toString()));
+              break;
+            case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
+              StringBuilder timestamp = new StringBuilder();
+              codeIndex = numericCompaction(codewords, codeIndex + 1, timestamp);
+              resultMetadata.setTimestamp(Long.parseLong(timestamp.toString()));
+              break;
+            case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
+              StringBuilder checksum = new StringBuilder();
+              codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
+              resultMetadata.setChecksum(Integer.parseInt(checksum.toString()));
+              break;
+            case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
+              StringBuilder fileSize = new StringBuilder();
+              codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
+              resultMetadata.setFileSize(Long.parseLong(fileSize.toString()));
+              break;
             default:
-                throw FormatException.getFormatInstance();
-        }
+              throw FormatException.getFormatInstance();
+          }
+          break;
+        case MACRO_PDF417_TERMINATOR:
+          codeIndex++;
+          resultMetadata.setLastSegment(true);
+          break;
+        default:
+          throw FormatException.getFormatInstance();
+      }
+    }
+
+    // copy optional fields to additional options
+    if (optionalFieldsStart != -1) {
+      int additionalFieldsLength = codeIndex - optionalFieldsStart;
+      if (resultMetadata.isLastSegment()) {
+        // do not include terminator
+        additionalFieldsLength--;
+      }
+      int[] additionalOptionCodeWords = new int[additionalFieldsLength];
+      System.arraycopy(codewords, optionalFieldsStart, additionalOptionCodeWords, 0, additionalFieldsLength);
+      resultMetadata.setOptionalData(additionalOptionCodeWords);
     }
 
     return codeIndex;
