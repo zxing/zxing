@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * <p>This class contains the methods for decoding the PDF417 codewords.</p>
@@ -240,14 +241,12 @@ final class DecodedBitStreamParser {
 
     // copy optional fields to additional options
     if (optionalFieldsStart != -1) {
-      int additionalFieldsLength = codeIndex - optionalFieldsStart;
+      int optionalFieldsLength = codeIndex - optionalFieldsStart;
       if (resultMetadata.isLastSegment()) {
         // do not include terminator
-        additionalFieldsLength--;
+        optionalFieldsLength--;
       }
-      int[] additionalOptionCodeWords = new int[additionalFieldsLength];
-      System.arraycopy(codewords, optionalFieldsStart, additionalOptionCodeWords, 0, additionalFieldsLength);
-      resultMetadata.setOptionalData(additionalOptionCodeWords);
+      resultMetadata.setOptionalData(Arrays.copyOfRange(codewords, optionalFieldsStart, optionalFieldsLength));
     }
 
     return codeIndex;
