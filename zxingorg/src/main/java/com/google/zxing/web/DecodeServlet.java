@@ -331,9 +331,10 @@ public final class DecodeServlet extends HttpServlet {
     BufferedImage image;
     try {
       image = ImageIO.read(is);
-    } catch (IOException | CMMException | IllegalArgumentException ioe) {
-      log.info(ioe.toString());
-      // Have seen these in some logs
+    } catch (IOException | CMMException | IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
+      // Have seen these in some logs, like an AIOOBE from certain GIF images
+      // https://github.com/zxing/zxing/issues/862#issuecomment-376159343
+      log.info(e.toString());
       errorResponse(request, response, "badimage");
       return;
     }

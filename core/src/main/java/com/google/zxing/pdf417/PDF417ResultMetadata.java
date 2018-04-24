@@ -69,6 +69,7 @@ public final class PDF417ResultMetadata {
   }
 
   /**
+   * @param optionalData old optional data format as int array
    * @deprecated parse and use new fields
    */
   @Deprecated

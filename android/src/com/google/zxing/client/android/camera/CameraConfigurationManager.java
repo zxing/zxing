@@ -226,9 +226,9 @@ final class CameraConfigurationManager {
       Camera.Parameters parameters = camera.getParameters();
       if (parameters != null) {
         String flashMode = parameters.getFlashMode();
-        return flashMode != null &&
-            (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
-             Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode));
+        return
+            Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
+            Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode);
       }
     }
     return false;
