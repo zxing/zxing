@@ -19,11 +19,15 @@ package com.google.zxing.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.zxing.DecodeHintType;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 import java.nio.file.Files;
-import java.nio.file.Paths;;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;;
 
 public final class StringUtilsTestCase extends Assert {
 
@@ -75,6 +79,23 @@ public final class StringUtilsTestCase extends Assert {
 	  byte[] file2 = Files.readAllBytes(Paths.get("src/test/resources/blackbox/encodedtexts/windows1250.txt"));
 	  doTest(file1, Charset.defaultCharset().name());
 	  doTest(file2, Charset.defaultCharset().name());
+  }
+  
+  @Test
+  public void testWithHint_1() {
+	// Test file sjis.txt under blackbox/encodedtexts
+	  byte[] file = {};
+	  Charset charset = Charset.forName("SJIS");
+	  Map<DecodeHintType,String> hints = new HashMap<DecodeHintType, String>();
+	  hints.put(DecodeHintType.CHARACTER_SET, charset.name());
+	  doTest(file, charset.name(), hints);
+  }
+  
+  private static void doTest(byte[] bytes, String charsetName, Map<DecodeHintType,?> hints) {
+	    Charset charset = Charset.forName(charsetName);
+	    String guessedName = StringUtils.guessEncoding(bytes, null);
+	    Charset guessedEncoding = Charset.forName(guessedName);
+	    assertEquals(charset, guessedEncoding);
   }
   
   private static void doTest(byte[] bytes, String charsetName) {
