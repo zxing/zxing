@@ -278,8 +278,14 @@ public abstract class ResultHandler {
       // Remove extra leading '\n'
       putExtra(intent, ContactsContract.Intents.Insert.NOTES, aggregatedNotes.substring(1));
     }
-    
-    putExtra(intent, ContactsContract.Intents.Insert.IM_HANDLE, instantMessenger);
+
+    if (instantMessenger != null && instantMessenger.startsWith("xmpp:")) {
+      intent.putExtra(ContactsContract.Intents.Insert.IM_PROTOCOL, ContactsContract.CommonDataKinds.Im.PROTOCOL_JABBER);
+      intent.putExtra(ContactsContract.Intents.Insert.IM_HANDLE, instantMessenger.substring(5));
+    } else {
+      putExtra(intent, ContactsContract.Intents.Insert.IM_HANDLE, instantMessenger);
+    }
+
     putExtra(intent, ContactsContract.Intents.Insert.POSTAL, address);
     if (addressType != null) {
       int type = toAddressContractType(addressType);
