@@ -51,12 +51,12 @@ library implemented in Java, with ports to other languages.
 | [zxing_cpp.rb](https://github.com/glassechidna/zxing_cpp.rb)    | bindings for Ruby (not just JRuby), powered by [zxing-cpp](https://github.com/glassechidna/zxing-cpp)
 | [jsqrcode](https://github.com/LazarSoft/jsqrcode)               | port to JavaScript
 | [python-zxing](https://github.com/oostendo/python-zxing)        | bindings for Python
-| [ZXing .NET](https://github.com/micjahn/ZXing.Net)                     | port to .NET and C#, and related Windows platform
+| [ZXing .NET](https://github.com/micjahn/ZXing.Net)              | port to .NET and C#, and related Windows platform
 | [php-qrcode-detector-decoder](https://github.com/khanamiryan/php-qrcode-detector-decoder)                     | port to PHP
-| [ZXing Delphi](https://github.com/Spelt/ZXing.Delphi)          |  Port to native Delphi object pascal, targeted at Firemonkey compatible devices (IOS/Android/Win/OSX) and VCL.
+| [ZXing Delphi](https://github.com/Spelt/ZXing.Delphi)           |  Port to native Delphi object pascal, targeted at Firemonkey compatible devices (IOS/Android/Win/OSX) and VCL.
 | [ZXingObjC](https://github.com/TheLevelUp/ZXingObjC)            | Port to Objective-C
 | [php-zxing](https://github.com/dsiddharth2/php-zxing)           | PHP wrapper to Zxing Java library
-| [zxing-ts](https://github.com/odahcam/zxing-ts)                 | TypeScript port of ZXing library
+| [zxing-js/library](https://github.com/zxing-js/library)         | TypeScript port of ZXing library
 
 
 ### Other related third-party open source projects
