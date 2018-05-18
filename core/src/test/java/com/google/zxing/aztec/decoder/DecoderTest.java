@@ -23,6 +23,9 @@ import com.google.zxing.common.DecoderResult;
 import org.junit.Test;
 import org.junit.Assert;
 
+/**
+ * Tests {@link Decoder}.
+ */
 public final class DecoderTest extends Assert {
 
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];

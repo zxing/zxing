@@ -21,6 +21,9 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link PDF417HighLevelEncoder}.
+ */
 public final class PDF417EncoderTestCase extends Assert {
 
   @Test
@@ -32,15 +35,15 @@ public final class PDF417EncoderTestCase extends Assert {
 
   @Test
   public void testEncodeAutoWithSpecialChars() throws Exception {
-	//Just check if this does not throw an exception
+    // Just check if this does not throw an exception
     PDF417HighLevelEncoder.encodeHighLevel(
         "1%§s ?aG$", Compaction.AUTO, StandardCharsets.UTF_8);
   }
   
   @Test
   public void testEncodeIso88591WithSpecialChars() throws Exception {
-	  // Just check if this does not throw an exception
-	  PDF417HighLevelEncoder.encodeHighLevel("asdfg§asd", Compaction.AUTO, StandardCharsets.ISO_8859_1);
+    // Just check if this does not throw an exception
+    PDF417HighLevelEncoder.encodeHighLevel("asdfg§asd", Compaction.AUTO, StandardCharsets.ISO_8859_1);
   }
 
   @Test

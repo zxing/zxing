@@ -26,6 +26,9 @@ import com.google.zxing.common.BitMatrix;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link PDF417Writer}.
+ */
 public final class PDF417WriterTestCase extends Assert {
 
   @Test

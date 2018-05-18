@@ -19,6 +19,9 @@ package com.google.zxing;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link RGBLuminanceSource}.
+ */
 public final class RGBLuminanceSourceTestCase extends Assert {
 
   private static final RGBLuminanceSource SOURCE = new RGBLuminanceSource(3, 3, new int[] {

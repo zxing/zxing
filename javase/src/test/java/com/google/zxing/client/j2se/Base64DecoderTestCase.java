@@ -21,6 +21,9 @@ import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Tests {@link Base64Decoder}.
+ */
 public final class Base64DecoderTestCase extends Assert {
   
   @Test

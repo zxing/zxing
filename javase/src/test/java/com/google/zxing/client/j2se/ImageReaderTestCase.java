@@ -22,6 +22,9 @@ import org.junit.Test;
 import java.awt.image.BufferedImage;
 import java.net.URI;
 
+/**
+ * Tests {@link ImageReader}.
+ */
 public final class ImageReaderTestCase extends Assert {
   
   @Test

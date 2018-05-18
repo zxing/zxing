@@ -197,7 +197,7 @@ public final class HttpHelper {
       throw new IOException(npe);
     }
     if (!(conn instanceof HttpURLConnection)) {
-      throw new IOException();
+      throw new IOException("Expected HttpURLConnection but got " + conn.getClass());
     }
     return (HttpURLConnection) conn;
   }

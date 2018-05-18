@@ -19,6 +19,9 @@ package com.google.zxing.common.detector;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link MathUtils}.
+ */
 public final class MathUtilsTestCase extends Assert {
 
   private static final float EPSILON = 1.0E-8f;

@@ -322,7 +322,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       return original;
     }
 
-    switch(original.getType()) {
+    switch (original.getType()) {
       case BufferedImage.TYPE_BYTE_INDEXED:
       case BufferedImage.TYPE_BYTE_BINARY:
         BufferedImage argb = new BufferedImage(original.getWidth(),

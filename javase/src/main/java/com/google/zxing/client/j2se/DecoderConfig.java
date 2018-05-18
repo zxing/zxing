@@ -84,8 +84,7 @@ final class DecoderConfig {
   Map<DecodeHintType,?> buildHints() {
     List<BarcodeFormat> finalPossibleFormats = possibleFormats;
     if (finalPossibleFormats == null || finalPossibleFormats.isEmpty()) {
-      finalPossibleFormats = new ArrayList<>();
-      finalPossibleFormats.addAll(Arrays.asList(
+      finalPossibleFormats = new ArrayList<>(Arrays.asList(
           BarcodeFormat.UPC_A,
           BarcodeFormat.UPC_E,
           BarcodeFormat.EAN_13,

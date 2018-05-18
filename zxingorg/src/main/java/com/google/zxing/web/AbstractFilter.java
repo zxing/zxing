@@ -33,7 +33,7 @@ import java.io.IOException;
 abstract class AbstractFilter implements Filter {
 
   @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
+  public final void init(FilterConfig filterConfig) {
     // do nothing
   }
 
@@ -41,8 +41,9 @@ abstract class AbstractFilter implements Filter {
   public abstract void doFilter(ServletRequest request, 
                        ServletResponse response, 
                        FilterChain chain) throws IOException, ServletException;
+
   @Override
-  public void destroy() {
+  public final void destroy() {
     // do nothing
   }
   

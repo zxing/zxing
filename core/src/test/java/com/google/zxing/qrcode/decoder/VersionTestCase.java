@@ -33,7 +33,7 @@ public final class VersionTestCase extends Assert {
       // good
     }
     for (int i = 1; i <= 40; i++) {
-      checkVersion(Version.getVersionForNumber(i), i, 4*i + 17);
+      checkVersion(Version.getVersionForNumber(i), i, 4 * i + 17);
     }
   }
 
@@ -55,7 +55,7 @@ public final class VersionTestCase extends Assert {
   @Test
   public void testGetProvisionalVersionForDimension() throws Exception {
     for (int i = 1; i <= 40; i++) {
-      assertEquals(i, Version.getProvisionalVersionForDimension(4*i + 17).getVersionNumber());
+      assertEquals(i, Version.getProvisionalVersionForDimension(4 * i + 17).getVersionNumber());
     }
   }
 

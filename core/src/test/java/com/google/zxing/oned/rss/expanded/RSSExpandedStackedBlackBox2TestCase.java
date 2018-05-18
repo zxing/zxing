@@ -30,6 +30,10 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
+/**
+ * A test of {@link RSSExpandedReader} against a fixed test set of images including
+ * stacked RSS barcodes.
+ */
 public final class RSSExpandedStackedBlackBox2TestCase extends AbstractBlackBoxTestCase {
     
   public RSSExpandedStackedBlackBox2TestCase() {

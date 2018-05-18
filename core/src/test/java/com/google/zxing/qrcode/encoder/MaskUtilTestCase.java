@@ -170,7 +170,7 @@ public final class MaskUtilTestCase extends Assert {
     assertEquals(30, MaskUtil.applyMaskPenaltyRule4(matrix));
   }
 
-  private static boolean TestGetDataMaskBitInternal(int maskPattern, int[][] expected) {
+  private static boolean testGetDataMaskBitInternal(int maskPattern, int[][] expected) {
     for (int x = 0; x < 6; ++x) {
       for (int y = 0; y < 6; ++y) {
         if ((expected[y][x] == 1) != MaskUtil.getDataMaskBit(maskPattern, x, y)) {
@@ -192,7 +192,7 @@ public final class MaskUtilTestCase extends Assert {
       {1, 0, 1, 0, 1, 0},
       {0, 1, 0, 1, 0, 1},
     };
-    assertTrue(TestGetDataMaskBitInternal(0, mask0));
+    assertTrue(testGetDataMaskBitInternal(0, mask0));
     int[][] mask1 = {
       {1, 1, 1, 1, 1, 1},
       {0, 0, 0, 0, 0, 0},
@@ -201,7 +201,7 @@ public final class MaskUtilTestCase extends Assert {
       {1, 1, 1, 1, 1, 1},
       {0, 0, 0, 0, 0, 0},
     };
-    assertTrue(TestGetDataMaskBitInternal(1, mask1));
+    assertTrue(testGetDataMaskBitInternal(1, mask1));
     int[][] mask2 = {
       {1, 0, 0, 1, 0, 0},
       {1, 0, 0, 1, 0, 0},
@@ -210,7 +210,7 @@ public final class MaskUtilTestCase extends Assert {
       {1, 0, 0, 1, 0, 0},
       {1, 0, 0, 1, 0, 0},
     };
-    assertTrue(TestGetDataMaskBitInternal(2, mask2));
+    assertTrue(testGetDataMaskBitInternal(2, mask2));
     int[][] mask3 = {
       {1, 0, 0, 1, 0, 0},
       {0, 0, 1, 0, 0, 1},
@@ -219,7 +219,7 @@ public final class MaskUtilTestCase extends Assert {
       {0, 0, 1, 0, 0, 1},
       {0, 1, 0, 0, 1, 0},
     };
-    assertTrue(TestGetDataMaskBitInternal(3, mask3));
+    assertTrue(testGetDataMaskBitInternal(3, mask3));
     int[][] mask4 = {
       {1, 1, 1, 0, 0, 0},
       {1, 1, 1, 0, 0, 0},
@@ -228,7 +228,7 @@ public final class MaskUtilTestCase extends Assert {
       {1, 1, 1, 0, 0, 0},
       {1, 1, 1, 0, 0, 0},
     };
-    assertTrue(TestGetDataMaskBitInternal(4, mask4));
+    assertTrue(testGetDataMaskBitInternal(4, mask4));
     int[][] mask5 = {
       {1, 1, 1, 1, 1, 1},
       {1, 0, 0, 0, 0, 0},
@@ -237,7 +237,7 @@ public final class MaskUtilTestCase extends Assert {
       {1, 0, 0, 1, 0, 0},
       {1, 0, 0, 0, 0, 0},
     };
-    assertTrue(TestGetDataMaskBitInternal(5, mask5));
+    assertTrue(testGetDataMaskBitInternal(5, mask5));
     int[][] mask6 = {
       {1, 1, 1, 1, 1, 1},
       {1, 1, 1, 0, 0, 0},
@@ -246,7 +246,7 @@ public final class MaskUtilTestCase extends Assert {
       {1, 0, 1, 1, 0, 1},
       {1, 0, 0, 0, 1, 1},
     };
-    assertTrue(TestGetDataMaskBitInternal(6, mask6));
+    assertTrue(testGetDataMaskBitInternal(6, mask6));
     int[][] mask7 = {
       {1, 0, 1, 0, 1, 0},
       {0, 0, 0, 1, 1, 1},
@@ -255,6 +255,6 @@ public final class MaskUtilTestCase extends Assert {
       {1, 1, 1, 0, 0, 0},
       {0, 1, 1, 1, 0, 0},
     };
-    assertTrue(TestGetDataMaskBitInternal(7, mask7));
+    assertTrue(testGetDataMaskBitInternal(7, mask7));
   }
 }

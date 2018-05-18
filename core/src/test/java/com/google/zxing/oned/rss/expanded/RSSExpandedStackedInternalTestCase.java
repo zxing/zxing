@@ -37,6 +37,9 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
 
+/**
+ * Tests {@link RSSExpandedReader} handling of stacked RSS barcodes.
+ */
 public final class RSSExpandedStackedInternalTestCase extends Assert {
 
   @Test

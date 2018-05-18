@@ -28,6 +28,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 
+/**
+ * Tests {@link Code128Writer}.
+ */
 public class Code128WriterTestCase extends Assert {
 
   private static final String FNC1 = "11110101110";

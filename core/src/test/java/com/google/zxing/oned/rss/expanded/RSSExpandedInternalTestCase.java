@@ -79,7 +79,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     assertNotNull(finderPattern);
     assertEquals(1, finderPattern.getValue());
 
-    try{
+    try {
       rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
       //   the previous was the last pair
       fail(NotFoundException.class.getName() + " expected");
@@ -116,8 +116,8 @@ public final class RSSExpandedInternalTestCase extends Assert {
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.getHeight() / 2, null);
 
-    int[] startEnd = {145, 243};//image pixels where the A1 pattern starts (at 124) and ends (at 214)
-    int value = 0;// A
+    int[] startEnd = {145, 243}; //image pixels where the A1 pattern starts (at 124) and ends (at 214)
+    int value = 0; // A
     FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.getHeight() / 2);
     //{1, 8, 4, 1, 1};
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
@@ -132,7 +132,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.getHeight() / 2, null);
 
-    int[] startEnd = {145, 243};//image pixels where the A1 pattern starts (at 124) and ends (at 214)
+    int[] startEnd = {145, 243}; //image pixels where the A1 pattern starts (at 124) and ends (at 214)
     int value = 0; // A
     FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.getHeight() / 2);
     //{1, 8, 4, 1, 1};

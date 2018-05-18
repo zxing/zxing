@@ -20,6 +20,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
+/**
+ * Tests {@link MaxiCodeReader} against a fixed set of test images.
+ */
 public final class Maxicode1TestCase extends AbstractBlackBoxTestCase {
 
   public Maxicode1TestCase() {

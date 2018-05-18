@@ -51,138 +51,138 @@ import org.junit.Test;
 public final class RSSExpandedImage2stringTestCase extends Assert {
 
   @Test
-  public void testDecodeRow2string_1() throws Exception {
+  public void testDecodeRow2string1() throws Exception {
     assertCorrectImage2string("1.png", "(11)100224(17)110224(3102)000100");
   }
 
   @Test
-  public void testDecodeRow2string_2() throws Exception {
+  public void testDecodeRow2string2() throws Exception {
     assertCorrectImage2string("2.png", "(01)90012345678908(3103)001750");
   }
 
   @Test
-  public void testDecodeRow2string_3() throws Exception {
+  public void testDecodeRow2string3() throws Exception {
     assertCorrectImage2string("3.png", "(10)12A");
   }
 
   @Test
-  public void testDecodeRow2string_4() throws Exception {
+  public void testDecodeRow2string4() throws Exception {
     assertCorrectImage2string("4.png", "(01)98898765432106(3202)012345(15)991231");
   }
 
   @Test
-  public void testDecodeRow2string_5() throws Exception {
+  public void testDecodeRow2string5() throws Exception {
     assertCorrectImage2string("5.png", "(01)90614141000015(3202)000150");
   }
 
   @Test
-  public void testDecodeRow2string_7() throws Exception {
+  public void testDecodeRow2string7() throws Exception {
     assertCorrectImage2string("7.png", "(10)567(11)010101");
   }
 
   @Test
-  public void testDecodeRow2string_10() throws Exception {
+  public void testDecodeRow2string10() throws Exception {
     String expected = "(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456(423)012345678901";
     assertCorrectImage2string("10.png", expected);
   }
 
   @Test
-  public void testDecodeRow2string_11() throws Exception {
+  public void testDecodeRow2string11() throws Exception {
     assertCorrectImage2string("11.png", "(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456");
   }
 
   @Test
-  public void testDecodeRow2string_12() throws Exception {
+  public void testDecodeRow2string12() throws Exception {
     assertCorrectImage2string("12.png", "(01)98898765432106(3103)001750");
   }
 
   @Test
-  public void testDecodeRow2string_13() throws Exception {
+  public void testDecodeRow2string13() throws Exception {
     assertCorrectImage2string("13.png", "(01)90012345678908(3922)795");
   }
 
   @Test
-  public void testDecodeRow2string_14() throws Exception {
+  public void testDecodeRow2string14() throws Exception {
     assertCorrectImage2string("14.png", "(01)90012345678908(3932)0401234");
   }
 
   @Test
-  public void testDecodeRow2string_15() throws Exception {
+  public void testDecodeRow2string15() throws Exception {
     assertCorrectImage2string("15.png", "(01)90012345678908(3102)001750(11)100312");
   }
 
   @Test
-  public void testDecodeRow2string_16() throws Exception {
+  public void testDecodeRow2string16() throws Exception {
     assertCorrectImage2string("16.png", "(01)90012345678908(3202)001750(11)100312");
   }
 
   @Test
-  public void testDecodeRow2string_17() throws Exception {
+  public void testDecodeRow2string17() throws Exception {
     assertCorrectImage2string("17.png", "(01)90012345678908(3102)001750(13)100312");
   }
 
   @Test
-  public void testDecodeRow2string_18() throws Exception {
+  public void testDecodeRow2string18() throws Exception {
     assertCorrectImage2string("18.png", "(01)90012345678908(3202)001750(13)100312");
   }
 
   @Test
-  public void testDecodeRow2string_19() throws Exception {
+  public void testDecodeRow2string19() throws Exception {
     assertCorrectImage2string("19.png", "(01)90012345678908(3102)001750(15)100312");
   }
 
   @Test
-  public void testDecodeRow2string_20() throws Exception {
+  public void testDecodeRow2string20() throws Exception {
     assertCorrectImage2string("20.png", "(01)90012345678908(3202)001750(15)100312");
   }
 
   @Test
-  public void testDecodeRow2string_21() throws Exception {
+  public void testDecodeRow2string21() throws Exception {
     assertCorrectImage2string("21.png", "(01)90012345678908(3102)001750(17)100312");
   }
 
   @Test
-  public void testDecodeRow2string_22() throws Exception {
+  public void testDecodeRow2string22() throws Exception {
     assertCorrectImage2string("22.png", "(01)90012345678908(3202)001750(17)100312");
   }
 
   @Test
-  public void testDecodeRow2string_25() throws Exception {
+  public void testDecodeRow2string25() throws Exception {
     assertCorrectImage2string("25.png", "(10)123");
   }
 
   @Test
-  public void testDecodeRow2string_26() throws Exception {
+  public void testDecodeRow2string26() throws Exception {
     assertCorrectImage2string("26.png", "(10)5678(11)010101");
   }
 
   @Test
-  public void testDecodeRow2string_27() throws Exception {
+  public void testDecodeRow2string27() throws Exception {
     assertCorrectImage2string("27.png", "(10)1098-1234");
   }
 
   @Test
-  public void testDecodeRow2string_28() throws Exception {
+  public void testDecodeRow2string28() throws Exception {
     assertCorrectImage2string("28.png", "(10)1098/1234");
   }
 
   @Test
-  public void testDecodeRow2string_29() throws Exception {
+  public void testDecodeRow2string29() throws Exception {
     assertCorrectImage2string("29.png", "(10)1098.1234");
   }
 
   @Test
-  public void testDecodeRow2string_30() throws Exception {
+  public void testDecodeRow2string30() throws Exception {
     assertCorrectImage2string("30.png", "(10)1098*1234");
   }
 
   @Test
-  public void testDecodeRow2string_31() throws Exception {
+  public void testDecodeRow2string31() throws Exception {
     assertCorrectImage2string("31.png", "(10)1098,1234");
   }
 
   @Test
-  public void testDecodeRow2string_32() throws Exception {
+  public void testDecodeRow2string32() throws Exception {
     assertCorrectImage2string("32.png", "(15)991231(3103)001750(10)12A(422)123(21)123456(423)0123456789012");
   }
 

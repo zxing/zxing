@@ -43,12 +43,6 @@ public final class MaxiCodeReader implements Reader {
 
   private final Decoder decoder = new Decoder();
 
-  /*
-  Decoder getDecoder() {
-    return decoder;
-  }
-   */
-
   /**
    * Locates and decodes a MaxiCode in an image.
    *

@@ -35,6 +35,9 @@ import com.google.zxing.multi.MultipleBarcodeReader;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link QRCodeMultiReader}.
+ */
 public final class MultiQRCodeTestCase extends Assert {
 
   @Test

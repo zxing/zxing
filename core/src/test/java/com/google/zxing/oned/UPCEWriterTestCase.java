@@ -23,6 +23,9 @@ import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link UPCEWriter}.
+ */
 public final class UPCEWriterTestCase extends Assert {
 
   @Test

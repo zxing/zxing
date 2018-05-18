@@ -23,6 +23,9 @@ import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link Code39Writer}.
+ */
 public final class Code39WriterTestCase extends Assert {
 
   @Test

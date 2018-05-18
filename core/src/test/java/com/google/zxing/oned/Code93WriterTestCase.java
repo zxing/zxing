@@ -23,6 +23,9 @@ import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link Code93Writer}.
+ */
 public final class Code93WriterTestCase extends Assert {
 
   @Test

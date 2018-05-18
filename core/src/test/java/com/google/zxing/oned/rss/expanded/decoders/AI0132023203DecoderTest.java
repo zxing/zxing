@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* 
+/*
  * These authors would like to acknowledge the Spanish Ministry of Industry,
  * Tourism and Trade, for the support in the project TSI020301-2008-2
  * "PIRAmIDE: Personalizable Interactions with Resources on AmI-enabled
@@ -26,33 +26,28 @@
 
 package com.google.zxing.oned.rss.expanded.decoders;
 
-import com.google.zxing.NotFoundException;
 import org.junit.Test;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
-public final class AI01_3103_DecoderTest extends AbstractDecoderTest {
+public final class AI0132023203DecoderTest extends AbstractDecoderTest {
 
-  private static final String header = "..X..";
+  private static final String header = "..X.X";
 
   @Test
-  public void test01_3103_1() throws Exception {
-    CharSequence data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750;
-    String expected = "(01)90012345678908(3103)001750";
+  public void test0132021() throws Exception {
+    CharSequence data = header + compressedGtin900123456798908 + compressed15bitWeight1750;
+    String expected = "(01)90012345678908(3202)001750";
+
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_3103_2() throws Exception {
-    CharSequence data = header + compressedGtin_900000000000008 + compressed15bitWeight_0;
-    String expected = "(01)90000000000003(3103)000000";
-    assertCorrectBinaryString(data, expected);
-  }
+  public void test0132031() throws Exception {
+    CharSequence data = header + compressedGtin900123456798908 + compressed15bitWeight11750;
+    String expected = "(01)90012345678908(3203)001750";
 
-  @Test(expected = NotFoundException.class)
-  public void test01_3103_invalid() throws Exception {
-    CharSequence data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750 + "..";
-    assertCorrectBinaryString(data, "");
+    assertCorrectBinaryString(data, expected);
   }
 }

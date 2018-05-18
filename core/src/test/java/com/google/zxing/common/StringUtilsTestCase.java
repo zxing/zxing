@@ -21,22 +21,25 @@ import org.junit.Test;
 
 import java.nio.charset.Charset;
 
+/**
+ * Tests {@link StringUtils}.
+ */
 public final class StringUtilsTestCase extends Assert {
 
   @Test
-  public void testShortShiftJIS_1() {
+  public void testShortShiftJIS1() {
     // ÈáëÈ≠ö
     doTest(new byte[] { (byte) 0x8b, (byte) 0xe0, (byte) 0x8b, (byte) 0x9b, }, "SJIS");
   }
 
   @Test
-  public void testShortISO88591_1() {
+  public void testShortISO885911() {
     // b√•d
     doTest(new byte[] { (byte) 0x62, (byte) 0xe5, (byte) 0x64, }, "ISO-8859-1");
   }
 
   @Test
-  public void testMixedShiftJIS_1() {
+  public void testMixedShiftJIS1() {
     // Hello Èáë!
     doTest(new byte[] { (byte) 0x48, (byte) 0x65, (byte) 0x6c, (byte) 0x6c, (byte) 0x6f,
                         (byte) 0x20, (byte) 0x8b, (byte) 0xe0, (byte) 0x21, },

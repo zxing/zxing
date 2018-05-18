@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Tests {@link MatrixToImageWriter}.
+ */
 public final class MatrixToImageWriterTestCase extends Assert {
   
   @Test

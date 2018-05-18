@@ -145,15 +145,16 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
   // Not private for testing
   List<ExpandedPair> decodeRow2pairs(int rowNumber, BitArray row) throws NotFoundException {
-    try {
-      while (true) {
-        ExpandedPair nextPair = retrieveNextPair(row, this.pairs, rowNumber);
-        this.pairs.add(nextPair);
+    boolean done = false;
+    while (!done) {
+      try {
+        this.pairs.add(retrieveNextPair(row, this.pairs, rowNumber));
+      } catch (NotFoundException nfe) {
+        if (this.pairs.isEmpty()) {
+          throw nfe;
+        }
         // exit this loop when retrieveNextPair() fails and throws
-      }
-    } catch (NotFoundException nfe) {
-      if (this.pairs.isEmpty()) {
-        throw nfe;
+        done = true;
       }
     }
 
@@ -227,8 +228,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
         return this.pairs;
       }
 
-      List<ExpandedRow> rs = new ArrayList<>();
-      rs.addAll(collectedRows);
+      List<ExpandedRow> rs = new ArrayList<>(collectedRows);
       rs.add(row);
       try {
         // Recursion: try to add more rows

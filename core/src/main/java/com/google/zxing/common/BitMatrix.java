@@ -41,7 +41,7 @@ public final class BitMatrix implements Cloneable {
   private final int[] bits;
 
   /**
-   * Creates an empty square {@link BitMatrix}.
+   * Creates an empty square {@code BitMatrix}.
    *
    * @param dimension height and width
    */
@@ -50,7 +50,7 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
-   * Creates an empty {@link BitMatrix}.
+   * Creates an empty {@code BitMatrix}.
    *
    * @param width bit matrix width
    * @param height bit matrix height
@@ -73,10 +73,10 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
-   * Interprets a 2D array of booleans as a {@link BitMatrix}, where "true" means an "on" bit.
+   * Interprets a 2D array of booleans as a {@code BitMatrix}, where "true" means an "on" bit.
    *
    * @param image bits of the image, as a row-major 2D array. Elements are arrays representing rows
-   * @return {@link BitMatrix} representation of image
+   * @return {@code BitMatrix} representation of image
    */
   public static BitMatrix parse(boolean[][] image) {
     int height = image.length;

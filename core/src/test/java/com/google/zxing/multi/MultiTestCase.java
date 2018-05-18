@@ -31,6 +31,9 @@ import com.google.zxing.common.HybridBinarizer;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link MultipleBarcodeReader}.
+ */
 public final class MultiTestCase extends Assert {
 
   @Test

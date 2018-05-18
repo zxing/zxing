@@ -31,84 +31,84 @@ import org.junit.Test;
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
-public final class AI01_3X0X_1X_DecoderTest extends AbstractDecoderTest {
+public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
-  private static final String header_310x_11 = "..XXX...";
-  private static final String header_320x_11 = "..XXX..X";
-  private static final String header_310x_13 = "..XXX.X.";
-  private static final String header_320x_13 = "..XXX.XX";
-  private static final String header_310x_15 = "..XXXX..";
-  private static final String header_320x_15 = "..XXXX.X";
-  private static final String header_310x_17 = "..XXXXX.";
-  private static final String header_320x_17 = "..XXXXXX";
+  private static final String header310x11 = "..XXX...";
+  private static final String header320x11 = "..XXX..X";
+  private static final String header310x13 = "..XXX.X.";
+  private static final String header320x13 = "..XXX.XX";
+  private static final String header310x15 = "..XXXX..";
+  private static final String header320x15 = "..XXXX.X";
+  private static final String header310x17 = "..XXXXX.";
+  private static final String header320x17 = "..XXXXXX";
 
   @Test
-  public void test01_310X_1X_endDate() throws Exception {
-    CharSequence data = header_310x_11 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_End;
+  public void test01310X1XendDate() throws Exception {
+    CharSequence data = header310x11 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateEnd;
     String expected = "(01)90012345678908(3100)001750";
 
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_310X_11_1() throws Exception {
-    CharSequence data = header_310x_11 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_March_12th_2010;
+  public void test01310X111() throws Exception {
+    CharSequence data = header310x11 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3100)001750(11)100312";
 
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_320X_11_1() throws Exception {
-    CharSequence data = header_320x_11 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_March_12th_2010;
+  public void test01320X111() throws Exception {
+    CharSequence data = header320x11 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3200)001750(11)100312";
 
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_310X_13_1() throws Exception {
-    CharSequence data = header_310x_13 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_March_12th_2010;
+  public void test01310X131() throws Exception {
+    CharSequence data = header310x13 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3100)001750(13)100312";
 
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_320X_13_1() throws Exception {
-    CharSequence data = header_320x_13 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_March_12th_2010;
+  public void test01320X131() throws Exception {
+    CharSequence data = header320x13 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3200)001750(13)100312";
 
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_310X_15_1() throws Exception {
-    CharSequence data = header_310x_15 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_March_12th_2010;
+  public void test01310X151() throws Exception {
+    CharSequence data = header310x15 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3100)001750(15)100312";
 
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_320X_15_1() throws Exception {
-    CharSequence data = header_320x_15 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_March_12th_2010;
+  public void test01320X151() throws Exception {
+    CharSequence data = header320x15 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3200)001750(15)100312";
 
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_310X_17_1() throws Exception {
-    CharSequence data = header_310x_17 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_March_12th_2010;
+  public void test01310X171() throws Exception {
+    CharSequence data = header310x17 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3100)001750(17)100312";
 
     assertCorrectBinaryString(data, expected);
   }
 
   @Test
-  public void test01_320X_17_1() throws Exception {
-    CharSequence data = header_320x_17 + compressedGtin_900123456798908 + compressed20bitWeight_1750 + compressedDate_March_12th_2010;
+  public void test01320X171() throws Exception {
+    CharSequence data = header320x17 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3200)001750(17)100312";
 
     assertCorrectBinaryString(data, expected);

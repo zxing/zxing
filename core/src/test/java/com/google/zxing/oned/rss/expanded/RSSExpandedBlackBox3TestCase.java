@@ -30,6 +30,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
+/**
+ * A test of {@link RSSExpandedReader} against a fixed test set of images.
+ */
 public final class RSSExpandedBlackBox3TestCase extends AbstractBlackBoxTestCase {
     
     public RSSExpandedBlackBox3TestCase() {

@@ -92,7 +92,7 @@ public final class Encoder {
     BitArray headerBits = new BitArray();
 
     // Append ECI segment if applicable
-    if (mode == Mode.BYTE && (hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.equals(encoding))) {
+    if (mode == Mode.BYTE && hasEncodingHint) {
       CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
       if (eci != null) {
         appendECI(eci, headerBits);

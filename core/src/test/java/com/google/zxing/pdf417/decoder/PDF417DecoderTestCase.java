@@ -21,6 +21,9 @@ import com.google.zxing.pdf417.PDF417ResultMetadata;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link DecodedBitStreamParser}.
+ */
 public class PDF417DecoderTestCase extends Assert {
 
   /**

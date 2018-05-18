@@ -19,11 +19,14 @@ package com.google.zxing.web;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link OutputUtils}.
+ */
 public final class OutputUtilsTestCase extends Assert {
   
   @Test
   public void testOutput() {
-    byte[] array = new byte[] { 0, 1, -1, 127, -128, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    byte[] array = { 0, 1, -1, 127, -128, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     assertEquals(
         "00 01 ff 7f 80 02 03 04   05 06 07 08 09 0a 0b 0c\n", 
         OutputUtils.arrayToString(array));

@@ -50,7 +50,7 @@ public final class OutputUtils {
   
   private static char hexChar(int value) {
     if (value < 0 || value > 15) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("Bad hex digit value " + value);
     }
     return (char) (value < 10 ? ('0' + value) : ('a' + (value - 10)));
   }

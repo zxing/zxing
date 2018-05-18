@@ -123,11 +123,7 @@ public final class Decoder {
       if (fe != null) {
         throw fe;
       }
-      if (ce != null) {
-        throw ce;
-      }
-      throw e;
-
+      throw ce; // If fe is null, this can't be
     }
   }
 

@@ -19,6 +19,9 @@ package com.google.zxing;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link PlanarYUVLuminanceSource}.
+ */
 public final class PlanarYUVLuminanceSourceTestCase extends Assert {
 
   private static final byte[] YUV = {

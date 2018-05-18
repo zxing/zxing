@@ -20,6 +20,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
+/**
+ * Tests {@link PDF417Reader} against more sample images.
+ */
 public final class PDF417BlackBox3TestCase extends AbstractBlackBoxTestCase {
 
   public PDF417BlackBox3TestCase() {
