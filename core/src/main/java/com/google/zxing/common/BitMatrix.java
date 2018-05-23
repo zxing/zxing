@@ -200,7 +200,7 @@ public final class BitMatrix implements Cloneable {
         || rowSize != mask.getRowSize()) {
       throw new IllegalArgumentException("input matrix dimensions do not match");
     }
-    BitArray rowArray = new BitArray(width / 32 + 1);
+    BitArray rowArray = new BitArray(width);
     for (int y = 0; y < height; y++) {
       int offset = y * rowSize;
       int[] row = mask.getRow(y, rowArray).getBitArray();
