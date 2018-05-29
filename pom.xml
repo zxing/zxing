@@ -278,7 +278,7 @@
             <dependency>
               <groupId>org.apache.maven.scm</groupId>
               <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.10.0</version>
+              <version>1.9.5</version> <!-- can't go to 1.10 until release plugin does -->
             </dependency>
           </dependencies>
           <configuration>
@@ -291,7 +291,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>1.10.0</version>
+          <version>1.9.5</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
