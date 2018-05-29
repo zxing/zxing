@@ -19,7 +19,7 @@
 
   <groupId>com.google.zxing</groupId>
   <artifactId>zxing-parent</artifactId>
-  <version>3.3.4-SNAPSHOT</version>
+  <version>3.3.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <dependencyManagement>
@@ -86,7 +86,7 @@
     <proguard.plugin.version>2.0.14</proguard.plugin.version>
     <slf4j.version>1.7.25</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
-    <zxing.version>3.3.4-SNAPSHOT</zxing.version>
+    <zxing.version>3.3.3-SNAPSHOT</zxing.version>
     <android.platform>22</android.platform>
   </properties>
 
