@@ -12,7 +12,6 @@ com.google.zxing.datamatrix
 com.google.zxing.datamatrix.decoder
 com.google.zxing.datamatrix.detector
 com.google.zxing.datamatrix.encoder
-com.google.zxing.integration.android
 com.google.zxing.maxicode
 com.google.zxing.maxicode.decoder
 com.google.zxing.multi
