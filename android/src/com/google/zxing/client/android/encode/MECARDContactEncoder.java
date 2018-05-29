@@ -67,7 +67,7 @@ final class MECARDContactEncoder extends ContactEncoder {
     return new String[] { newContents.toString(), newDisplayContents.toString() };
   }
 
-  private static class MECARDFieldFormatter implements Formatter {
+  private static final class MECARDFieldFormatter implements Formatter {
     private static final Pattern RESERVED_MECARD_CHARS = Pattern.compile("([\\\\:;])");
     private static final Pattern NEWLINE = Pattern.compile("\\n");
     @Override
@@ -76,7 +76,7 @@ final class MECARDContactEncoder extends ContactEncoder {
     }
   }
 
-  private static class MECARDTelDisplayFormatter implements Formatter {
+  private static final class MECARDTelDisplayFormatter implements Formatter {
     private static final Pattern NOT_DIGITS_OR_PLUS = Pattern.compile("[^0-9+]+");
     @Override
     public CharSequence format(CharSequence value, int index) {
@@ -84,7 +84,7 @@ final class MECARDContactEncoder extends ContactEncoder {
     }
   }
 
-  private static class MECARDNameDisplayFormatter implements Formatter {
+  private static final class MECARDNameDisplayFormatter implements Formatter {
     private static final Pattern COMMA = Pattern.compile(",");
     @Override
     public CharSequence format(CharSequence value, int index) {

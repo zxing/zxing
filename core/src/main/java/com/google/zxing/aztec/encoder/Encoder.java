@@ -108,7 +108,7 @@ public final class Encoder {
         }
         // [Re]stuff the bits if this is the first opportunity, or if the
         // wordSize has changed
-        if (wordSize != WORD_SIZE[layers]) {
+        if (stuffedBits == null || wordSize != WORD_SIZE[layers]) {
           wordSize = WORD_SIZE[layers];
           stuffedBits = stuffBits(bits, wordSize);
         }

@@ -40,16 +40,15 @@ final class BoundingBox {
               ResultPoint bottomLeft,
               ResultPoint topRight,
               ResultPoint bottomRight) throws NotFoundException {
-    if ((topLeft == null && topRight == null) ||
-        (bottomLeft == null && bottomRight == null) ||
-        (topLeft != null && bottomLeft == null) ||
-        (topRight != null && bottomRight == null)) {
+    boolean leftUnspecified = topLeft == null || bottomLeft == null;
+    boolean rightUnspecified = topRight == null || bottomRight == null;
+    if (leftUnspecified && rightUnspecified) {
       throw NotFoundException.getNotFoundInstance();
     }
-    if (topLeft == null) {
+    if (leftUnspecified) {
       topLeft = new ResultPoint(0, topRight.getY());
       bottomLeft = new ResultPoint(0, bottomRight.getY());
-    } else if (topRight == null) {
+    } else if (rightUnspecified) {
       topRight = new ResultPoint(image.getWidth() - 1, topLeft.getY());
       bottomRight = new ResultPoint(image.getWidth() - 1, bottomLeft.getY());
     }

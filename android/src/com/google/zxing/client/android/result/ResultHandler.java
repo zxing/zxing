@@ -205,24 +205,28 @@ public abstract class ResultHandler {
 
     putExtra(intent, ContactsContract.Intents.Insert.PHONETIC_NAME, pronunciation);
 
-    int phoneCount = Math.min(phoneNumbers != null ? phoneNumbers.length : 0, Contents.PHONE_KEYS.length);
-    for (int x = 0; x < phoneCount; x++) {
-      putExtra(intent, Contents.PHONE_KEYS[x], phoneNumbers[x]);
-      if (phoneTypes != null && x < phoneTypes.length) {
-        int type = toPhoneContractType(phoneTypes[x]);
-        if (type >= 0) {
-          intent.putExtra(Contents.PHONE_TYPE_KEYS[x], type);
+    if (phoneNumbers != null) {
+      int phoneCount = Math.min(phoneNumbers.length, Contents.PHONE_KEYS.length);
+      for (int x = 0; x < phoneCount; x++) {
+        putExtra(intent, Contents.PHONE_KEYS[x], phoneNumbers[x]);
+        if (phoneTypes != null && x < phoneTypes.length) {
+          int type = toPhoneContractType(phoneTypes[x]);
+          if (type >= 0) {
+            intent.putExtra(Contents.PHONE_TYPE_KEYS[x], type);
+          }
         }
       }
     }
 
-    int emailCount = Math.min(emails != null ? emails.length : 0, Contents.EMAIL_KEYS.length);
-    for (int x = 0; x < emailCount; x++) {
-      putExtra(intent, Contents.EMAIL_KEYS[x], emails[x]);
-      if (emailTypes != null && x < emailTypes.length) {
-        int type = toEmailContractType(emailTypes[x]);
-        if (type >= 0) {
-          intent.putExtra(Contents.EMAIL_TYPE_KEYS[x], type);
+    if (emails != null) {
+      int emailCount = Math.min(emails.length, Contents.EMAIL_KEYS.length);
+      for (int x = 0; x < emailCount; x++) {
+        putExtra(intent, Contents.EMAIL_KEYS[x], emails[x]);
+        if (emailTypes != null && x < emailTypes.length) {
+          int type = toEmailContractType(emailTypes[x]);
+          if (type >= 0) {
+            intent.putExtra(Contents.EMAIL_TYPE_KEYS[x], type);
+          }
         }
       }
     }

@@ -88,7 +88,7 @@ public final class PreferencesFragment
     }
   }
 
-  private class CustomSearchURLValidator implements Preference.OnPreferenceChangeListener {
+  private final class CustomSearchURLValidator implements Preference.OnPreferenceChangeListener {
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
       if (!isValid(newValue)) {

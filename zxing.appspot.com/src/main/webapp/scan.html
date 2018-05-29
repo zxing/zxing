@@ -54,43 +54,45 @@
 			
 		<script type="text/javascript">
 			$(function(){
+				var playLink = $(".playLink");
+				var man = $("#man");
 				// If device is Android, change URI to Android-friendly. Otherwise use HTTP URI.
 				if(navigator.userAgent.toLowerCase().indexOf("android") !== -1) {
-					$(".playLink").attr("src","market://details?id=com.google.zxing.client.android");
+					playLink.attr("src","market://details?id=com.google.zxing.client.android");
 				}
 				
 				// Detect GET-parameters from URL
-				GET = {};
+				var GET = {};
 				$.each(location.search.substr(1).split("&"),function(k,v){
 					var prm = v.split("=");
 					GET[decodeURIComponent(prm[0])] = decodeURIComponent(prm[1]); 
 				});
 				
 				// Check is it possible to use manual mode
-				if(GET.ret == "" || GET.ret == void(0) || GET.ret.indexOf("http") == -1){
-					$("#man").hide();
+				if(GET["ret"] === "" || GET["ret"] === void(0) || GET["ret"].indexOf("http") === -1){
+					man.hide();
 				}
 				
 				// When Google Play -badge is clicked ...
-				$(".playLink").click(function(){
+				playLink.click(function(){
 					$("#info").hide();
 					$("#error").hide();
 					$("#installed").show();
 					var url = location.href;
-					if(url.indexOf("?") == -1) url = url + "?";
+					if(url.indexOf("?") === -1) url = url + "?";
 					url = url + "&installed=1";
 					$("#installed a").attr("href",url);
 				});
 			
 				// When manual-button is clicked ...
-				$("#man").click(function(e){
+				man.click(function(e){
 					e.preventDefault();
 					var man = prompt("Please type barcode below");
 					if(man){
-						var url = GET.ret;
-						if (url.indexOf("{CODE}") == -1) {
+						var url = GET["ret"];
+						if (url.indexOf("{CODE}") === -1) {
 							// Return URL has no {CODE} place holder, so add a query parameter
-							if (url.indexOf("?") == -1)
+							if (url.indexOf("?") === -1)
 								url = url + "?" + encodeURIComponent("{CODE}") + "=" + encodeURIComponent(man);
 							else
 								url = url + "&" + encodeURIComponent("{CODE}") + "=" + encodeURIComponent(man);
@@ -103,7 +105,7 @@
 				});
 				
 				// If app isn't installed after visiting on Google Play, show error
-				if(GET.installed !== void(0)){
+				if(GET["installed"] !== void(0)){
 					$("#info").hide();
 					$("#error").show();
 				}

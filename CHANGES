@@ -378,3 +378,8 @@
   - Minor DataMatrix bug fixes
   - Improve WPA2 wi-fi configuration support in Barcode Scanner
   - Various translation updates and minor improvements
+
+3.3.3 (30 May 2018)
+
+  - Minor fixes and improvements
+  - Java 9+ support

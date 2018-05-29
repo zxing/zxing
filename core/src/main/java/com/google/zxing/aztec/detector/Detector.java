@@ -524,8 +524,8 @@ public final class Detector {
    * @param newSide the new length of the size of the square in the target bit matrix
    * @return the corners of the expanded square
    */
-  private static ResultPoint[] expandSquare(ResultPoint[] cornerPoints, float oldSide, float newSide) {
-    float ratio = newSide / (2 * oldSide);
+  private static ResultPoint[] expandSquare(ResultPoint[] cornerPoints, int oldSide, int newSide) {
+    float ratio = newSide / (2.0f * oldSide);
     float dx = cornerPoints[0].getX() - cornerPoints[2].getX();
     float dy = cornerPoints[0].getY() - cornerPoints[2].getY();
     float centerx = (cornerPoints[0].getX() + cornerPoints[2].getX()) / 2.0f;
