@@ -206,7 +206,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
           }
 
           // Calculate the diagonal length by assuming a 90° angle at topleft
-          float dCpy = (float) Math.sqrt(dA * dA + dB * dB);
+          float dCpy = (float) Math.sqrt((double) dA * dA + (double) dB * dB);
           // Compare to the real distance in %
           float vPyC = Math.abs((dC - dCpy) / Math.min(dC, dCpy));
 

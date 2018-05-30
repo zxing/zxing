@@ -59,8 +59,8 @@ public final class PDF417ScanningDecoder {
     BoundingBox boundingBox = new BoundingBox(image, imageTopLeft, imageBottomLeft, imageTopRight, imageBottomRight);
     DetectionResultRowIndicatorColumn leftRowIndicatorColumn = null;
     DetectionResultRowIndicatorColumn rightRowIndicatorColumn = null;
-    DetectionResult detectionResult = null;
-    for (int i = 0; i < 2; i++) {
+    DetectionResult detectionResult;
+    for (boolean firstPass = true; ; firstPass = false) {
       if (imageTopLeft != null) {
         leftRowIndicatorColumn = getRowIndicatorColumn(image, boundingBox, imageTopLeft, true, minCodewordWidth,
             maxCodewordWidth);
@@ -73,15 +73,15 @@ public final class PDF417ScanningDecoder {
       if (detectionResult == null) {
         throw NotFoundException.getNotFoundInstance();
       }
-      if (i == 0 && detectionResult.getBoundingBox() != null &&
-          (detectionResult.getBoundingBox().getMinY() < boundingBox.getMinY() || detectionResult.getBoundingBox()
-              .getMaxY() > boundingBox.getMaxY())) {
-        boundingBox = detectionResult.getBoundingBox();
+      BoundingBox resultBox = detectionResult.getBoundingBox();
+      if (firstPass && resultBox != null &&
+          (resultBox.getMinY() < boundingBox.getMinY() || resultBox.getMaxY() > boundingBox.getMaxY())) {
+        boundingBox = resultBox;
       } else {
-        detectionResult.setBoundingBox(boundingBox);
         break;
       }
     }
+    detectionResult.setBoundingBox(boundingBox);
     int maxBarcodeColumn = detectionResult.getBarcodeColumnCount() + 1;
     detectionResult.setDetectionResultColumn(0, leftRowIndicatorColumn);
     detectionResult.setDetectionResultColumn(maxBarcodeColumn, rightRowIndicatorColumn);

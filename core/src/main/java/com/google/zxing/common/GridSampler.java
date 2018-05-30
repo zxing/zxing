@@ -122,7 +122,8 @@ public abstract class GridSampler {
     int height = image.getHeight();
     // Check and nudge points from start until we see some that are OK:
     boolean nudged = true;
-    for (int offset = 0; offset < points.length && nudged; offset += 2) {
+    int maxOffset = points.length - 1; // points.length must be even
+    for (int offset = 0; offset < maxOffset && nudged; offset += 2) {
       int x = (int) points[offset];
       int y = (int) points[offset + 1];
       if (x < -1 || x > width || y < -1 || y > height) {

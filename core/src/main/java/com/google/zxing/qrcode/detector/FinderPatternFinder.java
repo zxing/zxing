@@ -607,19 +607,19 @@ public class FinderPatternFinder {
     // Filter outlier possibilities whose module size is too different
     if (startSize > 3) {
       // But we can only afford to do so if we have at least 4 possibilities to choose from
-      float totalModuleSize = 0.0f;
-      float square = 0.0f;
+      double totalModuleSize = 0.0;
+      double square = 0.0;
       for (FinderPattern center : possibleCenters) {
         float size = center.getEstimatedModuleSize();
         totalModuleSize += size;
         square += size * size;
       }
-      float average = totalModuleSize / startSize;
+      double average = totalModuleSize / startSize;
       float stdDev = (float) Math.sqrt(square / startSize - average * average);
 
-      Collections.sort(possibleCenters, new FurthestFromAverageComparator(average));
+      Collections.sort(possibleCenters, new FurthestFromAverageComparator((float) average));
 
-      float limit = Math.max(0.2f * average, stdDev);
+      float limit = Math.max(0.2f * (float) average, stdDev);
 
       for (int i = 0; i < possibleCenters.size() && possibleCenters.size() > 3; i++) {
         FinderPattern pattern = possibleCenters.get(i);
