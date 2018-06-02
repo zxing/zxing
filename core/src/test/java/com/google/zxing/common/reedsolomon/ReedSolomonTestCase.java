@@ -393,6 +393,11 @@ public final class ReedSolomonTestCase extends Assert {
     testEncodeDecodeRandom(GenericGF.AZTEC_DATA_12, 3072, 1023);
   }
 
+  @Test
+  public void testZeroPolyString() {
+    assertEquals("0", GenericGF.QR_CODE_FIELD_256.getZero().toString());
+  }
+
   public static void corrupt(int[] received, int howMany, Random random, int max) {
     BitSet corrupted = new BitSet(received.length);
     for (int j = 0; j < howMany; j++) {
