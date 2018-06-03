@@ -19,6 +19,9 @@ package com.google.zxing.common.reedsolomon;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link GenericGFPoly}.
+ */
 public final class GenericGFPolyTestCase extends Assert {
 
   private static final GenericGF FIELD = GenericGF.QR_CODE_FIELD_256;
