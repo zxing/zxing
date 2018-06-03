@@ -393,13 +393,6 @@ public final class ReedSolomonTestCase extends Assert {
     testEncodeDecodeRandom(GenericGF.AZTEC_DATA_12, 3072, 1023);
   }
 
-  @Test
-  public void testPolynomialString() {
-    assertEquals("0", GenericGF.QR_CODE_FIELD_256.getZero().toString());
-    GenericGFPoly p = new GenericGFPoly(GenericGF.QR_CODE_FIELD_256, new int[] {3, 0, -2, 1, 1});
-    assertEquals("a^25x^4 - ax^2 + x + 1", p.toString());
-  }
-
   public static void corrupt(int[] received, int howMany, Random random, int max) {
     BitSet corrupted = new BitSet(received.length);
     for (int j = 0; j < howMany; j++) {
