@@ -396,8 +396,8 @@ public final class ReedSolomonTestCase extends Assert {
   @Test
   public void testPolynomialString() {
     assertEquals("0", GenericGF.QR_CODE_FIELD_256.getZero().toString());
-    GenericGFPoly p = new GenericGFPoly(GenericGF.QR_CODE_FIELD_256, new int[] {3, -2, 1});
-    assertEquals("a^25x^2 - ax + 1", p.toString());
+    GenericGFPoly p = new GenericGFPoly(GenericGF.QR_CODE_FIELD_256, new int[] {3, 0, -2, 1, 1});
+    assertEquals("a^25x^4 - ax^2 + x + 1", p.toString());
   }
 
   public static void corrupt(int[] received, int howMany, Random random, int max) {
