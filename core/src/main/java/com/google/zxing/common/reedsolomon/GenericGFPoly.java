@@ -225,15 +225,19 @@ final class GenericGFPoly {
 
   @Override
   public String toString() {
-    if (getDegree() == 0) {
-      return Integer.toString(getCoefficient(0));
+    if (isZero()) {
+      return "0";
     }
     StringBuilder result = new StringBuilder(8 * getDegree());
     for (int degree = getDegree(); degree >= 0; degree--) {
       int coefficient = getCoefficient(degree);
       if (coefficient != 0) {
         if (coefficient < 0) {
-          result.append(" - ");
+          if (degree == getDegree()) {
+            result.append("-");
+          } else {
+            result.append(" - ");
+          }
           coefficient = -coefficient;
         } else {
           if (result.length() > 0) {

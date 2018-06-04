@@ -32,6 +32,8 @@ public final class GenericGFPolyTestCase extends Assert {
     assertEquals("-1", FIELD.buildMonomial(0, -1).toString());
     GenericGFPoly p = new GenericGFPoly(FIELD, new int[] {3, 0, -2, 1, 1});
     assertEquals("a^25x^4 - ax^2 + x + 1", p.toString());
+    p = new GenericGFPoly(FIELD, new int[] {3});
+    assertEquals("a^25", p.toString());
   }
 
   @Test
