@@ -61,7 +61,9 @@ public final class DoSFilter implements Filter {
                        FilterChain chain) throws IOException, ServletException {
     if (isBanned((HttpServletRequest) request)) {
       HttpServletResponse servletResponse = (HttpServletResponse) response;
-      servletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+      // Send very short response as requests may be very frequent
+      servletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+      servletResponse.getWriter().write("Forbidden");
     } else {
       chain.doFilter(request, response);
     }
