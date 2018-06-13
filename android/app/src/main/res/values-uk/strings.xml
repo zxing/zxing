@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Сканер штрих-кодів</string>
+  <string name="app_picker_name">Програми</string>
+  <string name="bookmark_picker_name">Закладки</string>
+  <string name="button_add_calendar">Додати в календар</string>
+  <string name="button_add_contact">Додати контакт</string>
+  <string name="button_book_search">Пошук книги</string>
+  <string name="button_cancel">Відміна</string>
+  <string name="button_custom_product_search">Користувацький пошук</string>
+  <string name="button_dial">Набрати номер</string>
+  <string name="button_email">Відправити e-mail</string>
+  <string name="button_get_directions">Прокласти маршрут</string>
+  <string name="button_mms">Відправити MMS</string>
+  <string name="button_ok">Гаразд</string>
+  <string name="button_open_browser">Відкрити браузер</string>
+  <string name="button_product_search">Пошук товару</string>
+  <string name="button_search_book_contents">Пошук вмісту книги</string>
+  <string name="button_share_app">Програма</string>
+  <string name="button_share_bookmark">Закладка</string>
+  <string name="button_share_by_email">Поділитись через e-mail</string>
+  <string name="button_share_by_sms">Поділитись через SMS</string>
+  <string name="button_share_clipboard">Буфер обміну</string>
+  <string name="button_share_contact">Контакт</string>
+  <string name="button_show_map">Показати карту</string>
+  <string name="button_sms">Відправити SMS</string>
+  <string name="button_web_search">Пошук в інтернеті</string>
+  <string name="button_wifi">Підключитись до мережі</string>
+  <string name="contents_contact">Контактна інформація</string>
+  <string name="contents_email">Адреса e-mail</string>
+  <string name="contents_location">Географічні координати</string>
+  <string name="contents_phone">Номер телефону</string>
+  <string name="contents_sms">Адреса для SMS</string>
+  <string name="contents_text">Текст</string>
+  <string name="history_clear_one_history_text">Видалити</string>
+  <string name="history_clear_text">Видалити історію</string>
+  <string name="history_email_title">Історія сканування</string>
+  <string name="history_empty">Пусто</string>
+  <string name="history_empty_detail">Нема збережених штрих-кодів</string>
+  <string name="history_send">Відправити історію</string>
+  <string name="history_title">Історія</string>
+  <string name="menu_encode_mecard">Використовуйте MECARD</string>
+  <string name="menu_encode_vcard">Використовуйте vCard</string>
+  <string name="menu_help">Допомога</string>
+  <string name="menu_history">Історія</string>
+  <string name="menu_settings">Налаштування</string>
+  <string name="menu_share">Поділитись</string>
+  <string name="msg_bulk_mode_scanned">Масовий режим: зберігати історію сканування</string>
+  <string name="msg_camera_framework_bug">На жаль, виникла помилка камери. Можливо, вам знадобиться перезавантажити пристрій.</string>
+  <string name="msg_default_format">Формат</string>
+  <string name="msg_default_meta">Метадані</string>
+  <string name="msg_default_mms_subject">Привіт</string>
+  <string name="msg_default_status">Щоб відсканувати штрих-код, помістіть його в прямокутник видошукача.</string>
+  <string name="msg_default_time">Час</string>
+  <string name="msg_default_type">Тип</string>
+  <string name="msg_encode_contents_failed">Неможливо створити штрих-код з наданих даних.</string>
+  <string name="msg_error">Помилка</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">На жаль, неможливо запустити дану програму. Можливо, вміст штрих-коду пошкоджено.</string>
+  <string name="msg_invalid_value">Некоректна</string>
+  <string name="msg_redirect">Переслати</string>
+  <string name="msg_sbc_book_not_searchable">На жаль, пошук книги був невдалим.</string>
+  <string name="msg_sbc_failed">На жаль, виникла помилка пошуку.</string>
+  <string name="msg_sbc_no_page_returned">Не знайдено жодної сторінки.</string>
+  <string name="msg_sbc_page">Сторінка</string>
+  <string name="msg_sbc_results">Результати</string>
+  <string name="msg_sbc_searching_book">Пошук книги\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Фрагмент недоступний</string>
+  <string name="msg_share_explanation">Ви можете ділитись даними, скануючи штрих-код з вашого екрану іншим телефоном.</string>
+  <string name="msg_share_text">Або введіть текст</string>
+  <string name="msg_sure">Ви впевнені?</string>
+  <string name="msg_unmount_usb">На жаль, SD-карта недоступна.</string>
+  <string name="preferences_actions_title">Коли штрих-код знайдено\u2026</string>
+  <string name="preferences_auto_focus_title">Використовувати автофокус</string>
+  <string name="preferences_auto_open_web_title">Відкрити веб-сторінку</string>
+  <string name="preferences_bulk_mode_summary">Постійно сканувати та зберігати штрих-коди</string>
+  <string name="preferences_bulk_mode_title">Масове сканування</string>
+  <string name="preferences_copy_to_clipboard_title">Скопіювати до буферу обміну</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Заміни: %s = вміст, %f = формат, %t = тип</string>
+  <string name="preferences_custom_product_search_title">URL користувацького пошуку</string>
+  <string name="preferences_decode_1D_industrial_title">Промислові 1D</string>
+  <string name="preferences_decode_1D_product_title">Продуктові 1D</string>
+  <string name="preferences_decode_Aztec_title">Розпізнавати Aztec коди</string>
+  <string name="preferences_decode_Data_Matrix_title">Розпізнавати Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">Розпізнавати QR-коди</string>
+  <string name="preferences_device_bug_workarounds_title">Виправлення помилок пристрою</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Немає режиму штрих-коду сцени</string>
+  <string name="preferences_disable_continuous_focus_summary">Стандартний режим фокусування</string>
+  <string name="preferences_disable_continuous_focus_title">Вимкнути постійне фокусування</string>
+  <string name="preferences_disable_exposure_title">Вимкнути експозицію</string>
+  <string name="preferences_disable_metering_title">Немає обліку</string>
+  <string name="preferences_front_light_auto">Автоматично</string>
+  <string name="preferences_front_light_off">Вимкнено</string>
+  <string name="preferences_front_light_on">Увімкнено</string>
+  <string name="preferences_front_light_summary">Покращує розпізнавання при поганому освітлення, але може викликати відблиски. Працює не на всіх пристроях.</string>
+  <string name="preferences_front_light_title">Ліхтарик</string>
+  <string name="preferences_general_title">Загальні налаштування</string>
+  <string name="preferences_history_summary">Зберігайте ваші скани в історії</string>
+  <string name="preferences_history_title">Додати в історію</string>
+  <string name="preferences_invert_scan_summary">Сканування білих штрих-кодів на чорному фоні. Не працює на деяких пристроях.</string>
+  <string name="preferences_invert_scan_title">Інвертувати</string>
+  <string name="preferences_name">Налаштування</string>
+  <string name="preferences_orientation_title">Не повертати автоматично</string>
+  <string name="preferences_play_beep_title">Подати звуковий сигнал</string>
+  <string name="preferences_remember_duplicates_summary">Зберігати результати сканування однакових штрих-кодів</string>
+  <string name="preferences_remember_duplicates_title">Запам\'ятовувати дублікати</string>
+  <string name="preferences_result_title">Налаштування результатів</string>
+  <string name="preferences_scanning_title">Під час сканування штрих-кодів\u2026</string>
+  <string name="preferences_search_country">Пошук країни</string>
+  <string name="preferences_supplemental_summary">Показати детальну інформацію про штрих-код</string>
+  <string name="preferences_supplemental_title">Подробиці</string>
+  <string name="preferences_vibrate_title">Вібрувати</string>
+  <string name="result_address_book">Знайдені контактні дані</string>
+  <string name="result_calendar">Знайдено подію для календаря</string>
+  <string name="result_email_address">Знайдено e-mail адресу</string>
+  <string name="result_geo">Знайдено географічні координати</string>
+  <string name="result_isbn">Знайдено книгу</string>
+  <string name="result_product">Знайдено товар</string>
+  <string name="result_sms">Знайдено адресу для SMS</string>
+  <string name="result_tel">Знайдено номер телефону</string>
+  <string name="result_text">Знайдено текст</string>
+  <string name="result_uri">Знайдено URL</string>
+  <string name="result_wifi">Знайдено конфігурацію мережі</string>
+  <string name="sbc_name">Пошук книг Google</string>
+  <string name="wifi_changing_network">Запит підключення до мережі\u2026</string>
+</resources>

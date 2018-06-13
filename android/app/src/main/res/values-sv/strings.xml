@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Applikationer</string>
+  <string name="bookmark_picker_name">Bokmärken</string>
+  <string name="button_add_calendar">Lägg till i kalender</string>
+  <string name="button_add_contact">Lägg till kontakt</string>
+  <string name="button_book_search">Boksökning</string>
+  <string name="button_cancel">Avbryt</string>
+  <string name="button_custom_product_search">Anpassad sökning</string>
+  <string name="button_dial">Slå nummer</string>
+  <string name="button_email">Skicka e-post</string>
+  <string name="button_get_directions">Få anvisningar</string>
+  <string name="button_mms">Skicka MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Öppna webbläsare</string>
+  <string name="button_product_search">Produktsök</string>
+  <string name="button_search_book_contents">Sökinnehåll</string>
+  <string name="button_share_app">Applikation</string>
+  <string name="button_share_bookmark">Bokmärke</string>
+  <string name="button_share_by_email">Dela via e-post</string>
+  <string name="button_share_by_sms">Dela via SMS</string>
+  <string name="button_share_clipboard">Klippbord</string>
+  <string name="button_share_contact">Kontakt</string>
+  <string name="button_show_map">Visa karta</string>
+  <string name="button_sms">Skicka SMS</string>
+  <string name="button_web_search">Webbsök</string>
+  <string name="button_wifi">Anslut till nätverk</string>
+  <string name="contents_contact">Kontaktinfo</string>
+  <string name="contents_email">E-postadress</string>
+  <string name="contents_location">Geografiska koordinater</string>
+  <string name="contents_phone">Telefonnummer</string>
+  <string name="contents_sms">SMS-adress</string>
+  <string name="contents_text">Vanlig text</string>
+  <string name="history_clear_one_history_text">Rensa</string>
+  <string name="history_clear_text">Rensa historik</string>
+  <string name="history_email_title">Historik inskannade streckkoder</string>
+  <string name="history_empty">Tom</string>
+  <string name="history_empty_detail">Inga inskannade streckkoder har registrerats</string>
+  <string name="history_send">Skicka historik</string>
+  <string name="history_title">Historik</string>
+  <string name="menu_encode_mecard">Använd MECARD</string>
+  <string name="menu_encode_vcard">Använd vCard</string>
+  <string name="menu_help">Hjälp</string>
+  <string name="menu_history">Historik</string>
+  <string name="menu_settings">Inställningar</string>
+  <string name="menu_share">Dela</string>
+  <string name="msg_bulk_mode_scanned">Bulk-läge: streckkod har inskannats och sparats</string>
+  <string name="msg_camera_framework_bug">Det uppstod tyvärr ett fel med Androidkameran.</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_mms_subject">Hej</string>
+  <string name="msg_default_status">Placera steckkoden inom sökarens rektangel för att läsa den.</string>
+  <string name="msg_default_time">Tid</string>
+  <string name="msg_default_type">Typ</string>
+  <string name="msg_encode_contents_failed">Det gick inte att avkoda en streckkod från den erhållna informationen.</string>
+  <string name="msg_error">Fel</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Den begärda applikationen kunde tyvärr inte startas. Streckkodens innehåll kan vara ogiltigt.</string>
+  <string name="msg_invalid_value">Ogiltigt värde</string>
+  <string name="msg_redirect">Omdirigering</string>
+  <string name="msg_sbc_book_not_searchable">Den här boken är tyvärr inte sökbar.</string>
+  <string name="msg_sbc_failed">Det uppstod tyvärr ett fel vid sökning. </string>
+  <string name="msg_sbc_no_page_returned">Ingen sida funnen</string>
+  <string name="msg_sbc_page">Sida</string>
+  <string name="msg_sbc_results">Resultat</string>
+  <string name="msg_sbc_searching_book">Söker bok\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Utdrag ej tillgängligt</string>
+  <string name="msg_share_explanation">Du kan dela information genom att visa en streckkod på din skärm och sedan skanna in den med en annan telefon.</string>
+  <string name="msg_share_text">Eller skriv in text och tryck Enter</string>
+  <string name="msg_sure">Är du säker?</string>
+  <string name="msg_unmount_usb">SD-kortet är tyvärr inte tillgängligt.</string>
+  <string name="preferences_actions_title">När en streckkod hittas\u2026</string>
+  <string name="preferences_auto_focus_title">Använd autofokus</string>
+  <string name="preferences_auto_open_web_title">Öppna webbsidor automatiskt</string>
+  <string name="preferences_bulk_mode_summary">Skanna och spara flera streckkoder samtidigt</string>
+  <string name="preferences_bulk_mode_title">Bulk-inskanningläge</string>
+  <string name="preferences_copy_to_clipboard_title">Kopiera till urklipp</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Ersättningar: %s = innehåll, %f = format, %t = typ</string>
+  <string name="preferences_custom_product_search_title">Anpassad sökning URL</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industriell</string>
+  <string name="preferences_decode_1D_product_title">1D Produkt</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR Code</string>
+  <string name="preferences_device_bug_workarounds_title">Bugglösningar för enhet</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Inget scenläge för streckkod</string>
+  <string name="preferences_disable_continuous_focus_summary">Använd endast standardfokusläge</string>
+  <string name="preferences_disable_continuous_focus_title">Ingen kontinuerlig fokus</string>
+  <string name="preferences_disable_exposure_title">Ingen exponering</string>
+  <string name="preferences_disable_metering_title">Ingen mätning</string>
+  <string name="preferences_front_light_auto">Automatisk</string>
+  <string name="preferences_front_light_off">Inaktiv</string>
+  <string name="preferences_front_light_on">Aktiv</string>
+  <string name="preferences_front_light_summary">Förbättrar inskanning i svag belysing på vissa telefoner, men kan orsaka bländning. Ej tillgängligt på vissa enheter.</string>
+  <string name="preferences_front_light_title">Använd frontljus</string>
+  <string name="preferences_general_title">Grundläggande inställningar</string>
+  <string name="preferences_history_summary">Lagra dina skanningar i historia</string>
+  <string name="preferences_history_title">Lägg till Historia</string>
+  <string name="preferences_invert_scan_summary">Skanna in vita streckkoder mot svart bakgrund. Ej tillgängligt på vissa enheter. </string>
+  <string name="preferences_invert_scan_title">Invertera inskanning</string>
+  <string name="preferences_name">Inställningar</string>
+  <string name="preferences_orientation_title">Ingen automatisk rotering</string>
+  <string name="preferences_play_beep_title">Ton</string>
+  <string name="preferences_remember_duplicates_summary">Lagra flera inskanningar av samma streckkod i historik</string>
+  <string name="preferences_remember_duplicates_title">Kom ihåg dubletter</string>
+  <string name="preferences_result_title">Resultatinställningar</string>
+  <string name="preferences_scanning_title">När du skannar in streckkoder, avkoda\u2026</string>
+  <string name="preferences_search_country">Sök land</string>
+  <string name="preferences_supplemental_summary">Försök hämta mer information om streckkodens innehåll</string>
+  <string name="preferences_supplemental_title">Hämta mer info</string>
+  <string name="preferences_vibrate_title">Vibrera</string>
+  <string name="result_address_book">Hittade kontaktinformation</string>
+  <string name="result_calendar">Hittade kalenderhändelser</string>
+  <string name="result_email_address">Hittade e-postadress</string>
+  <string name="result_geo">Hittade geografiska koordinater</string>
+  <string name="result_isbn">Hittade bok</string>
+  <string name="result_product">Hittade produkt</string>
+  <string name="result_sms">Hittade SMS-adress</string>
+  <string name="result_tel">Hittade telefonnummer</string>
+  <string name="result_text">Hittade vanlig text</string>
+  <string name="result_uri">Hittade URL</string>
+  <string name="result_wifi">Hittade WLAN-konfiguration</string>
+  <string name="sbc_name">Google Book Search</string>
+  <string name="wifi_changing_network">Begär anslutning till nätverk\u2026</string>
+</resources>

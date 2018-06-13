@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Aplikacje</string>
+  <string name="bookmark_picker_name">Zakładki</string>
+  <string name="button_add_calendar">Dodaj do kalendarza</string>
+  <string name="button_add_contact">Dodaj kontakt</string>
+  <string name="button_book_search">Szukaj książek</string>
+  <string name="button_cancel">Anuluj</string>
+  <string name="button_custom_product_search">Wyszukiwanie indywidualne</string>
+  <string name="button_dial">Zadzwoń</string>
+  <string name="button_email">Wyślij email</string>
+  <string name="button_get_directions">Wskazówki</string>
+  <string name="button_mms">Wyślij MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Otwórz przeglądarkę</string>
+  <string name="button_product_search">Szukaj produktów</string>
+  <string name="button_search_book_contents">Przeszukaj zawartość</string>
+  <string name="button_share_app">Aplikacja</string>
+  <string name="button_share_bookmark">Zakładka</string>
+  <string name="button_share_by_email">Udostępnij przez email</string>
+  <string name="button_share_by_sms">Udostępnij przez SMS</string>
+  <string name="button_share_clipboard">Schowek</string>
+  <string name="button_share_contact">Kontakt</string>
+  <string name="button_show_map">Pokaż mapę</string>
+  <string name="button_sms">Wyślij SMS</string>
+  <string name="button_web_search">Szukaj w sieci</string>
+  <string name="button_wifi">Podłącz do sieci</string>
+  <string name="contents_contact">Informacje o kontakcie</string>
+  <string name="contents_email">Adres email</string>
+  <string name="contents_location">Współrzędne geograficzne</string>
+  <string name="contents_phone">Numer telefonu</string>
+  <string name="contents_sms">Adres SMS</string>
+  <string name="contents_text">Zwykły tekst</string>
+  <string name="history_clear_one_history_text">Wyczyść</string>
+  <string name="history_clear_text">Wyczyść historię</string>
+  <string name="history_email_title">Historia Skanera Kodów Paskowych</string>
+  <string name="history_empty">Pusty</string>
+  <string name="history_empty_detail">Brak zeskanowanych kodów</string>
+  <string name="history_send">Wyślij historię</string>
+  <string name="history_title">Historia</string>
+  <string name="menu_encode_mecard">Użyj MECARD</string>
+  <string name="menu_encode_vcard">Użyj vCard</string>
+  <string name="menu_help">Pomoc</string>
+  <string name="menu_history">Historia</string>
+  <string name="menu_settings">Ustawienia</string>
+  <string name="menu_share">Udostępnij</string>
+  <string name="msg_bulk_mode_scanned">Tryb zbiorczy: skanowanie i zapisywanie kodów kreskowych w trybie ciągłym</string>
+  <string name="msg_camera_framework_bug">Przepraszamy, aparat Android napotkał problem. Może wystąpić potrzeba ponownego uruchomienia urządzenia.</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metadanych</string>
+  <string name="msg_default_mms_subject">Cześć</string>
+  <string name="msg_default_status">Umieść kod paskowy w prostokącie wizjera aby zeskanować.</string>
+  <string name="msg_default_time">Czas</string>
+  <string name="msg_default_type">Typ</string>
+  <string name="msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
+  <string name="msg_error">Błąd</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Przepraszamy, żadana aplikacja nie może zostać uruchomiona. Zawartość kodu paskowego może być nieprawidłowa.</string>
+  <string name="msg_invalid_value">Nieprawidłowa wartość</string>
+  <string name="msg_redirect">Przekierowanie</string>
+  <string name="msg_sbc_book_not_searchable">Przepraszamy, ta książka nie jest przeszukiwalna.</string>
+  <string name="msg_sbc_failed">Przepraszamy, wyszukiwania napotkało problem.</string>
+  <string name="msg_sbc_no_page_returned">Nie zwrócono żadnej strony</string>
+  <string name="msg_sbc_page">Strona</string>
+  <string name="msg_sbc_results">Wyniki</string>
+  <string name="msg_sbc_searching_book">Przeszukiwanie książki\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Wycinek niedostępny</string>
+  <string name="msg_share_explanation">Możesz udostępniać dane wyświetlając kod paskowy na swoim ekranie i skanując go innym telefonem.</string>
+  <string name="msg_share_text">Albo wpisz tekst</string>
+  <string name="msg_sure">Czy na pewno?</string>
+  <string name="msg_unmount_usb">Niestety, karta SD nie jest dostępna.</string>
+  <string name="preferences_actions_title">Akcja po odnalezieniu kodu\u2026</string>
+  <string name="preferences_auto_focus_title">Ustaw ostrość</string>
+  <string name="preferences_auto_open_web_title">Otwieranie stron internetowych automatycznie</string>
+  <string name="preferences_bulk_mode_summary">Skanowanie i zapisywanie wielu kodów kreskowych jeden po drugim w trybie ciągłym</string>
+  <string name="preferences_bulk_mode_title">Tryb ciągłego skanowania</string>
+  <string name="preferences_copy_to_clipboard_title">Kopiuj do schowka</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Zastępstwa: %s = zawartość, %f = format, %t = typ</string>
+  <string name="preferences_custom_product_search_title">Własny URL wyszukiwania</string>
+  <string name="preferences_decode_1D_industrial_title">1D przemysłowe</string>
+  <string name="preferences_decode_1D_product_title">1D wyrobów</string>
+  <string name="preferences_decode_Aztec_title">Aztek</string>
+  <string name="preferences_decode_Data_Matrix_title">Dekoduj Decode Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">Dekoduj kody QR</string>
+  <string name="preferences_device_bug_workarounds_title">Obejścia błędów urządzeń</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Brak trybu sceny barcode</string>
+  <string name="preferences_disable_continuous_focus_summary">Używaj tylko standardowego trybu ostrości</string>
+  <string name="preferences_disable_continuous_focus_title">Ostrość</string>
+  <string name="preferences_disable_exposure_title">Bez ekspozycji</string>
+  <string name="preferences_disable_metering_title">Bez pomiaru</string>
+  <string name="preferences_front_light_auto">Automatyczny</string>
+  <string name="preferences_front_light_off">Nieaktywny</string>
+  <string name="preferences_front_light_on">Aktywny</string>
+  <string name="preferences_front_light_summary">Polepsza skanowanie przy słabym świetle w niektórych telefonach, ale może powodować odbłysk. Nie działa na wszystkich telefonach.</string>
+  <string name="preferences_front_light_title">Używaj lampy frontowej</string>
+  <string name="preferences_general_title">Ustawienia ogólne</string>
+  <string name="preferences_history_summary">Przechowywanie skanów w historii</string>
+  <string name="preferences_history_title">Dodaj do historii</string>
+  <string name="preferences_invert_scan_summary">Skanowanie białych kodów kreskowych na czarnym tle. Nie dostępne w niektórych urządzeniach.</string>
+  <string name="preferences_invert_scan_title">Białe na czarnym</string>
+  <string name="preferences_name">Ustawienia</string>
+  <string name="preferences_orientation_title">Brak automatycznego obracania</string>
+  <string name="preferences_play_beep_title">Piszcz</string>
+  <string name="preferences_remember_duplicates_summary">Przechowuj powtarzane skany tego samego kodu w historii</string>
+  <string name="preferences_remember_duplicates_title">Przechowuj duplikaty</string>
+  <string name="preferences_result_title">Ustawienia wyników</string>
+  <string name="preferences_scanning_title">Podczas skanowania kodów kreskowych\u2026</string>
+  <string name="preferences_search_country">Szukaj kraju</string>
+  <string name="preferences_supplemental_summary">Spróbuj wyszukać więcej informacji o treści kodu</string>
+  <string name="preferences_supplemental_title">Pobierz więcej informacji</string>
+  <string name="preferences_vibrate_title">Wibruj</string>
+  <string name="result_address_book">Znaleziono dane kontaktu</string>
+  <string name="result_calendar">Znaleziono wydarzenie z kalendarza</string>
+  <string name="result_email_address">Znaleziono adres email</string>
+  <string name="result_geo">Znaleziono współrzędne geograficzne</string>
+  <string name="result_isbn">Znaleziono książkę</string>
+  <string name="result_product">Znaleziono produkt</string>
+  <string name="result_sms">Znaleziono adres SMS</string>
+  <string name="result_tel">Znaleziono numer telefonu</string>
+  <string name="result_text">Znaleziono zwykły tekst</string>
+  <string name="result_uri">Znaleziono URL</string>
+  <string name="result_wifi">Znaleziono konfiguracje sieci</string>
+  <string name="sbc_name">Wyszukiwanie książek Google</string>
+  <string name="wifi_changing_network">Trwa próba podłączenia się do sieci\u2026</string>
+</resources>

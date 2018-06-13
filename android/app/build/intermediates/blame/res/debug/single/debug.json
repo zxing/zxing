@@ -1,0 +1,162 @@
+[
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_bookmark_picker_list_item.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\bookmark_picker_list_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\xml_preferences.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\xml\\preferences.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout-land_encode.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout-land\\encode.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_launcher_icon.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\drawable-xxhdpi\\launcher_icon.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\menu_capture.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\menu\\capture.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_launcher_icon.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\drawable-hdpi\\launcher_icon.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout-land_share.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout-land\\share.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_capture.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\capture.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_share.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\share.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\raw_beep.ogg.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\raw\\beep.ogg"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_app_picker_list_item.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\app_picker_list_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_share_via_barcode.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\drawable\\share_via_barcode.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_search_book_contents_header.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\search_book_contents_header.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_history_list_item.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\history_list_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_help.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\help.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_search_book_contents_list_item.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\search_book_contents_list_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\menu_history.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\menu\\history.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_launcher_icon.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\drawable\\launcher_icon.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_search_book_contents.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\search_book_contents.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_launcher_icon.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\drawable-xhdpi\\launcher_icon.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_encode.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout\\encode.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout-ldpi_capture.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\layout-ldpi\\capture.xml"
+    },
+    {
+        "merged": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\build\\intermediates\\res\\merged\\debug\\menu_encode.xml.flat",
+        "source": "C:\\Users\\kdwoo\\AndroidStudioProjects\\zxing\\android\\app\\src\\main\\res\\menu\\encode.xml"
+    }
+]
