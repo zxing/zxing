@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">סורק ברקודים</string>
+  <string name="app_picker_name">יישומים</string>
+  <string name="bookmark_picker_name">סימניות</string>
+  <string name="button_add_calendar">הוסף ללוח שנה</string>
+  <string name="button_add_contact">הוספת איש קשר</string>
+  <string name="button_book_search">חיפוש ספר</string>
+  <string name="button_cancel">ביטול</string>
+  <string name="button_custom_product_search">חיפוש מותאם אישית</string>
+  <string name="button_dial">חייג מספר</string>
+  <string name="button_email">שלח דואר אלקטרוני</string>
+  <string name="button_get_directions">קבל הוראות הגעה</string>
+  <string name="button_mms">שלח הודעת מולטימדיה</string>
+  <string name="button_ok">אישור</string>
+  <string name="button_open_browser">פתח את הדפדפן</string>
+  <string name="button_product_search">חיפוש מוצר</string>
+  <string name="button_search_book_contents">חיפוש בתוכן</string>
+  <string name="button_share_app">יישום</string>
+  <string name="button_share_bookmark">סימניה</string>
+  <string name="button_share_by_email">שתף בדואר אלקטרוני</string>
+  <string name="button_share_by_sms">שתף בהודעה</string>
+  <string name="button_share_clipboard">לוח עריכה</string>
+  <string name="button_share_contact">איש קשר</string>
+  <string name="button_show_map">הצג מפה</string>
+  <string name="button_sms">שלח הודעה</string>
+  <string name="button_web_search">חיפוש באינטרנט</string>
+  <string name="button_wifi">התחבר לרשת</string>
+  <string name="contents_contact">פרטי איש קשר</string>
+  <string name="contents_email">כתובת דואר אלקטרוני</string>
+  <string name="contents_location">קואורדינטות גאוגרפיות</string>
+  <string name="contents_phone">מספר טלפון</string>
+  <string name="contents_sms">כתובת SMS</string>
+  <string name="contents_text">טקסט רגיל</string>
+  <string name="history_clear_one_history_text">נקה</string>
+  <string name="history_clear_text">נקה היסטוריה</string>
+  <string name="history_email_title">היסטוריית סורק הברקודים</string>
+  <string name="history_empty">ריק</string>
+  <string name="history_empty_detail">ברקודים לא נרשמו</string>
+  <string name="history_send">שלח היסטוריה</string>
+  <string name="history_title">היסטוריה</string>
+  <string name="menu_encode_mecard">השתמש MECARD</string>
+  <string name="menu_encode_vcard">השתמש vCard</string>
+  <string name="menu_help">עזרה</string>
+  <string name="menu_history">היסטוריה</string>
+  <string name="menu_settings">הגדרות</string>
+  <string name="menu_share">שתף</string>
+  <string name="msg_bulk_mode_scanned">מצב קבוצה: ברקוד נסרק ונשמר</string>
+  <string name="msg_camera_framework_bug">סליחה, מצלמת האנדרואיד נתקלה בבעיה. ייתכן שיהיה עליך להפעיל מחדש את המכשיר.</string>
+  <string name="msg_default_format">פורמט</string>
+  <string name="msg_default_meta">מטה-נתונים</string>
+  <string name="msg_default_mms_subject">היי</string>
+  <string name="msg_default_status">הצב ברקוד בתוך המלבן כדי לסרוק אותו.</string>
+  <string name="msg_default_time">זמן</string>
+  <string name="msg_default_type">סוג</string>
+  <string name="msg_encode_contents_failed">לא היתה אפשרות לקודד ברקוד מהנתונים שסופקו.</string>
+  <string name="msg_error">שגיאה</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">סליחה, לא ניתן להפעיל את היישום המבוקש. ייתכן שתוכן הברקוד לא תקין.</string>
+  <string name="msg_invalid_value">ערך לא חוקי</string>
+  <string name="msg_redirect">נתב מחדש</string>
+  <string name="msg_sbc_book_not_searchable">סליחה, ספר זה אינו ניתן לחיפוש.</string>
+  <string name="msg_sbc_failed">סליחה, החיפוש נתקל בבעיה.</string>
+  <string name="msg_sbc_no_page_returned">לא הוחזר דף</string>
+  <string name="msg_sbc_page">דף</string>
+  <string name="msg_sbc_results">תוצאות</string>
+  <string name="msg_sbc_searching_book">מחפש ספר\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">גזיר לא זמין</string>
+  <string name="msg_share_explanation">באפשרותך לשתף נתונים על-ידי הצגת ברקוד על המסך וסריקתו עם טלפון אחר.</string>
+  <string name="msg_share_text">או הקלד טקסט כלשהו</string>
+  <string name="msg_sure">האם אתה בטוח?</string>
+  <string name="msg_unmount_usb">סליחה, כרטיס הזכרון אינו נגיש.</string>
+  <string name="preferences_actions_title">כאשר ברקוד נמצא\u2026</string>
+  <string name="preferences_auto_focus_title">להשתמש במיקוד האוטומטי</string>
+  <string name="preferences_auto_open_web_title">לפתוח דפי אינטרנט באופן אוטומטי</string>
+  <string name="preferences_bulk_mode_summary">סורק ושומר ברקודים באופן רציף</string>
+  <string name="preferences_bulk_mode_title">מצב סריקה מרובה</string>
+  <string name="preferences_copy_to_clipboard_title">העתק ללוח</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">החלפות: s% = התוכן, f% = הפורמט, t% = סוג</string>
+  <string name="preferences_custom_product_search_title">כתובת לחיפוש מותאם אישית</string>
+  <string name="preferences_decode_1D_industrial_title">1D תעשייתי</string>
+  <string name="preferences_decode_1D_product_title">1D מוצר</string>
+  <string name="preferences_decode_Aztec_title">האצטקים</string>
+  <string name="preferences_decode_Data_Matrix_title">מטריצת נתונים</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">קודי QR</string>
+  <string name="preferences_device_bug_workarounds_title">באג במכשיר דרכים לעקיפת הבעיה</string>
+  <string name="preferences_disable_barcode_scene_mode_title">אין מצב סצנה ברקוד</string>
+  <string name="preferences_disable_continuous_focus_summary">השתמש רק במצב רגיל פוקוס</string>
+  <string name="preferences_disable_continuous_focus_title">המיקוד לא רציפה</string>
+  <string name="preferences_disable_exposure_title">אין חשיפה</string>
+  <string name="preferences_disable_metering_title">אין מדידה</string>
+  <string name="preferences_front_light_auto">אוטומטי</string>
+  <string name="preferences_front_light_off">לא פעיל</string>
+  <string name="preferences_front_light_on">פעיל</string>
+  <string name="preferences_front_light_summary">משפר את הסריקה בתאורה נמוכה בטלפונים מסוימים, אך עשוי לגרום לסנוור. לא עובד בכל הטלפונים.</string>
+  <string name="preferences_front_light_title">השתמש באור הקדמי</string>
+  <string name="preferences_general_title">הגדרות כלליות</string>
+  <string name="preferences_history_summary">אחסן הסריקות שלך בהיסטוריה</string>
+  <string name="preferences_history_title">הוסף להיסטוריה</string>
+  <string name="preferences_invert_scan_summary">סרוק ברקודים לבן על רקע שחור. לא זמין על התקנים מסוימים.</string>
+  <string name="preferences_invert_scan_title">היפוך לסרוק</string>
+  <string name="preferences_name">הגדרות</string>
+  <string name="preferences_orientation_title">סיבוב לא אוטומטי</string>
+  <string name="preferences_play_beep_title">צפצוף</string>
+  <string name="preferences_remember_duplicates_summary">אחסן מספר סריקות של אותו הברקוד בהיסטוריה</string>
+  <string name="preferences_remember_duplicates_title">זכור כפילויות</string>
+  <string name="preferences_result_title">הגדרות תוצאה</string>
+  <string name="preferences_scanning_title">בעת סריקת ברקודים, קודד\u2026</string>
+  <string name="preferences_search_country">חיפוש הארץ</string>
+  <string name="preferences_supplemental_summary">נסה למצא מידע נוסף על תוכן הברקוד</string>
+  <string name="preferences_supplemental_title">מצא מידע נוסף</string>
+  <string name="preferences_vibrate_title">רטט</string>
+  <string name="result_address_book">נמצא מידע של איש קשר</string>
+  <string name="result_calendar">נמצא אירוע</string>
+  <string name="result_email_address">נמצאה כתובת דוא"ל</string>
+  <string name="result_geo">נמצאו קואורדינטות גיאוגרפיות</string>
+  <string name="result_isbn">נמצא ספר</string>
+  <string name="result_product">נמצא מוצר</string>
+  <string name="result_sms">נמצאה כתובת הודעה</string>
+  <string name="result_tel">נמצא מספר טלפון</string>
+  <string name="result_text">נמצא טקסט</string>
+  <string name="result_uri">נמצאה כתובת אינטרנט</string>
+  <string name="result_wifi">נמצאו הגדרות רשת אל חוטית</string>
+  <string name="sbc_name">Google חיפוש ספרים</string>
+  <string name="wifi_changing_network">בקשת חיבור לרשת \u2026</string>
+</resources>

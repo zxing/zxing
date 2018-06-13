@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">باركد خوان</string>
+  <string name="app_picker_name">اپليكيشن</string>
+  <string name="bookmark_picker_name">بوك مارك ها</string>
+  <string name="button_add_calendar">افزودن به تقويم</string>
+  <string name="button_add_contact">افزودن مخاطبان</string>
+  <string name="button_book_search">جستجو كتاب</string>
+  <string name="button_cancel">لغو</string>
+  <string name="button_custom_product_search">جستجوي سفارشي</string>
+  <string name="button_dial">شماره گيري تلفن</string>
+  <string name="button_email">ارسال ايميل</string>
+  <string name="button_get_directions">دريافت جهت</string>
+  <string name="button_mms">ارسال MMS</string>
+  <string name="button_ok">تاييد</string>
+  <string name="button_open_browser">گشودن مرورگر</string>
+  <string name="button_product_search">جستجوي محصول</string>
+  <string name="button_search_book_contents">جستجو محتوا</string>
+  <string name="button_share_app">برنامه</string>
+  <string name="button_share_bookmark">بوك مارك</string>
+  <string name="button_share_by_email">اشتراك گذاري با ايميل</string>
+  <string name="button_share_by_sms">اشتراك گذاري با SMS</string>
+  <string name="button_share_clipboard">حافظه موقت</string>
+  <string name="button_share_contact">مخاطبان</string>
+  <string name="button_show_map">نمايش نقشه</string>
+  <string name="button_sms">ارسال SMS</string>
+  <string name="button_web_search">جستجوي وب</string>
+  <string name="button_wifi">اتصال به شبكه</string>
+  <string name="contents_contact">اطلاعات تماس</string>
+  <string name="contents_email">آدرس ايميل</string>
+  <string name="contents_location">مختصات جغرافيايي</string>
+  <string name="contents_phone">شماره تلفن</string>
+  <string name="contents_sms">آدرس SMS</string>
+  <string name="contents_text">متن خالي</string>
+  <string name="history_clear_text">پاك كردن تاريخچه</string>
+  <string name="history_clear_one_history_text">پاك كردن</string>
+  <string name="history_email_title">تاريخچه باركد خوان</string>
+  <string name="history_empty">خالي</string>
+  <string name="history_empty_detail">هيچ باركد اسكن شده اي ثبت نشده است</string>
+  <string name="history_send">تاريخچه ارسال</string>
+  <string name="history_title">تاريخچه</string>
+  <string name="menu_encode_mecard">استفاده از MECARD</string>
+  <string name="menu_encode_vcard">استفاده از vCard</string>
+  <string name="menu_help">راهنما و درباره پرو‍ژه ZXing</string>
+  <string name="menu_history">تاريخچه</string>
+  <string name="menu_settings">تنظيمات</string>
+  <string name="menu_share">اشتراك گذاري</string>
+  <string name="msg_bulk_mode_scanned">مد انبوه: باركد اسكن و ذخيره شد</string>
+  <string name="msg_camera_framework_bug">دوربين اندرويد با مشكل مواجه شده است. لطفا دستگاه خود را ري ست نماييد</string>
+  <string name="msg_default_format">قالب بندي</string>
+  <string name="msg_default_meta">متاديتا</string>
+  <string name="msg_default_mms_subject">سلام</string>
+  <string name="msg_default_status">براي اسكن باركد ، باركد بايستي در داخل كادر مستطيلي قرار بگيرد</string>
+  <string name="msg_default_time">زمان</string>
+  <string name="msg_default_type">نوع</string>
+  <string name="msg_encode_contents_failed">باركد قابل رمزگشايي نيست</string>
+  <string name="msg_error">خطا</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">اپليكيشن درخواست شده قابل دسترس نيست. احتمالا محتواي بار كد نامعتبر است</string>
+  <string name="msg_invalid_value">مقدار نامعتبر</string>
+  <string name="msg_redirect">انتقال</string>
+  <string name="msg_sbc_book_not_searchable">كتاب خواسته شده قابل جستجو نيست</string>
+  <string name="msg_sbc_failed">جستجو با مشكل مواجه شده است</string>
+  <string name="msg_sbc_no_page_returned">صفحه اي دريافت نشد</string>
+  <string name="msg_sbc_page">صفحه</string>
+  <string name="msg_sbc_results">نتايج</string>
+  <string name="msg_sbc_searching_book">جستجوي كتاب\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">چيزي در دسترس نيست</string>
+  <string name="msg_share_explanation">شما مي توانيد با نمايش باركد در صفحه نمايش خود، و اسكن آن با موبايلي ديگر، اطلاعات را به اشتراك بگذاريد</string>
+  <string name="msg_share_text">يا متني را تايپ كنيد و كليد Enter را بفشاريد</string>
+  <string name="msg_sure">آيا شما اطمينان داريد؟</string>
+  <string name="msg_unmount_usb">كارت SD در دسترس نيست</string>
+  <string name="preferences_actions_title">زماني كه باركد يافت مي شود\u2026</string>
+  <string name="preferences_auto_focus_title">از فوكوس اتوكاتيك استفاده نماييد</string>
+  <string name="preferences_auto_open_web_title">باز كردن صفحات وب بطور اتوماتيك</string>
+  <string name="preferences_bulk_mode_summary">تعداد زيادي باركد را به طور متوالي اسكن و ذخيره كن</string>
+  <string name="preferences_bulk_mode_title">مد اسكن انبوه</string>
+  <string name="preferences_copy_to_clipboard_title">كپي در حافظه موقت</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Substitutions: %s = contents, %f = format, %t = type</string>
+  <string name="preferences_custom_product_search_title">جستجوي سفارشي URL</string>
+  <string name="preferences_decode_1D_industrial_title">1D صنعتي</string>
+  <string name="preferences_decode_1D_product_title">1D كالا</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">كدهاي QR</string>
+  <string name="preferences_device_bug_workarounds_title">رفع مشكلات و باگ هاي دستگاه</string>
+  <string name="preferences_disable_barcode_scene_mode_title">مد بدون نمايش باركد</string>
+  <string name="preferences_disable_continuous_focus_summary">تنها از مد فوكوس استاندارد استفاده نماييد</string>
+  <string name="preferences_disable_continuous_focus_title">بدون فوكوس ممتد</string>
+  <string name="preferences_disable_exposure_title">بدون exposure</string>
+  <string name="preferences_disable_metering_title">بدون metering</string>
+  <string name="preferences_front_light_summary">امكان بهبودي در اسكن كردن كدها در نورهاي كم. مي تواند موجب درخشندگي شود. در بعضي از تلفن ها پشتيباني مي شود.</string>
+  <string name="preferences_front_light_title">استفاده از نور</string>
+  <string name="preferences_front_light_auto">اتوماتيك</string>
+  <string name="preferences_front_light_off">خاموش</string>
+  <string name="preferences_front_light_on">روشن</string>
+  <string name="preferences_general_title">تنظيمات عمومي</string>
+  <string name="preferences_history_summary">ذخيره اسكن ها در تاريخچه</string>
+  <string name="preferences_history_title">افزودن به تاريخچه</string>
+  <string name="preferences_invert_scan_title">معكوس كردن اسكن</string>
+  <string name="preferences_invert_scan_summary">اسكن باركد سفيد در پس زمينه مشكي. در بعضي از دستگاه ها پشتيباني نمي شود</string>  
+  <string name="preferences_name">تنظيمات</string>
+  <string name="preferences_orientation_title">بدون دوران اتوماتيك</string>
+  <string name="preferences_play_beep_title">بوق</string>
+  <string name="preferences_remember_duplicates_summary">چندين اسكن از يك باركد را در تاريخچه ذخيره مي كند.</string>
+  <string name="preferences_remember_duplicates_title">به ياد آوري تكرار ها</string>
+  <string name="preferences_result_title">تنظيمات نتيجه بدست آمده</string>
+  <string name="preferences_scanning_title">كدام نوع باركد قابل خواندن و رمزگشايي باشد\u2026</string>
+  <string name="preferences_search_country">جستجوي كشور</string>
+  <string name="preferences_supplemental_summary">تلاش در بدست آوردن اطلاعات بيشتر در مورد محتواي باركد</string>
+  <string name="preferences_supplemental_title">بازيابي اطلاعات بيشتر</string>
+  <string name="preferences_vibrate_title">لرزش</string>
+  <string name="result_address_book">اطلاعات تماس يافته شده</string>
+  <string name="result_calendar">رويداد تقويمي يافته شده</string>
+  <string name="result_email_address">آدرس ايميل يافته شده</string>
+  <string name="result_geo">مختصات جغرافيايي يافته شده</string>
+  <string name="result_isbn">كتاب يافته شده</string>
+  <string name="result_product">محصول يافته شده</string>
+  <string name="result_sms">آدرس SMS يافته شده</string>
+  <string name="result_tel">شماره تلفن يافته شده</string>
+  <string name="result_text">متن يافته شده</string>
+  <string name="result_uri">URL يافته شده</string>
+  <string name="result_wifi">پيكربندي WLAN يافته شده</string>
+  <string name="sbc_name">جستجو در گوگل بوك</string>
+  <string name="wifi_changing_network">درخواست اتصال به شبكه\u2026</string>
+</resources>

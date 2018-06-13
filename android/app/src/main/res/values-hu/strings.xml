@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Alkalmazások</string>
+  <string name="bookmark_picker_name">Könyvjelzők</string>
+  <string name="button_add_calendar">Hozzáadás a naptárhoz</string>
+  <string name="button_add_contact">Névjegy hozzáadása</string>
+  <string name="button_book_search">Könyv keresése</string>
+  <string name="button_cancel">Mégse</string>
+  <string name="button_custom_product_search">Egyedi keresés</string>
+  <string name="button_dial">Telefonszám tárcsázása</string>
+  <string name="button_email">E-mail küldése</string>
+  <string name="button_get_directions">Útvonaltervezés</string>
+  <string name="button_mms">MMS küldése</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Böngésző megnyitása</string>
+  <string name="button_product_search">Termék keresése</string>
+  <string name="button_search_book_contents">Tartalom keresése</string>
+  <string name="button_share_app">Alkalmazás</string>
+  <string name="button_share_bookmark">Könyvjelző</string>
+  <string name="button_share_by_email">Megosztás e-mailben</string>
+  <string name="button_share_by_sms">Megosztás SMS-ben</string>
+  <string name="button_share_clipboard">Vágólap</string>
+  <string name="button_share_contact">Névjegy</string>
+  <string name="button_show_map">Térkép mutatása</string>
+  <string name="button_sms">SMS küldése</string>
+  <string name="button_web_search">Keresés a weben</string>
+  <string name="button_wifi">Kapcsolódás hálózathoz</string>
+  <string name="contents_contact">Névjegy információ</string>
+  <string name="contents_email">E-mail cím</string>
+  <string name="contents_location">Földrajzi koordináták</string>
+  <string name="contents_phone">Telefonszám</string>
+  <string name="contents_sms">SMS szám</string>
+  <string name="contents_text">Egyszerű szöveg</string>
+  <string name="history_clear_one_history_text">Törlése</string>
+  <string name="history_clear_text">Előzmények törlése</string>
+  <string name="history_email_title">Barcode Scanner előzmények</string>
+  <string name="history_empty">Üres</string>
+  <string name="history_empty_detail">Még nincs rögzítve vonalkód-szkennelés</string>
+  <string name="history_send">Előzmények küldése</string>
+  <string name="history_title">Előzmények</string>
+  <string name="menu_encode_mecard">MECARD használata</string>
+  <string name="menu_encode_vcard">vCard használata</string>
+  <string name="menu_help">Súgó</string>
+  <string name="menu_history">Előzmények</string>
+  <string name="menu_settings">Beállítások</string>
+  <string name="menu_share">Megosztás</string>
+  <string name="msg_bulk_mode_scanned">Tömeges beolvasás: vonalkód beszkennelve és mentve</string>
+  <string name="msg_camera_framework_bug">Sajnáljuk, az Android kamerája hibát észlelt. Lehet, hogy újra kell indítania a készüléket.</string>
+  <string name="msg_default_format">Formátum</string>
+  <string name="msg_default_meta">Metaadatok</string>
+  <string name="msg_default_mms_subject">Szia</string>
+  <string name="msg_default_status">Pozicionálja a vonalkódot a kereső téglalapba a szkenneléshez.</string>
+  <string name="msg_default_time">Idő</string>
+  <string name="msg_default_type">Típus</string>
+  <string name="msg_encode_contents_failed">Nem sikerült létrehozni a vonalkódot a megadott adatokból.</string>
+  <string name="msg_error">Hiba</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">A kért alkalmazást nem lehet elindítani. A vonalkód tartalma lehet, hogy érvénytelen.</string>
+  <string name="msg_invalid_value">Érvénytelen érték</string>
+  <string name="msg_redirect">Átirányítás</string>
+  <string name="msg_sbc_book_not_searchable">Ez a könyv nem kereshető.</string>
+  <string name="msg_sbc_failed">A keresés problémába ütközött.</string>
+  <string name="msg_sbc_no_page_returned">Nincs visszakapott oldal</string>
+  <string name="msg_sbc_page">Oldal</string>
+  <string name="msg_sbc_results">Eredmények</string>
+  <string name="msg_sbc_searching_book">Könyv keresése\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Kódrészlet nem elérhető</string>
+  <string name="msg_share_explanation">Meg tud osztani adatot úgy, hogy egy vonalkódot jelenít meg a képernyőjén, melyet egy másik telefon beszkennel.</string>
+  <string name="msg_share_text">Vagy írja be a szöveget és nyomjon Enter-t</string>
+  <string name="msg_sure">Biztos benne?</string>
+  <string name="msg_unmount_usb">Az SD kártya nem elérhető.</string>
+  <string name="preferences_actions_title">Amikor a vonalkód megvan\u2026</string>
+  <string name="preferences_auto_focus_title">Használjon autofókuszt</string>
+  <string name="preferences_auto_open_web_title">Nyissa meg a weboldalakat automatikusan</string>
+  <string name="preferences_bulk_mode_summary">Több vonalkód folyamatos szkennelése és mentése</string>
+  <string name="preferences_bulk_mode_title">Tömeges beolvasás</string>
+  <string name="preferences_copy_to_clipboard_title">Másolás a vágólapra</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Helyettesítő jelek: %s = tartalom, %f = formátum, %t = típus</string>
+  <string name="preferences_custom_product_search_title">Egyedi kereső URL</string>
+  <string name="preferences_decode_1D_industrial_title">1D ipari</string>
+  <string name="preferences_decode_1D_product_title">1D termék</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR kódok</string>
+  <string name="preferences_device_bug_workarounds_title">Eszközhibák kerülő megoldásai</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Nincs vonalkód motívumprogram</string>
+  <string name="preferences_disable_continuous_focus_summary">Csak a normál élességállítási mód</string>
+  <string name="preferences_disable_continuous_focus_title">Nincs folyamatos fókusz</string>
+  <string name="preferences_disable_exposure_title">Nincs expozíció</string>
+  <string name="preferences_disable_metering_title">Nincs mérés</string>
+  <string name="preferences_front_light_auto">Automatikus</string>
+  <string name="preferences_front_light_off">Kikapcsolva</string>
+  <string name="preferences_front_light_on">Bekapcsolva</string>
+  <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat. Nem minden telefonon működik.</string>
+  <string name="preferences_front_light_title">Kamera LED használata</string>
+  <string name="preferences_general_title">Általános beállítások</string>
+  <string name="preferences_history_summary">Beolvasások tárolása az Előzményekben</string>
+  <string name="preferences_history_title">Hozzáadás az Előzményekhez</string>
+  <string name="preferences_invert_scan_summary">Fehér vonalkódok keresése fekete háttéren. Nem érhető el egyes eszközökön.</string>
+  <string name="preferences_invert_scan_title">Inverz szkennelés</string>
+  <string name="preferences_name">Beállítások</string>
+  <string name="preferences_orientation_title">Nincs automatikus forgatás</string>
+  <string name="preferences_play_beep_title">Sípolás</string>
+  <string name="preferences_remember_duplicates_summary">Ugyanannak a vonalkódnak több szkennelt képét is tárolja az Előzményekben</string>
+  <string name="preferences_remember_duplicates_title">Duplikációk megjegyzése</string>
+  <string name="preferences_result_title">Találati beállítások</string>
+  <string name="preferences_scanning_title">Vonalkód szkennelésekor, dekódolája ezeket:</string>
+  <string name="preferences_search_country">Keresési ország</string>
+  <string name="preferences_supplemental_summary">A vonalkóddal jelzett tartalomról megpróbál több információt letölteni</string>
+  <string name="preferences_supplemental_title">További információk letöltése</string>
+  <string name="preferences_vibrate_title">Rezgés</string>
+  <string name="result_address_book">Névjegytalálat</string>
+  <string name="result_calendar">Naptáresemény-találat</string>
+  <string name="result_email_address">E-mail-cím-találat</string>
+  <string name="result_geo">Földrajzi koordináta-találat</string>
+  <string name="result_isbn">Könyvtalálat</string>
+  <string name="result_product">Terméktalálat</string>
+  <string name="result_sms">SMS-szám-találat</string>
+  <string name="result_tel">Telefonszámtalálat</string>
+  <string name="result_text">Egyszerű szöveges találat</string>
+  <string name="result_uri">URL-találat</string>
+  <string name="result_wifi">WLAN-konfiguráció-találat</string>
+  <string name="sbc_name">Google Könyvek keresés</string>
+  <string name="wifi_changing_network">Hálózati kapcsolat kérése\u2026</string>
+</resources>

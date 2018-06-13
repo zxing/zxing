@@ -1,0 +1,263 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:17:1-143:12
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:17:1-143:12
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:17:1-143:12
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:17:1-143:12
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:17:1-143:12
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:17:1-143:12
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:17:1-143:12
+	package
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:18:11-52
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:19:11-38
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:17:11-69
+	android:versionCode
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:20:11-36
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+	android:installLocation
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:21:11-41
+uses-permission#android.permission.CAMERA
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:23:3-62
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:23:20-60
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:24:3-64
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:24:20-62
+uses-permission#android.permission.VIBRATE
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:25:3-63
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:25:20-61
+uses-permission#android.permission.FLASHLIGHT
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:26:3-66
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:26:20-64
+uses-permission#android.permission.READ_CONTACTS
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:27:3-69
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:27:20-67
+uses-permission#com.android.browser.permission.READ_HISTORY_BOOKMARKS
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:29:3-90
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:29:20-88
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:30:3-78
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:30:20-76
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:31:3-73
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:31:20-71
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:32:3-73
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:32:20-71
+uses-sdk
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:34:3-71
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:34:3-71
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:34:3-71
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:34:3-71
+INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:34:3-71
+	android:targetSdkVersion
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:34:40-69
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:34:13-39
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml
+uses-feature#android.hardware.camera.any
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:36:3-61
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:36:17-59
+uses-feature#android.hardware.camera.autofocus
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:37:3-92
+	android:required
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:37:66-90
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:37:17-65
+uses-feature#android.hardware.camera.flash
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:38:3-88
+	android:required
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:38:62-86
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:38:17-61
+uses-feature#android.hardware.screen.landscape
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:39:3-67
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:39:17-65
+uses-feature#android.hardware.wifi
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:40:3-80
+	android:required
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:40:54-78
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:40:17-53
+application
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:42:3-141:17
+	android:label
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:44:16-48
+	android:icon
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:42:16-50
+	android:allowBackup
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:45:16-42
+	android:logo
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:43:16-54
+activity#com.google.zxing.client.android.CaptureActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:46:5-88:16
+	android:screenOrientation
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:47:15-58
+	android:clearTaskOnLaunch
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:48:15-47
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:49:15-44
+	android:windowSoftInputMode
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:51:15-62
+	android:theme
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:50:15-50
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:46:15-46
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:52:7-55:23
+action#android.intent.action.MAIN
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:53:9-60
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:53:17-58
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:54:9-68
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:54:19-66
+intent-filter#action:name:com.google.zxing.client.android.SCAN+category:name:android.intent.category.DEFAULT
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:56:7-59:23
+action#com.google.zxing.client.android.SCAN
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:57:9-70
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:57:17-68
+category#android.intent.category.DEFAULT
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:58:9-67
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:58:19-65
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:zxing.appspot.com+data:path:/scan+data:scheme:http
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:61:7-66:23
+action#android.intent.action.VIEW
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:62:9-60
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:62:17-58
+category#android.intent.category.BROWSABLE
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:64:9-69
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:64:19-67
+data
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:65:9-92
+	android:path
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:65:70-90
+	android:host
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:65:37-69
+	android:scheme
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:65:15-36
+	android:mimeType
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:102:15-46
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:www.google.com+data:path:/m/products/scan+data:scheme:http
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:68:7-73:23
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:www.google.co.uk+data:path:/m/products/scan+data:scheme:http
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:75:7-80:23
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:scan+data:path:/+data:scheme:zxing
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:82:7-87:23
+activity#com.google.zxing.client.android.PreferencesActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:89:5-91:46
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:91:15-44
+	android:label
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:90:15-55
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:89:15-50
+activity#com.google.zxing.client.android.encode.EncodeActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:92:5-110:16
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:93:15-44
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:92:15-52
+intent-filter#action:name:com.google.zxing.client.android.ENCODE+category:name:android.intent.category.DEFAULT
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:94:7-97:23
+action#com.google.zxing.client.android.ENCODE
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:95:9-72
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:95:17-70
+intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT+data:mimeType:text/x-vcard
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:99:7-103:23
+action#android.intent.action.SEND
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:100:9-60
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:100:17-58
+intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT+data:mimeType:text/plain
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:105:7-109:23
+activity#com.google.zxing.client.android.book.SearchBookContentsActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:111:5-119:16
+	android:screenOrientation
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:114:15-58
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:113:15-44
+	android:label
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:112:15-47
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:111:15-62
+intent-filter#action:name:com.google.zxing.client.android.SEARCH_BOOK_CONTENTS+category:name:android.intent.category.DEFAULT
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:115:7-118:23
+action#com.google.zxing.client.android.SEARCH_BOOK_CONTENTS
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:116:9-86
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:116:17-84
+activity#com.google.zxing.client.android.share.ShareActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:120:5-127:16
+	android:screenOrientation
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:122:15-47
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:121:15-44
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:120:15-50
+intent-filter#action:name:com.google.zxing.client.android.SHARE+category:name:android.intent.category.DEFAULT
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:123:7-126:23
+action#com.google.zxing.client.android.SHARE
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:124:9-71
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:124:17-69
+activity#com.google.zxing.client.android.history.HistoryActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:128:5-130:46
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:130:15-44
+	android:label
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:129:15-52
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:128:15-54
+activity#com.google.zxing.client.android.share.BookmarkPickerActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:131:5-133:46
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:133:15-44
+	android:label
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:132:15-59
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:131:15-59
+activity#com.google.zxing.client.android.share.AppPickerActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:134:5-136:46
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:136:15-44
+	android:label
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:135:15-54
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:134:15-54
+activity#com.google.zxing.client.android.HelpActivity
+ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:137:5-140:46
+	android:screenOrientation
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:139:15-47
+	android:stateNotNeeded
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:140:15-44
+	android:label
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:138:15-48
+	android:name
+		ADDED from C:\Users\kdwoo\AndroidStudioProjects\zxing\android\app\src\main\AndroidManifest.xml:137:15-43
