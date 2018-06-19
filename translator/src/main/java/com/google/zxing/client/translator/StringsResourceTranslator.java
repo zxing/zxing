@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing;
+package com.google.zxing.client.translator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,19 +53,20 @@ import java.util.regex.Pattern;
 public final class StringsResourceTranslator {
 
   private static final String API_KEY = System.getProperty("translateAPI.key");
+
   static {
     if (API_KEY == null) {
       throw new IllegalArgumentException("translateAPI.key is not specified");
     }
   }
-  
+
   private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
   private static final Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile("values-(.+)");
   private static final Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile("translatedText\":\\s*\"([^\"]+)\"");
   private static final Pattern VALUES_DIR_PATTERN = Pattern.compile("values-[a-z]{2}(-[a-zA-Z]{2,3})?");
 
   private static final String APACHE_2_LICENSE =
-      "<!--\n" +
+    "<!--\n" +
       " Copyright (C) 2015 ZXing authors\n" +
       '\n' +
       " Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
@@ -81,13 +82,15 @@ public final class StringsResourceTranslator {
       " limitations under the License.\n" +
       " -->\n";
 
-  private static final Map<String,String> LANGUAGE_CODE_MASSAGINGS = new HashMap<>(3);
+  private static final Map<String, String> LANGUAGE_CODE_MASSAGINGS = new HashMap<>(3);
+
   static {
     LANGUAGE_CODE_MASSAGINGS.put("zh-rCN", "zh-cn");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rTW", "zh-tw");
   }
 
-  private StringsResourceTranslator() {}
+  private StringsResourceTranslator() {
+  }
 
   public static void main(String[] args) throws IOException {
     Path resDir = Paths.get(args[0]);
@@ -99,7 +102,7 @@ public final class StringsResourceTranslator {
       @Override
       public boolean accept(Path entry) {
         return Files.isDirectory(entry) && !Files.isSymbolicLink(entry) &&
-            VALUES_DIR_PATTERN.matcher(entry.getFileName().toString()).matches();
+          VALUES_DIR_PATTERN.matcher(entry.getFileName().toString()).matches();
       }
     };
     try (DirectoryStream<Path> dirs = Files.newDirectoryStream(resDir, filter)) {
@@ -114,7 +117,7 @@ public final class StringsResourceTranslator {
                                 Collection<String> forceRetranslation) throws IOException {
 
     Map<String, String> english = readLines(englishFile);
-    Map<String,String> translated = readLines(translatedFile);
+    Map<String, String> translated = readLines(translatedFile);
     String parentName = translatedFile.getParent().getFileName().toString();
 
     Matcher stringsFileNameMatcher = STRINGS_FILE_NAME_PATTERN.matcher(parentName);
@@ -137,7 +140,7 @@ public final class StringsResourceTranslator {
       out.write(APACHE_2_LICENSE);
       out.write("<resources>\n");
 
-      for (Map.Entry<String,String> englishEntry : english.entrySet()) {
+      for (Map.Entry<String, String> englishEntry : english.entrySet()) {
         String key = englishEntry.getKey();
         String value = englishEntry.getValue();
         out.write("  <string name=\"");
@@ -184,9 +187,9 @@ public final class StringsResourceTranslator {
     System.out.println("  Need translation for " + english);
 
     URI translateURI = URI.create(
-        "https://www.googleapis.com/language/translate/v2?key=" + API_KEY + "&q=" +
-            URLEncoder.encode(english, "UTF-8") +
-            "&source=en&target=" + language);
+      "https://www.googleapis.com/language/translate/v2?key=" + API_KEY + "&q=" +
+        URLEncoder.encode(english, "UTF-8") +
+        "&source=en&target=" + language);
     CharSequence translateResult = fetch(translateURI);
     Matcher m = TRANSLATE_RESPONSE_PATTERN.matcher(translateResult);
     if (!m.find()) {
@@ -218,9 +221,9 @@ public final class StringsResourceTranslator {
     return translateResult;
   }
 
-  private static Map<String,String> readLines(Path file) throws IOException {
+  private static Map<String, String> readLines(Path file) throws IOException {
     if (Files.exists(file)) {
-      Map<String,String> entries = new TreeMap<>();
+      Map<String, String> entries = new TreeMap<>();
       for (String line : Files.readAllLines(file, StandardCharsets.UTF_8)) {
         Matcher m = ENTRY_PATTERN.matcher(line);
         if (m.find()) {

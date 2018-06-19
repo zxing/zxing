@@ -17,7 +17,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>core</artifactId>
+  <artifactId>translator</artifactId>
   <version>3.3.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -35,54 +35,15 @@
     <version>3.3.4-SNAPSHOT</version>
   </parent>
 
-  <name>ZXing Core</name>
-  <description>Core barcode encoding/decoding library</description>
-
-  <profiles>
-    <profile>
-      <id>proguard-library</id>
-      <activation>
-        <jdk>[,9)</jdk> <!-- Proguard won't work with JDK 9 -->
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.github.wvengen</groupId>
-            <artifactId>proguard-maven-plugin</artifactId>
-            <version>${proguard.plugin.version}</version>
-            <configuration>
-              <options combine.children="append">
-                <option>-optimizations !code/simplification/cast,!code/allocation/variable,!field/*,!class/*,!method/*</option>
-              </options>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
   <build>
     <plugins>
-      <plugin>
-        <groupId>biz.aQute.bnd</groupId>
-        <artifactId>bnd-maven-plugin</artifactId>
-        <version>3.5.0</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>bnd-process</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
-            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
             <manifestEntries>
-              <Automatic-Module-Name>com.google.zxing.core</Automatic-Module-Name>
+              <Automatic-Module-Name>com.google.zxing.client.translator</Automatic-Module-Name>
             </manifestEntries>
           </archive>
         </configuration>
@@ -90,5 +51,7 @@
     </plugins>
   </build>
 
-</project>
+  <name>ZXing Java SE translator</name>
+  <description>Java SE-specific translator for ZXing library</description>
 
+</project>
