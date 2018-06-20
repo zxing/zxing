@@ -73,6 +73,7 @@
   <modules>
     <module>core</module>
     <module>javase</module>
+    <module>translator</module>
     <!-- android modules are activated by a profile below -->
     <module>zxingorg</module>
     <!-- appspot app activated by a profile below -->
