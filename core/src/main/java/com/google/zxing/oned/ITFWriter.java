@@ -79,7 +79,13 @@ public final class ITFWriter extends OneDimensionalCodeWriter {
     for (int i = 0; i < length; i += 2) {
       int one = Character.digit(contents.charAt(i), 10);
       int two = Character.digit(contents.charAt(i + 1), 10);
+      
+      if (one == -1 || two == -1) {
+        throw new IllegalArgumentException("Input contains invalid characters");
+      }
+
       int[] encoding = new int[10];
+
       for (int j = 0; j < 5; j++) {
         encoding[2 * j] = PATTERNS[one][j];
         encoding[2 * j + 1] = PATTERNS[two][j];

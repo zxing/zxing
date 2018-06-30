@@ -80,6 +80,11 @@ public final class EAN13Writer extends UPCEANWriter {
 
 
     int firstDigit = Character.digit(contents.charAt(0), 10);
+    
+    if (firstDigit == -1) {
+      throw new IllegalArgumentException("Input should only contain digits 0-9");
+    }
+
     int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
     boolean[] result = new boolean[CODE_WIDTH];
     int pos = 0;
@@ -89,6 +94,11 @@ public final class EAN13Writer extends UPCEANWriter {
     // See EAN13Reader for a description of how the first digit & left bars are encoded
     for (int i = 1; i <= 6; i++) {
       int digit = Character.digit(contents.charAt(i), 10);
+
+      if (digit == -1) {
+        throw new IllegalArgumentException("Input should only contain digits 0-9");
+      }
+
       if ((parities >> (6 - i) & 1) == 1) {
         digit += 10;
       }
@@ -99,6 +109,11 @@ public final class EAN13Writer extends UPCEANWriter {
 
     for (int i = 7; i <= 12; i++) {
       int digit = Character.digit(contents.charAt(i), 10);
+
+      if (digit == -1) {
+        throw new IllegalArgumentException("Input should only contain digits 0-9");
+      }
+
       pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true);
     }
     appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);

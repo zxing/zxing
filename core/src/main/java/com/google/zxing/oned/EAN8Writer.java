@@ -89,6 +89,11 @@ public final class EAN8Writer extends UPCEANWriter {
 
     for (int i = 0; i <= 3; i++) {
       int digit = Character.digit(contents.charAt(i), 10);
+
+      if (digit == -1) {
+        throw new IllegalArgumentException("Input should only contain digits 0-9");
+      }
+
       pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], false);
     }
 
@@ -96,6 +101,11 @@ public final class EAN8Writer extends UPCEANWriter {
 
     for (int i = 4; i <= 7; i++) {
       int digit = Character.digit(contents.charAt(i), 10);
+      
+      if (digit == -1) {
+        throw new IllegalArgumentException("Input should only contain digits 0-9");
+      }
+
       pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true);
     }
     appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
