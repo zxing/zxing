@@ -23,6 +23,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
@@ -90,6 +91,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     return output;
   }
 
+  private static final Pattern NUMERIC = Pattern.compile("[0-9]+");
 
   /**
    * @param target encode black/white pattern into this array

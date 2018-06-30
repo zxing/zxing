@@ -40,4 +40,15 @@ public final class ITFWriterTestCase extends Assert {
     assertEquals(expected, BitMatrixTestCase.matrixToString(result));
   }
 
+  @Test
+  public void testEncodeIllegalCharacters() throws WriterException {
+    int illegalArgument = 0;
+    try {
+      BitMatrix result = new ITFWriter().encode("00123456789abc", BarcodeFormat.ITF, 0, 0);
+    } catch (IllegalArgumentException e) {
+      illegalArgument = 1;
+    }
+    assertEquals(illegalArgument, 1);
+  }
+
 }

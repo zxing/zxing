@@ -76,17 +76,16 @@ public final class UPCEWriter extends UPCEANWriter {
             "Requested contents should be 8 digits long, but got " + length);
     }
 
+    if (!NUMERIC.matcher(contents).matches()) {
+      throw new IllegalArgumentException("Input should only contain digits 0-9.");
+    }
+
     int firstDigit = Character.digit(contents.charAt(0), 10);
     if (firstDigit != 0 && firstDigit != 1) {
       throw new IllegalArgumentException("Number system must be 0 or 1");
     }
 
     int checkDigit = Character.digit(contents.charAt(7), 10);
-
-    if (checkDigit == -1) {
-      throw new IllegalArgumentException("Input should only contain digits 0-9");
-    }
-
     int parities = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
     boolean[] result = new boolean[CODE_WIDTH];
     int pos = 0;
@@ -95,10 +94,6 @@ public final class UPCEWriter extends UPCEANWriter {
 
     for (int i = 1; i <= 6; i++) {
       int digit = Character.digit(contents.charAt(i), 10);
-      if (digit == -1) {
-        throw new IllegalArgumentException("Input should only contain digits 0-9");
-      }
-
       if ((parities >> (6 - i) & 1) == 1) {
         digit += 10;
       }
