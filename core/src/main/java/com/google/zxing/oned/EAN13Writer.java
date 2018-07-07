@@ -78,7 +78,7 @@ public final class EAN13Writer extends UPCEANWriter {
             "Requested contents should be 12 or 13 digits long, but got " + length);
     }
 
-    if (!NUMERIC.matcher(contents).matches()) {
+    if (!checkNumeric(contents)) {
       throw new IllegalArgumentException("Input should only contain digits 0-9.");
     }
 

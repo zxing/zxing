@@ -93,6 +93,10 @@ public abstract class OneDimensionalCodeWriter implements Writer {
 
   private static final Pattern NUMERIC = Pattern.compile("[0-9]+");
 
+  protected static boolean checkNumeric(String contents) {
+    return NUMERIC.matcher(contents).matches();
+  }
+
   /**
    * @param target encode black/white pattern into this array
    * @param pos position to start encoding at in {@code target}

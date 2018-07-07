@@ -75,7 +75,9 @@ public final class ITFWriter extends OneDimensionalCodeWriter {
           "Requested contents should be less than 80 digits long, but got " + length);
     }
 
-    if (!NUMERIC.matcher(contents).matches()) {
+    
+
+    if (!checkNumeric(contents)) {
       throw new IllegalArgumentException("Input should only contain digits 0-9.");
     }
 
