@@ -51,15 +51,8 @@ public final class UPCEWriterTestCase extends Assert {
     assertEquals(encoding, BitMatrixTestCase.matrixToString(result));
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testEncodeIllegalCharacters() throws WriterException {
-    boolean illegalArgument = false;
-    try {
       new UPCEWriter().encode("05096abc", BarcodeFormat.UPC_E, 0, 0);
-    } catch (IllegalArgumentException e) {
-      illegalArgument = true;
-    }
-    assertEquals(illegalArgument, true);
   }
-
 }
