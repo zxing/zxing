@@ -75,11 +75,7 @@ public final class ITFWriter extends OneDimensionalCodeWriter {
           "Requested contents should be less than 80 digits long, but got " + length);
     }
 
-    
-
-    if (!checkNumeric(contents)) {
-      throw new IllegalArgumentException("Input should only contain digits 0-9.");
-    }
+    checkNumeric(contents);
 
     boolean[] result = new boolean[9 + 9 * length];
     int pos = appendPattern(result, 0, START_PATTERN, true);

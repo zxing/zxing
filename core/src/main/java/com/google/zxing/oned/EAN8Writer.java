@@ -82,9 +82,7 @@ public final class EAN8Writer extends UPCEANWriter {
             "Requested contents should be 8 digits long, but got " + length);
     }
 
-    if (!checkNumeric(contents)) {
-      throw new IllegalArgumentException("Input should only contain digits 0-9.");
-    }
+    checkNumeric(contents);
 
     boolean[] result = new boolean[CODE_WIDTH];
     int pos = 0;

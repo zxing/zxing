@@ -92,8 +92,13 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     return output;
   }
 
-  protected static boolean checkNumeric(String contents) {
-    return NUMERIC.matcher(contents).matches();
+  /**
+   * Throw IllegalArgumentException if input contains characters other than digits 0-9.
+   */
+  protected static final void checkNumeric(String contents) throws IllegalArgumentException{
+    if (!NUMERIC.matcher(contents).matches()) {
+        throw new IllegalArgumentException("Input should only contain digits 0-9");
+    }
   }
 
   /**

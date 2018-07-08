@@ -78,9 +78,7 @@ public final class EAN13Writer extends UPCEANWriter {
             "Requested contents should be 12 or 13 digits long, but got " + length);
     }
 
-    if (!checkNumeric(contents)) {
-      throw new IllegalArgumentException("Input should only contain digits 0-9.");
-    }
+    checkNumeric(contents);
 
     int firstDigit = Character.digit(contents.charAt(0), 10);
     int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];

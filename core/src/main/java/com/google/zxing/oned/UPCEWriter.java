@@ -76,9 +76,7 @@ public final class UPCEWriter extends UPCEANWriter {
             "Requested contents should be 8 digits long, but got " + length);
     }
 
-    if (!checkNumeric(contents)) {
-      throw new IllegalArgumentException("Input should only contain digits 0-9.");
-    }
+    checkNumeric(contents);
 
     int firstDigit = Character.digit(contents.charAt(0), 10);
     if (firstDigit != 0 && firstDigit != 1) {
