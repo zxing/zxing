@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
  * @author dsbnatut@gmail.com (Kazuki Nishiura)
  */
 public abstract class OneDimensionalCodeWriter implements Writer {
+  private static final Pattern NUMERIC = Pattern.compile("[0-9]+");
 
   @Override
   public final BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
@@ -90,8 +91,6 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     }
     return output;
   }
-
-  private static final Pattern NUMERIC = Pattern.compile("[0-9]+");
 
   protected static boolean checkNumeric(String contents) {
     return NUMERIC.matcher(contents).matches();

@@ -44,12 +44,12 @@ public final class EAN8WriterTestCase extends Assert {
 
   @Test
   public void testEncodeIllegalCharacters() throws WriterException {
-    int illegalArgument = 0;
+    boolean illegalArgument = false;
     try {
-      BitMatrix result = new EAN8Writer().encode("96385abc", BarcodeFormat.EAN_8, 0, 0);
+      new EAN8Writer().encode("96385abc", BarcodeFormat.EAN_8, 0, 0);
     } catch (IllegalArgumentException e) {
-      illegalArgument = 1;
+      illegalArgument = true;
     }
-    assertEquals(illegalArgument, 1);
+    assertEquals(illegalArgument, true);
   }
 }
