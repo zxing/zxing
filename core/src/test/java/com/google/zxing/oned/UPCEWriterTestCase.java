@@ -53,6 +53,6 @@ public final class UPCEWriterTestCase extends Assert {
 
   @Test(expected = IllegalArgumentException.class)
   public void testEncodeIllegalCharacters() throws WriterException {
-      new UPCEWriter().encode("05096abc", BarcodeFormat.UPC_E, 0, 0);
+    new UPCEWriter().encode("05096abc", BarcodeFormat.UPC_E, 0, 0);
   }
 }
