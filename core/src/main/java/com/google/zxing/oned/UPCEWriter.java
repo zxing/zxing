@@ -76,6 +76,8 @@ public final class UPCEWriter extends UPCEANWriter {
             "Requested contents should be 8 digits long, but got " + length);
     }
 
+    checkNumeric(contents);
+
     int firstDigit = Character.digit(contents.charAt(0), 10);
     if (firstDigit != 0 && firstDigit != 1) {
       throw new IllegalArgumentException("Number system must be 0 or 1");

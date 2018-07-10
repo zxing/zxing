@@ -23,6 +23,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
@@ -30,6 +31,7 @@ import java.util.Map;
  * @author dsbnatut@gmail.com (Kazuki Nishiura)
  */
 public abstract class OneDimensionalCodeWriter implements Writer {
+  private static final Pattern NUMERIC = Pattern.compile("[0-9]+");
 
   @Override
   public final BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
@@ -90,6 +92,14 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     return output;
   }
 
+  /**
+   * Throw IllegalArgumentException if input contains characters other than digits 0-9.
+   */
+  protected static final void checkNumeric(String contents) throws IllegalArgumentException {
+    if (!NUMERIC.matcher(contents).matches()) {
+      throw new IllegalArgumentException("Input should only contain digits 0-9");
+    }
+  }
 
   /**
    * @param target encode black/white pattern into this array

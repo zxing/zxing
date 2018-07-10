@@ -42,4 +42,8 @@ public final class EAN13WriterTestCase extends Assert {
     assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testEncodeIllegalCharacters() throws WriterException {
+    new EAN13Writer().encode("5901234123abc", BarcodeFormat.EAN_13, 0, 0);
+  }
 }
