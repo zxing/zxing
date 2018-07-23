@@ -170,15 +170,16 @@ final class State {
   }
   
   private static int calculateBinaryShiftCost(State state) {
-      if (state.binaryShiftByteCount > 62) {
-          return 21; // B/S with extended length
-      } else if (state.binaryShiftByteCount > 31) {
-          return 20; // two B/S
-      } else if (state.binaryShiftByteCount > 0) {
-          return 10; // one B/S
-      } else {
-          return 0;
-      }
+    if (state.binaryShiftByteCount > 62) {
+      return 21; // B/S with extended length
+    }
+    if (state.binaryShiftByteCount > 31) {
+      return 20; // two B/S
+    }
+    if (state.binaryShiftByteCount > 0) {
+      return 10; // one B/S
+    }
+    return 0;
   }
 
 }
