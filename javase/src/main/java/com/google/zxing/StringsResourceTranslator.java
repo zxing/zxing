@@ -85,6 +85,8 @@ public final class StringsResourceTranslator {
   static {
     LANGUAGE_CODE_MASSAGINGS.put("zh-rCN", "zh-cn");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rTW", "zh-tw");
+    LANGUAGE_CODE_MASSAGINGS.put("zh-rHK", "zh-hk");
+    LANGUAGE_CODE_MASSAGINGS.put("zh-rSG", "zh-sg");
   }
 
   private StringsResourceTranslator() {}
