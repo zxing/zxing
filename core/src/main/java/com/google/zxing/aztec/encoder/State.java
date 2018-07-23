@@ -137,12 +137,15 @@ final class State {
   // Returns true if "this" state is better (or equal) to be in than "that"
   // state under all possible circumstances.
   boolean isBetterThanOrEqualTo(State other) {
-    int mySize = this.bitCount + (HighLevelEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
-    if (other.binaryShiftByteCount > 0 &&
-        (this.binaryShiftByteCount == 0 || this.binaryShiftByteCount > other.binaryShiftByteCount)) {
-      mySize += 10;     // Cost of entering Binary Shift mode.
+    int newModeBitCount = this.bitCount + (HighLevelEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
+    if (this.binaryShiftByteCount < other.binaryShiftByteCount) {
+      // add additional B/S encoding cost of other, if any
+      newModeBitCount += calculateBinaryShiftCost(other) - calculateBinaryShiftCost(this);
+    } else if (this.binaryShiftByteCount > other.binaryShiftByteCount && other.binaryShiftByteCount > 0) {
+      // maximum possible additional cost (we end up exceeding the 31 byte boundary and other state can stay beneath it)
+      newModeBitCount += 10; 
     }
-    return mySize <= other.bitCount;
+    return newModeBitCount <= other.bitCount;
   }
 
   BitArray toBitArray(byte[] text) {
@@ -164,6 +167,19 @@ final class State {
   @Override
   public String toString() {
     return String.format("%s bits=%d bytes=%d", HighLevelEncoder.MODE_NAMES[mode], bitCount, binaryShiftByteCount);
+  }
+  
+  private static int calculateBinaryShiftCost(State state) {
+    if (state.binaryShiftByteCount > 62) {
+      return 21; // B/S with extended length
+    }
+    if (state.binaryShiftByteCount > 31) {
+      return 20; // two B/S
+    }
+    if (state.binaryShiftByteCount > 0) {
+      return 10; // one B/S
+    }
+    return 0;
   }
 
 }

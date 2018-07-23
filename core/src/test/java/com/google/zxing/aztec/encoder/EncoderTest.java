@@ -307,7 +307,7 @@ public final class EncoderTest extends Assert {
             + "Ygh6utAIgLl1aBVM4EOTQtMQQYH9M2Z3Dp4qnA/fwWuQ+M8L3V8U=",
         823);
   }
-
+  
   @Test
   public void testHighLevelEncodeBinary() {
     // binary short form single byte
@@ -361,8 +361,40 @@ public final class EncoderTest extends Assert {
       // A lower case letter at both ends will enough to latch us into LOWER.
       testHighLevelEncodeString('a' + sb.substring(0, i) + 'b', expectedLength + 15);
     }
+
+    sb = new StringBuilder();
+    for (int i = 0; i < 32; i++) {
+      sb.append('§'); // § forces binary encoding
+    }
+    sb.setCharAt(1, 'A');
+    // expect B/S(1) A B/S(30)
+    testHighLevelEncodeString(sb.toString(), 5 + 20 + 31 * 8);
+
+    sb = new StringBuilder();
+    for (int i = 0; i < 31; i++) {
+      sb.append('§');
+    }
+    sb.setCharAt(1, 'A');
+    // expect B/S(31)
+    testHighLevelEncodeString(sb.toString(), 10 + 31 * 8);
+
+    sb = new StringBuilder();
+    for (int i = 0; i < 34; i++) {
+      sb.append('§');
+    }
+    sb.setCharAt(1, 'A');
+    // expect B/S(31) B/S(3)
+    testHighLevelEncodeString(sb.toString(), 20 + 34 * 8);
+
+    sb = new StringBuilder();
+    for (int i = 0; i < 64; i++) {
+      sb.append('§');
+    }
+    sb.setCharAt(30, 'A');
+    // expect B/S(64)
+    testHighLevelEncodeString(sb.toString(), 21 + 64 * 8);
   }
-  
+
   @Test
   public void testHighLevelEncodePairs() {
     // Typical usage
