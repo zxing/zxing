@@ -25,6 +25,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Tests {@link CommandLineEncoder}.
+ */
 public final class CommandLineEncoderTestCase extends Assert {
 
   @Test

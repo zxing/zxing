@@ -19,6 +19,9 @@ package com.google.zxing.client.j2se;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link CommandLineRunner}.
+ */
 public final class CommandLineRunnerTestCase extends Assert {
 
   @Test
