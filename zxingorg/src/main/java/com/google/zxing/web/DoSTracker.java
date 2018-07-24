@@ -38,7 +38,7 @@ final class DoSTracker {
   DoSTracker(Timer timer, final int maxAccessesPerTime, long accessTimeMS, int maxEntries) {
     this.maxAccessesPerTime = maxAccessesPerTime;
     this.numRecentAccesses = new LRUMap<>(maxEntries);
-    timer.scheduleAtFixedRate(new TimerTask() {
+    timer.schedule(new TimerTask() {
       @Override
       public void run() {
         synchronized (numRecentAccesses) {

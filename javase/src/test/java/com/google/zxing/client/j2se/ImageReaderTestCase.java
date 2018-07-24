@@ -28,7 +28,7 @@ import java.net.URI;
 public final class ImageReaderTestCase extends Assert {
   
   @Test
-  public void testFoo() throws Exception {
+  public void testDataURI() throws Exception {
     String uri = 
         "data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////w" +
         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6" +

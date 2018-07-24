@@ -68,10 +68,9 @@ public final class Generator implements EntryPoint {
 
     setupLeftPanel();
     topPanel.getElement().setId("leftpanel");
-    Widget leftPanel = topPanel;
 
     HorizontalPanel mainPanel = new HorizontalPanel();
-    mainPanel.add(leftPanel);
+    mainPanel.add(topPanel);
 
     SimplePanel div2 = new SimplePanel();
     div2.add(result);

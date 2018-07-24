@@ -18,7 +18,6 @@ package com.google.zxing.web;
 
 import com.google.common.net.HttpHeaders;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -27,39 +26,19 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Tests {@link HTTPSFilter}.
+ * Tests {@link WelcomeFilter}.
  */
-public final class HTTPSFilterTestCase extends Assert {
-
-  private MockHttpServletRequest request;
-  private MockHttpServletResponse response;
-  private MockFilterChain chain;
-
-  @Before
-  public void setUp() {
-    request = new MockHttpServletRequest();
-    request.setServerName("example.org");
-    request.setRequestURI("/path");
-    response = new MockHttpServletResponse();
-    chain = new MockFilterChain();
-  }
+public final class WelcomeFilterTestCase extends Assert {
 
   @Test
-  public void testNoRedirect() throws Exception {
-    request.setSecure(true);
-    request.setScheme("https");
-    request.setServerPort(443);
-    new HTTPSFilter().doFilter(request, response, chain);
-    assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-  }
-
-  @Test
-  public void testRedirect() throws Exception {
-    request.setScheme("http");
-    request.setServerPort(80);
-    new HTTPSFilter().doFilter(request, response, chain);
+  public void testRedirect() {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.setRequestURI("/");
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+    new WelcomeFilter().doFilter(request, response, chain);
     assertEquals(HttpServletResponse.SC_MOVED_PERMANENTLY, response.getStatus());
-    assertEquals("https://example.org/path", response.getHeader(HttpHeaders.LOCATION));
+    assertEquals("/w/decode.jspx", response.getHeader(HttpHeaders.LOCATION));
   }
 
 }

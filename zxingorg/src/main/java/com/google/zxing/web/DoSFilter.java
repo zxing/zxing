@@ -39,13 +39,17 @@ import java.util.concurrent.TimeUnit;
 @WebFilter({"/w/decode", "/w/chart"})
 public final class DoSFilter implements Filter {
 
+  static final int MAX_ACCESS_PER_TIME = 500;
+  static final long ACCESS_TIME_MS = TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES);
+  static final int MAX_ENTRIES = 10_000;
+
   private Timer timer;
   private DoSTracker sourceAddrTracker;
 
   @Override
   public void init(FilterConfig filterConfig) {
     timer = new Timer("DoSFilter");
-    sourceAddrTracker = new DoSTracker(timer, 500, TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES), 10_000);
+    sourceAddrTracker = new DoSTracker(timer, MAX_ACCESS_PER_TIME, ACCESS_TIME_MS, MAX_ENTRIES);
     timer.scheduleAtFixedRate(
         new TimerTask() {
           @Override
