@@ -93,8 +93,13 @@ final class DecodeWorker implements Callable<Integer> {
       inputFileName = inputPath.getFileName().toString();
     } else {
       outDir = Paths.get(".").toRealPath();
-      String[] pathElements = input.getPath().split("/");
-      inputFileName = pathElements[pathElements.length - 1];
+      String path = input.getPath();
+      if (path == null) {
+        inputFileName = "input";
+      } else {
+        String[] pathElements = path.split("/");
+        inputFileName = pathElements[pathElements.length - 1];
+      }
     }
 
     // Replace/add extension
