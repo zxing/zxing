@@ -139,7 +139,7 @@ public final class EncodeActivity extends Activity {
 
     File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
     File barcodesRoot = new File(bsRoot, "Barcodes");
-    if (!barcodesRoot.exists() && !barcodesRoot.mkdirs()) {
+    if (!barcodesRoot.mkdirs() && !barcodesRoot.isDirectory()) {
       Log.w(TAG, "Couldn't make dir " + barcodesRoot);
       showErrorMessage(R.string.msg_unmount_usb);
       return;
