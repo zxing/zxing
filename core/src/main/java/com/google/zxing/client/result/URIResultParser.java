@@ -28,6 +28,9 @@ import java.util.regex.Pattern;
  */
 public final class URIResultParser extends ResultParser {
 
+  private static final Pattern ALLOWED_URI_CHARS_PATTERN =
+      Pattern.compile("[-._~:/?#\\[\\]@!$&'()*+,;=%A-Za-z0-9]+");
+  private static final Pattern USER_IN_HOST = Pattern.compile(":/*([^/@]+)@[^/]+");
   // See http://www.ietf.org/rfc/rfc2396.txt
   private static final Pattern URL_WITH_PROTOCOL_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9+-.]+:");
   private static final Pattern URL_WITHOUT_PROTOCOL_PATTERN = Pattern.compile(
@@ -44,7 +47,22 @@ public final class URIResultParser extends ResultParser {
       return new URIParsedResult(rawText.substring(4).trim(), null);
     }
     rawText = rawText.trim();
-    return isBasicallyValidURI(rawText) ? new URIParsedResult(rawText, null) : null;
+    if (!isBasicallyValidURI(rawText) || isPossiblyMaliciousURI(rawText)) {
+      return null;
+    }
+    return new URIParsedResult(rawText, null);
+  }
+
+  /**
+   * @return true if the URI contains suspicious patterns that may suggest it intends to
+   *  mislead the user about its true nature. At the moment this looks for the presence
+   *  of user/password syntax in the host/authority portion of a URI which may be used
+   *  in attempts to make the URI's host appear to be other than it is. Example:
+   *  http://yourbank.com@phisher.com  This URI connects to phisher.com but may appear
+   *  to connect to yourbank.com at first glance.
+   */
+  static boolean isPossiblyMaliciousURI(String uri) {
+    return !ALLOWED_URI_CHARS_PATTERN.matcher(uri).matches() || USER_IN_HOST.matcher(uri).find();
   }
 
   static boolean isBasicallyValidURI(String uri) {

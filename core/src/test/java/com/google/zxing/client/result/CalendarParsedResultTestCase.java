@@ -146,7 +146,7 @@ public final class CalendarParsedResultTestCase extends Assert {
         "GEO:-12.345\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR", null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertSame(ParsedResultType.URI, result.getType());
+    assertSame(ParsedResultType.TEXT, result.getType());
   }
 
   @Test

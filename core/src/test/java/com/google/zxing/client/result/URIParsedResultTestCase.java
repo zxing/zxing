@@ -94,6 +94,12 @@ public final class URIParsedResultTestCase extends Assert {
   }
 
   @Test
+  public void testMaliciousUnicode() {
+    doTestIsPossiblyMalicious("https://google.com\u2215.evil.com/stuff", true);
+    doTestIsPossiblyMalicious("\u202ehttps://dylankatz.com/moc.elgoog.www//:sptth", true);
+  }
+
+  @Test
   public void testExotic() {
     doTest("bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y", "bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y", null);
     doTest("BTCTX:-TC4TO3$ZYZTC5NC83/SYOV+YGUGK:$BSF0P8/STNTKTKS.V84+JSA$LB+EHCG+8A725.2AZ-NAVX3VBV5K4MH7UL2.2M:" +
@@ -124,9 +130,10 @@ public final class URIParsedResultTestCase extends Assert {
     assertEquals(text, result.getDisplayResult());
   }
 
-  private static void doTestIsPossiblyMalicious(String uri, boolean expected) {
-    URIParsedResult result = new URIParsedResult(uri, null);
-    assertEquals(expected, result.isPossiblyMaliciousURI());
+  private static void doTestIsPossiblyMalicious(String uri, boolean malicious) {
+    Result fakeResult = new Result(uri, null, null, BarcodeFormat.QR_CODE);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
+    assertSame(malicious ? ParsedResultType.TEXT : ParsedResultType.URI, result.getType());
   }
 
 }

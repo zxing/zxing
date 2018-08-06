@@ -238,7 +238,7 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
         "foo\n" + formatDate(2008, 5, 4), ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT",
-        "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.URI);
+        "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
     // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR
     // Make sure illegal entries without newlines don't crash
     doTestResult(

@@ -16,16 +16,12 @@
 
 package com.google.zxing.client.result;
 
-import java.util.regex.Pattern;
-
 /**
  * A simple result type encapsulating a URI that has no further interpretation.
  *
  * @author Sean Owen
  */
 public final class URIParsedResult extends ParsedResult {
-
-  private static final Pattern USER_IN_HOST = Pattern.compile(":/*([^/@]+)@[^/]+");
 
   private final String uri;
   private final String title;
@@ -45,15 +41,11 @@ public final class URIParsedResult extends ParsedResult {
   }
 
   /**
-   * @return true if the URI contains suspicious patterns that may suggest it intends to
-   *  mislead the user about its true nature. At the moment this looks for the presence
-   *  of user/password syntax in the host/authority portion of a URI which may be used
-   *  in attempts to make the URI's host appear to be other than it is. Example:
-   *  http://yourbank.com@phisher.com  This URI connects to phisher.com but may appear
-   *  to connect to yourbank.com at first glance.
+   * @deprecated see {@link URIResultParser#isPossiblyMaliciousURI(String)}
    */
+  @Deprecated
   public boolean isPossiblyMaliciousURI() {
-    return USER_IN_HOST.matcher(uri).find();
+    return URIResultParser.isPossiblyMaliciousURI(uri);
   }
 
   @Override
