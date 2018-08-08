@@ -63,6 +63,7 @@ import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
@@ -92,6 +93,7 @@ public final class DecodeServlet extends HttpServlet {
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
+  private static final Pattern WHITESPACE = Pattern.compile("\\s+");
   // No real reason to let people upload more than ~64MB
   private static final long MAX_IMAGE_SIZE = 1L << 26;
   // No real reason to deal with more than ~32 megapixels
@@ -152,7 +154,8 @@ public final class DecodeServlet extends HttpServlet {
       return;
     }
 
-    imageURIString = imageURIString.trim();
+    // Remove any whitespace to sanitize; none is valid anyway
+    imageURIString = WHITESPACE.matcher(imageURIString).replaceAll("");
     for (CharSequence substring : blockedURLSubstrings) {
       if (imageURIString.contains(substring)) {
         log.info("Disallowed URI " + imageURIString);

@@ -462,7 +462,6 @@ public abstract class ResultHandler {
   final void rawLaunchIntent(Intent intent) {
     if (intent != null) {
       intent.addFlags(Intents.FLAG_NEW_DOC);
-      Log.d(TAG, "Launching intent: " + intent + " with extras: " + intent.getExtras());
       activity.startActivity(intent);
     }
   }

@@ -76,7 +76,7 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
     try {
       networkType = NetworkType.forIntentValue(networkTypeString);
     } catch (IllegalArgumentException ignored) {
-      Log.w(TAG, "Bad network type; see NetworkType values: " + networkTypeString);
+      Log.w(TAG, "Bad network type");
       return null;
     }
     if (networkType == NetworkType.NO_PASSWORD) {
