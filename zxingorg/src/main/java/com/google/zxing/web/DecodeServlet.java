@@ -38,7 +38,6 @@ import com.google.common.io.Resources;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 
-import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -179,10 +178,10 @@ public final class DecodeServlet extends HttpServlet {
     
     // Shortcut for data URI
     if ("data".equals(imageURI.getScheme())) {
-      BufferedImage image = null;
+      BufferedImage image;
       try {
         image = ImageReader.readDataURIImage(imageURI);
-      } catch (IOException | IllegalStateException e) {
+      } catch (Exception e) {
         log.info("Error " + e + " while reading data URI: " + imageURIString);
         errorResponse(request, response, "badurl");
         return;
@@ -240,7 +239,7 @@ public final class DecodeServlet extends HttpServlet {
 
     try {
       connection.connect();
-    } catch (IOException | IllegalArgumentException e) {
+    } catch (Exception e) {
       // Encompasses lots of stuff, including
       //  java.net.SocketException, java.net.UnknownHostException,
       //  javax.net.ssl.SSLPeerUnverifiedException,
@@ -302,12 +301,9 @@ public final class DecodeServlet extends HttpServlet {
     Collection<Part> parts;
     try {
       parts = request.getParts();
-    } catch (IllegalStateException ise) {
-      log.info("File upload was too large or invalid");
-      errorResponse(request, response, "badimage");
-      return;
-    } catch (IOException ioe) {
-      log.info(ioe.toString());
+    } catch (Exception e) {
+      // Includes IOException, InvalidContentTypeException, other parsing IllegalStateException
+      log.info(e.toString());
       errorResponse(request, response, "badimage");
       return;
     }
@@ -336,9 +332,8 @@ public final class DecodeServlet extends HttpServlet {
     BufferedImage image;
     try {
       image = ImageIO.read(is);
-    } catch (IOException | CMMException | IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
-      // Have seen these in some logs, like an AIOOBE from certain GIF images
-      // https://github.com/zxing/zxing/issues/862#issuecomment-376159343
+    } catch (Exception e) {
+      // Many possible failures from JAI, so just catch anything as a failure
       log.info(e.toString());
       errorResponse(request, response, "badimage");
       return;

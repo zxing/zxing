@@ -19,13 +19,9 @@ package com.google.zxing.web;
 import com.google.common.net.HttpHeaders;
 
 import javax.servlet.Filter;
-import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Provides no-op default implementations for convenience of subclasses.
@@ -36,11 +32,6 @@ abstract class AbstractFilter implements Filter {
   public final void init(FilterConfig filterConfig) {
     // do nothing
   }
-
-  @Override
-  public abstract void doFilter(ServletRequest request, 
-                       ServletResponse response, 
-                       FilterChain chain) throws IOException, ServletException;
 
   @Override
   public final void destroy() {
