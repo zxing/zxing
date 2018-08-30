@@ -185,6 +185,7 @@ public final class DecodeServlet extends HttpServlet {
       } catch (IOException | IllegalStateException e) {
         log.info("Error " + e + " while reading data URI: " + imageURIString);
         errorResponse(request, response, "badurl");
+        return;
       }
       if (image == null) {
         log.info("Couldn't read data URI: " + imageURIString);
@@ -218,6 +219,7 @@ public final class DecodeServlet extends HttpServlet {
     if (destHostTracker.isBanned(imageURL.getHost())) {
       log.info("Temporarily not requesting from host: " + imageURIString);
       errorResponse(request, response, "badurl");
+      return;
     }
 
     HttpURLConnection connection;
