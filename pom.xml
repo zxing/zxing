@@ -127,6 +127,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
+          <!-- 3.0.0-M2 has a regression re: plugin versions -->
           <version>3.0.0-M1</version>
           <executions>
             <execution>
@@ -154,7 +155,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
+          <version>3.8.0</version>
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>
@@ -179,11 +180,14 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.0.1</version>
           <configuration>
             <javadocVersion>${java.version}</javadocVersion>
             <quiet>true</quiet>
             <notimestamp>true</notimestamp>
+            <encoding>${project.build.sourceEncoding}</encoding>
+            <docencoding>${project.reporting.outputEncoding}</docencoding>
+            <doclint>all</doclint>
           </configuration>
           <executions>
             <execution>
@@ -198,7 +202,7 @@
             <dependency>
               <groupId>org.apache.commons</groupId>
               <artifactId>commons-lang3</artifactId>
-              <version>3.7</version>
+              <version>3.8</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -306,7 +310,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>2.9</version>
+          <version>3.0.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -328,7 +332,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.21.0</version>
+          <version>2.22.0</version>
           <configuration>
             <forkCount>0.5C</forkCount>
             <systemPropertyVariables>
@@ -339,7 +343,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.1</version>
+          <version>3.2.2</version>
         </plugin>
         <plugin>
           <groupId>com.simpligility.maven.plugins</groupId>
@@ -466,7 +470,7 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.10.1</version>
+              <version>8.12</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -526,7 +530,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.1</version>
+          <version>0.8.2</version>
           <executions>
             <execution>
               <goals>
@@ -555,16 +559,16 @@
         <reportSets>
           <reportSet>
             <reports>
-              <!-- <report>cim</report> -->
+              <!-- <report>ci-management</report> -->
               <!-- <report>dependencies</report> -->
               <!-- <report>dependency-convergence</report> -->
               <report>dependency-info</report>
               <report>dependency-management</report>
               <!-- <report>distribution-management</report> -->
               <report>index</report>
-              <report>issue-tracking</report>
-              <report>license</report>
-              <report>mailing-list</report>
+              <report>issue-management</report>
+              <report>licenses</report>
+              <report>mailing-lists</report>
               <!-- <report>modules</report> -->
               <!-- <report>plugin-management</report> -->
               <!-- <report>plugins</report> -->
