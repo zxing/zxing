@@ -92,7 +92,7 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
       return EMPTY_RESULT_ARRAY;
     } else {
       results = processStructuredAppend(results);
-      return results.toArray(new Result[results.size()]);
+      return results.toArray(EMPTY_RESULT_ARRAY);
     }
   }
 

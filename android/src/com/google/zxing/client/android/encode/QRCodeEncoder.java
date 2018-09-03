@@ -40,6 +40,7 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -195,7 +196,7 @@ final class QRCodeEncoder {
         baos.write(buffer, 0, bytesRead);
       }
       vcard = baos.toByteArray();
-      vcardString = new String(vcard, 0, vcard.length, "UTF-8");
+      vcardString = new String(vcard, 0, vcard.length, StandardCharsets.UTF_8);
     } catch (IOException ioe) {
       throw new WriterException(ioe);
     }

@@ -37,6 +37,8 @@ import java.util.Map;
  */
 public final class MultiFormatUPCEANReader extends OneDReader {
 
+  private static final UPCEANReader[] EMPTY_READER_ARRAY = new UPCEANReader[0];
+
   private final UPCEANReader[] readers;
 
   public MultiFormatUPCEANReader(Map<DecodeHintType,?> hints) {
@@ -63,7 +65,7 @@ public final class MultiFormatUPCEANReader extends OneDReader {
       readers.add(new EAN8Reader());
       readers.add(new UPCEReader());
     }
-    this.readers = readers.toArray(new UPCEANReader[readers.size()]);
+    this.readers = readers.toArray(EMPTY_READER_ARRAY);
   }
 
   @Override

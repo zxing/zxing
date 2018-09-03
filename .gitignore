@@ -1,5 +1,4 @@
 target
-private
 .idea
 *.iml
 .DS_Store

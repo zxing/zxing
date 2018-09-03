@@ -85,7 +85,7 @@ public final class AddressBookAUResultParser extends ResultParser {
     if (values == null) {
       return null;
     }
-    return values.toArray(new String[values.size()]);
+    return values.toArray(EMPTY_STR_ARRAY);
   }
 
 }

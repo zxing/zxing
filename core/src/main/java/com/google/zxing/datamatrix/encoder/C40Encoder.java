@@ -45,8 +45,7 @@ class C40Encoder implements Encoder {
         if ((buffer.length() % 3) == 2 && (available < 2 || available > 2)) {
           lastCharSize = backtrackOneCharacter(context, buffer, removed, lastCharSize);
         }
-        while ((buffer.length() % 3) == 1
-            && ((lastCharSize <= 3 && available != 1) || lastCharSize > 3)) {
+        while ((buffer.length() % 3) == 1 && (lastCharSize > 3 || available != 1)) {
           lastCharSize = backtrackOneCharacter(context, buffer, removed, lastCharSize);
         }
         break;

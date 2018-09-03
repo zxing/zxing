@@ -90,7 +90,6 @@ public final class WhiteRectangleDetector {
     int down = downInit;
     boolean sizeExceeded = false;
     boolean aBlackPointFoundOnBorder = true;
-    boolean atLeastOneBlackPointFoundOnBorder = false;
 
     boolean atLeastOneBlackPointFoundOnRight = false;
     boolean atLeastOneBlackPointFoundOnBottom = false;
@@ -181,13 +180,9 @@ public final class WhiteRectangleDetector {
         break;
       }
 
-      if (aBlackPointFoundOnBorder) {
-        atLeastOneBlackPointFoundOnBorder = true;
-      }
-
     }
 
-    if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder) {
+    if (!sizeExceeded) {
 
       int maxSize = right - left;
 

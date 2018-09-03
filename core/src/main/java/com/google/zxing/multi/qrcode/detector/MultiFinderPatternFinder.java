@@ -49,6 +49,7 @@ import java.util.Map;
 final class MultiFinderPatternFinder extends FinderPatternFinder {
 
   private static final FinderPatternInfo[] EMPTY_RESULT_ARRAY = new FinderPatternInfo[0];
+  private static final FinderPattern[][] EMPTY_FP_2D_ARRAY = new FinderPattern[0][];
 
   // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
   // since it limits the number of regions to decode
@@ -216,12 +217,12 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
           // All tests passed!
           results.add(test);
-        } // end iterate p3
-      } // end iterate p2
-    } // end iterate p1
+        }
+      }
+    }
 
     if (!results.isEmpty()) {
-      return results.toArray(new FinderPattern[results.size()][]);
+      return results.toArray(EMPTY_FP_2D_ARRAY);
     }
 
     // Nothing found!
@@ -279,7 +280,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
       if (foundPatternCross(stateCount)) {
         handlePossibleCenter(stateCount, i, maxJ);
-      } // end if foundPatternCross
+      }
     } // for i=iSkip-1 ...
     FinderPattern[][] patternInfo = selectMutipleBestPatterns();
     List<FinderPatternInfo> result = new ArrayList<>();
@@ -291,7 +292,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
     if (result.isEmpty()) {
       return EMPTY_RESULT_ARRAY;
     } else {
-      return result.toArray(new FinderPatternInfo[result.size()]);
+      return result.toArray(EMPTY_RESULT_ARRAY);
     }
   }
 

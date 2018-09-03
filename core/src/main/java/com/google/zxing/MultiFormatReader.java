@@ -37,6 +37,8 @@ import java.util.Map;
  */
 public final class MultiFormatReader implements Reader {
 
+  private static final Reader[] EMPTY_READER_ARRAY = new Reader[0];
+
   private Map<DecodeHintType,?> hints;
   private Reader[] readers;
 
@@ -152,7 +154,7 @@ public final class MultiFormatReader implements Reader {
         readers.add(new MultiFormatOneDReader(hints));
       }
     }
-    this.readers = readers.toArray(new Reader[readers.size()]);
+    this.readers = readers.toArray(EMPTY_READER_ARRAY);
   }
 
   @Override

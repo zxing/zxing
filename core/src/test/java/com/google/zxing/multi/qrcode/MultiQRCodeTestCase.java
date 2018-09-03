@@ -19,9 +19,9 @@ package com.google.zxing.multi.qrcode;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -55,14 +55,14 @@ public final class MultiQRCodeTestCase extends Assert {
     assertNotNull(results);
     assertEquals(4, results.length);
 
-    Set<String> barcodeContents = new HashSet<>();
+    Collection<String> barcodeContents = new HashSet<>();
     for (Result result : results) {
       barcodeContents.add(result.getText());
       assertEquals(BarcodeFormat.QR_CODE, result.getBarcodeFormat());
       Map<ResultMetadataType,Object> metadata = result.getResultMetadata();
       assertNotNull(metadata);
     }
-    Set<String> expectedContents = new HashSet<>();
+    Collection<String> expectedContents = new HashSet<>();
     expectedContents.add("You earned the class a 5 MINUTE DANCE PARTY!!  Awesome!  Way to go!  Let's boogie!");
     expectedContents.add("You earned the class 5 EXTRA MINUTES OF RECESS!!  Fabulous!!  Way to go!!");
     expectedContents.add("You get to SIT AT MRS. SIGMON'S DESK FOR A DAY!!  Awesome!!  Way to go!! Guess I better clean up! :)");

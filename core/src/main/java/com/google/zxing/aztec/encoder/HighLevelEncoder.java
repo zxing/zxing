@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This produces nearly optimal encodings of text into the first-level of
@@ -284,7 +283,7 @@ public final class HighLevelEncoder {
   }
 
   private static Collection<State> simplifyStates(Iterable<State> states) {
-    List<State> result = new LinkedList<>();
+    Collection<State> result = new LinkedList<>();
     for (State newState : states) {
       boolean add = true;
       for (Iterator<State> iterator = result.iterator(); iterator.hasNext();) {

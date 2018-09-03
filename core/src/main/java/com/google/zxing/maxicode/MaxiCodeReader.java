@@ -59,14 +59,10 @@ public final class MaxiCodeReader implements Reader {
   @Override
   public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
-    DecoderResult decoderResult;
-    if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = extractPureBits(image.getBlackMatrix());
-      decoderResult = decoder.decode(bits, hints);
-    } else {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
+    // Note that MaxiCode reader effectively always assumes PURE_BARCODE mode
+    // and can't detect it in an image
+    BitMatrix bits = extractPureBits(image.getBlackMatrix());
+    DecoderResult decoderResult = decoder.decode(bits, hints);
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.MAXICODE);
 
     String ecLevel = decoderResult.getECLevel();

@@ -36,6 +36,8 @@ import java.util.Map;
  */
 public final class MultiFormatOneDReader extends OneDReader {
 
+  private static final OneDReader[] EMPTY_ONED_ARRAY = new OneDReader[0];
+
   private final OneDReader[] readers;
 
   public MultiFormatOneDReader(Map<DecodeHintType,?> hints) {
@@ -84,7 +86,7 @@ public final class MultiFormatOneDReader extends OneDReader {
       readers.add(new RSS14Reader());
       readers.add(new RSSExpandedReader());
     }
-    this.readers = readers.toArray(new OneDReader[readers.size()]);
+    this.readers = readers.toArray(EMPTY_ONED_ARRAY);
   }
 
   @Override

@@ -34,7 +34,7 @@ public final class DoSFilterTestCase extends Assert {
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRequestURI("/");
     request.setRemoteAddr("1.2.3.4");
-    MockHttpServletResponse response = new MockHttpServletResponse();
+    HttpServletResponse response = new MockHttpServletResponse();
     DoSFilter filter = new DoSFilter();
     filter.init(null);
     for (int i = 0; i < DoSFilter.MAX_ACCESS_PER_TIME; i++) {

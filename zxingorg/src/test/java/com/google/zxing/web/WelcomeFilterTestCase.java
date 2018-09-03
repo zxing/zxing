@@ -23,6 +23,7 @@ import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -34,8 +35,8 @@ public final class WelcomeFilterTestCase extends Assert {
   public void testRedirect() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRequestURI("/");
-    MockHttpServletResponse response = new MockHttpServletResponse();
-    MockFilterChain chain = new MockFilterChain();
+    HttpServletResponse response = new MockHttpServletResponse();
+    FilterChain chain = new MockFilterChain();
     new WelcomeFilter().doFilter(request, response, chain);
     assertEquals(HttpServletResponse.SC_MOVED_PERMANENTLY, response.getStatus());
     assertEquals("/w/decode.jspx", response.getHeader(HttpHeaders.LOCATION));

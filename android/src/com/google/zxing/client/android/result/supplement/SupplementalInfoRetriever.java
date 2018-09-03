@@ -46,6 +46,8 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
 
   private static final String TAG = "SupplementalInfo";
 
+  static final String[] EMPTY_STR_ARRAY = new String[0];
+
   private final WeakReference<TextView> textViewRef;
   private final WeakReference<HistoryManager> historyManagerRef;
   private final Collection<Spannable> newContents;

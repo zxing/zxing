@@ -47,6 +47,8 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
   private static final int MIN_DIMENSION_TO_RECUR = 100;
   private static final int MAX_DEPTH = 4;
 
+  static final Result[] EMPTY_RESULT_ARRAY = new Result[0];
+
   private final Reader delegate;
 
   public GenericMultipleBarcodeReader(Reader delegate) {
@@ -66,7 +68,7 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     if (results.isEmpty()) {
       throw NotFoundException.getNotFoundInstance();
     }
-    return results.toArray(new Result[results.size()]);
+    return results.toArray(EMPTY_RESULT_ARRAY);
   }
 
   private void doDecodeMultiple(BinaryBitmap image,

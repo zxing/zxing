@@ -109,7 +109,7 @@ public final class DecodeServlet extends HttpServlet {
     HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
   }
 
-  private Iterable<String> blockedURLSubstrings;
+  private Collection<String> blockedURLSubstrings;
   private Timer timer;
   private DoSTracker destHostTracker;
 
@@ -155,11 +155,14 @@ public final class DecodeServlet extends HttpServlet {
 
     // Remove any whitespace to sanitize; none is valid anyway
     imageURIString = WHITESPACE.matcher(imageURIString).replaceAll("");
-    for (CharSequence substring : blockedURLSubstrings) {
-      if (imageURIString.contains(substring)) {
-        log.info("Disallowed URI " + imageURIString);
-        errorResponse(request, response, "badurl");
-        return;
+
+    if (!blockedURLSubstrings.isEmpty()) {
+      for (CharSequence substring : blockedURLSubstrings) {
+        if (imageURIString.contains(substring)) {
+          log.info("Disallowed URI " + imageURIString);
+          errorResponse(request, response, "badurl");
+          return;
+        }
       }
     }
 
@@ -198,6 +201,11 @@ public final class DecodeServlet extends HttpServlet {
       }
       return;
     }
+
+    if (destHostTracker.isBanned(imageURI.getHost())) {
+      errorResponse(request, response, "badurl");
+      return;
+    }
     
     URL imageURL;    
     try {
@@ -211,12 +219,6 @@ public final class DecodeServlet extends HttpServlet {
     String protocol = imageURL.getProtocol();
     if (!"http".equalsIgnoreCase(protocol) && !"https".equalsIgnoreCase(protocol)) {
       log.info("URL protocol was not valid: " + imageURIString);
-      errorResponse(request, response, "badurl");
-      return;
-    }
-
-    if (destHostTracker.isBanned(imageURL.getHost())) {
-      log.info("Temporarily not requesting from host: " + imageURIString);
       errorResponse(request, response, "badurl");
       return;
     }

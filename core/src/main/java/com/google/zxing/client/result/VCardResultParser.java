@@ -296,7 +296,7 @@ public final class VCardResultParser extends ResultParser {
         result.add(value);
       }
     }
-    return result.toArray(new String[result.size()]);
+    return result.toArray(EMPTY_STR_ARRAY);
   }
   
   private static String[] toTypes(Collection<List<String>> lists) {
@@ -324,7 +324,7 @@ public final class VCardResultParser extends ResultParser {
         result.add(type);
       }
     }
-    return result.toArray(new String[result.size()]);
+    return result.toArray(EMPTY_STR_ARRAY);
   }
 
   private static boolean isLikeVCardDate(CharSequence value) {

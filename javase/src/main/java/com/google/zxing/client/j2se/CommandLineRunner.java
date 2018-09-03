@@ -105,7 +105,7 @@ public final class CommandLineRunner {
     }
   }
 
-  private static List<URI> expand(List<URI> inputs) throws IOException {
+  private static List<URI> expand(Iterable<URI> inputs) throws IOException {
     List<URI> expanded = new ArrayList<>();
     for (URI input : inputs) {
       if (isFileOrDir(input)) {
@@ -132,7 +132,7 @@ public final class CommandLineRunner {
     return expanded;
   }
 
-  private static List<URI> retainValid(List<URI> inputs, boolean recursive) {
+  private static List<URI> retainValid(Iterable<URI> inputs, boolean recursive) {
     List<URI> retained = new ArrayList<>();
     for (URI input : inputs) {
       boolean retain;
@@ -151,7 +151,7 @@ public final class CommandLineRunner {
     return retained;
   }
 
-  private static boolean isExpandable(List<URI> inputs) {
+  private static boolean isExpandable(Iterable<URI> inputs) {
     for (URI input : inputs) {
       if (isFileOrDir(input) && Files.isDirectory(Paths.get(input))) {
         return true;

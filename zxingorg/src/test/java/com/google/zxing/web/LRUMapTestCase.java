@@ -19,6 +19,8 @@ package com.google.zxing.web;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Map;
+
 /**
  * Tests {@link LRUMap}.
  */
@@ -26,7 +28,7 @@ public final class LRUMapTestCase extends Assert {
 
   @Test
   public void testLRU() {
-    LRUMap<String,String> map = new LRUMap<>(2);
+    Map<String,String> map = new LRUMap<>(2);
     map.put("foo", "bar");
     map.put("bar", "baz");
     assertEquals("bar", map.get("foo"));

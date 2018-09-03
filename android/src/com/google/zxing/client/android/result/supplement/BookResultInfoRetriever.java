@@ -99,7 +99,7 @@ final class BookResultInfoRetriever extends SupplementalInfoRetriever {
     String baseBookUri = "http://www.google." + LocaleManager.getBookSearchCountryTLD(context)
         + "/search?tbm=bks&source=zxing&q=";
 
-    append(isbn, source, newTexts.toArray(new String[newTexts.size()]), baseBookUri + isbn);
+    append(isbn, source, newTexts.toArray(EMPTY_STR_ARRAY), baseBookUri + isbn);
   }
 
 }

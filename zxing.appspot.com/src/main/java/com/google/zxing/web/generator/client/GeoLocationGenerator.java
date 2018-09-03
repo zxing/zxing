@@ -30,8 +30,8 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public final class GeoLocationGenerator implements GeneratorSource {
 
-  private static final String LON_REGEXP = "[+-]?[0-9]+(.[0-9]+)?";
-  private static final String LAT_REGEXP = "[+-]?[0-9]+(.[0-9]+)?";
+  private static final String LON_REGEXP = "[+-]?[0-9]+(?:.[0-9]+)?";
+  private static final String LAT_REGEXP = "[+-]?[0-9]+(?:.[0-9]+)?";
   
   private Grid table;
   private final TextBox latitude = new TextBox();
