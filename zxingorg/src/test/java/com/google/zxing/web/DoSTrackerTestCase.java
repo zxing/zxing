@@ -29,8 +29,9 @@ public final class DoSTrackerTestCase extends Assert {
   @Test
   public void testDoS() throws Exception {
     Timer timer = new Timer();
-    long timerTimeMS = 200;
-    DoSTracker tracker = new DoSTracker(timer, 2, timerTimeMS, 3);
+    long timerTimeMS = 500;
+    int maxAccessPerTime = 2;
+    DoSTracker tracker = new DoSTracker(timer, maxAccessPerTime, timerTimeMS, 3);
 
     // 2 requests allowed per time; 3rd should be banned
     assertFalse(tracker.isBanned("A"));
@@ -49,10 +50,9 @@ public final class DoSTrackerTestCase extends Assert {
     Thread.sleep(timerTimeMS * 3);
     assertFalse(tracker.isBanned("A"));
 
-    assertFalse(tracker.isBanned("A"));
     // Build up a lot of hits
-    for (int i = 0; i < 10; i++) {
-      assertTrue(tracker.isBanned("A"));
+    for (int i = 0; i < maxAccessPerTime * 5; i++) {
+      tracker.isBanned("A");
     }
     // After one interval, should still have enough hits to be banned
     Thread.sleep(timerTimeMS * 2);
