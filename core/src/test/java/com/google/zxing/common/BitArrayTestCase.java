@@ -225,7 +225,7 @@ public final class BitArrayTestCase extends Assert {
     assertEquals(a.hashCode(), b.hashCode());
     assertNotEquals(a, new BitArray(31));
     a.set(16);
-    assertNotEquals(a, new BitArray(31));
+    assertNotEquals(a, b);
     assertNotEquals(a.hashCode(), b.hashCode());
     b.set(16);
     assertEquals(a, b);
