@@ -119,6 +119,9 @@ public final class Detector {
     return new ResultPoint(x, y);
   }
 
+  /**
+   * Detect a solid side which has minimum transition.
+   */
   private ResultPoint[] detectSolid1(ResultPoint[] cornerPoints) {
     // 0  2
     // 1  3
@@ -161,6 +164,9 @@ public final class Detector {
     return points;
   }
 
+  /**
+   * Detect a second solid side next to first solid side.
+   */
   private ResultPoint[] detectSolid2(ResultPoint[] points) {
     // A..D
     // :  :
@@ -170,11 +176,11 @@ public final class Detector {
     ResultPoint pointC = points[2];
     ResultPoint pointD = points[3];
 
+    // Transition detection on the edge is not stable.
+    // To safely detect, shift the points to the module center.
     int tr = transitionsBetween(pointA, pointD).getTransitions();
-
     ResultPoint pointBs = shiftPoint(pointB, pointC, (tr + 1) * 4);
     ResultPoint pointCs = shiftPoint(pointC, pointB, (tr + 1) * 4);
-
     int trBA = transitionsBetween(pointBs, pointA).getTransitions();
     int trCD = transitionsBetween(pointCs, pointD).getTransitions();
 
@@ -195,6 +201,9 @@ public final class Detector {
     return points;
   }
 
+  /**
+   * Calculates the position of the white top right module.
+   */
   private ResultPoint correctTopRight(ResultPoint[] points) {
     // A..D
     // |  :
@@ -212,35 +221,38 @@ public final class Detector {
     trTop = transitionsBetween(pointAs, pointD).getTransitions();
     trRight = transitionsBetween(pointCs, pointD).getTransitions();
 
-    ResultPoint c1 = new ResultPoint(
+    ResultPoint candidate1 = new ResultPoint(
       pointD.getX() + (pointC.getX() - pointB.getX()) / (trTop + 1),
       pointD.getY() + (pointC.getY() - pointB.getY()) / (trTop + 1));
-    ResultPoint c2 = new ResultPoint(
+    ResultPoint candidate2 = new ResultPoint(
       pointD.getX() + (pointA.getX() - pointB.getX()) / (trRight + 1),
       pointD.getY() + (pointA.getY() - pointB.getY()) / (trRight + 1));
 
-    if (!isValid(c1)) {
-      if (isValid(c2)) {
-        return c2;
+    if (!isValid(candidate1)) {
+      if (isValid(candidate2)) {
+        return candidate2;
       }
       return null;
     }
-    if (!isValid(c2)) {
-      return c1;
+    if (!isValid(candidate2)) {
+      return candidate1;
     }
 
-    int sumc1 = transitionsBetween(pointAs, c1).getTransitions() + 
-      transitionsBetween(pointCs, c1).getTransitions();
-    int sumc2 = transitionsBetween(pointAs, c2).getTransitions() + 
-      transitionsBetween(pointCs, c2).getTransitions();
+    int sumc1 = transitionsBetween(pointAs, candidate1).getTransitions() +
+      transitionsBetween(pointCs, candidate1).getTransitions();
+    int sumc2 = transitionsBetween(pointAs, candidate2).getTransitions() +
+      transitionsBetween(pointCs, candidate2).getTransitions();
 
     if (sumc1 > sumc2) {
-      return c1;
+      return candidate1;
     } else {
-      return c2;
+      return candidate2;
     }
   }
 
+  /**
+   * Shift the edge points to the module center.
+   */
   private ResultPoint[] moduleCenterPoints(ResultPoint[] points) {
     // A...D
     // |   :
@@ -264,7 +276,7 @@ public final class Detector {
       dimV += 1;
     }
 
-    // WhiteRectangleDetector returns points inside of a rectangle.
+    // WhiteRectangleDetector returns points inside of the rectangle.
     // I want points on the edges.
     float centerX = (pointA.getX() + pointB.getX() + pointC.getX() + pointD.getX()) / 4;
     float centerY = (pointA.getY() + pointB.getY() + pointC.getY() + pointD.getY()) / 4;
@@ -276,7 +288,7 @@ public final class Detector {
     ResultPoint pointBs;
     ResultPoint pointDs;
 
-    // shift to center of each corner modules
+    // shift points to the center of each modules
     pointAs = shiftPoint(pointA, pointB, dimV * 4);
     pointAs = shiftPoint(pointAs, pointD, dimH * 4);
     pointBs = shiftPoint(pointB, pointA, dimV * 4);
