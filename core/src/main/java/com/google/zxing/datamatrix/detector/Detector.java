@@ -55,162 +55,238 @@ public final class Detector {
    * @throws NotFoundException if no Data Matrix Code can be found
    */
   public DetectorResult detect() throws NotFoundException {
-
     ResultPoint[] cornerPoints = rectangleDetector.detect();
-    ResultPoint pointA = cornerPoints[0];
-    ResultPoint pointB = cornerPoints[1];
-    ResultPoint pointC = cornerPoints[2];
-    ResultPoint pointD = cornerPoints[3];
 
-    // Point A and D are across the diagonal from one another,
-    // as are B and C. Figure out which are the solid black lines
-    // by counting transitions
-    List<ResultPointsAndTransitions> transitions = new ArrayList<>(4);
-    transitions.add(transitionsBetween(pointA, pointB));
-    transitions.add(transitionsBetween(pointA, pointC));
-    transitions.add(transitionsBetween(pointB, pointD));
-    transitions.add(transitionsBetween(pointC, pointD));
-    Collections.sort(transitions, new ResultPointsAndTransitionsComparator());
-
-    // Sort by number of transitions. First two will be the two solid sides; last two
-    // will be the two alternating black/white sides
-    ResultPointsAndTransitions lSideOne = transitions.get(0);
-    ResultPointsAndTransitions lSideTwo = transitions.get(1);
-
-    // Figure out which point is their intersection by tallying up the number of times we see the
-    // endpoints in the four endpoints. One will show up twice.
-    Map<ResultPoint,Integer> pointCount = new HashMap<>();
-    increment(pointCount, lSideOne.getFrom());
-    increment(pointCount, lSideOne.getTo());
-    increment(pointCount, lSideTwo.getFrom());
-    increment(pointCount, lSideTwo.getTo());
-
-    ResultPoint maybeTopLeft = null;
-    ResultPoint bottomLeft = null;
-    ResultPoint maybeBottomRight = null;
-    for (Map.Entry<ResultPoint,Integer> entry : pointCount.entrySet()) {
-      ResultPoint point = entry.getKey();
-      Integer value = entry.getValue();
-      if (value == 2) {
-        bottomLeft = point; // this is definitely the bottom left, then -- end of two L sides
-      } else {
-        // Otherwise it's either top left or bottom right -- just assign the two arbitrarily now
-        if (maybeTopLeft == null) {
-          maybeTopLeft = point;
-        } else {
-          maybeBottomRight = point;
-        }
-      }
-    }
-
-    if (maybeTopLeft == null || bottomLeft == null || maybeBottomRight == null) {
+    ResultPoint[] points = detectSolid1(cornerPoints);
+    points = detectSolid2(points);
+    points[3] = correctTopRight(points);
+    if (points[3] == null) {
       throw NotFoundException.getNotFoundInstance();
     }
+    points = moduleCenterPoints(points);
 
-    // Bottom left is correct but top left and bottom right might be switched
-    ResultPoint[] corners = { maybeTopLeft, bottomLeft, maybeBottomRight };
-    // Use the dot product trick to sort them out
-    ResultPoint.orderBestPatterns(corners);
+    ResultPoint topLeft = points[0];
+    ResultPoint bottomLeft = points[1];
+    ResultPoint bottomRight = points[2];
+    ResultPoint topRight = points[3];
 
-    // Now we know which is which:
-    ResultPoint bottomRight = corners[0];
-    bottomLeft = corners[1];
-    ResultPoint topLeft = corners[2];
-
-    // Which point didn't we find in relation to the "L" sides? that's the top right corner
-    ResultPoint topRight;
-    if (!pointCount.containsKey(pointA)) {
-      topRight = pointA;
-    } else if (!pointCount.containsKey(pointB)) {
-      topRight = pointB;
-    } else if (!pointCount.containsKey(pointC)) {
-      topRight = pointC;
-    } else {
-      topRight = pointD;
-    }
-
-    // Next determine the dimension by tracing along the top or right side and counting black/white
-    // transitions. Since we start inside a black module, we should see a number of transitions
-    // equal to 1 less than the code dimension. Well, actually 2 less, because we are going to
-    // end on a black module:
-
-    // The top right point is actually the corner of a module, which is one of the two black modules
-    // adjacent to the white module at the top right. Tracing to that corner from either the top left
-    // or bottom right should work here.
-
-    int dimensionTop = transitionsBetween(topLeft, topRight).getTransitions();
-    int dimensionRight = transitionsBetween(bottomRight, topRight).getTransitions();
-
+    int dimensionTop = transitionsBetween(topLeft, topRight).getTransitions() +1;
+    int dimensionRight = transitionsBetween(bottomRight, topRight).getTransitions() +1;
     if ((dimensionTop & 0x01) == 1) {
-      // it can't be odd, so, round... up?
-      dimensionTop++;
+      dimensionTop += 1;
     }
-    dimensionTop += 2;
-
     if ((dimensionRight & 0x01) == 1) {
-      // it can't be odd, so, round... up?
-      dimensionRight++;
+      dimensionRight += 1;
     }
-    dimensionRight += 2;
 
-    BitMatrix bits;
-    ResultPoint correctedTopRight;
+    if (!(4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop)) {
+      dimensionTop = dimensionRight = Math.max(dimensionTop, dimensionRight);
+    }
 
-    // Rectangular symbols are 6x16, 6x28, 10x24, 10x32, 14x32, or 14x44. If one dimension is more
-    // than twice the other, it's certainly rectangular, but to cut a bit more slack we accept it as
-    // rectangular if the bigger side is at least 7/4 times the other:
-    if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {
-      // The matrix is rectangular
+    BitMatrix bits = sampleGrid(image, 
+                                topLeft,
+                                bottomLeft,
+                                bottomRight,
+                                topRight,
+                                dimensionTop,
+                                dimensionRight);
 
-      correctedTopRight =
-          correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
-      if (correctedTopRight == null) {
-        correctedTopRight = topRight;
-      }
+    return new DetectorResult(bits, new ResultPoint[]{topLeft, bottomLeft, bottomRight, topRight});
+  }
 
-      dimensionTop = transitionsBetween(topLeft, correctedTopRight).getTransitions();
-      dimensionRight = transitionsBetween(bottomRight, correctedTopRight).getTransitions();
+  private ResultPoint shiftPoint(ResultPoint point, ResultPoint to, int div) {
+    float x = (to.getX() - point.getX()) / (div + 1);
+    float y = (to.getY() - point.getY()) / (div + 1);
+    return new ResultPoint(point.getX() + x, point.getY() + y);
+  }
 
-      if ((dimensionTop & 0x01) == 1) {
-        // it can't be odd, so, round... up?
-        dimensionTop++;
-      }
+  private ResultPoint moveAway(ResultPoint point, float fromX, float fromY) {
+    float x = point.getX();
+    float y = point.getY();
 
-      if ((dimensionRight & 0x01) == 1) {
-        // it can't be odd, so, round... up?
-        dimensionRight++;
-      }
-
-      bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
-
+    if (x < fromX) {
+      x -= 1;
     } else {
-      // The matrix is square
-
-      int dimension = Math.min(dimensionRight, dimensionTop);
-      // correct top right point to match the white module
-      correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
-      if (correctedTopRight == null) {
-        correctedTopRight = topRight;
-      }
-
-      // Redetermine the dimension using the corrected top right point
-      int dimensionCorrected = Math.max(transitionsBetween(topLeft, correctedTopRight).getTransitions(),
-                                transitionsBetween(bottomRight, correctedTopRight).getTransitions());
-      dimensionCorrected++;
-      if ((dimensionCorrected & 0x01) == 1) {
-        dimensionCorrected++;
-      }
-
-      bits = sampleGrid(image,
-                        topLeft,
-                        bottomLeft,
-                        bottomRight,
-                        correctedTopRight,
-                        dimensionCorrected,
-                        dimensionCorrected);
+      x += 1;
     }
 
-    return new DetectorResult(bits, new ResultPoint[]{topLeft, bottomLeft, bottomRight, correctedTopRight});
+    if (y < fromY) {
+      y -= 1;
+    } else {
+      y += 1;
+    }
+
+    return new ResultPoint(x, y);
+  }
+
+  private ResultPoint[] detectSolid1(ResultPoint[] cornerPoints) {
+    // 0  2
+    // 1  3
+    ResultPoint pointA = cornerPoints[0];
+    ResultPoint pointB = cornerPoints[1];
+    ResultPoint pointC = cornerPoints[3];
+    ResultPoint pointD = cornerPoints[2];
+
+    int trAB = transitionsBetween(pointA, pointB).getTransitions();
+    int trBC = transitionsBetween(pointB, pointC).getTransitions();
+    int trCD = transitionsBetween(pointC, pointD).getTransitions();
+    int trDA = transitionsBetween(pointD, pointA).getTransitions();
+
+    // 0..3
+    // :  :
+    // 1--2
+    int min = trAB;
+    ResultPoint[] points = {pointD, pointA, pointB, pointC};
+    if (min > trBC) {
+      min = trBC;
+      points[0] = pointA;
+      points[1] = pointB;
+      points[2] = pointC;
+      points[3] = pointD;
+    }
+    if (min > trCD) {
+      min = trCD;
+      points[0] = pointB;
+      points[1] = pointC;
+      points[2] = pointD;
+      points[3] = pointA;
+    }
+    if (min > trDA) {
+      points[0] = pointC;
+      points[1] = pointD;
+      points[2] = pointA;
+      points[3] = pointB;
+    }
+
+    return points;
+  }
+
+  private ResultPoint[] detectSolid2(ResultPoint[] points) {
+    // A..D
+    // :  :
+    // B--C
+    ResultPoint pointA = points[0];
+    ResultPoint pointB = points[1];
+    ResultPoint pointC = points[2];
+    ResultPoint pointD = points[3];
+
+    int tr = transitionsBetween(pointA, pointD).getTransitions();
+
+    ResultPoint pointBs = shiftPoint(pointB, pointC, (tr + 1) * 4);
+    ResultPoint pointCs = shiftPoint(pointC, pointB, (tr + 1) * 4);
+
+    int trBA = transitionsBetween(pointBs, pointA).getTransitions();
+    int trCD = transitionsBetween(pointCs, pointD).getTransitions();
+
+    if (trBA < trCD) {
+      // solid sides: A-B-C
+      points[0] = pointA;
+      points[1] = pointB;
+      points[2] = pointC;
+      points[3] = pointD;
+    } else {
+      // solid sides: B-C-D
+      points[0] = pointB;
+      points[1] = pointC;
+      points[2] = pointD;
+      points[3] = pointA;
+    }
+
+    return points;
+  }
+
+  private ResultPoint correctTopRight(ResultPoint[] points) {
+    // A..D
+    // |  :
+    // B--C
+    ResultPoint pointA = points[0];
+    ResultPoint pointB = points[1];
+    ResultPoint pointC = points[2];
+    ResultPoint pointD = points[3];
+
+    int trTop = transitionsBetween(pointA, pointD).getTransitions();
+    int trRight = transitionsBetween(pointB, pointD).getTransitions();
+    ResultPoint pointAs = shiftPoint(pointA, pointB, (trRight + 1) * 4);
+    ResultPoint pointCs = shiftPoint(pointC, pointB, (trTop + 1) * 4);
+
+    trTop = transitionsBetween(pointAs, pointD).getTransitions();
+    trRight = transitionsBetween(pointCs, pointD).getTransitions();
+
+    ResultPoint c1 = new ResultPoint(
+      pointD.getX() + (pointC.getX() - pointB.getX()) / (trTop + 1),
+      pointD.getY() + (pointC.getY() - pointB.getY()) / (trTop + 1));
+    ResultPoint c2 = new ResultPoint(
+      pointD.getX() + (pointA.getX() - pointB.getX()) / (trRight + 1),
+      pointD.getY() + (pointA.getY() - pointB.getY()) / (trRight + 1));
+
+    if (!isValid(c1)) {
+      if (isValid(c2)) {
+        return c2;
+      }
+      return null;
+    }
+    if (!isValid(c2)) {
+      return c1;
+    }
+
+    int sumc1 = transitionsBetween(pointAs, c1).getTransitions() + 
+      transitionsBetween(pointCs, c1).getTransitions();
+    int sumc2 = transitionsBetween(pointAs, c2).getTransitions() + 
+      transitionsBetween(pointCs, c2).getTransitions();
+
+    if (sumc1 > sumc2) {
+      return c1;
+    } else {
+      return c2;
+    }
+  }
+
+  private ResultPoint[] moduleCenterPoints(ResultPoint[] points) {
+    // A...D
+    // |   :
+    // B---C
+    ResultPoint pointA = points[0];
+    ResultPoint pointB = points[1];
+    ResultPoint pointC = points[2];
+    ResultPoint pointD = points[3];
+
+    // calculate pseudo dimensions
+    int dimH = transitionsBetween(pointA, pointD).getTransitions() + 1;
+    int dimV = transitionsBetween(pointC, pointD).getTransitions() + 1;
+    ResultPoint pointAs = shiftPoint(pointA, pointB, dimV * 4);
+    ResultPoint pointCs = shiftPoint(pointC, pointB, dimH * 4);
+    dimH = transitionsBetween(pointAs, pointD).getTransitions() + 1;
+    dimV = transitionsBetween(pointCs, pointD).getTransitions() + 1;
+    if ((dimH & 0x01) == 1) {
+      dimH += 1;
+    }
+    if ((dimV & 0x01) == 1) {
+      dimV += 1;
+    }
+
+    // WhiteRectangleDetector returns points inside of a rectangle.
+    // I want points on the edges.
+    float centerX = (pointA.getX() + pointB.getX() + pointC.getX() + pointD.getX()) / 4;
+    float centerY = (pointA.getY() + pointB.getY() + pointC.getY() + pointD.getY()) / 4;
+    pointA = moveAway(pointA, centerX, centerY);
+    pointB = moveAway(pointB, centerX, centerY);
+    pointC = moveAway(pointC, centerX, centerY);
+    pointD = moveAway(pointD, centerX, centerY);
+
+    ResultPoint pointBs;
+    ResultPoint pointDs;
+
+    // shift to center of each corner modules
+    pointAs = shiftPoint(pointA, pointB, dimV * 4);
+    pointAs = shiftPoint(pointAs, pointD, dimH * 4);
+    pointBs = shiftPoint(pointB, pointA, dimV * 4);
+    pointBs = shiftPoint(pointBs, pointC, dimH * 4);
+    pointCs = shiftPoint(pointC, pointD, dimV * 4);
+    pointCs = shiftPoint(pointCs, pointB, dimH * 4);
+    pointDs = shiftPoint(pointD, pointC, dimV * 4);
+    pointDs = shiftPoint(pointDs, pointA, dimH * 4);
+
+    return new ResultPoint[]{pointAs, pointBs, pointCs, pointDs};
   }
 
   /**
