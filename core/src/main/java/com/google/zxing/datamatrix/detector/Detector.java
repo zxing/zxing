@@ -81,6 +81,7 @@ public final class Detector {
     }
 
     if (4 * dimensionTop < 7 * dimensionRight && 4 * dimensionRight < 7 * dimensionTop) {
+      // The matrix is square
       dimensionTop = dimensionRight = Math.max(dimensionTop, dimensionRight);
     }
 
