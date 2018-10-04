@@ -21,16 +21,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
-import com.google.zxing.common.detector.MathUtils;
 import com.google.zxing.common.detector.WhiteRectangleDetector;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
@@ -186,9 +177,9 @@ public final class Detector {
     int trBA = transitionsBetween(pointBs, pointA);
     int trCD = transitionsBetween(pointCs, pointD);
 
-	// 0..3
-	// |  :
-	// 1--2
+    // 0..3
+    // |  :
+    // 1--2
     if (trBA < trCD) {
       // solid sides: A-B-C
       points[0] = pointA;
@@ -270,11 +261,11 @@ public final class Detector {
     int dimH = transitionsBetween(pointA, pointD) + 1;
     int dimV = transitionsBetween(pointC, pointD) + 1;
 
-	// shift points for safe dimension detection
+    // shift points for safe dimension detection
     ResultPoint pointAs = shiftPoint(pointA, pointB, dimV * 4);
     ResultPoint pointCs = shiftPoint(pointC, pointB, dimH * 4);
 
-	//  calculate more precise dimensions
+    //  calculate more precise dimensions
     dimH = transitionsBetween(pointAs, pointD) + 1;
     dimV = transitionsBetween(pointCs, pointD) + 1;
     if ((dimH & 0x01) == 1) {
