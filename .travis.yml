@@ -1,8 +1,8 @@
 language: java
 sudo: false
-install: mvn -Ptravis -DskipTests=true -B -V install
+install: mvn -Ptravis -DskipTests=true -nsu -B install
 script:
-  - mvn -Ptravis ${JACOCO} test
+  - mvn -Ptravis ${JACOCO} -nsu -B test
   - find $HOME/.m2/repository/com/google/zxing -path "*SNAPSHOT/*" -delete
   - find $HOME/.m2/repository/com/google/zxing -name "*SNAPSHOT" -type d -delete
 matrix:
@@ -10,8 +10,8 @@ matrix:
    # Covers Java 7, Open JDK, and code coverage
    - jdk: openjdk7
      env: JACOCO=-Pjacoco
-   # Covers Java 8, Oracle JDK, Android apps
-   - jdk: oraclejdk8
+   # Covers Java 8, Android apps
+   - jdk: openjdk8
      env: ANDROID_HOME=$HOME/android-sdk-linux
      before_install: if [ ! -d $HOME/android-sdk-linux/platforms ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C $HOME; else ls -l $HOME/android-sdk-linux; fi
    # Covers Java 9
