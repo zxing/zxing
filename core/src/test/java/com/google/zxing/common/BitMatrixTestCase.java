@@ -43,6 +43,10 @@ public final class BitMatrixTestCase extends Assert {
         assertEquals(y * x % 3 == 0, matrix.get(x, y));
       }
     }
+    assertFalse(matrix.get(-1, 0));
+    assertFalse(matrix.get(0, -1));
+    assertFalse(matrix.get(33, 0));
+    assertFalse(matrix.get(0, 33));
   }
 
   @Test

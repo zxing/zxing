@@ -158,6 +158,9 @@ public final class BitMatrix implements Cloneable {
    * @return value of given bit in matrix
    */
   public boolean get(int x, int y) {
+    if (x < 0 || x >= width || y < 0 || y >= height) {
+      return false;
+    }
     int offset = y * rowSize + (x / 32);
     return ((bits[offset] >>> (x & 0x1f)) & 1) != 0;
   }
