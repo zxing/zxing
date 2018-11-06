@@ -52,7 +52,7 @@ public final class Code93Reader extends OneDReader {
       0x12E, 0x1D4, 0x1D2, 0x1CA, 0x16E, 0x176, 0x1AE, // - - %
       0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
   };
-  private static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
+  static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
   private final StringBuilder decodeRowResult;
   private final int[] counters;

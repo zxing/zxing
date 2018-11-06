@@ -40,10 +40,11 @@ public class Code93Writer extends OneDimensionalCodeWriter {
 
   @Override
   public boolean[] encode(String contents) {
+    contents = convertToExtended(contents);
     int length = contents.length();
     if (length > 80) {
       throw new IllegalArgumentException(
-        "Requested contents should be less than 80 digits long, but got " + length);
+        "Requested contents should be less than 80 digits long after extended, but got " + length);
     }
     //each character is encoded by 9 of 0/1's
     int[] widths = new int[9];
@@ -52,7 +53,7 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     int codeWidth = (contents.length() + 2 + 2) * 9 + 1;
 
     //start character (*)
-    toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
+    toIntArray(Code93Reader.ASTERISK_ENCODING, widths);
 
     boolean[] result = new boolean[codeWidth];
     int pos = appendPattern(result, 0, widths);
@@ -76,7 +77,7 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     pos += appendPattern(result, pos, widths);
 
     //end character (*)
-    toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
+    toIntArray(Code93Reader.ASTERISK_ENCODING, widths);
     pos += appendPattern(result, pos, widths);
 
     //termination bar (single black bar)
@@ -125,4 +126,66 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     }
     return total % 47;
   }
+
+  private static String convertToExtended(String contents) {
+    int length = contents.length();
+    StringBuilder extendedContent = new StringBuilder(length * 2);
+    for (int i = 0; i < length; i++) {
+      char character = contents.charAt(i);
+      if (character == 0) {
+        // NUL: (%)U
+        extendedContent.append("bU");
+      } else if (character <= 26) {
+        // SOH - SUB: ($)A - ($)Z
+        extendedContent.append('a');
+        extendedContent.append((char) ('A' + character - 1));
+      } else if (character <= 31) {
+        // ESC - US: (%)A - (%)E
+        extendedContent.append('b');
+        extendedContent.append((char) ('A' + character - 27));
+      } else if (character == ' ' || character == '$' || character == '%' || character == '+') {
+        // space $ % +
+        extendedContent.append(character);
+      } else if (character <= ',') {
+        // ! " # & ' ( ) * ,: (/)A - (/)L
+        extendedContent.append('c');
+        extendedContent.append((char) ('A' + character - '!'));
+      } else if (character <= '9') {
+        extendedContent.append(character);
+      } else if (character == ':') {
+        // :: (/)Z
+        extendedContent.append("cZ");
+      } else if (character <= '?') {
+        // ; - ?: (%)F - (%)J
+        extendedContent.append('b');
+        extendedContent.append((char) ('F' + character - ';'));
+      } else if (character == '@') {
+        // @: (%)V
+        extendedContent.append("bV");
+      } else if (character <= 'Z') {
+        // A - Z
+        extendedContent.append(character);
+      } else if (character <= '_') {
+        // [ - _: (%)K - (%)O
+        extendedContent.append('b');
+        extendedContent.append((char) ('K' + character - '['));
+      } else if (character == '`') {
+        // `: (%)W
+        extendedContent.append("bW");
+      } else if (character <= 'z') {
+        // a - z: (*)A - (*)Z
+        extendedContent.append('d');
+        extendedContent.append((char) ('A' + character - 'a'));
+      } else if (character <= 127) {
+        // { - DEL: (%)P - (%)T
+        extendedContent.append('b');
+        extendedContent.append((char) ('P' + character - '{'));
+      } else {
+        throw new IllegalArgumentException(
+          "Requested content contains a non-encodable character: '" + character + "'");
+      }
+    }
+    return extendedContent.toString();
+  }
+
 }
