@@ -22,6 +22,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
+import java.lang.reflect.Method;
 
 /**
  * Tests {@link Code93Writer}.
@@ -45,7 +46,7 @@ public final class Code93WriterTestCase extends Assert {
            "110101110" + "101110110" + "111010110" + "110101000" +  // % + cA
            "111010110" + "101011000" + "100010100" + "100001010" +  // cL 0 9
            "111010110" + "100111010" + "111011010" + "110001010" +  // cZ bF
-           "111011010" + "110011010" + "110101000" + "100111010" +  // bV AZ
+           "111011010" + "110011010" + "110101000" + "100111010" +  // bV A Z
            "111011010" + "100011010" + "111011010" + "100101100" +  // bK bO
            "111011010" + "101101100" + "100110010" + "110101000" +  // bW dA
            "100110010" + "100111010" + "111011010" + "100010110" +  // dZ bP
@@ -57,6 +58,17 @@ public final class Code93WriterTestCase extends Assert {
   private static void doTest(String input, CharSequence expected) throws WriterException {
     BitMatrix result = new Code93Writer().encode(input, BarcodeFormat.CODE_93, 0, 0);
     assertEquals(expected, BitMatrixTestCase.matrixToString(result));
+  }
+
+  @Test
+  public void testConvertToExtended() throws Exception {
+    Method method = Code93Writer.class.getDeclaredMethod("convertToExtended", String.class);
+    method.setAccessible(true);
+
+    // non-extended chars are not changed.
+    String src = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
+    String dst = (String) method.invoke(null, src);
+    assertEquals(src, dst);
   }
 
 }
