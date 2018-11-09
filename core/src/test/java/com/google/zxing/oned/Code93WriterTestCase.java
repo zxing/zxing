@@ -22,7 +22,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
-import java.lang.reflect.Method;
 
 /**
  * Tests {@link Code93Writer}.
@@ -62,12 +61,9 @@ public final class Code93WriterTestCase extends Assert {
 
   @Test
   public void testConvertToExtended() throws Exception {
-    Method method = Code93Writer.class.getDeclaredMethod("convertToExtended", String.class);
-    method.setAccessible(true);
-
     // non-extended chars are not changed.
     String src = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
-    String dst = (String) method.invoke(null, src);
+    String dst = Code93Writer.convertToExtended(src);
     assertEquals(src, dst);
   }
 

@@ -39,7 +39,7 @@ public class Code93Writer extends OneDimensionalCodeWriter {
   }
 
   /**
-   * @param contents barcode contents to encode. it should not be encoded for extended characters.
+   * @param contents barcode contents to encode. It should not be encoded for extended characters.
    * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
    */
   @Override
@@ -121,7 +121,7 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     return total % 47;
   }
 
-  private static String convertToExtended(String contents) {
+  static String convertToExtended(String contents) {
     int length = contents.length();
     StringBuilder extendedContent = new StringBuilder(length * 2);
     for (int i = 0; i < length; i++) {
