@@ -38,13 +38,17 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     return super.encode(contents, format, width, height, hints);
   }
 
+  /**
+   * @param contents barcode contents to encode. it should not be encoded for extended characters.
+   * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
+   */
   @Override
   public boolean[] encode(String contents) {
     contents = convertToExtended(contents);
     int length = contents.length();
     if (length > 80) {
       throw new IllegalArgumentException(
-        "Requested contents should be less than 80 digits long after extended, but got " + length);
+        "Requested contents should be less than 80 digits long after converting to extended encoding, but got " + length);
     }
 
     //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
@@ -79,6 +83,22 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     return result;
   }
 
+  /**
+   * @param target output to append to
+   * @param pos start position
+   * @param pattern pattern to append
+   * @param startColor unused
+   * @return 9
+   * @deprecated without replacement; intended as an internal-only method
+   */
+  @Deprecated
+  protected static int appendPattern(boolean[] target, int pos, int[] pattern, boolean startColor) {
+    for (int bit : pattern) {
+      target[pos++] = bit != 0;
+    }
+    return 9;
+  }
+
   private static int appendPattern(boolean[] target, int pos, int a) {
     for (int i = 0; i < 9; i++) {
       int temp = a & (1 << (8 - i));
@@ -106,6 +126,7 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     StringBuilder extendedContent = new StringBuilder(length * 2);
     for (int i = 0; i < length; i++) {
       char character = contents.charAt(i);
+      // ($)=a, (%)=b, (/)=c, (+)=d. see Code93Reader.ALPHABET_STRING
       if (character == 0) {
         // NUL: (%)U
         extendedContent.append("bU");
