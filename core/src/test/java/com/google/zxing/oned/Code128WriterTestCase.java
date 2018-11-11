@@ -116,12 +116,12 @@ public class Code128WriterTestCase extends Assert {
   }
 
   @Test
-  public void testEncodeWithFunc4InCodesetA() throws Exception {
-    String toEncode = "\n" + "\u00f4" + "\n";
+  public void testEncodeWithFunc1And4InCodesetA() throws Exception {
+    String toEncode = "\n" + "\u00f1" + "\u00f4" + "\n";
 
     String LF = "10000110010";
 
-    String expected = QUIET_SPACE + START_CODE_A + LF + FNC4A + LF + "11110100100" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE + START_CODE_A + LF + FNC1 + FNC4A + LF + "11011101110" + STOP + QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 

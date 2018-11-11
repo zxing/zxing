@@ -245,6 +245,9 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
       }
       return CODE_CODE_B; // no choice
     }
+    if (oldCode == CODE_CODE_A && lookahead == CType.FNC_1) {
+      return CODE_CODE_A;
+    }
     if (oldCode == CODE_CODE_C) { // can continue in code C
       return CODE_CODE_C;
     }
