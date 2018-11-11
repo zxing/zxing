@@ -238,8 +238,8 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     if (lookahead == CType.UNCODABLE) {
       if (start < value.length()) {
         char c = value.charAt(start);
-        if (c < ' ' || (oldCode == CODE_CODE_A && c < '`')) {
-          // can continue in code A, encodes ASCII 0 to 95
+        if (c < ' ' || (oldCode == CODE_CODE_A && (c < '`' || (c >= ESCAPE_FNC_1 && c <= ESCAPE_FNC_4)))) {
+          // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
           return CODE_CODE_A;
         }
       }
