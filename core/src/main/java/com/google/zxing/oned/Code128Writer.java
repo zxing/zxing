@@ -233,17 +233,23 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   private static int chooseCode(CharSequence value, int start, int oldCode) {
     CType lookahead = findCType(value, start);
     if (lookahead == CType.ONE_DIGIT) {
+       if (oldCode == CODE_CODE_A) {
+         return CODE_CODE_A;
+       }
        return CODE_CODE_B;
     }
     if (lookahead == CType.UNCODABLE) {
       if (start < value.length()) {
         char c = value.charAt(start);
-        if (c < ' ' || (oldCode == CODE_CODE_A && c < '`')) {
-          // can continue in code A, encodes ASCII 0 to 95
+        if (c < ' ' || (oldCode == CODE_CODE_A && (c < '`' || (c >= ESCAPE_FNC_1 && c <= ESCAPE_FNC_4)))) {
+          // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
           return CODE_CODE_A;
         }
       }
       return CODE_CODE_B; // no choice
+    }
+    if (oldCode == CODE_CODE_A && lookahead == CType.FNC_1) {
+      return CODE_CODE_A;
     }
     if (oldCode == CODE_CODE_C) { // can continue in code C
       return CODE_CODE_C;

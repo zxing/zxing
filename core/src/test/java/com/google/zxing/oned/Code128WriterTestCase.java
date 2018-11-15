@@ -36,7 +36,8 @@ public class Code128WriterTestCase extends Assert {
   private static final String FNC1 = "11110101110";
   private static final String FNC2 = "11110101000";
   private static final String FNC3 = "10111100010";
-  private static final String FNC4 = "10111101110";
+  private static final String FNC4A = "11101011110";
+  private static final String FNC4B = "10111101110";
   private static final String START_CODE_A = "11010000100";
   private static final String START_CODE_B = "11010010000";
   private static final String START_CODE_C = "11010011100";
@@ -44,6 +45,7 @@ public class Code128WriterTestCase extends Assert {
   private static final String SWITCH_CODE_B = "10111101110";
   private static final String QUIET_SPACE = "00000";
   private static final String STOP = "1100011101011";
+  private static final String LF = "10000110010";
 
   private Writer writer;
   private Code128Reader reader;
@@ -106,14 +108,27 @@ public class Code128WriterTestCase extends Assert {
   public void testEncodeWithFunc4() throws WriterException {
     String toEncode = "\u00f4" + "123";
     //                                                       "1"            "2"             "3"          check digit 59
-    String expected = QUIET_SPACE + START_CODE_B + FNC4 + "10011100110" + "11001110010" + "11001011100" + "11100011010" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE + START_CODE_B + FNC4B + "10011100110" + "11001110010" + "11001011100" + "11100011010" + STOP + QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
     String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
   }
-  
+
+  @Test
+  public void testEncodeWithFncsAndNumberInCodesetA() throws Exception {
+    String toEncode = "\n" + "\u00f1" + "\u00f4" + "1" + "\n";
+
+    String expected = QUIET_SPACE + START_CODE_A + LF + FNC1 + FNC4A + "10011100110" + LF + "10101111000" + STOP + QUIET_SPACE;
+
+    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+
+    String actual = BitMatrixTestCase.matrixToString(result);
+
+    assertEquals(expected, actual);
+  }
+
   @Test
   public void testEncodeSwitchBetweenCodesetsAAndB() throws Exception {
     // start with A switch to B and back to A
