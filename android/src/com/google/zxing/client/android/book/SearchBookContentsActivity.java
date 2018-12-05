@@ -97,6 +97,11 @@ public final class SearchBookContentsActivity extends Activity {
     }
 
     isbn = intent.getStringExtra(Intents.SearchBookContents.ISBN);
+    if (isbn == null) {
+      finish();
+      return;
+    }
+
     if (LocaleManager.isBookSearchUrl(isbn)) {
       setTitle(getString(R.string.sbc_name));
     } else {
