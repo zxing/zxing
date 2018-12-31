@@ -112,8 +112,8 @@
   <string name="preferences_front_light_summary">Mejora la exploración en condiciones de poca luz en algunos teléfonos, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
   <string name="preferences_front_light_title">Utilizar flash</string>
   <string name="preferences_general_title">Configuración general</string>
-  <string name="preferences_history_summary">Almacene escáneres en la historia</string>
-  <string name="preferences_history_title">Añadir a Historia</string>
+  <string name="preferences_history_summary">Almacene escáneres en el historial</string>
+  <string name="preferences_history_title">Añadir al Historial</string>
   <string name="preferences_invert_scan_summary">Escanear códigos de barras blancas sobre fondo negro. No disponible en algunos dispositivos.</string>
   <string name="preferences_invert_scan_title">Invertir exploración</string>
   <string name="preferences_name">Configuración</string>
