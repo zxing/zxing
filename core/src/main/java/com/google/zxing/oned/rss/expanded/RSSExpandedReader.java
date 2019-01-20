@@ -452,7 +452,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     } catch (NotFoundException ignored) {
       rightChar = null;
     }
-    return new ExpandedPair(leftChar, rightChar, pattern, true);
+    return new ExpandedPair(leftChar, rightChar, pattern);
   }
 
   private void findNextPair(BitArray row, List<ExpandedPair> previousPairs, int forcedOffset)

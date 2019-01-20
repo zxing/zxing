@@ -76,7 +76,7 @@ public final class BitArrayBuilderTest extends Assert {
         rightChar = null;
       }
 
-      ExpandedPair expandedPair = new ExpandedPair(leftChar, rightChar, null, true);
+      ExpandedPair expandedPair = new ExpandedPair(leftChar, rightChar, null);
       pairs.add(expandedPair);
     }
 

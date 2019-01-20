@@ -60,7 +60,7 @@ public final class Code93WriterTestCase extends Assert {
   }
 
   @Test
-  public void testConvertToExtended() throws Exception {
+  public void testConvertToExtended() {
     // non-extended chars are not changed.
     String src = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
     String dst = Code93Writer.convertToExtended(src);

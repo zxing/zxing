@@ -27,6 +27,7 @@
 package com.google.zxing.client.result;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a parsed result that encodes extended product information as encoded
@@ -98,46 +99,37 @@ public final class ExpandedProductParsedResult extends ParsedResult {
 
     ExpandedProductParsedResult other = (ExpandedProductParsedResult) o;
 
-    return equalsOrNull(productID, other.productID)
-        && equalsOrNull(sscc, other.sscc)
-        && equalsOrNull(lotNumber, other.lotNumber)
-        && equalsOrNull(productionDate, other.productionDate)
-        && equalsOrNull(bestBeforeDate, other.bestBeforeDate)
-        && equalsOrNull(expirationDate, other.expirationDate)
-        && equalsOrNull(weight, other.weight)
-        && equalsOrNull(weightType, other.weightType)
-        && equalsOrNull(weightIncrement, other.weightIncrement)
-        && equalsOrNull(price, other.price)
-        && equalsOrNull(priceIncrement, other.priceIncrement)
-        && equalsOrNull(priceCurrency, other.priceCurrency)
-        && equalsOrNull(uncommonAIs, other.uncommonAIs);
-  }
-
-  private static boolean equalsOrNull(Object o1, Object o2) {
-    return o1 == null ? o2 == null : o1.equals(o2);
+    return Objects.equals(productID, other.productID)
+        && Objects.equals(sscc, other.sscc)
+        && Objects.equals(lotNumber, other.lotNumber)
+        && Objects.equals(productionDate, other.productionDate)
+        && Objects.equals(bestBeforeDate, other.bestBeforeDate)
+        && Objects.equals(expirationDate, other.expirationDate)
+        && Objects.equals(weight, other.weight)
+        && Objects.equals(weightType, other.weightType)
+        && Objects.equals(weightIncrement, other.weightIncrement)
+        && Objects.equals(price, other.price)
+        && Objects.equals(priceIncrement, other.priceIncrement)
+        && Objects.equals(priceCurrency, other.priceCurrency)
+        && Objects.equals(uncommonAIs, other.uncommonAIs);
   }
 
   @Override
   public int hashCode() {
-    int hash = 0;
-    hash ^= hashNotNull(productID);
-    hash ^= hashNotNull(sscc);
-    hash ^= hashNotNull(lotNumber);
-    hash ^= hashNotNull(productionDate);
-    hash ^= hashNotNull(bestBeforeDate);
-    hash ^= hashNotNull(expirationDate);
-    hash ^= hashNotNull(weight);
-    hash ^= hashNotNull(weightType);
-    hash ^= hashNotNull(weightIncrement);
-    hash ^= hashNotNull(price);
-    hash ^= hashNotNull(priceIncrement);
-    hash ^= hashNotNull(priceCurrency);
-    hash ^= hashNotNull(uncommonAIs);
+    int hash = Objects.hashCode(productID);
+    hash ^= Objects.hashCode(sscc);
+    hash ^= Objects.hashCode(lotNumber);
+    hash ^= Objects.hashCode(productionDate);
+    hash ^= Objects.hashCode(bestBeforeDate);
+    hash ^= Objects.hashCode(expirationDate);
+    hash ^= Objects.hashCode(weight);
+    hash ^= Objects.hashCode(weightType);
+    hash ^= Objects.hashCode(weightIncrement);
+    hash ^= Objects.hashCode(price);
+    hash ^= Objects.hashCode(priceIncrement);
+    hash ^= Objects.hashCode(priceCurrency);
+    hash ^= Objects.hashCode(uncommonAIs);
     return hash;
-  }
-
-  private static int hashNotNull(Object o) {
-    return o == null ? 0 : o.hashCode();
   }
 
   public String getRawText() {

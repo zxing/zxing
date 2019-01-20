@@ -56,7 +56,7 @@ public final class CalendarEventGenerator implements GeneratorSource {
   private final TextBox timePicker2 = new TextBox();
   private final CheckBox summerTime = new CheckBox();
   private final ListBox timeZones = new ListBox();
-  private Date timePicker1PreviousDate = null;
+  private Date timePicker1PreviousDate;
   private final TextBox location = new TextBox();
   private final TextBox description = new TextBox();
 

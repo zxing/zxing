@@ -612,7 +612,7 @@ public class FinderPatternFinder {
       for (FinderPattern center : possibleCenters) {
         float size = center.getEstimatedModuleSize();
         totalModuleSize += size;
-        square += size * size;
+        square += (double) size * size;
       }
       double average = totalModuleSize / startSize;
       float stdDev = (float) Math.sqrt(square / startSize - average * average);

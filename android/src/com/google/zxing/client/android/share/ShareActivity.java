@@ -43,8 +43,6 @@ import com.google.zxing.client.android.clipboard.ClipboardInterface;
  */
 public final class ShareActivity extends Activity {
 
-  private static final String TAG = ShareActivity.class.getSimpleName();
-
   private static final int PICK_BOOKMARK = 0;
   private static final int PICK_CONTACT = 1;
   private static final int PICK_APP = 2;
@@ -96,7 +94,7 @@ public final class ShareActivity extends Activity {
     public boolean onKey(View view, int keyCode, KeyEvent event) {
       if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
         String text = ((TextView) view).getText().toString();
-        if (text != null && !text.isEmpty()) {
+        if (!text.isEmpty()) {
           launchSearch(text);
         }
         return true;
