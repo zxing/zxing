@@ -49,7 +49,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>4.3.18.RELEASE</version> <!-- 5.x requires Java 8 -->
+      <version>4.3.22.RELEASE</version> <!-- 5.x requires Java 8 -->
       <scope>test</scope>
     </dependency>
     <dependency>

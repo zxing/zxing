@@ -113,14 +113,9 @@ public final class ErrorCorrection {
       sb.setLength(sb.capacity());
       int[] dataSizes = new int[blockCount];
       int[] errorSizes = new int[blockCount];
-      int[] startPos = new int[blockCount];
       for (int i = 0; i < blockCount; i++) {
         dataSizes[i] = symbolInfo.getDataLengthForInterleavedBlock(i + 1);
         errorSizes[i] = symbolInfo.getErrorLengthForInterleavedBlock(i + 1);
-        startPos[i] = 0;
-        if (i > 0) {
-          startPos[i] = startPos[i - 1] + dataSizes[i];
-        }
       }
       for (int block = 0; block < blockCount; block++) {
         StringBuilder temp = new StringBuilder(dataSizes[block]);

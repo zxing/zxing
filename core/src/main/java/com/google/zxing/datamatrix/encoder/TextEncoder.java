@@ -42,12 +42,12 @@ final class TextEncoder extends C40Encoder {
       sb.append(c);
       return 2;
     }
-    if (c >= '!' && c <= '/') {
+    if (c <= '/') {
       sb.append('\1'); //Shift 2 Set
       sb.append((char) (c - 33));
       return 2;
     }
-    if (c >= ':' && c <= '@') {
+    if (c <= '@') {
       sb.append('\1'); //Shift 2 Set
       sb.append((char) (c - 58 + 15));
       return 2;
@@ -62,12 +62,12 @@ final class TextEncoder extends C40Encoder {
       sb.append((char) (c - 96));
       return 2;
     }
-    if (c >= 'A' && c <= 'Z') {
+    if (c <= 'Z') {
       sb.append('\2'); //Shift 3 Set
       sb.append((char) (c - 65 + 1));
       return 2;
     }
-    if (c >= '{' && c <= 127) {
+    if (c <= 127) {
       sb.append('\2'); //Shift 3 Set
       sb.append((char) (c - 123 + 27));
       return 2;

@@ -88,6 +88,7 @@
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.3.4-SNAPSHOT</zxing.version>
     <android.platform>22</android.platform>
+    <maven.scm.version>1.9.5</maven.scm.version>
   </properties>
 
   <build>
@@ -230,17 +231,17 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jarsigner-plugin</artifactId>
-          <version>1.4</version>
+          <version>3.0.0</version>
           <executions>
             <execution>
               <id>signing</id>
@@ -272,7 +273,7 @@
             <dependency>
               <groupId>org.apache.maven.scm</groupId>
               <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.9.5</version> <!-- can't go to 1.10 until release plugin does -->
+              <version>${maven.scm.version}</version> <!-- can't go to 1.10 until release plugin does -->
             </dependency>
           </dependencies>
           <configuration>
@@ -285,7 +286,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>1.9.5</version>
+          <version>${maven.scm.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -460,14 +461,14 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.14</version>
+              <version>8.16</version>
             </dependency>
           </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
-          <version>0.12</version>
+          <version>0.13</version>
           <configuration>
             <excludes>
               <exclude>**/.*</exclude>
@@ -520,7 +521,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.2</version>
+          <version>0.8.3</version>
           <executions>
             <execution>
               <goals>

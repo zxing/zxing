@@ -142,22 +142,22 @@ class C40Encoder implements Encoder {
       sb.append(c);
       return 2;
     }
-    if (c >= '!' && c <= '/') {
+    if (c <= '/') {
       sb.append('\1'); //Shift 2 Set
       sb.append((char) (c - 33));
       return 2;
     }
-    if (c >= ':' && c <= '@') {
+    if (c <= '@') {
       sb.append('\1'); //Shift 2 Set
       sb.append((char) (c - 58 + 15));
       return 2;
     }
-    if (c >= '[' && c <= '_') {
+    if (c <= '_') {
       sb.append('\1'); //Shift 2 Set
       sb.append((char) (c - 91 + 22));
       return 2;
     }
-    if (c >= '`' && c <= 127) {
+    if (c <= 127) {
       sb.append('\2'); //Shift 3 Set
       sb.append((char) (c - 96));
       return 2;
