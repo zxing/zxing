@@ -156,7 +156,7 @@
     <module name="EqualsHashCode"/>
     <!--<module name="HiddenField"/>-->
     <module name="IllegalInstantiation"/>
-    <module name="IllegalType"/>
+    <!-- <module name="IllegalType"/> -->
     <!-- <module name="InnerAssignment"/> -->
     <!-- <module name="MagicNumber"/> -->
     <!-- <module name="MissingSwitchDefault"/> -->
