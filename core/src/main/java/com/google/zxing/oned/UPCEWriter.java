@@ -64,7 +64,7 @@ public final class UPCEWriter extends UPCEANWriter {
         break;
       case 8:
         try {
-          if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
+          if (!UPCEANReader.checkStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents))) {
             throw new IllegalArgumentException("Contents do not pass checksum");
           }
         } catch (FormatException ignored) {
