@@ -7,7 +7,20 @@ Only bug fixes and minor enhancements will be considered. The Barcode Scanner ap
 no longer be published, so it's unlikely any changes will be accepted for it.
 There is otherwise no active development or roadmap for this project. It is "DIY".
 
+## Barcode Scanner app no longer available in Google Play Store
+
+The Barcode Scanner app targets API 19, and so can no longer be updated in the Google Play store.
+Further, due to new restrictions on app permissions, Google has removed the app, as it does
+require SMS-related permissions which are now highly restricted.
+
+The last .apk remains available at https://github.com/zxing/zxing/releases/tag/BS-4.7.8 
+and may be freely redistributed by third parties.
+
+The work-alike "Barcode Scanner+" app remains available at 
+https://play.google.com/store/apps/details?id=com.srowen.bs.android as well.
+
 ## Get Started Developing
+
 To get started, please visit: https://github.com/zxing/zxing/wiki/Getting-Started-Developing
 
 ZXing ("zebra crossing") is an open-source, multi-format 1D/2D barcode image processing
@@ -15,15 +28,15 @@ library implemented in Java, with ports to other languages.
 
 ## Supported Formats
 
-| 1D product | 1D industrial | 2D
-| ---------- | ------------- | --------------
-| UPC-A      | Code 39       | QR Code
-| UPC-E      | Code 93       | Data Matrix
-| EAN-8      | Code 128      | Aztec (beta)
-| EAN-13     | Codabar       | PDF 417 (beta)
-|            | ITF           | MaxiCode
-|            | RSS-14        |
-|            | RSS-Expanded  |
+| 1D product | 1D industrial | 2D             |
+|:-----------|:--------------|:---------------|
+| UPC-A      | Code 39       | QR Code        |
+| UPC-E      | Code 93       | Data Matrix    |
+| EAN-8      | Code 128      | Aztec (beta)   |
+| EAN-13     | Codabar       | PDF 417 (beta) |
+|            | ITF           | MaxiCode       |
+|            |               | RSS-14         |
+|            |               | RSS-Expanded   |
 
 ## Components
 
@@ -73,7 +86,7 @@ library implemented in Java, with ports to other languages.
 | ---------------------------------------------- | -----------
 | [Barcode4J](http://barcode4j.sourceforge.net/) | Generator library in Java
 | [ZBar](http://zbar.sourceforge.net/)           | Reader library in C99
-| [OkapiBarcode](https://github.com/woo-j/OkapiBarcode)  | 
+| [OkapiBarcode](https://github.com/woo-j/OkapiBarcode)  | |
 
 ## Links
 
