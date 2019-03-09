@@ -19,6 +19,7 @@ package com.google.zxing.web;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.mock.web.MockFilterChain;
+import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -36,8 +37,13 @@ public final class DoSFilterTestCase extends Assert {
     request.setRemoteAddr("1.2.3.4");
     HttpServletResponse response = new MockHttpServletResponse();
     DoSFilter filter = new DoSFilter();
-    filter.init(null);
-    for (int i = 0; i < DoSFilter.MAX_ACCESS_PER_TIME; i++) {
+    MockFilterConfig config = new MockFilterConfig();
+    int maxAccessPerTime = 10;
+    config.addInitParameter("maxAccessPerTime", Integer.toString(maxAccessPerTime));
+    config.addInitParameter("accessTimeSec", "60");
+    config.addInitParameter("maxEntries", "100");
+    filter.init(config);
+    for (int i = 0; i < maxAccessPerTime; i++) {
       filter.doFilter(request, response, new MockFilterChain());
       assertEquals(HttpServletResponse.SC_OK, response.getStatus());
     }

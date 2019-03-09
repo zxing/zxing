@@ -7,18 +7,6 @@ Only bug fixes and minor enhancements will be considered. The Barcode Scanner ap
 no longer be published, so it's unlikely any changes will be accepted for it.
 There is otherwise no active development or roadmap for this project. It is "DIY".
 
-## Barcode Scanner app no longer available in Google Play Store
-
-The Barcode Scanner app targets API 19, and so can no longer be updated in the Google Play store.
-Further, due to new restrictions on app permissions, Google has removed the app, as it does
-require SMS-related permissions which are now highly restricted.
-
-The last .apk remains available at https://github.com/zxing/zxing/releases/tag/BS-4.7.8 
-and may be freely redistributed by third parties.
-
-The work-alike "Barcode Scanner+" app remains available at 
-https://play.google.com/store/apps/details?id=com.srowen.bs.android as well.
-
 ## Get Started Developing
 
 To get started, please visit: https://github.com/zxing/zxing/wiki/Getting-Started-Developing

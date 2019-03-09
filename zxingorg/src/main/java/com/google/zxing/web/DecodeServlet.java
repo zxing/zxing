@@ -70,6 +70,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -87,7 +88,11 @@ import javax.servlet.http.Part;
     maxRequestSize = 1L << 26, // ~64MB
     fileSizeThreshold = 1 << 23, // ~8MB
     location = "/tmp")
-@WebServlet(value = "/w/decode", loadOnStartup = 1)
+@WebServlet(value = "/w/decode", loadOnStartup = 1, initParams = {
+  @WebInitParam(name = "maxAccessPerTime", value = "150"),
+  @WebInitParam(name = "accessTimeSec", value = "300"),
+  @WebInitParam(name = "maxEntries", value = "10000")
+})
 public final class DecodeServlet extends HttpServlet {
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
@@ -131,8 +136,13 @@ public final class DecodeServlet extends HttpServlet {
       log.info("Blocking URIs containing: " + blockedURLSubstrings);
     }
 
+    int maxAccessPerTime = Integer.parseInt(servletConfig.getInitParameter("maxAccessPerTime"));
+    int accessTimeSec = Integer.parseInt(servletConfig.getInitParameter("accessTimeSec"));
+    long accessTimeMS = TimeUnit.MILLISECONDS.convert(accessTimeSec, TimeUnit.SECONDS);
+    int maxEntries = Integer.parseInt(servletConfig.getInitParameter("maxEntries"));
+
     timer = new Timer("DecodeServlet");
-    destHostTracker = new DoSTracker(timer, 500, TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES), 10_000);
+    destHostTracker = new DoSTracker(timer, maxAccessPerTime, accessTimeMS, maxEntries);
   }
 
   @Override

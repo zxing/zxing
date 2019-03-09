@@ -42,7 +42,7 @@ class C40Encoder implements Encoder {
       if (!context.hasMoreCharacters()) {
         //Avoid having a single C40 value in the last triplet
         StringBuilder removed = new StringBuilder();
-        if ((buffer.length() % 3) == 2 && (available < 2 || available > 2)) {
+        if ((buffer.length() % 3) == 2 && available != 2) {
           lastCharSize = backtrackOneCharacter(context, buffer, removed, lastCharSize);
         }
         while ((buffer.length() % 3) == 1 && (lastCharSize > 3 || available != 1)) {

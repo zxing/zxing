@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -36,20 +37,24 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Sean Owen
  */
-@WebFilter({"/w/decode", "/w/chart"})
+@WebFilter(urlPatterns = {"/w/decode", "/w/chart"}, initParams = {
+  @WebInitParam(name = "maxAccessPerTime", value = "150"),
+  @WebInitParam(name = "accessTimeSec", value = "300"),
+  @WebInitParam(name = "maxEntries", value = "10000")
+})
 public final class DoSFilter implements Filter {
-
-  static final int MAX_ACCESS_PER_TIME = 500;
-  static final long ACCESS_TIME_MS = TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES);
-  static final int MAX_ENTRIES = 10_000;
 
   private Timer timer;
   private DoSTracker sourceAddrTracker;
 
   @Override
   public void init(FilterConfig filterConfig) {
+    int maxAccessPerTime = Integer.parseInt(filterConfig.getInitParameter("maxAccessPerTime"));
+    int accessTimeSec = Integer.parseInt(filterConfig.getInitParameter("accessTimeSec"));
+    long accessTimeMS = TimeUnit.MILLISECONDS.convert(accessTimeSec, TimeUnit.SECONDS);
+    int maxEntries = Integer.parseInt(filterConfig.getInitParameter("maxEntries"));
     timer = new Timer("DoSFilter");
-    sourceAddrTracker = new DoSTracker(timer, MAX_ACCESS_PER_TIME, ACCESS_TIME_MS, MAX_ENTRIES);
+    sourceAddrTracker = new DoSTracker(timer, maxAccessPerTime, accessTimeMS, maxEntries);
     timer.scheduleAtFixedRate(
         new TimerTask() {
           @Override
@@ -75,10 +80,9 @@ public final class DoSFilter implements Filter {
 
   private boolean isBanned(HttpServletRequest request) {
     String remoteIPAddress = request.getHeader("x-forwarded-for");
-    if (remoteIPAddress == null) {
-      remoteIPAddress = request.getRemoteAddr();
-    }
-    return sourceAddrTracker.isBanned(remoteIPAddress);
+    return
+      (remoteIPAddress != null && sourceAddrTracker.isBanned(remoteIPAddress)) ||
+      sourceAddrTracker.isBanned(request.getRemoteAddr());
   }
 
   @Override

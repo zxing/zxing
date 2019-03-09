@@ -99,6 +99,10 @@ public final class ChartServlet extends HttpServlet {
     }
 
     String requestURI = request.getRequestURI();
+    if (requestURI == null) {
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
     int lastDot = requestURI.lastIndexOf('.');
     String imageFormat;
     if (lastDot > 0) {
