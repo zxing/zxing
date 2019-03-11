@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">條碼掃描器</string>
+  <string name="app_picker_name">應用程式</string>
+  <string name="bookmark_picker_name">書籤</string>
+  <string name="button_add_calendar">新增至行事曆</string>
+  <string name="button_add_contact">新增聯絡人</string>
+  <string name="button_book_search">書籍搜尋</string>
+  <string name="button_cancel">取消</string>
+  <string name="button_custom_product_search">自訂搜尋</string>
+  <string name="button_dial">撥號</string>
+  <string name="button_email">傳送電子郵件</string>
+  <string name="button_get_directions">取得方向</string>
+  <string name="button_mms">傳送 MMS</string>
+  <string name="button_ok">確定</string>
+  <string name="button_open_browser">開啟瀏覽器</string>
+  <string name="button_product_search">產品搜尋</string>
+  <string name="button_search_book_contents">搜尋內容</string>
+  <string name="button_share_app">應用程式</string>
+  <string name="button_share_bookmark">書籤</string>
+  <string name="button_share_by_email">透過電子郵件分享</string>
+  <string name="button_share_by_sms">透過簡訊分享</string>
+  <string name="button_share_clipboard">剪貼簿</string>
+  <string name="button_share_contact">聯絡人</string>
+  <string name="button_show_map">顯示地圖</string>
+  <string name="button_sms">傳送簡訊</string>
+  <string name="button_web_search">網路搜尋</string>
+  <string name="button_wifi">連線至網路</string>
+  <string name="contents_contact">聯絡人資訊</string>
+  <string name="contents_email">電子郵件地址</string>
+  <string name="contents_location">地理座標</string>
+  <string name="contents_phone">電話號碼</string>
+  <string name="contents_sms">簡訊地址</string>
+  <string name="contents_text">純文字</string>
+  <string name="history_clear_text">清除歷史紀錄</string>
+  <string name="history_clear_one_history_text">清除</string>
+  <string name="history_email_title">條碼掃描器歷史紀錄</string>
+  <string name="history_empty">空</string>
+  <string name="history_empty_detail">未記錄任何條碼掃描</string>
+  <string name="history_send">傳送歷史紀錄</string>
+  <string name="history_title">歷史紀錄</string>
+  <string name="menu_encode_mecard">使用 MECARD</string>
+  <string name="menu_encode_vcard">使用 vCard</string>
+  <string name="menu_help">說明</string>
+  <string name="menu_history">歷史紀錄</string>
+  <string name="menu_settings">設定</string>
+  <string name="menu_share">分享</string>
+  <string name="msg_bulk_mode_scanned">大量模式：條碼掃描後儲存</string>
+  <string name="msg_camera_framework_bug">抱歉，Android 相機遇到了一點問題。您可能要重新啟動裝置。</string>
+  <string name="msg_default_format">格式</string>
+  <string name="msg_default_meta">銓釋資料</string>
+  <string name="msg_default_mms_subject">你好</string>
+  <string name="msg_default_status">將條碼置於取景器的矩形區域中以進行掃描。</string>
+  <string name="msg_default_time">時間</string>
+  <string name="msg_default_type">類型</string>
+  <string name="msg_encode_contents_failed">無法從提供的資料編碼出條碼。</string>
+  <string name="msg_error">錯誤</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">抱歉，無法啟動需要的應用程式。條碼內容可能無效。</string>
+  <string name="msg_invalid_value">無效的值</string>
+  <string name="msg_redirect">重新導向</string>
+  <string name="msg_sbc_book_not_searchable">抱歉，找不到這本書。</string>
+  <string name="msg_sbc_failed">抱歉，搜尋遇到了一點問題。</string>
+  <string name="msg_sbc_no_page_returned">沒有回傳頁面</string>
+  <string name="msg_sbc_page">頁面</string>
+  <string name="msg_sbc_results">結果</string>
+  <string name="msg_sbc_searching_book">正在搜尋書籍\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">片段不可用</string>
+  <string name="msg_share_explanation">您可以透過在您的螢幕上顯示條碼並以其他手機掃描來分享資料。</string>
+  <string name="msg_share_text">或輸入一些文字並按下 Enter</string>
+  <string name="msg_sure">您確定嗎？</string>
+  <string name="msg_unmount_usb">抱歉，SD 卡不可用。</string>
+  <string name="preferences_actions_title">找到條碼時\u2026</string>
+  <string name="preferences_auto_focus_title">使用自動聚焦</string>
+  <string name="preferences_auto_open_web_title">自動開啟網頁</string>
+  <string name="preferences_bulk_mode_summary">連續掃描並儲存許多條碼</string>
+  <string name="preferences_bulk_mode_title">大量掃描模式</string>
+  <string name="preferences_copy_to_clipboard_title">複製到剪貼簿</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">替換：%s = 內容，%f = 格式，%t = 類型</string>
+  <string name="preferences_custom_product_search_title">自訂搜尋 URL</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">1D Product</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR Codes</string>
+  <string name="preferences_device_bug_workarounds_title">裝置臭蟲暫時解決方法</string>
+  <string name="preferences_disable_barcode_scene_mode_title">無條碼場景模式</string>
+  <string name="preferences_disable_continuous_focus_summary">僅使用標準對焦模式</string>
+  <string name="preferences_disable_continuous_focus_title">無連續對焦</string>
+  <string name="preferences_disable_exposure_title">無曝光</string>
+  <string name="preferences_disable_metering_title">不測距</string>
+  <string name="preferences_front_light_summary">改善在某些手機的低光源掃描，但可能會造成眩光。並不是在所有手機上都能運作。</string>
+  <string name="preferences_front_light_title">使用閃光燈</string>
+  <string name="preferences_front_light_auto">自動</string>
+  <string name="preferences_front_light_off">關閉</string>
+  <string name="preferences_front_light_on">開啟</string>
+  <string name="preferences_general_title">一般設定</string>
+  <string name="preferences_history_summary">將您的掃描儲存在歷史紀錄中</string>
+  <string name="preferences_history_title">新增至歷史紀錄</string>
+  <string name="preferences_invert_scan_title">色彩反轉掃描</string>
+  <string name="preferences_invert_scan_summary">掃描在黑色背景上的白色條碼。某些裝置無法使用。</string>  
+  <string name="preferences_name">設定</string>
+  <string name="preferences_orientation_title">不自動旋轉</string>
+  <string name="preferences_play_beep_title">提示音</string>
+  <string name="preferences_remember_duplicates_summary">在歷史紀錄中儲存重複的條碼</string>
+  <string name="preferences_remember_duplicates_title">記住重覆紀錄</string>
+  <string name="preferences_result_title">搜尋設定</string>
+  <string name="preferences_scanning_title">當掃描條碼時，解碼\u2026</string>
+  <string name="preferences_search_country">搜尋國家</string>
+  <string name="preferences_supplemental_summary">嘗試擷取更多關於條碼內容的資訊</string>
+  <string name="preferences_supplemental_title">擷取更多資訊</string>
+  <string name="preferences_vibrate_title">震動</string>
+  <string name="result_address_book">找到聯絡人資訊</string>
+  <string name="result_calendar">找到行事曆活動</string>
+  <string name="result_email_address">找到電子郵件地址</string>
+  <string name="result_geo">找到地理座標</string>
+  <string name="result_isbn">找到書籍</string>
+  <string name="result_product">找到產品</string>
+  <string name="result_sms">找到簡訊地址</string>
+  <string name="result_tel">找到電話號碼</string>
+  <string name="result_text">找到純文字</string>
+  <string name="result_uri">找到 URL</string>
+  <string name="result_wifi">找到 WLAN 設定</string>
+  <string name="sbc_name">Google 圖書搜尋</string>
+  <string name="wifi_changing_network">正在請求連線到網路\u2026</string>
+</resources>
