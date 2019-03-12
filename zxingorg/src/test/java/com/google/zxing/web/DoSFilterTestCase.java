@@ -23,32 +23,79 @@ import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import javax.servlet.Filter;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
- * Tests {@link DoSFilter}.
+ * Tests {@link DoSFilter} implementations.
  */
 public final class DoSFilterTestCase extends Assert {
 
+  private static final int MAX_ACCESS_PER_TIME = 10;
+
   @Test
   public void testRedirect() throws Exception {
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    request.setRequestURI("/");
-    request.setRemoteAddr("1.2.3.4");
-    HttpServletResponse response = new MockHttpServletResponse();
-    DoSFilter filter = new DoSFilter();
+    for (DoSFilter filter : Arrays.asList(new ChartDoSFilter(), new DecodeDoSFilter())) {
+      initFilter(filter);
+      try {
+        for (int i = 0; i < MAX_ACCESS_PER_TIME; i++) {
+          testRequest(filter, "1.2.3.4", null, HttpServletResponse.SC_OK);
+        }
+        testRequest(filter, "1.2.3.4", null, HttpServletResponse.SC_FORBIDDEN);
+      } finally {
+        filter.destroy();
+      }
+    }
+  }
+
+  @Test
+  public void testNoRemoteHost() throws Exception {
+    Filter filter = new DecodeDoSFilter();
+    initFilter(filter);
+    try {
+      testRequest(filter, null, null, HttpServletResponse.SC_FORBIDDEN);
+      testRequest(filter, null, "1.1.1.1", HttpServletResponse.SC_FORBIDDEN);
+    } finally {
+      filter.destroy();
+    }
+  }
+
+  @Test
+  public void testProxy() throws Exception {
+    Filter filter = new DecodeDoSFilter();
+    initFilter(filter);
+    try {
+      for (int i = 0; i < MAX_ACCESS_PER_TIME; i++) {
+        testRequest(filter, "1.2.3.4", "1.1.1." + i + ", proxy1", HttpServletResponse.SC_OK);
+      }
+      testRequest(filter, "1.2.3.4", "1.1.1.0", HttpServletResponse.SC_FORBIDDEN);
+    } finally {
+      filter.destroy();
+    }
+  }
+
+  private void initFilter(Filter filter) throws ServletException {
     MockFilterConfig config = new MockFilterConfig();
-    int maxAccessPerTime = 10;
-    config.addInitParameter("maxAccessPerTime", Integer.toString(maxAccessPerTime));
+    config.addInitParameter("maxAccessPerTime", Integer.toString(MAX_ACCESS_PER_TIME));
     config.addInitParameter("accessTimeSec", "60");
     config.addInitParameter("maxEntries", "100");
     filter.init(config);
-    for (int i = 0; i < maxAccessPerTime; i++) {
-      filter.doFilter(request, response, new MockFilterChain());
-      assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+  }
+
+  private void testRequest(Filter filter, String host, String proxy, int expectedStatus)
+      throws IOException, ServletException {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.setRequestURI("/");
+    request.setRemoteAddr(host);
+    if (proxy != null) {
+      request.addHeader("X-Forwarded-For", proxy);
     }
+    HttpServletResponse response = new MockHttpServletResponse();
     filter.doFilter(request, response, new MockFilterChain());
-    assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());
+    assertEquals(expectedStatus, response.getStatus());
   }
 
 }

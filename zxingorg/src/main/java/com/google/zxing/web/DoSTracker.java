@@ -35,7 +35,7 @@ final class DoSTracker {
   private final long maxAccessesPerTime;
   private final Map<String,AtomicLong> numRecentAccesses;
 
-  DoSTracker(Timer timer, final int maxAccessesPerTime, long accessTimeMS, int maxEntries) {
+  DoSTracker(Timer timer, final String name, final int maxAccessesPerTime, long accessTimeMS, int maxEntries) {
     this.maxAccessesPerTime = maxAccessesPerTime;
     this.numRecentAccesses = new LRUMap<>(maxEntries);
     timer.schedule(new TimerTask() {
@@ -51,8 +51,8 @@ final class DoSTracker {
               accessIt.remove();
             } else {
               // Else it exceeded the max, so log it (again)
-              log.warning("Blocking " + entry.getKey() + " (" + count + " outstanding)");
-              // Reduce count of accesses held against the IP
+              log.warning(name + ": Blocking " + entry.getKey() + " (" + count + " outstanding)");
+              // Reduce count of accesses held against the host
               count.getAndAdd(-maxAccessesPerTime);
             }
           }
@@ -70,8 +70,8 @@ final class DoSTracker {
     synchronized (numRecentAccesses) {
       count = numRecentAccesses.get(event);
       if (count == null) {
-        count = new AtomicLong();
-        numRecentAccesses.put(event, count);
+        numRecentAccesses.put(event, new AtomicLong(1));
+        return false;
       }
     }
     return count.incrementAndGet() > maxAccessesPerTime;

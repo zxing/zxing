@@ -16,19 +16,18 @@
 
 package com.google.zxing.web;
 
+import com.google.common.base.Preconditions;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,12 +36,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Sean Owen
  */
-@WebFilter(urlPatterns = {"/w/decode", "/w/chart"}, initParams = {
-  @WebInitParam(name = "maxAccessPerTime", value = "150"),
-  @WebInitParam(name = "accessTimeSec", value = "300"),
-  @WebInitParam(name = "maxEntries", value = "10000")
-})
-public final class DoSFilter implements Filter {
+public abstract class DoSFilter implements Filter {
 
   private Timer timer;
   private DoSTracker sourceAddrTracker;
@@ -50,18 +44,16 @@ public final class DoSFilter implements Filter {
   @Override
   public void init(FilterConfig filterConfig) {
     int maxAccessPerTime = Integer.parseInt(filterConfig.getInitParameter("maxAccessPerTime"));
+    Preconditions.checkArgument(maxAccessPerTime > 0);
     int accessTimeSec = Integer.parseInt(filterConfig.getInitParameter("accessTimeSec"));
+    Preconditions.checkArgument(accessTimeSec > 0);
     long accessTimeMS = TimeUnit.MILLISECONDS.convert(accessTimeSec, TimeUnit.SECONDS);
     int maxEntries = Integer.parseInt(filterConfig.getInitParameter("maxEntries"));
-    timer = new Timer("DoSFilter");
-    sourceAddrTracker = new DoSTracker(timer, maxAccessPerTime, accessTimeMS, maxEntries);
-    timer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            System.gc();
-          }
-        }, 0L, TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
+    Preconditions.checkArgument(maxEntries > 0);
+
+    String name = getClass().getSimpleName();
+    timer = new Timer(name);
+    sourceAddrTracker = new DoSTracker(timer, name, maxAccessPerTime, accessTimeMS, maxEntries);
   }
 
   @Override
@@ -79,9 +71,17 @@ public final class DoSFilter implements Filter {
   }
 
   private boolean isBanned(HttpServletRequest request) {
-    String remoteIPAddress = request.getHeader("x-forwarded-for");
+    String remoteHost = request.getHeader("x-forwarded-for");
+    if (remoteHost != null) {
+      int comma = remoteHost.indexOf(',');
+      if (comma >= 0) {
+        remoteHost = remoteHost.substring(0, comma);
+      }
+      remoteHost = remoteHost.trim();
+    }
+    // Non-short-circuit "|" below is on purpose
     return
-      (remoteIPAddress != null && sourceAddrTracker.isBanned(remoteIPAddress)) ||
+      (remoteHost != null && sourceAddrTracker.isBanned(remoteHost)) |
       sourceAddrTracker.isBanned(request.getRemoteAddr());
   }
 

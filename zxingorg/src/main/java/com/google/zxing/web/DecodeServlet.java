@@ -59,6 +59,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,8 +90,8 @@ import javax.servlet.http.Part;
     fileSizeThreshold = 1 << 23, // ~8MB
     location = "/tmp")
 @WebServlet(value = "/w/decode", loadOnStartup = 1, initParams = {
-  @WebInitParam(name = "maxAccessPerTime", value = "150"),
-  @WebInitParam(name = "accessTimeSec", value = "300"),
+  @WebInitParam(name = "maxAccessPerTime", value = "120"),
+  @WebInitParam(name = "accessTimeSec", value = "120"),
   @WebInitParam(name = "maxEntries", value = "10000")
 })
 public final class DecodeServlet extends HttpServlet {
@@ -141,8 +142,17 @@ public final class DecodeServlet extends HttpServlet {
     long accessTimeMS = TimeUnit.MILLISECONDS.convert(accessTimeSec, TimeUnit.SECONDS);
     int maxEntries = Integer.parseInt(servletConfig.getInitParameter("maxEntries"));
 
-    timer = new Timer("DecodeServlet");
-    destHostTracker = new DoSTracker(timer, maxAccessPerTime, accessTimeMS, maxEntries);
+    String name = getClass().getSimpleName();
+    timer = new Timer(name);
+    destHostTracker = new DoSTracker(timer, name, maxAccessPerTime, accessTimeMS, maxEntries);
+    // Hack to try to avoid odd OOM due to memory leak in JAI?
+    timer.scheduleAtFixedRate(
+      new TimerTask() {
+        @Override
+        public void run() {
+          System.gc();
+        }
+      }, 0L, TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES));
   }
 
   @Override
@@ -433,10 +443,8 @@ public final class DecodeServlet extends HttpServlet {
         try {
           throw savedException == null ? NotFoundException.getNotFoundInstance() : savedException;
         } catch (FormatException | ChecksumException e) {
-          log.info(e.toString());
           errorResponse(request, response, "format");
         } catch (ReaderException e) { // Including NotFoundException
-          log.info(e.toString());
           errorResponse(request, response, "notfound");
         }
         return;
