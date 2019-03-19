@@ -96,7 +96,7 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
     }
   }
 
-  private static List<Result> processStructuredAppend(List<Result> results) {
+  static List<Result> processStructuredAppend(List<Result> results) {
     boolean hasSA = false;
 
     // first, check, if there is at least on SA result in the list
@@ -114,9 +114,10 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
     List<Result> newResults = new ArrayList<>();
     List<Result> saResults = new ArrayList<>();
     for (Result result : results) {
-      newResults.add(result);
       if (result.getResultMetadata().containsKey(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE)) {
         saResults.add(result);
+      } else {
+        newResults.add(result);
       }
     }
     // sort and concatenate the SA list items
