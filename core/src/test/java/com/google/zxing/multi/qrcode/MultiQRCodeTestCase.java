@@ -79,11 +79,11 @@ public final class MultiQRCodeTestCase extends Assert {
     Result sa1 = new Result("SA1", new byte[]{}, new ResultPoint[]{}, BarcodeFormat.QR_CODE);
     Result sa2 = new Result("SA2", new byte[]{}, new ResultPoint[]{}, BarcodeFormat.QR_CODE);
     Result sa3 = new Result("SA3", new byte[]{}, new ResultPoint[]{}, BarcodeFormat.QR_CODE);
-    sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (0<<4)+2);
+    sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (0 << 4) + 2);
     sa1.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
-    sa2.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (1<<4)+2);
+    sa2.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (1 << 4) + 2);
     sa2.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
-    sa3.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2<<4)+2);
+    sa3.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2 << 4) + 2);
     sa3.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
 
     Result nsa = new Result("NotSA", new byte[]{}, new ResultPoint[]{}, BarcodeFormat.QR_CODE);
