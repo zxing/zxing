@@ -19,8 +19,10 @@ package com.google.zxing.multi.qrcode;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import com.google.zxing.BarcodeFormat;
@@ -29,6 +31,7 @@ import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.MultipleBarcodeReader;
@@ -70,4 +73,38 @@ public final class MultiQRCodeTestCase extends Assert {
     assertEquals(expectedContents, barcodeContents);
   }
 
+  @Test
+  public void testProcessStructuredAppend() {
+    Result sa1 = new Result("SA1", new byte[]{}, new ResultPoint[]{}, BarcodeFormat.QR_CODE);
+    Result sa2 = new Result("SA2", new byte[]{}, new ResultPoint[]{}, BarcodeFormat.QR_CODE);
+    Result sa3 = new Result("SA3", new byte[]{}, new ResultPoint[]{}, BarcodeFormat.QR_CODE);
+    sa1.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (0 << 4) + 2);
+    sa1.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
+    sa2.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (1 << 4) + 2);
+    sa2.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
+    sa3.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, (2 << 4) + 2);
+    sa3.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
+
+    Result nsa = new Result("NotSA", new byte[]{}, new ResultPoint[]{}, BarcodeFormat.QR_CODE);
+    nsa.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
+
+    List<Result> inputs = new ArrayList<>();
+    inputs.add(sa3);
+    inputs.add(sa1);
+    inputs.add(nsa);
+    inputs.add(sa2);
+
+    List<Result> results = QRCodeMultiReader.processStructuredAppend(inputs);
+    assertNotNull(results);
+    assertEquals(2, results.size());
+
+    Collection<String> barcodeContents = new HashSet<>();
+    for (Result result : results) {
+      barcodeContents.add(result.getText());
+    }
+    Collection<String> expectedContents = new HashSet<>();
+    expectedContents.add("SA1SA2SA3");
+    expectedContents.add("NotSA");
+    assertEquals(expectedContents, barcodeContents);
+  }
 }
