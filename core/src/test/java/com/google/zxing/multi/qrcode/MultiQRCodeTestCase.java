@@ -35,7 +35,6 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.MultipleBarcodeReader;
-import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 import org.junit.Assert;
 import org.junit.Test;
 
