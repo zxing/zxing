@@ -638,9 +638,11 @@ public class FinderPatternFinder {
           squares[2] = squaredDistance(possibleCenters.get(k), possibleCenters.get(i));
           Arrays.sort(squares);
 
-          // From the Pythagorean theorem (a^2 + b^2 = c^2).
-          // When the triangle has a very short side, c^2 - b^2 - a^2 will be nealy 0.
-          // So we need to check each side separately.
+          // a^2 + b^2 = c^2 (Pythagorean theorem), and a = b (isosceles triangle).
+          // Since any right triangle satisfies the formula c^2 - b^2 - a^2 = 0,
+          // we also need to check both sides separately.
+          // The value of |c^2 - 2 * b^2| + |c^2 - 2 * a^2| increases as the triangle
+          // is dissimilar from isosceles right triangle.
           double d = Math.abs(squares[2] - 2 * squares[1]) + Math.abs(squares[2] - 2 * squares[0]);
           if (d < distortion) {
             distortion = d;
