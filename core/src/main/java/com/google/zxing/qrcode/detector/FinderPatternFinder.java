@@ -41,6 +41,7 @@ import java.util.Map;
 public class FinderPatternFinder {
 
   private static final int CENTER_QUORUM = 2;
+  private static final EstimatedModuleComparator moduleComparator = new EstimatedModuleComparator();
   protected static final int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
   protected static final int MAX_MODULES = 97; // support up to version 20 for mobile clients
 
@@ -613,7 +614,7 @@ public class FinderPatternFinder {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    Collections.sort(possibleCenters, new EstimatedModuleComparator());
+    Collections.sort(possibleCenters, moduleComparator);
 
     double distortion = Double.MAX_VALUE;
     double[] squares = new double[3];
