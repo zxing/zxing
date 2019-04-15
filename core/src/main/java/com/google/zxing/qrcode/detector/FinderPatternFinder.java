@@ -594,7 +594,7 @@ public class FinderPatternFinder {
   /**
    * Get square of distance between a and b.
    */
-  private static double square(FinderPattern a, FinderPattern b) {
+  private static double squaredDistance(FinderPattern a, FinderPattern b) {
     double x = a.getX() - b.getX();
     double y = a.getY() - b.getY();
     return x * x + y * y;
@@ -615,7 +615,7 @@ public class FinderPatternFinder {
 
     Collections.sort(possibleCenters, new EstimatedModuleComparator());
 
-    double distotion = Double.MAX_VALUE;
+    double distortion = Double.MAX_VALUE;
     double[] squares = new double[3];
     FinderPattern[] bestPatterns = new FinderPattern[3];
 
@@ -629,14 +629,14 @@ public class FinderPatternFinder {
             continue;
           }
 
-          squares[0] = square(possibleCenters.get(i), possibleCenters.get(j));
-          squares[1] = square(possibleCenters.get(j), possibleCenters.get(k));
-          squares[2] = square(possibleCenters.get(k), possibleCenters.get(i));
+          squares[0] = squaredDistance(possibleCenters.get(i), possibleCenters.get(j));
+          squares[1] = squaredDistance(possibleCenters.get(j), possibleCenters.get(k));
+          squares[2] = squaredDistance(possibleCenters.get(k), possibleCenters.get(i));
           Arrays.sort(squares);
 
           double d = Math.abs(squares[2] - 2 * squares[1]) + Math.abs(squares[2] - 2 * squares[0]);
-          if (d < distotion) {
-            distotion = d;
+          if (d < distortion) {
+            distortion = d;
             bestPatterns[0] = possibleCenters.get(i);
             bestPatterns[1] = possibleCenters.get(j);
             bestPatterns[2] = possibleCenters.get(k);
@@ -645,7 +645,7 @@ public class FinderPatternFinder {
       }
     }
 
-    if (distotion == Double.MAX_VALUE) {
+    if (distortion == Double.MAX_VALUE) {
         throw NotFoundException.getNotFoundInstance();
     }
 
