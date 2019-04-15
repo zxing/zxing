@@ -621,16 +621,18 @@ public class FinderPatternFinder {
     FinderPattern[] bestPatterns = new FinderPattern[3];
 
     for (int i = 0; i < possibleCenters.size() - 2; i++) {
+      float minModuleSize = possibleCenters.get(i).getEstimatedModuleSize();
+
       for (int j = i + 1; j < possibleCenters.size() - 1; j++) {
+        squares[0] = squaredDistance(possibleCenters.get(i), possibleCenters.get(j));
+
         for (int k = j + 1; k < possibleCenters.size(); k++) {
-          float minModuleSize = possibleCenters.get(i).getEstimatedModuleSize();
           float maxModuleSize = possibleCenters.get(k).getEstimatedModuleSize();
           if (maxModuleSize > minModuleSize * 1.4f) {
             // module size is not similar
             continue;
           }
 
-          squares[0] = squaredDistance(possibleCenters.get(i), possibleCenters.get(j));
           squares[1] = squaredDistance(possibleCenters.get(j), possibleCenters.get(k));
           squares[2] = squaredDistance(possibleCenters.get(k), possibleCenters.get(i));
           Arrays.sort(squares);
