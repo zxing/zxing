@@ -603,7 +603,7 @@ public class FinderPatternFinder {
 
   /**
    * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
-   *         those have similar module size and form a shape closer to a isoceles right triangle.
+   *         those have similar module size and form a shape closer to a isosceles right triangle.
    * @throws NotFoundException if 3 such finder patterns do not exist
    */
   private FinderPattern[] selectBestPatterns() throws NotFoundException {
@@ -638,6 +638,9 @@ public class FinderPatternFinder {
           squares[2] = squaredDistance(possibleCenters.get(k), possibleCenters.get(i));
           Arrays.sort(squares);
 
+          // From the Pythagorean theorem (a^2 + b^2 = c^2).
+          // When the triangle has a very short side, c^2 - b^2 - a^2 will be nealy 0.
+          // So we need to check each side separately.
           double d = Math.abs(squares[2] - 2 * squares[1]) + Math.abs(squares[2] - 2 * squares[0]);
           if (d < distortion) {
             distortion = d;
