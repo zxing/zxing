@@ -624,7 +624,7 @@ public class FinderPatternFinder {
       float minModuleSize = possibleCenters.get(i).getEstimatedModuleSize();
 
       for (int j = i + 1; j < possibleCenters.size() - 1; j++) {
-        squares[0] = squaredDistance(possibleCenters.get(i), possibleCenters.get(j));
+        double squares0 = squaredDistance(possibleCenters.get(i), possibleCenters.get(j));
 
         for (int k = j + 1; k < possibleCenters.size(); k++) {
           float maxModuleSize = possibleCenters.get(k).getEstimatedModuleSize();
@@ -633,6 +633,7 @@ public class FinderPatternFinder {
             continue;
           }
 
+          squares[0] = squares0;
           squares[1] = squaredDistance(possibleCenters.get(j), possibleCenters.get(k));
           squares[2] = squaredDistance(possibleCenters.get(k), possibleCenters.get(i));
           Arrays.sort(squares);
