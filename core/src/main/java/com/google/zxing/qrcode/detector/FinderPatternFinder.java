@@ -24,6 +24,7 @@ import com.google.zxing.common.BitMatrix;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -40,6 +41,7 @@ import java.util.Map;
 public class FinderPatternFinder {
 
   private static final int CENTER_QUORUM = 2;
+  private static final EstimatedModuleComparator moduleComparator = new EstimatedModuleComparator();
   protected static final int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
   protected static final int MAX_MODULES = 97; // support up to version 20 for mobile clients
 
@@ -591,9 +593,17 @@ public class FinderPatternFinder {
   }
 
   /**
+   * Get square of distance between a and b.
+   */
+  private static double squaredDistance(FinderPattern a, FinderPattern b) {
+    double x = a.getX() - b.getX();
+    double y = a.getY() - b.getY();
+    return x * x + y * y;
+  }
+
+  /**
    * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
-   *         those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
-   *         size differs from the average among those patterns the least
+   *         those have similar module size and form a shape closer to a isosceles right triangle.
    * @throws NotFoundException if 3 such finder patterns do not exist
    */
   private FinderPattern[] selectBestPatterns() throws NotFoundException {
@@ -604,85 +614,63 @@ public class FinderPatternFinder {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    // Filter outlier possibilities whose module size is too different
-    if (startSize > 3) {
-      // But we can only afford to do so if we have at least 4 possibilities to choose from
-      double totalModuleSize = 0.0;
-      double square = 0.0;
-      for (FinderPattern center : possibleCenters) {
-        float size = center.getEstimatedModuleSize();
-        totalModuleSize += size;
-        square += (double) size * size;
-      }
-      double average = totalModuleSize / startSize;
-      float stdDev = (float) Math.sqrt(square / startSize - average * average);
+    Collections.sort(possibleCenters, moduleComparator);
 
-      Collections.sort(possibleCenters, new FurthestFromAverageComparator((float) average));
+    double distortion = Double.MAX_VALUE;
+    double[] squares = new double[3];
+    FinderPattern[] bestPatterns = new FinderPattern[3];
 
-      float limit = Math.max(0.2f * (float) average, stdDev);
+    for (int i = 0; i < possibleCenters.size() - 2; i++) {
+      FinderPattern fpi = possibleCenters.get(i);
+      float minModuleSize = fpi.getEstimatedModuleSize();
 
-      for (int i = 0; i < possibleCenters.size() && possibleCenters.size() > 3; i++) {
-        FinderPattern pattern = possibleCenters.get(i);
-        if (Math.abs(pattern.getEstimatedModuleSize() - average) > limit) {
-          possibleCenters.remove(i);
-          i--;
+      for (int j = i + 1; j < possibleCenters.size() - 1; j++) {
+        FinderPattern fpj = possibleCenters.get(j);
+        double squares0 = squaredDistance(fpi, fpj);
+
+        for (int k = j + 1; k < possibleCenters.size(); k++) {
+          FinderPattern fpk = possibleCenters.get(k);
+          float maxModuleSize = fpk.getEstimatedModuleSize();
+          if (maxModuleSize > minModuleSize * 1.4f) {
+            // module size is not similar
+            continue;
+          }
+
+          squares[0] = squares0;
+          squares[1] = squaredDistance(fpj, fpk);
+          squares[2] = squaredDistance(fpi, fpk);
+          Arrays.sort(squares);
+
+          // a^2 + b^2 = c^2 (Pythagorean theorem), and a = b (isosceles triangle).
+          // Since any right triangle satisfies the formula c^2 - b^2 - a^2 = 0,
+          // we need to check both two equal sides separately.
+          // The value of |c^2 - 2 * b^2| + |c^2 - 2 * a^2| increases as dissimilarity
+          // from isosceles right triangle.
+          double d = Math.abs(squares[2] - 2 * squares[1]) + Math.abs(squares[2] - 2 * squares[0]);
+          if (d < distortion) {
+            distortion = d;
+            bestPatterns[0] = fpi;
+            bestPatterns[1] = fpj;
+            bestPatterns[2] = fpk;
+          }
         }
       }
     }
 
-    if (possibleCenters.size() > 3) {
-      // Throw away all but those first size candidate points we found.
-
-      float totalModuleSize = 0.0f;
-      for (FinderPattern possibleCenter : possibleCenters) {
-        totalModuleSize += possibleCenter.getEstimatedModuleSize();
-      }
-
-      float average = totalModuleSize / possibleCenters.size();
-
-      Collections.sort(possibleCenters, new CenterComparator(average));
-
-      possibleCenters.subList(3, possibleCenters.size()).clear();
+    if (distortion == Double.MAX_VALUE) {
+        throw NotFoundException.getNotFoundInstance();
     }
 
-    return new FinderPattern[]{
-        possibleCenters.get(0),
-        possibleCenters.get(1),
-        possibleCenters.get(2)
-    };
+    return bestPatterns;
   }
 
   /**
-   * <p>Orders by furthest from average</p>
+   * <p>Orders by {@link FinderPatternFinder#getEstimatedModuleSize()}</p>
    */
-  private static final class FurthestFromAverageComparator implements Comparator<FinderPattern>, Serializable {
-    private final float average;
-    private FurthestFromAverageComparator(float f) {
-      average = f;
-    }
+  private static final class EstimatedModuleComparator implements Comparator<FinderPattern>, Serializable {
     @Override
     public int compare(FinderPattern center1, FinderPattern center2) {
-      return Float.compare(Math.abs(center2.getEstimatedModuleSize() - average),
-                           Math.abs(center1.getEstimatedModuleSize() - average));
-    }
-  }
-
-  /**
-   * <p>Orders by {@link FinderPattern#getCount()}, descending.</p>
-   */
-  private static final class CenterComparator implements Comparator<FinderPattern>, Serializable {
-    private final float average;
-    private CenterComparator(float f) {
-      average = f;
-    }
-    @Override
-    public int compare(FinderPattern center1, FinderPattern center2) {
-      int countCompare = Integer.compare(center2.getCount(), center1.getCount());
-      if (countCompare == 0) {
-        return Float.compare(Math.abs(center1.getEstimatedModuleSize() - average),
-                             Math.abs(center2.getEstimatedModuleSize() - average));
-      }
-      return countCompare;
+      return Float.compare(center1.getEstimatedModuleSize(), center2.getEstimatedModuleSize());
     }
   }
 
