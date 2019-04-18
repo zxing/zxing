@@ -621,21 +621,24 @@ public class FinderPatternFinder {
     FinderPattern[] bestPatterns = new FinderPattern[3];
 
     for (int i = 0; i < possibleCenters.size() - 2; i++) {
-      float minModuleSize = possibleCenters.get(i).getEstimatedModuleSize();
+      FinderPattern fpi = possibleCenters.get(i);
+      float minModuleSize = fpi.getEstimatedModuleSize();
 
       for (int j = i + 1; j < possibleCenters.size() - 1; j++) {
-        double squares0 = squaredDistance(possibleCenters.get(i), possibleCenters.get(j));
+        FinderPattern fpj = possibleCenters.get(j);
+        double squares0 = squaredDistance(fpi, fpj);
 
         for (int k = j + 1; k < possibleCenters.size(); k++) {
-          float maxModuleSize = possibleCenters.get(k).getEstimatedModuleSize();
+          FinderPattern fpk = possibleCenters.get(k);
+          float maxModuleSize = fpk.getEstimatedModuleSize();
           if (maxModuleSize > minModuleSize * 1.4f) {
             // module size is not similar
             continue;
           }
 
           squares[0] = squares0;
-          squares[1] = squaredDistance(possibleCenters.get(j), possibleCenters.get(k));
-          squares[2] = squaredDistance(possibleCenters.get(k), possibleCenters.get(i));
+          squares[1] = squaredDistance(fpj, fpk);
+          squares[2] = squaredDistance(fpi, fpk);
           Arrays.sort(squares);
 
           // a^2 + b^2 = c^2 (Pythagorean theorem), and a = b (isosceles triangle).
@@ -646,9 +649,9 @@ public class FinderPatternFinder {
           double d = Math.abs(squares[2] - 2 * squares[1]) + Math.abs(squares[2] - 2 * squares[0]);
           if (d < distortion) {
             distortion = d;
-            bestPatterns[0] = possibleCenters.get(i);
-            bestPatterns[1] = possibleCenters.get(j);
-            bestPatterns[2] = possibleCenters.get(k);
+            bestPatterns[0] = fpi;
+            bestPatterns[1] = fpj;
+            bestPatterns[2] = fpk;
           }
         }
       }
