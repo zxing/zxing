@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing;
+package com.google.zxing.client.j2se.translators;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

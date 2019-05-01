@@ -501,6 +501,7 @@
             </execution>
           </executions>
         </plugin>
+<!-- Disable API compatibility check since we moved two classes in JavaSE
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>clirr-maven-plugin</artifactId>
@@ -515,6 +516,7 @@
             </execution>
           </executions>
         </plugin>
+-->
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>

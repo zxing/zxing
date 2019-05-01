@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing;
+package com.google.zxing.client.j2se.translators;
 
 import java.io.BufferedReader;
 import java.io.IOException;
