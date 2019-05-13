@@ -69,7 +69,7 @@ public final class RSSExpandedImage2resultTestCase extends Assert {
                                         null, null, null, null, null, null,
                                         "001750",
                                         ExpandedProductParsedResult.KILOGRAM,
-                                        "3", null, null, null, new HashMap<String,String>());
+                                        "3", null, null, null, new HashMap<>());
 
     assertCorrectImage2result("2.png", expected);
   }

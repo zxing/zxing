@@ -95,13 +95,9 @@ public final class StringsResourceTranslator {
     Path stringsFile = valueDir.resolve("strings.xml");
     Collection<String> forceRetranslation = Arrays.asList(args).subList(1, args.length);
 
-    DirectoryStream.Filter<Path> filter = new DirectoryStream.Filter<Path>() {
-      @Override
-      public boolean accept(Path entry) {
-        return Files.isDirectory(entry) && !Files.isSymbolicLink(entry) &&
-            VALUES_DIR_PATTERN.matcher(entry.getFileName().toString()).matches();
-      }
-    };
+    DirectoryStream.Filter<Path> filter = entry ->
+      Files.isDirectory(entry) && !Files.isSymbolicLink(entry) &&
+        VALUES_DIR_PATTERN.matcher(entry.getFileName().toString()).matches();
     try (DirectoryStream<Path> dirs = Files.newDirectoryStream(resDir, filter)) {
       for (Path dir : dirs) {
         translate(stringsFile, dir.resolve("strings.xml"), forceRetranslation);

@@ -98,7 +98,7 @@ public final class MultiFormatUPCEANReader extends OneDReader {
         boolean canReturnUPCA = possibleFormats == null || possibleFormats.contains(BarcodeFormat.UPC_A);
   
         if (ean13MayBeUPCA && canReturnUPCA) {
-          // Transfer the metdata across
+          // Transfer the metadata across
           Result resultUPCA = new Result(result.getText().substring(1),
                                          result.getRawBytes(),
                                          result.getResultPoints(),

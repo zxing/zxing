@@ -77,7 +77,7 @@ public final class DoSFilterTestCase extends Assert {
     }
   }
 
-  private void initFilter(Filter filter) throws ServletException {
+  private static void initFilter(Filter filter) throws ServletException {
     MockFilterConfig config = new MockFilterConfig();
     config.addInitParameter("maxAccessPerTime", Integer.toString(MAX_ACCESS_PER_TIME));
     config.addInitParameter("accessTimeSec", "60");
@@ -85,7 +85,7 @@ public final class DoSFilterTestCase extends Assert {
     filter.init(config);
   }
 
-  private void testRequest(Filter filter, String host, String proxy, int expectedStatus)
+  private static void testRequest(Filter filter, String host, String proxy, int expectedStatus)
       throws IOException, ServletException {
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRequestURI("/");

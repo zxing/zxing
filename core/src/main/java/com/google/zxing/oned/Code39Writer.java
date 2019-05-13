@@ -136,7 +136,8 @@ public final class Code39Writer extends OneDimensionalCodeWriter {
              extendedContent.append('%');
              extendedContent.append((char) ('P' + (character - 123)));
            } else {
-             throw new IllegalArgumentException("Requested content contains a non-encodable character: '" + contents.charAt(i) + "'");
+             throw new IllegalArgumentException(
+               "Requested content contains a non-encodable character: '" + contents.charAt(i) + "'");
            }
            break;
        }

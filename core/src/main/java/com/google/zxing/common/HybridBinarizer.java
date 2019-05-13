@@ -112,13 +112,13 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
       if (yoffset > maxYOffset) {
         yoffset = maxYOffset;
       }
-      int top = cap(y, 2, subHeight - 3);
+      int top = cap(y, subHeight - 3);
       for (int x = 0; x < subWidth; x++) {
         int xoffset = x << BLOCK_SIZE_POWER;
         if (xoffset > maxXOffset) {
           xoffset = maxXOffset;
         }
-        int left = cap(x, 2, subWidth - 3);
+        int left = cap(x, subWidth - 3);
         int sum = 0;
         for (int z = -2; z <= 2; z++) {
           int[] blackRow = blackPoints[top + z];
@@ -130,8 +130,8 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
     }
   }
 
-  private static int cap(int value, int min, int max) {
-    return value < min ? min : value > max ? max : value;
+  private static int cap(int value, int max) {
+    return value < 2 ? 2 : value > max ? max : value;
   }
 
   /**

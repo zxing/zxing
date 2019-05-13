@@ -70,8 +70,4 @@ final class DecodedNumeric extends DecodedObject {
     return this.secondDigit == FNC1;
   }
 
-  boolean isAnyFNC1() {
-    return this.firstDigit == FNC1 || this.secondDigit == FNC1;
-  }
-
 }

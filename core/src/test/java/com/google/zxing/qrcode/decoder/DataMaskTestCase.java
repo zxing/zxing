@@ -27,82 +27,42 @@ public final class DataMaskTestCase extends Assert {
 
   @Test
   public void testMask0() {
-    testMaskAcrossDimensions(0, new MaskCondition() {
-      @Override
-      public boolean isMasked(int i, int j) {
-        return (i + j) % 2 == 0;
-      }
-    });
+    testMaskAcrossDimensions(0, (i, j) -> (i + j) % 2 == 0);
   }
 
   @Test
   public void testMask1() {
-    testMaskAcrossDimensions(1, new MaskCondition() {
-      @Override
-      public boolean isMasked(int i, int j) {
-        return i % 2 == 0;
-      }
-    });
+    testMaskAcrossDimensions(1, (i, j) -> i % 2 == 0);
   }
 
   @Test
   public void testMask2() {
-    testMaskAcrossDimensions(2, new MaskCondition() {
-      @Override
-      public boolean isMasked(int i, int j) {
-        return j % 3 == 0;
-      }
-    });
+    testMaskAcrossDimensions(2, (i, j) -> j % 3 == 0);
   }
 
   @Test
   public void testMask3() {
-    testMaskAcrossDimensions(3, new MaskCondition() {
-      @Override
-      public boolean isMasked(int i, int j) {
-        return (i + j) % 3 == 0;
-      }
-    });
+    testMaskAcrossDimensions(3, (i, j) -> (i + j) % 3 == 0);
   }
 
   @Test
   public void testMask4() {
-    testMaskAcrossDimensions(4, new MaskCondition() {
-      @Override
-      public boolean isMasked(int i, int j) {
-        return (i / 2 + j / 3) % 2 == 0;
-      }
-    });
+    testMaskAcrossDimensions(4, (i, j) -> (i / 2 + j / 3) % 2 == 0);
   }
 
   @Test
   public void testMask5() {
-    testMaskAcrossDimensions(5, new MaskCondition() {
-      @Override
-      public boolean isMasked(int i, int j) {
-        return (i * j) % 2 + (i * j) % 3 == 0;
-      }
-    });
+    testMaskAcrossDimensions(5, (i, j) -> (i * j) % 2 + (i * j) % 3 == 0);
   }
 
   @Test
   public void testMask6() {
-    testMaskAcrossDimensions(6, new MaskCondition() {
-      @Override
-      public boolean isMasked(int i, int j) {
-        return ((i * j) % 2 + (i * j) % 3) % 2 == 0;
-      }
-    });
+    testMaskAcrossDimensions(6, (i, j) -> ((i * j) % 2 + (i * j) % 3) % 2 == 0);
   }
 
   @Test
   public void testMask7() {
-    testMaskAcrossDimensions(7, new MaskCondition() {
-      @Override
-      public boolean isMasked(int i, int j) {
-        return ((i + j) % 2 + (i * j) % 3) % 2 == 0;
-      }
-    });
+    testMaskAcrossDimensions(7, (i, j) -> ((i + j) % 2 + (i * j) % 3) % 2 == 0);
   }
 
   private static void testMaskAcrossDimensions(int reference, MaskCondition condition) {
@@ -126,6 +86,7 @@ public final class DataMaskTestCase extends Assert {
     }
   }
 
+  @FunctionalInterface
   private interface MaskCondition {
     boolean isMasked(int i, int j);
   }

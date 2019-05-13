@@ -87,13 +87,13 @@ public final class Detector {
     return new DetectorResult(bits, new ResultPoint[]{topLeft, bottomLeft, bottomRight, topRight});
   }
 
-  private ResultPoint shiftPoint(ResultPoint point, ResultPoint to, int div) {
+  private static ResultPoint shiftPoint(ResultPoint point, ResultPoint to, int div) {
     float x = (to.getX() - point.getX()) / (div + 1);
     float y = (to.getY() - point.getY()) / (div + 1);
     return new ResultPoint(point.getX() + x, point.getY() + y);
   }
 
-  private ResultPoint moveAway(ResultPoint point, float fromX, float fromY) {
+  private static ResultPoint moveAway(ResultPoint point, float fromX, float fromY) {
     float x = point.getX();
     float y = point.getY();
 

@@ -49,6 +49,7 @@ import java.util.Map;
 final class MultiFinderPatternFinder extends FinderPatternFinder {
 
   private static final FinderPatternInfo[] EMPTY_RESULT_ARRAY = new FinderPatternInfo[0];
+  private static final FinderPattern[] EMPTY_FP_ARRAY = new FinderPattern[0];
   private static final FinderPattern[][] EMPTY_FP_2D_ARRAY = new FinderPattern[0][];
 
   // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
@@ -85,15 +86,6 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
     }
   }
 
-  /**
-   * <p>Creates a finder that will search the image for three finder patterns.</p>
-   *
-   * @param image image to search
-   */
-  MultiFinderPatternFinder(BitMatrix image) {
-    super(image);
-  }
-
   MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback) {
     super(image, resultPointCallback);
   }
@@ -117,13 +109,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
      * Begin HE modifications to safely detect multiple codes of equal size
      */
     if (size == 3) {
-      return new FinderPattern[][]{
-          new FinderPattern[]{
-              possibleCenters.get(0),
-              possibleCenters.get(1),
-              possibleCenters.get(2)
-          }
-      };
+      return new FinderPattern[][] { possibleCenters.toArray(EMPTY_FP_ARRAY) };
     }
 
     // Sort by estimated module size to speed up the upcoming checks

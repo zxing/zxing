@@ -40,7 +40,7 @@ import android.util.Log;
  * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the
  * project's source code.</p>
  *
- * <h2>Initiating a barcode scan</h2>
+ * <h1>Initiating a barcode scan</h1>
  *
  * <p>To integrate, create an instance of {@code IntentIntegrator} and call {@link #initiateScan()} and wait
  * for the result in your app.</p>
@@ -88,13 +88,13 @@ import android.util.Log;
  * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(List)}.
  * For example, set to {@link #TARGET_BARCODE_SCANNER_ONLY} to only target the Barcode Scanner app itself.</p>
  *
- * <h2>Sharing text via barcode</h2>
+ * <h1>Sharing text via barcode</h1>
  *
  * <p>To share text, encoded as a QR Code on-screen, similarly, see {@link #shareText(CharSequence)}.</p>
  *
  * <p>Some code, particularly download integration, was contributed from the Anobiit application.</p>
  *
- * <h2>Enabling experimental barcode formats</h2>
+ * <h1>Enabling experimental barcode formats</h1>
  *
  * <p>Some formats are not enabled by default even when scanning with {@link #ALL_CODE_TYPES}, such as
  * PDF417. Use {@link #initiateScan(Collection)} with
@@ -151,7 +151,7 @@ public class IntentIntegrator {
   private String buttonYes;
   private String buttonNo;
   private List<String> targetApplications;
-  private final Map<String,Object> moreExtras = new HashMap<String,Object>(3);
+  private final Map<String,Object> moreExtras = new HashMap<>(3);
 
   /**
    * @param activity {@link Activity} invoking the integration

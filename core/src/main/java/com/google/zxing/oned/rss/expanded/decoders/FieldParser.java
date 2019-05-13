@@ -276,12 +276,7 @@ final class FieldParser {
   private static String processVariableAI(int aiSize, int variableFieldSize, String rawInformation)
       throws NotFoundException {
     String ai = rawInformation.substring(0, aiSize);
-    int maxSize;
-    if (rawInformation.length() < aiSize + variableFieldSize) {
-      maxSize = rawInformation.length();
-    } else {
-      maxSize = aiSize + variableFieldSize;
-    }
+    int maxSize = Math.min(rawInformation.length(), aiSize + variableFieldSize);
     String field = rawInformation.substring(aiSize, maxSize);
     String remaining = rawInformation.substring(maxSize);
     String result = '(' + ai + ')' + field;

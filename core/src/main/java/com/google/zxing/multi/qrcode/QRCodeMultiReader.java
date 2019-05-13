@@ -31,9 +31,9 @@ import com.google.zxing.multi.qrcode.detector.MultiDetector;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.decoder.QRCodeDecoderMetaData;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
@@ -97,20 +97,6 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
   }
 
   static List<Result> processStructuredAppend(List<Result> results) {
-    boolean hasSA = false;
-
-    // first, check, if there is at least on SA result in the list
-    for (Result result : results) {
-      if (result.getResultMetadata().containsKey(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE)) {
-        hasSA = true;
-        break;
-      }
-    }
-    if (!hasSA) {
-      return results;
-    }
-
-    // it is, second, split the lists and built a new result list
     List<Result> newResults = new ArrayList<>();
     List<Result> saResults = new ArrayList<>();
     for (Result result : results) {
@@ -120,45 +106,32 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
         newResults.add(result);
       }
     }
+    if (saResults.isEmpty()) {
+      return results;
+    }
+
     // sort and concatenate the SA list items
     Collections.sort(saResults, new SAComparator());
-    StringBuilder concatedText = new StringBuilder();
-    int rawBytesLen = 0;
-    int byteSegmentLength = 0;
+    StringBuilder newText = new StringBuilder();
+    ByteArrayOutputStream newRawBytes = new ByteArrayOutputStream();
+    ByteArrayOutputStream newByteSegment = new ByteArrayOutputStream();
     for (Result saResult : saResults) {
-      concatedText.append(saResult.getText());
-      rawBytesLen += saResult.getRawBytes().length;
-      if (saResult.getResultMetadata().containsKey(ResultMetadataType.BYTE_SEGMENTS)) {
-        @SuppressWarnings("unchecked")
-        Iterable<byte[]> byteSegments =
-            (Iterable<byte[]>) saResult.getResultMetadata().get(ResultMetadataType.BYTE_SEGMENTS);
+      newText.append(saResult.getText());
+      byte[] saBytes = saResult.getRawBytes();
+      newRawBytes.write(saBytes, 0, saBytes.length);
+      @SuppressWarnings("unchecked")
+      Iterable<byte[]> byteSegments =
+          (Iterable<byte[]>) saResult.getResultMetadata().get(ResultMetadataType.BYTE_SEGMENTS);
+      if (byteSegments != null) {
         for (byte[] segment : byteSegments) {
-          byteSegmentLength += segment.length;
+          newByteSegment.write(segment, 0, segment.length);
         }
       }
     }
-    byte[] newRawBytes = new byte[rawBytesLen];
-    byte[] newByteSegment = new byte[byteSegmentLength];
-    int newRawBytesIndex = 0;
-    int byteSegmentIndex = 0;
-    for (Result saResult : saResults) {
-      System.arraycopy(saResult.getRawBytes(), 0, newRawBytes, newRawBytesIndex, saResult.getRawBytes().length);
-      newRawBytesIndex += saResult.getRawBytes().length;
-      if (saResult.getResultMetadata().containsKey(ResultMetadataType.BYTE_SEGMENTS)) {
-        @SuppressWarnings("unchecked")
-        Iterable<byte[]> byteSegments =
-            (Iterable<byte[]>) saResult.getResultMetadata().get(ResultMetadataType.BYTE_SEGMENTS);
-        for (byte[] segment : byteSegments) {
-          System.arraycopy(segment, 0, newByteSegment, byteSegmentIndex, segment.length);
-          byteSegmentIndex += segment.length;
-        }
-      }
-    }
-    Result newResult = new Result(concatedText.toString(), newRawBytes, NO_POINTS, BarcodeFormat.QR_CODE);
-    if (byteSegmentLength > 0) {
-      Collection<byte[]> byteSegmentList = new ArrayList<>();
-      byteSegmentList.add(newByteSegment);
-      newResult.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegmentList);
+
+    Result newResult = new Result(newText.toString(), newRawBytes.toByteArray(), NO_POINTS, BarcodeFormat.QR_CODE);
+    if (newByteSegment.size() > 0) {
+      newResult.putMetadata(ResultMetadataType.BYTE_SEGMENTS, Collections.singletonList(newByteSegment.toByteArray()));
     }
     newResults.add(newResult);
     return newResults;

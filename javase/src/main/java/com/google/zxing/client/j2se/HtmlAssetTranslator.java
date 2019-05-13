@@ -87,13 +87,10 @@ public final class HtmlAssetTranslator {
                                                               String languageArg) throws IOException {
     if ("all".equals(languageArg)) {
       Collection<String> languages = new ArrayList<>();
-      DirectoryStream.Filter<Path> fileFilter = new DirectoryStream.Filter<Path>() {
-        @Override
-        public boolean accept(Path entry) {
-          String fileName = entry.getFileName().toString();
-          return Files.isDirectory(entry) && !Files.isSymbolicLink(entry) &&
-              fileName.startsWith("html-") && !"html-en".equals(fileName);
-        }
+      DirectoryStream.Filter<Path> fileFilter = entry -> {
+        String fileName = entry.getFileName().toString();
+        return Files.isDirectory(entry) && !Files.isSymbolicLink(entry) &&
+            fileName.startsWith("html-") && !"html-en".equals(fileName);
       };
       try (DirectoryStream<Path> dirs = Files.newDirectoryStream(assetsDir, fileFilter)) {
         for (Path languageDir : dirs) {
@@ -132,12 +129,9 @@ public final class HtmlAssetTranslator {
     String translationTextTranslated =
         StringsResourceTranslator.translateString("Translated by Google Translate.", language);
 
-    DirectoryStream.Filter<Path> filter = new DirectoryStream.Filter<Path>() {
-      @Override
-      public boolean accept(Path entry) {
-        String name = entry.getFileName().toString();
-        return name.endsWith(".html") && (filesToTranslate.isEmpty() || filesToTranslate.contains(name));
-      }
+    DirectoryStream.Filter<Path> filter = entry -> {
+      String name = entry.getFileName().toString();
+      return name.endsWith(".html") && (filesToTranslate.isEmpty() || filesToTranslate.contains(name));
     };
     try (DirectoryStream<Path> files = Files.newDirectoryStream(englishHtmlDir, filter)) {
       for (Path sourceFile : files) {

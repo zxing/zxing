@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   
   <artifactId>zxingorg</artifactId>
-  <version>3.3.4-SNAPSHOT</version>
+  <version>3.4.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
   <dependencies>
@@ -33,13 +33,13 @@
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-web-api</artifactId>
-      <version>7.0</version>
+      <version>8.0.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>26.0-android</version>
+      <version>27.1-android</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -49,13 +49,13 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>4.3.22.RELEASE</version> <!-- 5.x requires Java 8 -->
+      <version>5.1.7.RELEASE</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
+      <version>4.0.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -63,7 +63,7 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.3.4-SNAPSHOT</version>
+    <version>3.4.0-SNAPSHOT</version>
   </parent>
   
   <build>

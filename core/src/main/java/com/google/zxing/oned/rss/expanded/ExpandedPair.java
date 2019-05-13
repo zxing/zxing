@@ -60,7 +60,7 @@ final class ExpandedPair {
     return this.finderPattern;
   }
 
-  public boolean mustBeLast() {
+  boolean mustBeLast() {
     return this.rightChar == null;
   }
 

@@ -25,7 +25,6 @@ import com.google.zxing.common.BitMatrix;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -614,7 +613,7 @@ public class FinderPatternFinder {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    Collections.sort(possibleCenters, moduleComparator);
+    possibleCenters.sort(moduleComparator);
 
     double distortion = Double.MAX_VALUE;
     double[] squares = new double[3];
@@ -665,7 +664,7 @@ public class FinderPatternFinder {
   }
 
   /**
-   * <p>Orders by {@link FinderPatternFinder#getEstimatedModuleSize()}</p>
+   * <p>Orders by {@link FinderPattern#getEstimatedModuleSize()}</p>
    */
   private static final class EstimatedModuleComparator implements Comparator<FinderPattern>, Serializable {
     @Override

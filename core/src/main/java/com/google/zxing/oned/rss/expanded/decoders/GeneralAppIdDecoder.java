@@ -126,7 +126,8 @@ final class GeneralAppIdDecoder {
 
     DecodedInformation lastDecoded = parseBlocks();
     if (lastDecoded != null && lastDecoded.isRemaining()) {
-      return new DecodedInformation(this.current.getPosition(), this.buffer.toString(), lastDecoded.getRemainingValue());
+      return new DecodedInformation(this.current.getPosition(),
+        this.buffer.toString(), lastDecoded.getRemainingValue());
     }
     return new DecodedInformation(this.current.getPosition(), this.buffer.toString());
   }
