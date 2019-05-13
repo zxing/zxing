@@ -514,6 +514,9 @@
               </goals>
             </execution>
           </executions>
+          <configuration>
+            <ignoredDifferencesFile>${project.parent.basedir}/src/clirr/ignored-differences.xml</ignoredDifferencesFile>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
