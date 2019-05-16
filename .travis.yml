@@ -23,12 +23,14 @@ after_success: if [ -n "$JACOCO" ]; then bash <(curl -s https://codecov.io/bash)
 
 # The Android SDK package android-sdk-linux.tar.bz2 above is built roughly like so:
 #
+# Download Command Line tools for Linux from https://developer.android.com/studio#downloads
+#
 # mkdir android-sdk-linux; cd android-sdk-linux
-# curl -O https://dl.google.com/android/repository/tools_r25.2.3-linux.zip
+# mv /path/to/sdk-tools-linux-4333796.zip .
 # unzip *.zip; rm *.zip
 #
 # # Or different, more recent versions; see sdkmanager --list
-# ./tools/bin/sdkmanager "platforms;android-22" "build-tools;25.0.2"
+# ./tools/bin/sdkmanager "platforms;android-22" "build-tools;28.0.2"
 # # Accept license
 #
 # ./tools/bin/sdkmanager --update
