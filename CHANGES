@@ -383,3 +383,12 @@
 
   - Minor fixes and improvements
   - Java 9+ support
+
+3.4.0 (19 May 2019)
+
+  - Requires Java 8+
+  - core, javase modules declare a Java 9+ module
+  - HtmlAssetTranslator and StringsResourceTranslator legacy utilities are moved to a .client.j2se subpackage
+  - No more releases of the Barcode Scanner app
+  - Minor bug fixes to Code93Writer
+  - Minor improvements to QR code detection
