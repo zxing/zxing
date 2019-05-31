@@ -16,6 +16,13 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
+import java.util.Map;
+
 /**
  * This class renders CodaBar as {@code boolean[]}.
  *
@@ -27,6 +34,19 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
   private static final char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
   private static final char[] CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = {'/', ':', '+', '.'};
   private static final char DEFAULT_GUARD = START_END_CHARS[0];
+
+  @Override
+  public BitMatrix encode(String contents,
+                          BarcodeFormat format,
+                          int width,
+                          int height,
+                          Map<EncodeHintType,?> hints) throws WriterException {
+    if (format != BarcodeFormat.CODABAR) {
+      throw new IllegalArgumentException("Can only encode CODABAR, but got " + format);
+    }
+
+    return super.encode(contents, format, width, height, hints);
+  }
 
   @Override
   public boolean[] encode(String contents) {
