@@ -17,11 +17,9 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * This class renders CodaBar as {@code boolean[]}.
@@ -36,16 +34,8 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
   private static final char DEFAULT_GUARD = START_END_CHARS[0];
 
   @Override
-  public BitMatrix encode(String contents,
-                          BarcodeFormat format,
-                          int width,
-                          int height,
-                          Map<EncodeHintType,?> hints) throws WriterException {
-    if (format != BarcodeFormat.CODABAR) {
-      throw new IllegalArgumentException("Can only encode CODABAR, but got " + format);
-    }
-
-    return super.encode(contents, format, width, height, hints);
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return Collections.singleton(BarcodeFormat.CODABAR);
   }
 
   @Override

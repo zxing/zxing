@@ -17,13 +17,11 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
+import java.util.Collections;
 
 /**
  * This object renders a CODE128 code as a {@link BitMatrix}.
@@ -61,15 +59,8 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   }
 
   @Override
-  public BitMatrix encode(String contents,
-                          BarcodeFormat format,
-                          int width,
-                          int height,
-                          Map<EncodeHintType,?> hints) throws WriterException {
-    if (format != BarcodeFormat.CODE_128) {
-      throw new IllegalArgumentException("Can only encode CODE_128, but got " + format);
-    }
-    return super.encode(contents, format, width, height, hints);
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return Collections.singleton(BarcodeFormat.CODE_128);
   }
 
   @Override

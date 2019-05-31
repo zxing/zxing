@@ -22,6 +22,7 @@ import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -60,6 +61,11 @@ public abstract class OneDimensionalCodeWriter implements Writer {
       throw new IllegalArgumentException("Negative size is not allowed. Input: "
                                              + width + 'x' + height);
     }
+    Collection<BarcodeFormat> supportedFormats = getSupportedWriteFormats();
+    if (supportedFormats != null && !supportedFormats.contains(format)) {
+      throw new IllegalArgumentException("Can only encode " + supportedFormats +
+        ", but got " + format);
+    }
 
     int sidesMargin = getDefaultMargin();
     if (hints != null && hints.containsKey(EncodeHintType.MARGIN)) {
@@ -68,6 +74,10 @@ public abstract class OneDimensionalCodeWriter implements Writer {
 
     boolean[] code = encode(contents);
     return renderResult(code, width, height, sidesMargin);
+  }
+
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return null;
   }
 
   /**

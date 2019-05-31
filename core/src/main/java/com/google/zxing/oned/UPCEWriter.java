@@ -16,12 +16,11 @@
 
 package com.google.zxing.oned;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
 import com.google.zxing.FormatException;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 /**
@@ -36,16 +35,8 @@ public final class UPCEWriter extends UPCEANWriter {
       6; // end guard
 
   @Override
-  public BitMatrix encode(String contents,
-                          BarcodeFormat format,
-                          int width,
-                          int height,
-                          Map<EncodeHintType, ?> hints) throws WriterException {
-    if (format != BarcodeFormat.UPC_E) {
-      throw new IllegalArgumentException("Can only encode UPC_E, but got " + format);
-    }
-
-    return super.encode(contents, format, width, height, hints);
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return Collections.singleton(BarcodeFormat.UPC_E);
   }
 
   @Override

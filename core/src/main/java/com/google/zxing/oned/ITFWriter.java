@@ -17,11 +17,10 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * This object renders a ITF code as a {@link BitMatrix}.
@@ -52,16 +51,8 @@ public final class ITFWriter extends OneDimensionalCodeWriter {
   };
 
   @Override
-  public BitMatrix encode(String contents,
-                          BarcodeFormat format,
-                          int width,
-                          int height,
-                          Map<EncodeHintType,?> hints) throws WriterException {
-    if (format != BarcodeFormat.ITF) {
-      throw new IllegalArgumentException("Can only encode ITF, but got " + format);
-    }
-
-    return super.encode(contents, format, width, height, hints);
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return Collections.singleton(BarcodeFormat.ITF);
   }
 
   @Override
