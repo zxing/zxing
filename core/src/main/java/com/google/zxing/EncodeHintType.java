@@ -103,6 +103,14 @@ public enum EncodeHintType {
    QR_VERSION,
 
   /**
+   * Specifies the QR code mask pattern to be used. Allowed values are
+   * 0..QRCode.NUM_MASK_PATTERNS-1. By default the code will automatically select
+   * the optimal mask pattern.
+   * * (Type {@link Integer}, or {@link String} representation of the integer value).
+   */
+  QR_MASK_PATTERN,
+
+  /**
    * Specifies whether the data should be encoded to the GS1 standard (type {@link Boolean}, or "true" or "false"
    * {@link String } value).
    */

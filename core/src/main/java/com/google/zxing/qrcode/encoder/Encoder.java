@@ -155,7 +155,17 @@ public final class Encoder {
     //  Choose the mask pattern and set to "qrCode".
     int dimension = version.getDimensionForVersion();
     ByteMatrix matrix = new ByteMatrix(dimension, dimension);
-    int maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+
+    // Enable manual selection of the pattern to be used via hint
+    int maskPattern = -1;
+    if (hints != null && hints.containsKey(EncodeHintType.QR_MASK_PATTERN)) {
+      int hintMaskPattern = Integer.parseInt(hints.get(EncodeHintType.QR_MASK_PATTERN).toString());
+      maskPattern = QRCode.isValidMaskPattern(hintMaskPattern) ? hintMaskPattern : -1;
+    }
+
+    if (maskPattern == -1) {
+      maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+    }
     qrCode.setMaskPattern(maskPattern);
 
     // Build the matrix and set it to "qrCode".
@@ -285,7 +295,7 @@ public final class Encoder {
     }
     throw new WriterException("Data too big");
   }
-  
+
   /**
    * @return true if the number of input bits will fit in a code with the specified version and
    * error correction level.
@@ -317,7 +327,7 @@ public final class Encoder {
     }
     // Append termination bits. See 8.4.8 of JISX0510:2004 (p.24) for details.
     // If the last byte isn't 8-bit aligned, we'll add padding bits.
-    int numBitsInLastByte = bits.getSize() & 0x07;    
+    int numBitsInLastByte = bits.getSize() & 0x07;
     if (numBitsInLastByte > 0) {
       for (int i = numBitsInLastByte; i < 8; i++) {
         bits.appendBit(false);
