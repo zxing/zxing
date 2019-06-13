@@ -163,7 +163,7 @@ public final class Encoder {
       maskPattern = QRCode.isValidMaskPattern(hintMaskPattern) ? hintMaskPattern : -1;
     }
 
-    if(maskPattern == -1) {
+    if (maskPattern == -1) {
       maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
     }
     qrCode.setMaskPattern(maskPattern);
