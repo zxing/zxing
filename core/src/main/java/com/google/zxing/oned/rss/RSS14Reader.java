@@ -164,7 +164,8 @@ public final class RSS14Reader extends AbstractRSSReader {
         (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
 
       if (resultPointCallback != null) {
-        float center = (startEnd[0] + startEnd[1]) / 2.0f;
+        startEnd = pattern.getStartEnd();
+        float center = (startEnd[0] + startEnd[1] - 1) / 2.0f;
         if (right) {
           // row is actually reversed
           center = row.getSize() - 1 - center;
@@ -193,7 +194,7 @@ public final class RSS14Reader extends AbstractRSSReader {
     if (outsideChar) {
       recordPatternInReverse(row, pattern.getStartEnd()[0], counters);
     } else {
-      recordPattern(row, pattern.getStartEnd()[1] + 1, counters);
+      recordPattern(row, pattern.getStartEnd()[1], counters);
       // reverse it
       for (int i = 0, j = counters.length - 1; i < j; i++, j--) {
         int temp = counters[i];
