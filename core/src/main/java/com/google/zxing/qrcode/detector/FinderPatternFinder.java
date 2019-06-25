@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -613,7 +614,7 @@ public class FinderPatternFinder {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    possibleCenters.sort(moduleComparator);
+    Collections.sort(possibleCenters,moduleComparator);
 
     double distortion = Double.MAX_VALUE;
     double[] squares = new double[3];
