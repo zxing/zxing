@@ -161,7 +161,7 @@ final class CameraConfigurationManager {
     CameraConfigurationUtils.setFocus(
         parameters,
         prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
-        prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true),
+        prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, false),
         safeMode);
 
     if (!safeMode) {
