@@ -77,7 +77,7 @@ public final class EncoderTest extends Assert {
         "        X X     X   X X   X   X   X       X X \n" +
         "  X   X   X X       X   X         X X X     X \n");
   }
-  
+
   @Test
   public void testEncode2() {
     testEncode("Aztec Code is a public domain 2D matrix barcode symbology" +
@@ -128,52 +128,50 @@ public final class EncoderTest extends Assert {
 
   @Test
   public void testAztecWriter() throws Exception {
-    for (int i = 0; i < 1000; i++) {
-      testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
-      testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
-      testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
-      testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
-      testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
-      testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
-      // Test AztecWriter defaults
-      String data = "In ut magna vel mauris malesuada";
-      AztecWriter writer = new AztecWriter();
-      BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-      AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1),
-          Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
-      BitMatrix expectedMatrix = aztec.getMatrix();
-      assertEquals(matrix, expectedMatrix);
-    }
+    testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
+    testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
+    testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
+    testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
+    testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
+    testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
+    // Test AztecWriter defaults
+    String data = "In ut magna vel mauris malesuada";
+    AztecWriter writer = new AztecWriter();
+    BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
+    AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1),
+        Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
+    BitMatrix expectedMatrix = aztec.getMatrix();
+    assertEquals(matrix, expectedMatrix);
   }
-  
+
   // synthetic tests (encode-decode round-trip)
 
   @Test
   public void testEncodeDecode1() throws Exception {
     testEncodeDecode("Abc123!", true, 1);
   }
-  
+
   @Test
   public void testEncodeDecode2() throws Exception {
     testEncodeDecode("Lorem ipsum. http://test/", true, 2);
   }
-  
+
   @Test
   public void testEncodeDecode3() throws Exception {
     testEncodeDecode("AAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAANAAAAN", true, 3);
   }
-  
+
   @Test
   public void testEncodeDecode4() throws Exception {
     testEncodeDecode("http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384", true, 4);
   }
-  
+
   @Test
   public void testEncodeDecode5() throws Exception {
     testEncodeDecode("http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384756<>/?abc"
         + "Four score and seven our forefathers brought forth", false, 5);
   }
-  
+
   @Test
   public void testEncodeDecode10() throws Exception {
     testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
@@ -183,7 +181,7 @@ public final class EncoderTest extends Assert {
         " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
         " elementum sapien dolor et diam.", false, 10);
   }
-  
+
   @Test
   public void testEncodeDecode23() throws Exception {
     testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
@@ -307,7 +305,7 @@ public final class EncoderTest extends Assert {
             + "Ygh6utAIgLl1aBVM4EOTQtMQQYH9M2Z3Dp4qnA/fwWuQ+M8L3V8U=",
         823);
   }
-  
+
   @Test
   public void testHighLevelEncodeBinary() {
     // binary short form single byte
@@ -486,7 +484,7 @@ public final class EncoderTest extends Assert {
     assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
     BitMatrix matrix = aztec.getMatrix();
-    AztecDetectorResult r = 
+    AztecDetectorResult r =
         new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     DecoderResult res = new Decoder().decode(r);
     assertEquals(data, res.getText());
@@ -501,10 +499,10 @@ public final class EncoderTest extends Assert {
     assertEquals(data, res.getText());
   }
 
-  private static void testWriter(String data, 
-                                 String charset, 
-                                 int eccPercent, 
-                                 boolean compact, 
+  private static void testWriter(String data,
+                                 String charset,
+                                 int eccPercent,
+                                 boolean compact,
                                  int layers) throws FormatException {
     // 1. Perform an encode-decode round-trip because it can be lossy.
     // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
@@ -520,7 +518,7 @@ public final class EncoderTest extends Assert {
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
     BitMatrix matrix2 = aztec.getMatrix();
     assertEquals(matrix, matrix2);
-    AztecDetectorResult r = 
+    AztecDetectorResult r =
         new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     DecoderResult res = new Decoder().decode(r);
     assertEquals(expectedData, res.getText());
@@ -554,7 +552,7 @@ public final class EncoderTest extends Assert {
   private static void testStuffBits(int wordSize, String bits, String expected) {
     BitArray in = toBitArray(bits);
     BitArray stuffed = Encoder.stuffBits(in, wordSize);
-    assertEquals("stuffBits() failed for input string: " + bits, 
+    assertEquals("stuffBits() failed for input string: " + bits,
                  stripSpace(expected), stripSpace(stuffed.toString()));
   }
 
@@ -585,7 +583,7 @@ public final class EncoderTest extends Assert {
   private static void testHighLevelEncodeString(String s, int expectedReceivedBits) {
     BitArray bits = new HighLevelEncoder(s.getBytes(StandardCharsets.ISO_8859_1)).encode();
     int receivedBitCount = stripSpace(bits.toString()).length();
-    assertEquals("highLevelEncode() failed for input string: " + s, 
+    assertEquals("highLevelEncode() failed for input string: " + s,
                  expectedReceivedBits, receivedBitCount);
     assertEquals(s, Decoder.highLevelDecode(toBooleanArray(bits)));
   }
