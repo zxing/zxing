@@ -77,9 +77,8 @@ public final class UPCEWriter extends UPCEANWriter {
     int checkDigit = Character.digit(contents.charAt(7), 10);
     int parities = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
     boolean[] result = new boolean[CODE_WIDTH];
-    int pos = 0;
 
-    pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
+    int pos = appendPattern(result, 0, UPCEANReader.START_END_PATTERN, true);
 
     for (int i = 1; i <= 6; i++) {
       int digit = Character.digit(contents.charAt(i), 10);

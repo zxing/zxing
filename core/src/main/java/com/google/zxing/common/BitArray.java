@@ -107,7 +107,7 @@ public final class BitArray implements Cloneable {
       currentBits = bits[bitsOffset];
     }
     int result = (bitsOffset * 32) + Integer.numberOfTrailingZeros(currentBits);
-    return result > size ? size : result;
+    return Math.min(result, size);
   }
 
   /**
@@ -130,7 +130,7 @@ public final class BitArray implements Cloneable {
       currentBits = ~bits[bitsOffset];
     }
     int result = (bitsOffset * 32) + Integer.numberOfTrailingZeros(currentBits);
-    return result > size ? size : result;
+    return Math.min(result, size);
   }
 
   /**

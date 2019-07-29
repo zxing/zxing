@@ -52,7 +52,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
                           BarcodeFormat format,
                           int width,
                           int height,
-                          Map<EncodeHintType,?> hints) throws WriterException {
+                          Map<EncodeHintType,?> hints) {
     if (contents.isEmpty()) {
       throw new IllegalArgumentException("Found empty contents");
     }

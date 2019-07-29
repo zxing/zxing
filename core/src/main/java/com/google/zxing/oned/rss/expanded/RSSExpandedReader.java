@@ -40,6 +40,7 @@ import com.google.zxing.oned.rss.FinderPattern;
 import com.google.zxing.oned.rss.RSSUtils;
 import com.google.zxing.oned.rss.expanded.decoders.AbstractExpandedDecoder;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -571,9 +572,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
                                     boolean isOddPattern,
                                     boolean leftChar) throws NotFoundException {
     int[] counters = this.getDataCharacterCounters();
-    for (int x = 0; x < counters.length; x++) {
-      counters[x] = 0;
-    }
+    Arrays.fill(counters, 0);
 
     if (leftChar) {
       recordPatternInReverse(row, pattern.getStartEnd()[0], counters);

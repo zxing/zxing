@@ -237,9 +237,7 @@ public class FinderPatternFinder {
   }
 
   protected final void clearCounts(int[] counts) {
-    for (int x = 0; x < counts.length; x++) {
-      counts[x] = 0;
-    }
+    Arrays.fill(counts, 0);
   }
 
   protected final void shiftCounts2(int[] stateCount) {
@@ -254,7 +252,7 @@ public class FinderPatternFinder {
    * After a vertical and horizontal scan finds a potential finder pattern, this method
    * "cross-cross-cross-checks" by scanning down diagonally through the center of the possible
    * finder pattern to see if the same proportion is detected.
-   * 
+   *
    * @param centerI row where a finder pattern was detected
    * @param centerJ center of the section that appears to cross a finder pattern
    * @return true if proportions are withing expected limits

@@ -25,6 +25,7 @@ import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.detector.MathUtils;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -187,9 +188,7 @@ public final class RSS14Reader extends AbstractRSSReader {
       throws NotFoundException {
 
     int[] counters = getDataCharacterCounters();
-    for (int x = 0; x < counters.length; x++) {
-      counters[x] = 0;
-    }
+    Arrays.fill(counters, 0);
 
     if (outsideChar) {
       recordPatternInReverse(row, pattern.getStartEnd()[0], counters);

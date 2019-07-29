@@ -131,7 +131,7 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
   }
 
   private static int cap(int value, int max) {
-    return value < 2 ? 2 : value > max ? max : value;
+    return value < 2 ? 2 : Math.min(value, max);
   }
 
   /**

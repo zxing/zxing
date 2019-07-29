@@ -60,7 +60,7 @@ public final class PDF417Writer implements Writer {
 
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
-        encoder.setCompact(Boolean.valueOf(hints.get(EncodeHintType.PDF417_COMPACT).toString()));
+        encoder.setCompact(Boolean.parseBoolean(hints.get(EncodeHintType.PDF417_COMPACT).toString()));
       }
       if (hints.containsKey(EncodeHintType.PDF417_COMPACTION)) {
         encoder.setCompaction(Compaction.valueOf(hints.get(EncodeHintType.PDF417_COMPACTION).toString()));
@@ -116,13 +116,7 @@ public final class PDF417Writer implements Writer {
 
     int scaleX = width / originalScale[0].length;
     int scaleY = height / originalScale.length;
-
-    int scale;
-    if (scaleX < scaleY) {
-      scale = scaleX;
-    } else {
-      scale = scaleY;
-    }
+    int scale = Math.min(scaleX, scaleY);
 
     if (scale > 1) {
       byte[][] scaledMatrix =

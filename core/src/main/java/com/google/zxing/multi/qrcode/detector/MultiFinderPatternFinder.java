@@ -126,8 +126,8 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
      * Note: we allow each point to be used for more than one code region: this might seem
      * counterintuitive at first, but the performance penalty is not that big. At this point,
      * we cannot make a good quality decision whether the three finders actually represent
-     * a QR code, or are just by chance layouted so it looks like there might be a QR code there.
-     * So, if the layout seems right, lets have the decoder try to decode.     
+     * a QR code, or are just by chance laid out so it looks like there might be a QR code there.
+     * So, if the layout seems right, lets have the decoder try to decode.
      */
 
      List<FinderPattern[]> results = new ArrayList<>(); // holder for the results

@@ -112,7 +112,7 @@ public final class EncodeActivity extends Activity {
         return false;
     }
   }
-  
+
   private void share() {
     QRCodeEncoder encoder = qrCodeEncoder;
     if (encoder == null) { // Odd
@@ -184,7 +184,7 @@ public final class EncodeActivity extends Activity {
     display.getSize(displaySize);
     int width = displaySize.x;
     int height = displaySize.y;
-    int smallerDimension = width < height ? width : height;
+    int smallerDimension = Math.min(width, height);
     smallerDimension = smallerDimension * 7 / 8;
 
     Intent intent = getIntent();
