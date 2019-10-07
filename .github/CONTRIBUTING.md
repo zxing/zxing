@@ -8,7 +8,7 @@ There is otherwise no development or roadmap for this project.
 Only proposed changes in the form of a pull request are likely to be acted on, but,
 these will be acted on promptly.
 
-### Questions
+### Questions
 
 Questions should be asked on the mailing list:
 https://groups.google.com/forum/#!forum/zxing
@@ -23,7 +23,7 @@ Bug reports must have enough detail to understand and reproduce the problem.
 Bug reports without an associated pull request will generally be closed. 
 However, bug reports with a pull request are likely to be merged promptly.
 
-## Licensing
+## Licensing
 
 Contributions via GitHub pull requests are gladly accepted from their original author.
 Along with any pull requests, please state that the contribution is your original work and
