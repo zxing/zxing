@@ -16,7 +16,7 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <artifactId>javase</artifactId>
   <version>3.4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>com.beust</groupId>
       <artifactId>jcommander</artifactId>
-      <version>1.72</version>
+      <version>1.78</version>
     </dependency>
     <dependency>
       <groupId>com.github.jai-imageio</groupId>

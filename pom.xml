@@ -64,7 +64,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.13-beta-3</version>
+        <version>4.13-rc-2</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
@@ -82,8 +82,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
-    <proguard.version>6.1.1</proguard.version>
-    <proguard.plugin.version>2.1.1</proguard.plugin.version>
+    <android.home>${env.ANDROID_HOME}</android.home>
+    <proguard.version>6.2.0</proguard.version>
+    <proguard.plugin.version>2.2.0</proguard.plugin.version>
     <slf4j.version>1.8.0-beta4</slf4j.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.4.1-SNAPSHOT</zxing.version>
@@ -132,7 +133,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.0.0-M2</version>
+          <version>3.0.0-M3</version>
           <executions>
             <execution>
               <id>enforce</id>
@@ -142,7 +143,7 @@
                   <requireUpperBoundDeps />
                   <dependencyConvergence />
                   <requireMavenVersion>
-                    <version>3.2.5</version>
+                    <version>3.3.9</version>
                   </requireMavenVersion>
                   <requireJavaVersion>
                     <version>${java.version}</version>
@@ -171,7 +172,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
           <executions>
             <execution>
               <id>attach-sources</id>
@@ -233,12 +234,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -325,7 +326,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M3</version>
+          <version>3.0.0-M4</version>
           <configuration>
             <forkCount>0.5C</forkCount>
             <systemPropertyVariables>
@@ -354,7 +355,7 @@
           </executions>
           <configuration>
             <sdk>
-              <path>${env.ANDROID_HOME}</path>
+              <path>${android.home}</path>
               <platform>${android.platform}</platform>
             </sdk>
             <artifactSet>
@@ -463,7 +464,7 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.23</version>
+              <version>8.27</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -526,7 +527,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.4</version>
+          <version>0.8.5</version>
           <executions>
             <execution>
               <goals>
@@ -729,7 +730,7 @@
             <version>${android.platform}</version>
             <scope>system</scope>
             <!-- ANDROID_HOME must be absolute, but redundant leading / may help Gradle Spring Boot plugin -->
-            <systemPath>/${env.ANDROID_HOME}/platforms/android-${android.platform}/android.jar</systemPath>
+            <systemPath>/${android.home}/platforms/android-${android.platform}/android.jar</systemPath>
           </dependency>
         </dependencies>
       </dependencyManagement>
@@ -764,7 +765,7 @@
               <!-- repeat Android jar as library jar, as plugin ignores scope system deps -->
               <proguardOptions>
                 <option>-libraryjars</option>
-                <option>${env.ANDROID_HOME}/platforms/android-${android.platform}/android.jar</option>
+                <option>${android.home}/platforms/android-${android.platform}/android.jar</option>
               </proguardOptions>
               <sign>
                 <debug>false</debug>

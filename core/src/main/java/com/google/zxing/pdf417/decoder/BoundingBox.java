@@ -65,14 +65,14 @@ final class BoundingBox {
 
   BoundingBox(BoundingBox boundingBox) {
     this.image = boundingBox.image;
-    this.topLeft = boundingBox.getTopLeft();
-    this.bottomLeft = boundingBox.getBottomLeft();
-    this.topRight = boundingBox.getTopRight();
-    this.bottomRight = boundingBox.getBottomRight();
-    this.minX = boundingBox.getMinX();
-    this.maxX = boundingBox.getMaxX();
-    this.minY = boundingBox.getMinY();
-    this.maxY = boundingBox.getMaxY();
+    this.topLeft = boundingBox.topLeft;
+    this.bottomLeft = boundingBox.bottomLeft;
+    this.topRight = boundingBox.topRight;
+    this.bottomRight = boundingBox.bottomRight;
+    this.minX = boundingBox.minX;
+    this.maxX = boundingBox.maxX;
+    this.minY = boundingBox.minY;
+    this.maxY = boundingBox.maxY;
   }
 
   static BoundingBox merge(BoundingBox leftBox, BoundingBox rightBox) throws NotFoundException {

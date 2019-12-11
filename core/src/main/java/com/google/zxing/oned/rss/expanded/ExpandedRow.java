@@ -61,7 +61,7 @@ final class ExpandedRow {
       return false;
     }
     ExpandedRow that = (ExpandedRow) o;
-    return this.pairs.equals(that.getPairs()) && wasReversed == that.wasReversed;
+    return this.pairs.equals(that.pairs) && wasReversed == that.wasReversed;
   }
 
   @Override

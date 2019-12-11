@@ -235,7 +235,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
     int[] stateCount = new int[5];
     for (int i = iSkip - 1; i < maxI; i += iSkip) {
       // Get a row of black/white values
-      clearCounts(stateCount);
+      doClearCounts(stateCount);
       int currentState = 0;
       for (int j = 0; j < maxJ; j++) {
         if (image.get(j, i)) {
@@ -250,9 +250,9 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
               if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j)) { // Yes
                 // Clear state to start looking again
                 currentState = 0;
-                clearCounts(stateCount);
+                doClearCounts(stateCount);
               } else { // No, shift counts back by two
-                shiftCounts2(stateCount);
+                doShiftCounts2(stateCount);
                 currentState = 3;
               }
             } else {

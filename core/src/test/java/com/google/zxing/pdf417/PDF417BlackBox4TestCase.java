@@ -51,7 +51,7 @@ import java.util.logging.Logger;
 /**
  * This class tests Macro PDF417 barcode specific functionality. It ensures that information, which is split into
  * several barcodes can be properly combined again to yield the original data content.
- * 
+ *
  * @author Guenther Grau
  */
 public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
@@ -69,10 +69,6 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   @Test
   @Override
   public void testBlackBox() throws IOException {
-    testPDF417BlackBoxCountingResults(true);
-  }
-
-  private void testPDF417BlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     Map<String,List<Path>> imageFiles = getImageFileLists();
@@ -157,13 +153,11 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     }
 
     // Then run through again and assert if any failed
-    if (assertOnFailure) {
-      for (int x = 0; x < testCount; x++) {
-        TestResult testResult = testResults.get(x);
-        String label = "Rotation " + testResult.getRotation() + " degrees: Too many images failed";
-        assertTrue(label, passedCounts[x] >= testResult.getMustPassCount());
-        assertTrue("Try harder, " + label, tryHarderCounts[x] >= testResult.getTryHarderCount());
-      }
+    for (int x = 0; x < testCount; x++) {
+      TestResult testResult = testResults.get(x);
+      String label = "Rotation " + testResult.getRotation() + " degrees: Too many images failed";
+      assertTrue(label, passedCounts[x] >= testResult.getMustPassCount());
+      assertTrue("Try harder, " + label, tryHarderCounts[x] >= testResult.getTryHarderCount());
     }
   }
 

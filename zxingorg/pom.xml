@@ -39,7 +39,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>27.1-android</version>
+      <version>28.1-android</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>5.1.8.RELEASE</version>
+      <version>5.2.2.RELEASE</version>
       <scope>test</scope>
     </dependency>
     <dependency>

@@ -577,7 +577,7 @@ public final class Detector {
     private final int y;
 
     ResultPoint toResultPoint() {
-      return new ResultPoint(getX(), getY());
+      return new ResultPoint(x, y);
     }
 
     Point(int x, int y) {

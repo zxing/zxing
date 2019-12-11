@@ -125,14 +125,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     return barcodeReader;
   }
 
-  // This workaround is used because AbstractNegativeBlackBoxTestCase overrides this method but does
-  // not return SummaryResults.
   @Test
   public void testBlackBox() throws IOException {
-    testBlackBoxCountingResults(true);
-  }
-
-  private void testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     List<Path> imageFiles = getImageFiles();
@@ -235,20 +229,18 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     }
 
     // Then run through again and assert if any failed
-    if (assertOnFailure) {
-      for (int x = 0; x < testCount; x++) {
-        TestResult testResult = testResults.get(x);
-        String label = "Rotation " + testResult.getRotation() + " degrees: Too many images failed";
-        assertTrue(label,
-                   passedCounts[x] >= testResult.getMustPassCount());
-        assertTrue("Try harder, " + label,
-                   tryHarderCounts[x] >= testResult.getTryHarderCount());
-        label = "Rotation " + testResult.getRotation() + " degrees: Too many images misread";
-        assertTrue(label,
-                   misreadCounts[x] <= testResult.getMaxMisreads());
-        assertTrue("Try harder, " + label,
-                   tryHarderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
-      }
+    for (int x = 0; x < testCount; x++) {
+      TestResult testResult = testResults.get(x);
+      String label = "Rotation " + testResult.getRotation() + " degrees: Too many images failed";
+      assertTrue(label,
+                 passedCounts[x] >= testResult.getMustPassCount());
+      assertTrue("Try harder, " + label,
+                 tryHarderCounts[x] >= testResult.getTryHarderCount());
+      label = "Rotation " + testResult.getRotation() + " degrees: Too many images misread";
+      assertTrue(label,
+                 misreadCounts[x] <= testResult.getMaxMisreads());
+      assertTrue("Try harder, " + label,
+                 tryHarderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
     }
   }
 

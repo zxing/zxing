@@ -196,8 +196,7 @@ public final class BitMatrix implements Cloneable {
    * @param mask XOR mask
    */
   public void xor(BitMatrix mask) {
-    if (width != mask.getWidth() || height != mask.getHeight()
-        || rowSize != mask.getRowSize()) {
+    if (width != mask.width || height != mask.height || rowSize != mask.rowSize) {
       throw new IllegalArgumentException("input matrix dimensions do not match");
     }
     BitArray rowArray = new BitArray(width);
@@ -281,17 +280,17 @@ public final class BitMatrix implements Cloneable {
    * Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
    */
   public void rotate180() {
-    int width = getWidth();
-    int height = getHeight();
     BitArray topRow = new BitArray(width);
     BitArray bottomRow = new BitArray(width);
-    for (int i = 0; i < (height + 1) / 2; i++) {
+    int maxHeight = (height + 1) / 2;
+    for (int i = 0; i < maxHeight; i++) {
       topRow = getRow(i, topRow);
-      bottomRow = getRow(height - 1 - i, bottomRow);
+      int bottomRowIndex = height - 1 - i;
+      bottomRow = getRow(bottomRowIndex, bottomRow);
       topRow.reverse();
       bottomRow.reverse();
       setRow(i, bottomRow);
-      setRow(height - 1 - i, topRow);
+      setRow(bottomRowIndex, topRow);
     }
   }
 
