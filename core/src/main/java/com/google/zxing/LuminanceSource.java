@@ -74,11 +74,11 @@ public abstract class LuminanceSource {
   }
 
   /**
-   * @return Whether this subclass supports cropping.
-   */
-  public boolean isCropSupported() {
-    return false;
-  }
+ * @return  Whether this subclass supports cropping.
+ */
+public static boolean isCropSupported() {
+	return false;
+}
 
   /**
    * Returns a new object with cropped image data. Implementations may keep a reference to the
