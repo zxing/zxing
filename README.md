@@ -16,15 +16,15 @@ library implemented in Java, with ports to other languages.
 
 ## Supported Formats
 
-| 1D product | 1D industrial | 2D             |
-|:-----------|:--------------|:---------------|
-| UPC-A      | Code 39       | QR Code        |
-| UPC-E      | Code 93       | Data Matrix    |
-| EAN-8      | Code 128      | Aztec (beta)   |
-| EAN-13     | Codabar       | PDF 417 (beta) |
-|            | ITF           | MaxiCode       |
-|            |               | RSS-14         |
-|            |               | RSS-Expanded   |
+| 1D product            | 1D industrial | 2D             |
+|:----------------------|:--------------|:---------------|
+| UPC-A                 | Code 39       | QR Code        |
+| UPC-E                 | Code 93       | Data Matrix    |
+| EAN-8                 | Code 128      | Aztec (beta)   |
+| EAN-13                | Codabar       | PDF 417 (beta) |
+| UPC/EAN Extension 2/5 | ITF           | MaxiCode       |
+|                       |               | RSS-14         |
+|                       |               | RSS-Expanded   |
 
 ## Components
 
