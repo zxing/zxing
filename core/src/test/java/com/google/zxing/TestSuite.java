@@ -20,7 +20,7 @@ public class TestSuite extends TestCase {
   public static void setup() {
     CoverageTool2000.initCoverageMatrix(0, 24);
     CoverageTool2000.initCoverageMatrix(1, 18);
-    CoverageTool2000.initCoverageMatrix(5, TODO);
+    CoverageTool2000.initCoverageMatrix(5, 51);
   }
   /**
    * One time teardown after all the tests are run.
