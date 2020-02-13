@@ -9,6 +9,7 @@ public class CoverageTool2000 {
 
   /**
    * Initializes the coverageMatrix with false values for a specific method.
+   *
    * @param methodID
    * @param length
    */
@@ -19,28 +20,29 @@ public class CoverageTool2000 {
 
   /**
    * Checks the total coverage for a given method
+   *
    * @param methodID
-   * @return double - ratio between not visited and total number visited of branches.
+   * @return double - ratio between visited branches and total number of branches.
    */
   public static double checkCoverage(int methodID) {
     int length = coverageMatrix[methodID].length;
-    int countFalse = 0;
+    int countTrue = 0;
     for (int i = 0; i < length; i++) {
-      if (coverageMatrix[methodID][i] == false) {
-        countFalse++;
+      if (coverageMatrix[methodID][i] == true) {
+        countTrue++;
       }
     }
-    return (double) countFalse / length;
+    return (double) countTrue / length;
   }
 
   /**
    * Sets the coverageMatrix to true for a specific method and branch.
+   *
    * @param methodID
    * @param branchID
    */
   public static void setCoverageMatrix(int methodID, int branchID) {
     coverageMatrix[methodID][branchID] = true;
   }
-
-
+  
 }
