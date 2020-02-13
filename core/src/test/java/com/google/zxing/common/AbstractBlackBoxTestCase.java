@@ -49,15 +49,6 @@ import java.util.logging.Logger;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public abstract class AbstractBlackBoxTestCase extends Assert {
-  @BeforeClass
-  public static void setUp(){
-    if (CoverageTool2000.setUpIsDone) {
-      return;
-    }
-    CoverageTool2000.initCoverageMatrix(0,24);
-    CoverageTool2000.initCoverageMatrix(1,13);
-    CoverageTool2000.setUpIsDone = true;
-  }
   private static final Logger log = Logger.getLogger(AbstractBlackBoxTestCase.class.getSimpleName());
 
   private final Path testBase;
@@ -349,9 +340,5 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
 
     return op.filter(original, new BufferedImage(width, height, original.getType()));
-  }
-  @After
-  public void print2(){
-    System.out.println(CoverageTool2000.checkCoverage(1));
   }
 }

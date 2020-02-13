@@ -29,23 +29,10 @@ import org.w3c.dom.ls.LSOutput;
  */
 public final class RSS14BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
-  @BeforeClass
-  public static void setUp(){
-    if (CoverageTool2000.setUpIsDone) {
-      return;
-    }
-    CoverageTool2000.initCoverageMatrix(1,13);
-    CoverageTool2000.initCoverageMatrix(0,24);
-    CoverageTool2000.setUpIsDone = true;
-  }
   public RSS14BlackBox1TestCase() {
     super("src/test/resources/blackbox/rss14-1", new MultiFormatReader(), BarcodeFormat.RSS_14);
     addTest(6, 6, 0.0f);
     addTest(6, 6, 180.0f);
-  }
-  @After
-  public void print2(){
-    System.out.println(CoverageTool2000.checkCoverage(1));
   }
 }
 

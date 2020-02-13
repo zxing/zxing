@@ -32,12 +32,11 @@ public class CoverageTool2000 {
     int length = coverageMatrix[methodID].length;
     int countTrue = 0;
     for (int i = 0; i < length; i++) {
-      if (coverageMatrix[methodID][i] == true) {
+      if (coverageMatrix[methodID][i]) {
         countTrue++;
       }
     }
-    allCoverage[methodID] = Math.round(((double) countTrue / length)*100d)/100d;
-    return (double) countTrue / length;
+    return Math.round(((double) countTrue / length) * 100d) / 100d;
   }
 
   /**
@@ -51,8 +50,10 @@ public class CoverageTool2000 {
   }
 
 
-  public static void checkAllCoverage() {
-    System.out.println("1: " + allCoverage[0] + " 2: " + allCoverage[1] + " 3: " + allCoverage[2] + " 4: " + allCoverage[3] + " 5: " + allCoverage[4]);
-    System.out.println("6: " + allCoverage[5] + " 7: " + allCoverage[6] + " 8: " + allCoverage[7] + " 9: " + allCoverage[8] + " 10: " + allCoverage[9]);
+  public static void checkAllCoverage(int nrTest) {
+    for (int i = 0; i < nrTest;i++) {
+      System.out.println("Method " + i + " - Coverage: " + checkCoverage(i));
+    }
+
   }
 }
