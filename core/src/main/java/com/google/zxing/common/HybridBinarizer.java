@@ -20,6 +20,8 @@ import com.google.zxing.Binarizer;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.NotFoundException;
 
+import com.google.zxing.CoverageTool2000;
+
 /**
  * This class implements a local thresholding algorithm, which while slower than the
  * GlobalHistogramBinarizer, is fairly efficient for what it does. It is designed for
@@ -169,12 +171,17 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
     for (int y = 0; y < subHeight; y++) {
       int yoffset = y << BLOCK_SIZE_POWER;
       if (yoffset > maxYOffset) {
+        CoverageTool2000.setCoverageMatrix(4, 0);
         yoffset = maxYOffset;
+      } else {
+        CoverageTool2000.setCoverageMatrix(4, 1);
       }
       for (int x = 0; x < subWidth; x++) {
         int xoffset = x << BLOCK_SIZE_POWER;
         if (xoffset > maxXOffset) {
           xoffset = maxXOffset;
+        } else {
+          CoverageTool2000.setCoverageMatrix(4, 2);
         }
         int sum = 0;
         int min = 0xFF;
@@ -186,9 +193,14 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
             // still looking for good contrast
             if (pixel < min) {
               min = pixel;
+              CoverageTool2000.setCoverageMatrix(4, 3);
+            } else {
+              CoverageTool2000.setCoverageMatrix(4, 4);
             }
             if (pixel > max) {
               max = pixel;
+            } else {
+              CoverageTool2000.setCoverageMatrix(4, 5);
             }
           }
           // short-circuit min/max tests once dynamic range is met
@@ -199,6 +211,8 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
                 sum += luminances[offset + xx] & 0xFF;
               }
             }
+          } else {
+            CoverageTool2000.setCoverageMatrix(4, 6);
           }
         }
 
@@ -225,8 +239,14 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
                 (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) + blackPoints[y - 1][x - 1]) / 4;
             if (min < averageNeighborBlackPoint) {
               average = averageNeighborBlackPoint;
+            } else {
+              CoverageTool2000.setCoverageMatrix(4, 7);
             }
+          } else {
+            CoverageTool2000.setCoverageMatrix(4, 8);
           }
+        } else {
+          CoverageTool2000.setCoverageMatrix(4, 9);
         }
         blackPoints[y][x] = average;
       }
