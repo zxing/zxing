@@ -16,13 +16,7 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Result;
-import com.google.zxing.ResultPoint;
+import com.google.zxing.*;
 import com.google.zxing.common.BitArray;
 
 import java.util.Arrays;
@@ -270,56 +264,78 @@ public final class Code39Reader extends OneDReader {
     int length = encoded.length();
     StringBuilder decoded = new StringBuilder(length);
     for (int i = 0; i < length; i++) {
+      CoverageTool2000.setCoverageMatrix(0,0);
       char c = encoded.charAt(i);
       if (c == '+' || c == '$' || c == '%' || c == '/') {
+        CoverageTool2000.setCoverageMatrix(0,1);
         char next = encoded.charAt(i + 1);
         char decodedChar = '\0';
         switch (c) {
           case '+':
+            CoverageTool2000.setCoverageMatrix(0,2);
             // +A to +Z map to a to z
             if (next >= 'A' && next <= 'Z') {
+              CoverageTool2000.setCoverageMatrix(0,3);
               decodedChar = (char) (next + 32);
             } else {
+              CoverageTool2000.setCoverageMatrix(0,4);
               throw FormatException.getFormatInstance();
             }
             break;
           case '$':
+            CoverageTool2000.setCoverageMatrix(0,5);
             // $A to $Z map to control codes SH to SB
             if (next >= 'A' && next <= 'Z') {
+              CoverageTool2000.setCoverageMatrix(0,6);
               decodedChar = (char) (next - 64);
             } else {
+              CoverageTool2000.setCoverageMatrix(0,7);
               throw FormatException.getFormatInstance();
             }
             break;
           case '%':
+            CoverageTool2000.setCoverageMatrix(0,8);
             // %A to %E map to control codes ESC to US
             if (next >= 'A' && next <= 'E') {
+              CoverageTool2000.setCoverageMatrix(0,9);
               decodedChar = (char) (next - 38);
             } else if (next >= 'F' && next <= 'J') {
+              CoverageTool2000.setCoverageMatrix(0,10);
               decodedChar = (char) (next - 11);
             } else if (next >= 'K' && next <= 'O') {
+              CoverageTool2000.setCoverageMatrix(0,11);
               decodedChar = (char) (next + 16);
             } else if (next >= 'P' && next <= 'T') {
+              CoverageTool2000.setCoverageMatrix(0,12);
               decodedChar = (char) (next + 43);
             } else if (next == 'U') {
+              CoverageTool2000.setCoverageMatrix(0,13);
               decodedChar = (char) 0;
             } else if (next == 'V') {
+              CoverageTool2000.setCoverageMatrix(0,14);
               decodedChar = '@';
             } else if (next == 'W') {
+              CoverageTool2000.setCoverageMatrix(0,15);
               decodedChar = '`';
             } else if (next == 'X' || next == 'Y' || next == 'Z') {
+              CoverageTool2000.setCoverageMatrix(0,16);
               decodedChar = (char) 127;
             } else {
+              CoverageTool2000.setCoverageMatrix(0,17);
               throw FormatException.getFormatInstance();
             }
             break;
           case '/':
+            CoverageTool2000.setCoverageMatrix(0,18);
             // /A to /O map to ! to , and /Z maps to :
             if (next >= 'A' && next <= 'O') {
+              CoverageTool2000.setCoverageMatrix(0,19);
               decodedChar = (char) (next - 32);
             } else if (next == 'Z') {
+              CoverageTool2000.setCoverageMatrix(0,20);
               decodedChar = ':';
             } else {
+              CoverageTool2000.setCoverageMatrix(0,21);
               throw FormatException.getFormatInstance();
             }
             break;
@@ -328,6 +344,7 @@ public final class Code39Reader extends OneDReader {
         // bump up i again since we read two characters
         i++;
       } else {
+        CoverageTool2000.setCoverageMatrix(0,22);
         decoded.append(c);
       }
     }
