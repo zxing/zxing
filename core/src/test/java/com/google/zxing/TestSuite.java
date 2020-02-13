@@ -1,5 +1,7 @@
 package com.google.zxing;
 
+import com.google.zxing.aztec.encoder.EncoderTest;
+import com.google.zxing.oned.CodaBarWriterTestCase;
 import com.google.zxing.oned.Code39ExtendedBlackBox2TestCase;
 import com.google.zxing.oned.Code39ExtendedModeTestCase;
 import junit.framework.TestCase;
@@ -11,8 +13,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-
-@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, StringUtilsTestCase.class, DetectorTest.class})
+@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, CodaBarWriterTestCase.class, EncoderTest.class, StringUtilsTestCase.class, DetectorTest.class})
 
 public class TestSuite extends TestCase {
   /**
@@ -23,8 +24,12 @@ public class TestSuite extends TestCase {
     CoverageTool2000.initCoverageMatrix(0, 23);
     CoverageTool2000.initCoverageMatrix(1, 18);
     CoverageTool2000.initCoverageMatrix(2, 12);
+    CoverageTool2000.initCoverageMatrix(3,26);
+    
     CoverageTool2000.initCoverageMatrix(5, 51);
     CoverageTool2000.initCoverageMatrix(6, 30);
+    CoverageTool2000.initCoverageMatrix(7,26);
+
   }
   /**
    * One time teardown after all the tests are run.

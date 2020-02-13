@@ -16,6 +16,7 @@
 
 package com.google.zxing.aztec.encoder;
 
+import com.google.zxing.CoverageTool2000;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.reedsolomon.GenericGF;
@@ -62,6 +63,7 @@ public final class Encoder {
    */
   public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers) {
     // High-level encode
+
     BitArray bits = new HighLevelEncoder(data).encode();
 
     // stuff bits and choose symbol size
@@ -73,24 +75,31 @@ public final class Encoder {
     int wordSize;
     BitArray stuffedBits;
     if (userSpecifiedLayers != DEFAULT_AZTEC_LAYERS) {
+      CoverageTool2000.setCoverageMatrix(7, 0);
       compact = userSpecifiedLayers < 0;
       layers = Math.abs(userSpecifiedLayers);
       if (layers > (compact ? MAX_NB_BITS_COMPACT : MAX_NB_BITS)) {
+        CoverageTool2000.setCoverageMatrix(7, 1);
         throw new IllegalArgumentException(
             String.format("Illegal value %s for layers", userSpecifiedLayers));
       }
+      CoverageTool2000.setCoverageMatrix(7, 2);
       totalBitsInLayer = totalBitsInLayer(layers, compact);
       wordSize = WORD_SIZE[layers];
       int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
       stuffedBits = stuffBits(bits, wordSize);
       if (stuffedBits.getSize() + eccBits > usableBitsInLayers) {
+        CoverageTool2000.setCoverageMatrix(7, 3);
         throw new IllegalArgumentException("Data to large for user specified layer");
       }
+      CoverageTool2000.setCoverageMatrix(7, 4);
       if (compact && stuffedBits.getSize() > wordSize * 64) {
+        CoverageTool2000.setCoverageMatrix(7, 5);
         // Compact format only allows 64 data words, though C4 can hold more words than that
         throw new IllegalArgumentException("Data to large for user specified layer");
       }
     } else {
+      CoverageTool2000.setCoverageMatrix(7, 6);
       wordSize = 0;
       stuffedBits = null;
       // We look at the possible table sizes in the order Compact1, Compact2, Compact3,
@@ -98,27 +107,41 @@ public final class Encoder {
       // is the same size, but has more data.
       for (int i = 0; ; i++) {
         if (i > MAX_NB_BITS) {
+          CoverageTool2000.setCoverageMatrix(7, 7);
           throw new IllegalArgumentException("Data too large for an Aztec code");
         }
+        CoverageTool2000.setCoverageMatrix(7, 8);
         compact = i <= 3;
         layers = compact ? i + 1 : i;
         totalBitsInLayer = totalBitsInLayer(layers, compact);
         if (totalSizeBits > totalBitsInLayer) {
+          CoverageTool2000.setCoverageMatrix(7, 9);
           continue;
+        }else{
+          CoverageTool2000.setCoverageMatrix(7, 10);
         }
         // [Re]stuff the bits if this is the first opportunity, or if the
         // wordSize has changed
         if (stuffedBits == null || wordSize != WORD_SIZE[layers]) {
+          CoverageTool2000.setCoverageMatrix(7, 11);
           wordSize = WORD_SIZE[layers];
           stuffedBits = stuffBits(bits, wordSize);
+        } else{
+          CoverageTool2000.setCoverageMatrix(7, 12);
         }
         int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
         if (compact && stuffedBits.getSize() > wordSize * 64) {
+          CoverageTool2000.setCoverageMatrix(7, 13);
           // Compact format only allows 64 data words, though C4 can hold more words than that
           continue;
+        } else{
+          CoverageTool2000.setCoverageMatrix(7, 14);
         }
         if (stuffedBits.getSize() + eccBits <= usableBitsInLayers) {
+          CoverageTool2000.setCoverageMatrix(7, 15);
           break;
+        }else {
+          CoverageTool2000.setCoverageMatrix(7, 16);
         }
       }
     }
@@ -133,12 +156,14 @@ public final class Encoder {
     int[] alignmentMap = new int[baseMatrixSize];
     int matrixSize;
     if (compact) {
+      CoverageTool2000.setCoverageMatrix(7, 17);
       // no alignment marks in compact mode, alignmentMap is a no-op
       matrixSize = baseMatrixSize;
       for (int i = 0; i < alignmentMap.length; i++) {
         alignmentMap[i] = i;
       }
     } else {
+      CoverageTool2000.setCoverageMatrix(7, 18);
       matrixSize = baseMatrixSize + 1 + 2 * ((baseMatrixSize / 2 - 1) / 15);
       int origCenter = baseMatrixSize / 2;
       int center = matrixSize / 2;
@@ -157,16 +182,28 @@ public final class Encoder {
         int columnOffset = j * 2;
         for (int k = 0; k < 2; k++) {
           if (messageBits.get(rowOffset + columnOffset + k)) {
+            CoverageTool2000.setCoverageMatrix(7, 19);
             matrix.set(alignmentMap[i * 2 + k], alignmentMap[i * 2 + j]);
+          }else{
+            CoverageTool2000.setCoverageMatrix(7, 20);
           }
           if (messageBits.get(rowOffset + rowSize * 2 + columnOffset + k)) {
+            CoverageTool2000.setCoverageMatrix(7, 21);
             matrix.set(alignmentMap[i * 2 + j], alignmentMap[baseMatrixSize - 1 - i * 2 - k]);
+          }else{
+            CoverageTool2000.setCoverageMatrix(7, 22);
           }
           if (messageBits.get(rowOffset + rowSize * 4 + columnOffset + k)) {
+            CoverageTool2000.setCoverageMatrix(7, 23);
             matrix.set(alignmentMap[baseMatrixSize - 1 - i * 2 - k], alignmentMap[baseMatrixSize - 1 - i * 2 - j]);
+          }else{
+            CoverageTool2000.setCoverageMatrix(7, 24);
           }
           if (messageBits.get(rowOffset + rowSize * 6 + columnOffset + k)) {
+            CoverageTool2000.setCoverageMatrix(7, 25);
             matrix.set(alignmentMap[baseMatrixSize - 1 - i * 2 - j], alignmentMap[i * 2 + k]);
+          }else{
+
           }
         }
       }
@@ -178,8 +215,10 @@ public final class Encoder {
 
     // draw alignment marks
     if (compact) {
+      CoverageTool2000.setCoverageMatrix(7, 0);
       drawBullsEye(matrix, matrixSize / 2, 5);
     } else {
+      CoverageTool2000.setCoverageMatrix(7, 0);
       drawBullsEye(matrix, matrixSize / 2, 7);
       for (int i = 0, j = 0; i < baseMatrixSize / 2 - 1; i += 15, j += 16) {
         for (int k = (matrixSize / 2) & 1; k < matrixSize; k += 2) {
