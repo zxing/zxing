@@ -43,9 +43,6 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
   @Override
   public boolean[] encode(String contents) {
 
-    CoverageTool2000.initCoverageMatrix(3,25);
-
-
 
     if (contents.length() < 2) {
       CoverageTool2000.setCoverageMatrix(3, 0);

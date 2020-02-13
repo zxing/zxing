@@ -1,6 +1,8 @@
 package com.google.zxing;
-import com.google.zxing.common.AbstractBlackBoxTestCase;
+import com.google.zxing.aztec.detector.DetectorTest;
 import com.google.zxing.aztec.encoder.EncoderTest;
+import com.google.zxing.common.StringUtilsTestCase;
+import com.google.zxing.multi.MultiTestCase;
 import com.google.zxing.oned.CodaBarWriterTestCase;
 import com.google.zxing.oned.Code39ExtendedBlackBox2TestCase;
 import com.google.zxing.oned.Code39ExtendedModeTestCase;
@@ -15,8 +17,9 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, CodaBarWriterTestCase.class, EncoderTest.class, StringUtilsTestCase.class, DetectorTest.class,
-               RSS14BlackBox1TestCase.class, RSS14BlackBox2TestCase.class, MultiTestCase.class})
+@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, CodaBarWriterTestCase.class,
+ EncoderTest.class, StringUtilsTestCase.class, DetectorTest.class, RSS14BlackBox1TestCase.class,
+ RSS14BlackBox2TestCase.class, MultiTestCase.class})
 
 public class TestSuite extends TestCase {
   /**
@@ -39,6 +42,6 @@ public class TestSuite extends TestCase {
    */
   @AfterClass
   public static void teardown() {
-    CoverageTool2000.checkAllCoverage(3);
+    CoverageTool2000.checkAllCoverage(8);
   }
 }
