@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class})
+@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, StringUtilsTestCase.class})
 public class TestSuite extends TestCase {
   /**
    * One time setup before the tests are run.
