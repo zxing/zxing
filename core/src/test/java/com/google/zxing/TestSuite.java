@@ -11,7 +11,9 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, DetectorTest.class})
+
+@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, StringUtilsTestCase.class, DetectorTest.class})
+
 public class TestSuite extends TestCase {
   /**
    * One time setup before the tests are run.
@@ -20,6 +22,8 @@ public class TestSuite extends TestCase {
   public static void setup() {
     CoverageTool2000.initCoverageMatrix(0, 24);
     CoverageTool2000.initCoverageMatrix(1, 18);
+    CoverageTool2000.initCoverageMatrix(2, 12);
+    CoverageTool2000.initCoverageMatrix(5, 51);
     CoverageTool2000.initCoverageMatrix(6, 30);
   }
   /**
