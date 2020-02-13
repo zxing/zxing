@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 
-@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, StringUtilsTestCase.class, DecoderTest.class})
+@SuiteClasses({Code39ExtendedModeTestCase.class, Code39ExtendedBlackBox2TestCase.class, StringUtilsTestCase.class, DetectorTest.class})
 
 public class TestSuite extends TestCase {
   /**
@@ -24,6 +24,7 @@ public class TestSuite extends TestCase {
     CoverageTool2000.initCoverageMatrix(1, 18);
     CoverageTool2000.initCoverageMatrix(2, 12);
     CoverageTool2000.initCoverageMatrix(5, 51);
+    CoverageTool2000.initCoverageMatrix(6, 30);
   }
   /**
    * One time teardown after all the tests are run.

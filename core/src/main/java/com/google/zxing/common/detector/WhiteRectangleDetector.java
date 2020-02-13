@@ -20,6 +20,8 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 
+import com.google.zxing.CoverageTool2000;
+
 /**
  * <p>
  * Detects a candidate barcode-like rectangular region within an image. It
@@ -107,18 +109,24 @@ public final class WhiteRectangleDetector {
       while ((rightBorderNotWhite || !atLeastOneBlackPointFoundOnRight) && right < width) {
         rightBorderNotWhite = containsBlackPoint(up, down, right, false);
         if (rightBorderNotWhite) {
+          ConverageTool2000.setCoverageMatrix(6, 0);
           right++;
           aBlackPointFoundOnBorder = true;
           atLeastOneBlackPointFoundOnRight = true;
         } else if (!atLeastOneBlackPointFoundOnRight) {
+          ConverageTool2000.setCoverageMatrix(6, 1);
           right++;
+        } else {
+          ConverageTool2000.setCoverageMatrix(6, 2);
         }
       }
 
       if (right >= width) {
+        ConverageTool2000.setCoverageMatrix(6, 3);
         sizeExceeded = true;
         break;
       }
+      ConverageTool2000.setCoverageMatrix(6, 4);
 
       // .....
       // .   .
@@ -127,18 +135,24 @@ public final class WhiteRectangleDetector {
       while ((bottomBorderNotWhite || !atLeastOneBlackPointFoundOnBottom) && down < height) {
         bottomBorderNotWhite = containsBlackPoint(left, right, down, true);
         if (bottomBorderNotWhite) {
+          ConverageTool2000.setCoverageMatrix(6, 5);
           down++;
           aBlackPointFoundOnBorder = true;
           atLeastOneBlackPointFoundOnBottom = true;
         } else if (!atLeastOneBlackPointFoundOnBottom) {
+          ConverageTool2000.setCoverageMatrix(6, 6);
           down++;
+        } else {
+          ConverageTool2000.setCoverageMatrix(6, 7);
         }
       }
 
       if (down >= height) {
+        ConverageTool2000.setCoverageMatrix(6, 8);
         sizeExceeded = true;
         break;
       }
+      ConverageTool2000.setCoverageMatrix(6, 9);
 
       // .....
       // |   .
@@ -147,19 +161,24 @@ public final class WhiteRectangleDetector {
       while ((leftBorderNotWhite || !atLeastOneBlackPointFoundOnLeft) && left >= 0) {
         leftBorderNotWhite = containsBlackPoint(up, down, left, false);
         if (leftBorderNotWhite) {
+          ConverageTool2000.setCoverageMatrix(6, 10);
           left--;
           aBlackPointFoundOnBorder = true;
           atLeastOneBlackPointFoundOnLeft = true;
         } else if (!atLeastOneBlackPointFoundOnLeft) {
+          ConverageTool2000.setCoverageMatrix(6, 11);
           left--;
+        } else {
+          ConverageTool2000.setCoverageMatrix(6, 12);
         }
       }
 
       if (left < 0) {
+        ConverageTool2000.setCoverageMatrix(6, 13);
         sizeExceeded = true;
         break;
       }
-
+      ConverageTool2000.setCoverageMatrix(6, 14);
       // .___.
       // .   .
       // .....
@@ -167,22 +186,28 @@ public final class WhiteRectangleDetector {
       while ((topBorderNotWhite || !atLeastOneBlackPointFoundOnTop) && up >= 0) {
         topBorderNotWhite = containsBlackPoint(left, right, up, true);
         if (topBorderNotWhite) {
+          ConverageTool2000.setCoverageMatrix(6, 15);
           up--;
           aBlackPointFoundOnBorder = true;
           atLeastOneBlackPointFoundOnTop = true;
         } else if (!atLeastOneBlackPointFoundOnTop) {
+          ConverageTool2000.setCoverageMatrix(6, 16);
           up--;
+        } else {
+          ConverageTool2000.setCoverageMatrix(6, 17);
         }
       }
 
       if (up < 0) {
+        ConverageTool2000.setCoverageMatrix(6, 18);
         sizeExceeded = true;
         break;
       }
-
+      ConverageTool2000.setCoverageMatrix(6, 19);
     }
 
     if (!sizeExceeded) {
+      ConverageTool2000.setCoverageMatrix(6, 20);
 
       int maxSize = right - left;
 
@@ -192,8 +217,10 @@ public final class WhiteRectangleDetector {
       }
 
       if (z == null) {
+        ConverageTool2000.setCoverageMatrix(6, 21);
         throw NotFoundException.getNotFoundInstance();
       }
+      ConverageTool2000.setCoverageMatrix(6, 22);
 
       ResultPoint t = null;
       //go down right
@@ -202,8 +229,10 @@ public final class WhiteRectangleDetector {
       }
 
       if (t == null) {
+        ConverageTool2000.setCoverageMatrix(6, 23);
         throw NotFoundException.getNotFoundInstance();
       }
+      ConverageTool2000.setCoverageMatrix(6, 24);
 
       ResultPoint x = null;
       //go down left
@@ -212,8 +241,10 @@ public final class WhiteRectangleDetector {
       }
 
       if (x == null) {
+        ConverageTool2000.setCoverageMatrix(6, 25);
         throw NotFoundException.getNotFoundInstance();
       }
+      ConverageTool2000.setCoverageMatrix(6, 26);
 
       ResultPoint y = null;
       //go up left
@@ -222,12 +253,15 @@ public final class WhiteRectangleDetector {
       }
 
       if (y == null) {
+        ConverageTool2000.setCoverageMatrix(6, 27);
         throw NotFoundException.getNotFoundInstance();
       }
+      ConverageTool2000.setCoverageMatrix(6, 28);
 
       return centerEdges(y, z, x, t);
 
     } else {
+      ConverageTool2000.setCoverageMatrix(6, 29);
       throw NotFoundException.getNotFoundInstance();
     }
   }
