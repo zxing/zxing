@@ -18,7 +18,7 @@ public class TestSuite extends TestCase {
    */
   @BeforeClass
   public static void setup() {
-    CoverageTool2000.initCoverageMatrix(0, 24);
+    CoverageTool2000.initCoverageMatrix(0, 23);
     CoverageTool2000.initCoverageMatrix(1, 18);
   }
   /**
@@ -26,6 +26,6 @@ public class TestSuite extends TestCase {
    */
   @AfterClass
   public static void teardown() {
-    System.out.println(CoverageTool2000.checkCoverage(0));
+    System.out.println("Coverage for Method 0: " + CoverageTool2000.checkCoverage(0));
   }
 }
