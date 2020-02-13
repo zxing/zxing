@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import com.google.zxing.CoverageTool2000;
 
 /**
  * Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.
@@ -189,12 +190,13 @@ public final class RSS14Reader extends AbstractRSSReader {
 
     int[] counters = getDataCharacterCounters();
     Arrays.fill(counters, 0);
-
     if (outsideChar) {
       recordPatternInReverse(row, pattern.getStartEnd()[0], counters);
+      CoverageTool2000.setCoverageMatrix(1,0);
     } else {
       recordPattern(row, pattern.getStartEnd()[1], counters);
       // reverse it
+      CoverageTool2000.setCoverageMatrix(1,1);
       for (int i = 0, j = counters.length - 1; i < j; i++, j--) {
         int temp = counters[i];
         counters[i] = counters[j];
@@ -213,18 +215,25 @@ public final class RSS14Reader extends AbstractRSSReader {
     for (int i = 0; i < counters.length; i++) {
       float value = counters[i] / elementWidth;
       int count = (int) (value + 0.5f); // Round
+
       if (count < 1) {
         count = 1;
+        CoverageTool2000.setCoverageMatrix(1,2);
       } else if (count > 8) {
+        CoverageTool2000.setCoverageMatrix(1,3);
         count = 8;
+      } else {
+        CoverageTool2000.setCoverageMatrix(1,4);
       }
       int offset = i / 2;
       if ((i & 0x01) == 0) {
         oddCounts[offset] = count;
         oddRoundingErrors[offset] = value - count;
+        CoverageTool2000.setCoverageMatrix(1,5);
       } else {
         evenCounts[offset] = count;
         evenRoundingErrors[offset] = value - count;
+        CoverageTool2000.setCoverageMatrix(1,6);
       }
     }
 
@@ -247,9 +256,12 @@ public final class RSS14Reader extends AbstractRSSReader {
     int checksumPortion = oddChecksumPortion + 3 * evenChecksumPortion;
 
     if (outsideChar) {
+      CoverageTool2000.setCoverageMatrix(1,7);
       if ((oddSum & 0x01) != 0 || oddSum > 12 || oddSum < 4) {
+        CoverageTool2000.setCoverageMatrix(1,8);
         throw NotFoundException.getNotFoundInstance();
       }
+      CoverageTool2000.setCoverageMatrix(1,9);
       int group = (12 - oddSum) / 2;
       int oddWidest = OUTSIDE_ODD_WIDEST[group];
       int evenWidest = 9 - oddWidest;
@@ -259,9 +271,12 @@ public final class RSS14Reader extends AbstractRSSReader {
       int gSum = OUTSIDE_GSUM[group];
       return new DataCharacter(vOdd * tEven + vEven + gSum, checksumPortion);
     } else {
+      CoverageTool2000.setCoverageMatrix(1,10);
       if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
+        CoverageTool2000.setCoverageMatrix(1,11);
         throw NotFoundException.getNotFoundInstance();
       }
+      CoverageTool2000.setCoverageMatrix(1,12);
       int group = (10 - evenSum) / 2;
       int oddWidest = INSIDE_ODD_WIDEST[group];
       int evenWidest = 9 - oddWidest;

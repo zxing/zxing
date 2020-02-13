@@ -16,16 +16,10 @@
 
 package com.google.zxing.common;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.BufferedImageLuminanceSource;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.Reader;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
+import com.google.zxing.*;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -55,7 +49,15 @@ import java.util.logging.Logger;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public abstract class AbstractBlackBoxTestCase extends Assert {
-
+  @BeforeClass
+  public static void setUp(){
+    if (CoverageTool2000.setUpIsDone) {
+      return;
+    }
+    CoverageTool2000.initCoverageMatrix(0,24);
+    CoverageTool2000.initCoverageMatrix(1,13);
+    CoverageTool2000.setUpIsDone = true;
+  }
   private static final Logger log = Logger.getLogger(AbstractBlackBoxTestCase.class.getSimpleName());
 
   private final Path testBase;
@@ -348,5 +350,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
 
     return op.filter(original, new BufferedImage(width, height, original.getType()));
   }
-
+  @After
+  public void print2(){
+    System.out.println(CoverageTool2000.checkCoverage(1));
+  }
 }
