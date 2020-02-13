@@ -24,6 +24,8 @@ import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
+import com.google.zxing.CoverageTool2000;
+
 import java.util.Arrays;
 
 /**
@@ -207,15 +209,20 @@ public final class Decoder {
     int codewordSize;
 
     if (ddata.getNbLayers() <= 2) {
+      CoverageTool2000.setCoverageMatrix(2, 0);
       codewordSize = 6;
       gf = GenericGF.AZTEC_DATA_6;
     } else if (ddata.getNbLayers() <= 8) {
+      CoverageTool2000.setCoverageMatrix(2, 1);
       codewordSize = 8;
       gf = GenericGF.AZTEC_DATA_8;
+
     } else if (ddata.getNbLayers() <= 22) {
+      CoverageTool2000.setCoverageMatrix(2, 2);
       codewordSize = 10;
       gf = GenericGF.AZTEC_DATA_10;
     } else {
+      CoverageTool2000.setCoverageMatrix(2, 3);
       codewordSize = 12;
       gf = GenericGF.AZTEC_DATA_12;
     }
@@ -223,8 +230,10 @@ public final class Decoder {
     int numDataCodewords = ddata.getNbDatablocks();
     int numCodewords = rawbits.length / codewordSize;
     if (numCodewords < numDataCodewords) {
+      CoverageTool2000.setCoverageMatrix(2, 4);
       throw FormatException.getFormatInstance();
     }
+    CoverageTool2000.setCoverageMatrix(2, 5);
     int offset = rawbits.length % codewordSize;
 
     int[] dataWords = new int[numCodewords];
@@ -233,9 +242,11 @@ public final class Decoder {
     }
 
     try {
+      CoverageTool2000.setCoverageMatrix(2, 6);
       ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(gf);
       rsDecoder.decode(dataWords, numCodewords - numDataCodewords);
     } catch (ReedSolomonException ex) {
+      CoverageTool2000.setCoverageMatrix(2, 7);
       throw FormatException.getFormatInstance(ex);
     }
 
@@ -246,8 +257,10 @@ public final class Decoder {
     for (int i = 0; i < numDataCodewords; i++) {
       int dataWord = dataWords[i];
       if (dataWord == 0 || dataWord == mask) {
+        CoverageTool2000.setCoverageMatrix(2, 8);
         throw FormatException.getFormatInstance();
       } else if (dataWord == 1 || dataWord == mask - 1) {
+        CoverageTool2000.setCoverageMatrix(2, 9);
         stuffedBits++;
       }
     }
@@ -257,10 +270,12 @@ public final class Decoder {
     for (int i = 0; i < numDataCodewords; i++) {
       int dataWord = dataWords[i];
       if (dataWord == 1 || dataWord == mask - 1) {
+        CoverageTool2000.setCoverageMatrix(2, 10);
         // next codewordSize-1 bits are all zeros or all ones
         Arrays.fill(correctedBits, index, index + codewordSize - 1, dataWord > 1);
         index += codewordSize - 1;
       } else {
+        CoverageTool2000.setCoverageMatrix(2, 11);
         for (int bit = codewordSize - 1; bit >= 0; --bit) {
           correctedBits[index++] = (dataWord & (1 << bit)) != 0;
         }
