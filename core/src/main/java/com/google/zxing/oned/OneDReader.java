@@ -16,16 +16,7 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Reader;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
-import com.google.zxing.ResultPoint;
+import com.google.zxing.*;
 import com.google.zxing.common.BitArray;
 
 import java.util.Arrays;
@@ -110,8 +101,10 @@ public abstract class OneDReader implements Reader {
     int rowStep = Math.max(1, height >> (tryHarder ? 8 : 5));
     int maxLines;
     if (tryHarder) {
+      CoverageTool2000.setCoverageMatrix(9, 0);
       maxLines = height; // Look at the whole image, not just the center
     } else {
+      CoverageTool2000.setCoverageMatrix(9, 1);
       maxLines = 15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
     }
 
@@ -123,14 +116,17 @@ public abstract class OneDReader implements Reader {
       boolean isAbove = (x & 0x01) == 0; // i.e. is x even?
       int rowNumber = middle + rowStep * (isAbove ? rowStepsAboveOrBelow : -rowStepsAboveOrBelow);
       if (rowNumber < 0 || rowNumber >= height) {
+        CoverageTool2000.setCoverageMatrix(9, 2);
         // Oops, if we run off the top or bottom, stop
         break;
       }
 
       // Estimate black point for this row and load it:
       try {
+        CoverageTool2000.setCoverageMatrix(9, 3);
         row = image.getBlackRow(rowNumber, row);
       } catch (NotFoundException ignored) {
+        CoverageTool2000.setCoverageMatrix(9, 4);
         continue;
       }
 
@@ -138,12 +134,14 @@ public abstract class OneDReader implements Reader {
       // handle decoding upside down barcodes.
       for (int attempt = 0; attempt < 2; attempt++) {
         if (attempt == 1) { // trying again?
+          CoverageTool2000.setCoverageMatrix(9, 5);
           row.reverse(); // reverse the row and continue
           // This means we will only ever draw result points *once* in the life of this method
           // since we want to avoid drawing the wrong points after flipping the row, and,
           // don't want to clutter with noise from every single row scan -- just the scans
           // that start on the center line.
           if (hints != null && hints.containsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
+            CoverageTool2000.setCoverageMatrix(9, 6);
             Map<DecodeHintType,Object> newHints = new EnumMap<>(DecodeHintType.class);
             newHints.putAll(hints);
             newHints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
@@ -151,21 +149,25 @@ public abstract class OneDReader implements Reader {
           }
         }
         try {
+          CoverageTool2000.setCoverageMatrix(9, 7);
           // Look for a barcode
           Result result = decodeRow(rowNumber, row, hints);
           // We found our barcode
           if (attempt == 1) {
+            CoverageTool2000.setCoverageMatrix(9, 8);
             // But it was upside down, so note that
             result.putMetadata(ResultMetadataType.ORIENTATION, 180);
             // And remember to flip the result points horizontally.
             ResultPoint[] points = result.getResultPoints();
             if (points != null) {
+              CoverageTool2000.setCoverageMatrix(9, 9);
               points[0] = new ResultPoint(width - points[0].getX() - 1, points[0].getY());
               points[1] = new ResultPoint(width - points[1].getX() - 1, points[1].getY());
             }
           }
           return result;
         } catch (ReaderException re) {
+          CoverageTool2000.setCoverageMatrix(9, 10);
           // continue -- just couldn't decode this row
         }
       }
