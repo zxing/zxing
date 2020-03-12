@@ -1,5 +1,4 @@
-#ifndef __MULTI_DETECTOR_H__
-#define __MULTI_DETECTOR_H__
+#pragma once
 
 /*
  *  Copyright 2011 ZXing authors
@@ -17,21 +16,24 @@
  * limitations under the License.
  */
 
-#include <zxing/qrcode/detector/Detector.h>
-#include <zxing/common/DetectorResult.h>
-#include <zxing/DecodeHints.h>
+#include <zxing/DecodeHints.h>                          // for DecodeHints
+#include <zxing/qrcode/detector/ZXingQRCodeDetector.h>  // for Detector
+#include <vector>                                       // for vector
 
-namespace zxing {
+namespace pping {
+class BitMatrix;
+class DetectorResult;
+template <typename T> class Ref;
+}  // namespace pping
+
+namespace pping {
 namespace multi {
-
-class MultiDetector : public zxing::qrcode::Detector {
+class MultiDetector : public pping::qrcode::Detector {
   public:
     MultiDetector(Ref<BitMatrix> image);
     virtual ~MultiDetector();
-    virtual std::vector<Ref<DetectorResult> > detectMulti(DecodeHints hints);
+    virtual Fallible<std::vector<Ref<DetectorResult> > > detectMulti(DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC;
 };
+} // End zxing::multi namespace
+} // End zxing namespace
 
-}
-}
-
-#endif // __MULTI_DETECTOR_H__

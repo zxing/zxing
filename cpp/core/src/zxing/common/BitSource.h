@@ -1,5 +1,4 @@
-#ifndef __BIT_SOURCE_H__
-#define __BIT_SOURCE_H__
+#pragma once
 
 /*
  *  BitSource.h
@@ -20,9 +19,12 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Array.h>
+#include <zxing/common/Array.h>    // for ArrayRef
 
-namespace zxing {
+#include "zxing/common/Counted.h"  // for Counted
+#include "zxing/common/Error.hpp"
+
+namespace pping {
 /**
  * <p>This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
  * number of bits read is not often a multiple of 8.</p>
@@ -33,7 +35,7 @@ namespace zxing {
  * @author christian.brunschen@gmail.com (Christian Brunschen)
  */
 class BitSource : public Counted {
-  typedef char byte;
+  typedef unsigned char byte;
 private:
   ArrayRef<byte> bytes_;
   int byteOffset_;
@@ -47,10 +49,6 @@ public:
       bytes_(bytes), byteOffset_(0), bitOffset_(0) {
   }
 
-  int getBitOffset() {
-    return bitOffset_;
-  }
-
   int getByteOffset() {
     return byteOffset_;
   }
@@ -59,9 +57,8 @@ public:
    * @param numBits number of bits to read
    * @return int representing the bits read. The bits will appear as the least-significant
    *         bits of the int
-   * @throws IllegalArgumentException if numBits isn't in [1,32]
    */
-  int readBits(int numBits);
+  Fallible<int> readBits(int numBits) MB_NOEXCEPT_EXCEPT_BADALLOC;
 
   /**
    * @return number of bits that can be read successfully
@@ -71,4 +68,3 @@ public:
 
 }
 
-#endif // __BIT_SOURCE_H__

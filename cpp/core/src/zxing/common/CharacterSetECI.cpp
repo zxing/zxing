@@ -15,14 +15,40 @@
  * limitations under the License.
  */
 
+#include <zxing/FormatException.h>  // for FormatException
 #include <zxing/common/CharacterSetECI.h>
-#include <zxing/common/IllegalArgumentException.h>
-#include <zxing/FormatException.h>
+#include "zxing/common/Error.hpp"
+
+#include <functional>               // for less
+#include <vector>                   // for vector
+
+namespace pping {
+class IllegalArgumentException;
+}  // namespace pping
 
 using std::string;
 
-using zxing::common::CharacterSetECI;
-using zxing::IllegalArgumentException;
+using pping::common::CharacterSetECI;
+using pping::IllegalArgumentException;
+
+namespace {
+class CharacterSetECICleaner {
+public:
+
+  CharacterSetECICleaner() {
+  }
+
+  virtual ~CharacterSetECICleaner() {
+    for (int i = 0; i < (int) values.size(); ++i) {
+      delete values[i];
+    }
+  }
+
+  std::vector<CharacterSetECI*> values;
+};
+} // namespace
+
+static CharacterSetECICleaner cleaner;
 
 std::map<int, CharacterSetECI*> CharacterSetECI::VALUE_TO_ECI;
 std::map<std::string, CharacterSetECI*> CharacterSetECI::NAME_TO_ECI;
@@ -72,11 +98,11 @@ bool CharacterSetECI::init_tables() {
 CharacterSetECI::CharacterSetECI(int const* values,
                                  char const* const* names) 
   : values_(values), names_(names) {
-  for(int const* values = values_; *values != -1; values++) {
-    VALUE_TO_ECI[*values] = this;
+  for(int const* valuesI = values_; *valuesI != -1; valuesI++) {
+    VALUE_TO_ECI[*valuesI ] = this;
   }
-  for(char const* const* names = names_; *names; names++) {
-    NAME_TO_ECI[string(*names)] = this;
+  for(char const* const* namesI = names_; *namesI; namesI++) {
+    NAME_TO_ECI[string(*namesI )] = this;
   }
 }
 
@@ -89,12 +115,12 @@ int CharacterSetECI::getValue() const {
 }
 
 void CharacterSetECI::addCharacterSet(int const* values, char const* const* names) {
-  new CharacterSetECI(values, names);
+  cleaner.values.push_back(new CharacterSetECI(values, names));
 }
 
-CharacterSetECI* CharacterSetECI::getCharacterSetECIByValue(int value) {
+pping::Fallible<CharacterSetECI*> CharacterSetECI::getCharacterSetECIByValue(int value) noexcept {
   if (value < 0 || value >= 900) {
-    throw FormatException();
+    return failure<FormatException>("ECI value should be in [0, 900>");
   }
   return VALUE_TO_ECI[value];
 }

@@ -14,55 +14,49 @@
  * limitations under the License.
  */
 
+#include <zxing/ReaderException.h>  // for ReaderException
 #include <zxing/multi/ByQuadrantReader.h>
-#include <zxing/ReaderException.h>
 
-namespace zxing {
+#include "zxing/BinaryBitmap.h"     // for BinaryBitmap
+#include "zxing/DecodeHints.h"      // for DecodeHints, DecodeHints::DEFAULT_HINT
+#include "zxing/Reader.h"           // for Reader
+#include "zxing/Result.h"           // for Result
+
+namespace pping {
 namespace multi {
 
-ByQuadrantReader::ByQuadrantReader(Reader& delegate) : delegate_(delegate) {}
-
-ByQuadrantReader::~ByQuadrantReader(){}
-
-Ref<Result> ByQuadrantReader::decode(Ref<BinaryBitmap> image){
+FallibleRef<Result> ByQuadrantReader::decode(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC {
   return decode(image, DecodeHints::DEFAULT_HINT);
 }
 
-Ref<Result> ByQuadrantReader::decode(Ref<BinaryBitmap> image, DecodeHints hints){
+FallibleRef<Result> ByQuadrantReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC {
   int width = image->getWidth();
   int height = image->getHeight();
   int halfWidth = width / 2;
   int halfHeight = height / 2;
-  Ref<BinaryBitmap> topLeft = image->crop(0, 0, halfWidth, halfHeight);
-  try {
-    return delegate_.decode(topLeft, hints);
-  } catch (ReaderException const& re) {
-    (void)re;
-    // continue
+  {
+    Ref<BinaryBitmap> topLeft = image->crop(0, 0, halfWidth, halfHeight);
+    auto result(delegate_.decode(topLeft, hints));
+    if (result && !(*result).empty())
+      return result;
   }
-
-  Ref<BinaryBitmap> topRight = image->crop(halfWidth, 0, halfWidth, halfHeight);
-  try {
-    return delegate_.decode(topRight, hints);
-  } catch (ReaderException const& re) {
-    (void)re;
-    // continue
+  {
+    Ref<BinaryBitmap> topRight = image->crop(halfWidth, 0, halfWidth, halfHeight);
+    auto result(delegate_.decode(topRight, hints));
+    if (result && !(*result).empty())
+      return result;
   }
-
-  Ref<BinaryBitmap> bottomLeft = image->crop(0, halfHeight, halfWidth, halfHeight);
-  try {
-    return delegate_.decode(bottomLeft, hints);
-  } catch (ReaderException const& re) {
-    (void)re;
-    // continue
+  {
+    Ref<BinaryBitmap> bottomLeft = image->crop(0, halfHeight, halfWidth, halfHeight);
+    auto result(delegate_.decode(bottomLeft, hints));
+    if (result && !(*result).empty())
+      return result;
   }
-
-  Ref<BinaryBitmap> bottomRight = image->crop(halfWidth, halfHeight, halfWidth, halfHeight);
-  try {
-    return delegate_.decode(bottomRight, hints);
-  } catch (ReaderException const& re) {
-    (void)re;
-    // continue
+  {
+    Ref<BinaryBitmap> bottomRight = image->crop(halfWidth, halfHeight, halfWidth, halfHeight);
+    auto result(delegate_.decode(bottomRight, hints));
+    if (result && !(*result).empty())
+        return result;
   }
 
   int quarterWidth = halfWidth / 2;

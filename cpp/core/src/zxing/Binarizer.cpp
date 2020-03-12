@@ -22,24 +22,20 @@
 
 #include <zxing/Binarizer.h>
 
-namespace zxing {
-	
-	Binarizer::Binarizer(Ref<LuminanceSource> source) : source_(source) {
-  }
-	
-	Binarizer::~Binarizer() {
-	}
-	
-	Ref<LuminanceSource> Binarizer::getLuminanceSource() const {
-		return source_;
-	}
+#include "zxing/LuminanceSource.h"  // for LuminanceSource
+#include "zxing/common/Counted.h"   // for Ref
 
-  int Binarizer::getWidth() const {
+namespace pping {
+    
+    Binarizer::Binarizer(Ref<LuminanceSource> source) noexcept : source_(source) {
+  }
+    
+  int Binarizer::getWidth() const noexcept {
     return source_->getWidth();
   }
-	
-  int Binarizer::getHeight() const {
+    
+  int Binarizer::getHeight() const noexcept {
     return source_->getHeight();
   }
-	
+    
 }

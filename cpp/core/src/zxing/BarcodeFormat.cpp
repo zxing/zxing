@@ -18,23 +18,21 @@
 
 #include <zxing/BarcodeFormat.h>
 
-const char* zxing::BarcodeFormat::barcodeFormatNames[] = {
-  0,
-  "AZTEC",
-  "CODABAR",
-  "CODE_39",
-  "CODE_93",
-  "CODE_128",
-  "DATA_MATRIX",
-  "EAN_8",
-  "EAN_13",
-  "ITF",
-  "MAXICODE",
-  "PDF_417",
-  "QR_CODE",
-  "RSS_14",
-  "RSS_EXPANDED",
-  "UPC_A",
-  "UPC_E",
-  "UPC_EAN_EXTENSION"
+namespace pping {
+
+const char *barcodeFormatNames[] = {
+    "None",
+    "QR_CODE",
+    "DATA_MATRIX",
+    "UPC_E",
+    "UPC_A",
+    "EAN_8",
+    "EAN_13",
+    "CODE_128",
+    "CODE_39",
+    "ITF",
+    "AZTEC",
+    "PDF417"
 };
+
+}

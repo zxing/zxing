@@ -21,18 +21,22 @@
 
 #include <zxing/qrcode/ErrorCorrectionLevel.h>
 
+#include "zxing/ReaderException.h"  // for ReaderException
+
+#include <Utils/Macros.h>
+
 using std::string;
 
-namespace zxing {
+namespace pping {
 namespace qrcode {
 
 ErrorCorrectionLevel::ErrorCorrectionLevel(int inOrdinal,
                                            int bits,
-                                           char const* name) :
-  ordinal_(inOrdinal), bits_(bits), name_(name) {}
+                                           char const* name) noexcept :
+    ordinal_(inOrdinal), bits_(bits), name_(name) {}
 
 int ErrorCorrectionLevel::ordinal() const {
-  return ordinal_;
+    return ordinal_;
 }
 
 int ErrorCorrectionLevel::bits() const {
@@ -47,11 +51,10 @@ ErrorCorrectionLevel::operator string const& () const {
   return name_;
 }
 
-ErrorCorrectionLevel& ErrorCorrectionLevel::forBits(int bits) {
-  if (bits < 0 || bits >= N_LEVELS) {
-    throw ReaderException("Ellegal error correction level bits");
-  }
-  return *FOR_BITS[bits];
+ErrorCorrectionLevel& ErrorCorrectionLevel::forBits(int bits) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    MB_ASSERTM((bits >= 0) && (bits < N_LEVELS), "%s", "Illegal error correction level bits");
+
+    return *FOR_BITS[bits];
 }
 
   ErrorCorrectionLevel ErrorCorrectionLevel::L(0, 0x01, "L");
@@ -59,7 +62,6 @@ ErrorCorrectionLevel& ErrorCorrectionLevel::forBits(int bits) {
   ErrorCorrectionLevel ErrorCorrectionLevel::Q(2, 0x03, "Q");
   ErrorCorrectionLevel ErrorCorrectionLevel::H(3, 0x02, "H");
 ErrorCorrectionLevel *ErrorCorrectionLevel::FOR_BITS[] = { &M, &L, &H, &Q };
-int ErrorCorrectionLevel::N_LEVELS = 4;
 
 }
 }

@@ -18,29 +18,32 @@
  * limitations under the License.
  */
 
+#include <zxing/common/IllegalArgumentException.h>  // for IllegalArgumentException
 #include <zxing/qrcode/decoder/DataMask.h>
 
-#include <zxing/common/IllegalArgumentException.h>
+#include "zxing/common/BitMatrix.h"                 // for BitMatrix
+#include "zxing/common/Counted.h"                   // for Ref
 
-namespace zxing {
+namespace pping {
 namespace qrcode {
 
 using namespace std;
 
-DataMask::DataMask() {
+vector<Ref<DataMask> > DataMask::DATA_MASKS;
+static int N_DATA_MASKS = DataMask::buildDataMasks();
+
+DataMask::DataMask() noexcept {
+	(void) N_DATA_MASKS;
 }
 
 DataMask::~DataMask() {
 }
 
-vector<Ref<DataMask> > DataMask::DATA_MASKS;
-static int N_DATA_MASKS = DataMask::buildDataMasks();
+FallibleRef<DataMask> DataMask::forReference(int reference) noexcept {
+    if((reference < 0) || (reference > 7))
+        return failure<IllegalArgumentException>("Reference must be between 0 and 7");
 
-DataMask &DataMask::forReference(int reference) {
-  if (reference < 0 || reference > 7) {
-    throw IllegalArgumentException("reference must be between 0 and 7");
-  }
-  return *DATA_MASKS[reference];
+    return DATA_MASKS[reference];
 }
 
 void DataMask::unmaskBitMatrix(BitMatrix& bits, size_t dimension) {
@@ -152,7 +155,7 @@ int DataMask::buildDataMasks() {
   DATA_MASKS.push_back(Ref<DataMask> (new DataMask101()));
   DATA_MASKS.push_back(Ref<DataMask> (new DataMask110()));
   DATA_MASKS.push_back(Ref<DataMask> (new DataMask111()));
-  return DATA_MASKS.size();
+  return (int)DATA_MASKS.size();
 }
 
 }

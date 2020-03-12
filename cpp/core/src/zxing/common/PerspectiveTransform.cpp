@@ -18,16 +18,22 @@
  * limitations under the License.
  */
 
+#include <stddef.h>                // for size_t
 #include <zxing/common/PerspectiveTransform.h>
 
-namespace zxing {
+#include "zxing/common/Counted.h"  // for Ref
+#include <Utils/Macros.h>
+
+#include <cmath>
+
+namespace pping {
 using namespace std;
 
 PerspectiveTransform::PerspectiveTransform(float inA11, float inA21, 
                                            float inA31, float inA12, 
                                            float inA22, float inA32, 
                                            float inA13, float inA23, 
-                                           float inA33) : 
+                                           float inA33) noexcept :
   a11(inA11), a12(inA12), a13(inA13), a21(inA21), a22(inA22), a23(inA23),
   a31(inA31), a32(inA32), a33(inA33) {}
 
@@ -54,6 +60,9 @@ Ref<PerspectiveTransform> PerspectiveTransform::squareToQuadrilateral(float x0, 
     float dy1 = y1 - y2;
     float dy2 = y3 - y2;
     float denominator = dx1 * dy2 - dx2 * dy1;
+
+    MB_ASSERTM( std::abs(denominator) > 1e-6f, "%s", "Denominator ~= 0" );
+
     float a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
     float a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
     Ref<PerspectiveTransform> result(new PerspectiveTransform(x1 - x0 + a13 * x1, x3 - x0 + a23 * x3, x0, y1 - y0
@@ -86,22 +95,27 @@ Ref<PerspectiveTransform> PerspectiveTransform::times(Ref<PerspectiveTransform> 
   return result;
 }
 
-void PerspectiveTransform::transformPoints(vector<float> &points) {
-  int max = points.size();
-  for (int i = 0; i < max; i += 2) {
+void PerspectiveTransform::transformPoints(vector<float> &points) noexcept
+#if !defined( DEBUG ) && defined( __clang__ )
+    /** @note
+     * In release mode, ASAN finds container-overflow when accessing first
+     * vector element, even though it is correctly initialised.
+     *                            (08.01.2018.) (Nenad Miksa)
+     */
+    __attribute__(( no_sanitize( "address" ) ))
+#endif
+{
+  size_t max = points.size();
+  for (size_t i = 0; i < max; i += 2) {
     float x = points[i];
     float y = points[i + 1];
     float denominator = a13 * x + a23 * y + a33;
+
+    MB_ASSERTM( std::abs(denominator) > 1e-6, "%s", "Denominator ~= 0" );
+
     points[i] = (a11 * x + a21 * y + a31) / denominator;
     points[i + 1] = (a12 * x + a22 * y + a32) / denominator;
   }
-}
-
-ostream& operator<<(ostream& out, const PerspectiveTransform &pt) {
-  out << pt.a11 << ", " << pt.a12 << ", " << pt.a13 << ", \n";
-  out << pt.a21 << ", " << pt.a22 << ", " << pt.a23 << ", \n";
-  out << pt.a31 << ", " << pt.a32 << ", " << pt.a33 << "\n";
-  return out;
 }
 
 }

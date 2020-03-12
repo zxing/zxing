@@ -1,7 +1,7 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __MODE_H__
-#define __MODE_H__
+#pragma once
 
+#include <string>
 /*
  *  Mode.h
  *  zxing
@@ -21,17 +21,17 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/qrcode/Version.h>
-
-namespace zxing {
+namespace pping {
 namespace qrcode {
+
+class Version;
 
 class Mode {
 private:
   int characterCountBitsForVersions0To9_;
   int characterCountBitsForVersions10To26_;
   int characterCountBitsForVersions27AndHigher_;
+//  int bits_;
   std::string name_;
 
   Mode(int cbv0_9, int cbv10_26, int cbv27, int bits, char const* name);
@@ -47,11 +47,11 @@ public:
   static Mode FNC1_FIRST_POSITION;
   static Mode FNC1_SECOND_POSITION;
   static Mode HANZI;
+  static Mode INVALID;
 
-  static Mode& forBits(int bits);
-  int getCharacterCountBits(Version *version);
+  static Mode& forBits(int bits) noexcept;
+  int getCharacterCountBits(pping::qrcode::Version *version) noexcept;
 };
 }
 }
 
-#endif // __MODE_H__

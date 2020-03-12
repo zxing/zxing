@@ -20,8 +20,14 @@
 
 #include <zxing/common/IllegalArgumentException.h>
 
-using zxing::IllegalArgumentException;
+#include "zxing/Exception.h"  // for Exception
 
-IllegalArgumentException::IllegalArgumentException() : Exception() {}
-IllegalArgumentException::IllegalArgumentException(const char *msg) : Exception(msg) {}
-IllegalArgumentException::~IllegalArgumentException() throw() {}
+namespace pping {
+
+IllegalArgumentException::IllegalArgumentException(const char *msg) :
+    Exception(msg) {
+}
+IllegalArgumentException::~IllegalArgumentException() throw() {
+
+}
+}

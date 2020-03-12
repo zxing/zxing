@@ -1,4 +1,3 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  GreyscaleLuminanceSource.cpp
  *  zxing
@@ -18,63 +17,57 @@
  * limitations under the License.
  */
 
+#include <string.h>                                        // for memcpy, NULL
 #include <zxing/common/GreyscaleLuminanceSource.h>
-#include <zxing/common/GreyscaleRotatedLuminanceSource.h>
-#include <zxing/common/IllegalArgumentException.h>
+#include <zxing/common/GreyscaleRotatedLuminanceSource.h>  // for GreyscaleRotatedLuminanceSource
+#include <zxing/common/IllegalArgumentException.h>         // for IllegalArgumentException
 
-using zxing::Ref;
-using zxing::ArrayRef;
-using zxing::LuminanceSource;
-using zxing::GreyscaleLuminanceSource;
+#include "zxing/LuminanceSource.h"                         // for LuminanceSource
 
-GreyscaleLuminanceSource::
-GreyscaleLuminanceSource(ArrayRef<char> greyData,
-                         int dataWidth, int dataHeight,
-                         int left, int top,
-                         int width, int height) 
-    : Super(width, height),
-      greyData_(greyData),
-      dataWidth_(dataWidth), dataHeight_(dataHeight),
-      left_(left), top_(top) {
+#include <boost/assert.hpp>
+#include <Utils/Macros.h>
 
-  if (left + width > dataWidth || top + height > dataHeight || top < 0 || left < 0) {
-    throw IllegalArgumentException("Crop rectangle does not fit within image data.");
-  }
+namespace pping {
+
+GreyscaleLuminanceSource::GreyscaleLuminanceSource(unsigned char* greyData, int dataWidth,
+    int dataHeight, int left, int top, int width, int height) noexcept : greyData_(greyData),
+    dataWidth_(dataWidth), dataHeight_(dataHeight), left_(left), top_(top), width_(width),
+    height_(height) {
+
+    MB_ASSERTM((top >= 0) && (left >= 0) && (left + width <= dataWidth) && (top + height <= dataHeight),
+               "%s", "Crop rectangle does not fit within image data.");
 }
 
-ArrayRef<char> GreyscaleLuminanceSource::getRow(int y, ArrayRef<char> row) const {
-  if (y < 0 || y >= this->getHeight()) {
-    throw IllegalArgumentException("Requested row is outside the image.");
-  }
+unsigned char* GreyscaleLuminanceSource::getRow(int y, unsigned char* row) const MB_NOEXCEPT_EXCEPT_BADALLOC {
+  BOOST_ASSERT_MSG(!(y < 0 || y >= this->getHeight()), "Requested row is outside the image.");
+
   int width = getWidth();
-  if (!row || row->size() < width) {
-    ArrayRef<char> temp (width);
-    row = temp;
+  // TODO(flyashi): determine if row has enough size.
+  if (row == NULL) {
+    row = new unsigned char[width_];
   }
   int offset = (y + top_) * dataWidth_ + left_;
-  memcpy(&row[0], &greyData_[offset], width);
+  memcpy(row, &greyData_[offset], width);
   return row;
 }
 
-ArrayRef<char> GreyscaleLuminanceSource::getMatrix() const {
-  int size = getWidth() * getHeight();
-  ArrayRef<char> result (size);
-  if (left_ == 0 && top_ == 0 && dataWidth_ == getWidth() && dataHeight_ == getHeight()) {
-    memcpy(&result[0], &greyData_[0], size);
+unsigned char* GreyscaleLuminanceSource::getMatrix() const MB_NOEXCEPT_EXCEPT_BADALLOC {
+  int size = width_ * height_;
+  unsigned char* result = new unsigned char[size];
+  if (left_ == 0 && top_ == 0 && dataWidth_ == width_ && dataHeight_ == height_) {
+    memcpy(result, greyData_, size);
   } else {
-    for (int row = 0; row < getHeight(); row++) {
-      memcpy(&result[row * getWidth()], &greyData_[(top_ + row) * dataWidth_ + left_], getWidth());
+    for (int row = 0; row < height_; row++) {
+      memcpy(result + row * width_, greyData_ + (top_ + row) * dataWidth_ + left_, width_);
     }
   }
   return result;
 }
 
-Ref<LuminanceSource> GreyscaleLuminanceSource::rotateCounterClockwise() const {
-  // Intentionally flip the left, top, width, and height arguments as
-  // needed. dataWidth and dataHeight are always kept unrotated.
-  Ref<LuminanceSource> result ( 
-      new GreyscaleRotatedLuminanceSource(greyData_,
-                                          dataWidth_, dataHeight_,
-                                          top_, left_, getHeight(), getWidth()));
-  return result;
+Ref<LuminanceSource> GreyscaleLuminanceSource::rotateCounterClockwise() MB_NOEXCEPT_EXCEPT_BADALLOC {
+  // Intentionally flip the left, top, width, and height arguments as needed. dataWidth and
+  // dataHeight are always kept unrotated.
+  return Ref<LuminanceSource> (new GreyscaleRotatedLuminanceSource(greyData_, dataWidth_, dataHeight_, top_, left_, height_, width_));
 }
+
+} /* namespace */

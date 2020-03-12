@@ -1,5 +1,9 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
+ *  MultiFormatBarcodeReader.cpp
+ *  ZXing
+ *
+ *  Created by Lukasz Warchol on 10-01-26.
+ *  Modified by Luiz Silva on 09/02/2010.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,110 +19,82 @@
  * limitations under the License.
  */
 
-#include <zxing/ZXing.h>
 #include <zxing/MultiFormatReader.h>
-#include <zxing/qrcode/QRCodeReader.h>
-#include <zxing/datamatrix/DataMatrixReader.h>
-#include <zxing/aztec/AztecReader.h>
-#include <zxing/pdf417/PDF417Reader.h>
-#include <zxing/oned/MultiFormatUPCEANReader.h>
-#include <zxing/oned/MultiFormatOneDReader.h>
-#include <zxing/ReaderException.h>
+#include <zxing/ReaderException.h>                  // for ReaderException
+#include <zxing/aztec/AztecReader.h>                // for AztecReader
+#include <zxing/datamatrix/DataMatrixReader.h>      // for DataMatrixReader
+#include <zxing/oned/ZXingMultiFormatOneDReader.h>  // for MultiFormatOneDReader
+#include <zxing/qrcode/QRCodeReader.h>              // for QRCodeReader
 
-using zxing::Ref;
-using zxing::Result;
-using zxing::MultiFormatReader;
+#include "zxing/BarcodeFormat.h"                    // for BarcodeFormat::AZTEC_BARCODE, BarcodeFormat::CODE_128, BarcodeFormat::CODE_39, BarcodeFormat::BarcodeFo...
+#include "zxing/BinaryBitmap.h"                     // for BinaryBitmap
+#include "zxing/DecodeHints.h"                      // for DecodeHints, DecodeHints::DEFAULT_HINT
+#include "zxing/Reader.h"                           // for Reader
+#include "zxing/Result.h"                           // for Result
 
-// VC++
-using zxing::DecodeHints;
-using zxing::BinaryBitmap;
+namespace pping {
+  MultiFormatReader::MultiFormatReader() {
 
-MultiFormatReader::MultiFormatReader() {}
+  }
   
-Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image) {
-  setHints(DecodeHints::DEFAULT_HINT);
-  return decodeInternal(image);
-}
-
-Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
-  setHints(hints);
-  return decodeInternal(image);
-}
-
-Ref<Result> MultiFormatReader::decodeWithState(Ref<BinaryBitmap> image) {
-  // Make sure to set up the default state so we don't crash
-  if (readers_.size() == 0) {
+  FallibleRef<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC {
     setHints(DecodeHints::DEFAULT_HINT);
+    return decodeInternal(image);
   }
-  return decodeInternal(image);
-}
 
-void MultiFormatReader::setHints(DecodeHints hints) {
-  hints_ = hints;
-  readers_.clear();
-  bool tryHarder = hints.getTryHarder();
+  FallibleRef<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    setHints(hints);
+    return decodeInternal(image);
+  }
 
-  bool addOneDReader = hints.containsFormat(BarcodeFormat::UPC_E) ||
-    hints.containsFormat(BarcodeFormat::UPC_A) ||
-    hints.containsFormat(BarcodeFormat::UPC_E) ||
-    hints.containsFormat(BarcodeFormat::EAN_13) ||
-    hints.containsFormat(BarcodeFormat::EAN_8) ||
-    hints.containsFormat(BarcodeFormat::CODABAR) ||
-    hints.containsFormat(BarcodeFormat::CODE_39) ||
-    hints.containsFormat(BarcodeFormat::CODE_93) ||
-    hints.containsFormat(BarcodeFormat::CODE_128) ||
-    hints.containsFormat(BarcodeFormat::ITF) ||
-    hints.containsFormat(BarcodeFormat::RSS_14) ||
-    hints.containsFormat(BarcodeFormat::RSS_EXPANDED);
-  if (addOneDReader && !tryHarder) {
-    readers_.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader(hints)));
-  }
-  if (hints.containsFormat(BarcodeFormat::QR_CODE)) {
-    readers_.push_back(Ref<Reader>(new zxing::qrcode::QRCodeReader()));
-  }
-  if (hints.containsFormat(BarcodeFormat::DATA_MATRIX)) {
-    readers_.push_back(Ref<Reader>(new zxing::datamatrix::DataMatrixReader()));
-  }
-  if (hints.containsFormat(BarcodeFormat::AZTEC)) {
-    readers_.push_back(Ref<Reader>(new zxing::aztec::AztecReader()));
-  }
-  if (hints.containsFormat(BarcodeFormat::PDF_417)) {
-    readers_.push_back(Ref<Reader>(new zxing::pdf417::PDF417Reader()));
-  }
-  /*
-  if (hints.contains(BarcodeFormat.MAXICODE)) {
-    readers.add(new MaxiCodeReader());
-  }
-  */
-  if (addOneDReader && tryHarder) {
-    readers_.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader(hints)));
-  }
-  if (readers_.size() == 0) {
-    if (!tryHarder) {
-      readers_.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader(hints)));
+  FallibleRef<Result> MultiFormatReader::decodeWithState(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    // Make sure to set up the default state so we don't crash
+    if (readers_.size() == 0) {
+      setHints(DecodeHints::DEFAULT_HINT);
     }
-    readers_.push_back(Ref<Reader>(new zxing::qrcode::QRCodeReader()));
-    readers_.push_back(Ref<Reader>(new zxing::datamatrix::DataMatrixReader()));
-    readers_.push_back(Ref<Reader>(new zxing::aztec::AztecReader()));
-    readers_.push_back(Ref<Reader>(new zxing::pdf417::PDF417Reader()));
-    // readers.add(new MaxiCodeReader());
+    return decodeInternal(image);
+  }
 
-    if (tryHarder) {
-      readers_.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader(hints)));
+  void MultiFormatReader::setHints(DecodeHints hints) {
+    hints_ = hints;
+    readers_.clear();
+    bool tryHarder = hints.getTryHarder();
+
+    bool addOneDReader = hints.containsFormat(BarcodeFormat::UPC_E) ||
+                         hints.containsFormat(BarcodeFormat::UPC_A) ||
+                         hints.containsFormat(BarcodeFormat::EAN_8) ||
+                         hints.containsFormat(BarcodeFormat::EAN_13) ||
+                         hints.containsFormat(BarcodeFormat::CODE_128) ||
+                         hints.containsFormat(BarcodeFormat::CODE_39) ||
+                         hints.containsFormat(BarcodeFormat::ITF);
+    if (addOneDReader && !tryHarder) {
+      readers_.push_back(Ref<Reader>(new pping::oned::MultiFormatOneDReader(hints)));
+    }
+    if (hints.containsFormat(BarcodeFormat::QR_CODE)) {
+      readers_.push_back(Ref<Reader>(new pping::qrcode::QRCodeReader()));
+    }
+    if (hints.containsFormat(BarcodeFormat::DATA_MATRIX)) {
+      readers_.push_back(Ref<Reader>(new pping::datamatrix::DataMatrixReader()));
+    }
+    if (hints.containsFormat(BarcodeFormat::AZTEC_BARCODE)) {
+      readers_.push_back(Ref<Reader>(new pping::aztec::AztecReader()));
+    }
+    //TODO: add PDF417 here once PDF417 reader is implemented
+    if (addOneDReader && tryHarder) {
+      readers_.push_back(Ref<Reader>(new pping::oned::MultiFormatOneDReader(hints)));
     }
   }
-}
 
-Ref<Result> MultiFormatReader::decodeInternal(Ref<BinaryBitmap> image) {
-  for (unsigned int i = 0; i < readers_.size(); i++) {
-    try {
-      return readers_[i]->decode(image, hints_);
-    } catch (ReaderException const& re) {
-      (void)re;
-      // continue
+  FallibleRef<Result> MultiFormatReader::decodeInternal(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    for ( auto const & pReader : readers_ ) {
+        auto result( pReader->decode(image, hints_) );
+        if (result)
+            return result;
     }
+    return failure<ReaderException>("No code detected");
   }
-  throw ReaderException("No code detected");
-}
   
-MultiFormatReader::~MultiFormatReader() {}
+  MultiFormatReader::~MultiFormatReader() {
+
+  }
+}

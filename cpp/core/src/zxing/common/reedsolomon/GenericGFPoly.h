@@ -19,38 +19,39 @@
  * limitations under the License.
  */
 
-#ifndef GENERICGFPOLY_H
-#define GENERICGFPOLY_H
+#pragma once
 
-#include <vector>
-#include <zxing/common/Array.h>
-#include <zxing/common/Counted.h>
+#include <zxing/common/Array.h>    // for ArrayRef
+#include <zxing/common/Counted.h>  // for Ref, Counted
 
-namespace zxing {
+#include "zxing/common/Error.hpp"
 
-class GenericGF;
+#include <vector>                  // for vector
+
+namespace pping {
+  class GenericGF;
   
-class GenericGFPoly : public Counted {
-private:
-  Ref<GenericGF> field_;
-  ArrayRef<int> coefficients_;
-    
-public:
-  GenericGFPoly(Ref<GenericGF> field, ArrayRef<int> coefficients);
-  ArrayRef<int> getCoefficients();
-  int getDegree();
-  bool isZero();
-  int getCoefficient(int degree);
-  int evaluateAt(int a);
-  Ref<GenericGFPoly> addOrSubtract(Ref<GenericGFPoly> other);
-  Ref<GenericGFPoly> multiply(Ref<GenericGFPoly> other);
-  Ref<GenericGFPoly> multiply(int scalar);
-  Ref<GenericGFPoly> multiplyByMonomial(int degree, int coefficient);
-  std::vector<Ref<GenericGFPoly> > divide(Ref<GenericGFPoly> other);
-    
+  class GenericGFPoly : public Counted {
+  private:
+    GenericGF& field_;
+    ArrayRef<int> coefficients_;
 
-};
-
+    GenericGFPoly(GenericGF& field, ArrayRef<int> coefficients) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    
+  public:
+    static FallibleRef<GenericGFPoly> createGenericGFPoly(GenericGF& field, ArrayRef<int> coefficients) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    ArrayRef<int> getCoefficients();
+    int getDegree();
+    bool isZero();
+    int getCoefficient(int degree);
+    Fallible<int> evaluateAt(int a) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<GenericGFPoly> addOrSubtract(Ref<GenericGFPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<GenericGFPoly> multiply(Ref<GenericGFPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<GenericGFPoly> multiply(int scalar) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<GenericGFPoly> multiplyByMonomial(int degree, int coefficient) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    Fallible<std::vector<Ref<GenericGFPoly>>> divide(Ref<GenericGFPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    
+      //#warning todo: add print method
+  };
 }
 
-#endif //GENERICGFPOLY_H

@@ -20,24 +20,21 @@
 
  */
 
-#include <zxing/ZXing.h>
 #include <zxing/Exception.h>
-#include <string.h>
 
-using zxing::Exception;
+namespace pping {
 
-void Exception::deleteMessage() {
-  delete [] message;
+Exception::Exception() {}
+
+Exception::Exception(const char *msg) :
+    message(msg) {
 }
 
-char const* Exception::copy(char const* msg) {
-  char* message = 0;
-  if (msg) {
-    int l = strlen(msg)+1;
-    if (l) {
-      message = new char[l];
-      strcpy(message, msg);
-    }
-  }
-  return message;
+const char* Exception::what() const throw() {
+  return message.c_str();
+}
+
+Exception::~Exception() throw() {
+}
+
 }

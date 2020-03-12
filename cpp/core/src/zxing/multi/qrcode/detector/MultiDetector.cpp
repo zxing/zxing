@@ -14,30 +14,40 @@
  * limitations under the License.
  */
 
+#include <zxing/ReaderException.h>                                 // for ReaderException
 #include <zxing/multi/qrcode/detector/MultiDetector.h>
-#include <zxing/multi/qrcode/detector/MultiFinderPatternFinder.h>
-#include <zxing/ReaderException.h>
+#include <zxing/multi/qrcode/detector/MultiFinderPatternFinder.h>  // for MultiFinderPatternFinder
 
-namespace zxing {
+#include "zxing/DecodeHints.h"                                     // for DecodeHints
+#include "zxing/ResultPointCallback.h"                             // for ResultPointCallback
+#include "zxing/common/BitMatrix.h"                                // for BitMatrix
+#include "zxing/common/Counted.h"                                  // for Ref
+#include "zxing/common/DetectorResult.h"                           // for DetectorResult
+#include "zxing/qrcode/detector/FinderPatternInfo.h"               // for FinderPatternInfo
+#include "zxing/qrcode/detector/ZXingQRCodeDetector.h"             // for Detector
+
+namespace pping {
 namespace multi {
-using namespace zxing::qrcode;
+using namespace pping::qrcode;
 
 MultiDetector::MultiDetector(Ref<BitMatrix> image) : Detector(image) {}
 
 MultiDetector::~MultiDetector(){}
 
-std::vector<Ref<DetectorResult> > MultiDetector::detectMulti(DecodeHints hints){
+Fallible<std::vector<Ref<DetectorResult>>> MultiDetector::detectMulti(DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC {
   Ref<BitMatrix> image = getImage();
   MultiFinderPatternFinder finder = MultiFinderPatternFinder(image, hints.getResultPointCallback());
-  std::vector<Ref<FinderPatternInfo> > info = finder.findMulti(hints);
+  auto const tryFindMulti(finder.findMulti(hints));
+  if(!tryFindMulti)
+      return tryFindMulti.error();
+
+  std::vector<Ref<FinderPatternInfo> > info = *tryFindMulti;
   std::vector<Ref<DetectorResult> > result;
-  for(unsigned int i = 0; i < info.size(); i++){
-    try{
-      result.push_back(processFinderPatternInfo(info[i]));
-    } catch (ReaderException const& e){
-      (void)e;
-      // ignore
-    }
+  for(unsigned int i = 0; i < info.size(); i++) {
+
+      auto const processInfo(processFinderPatternInfo(info[i]));
+      if(processInfo)
+          result.push_back(*processInfo);
   }
 
   return result;

@@ -1,5 +1,4 @@
-#ifndef __MULTIPLE_BARCODE_READER_H__
-#define __MULTIPLE_BARCODE_READER_H__
+#pragma once
 
 /*
  *  Copyright 2011 ZXing authors All rights reserved.
@@ -17,25 +16,27 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/Result.h>
-#include <zxing/BinaryBitmap.h>
-#include <zxing/DecodeHints.h>
-#include <vector>
+#include <zxing/DecodeHints.h>     // for DecodeHints
+#include <zxing/common/Counted.h>  // for Counted
+#include <zxing/common/Error.hpp>
 
-namespace zxing {
+#include <vector>                  // for vector
+
+namespace pping {
+class BinaryBitmap;
+class Result;
+}  // namespace pping
+
+namespace pping {
 namespace multi {
-
 class MultipleBarcodeReader : public Counted {
   protected:
     MultipleBarcodeReader() {}
   public:
-    virtual std::vector<Ref<Result> > decodeMultiple(Ref<BinaryBitmap> image);
-    virtual std::vector<Ref<Result> > decodeMultiple(Ref<BinaryBitmap> image, DecodeHints hints) = 0;
+    virtual Fallible<std::vector<Ref<Result>>> decodeMultiple(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    virtual Fallible<std::vector<Ref<Result>>> decodeMultiple(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC = 0;
     virtual ~MultipleBarcodeReader();
 };
+} // End zxing::multi namespace
+} // End zxing namespace
 
-}
-}
-
-#endif // __MULTIPLE_BARCODE_READER_H__

@@ -19,7 +19,7 @@
 
 #include <zxing/ResultPointCallback.h>
 
-namespace zxing {
+namespace pping {
 
 ResultPointCallback::~ResultPointCallback() {}
 

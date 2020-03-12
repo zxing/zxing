@@ -1,5 +1,5 @@
-#ifndef __POINT_H__
-#define __POINT_H__
+
+#pragma once
 
 /*
  *  Point.h
@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-namespace zxing {
+namespace pping {
 class PointI {
 public:
   int x;
@@ -44,4 +44,3 @@ public:
   Point end;
 };
 }
-#endif // POINT_H_

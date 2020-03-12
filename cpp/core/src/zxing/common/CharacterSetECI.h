@@ -1,8 +1,4 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-
-#ifndef __CHARACTERSET_ECI__
-#define __CHARACTERSET_ECI__
-
 /*
  * Copyright 2008-2011 ZXing authors
  *
@@ -19,10 +15,14 @@
  * limitations under the License.
  */
 
-#include <map>
-#include <zxing/DecodeHints.h>
+#pragma once
 
-namespace zxing {
+#include "zxing/common/Error.hpp"
+
+#include <string>
+#include <map>     // for map
+
+namespace pping {
 namespace common {
 
 class CharacterSetECI {
@@ -43,11 +43,9 @@ public:
   char const* name() const;
   int getValue() const;
 
-  static CharacterSetECI* getCharacterSetECIByValue(int value);
+  static pping::Fallible<CharacterSetECI*> getCharacterSetECIByValue(int value) noexcept;
   static CharacterSetECI* getCharacterSetECIByName(std::string const& name);
 };
 
 }
 }
-
-#endif

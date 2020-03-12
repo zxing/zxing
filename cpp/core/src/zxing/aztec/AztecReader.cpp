@@ -20,49 +20,67 @@
  */
 
 #include <zxing/aztec/AztecReader.h>
-#include <zxing/aztec/detector/Detector.h>
-#include <zxing/common/DecoderResult.h>
-#include <iostream>
+#include <zxing/aztec/detector/ZxingAztecDetector.h>    // for Detector
+#include <vector>                                       // for allocator, vector
 
-using zxing::Ref;
-using zxing::ArrayRef;
-using zxing::Result;
-using zxing::aztec::AztecReader;
+#include "zxing/BarcodeFormat.h"                        // for BarcodeFormat::AZTEC_BARCODE
+#include "zxing/BinaryBitmap.h"                         // for BinaryBitmap
+#include "zxing/DecodeHints.h"                          // for DecodeHints
+#include "zxing/Result.h"                               // for Result
+#include "zxing/ResultPoint.h"                          // for ResultPoint
+#include "zxing/aztec/AztecDetectorResult.h"            // for AztecDetectorResult
+#include "zxing/aztec/decoder/Decoder.h"                // for Decoder
+#include "zxing/common/BitMatrix.h"                     // for BitMatrix
+#include "zxing/common/DecoderResult.h"                 // for DecoderResult
+#include "zxing/common/Str.h"                           // for String
 
-// VC++
-using zxing::BinaryBitmap;
-using zxing::DecodeHints;
+namespace pping {
+  namespace aztec {
         
-AztecReader::AztecReader() : decoder_() {
-  // nothing
-}
+    AztecReader::AztecReader() : decoder_() {
+      // nothing
+    }
         
-Ref<Result> AztecReader::decode(Ref<zxing::BinaryBitmap> image) {
-  Detector detector(image->getBlackMatrix());
+    FallibleRef<Result> AztecReader::decode(Ref<pping::BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC {
+      auto const blackMatrix(image->getBlackMatrix());
+      if (!blackMatrix)
+          return blackMatrix.error();
+      Detector detector(*blackMatrix);
             
-  Ref<AztecDetectorResult> detectorResult(detector.detect());
+
+      auto const detectorResult(detector.detect());
+      if(!detectorResult)
+          return detectorResult.error();
             
-  ArrayRef< Ref<ResultPoint> > points(detectorResult->getPoints());
+      std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
             
-  Ref<DecoderResult> decoderResult(decoder_.decode(detectorResult));
+      auto const getDecoderResult(decoder_.decode(*detectorResult));
+      if(!getDecoderResult)
+          return getDecoderResult.error();
+
+      Ref<DecoderResult> decoderResult(*getDecoderResult);
+
+      Ref<Result> result(new Result(decoderResult->getText(),
+                                    decoderResult->getRawBytes(),
+                                    points,
+                                    BarcodeFormat::AZTEC_BARCODE,
+                                    decoderResult->getByteSegments()));
             
-  Ref<Result> result(new Result(decoderResult->getText(),
-                                decoderResult->getRawBytes(),
-                                points,
-                                BarcodeFormat::AZTEC));
-            
-  return result;
-}
+      return result;
+    }
         
-Ref<Result> AztecReader::decode(Ref<BinaryBitmap> image, DecodeHints) {
-  //cout << "decoding with hints not supported for aztec" << "\n" << flush;
-  return this->decode(image);
-}
+    FallibleRef<Result> AztecReader::decode(Ref<BinaryBitmap> image, DecodeHints) MB_NOEXCEPT_EXCEPT_BADALLOC {
+      //cout << "decoding with hints not supported for aztec" << "\n" << flush;
+      return this->decode(image);
+    }
         
-AztecReader::~AztecReader() {
-  // nothing
-}
+    AztecReader::~AztecReader() {
+      // nothing
+    }
         
-zxing::aztec::Decoder& AztecReader::getDecoder() {
-  return decoder_;
+    Decoder& AztecReader::getDecoder() {
+      return decoder_;
+    }
+        
+  }
 }

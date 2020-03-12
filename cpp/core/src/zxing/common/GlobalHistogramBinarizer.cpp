@@ -18,141 +18,135 @@
  * limitations under the License.
  */
 
+#include <zxing/common/Array.h>                     // for ArrayRef
 #include <zxing/common/GlobalHistogramBinarizer.h>
-#include <zxing/NotFoundException.h>
-#include <zxing/common/Array.h>
+#include <zxing/common/IllegalArgumentException.h>  // for IllegalArgumentException
 
-using zxing::GlobalHistogramBinarizer;
-using zxing::Binarizer;
-using zxing::ArrayRef;
-using zxing::Ref;
-using zxing::BitArray;
-using zxing::BitMatrix;
+#include "zxing/Binarizer.h"                        // for Binarizer
+#include "zxing/LuminanceSource.h"                  // for LuminanceSource
+#include "zxing/common/BitArray.h"                  // for BitArray
+#include "zxing/common/BitMatrix.h"                 // for BitMatrix
 
-// VC++
-using zxing::LuminanceSource;
+#include <boost/assert.hpp>
 
-namespace {
-  const int LUMINANCE_BITS = 5;
-  const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-  const int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
-  const ArrayRef<char> EMPTY (0);
+#include <memory>
+
+namespace pping {
+
+using namespace std;
+
+const int LUMINANCE_BITS = 5;
+const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
+const int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+
+GlobalHistogramBinarizer::GlobalHistogramBinarizer(Ref<LuminanceSource> source) noexcept :
+  Binarizer(source), cached_matrix_(nullptr), cached_row_(nullptr), cached_row_num_(-1) {
+
 }
 
-GlobalHistogramBinarizer::GlobalHistogramBinarizer(Ref<LuminanceSource> source) 
-  : Binarizer(source), luminances(EMPTY), buckets(LUMINANCE_BUCKETS) {}
+GlobalHistogramBinarizer::~GlobalHistogramBinarizer() = default;
 
-GlobalHistogramBinarizer::~GlobalHistogramBinarizer() {}
-
-void GlobalHistogramBinarizer::initArrays(int luminanceSize) {
-  if (luminances->size() < luminanceSize) {
-    luminances = ArrayRef<char>(luminanceSize);
+FallibleRef<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) const MB_NOEXCEPT_EXCEPT_BADALLOC {
+  if (y == cached_row_num_) {
+      BOOST_ASSERT_MSG(cached_row_ != nullptr, "Internal inconsistency: cached_row_num_ says there should be a cached row but there is none.");
+      return cached_row_;
   }
-  for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
-    buckets[x] = 0;
-  }
-}
 
-Ref<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) {
-  // std::cerr << "gbr " << y << std::endl;
+  vector<int> histogram(LUMINANCE_BUCKETS, 0);
   LuminanceSource& source = *getLuminanceSource();
   int width = source.getWidth();
-  if (row == NULL || static_cast<int>(row->getSize()) < width) {
+  if (row == nullptr || static_cast<int>(row->getSize()) < width) {
     row = new BitArray(width);
   } else {
     row->clear();
   }
 
-  initArrays(width);
-  ArrayRef<char> localLuminances = source.getRow(y, luminances);
-  if (false) {
-    std::cerr << "gbr " << y << " r ";
-    for(int i=0, e=localLuminances->size(); i < e; ++i) {
-      std::cerr << 0+localLuminances[i] << " ";
-    }
-    std::cerr << std::endl;
-  }
-  ArrayRef<int> localBuckets = buckets;
+  //TODO(flyashi): cache this instead of allocating and deleting per row
+  auto const row_pixels( std::make_unique<unsigned char[]>( width ) );
+  BOOST_VERIFY( source.getRow(y, row_pixels.get()) == row_pixels.get() );
   for (int x = 0; x < width; x++) {
-    int pixel = localLuminances[x] & 0xff;
-    localBuckets[pixel >> LUMINANCE_SHIFT]++;
+      histogram[row_pixels[x] >> LUMINANCE_SHIFT]++;
   }
-  int blackPoint = estimateBlackPoint(localBuckets);
-  // std::cerr << "gbr bp " << y << " " << blackPoint << std::endl;
 
-  int left = localLuminances[0] & 0xff;
-  int center = localLuminances[1] & 0xff;
+  auto blackPoint(estimate(histogram));
+  if ( !blackPoint )
+      return blackPoint.error();
+
+  BitArray& array = *row;
+  int left = row_pixels[0];
+  int center = row_pixels[1];
   for (int x = 1; x < width - 1; x++) {
-    int right = localLuminances[x + 1] & 0xff;
-    // A simple -1 4 -1 box filter with a weight of 2.
-    int luminance = ((center << 2) - left - right) >> 1;
-    if (luminance < blackPoint) {
-      row->set(x);
-    }
-    left = center;
-    center = right;
+      int right = row_pixels[x + 1];
+      // A simple -1 4 -1 box filter with a weight of 2.
+      int luminance = ((center << 2) - left - right) >> 1;
+      if (luminance < *blackPoint) {
+      array.set(x);
+      }
+      left = center;
+      center = right;
   }
+
+  cached_row_ = row;
+  cached_row_num_ = y;
   return row;
 }
- 
-Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
+
+FallibleRef<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() const MB_NOEXCEPT_EXCEPT_BADALLOC {
+  if (cached_matrix_)
+    return cached_matrix_;
+
+  // Faster than working with the reference
   LuminanceSource& source = *getLuminanceSource();
   int width = source.getWidth();
   int height = source.getHeight();
-  Ref<BitMatrix> matrix(new BitMatrix(width, height));
+  vector<int> histogram(LUMINANCE_BUCKETS, 0);
 
   // Quickly calculates the histogram by sampling four rows from the image.
   // This proved to be more robust on the blackbox tests than sampling a
   // diagonal as we used to do.
-  initArrays(width);
-  ArrayRef<int> localBuckets = buckets;
+  ArrayRef<unsigned char> ref (width);
+  unsigned char* row = &ref[0];
   for (int y = 1; y < 5; y++) {
-    int row = height * y / 5;
-    ArrayRef<char> localLuminances = source.getRow(row, luminances);
+    int rownum = height * y / 5;
     int right = (width << 2) / 5;
+    row = source.getRow(rownum, row);
     for (int x = width / 5; x < right; x++) {
-      int pixel = localLuminances[x] & 0xff;
-      localBuckets[pixel >> LUMINANCE_SHIFT]++;
+      histogram[row[x] >> LUMINANCE_SHIFT]++;
     }
   }
 
-  int blackPoint = estimateBlackPoint(localBuckets);
+  auto const blackPoint(estimate(histogram));
+  if (!blackPoint) 
+    return blackPoint.error();
 
-  ArrayRef<char> localLuminances = source.getMatrix();
+  Ref<BitMatrix> matrix_ref(new BitMatrix(width, height));
+  BitMatrix& matrix = *matrix_ref;
   for (int y = 0; y < height; y++) {
-    int offset = y * width;
+    row = source.getRow(y, row);
     for (int x = 0; x < width; x++) {
-      int pixel = localLuminances[offset + x] & 0xff;
-      if (pixel < blackPoint) {
-        matrix->set(x, y);
-      }
+      if (row[x] < *blackPoint)
+        matrix.set(x, y);
     }
   }
-  
-  return matrix;
+
+  cached_matrix_ = matrix_ref;
+  return matrix_ref;
 }
 
-using namespace std;
-
-int GlobalHistogramBinarizer::estimateBlackPoint(ArrayRef<int> const& buckets) {
-  // Find tallest peak in histogram
-  int numBuckets = buckets->size();
+Fallible<int> GlobalHistogramBinarizer::estimate(vector<int> &histogram) noexcept {
+  int numBuckets = (int)histogram.size();
   int maxBucketCount = 0;
+
+  // Find tallest peak in histogram
   int firstPeak = 0;
   int firstPeakSize = 0;
-  if (false) {
-    for (int x = 0; x < numBuckets; x++) {
-      cerr << buckets[x] << " ";
+  for (int i = 0; i < numBuckets; i++) {
+    if (histogram[i] > firstPeakSize) {
+      firstPeak = i;
+      firstPeakSize = histogram[i];
     }
-    cerr << endl;
-  }
-  for (int x = 0; x < numBuckets; x++) {
-    if (buckets[x] > firstPeakSize) {
-      firstPeak = x;
-      firstPeakSize = buckets[x];
-    }
-    if (buckets[x] > maxBucketCount) {
-      maxBucketCount = buckets[x];
+    if (histogram[i] > maxBucketCount) {
+      maxBucketCount = histogram[i];
     }
   }
 
@@ -160,16 +154,17 @@ int GlobalHistogramBinarizer::estimateBlackPoint(ArrayRef<int> const& buckets) {
   // so close to the first one
   int secondPeak = 0;
   int secondPeakScore = 0;
-  for (int x = 0; x < numBuckets; x++) {
-    int distanceToBiggest = x - firstPeak;
+  for (int i = 0; i < numBuckets; i++) {
+    int distanceToBiggest = i - firstPeak;
     // Encourage more distant second peaks by multiplying by square of distance
-    int score = buckets[x] * distanceToBiggest * distanceToBiggest;
+    int score = histogram[i] * distanceToBiggest * distanceToBiggest;
     if (score > secondPeakScore) {
-      secondPeak = x;
+      secondPeak = i;
       secondPeakScore = score;
     }
   }
 
+  // Put firstPeak first
   if (firstPeak > secondPeak) {
     int temp = firstPeak;
     firstPeak = secondPeak;
@@ -183,30 +178,30 @@ int GlobalHistogramBinarizer::estimateBlackPoint(ArrayRef<int> const& buckets) {
   // a false positive for 1D formats, which are relatively lenient.
   // We arbitrarily say "close" is
   // "<= 1/16 of the total histogram buckets apart"
-  // std::cerr << "! " << secondPeak << " " << firstPeak << " " << numBuckets << std::endl;
-  if (secondPeak - firstPeak <= numBuckets >> 4) {
-    throw NotFoundException();
+  if ( secondPeak - firstPeak <= numBuckets >> 4) {
+    return failure<IllegalArgumentException>( "Too little dynamic range in luminance" ); //...FIXME...this is not an 'illegal argument exception'...
   }
 
   // Find a valley between them that is low and closer to the white peak
   int bestValley = secondPeak - 1;
   int bestValleyScore = -1;
-  for (int x = secondPeak - 1; x > firstPeak; x--) {
-    int fromFirst = x - firstPeak;
+  for (int i = secondPeak - 1; i > firstPeak; i--) {
+    int fromFirst = i - firstPeak;
     // Favor a "valley" that is not too close to either peak -- especially not
     // the black peak -- and that has a low value of course
-    int score = fromFirst * fromFirst * (secondPeak - x) *
-      (maxBucketCount - buckets[x]);
+    int score = fromFirst * fromFirst * (secondPeak - i) *
+      (maxBucketCount - histogram[i]);
     if (score > bestValleyScore) {
-      bestValley = x;
+      bestValley = i;
       bestValleyScore = score;
     }
   }
 
-  // std::cerr << "bps " << (bestValley << LUMINANCE_SHIFT) << std::endl;
   return bestValley << LUMINANCE_SHIFT;
 }
 
-Ref<Binarizer> GlobalHistogramBinarizer::createBinarizer(Ref<LuminanceSource> source) {
+Ref<Binarizer> GlobalHistogramBinarizer::createBinarizer(Ref<LuminanceSource> source) const MB_NOEXCEPT_EXCEPT_BADALLOC {
   return Ref<Binarizer> (new GlobalHistogramBinarizer(source));
 }
+
+} // namespace zxing

@@ -1,4 +1,3 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  DecodeHintType.cpp
  *  zxing
@@ -19,42 +18,45 @@
  */
 
 #include <zxing/DecodeHints.h>
-#include <zxing/common/IllegalArgumentException.h>
+#include <zxing/common/IllegalArgumentException.h>  // for IllegalArgumentException
 
-using zxing::Ref;
-using zxing::ResultPointCallback;
-using zxing::DecodeHintType;
-using zxing::DecodeHints;
+#include "zxing/BarcodeFormat.h"                    // for BarcodeFormat, BarcodeFormat::AZTEC_BARCODE, BarcodeFormat::CODE_128, BarcodeFormat::CODE_39, BarcodeFo...
+#include "zxing/ResultPointCallback.h"              // for ResultPointCallback
 
-// VC++
-using zxing::BarcodeFormat;
+#include <Utils/Macros.h>
 
+namespace pping {
+
+#ifndef _WIN32
 const DecodeHintType DecodeHints::CHARACTER_SET;
+#endif // ifndef WIN32
 
 const DecodeHints DecodeHints::PRODUCT_HINT(
-  UPC_A_HINT |
-  UPC_E_HINT |
-  EAN_13_HINT |
-  EAN_8_HINT |
-  RSS_14_HINT
-  );
+    BARCODEFORMAT_UPC_E_HINT |
+    BARCODEFORMAT_UPC_A_HINT |
+    BARCODEFORMAT_EAN_8_HINT |
+    BARCODEFORMAT_EAN_13_HINT);
 
 const DecodeHints DecodeHints::ONED_HINT(
-  CODE_39_HINT |
-  CODE_93_HINT |
-  CODE_128_HINT |
-  ITF_HINT |
-  CODABAR_HINT |
-  DecodeHints::PRODUCT_HINT
-  );
+    BARCODEFORMAT_UPC_E_HINT |
+    BARCODEFORMAT_UPC_A_HINT |
+    BARCODEFORMAT_EAN_8_HINT |
+    BARCODEFORMAT_EAN_13_HINT |
+    BARCODEFORMAT_CODE_128_HINT |
+    BARCODEFORMAT_CODE_39_HINT |
+    BARCODEFORMAT_ITF_HINT);
 
 const DecodeHints DecodeHints::DEFAULT_HINT(
-  ONED_HINT |
-  QR_CODE_HINT |
-  DATA_MATRIX_HINT |
-  AZTEC_HINT |
-  PDF_417_HINT
-  );
+    BARCODEFORMAT_UPC_E_HINT |
+    BARCODEFORMAT_UPC_A_HINT |
+    BARCODEFORMAT_EAN_8_HINT |
+    BARCODEFORMAT_EAN_13_HINT |
+    BARCODEFORMAT_CODE_128_HINT |
+    BARCODEFORMAT_CODE_39_HINT |
+    BARCODEFORMAT_ITF_HINT |
+    BARCODEFORMAT_DATA_MATRIX_HINT |
+    BARCODEFORMAT_AZTEC_HINT |
+    BARCODEFORMAT_QR_CODE_HINT);
 
 DecodeHints::DecodeHints() {
   hints = 0;
@@ -64,50 +66,38 @@ DecodeHints::DecodeHints(DecodeHintType init) {
   hints = init;
 }
 
-void DecodeHints::addFormat(BarcodeFormat toadd) {
+void DecodeHints::addFormat(BarcodeFormat toadd) noexcept {
   switch (toadd) {
-  case BarcodeFormat::AZTEC: hints |= AZTEC_HINT; break;
-  case BarcodeFormat::CODABAR: hints |= CODABAR_HINT; break;
-  case BarcodeFormat::CODE_39: hints |= CODE_39_HINT; break;
-  case BarcodeFormat::CODE_93: hints |= CODE_93_HINT; break;
-  case BarcodeFormat::CODE_128: hints |= CODE_128_HINT; break;
-  case BarcodeFormat::DATA_MATRIX: hints |= DATA_MATRIX_HINT; break;
-  case BarcodeFormat::EAN_8: hints |= EAN_8_HINT; break;
-  case BarcodeFormat::EAN_13: hints |= EAN_13_HINT; break;
-  case BarcodeFormat::ITF: hints |= ITF_HINT; break;
-  case BarcodeFormat::MAXICODE: hints |= MAXICODE_HINT; break;
-  case BarcodeFormat::PDF_417: hints |= PDF_417_HINT; break;
-  case BarcodeFormat::QR_CODE: hints |= QR_CODE_HINT; break;
-  case BarcodeFormat::RSS_14: hints |= RSS_14_HINT; break;
-  case BarcodeFormat::RSS_EXPANDED: hints |= RSS_EXPANDED_HINT; break;
-  case BarcodeFormat::UPC_A: hints |= UPC_A_HINT; break;
-  case BarcodeFormat::UPC_E: hints |= UPC_E_HINT; break;
-  case BarcodeFormat::UPC_EAN_EXTENSION: hints |= UPC_EAN_EXTENSION_HINT; break;
-  default: throw IllegalArgumentException("Unrecognizd barcode format");
+    case BarcodeFormat::AZTEC_BARCODE: hints |= BARCODEFORMAT_AZTEC_HINT; break;
+    case BarcodeFormat::QR_CODE: hints |= BARCODEFORMAT_QR_CODE_HINT; break;
+    case BarcodeFormat::DATA_MATRIX: hints |= BARCODEFORMAT_DATA_MATRIX_HINT; break;
+    case BarcodeFormat::UPC_E: hints |= BARCODEFORMAT_UPC_E_HINT; break;
+    case BarcodeFormat::UPC_A: hints |= BARCODEFORMAT_UPC_A_HINT; break;
+    case BarcodeFormat::EAN_8: hints |= BARCODEFORMAT_EAN_8_HINT; break;
+    case BarcodeFormat::EAN_13: hints |= BARCODEFORMAT_EAN_13_HINT; break;
+    case BarcodeFormat::CODE_128: hints |= BARCODEFORMAT_CODE_128_HINT; break;
+    case BarcodeFormat::CODE_39: hints |= BARCODEFORMAT_CODE_39_HINT; break;
+    case BarcodeFormat::ITF: hints |= BARCODEFORMAT_ITF_HINT; break;
+    default: MB_ASSERTM(false, "%s", "Unrecognized barcode format");
   }
 }
 
-bool DecodeHints::containsFormat(BarcodeFormat tocheck) const {
-  DecodeHintType checkAgainst = 0;
+bool DecodeHints::containsFormat(BarcodeFormat tocheck) const noexcept {
+  DecodeHintType checkAgainst;
   switch (tocheck) {
-  case BarcodeFormat::AZTEC: checkAgainst |= AZTEC_HINT; break;
-  case BarcodeFormat::CODABAR: checkAgainst |= CODABAR_HINT; break;
-  case BarcodeFormat::CODE_39: checkAgainst |= CODE_39_HINT; break;
-  case BarcodeFormat::CODE_93: checkAgainst |= CODE_93_HINT; break;
-  case BarcodeFormat::CODE_128: checkAgainst |= CODE_128_HINT; break;
-  case BarcodeFormat::DATA_MATRIX: checkAgainst |= DATA_MATRIX_HINT; break;
-  case BarcodeFormat::EAN_8: checkAgainst |= EAN_8_HINT; break;
-  case BarcodeFormat::EAN_13: checkAgainst |= EAN_13_HINT; break;
-  case BarcodeFormat::ITF: checkAgainst |= ITF_HINT; break;
-  case BarcodeFormat::MAXICODE: checkAgainst |= MAXICODE_HINT; break;
-  case BarcodeFormat::PDF_417: checkAgainst |= PDF_417_HINT; break;
-  case BarcodeFormat::QR_CODE: checkAgainst |= QR_CODE_HINT; break;
-  case BarcodeFormat::RSS_14: checkAgainst |= RSS_14_HINT; break;
-  case BarcodeFormat::RSS_EXPANDED: checkAgainst |= RSS_EXPANDED_HINT; break;
-  case BarcodeFormat::UPC_A: checkAgainst |= UPC_A_HINT; break;
-  case BarcodeFormat::UPC_E: checkAgainst |= UPC_E_HINT; break;
-  case BarcodeFormat::UPC_EAN_EXTENSION: checkAgainst |= UPC_EAN_EXTENSION_HINT; break;
-  default: throw IllegalArgumentException("Unrecognizd barcode format");
+    case BarcodeFormat::AZTEC_BARCODE: checkAgainst = BARCODEFORMAT_AZTEC_HINT; break;
+    case BarcodeFormat::QR_CODE: checkAgainst = BARCODEFORMAT_QR_CODE_HINT; break;
+    case BarcodeFormat::DATA_MATRIX: checkAgainst = BARCODEFORMAT_DATA_MATRIX_HINT; break;
+    case BarcodeFormat::UPC_E: checkAgainst = BARCODEFORMAT_UPC_E_HINT; break;
+    case BarcodeFormat::UPC_A: checkAgainst = BARCODEFORMAT_UPC_A_HINT; break;
+    case BarcodeFormat::EAN_8: checkAgainst = BARCODEFORMAT_EAN_8_HINT; break;
+    case BarcodeFormat::EAN_13: checkAgainst = BARCODEFORMAT_EAN_13_HINT; break;
+    case BarcodeFormat::CODE_128: checkAgainst = BARCODEFORMAT_CODE_128_HINT; break;
+    case BarcodeFormat::CODE_39: checkAgainst = BARCODEFORMAT_CODE_39_HINT; break;
+    case BarcodeFormat::ITF: checkAgainst = BARCODEFORMAT_ITF_HINT; break;
+    default:
+      MB_ASSERTM(false, "%s", "Unrecognized barcode format");
+      return false;
   }
   return (hints & checkAgainst) != 0;
 }
@@ -125,18 +115,11 @@ bool DecodeHints::getTryHarder() const {
 }
 
 void DecodeHints::setResultPointCallback(Ref<ResultPointCallback> const& _callback) {
-  callback = _callback;
+    callback = _callback;
 }
 
 Ref<ResultPointCallback> DecodeHints::getResultPointCallback() const {
-  return callback;
+    return callback;
 }
 
-DecodeHints zxing::operator | (DecodeHints const& l, DecodeHints const& r) {
-  DecodeHints result (l);
-  result.hints |= r.hints;
-  if (!result.callback) {
-    result.callback = r.callback;
-  }
-  return result;
-}
+} /* namespace */

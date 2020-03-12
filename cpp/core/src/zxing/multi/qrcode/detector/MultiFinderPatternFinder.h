@@ -1,5 +1,4 @@
-#ifndef __MULTI_FINDER_PATTERN_FINDER_H__
-#define __MULTI_FINDER_PATTERN_FINDER_H__
+#pragma once
 
 /*
  *  Copyright 2011 ZXing authors
@@ -17,16 +16,26 @@
  * limitations under the License.
  */
 
-#include <zxing/qrcode/detector/FinderPattern.h>
-#include <zxing/qrcode/detector/FinderPatternFinder.h>
-#include <zxing/qrcode/detector/FinderPatternInfo.h>
+#include <zxing/qrcode/detector/ZXingQRCodeFinderPatternFinder.h>  // for FinderPatternFinder
+#include <vector>                                                  // for vector
 
-namespace zxing {
+#include "zxing/DecodeHints.h"                                     // for DecodeHints
+
+namespace pping {
+class BitMatrix;
+class ResultPointCallback;
+namespace qrcode {
+class FinderPattern;
+class FinderPatternInfo;
+}  // namespace qrcode
+template <typename T> class Ref;
+}  // namespace pping
+
+namespace pping {
 namespace multi {
-
-class MultiFinderPatternFinder : zxing::qrcode::FinderPatternFinder {
+class MultiFinderPatternFinder : pping::qrcode::FinderPatternFinder {
   private:
-    std::vector<std::vector<Ref<zxing::qrcode::FinderPattern> > > selectBestPatterns();
+    Fallible<std::vector<std::vector<Ref<qrcode::FinderPattern> > > > selectBestPatterns() MB_NOEXCEPT_EXCEPT_BADALLOC;
 
     static const float MAX_MODULE_COUNT_PER_EDGE;
     static const float MIN_MODULE_COUNT_PER_EDGE;
@@ -36,12 +45,10 @@ class MultiFinderPatternFinder : zxing::qrcode::FinderPatternFinder {
   public:
     MultiFinderPatternFinder(Ref<BitMatrix> image, Ref<ResultPointCallback> resultPointCallback);
     virtual ~MultiFinderPatternFinder();
-    virtual std::vector<Ref<zxing::qrcode::FinderPatternInfo> > findMulti(DecodeHints const& hints);
+    virtual Fallible<std::vector<Ref<qrcode::FinderPatternInfo> > > findMulti(DecodeHints const& hints) MB_NOEXCEPT_EXCEPT_BADALLOC;
 
 
 };
-
 }
 }
 
-#endif // __MULTI_FINDER_PATTERN_FINDER_H__

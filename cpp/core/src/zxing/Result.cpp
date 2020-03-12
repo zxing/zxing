@@ -21,41 +21,42 @@
 
 #include <zxing/Result.h>
 
-using zxing::Result;
-using zxing::Ref;
-using zxing::ArrayRef;
-using zxing::String;
-using zxing::ResultPoint;
+#include "zxing/BarcodeFormat.h"   // for BarcodeFormat
+#include "zxing/ResultPoint.h"     // for ResultPoint
+#include "zxing/common/Array.h"    // for ArrayRef, Array
+#include "zxing/common/Counted.h"  // for Ref
+#include "zxing/common/Str.h"      // for String
 
-// VC++
-using zxing::BarcodeFormat;
+namespace pping {
+using namespace std;
 
-Result::Result(Ref<String> text,
-               ArrayRef<char> rawBytes,
-               ArrayRef< Ref<ResultPoint> > resultPoints,
-               BarcodeFormat format) :
-  text_(text), rawBytes_(rawBytes), resultPoints_(resultPoints), format_(format) {
-}
-
-Result::~Result() {
+Result::Result(Ref<String> text, ArrayRef<unsigned char> rawBytes, std::vector<Ref<ResultPoint>> const & resultPoints,
+               BarcodeFormat format, ArrayRef< ArrayRef<unsigned char> > byteSegments) :
+  text_(text), rawBytes_(rawBytes), resultPoints_(resultPoints), format_(format), byteSegments_(byteSegments) {
 }
 
 Ref<String> Result::getText() {
   return text_;
 }
 
-ArrayRef<char> Result::getRawBytes() {
+ArrayRef<unsigned char> Result::getRawBytes() {
   return rawBytes_;
 }
 
-ArrayRef< Ref<ResultPoint> > const& Result::getResultPoints() const {
+const std::vector<Ref<ResultPoint> >& Result::getResultPoints() const {
   return resultPoints_;
 }
 
-ArrayRef< Ref<ResultPoint> >& Result::getResultPoints() {
+std::vector<Ref<ResultPoint> >& Result::getResultPoints() {
   return resultPoints_;
 }
 
-zxing::BarcodeFormat Result::getBarcodeFormat() const {
+BarcodeFormat Result::getBarcodeFormat() const {
   return format_;
+}
+
+ArrayRef< ArrayRef<unsigned char> > Result::getByteSegments(){
+    return byteSegments_;
+}
+
 }

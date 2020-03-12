@@ -1,5 +1,4 @@
-#ifndef __READER_H__
-#define __READER_H__
+#pragma once
 
 /*
  *  Reader.h
@@ -20,21 +19,24 @@
  * limitations under the License.
  */
 
-#include <zxing/BinaryBitmap.h>
-#include <zxing/Result.h>
-#include <zxing/DecodeHints.h>
+#include <zxing/DecodeHints.h>     // for DecodeHints
 
-namespace zxing {
+#include "zxing/common/Counted.h"  // for Ref, Counted
+#include "zxing/common/Error.hpp"
+
+namespace pping {
+
+class BinaryBitmap;
+class Result;
 
  class Reader : public Counted {
   protected:
    Reader() {}
+   ~Reader() = default;
   public:
-   virtual Ref<Result> decode(Ref<BinaryBitmap> image);
-   virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) = 0;
-   virtual ~Reader();
+   virtual FallibleRef<Result> decode(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC;
+   virtual FallibleRef<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC = 0;
 };
 
 }
 
-#endif // __READER_H__

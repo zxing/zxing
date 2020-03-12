@@ -1,5 +1,4 @@
-#ifndef __MODULUS_GFPOLY_PDF_H__
-#define __MODULUS_GFPOLY_PDF_H__
+#pragma once
 
 /*
  * Copyright 2012 ZXing authors
@@ -19,15 +18,14 @@
  * 2012-09-17 HFN translation from Java into C++
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/common/Array.h>
-#include <zxing/common/DecoderResult.h>
-#include <zxing/common/BitMatrix.h>
+#include <zxing/common/Array.h>    // for ArrayRef
+#include <zxing/common/Counted.h>  // for Ref, Counted
+#include "zxing/common/Error.hpp"
 
-namespace zxing {
+#include <vector>                  // for vector
+
+namespace pping {
 namespace pdf417 {
-namespace decoder {
-namespace ec {
 
 class ModulusGF;
 
@@ -37,32 +35,36 @@ class ModulusGF;
  */
 class ModulusPoly: public Counted {
 
+  /**
+   * We will allow ModulusGF to use our private constructor because it promises to worry about
+   * possible failures
+   */
+  friend ModulusGF;
+
   private:
-	ModulusGF &field_;
-	ArrayRef<int> coefficients_;
+    ModulusGF &field_;
+    ArrayRef<int> coefficients_;
+    ModulusPoly(ModulusGF& field, ArrayRef<int> coefficients) MB_NOEXCEPT_EXCEPT_BADALLOC;
   public:
-	ModulusPoly(ModulusGF& field, ArrayRef<int> coefficients);
-	~ModulusPoly();
-	ArrayRef<int> getCoefficients();
-	int getDegree();
-	bool isZero();
-	int getCoefficient(int degree);
-	int evaluateAt(int a);
-	Ref<ModulusPoly> add(Ref<ModulusPoly> other);
-	Ref<ModulusPoly> subtract(Ref<ModulusPoly> other);
-	Ref<ModulusPoly> multiply(Ref<ModulusPoly> other);
-	Ref<ModulusPoly> negative();
-	Ref<ModulusPoly> multiply(int scalar);
-	Ref<ModulusPoly> multiplyByMonomial(int degree, int coefficient);
-	std::vector<Ref<ModulusPoly> > divide(Ref<ModulusPoly> other);
-	#if 0
+    static FallibleRef<ModulusPoly> createModulusPoly(ModulusGF& field, ArrayRef<int> coefficients) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    ~ModulusPoly();
+    ArrayRef<int> getCoefficients();
+    int getDegree();
+    bool isZero();
+    int getCoefficient(int degree);
+    int evaluateAt(int a);
+    FallibleRef<ModulusPoly> add(Ref<ModulusPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<ModulusPoly> subtract(Ref<ModulusPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<ModulusPoly> multiply(Ref<ModulusPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<ModulusPoly> negative();
+    FallibleRef<ModulusPoly> multiply(int scalar);
+    FallibleRef<ModulusPoly> multiplyByMonomial(int degree, int coefficient) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    Fallible<std::vector<Ref<ModulusPoly> > > divide(Ref<ModulusPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    #if 0
     public String toString();
-	#endif
+    #endif
 };
 
-}
-}
-}
-}
+} /* namespace pdf417 */
+} /* namespace zxing */
 
-#endif /* __MODULUS_GFPOLY_PDF_H__ */

@@ -19,29 +19,32 @@
  * limitations under the License.
  */
 
-#ifndef GENERICGF_H
-#define GENERICGF_H
+#pragma once
 
-#include <vector>
-#include <zxing/common/Counted.h>
+#include <zxing/common/Counted.h>                    // for Ref, Counted
+#include <vector>                                    // for vector
 
-namespace zxing {
-  class GenericGFPoly;
+#include "zxing/common/reedsolomon/GenericGFPoly.h"  // for GenericGFPoly
+#include "zxing/common/Error.hpp"
+
+namespace pping {
   
   class GenericGF : public Counted {
     
   private:
-    std::vector<int> expTable;
-    std::vector<int> logTable;
-    Ref<GenericGFPoly> zero;
-    Ref<GenericGFPoly> one;
-    int size;
-    int primitive;
-    int generatorBase;
-    bool initialized;
+    std::vector<int> expTable_;
+    std::vector<int> logTable_;
+    Ref<GenericGFPoly> zero_;
+    Ref<GenericGFPoly> one_;
+    int size_;
+    int primitive_;
+    int generatorBase_;
+    bool initialized_;
     
-    void initialize();
-    void checkInit();
+    Fallible<void> initialize() MB_NOEXCEPT_EXCEPT_BADALLOC;
+    Fallible<void> checkInit() MB_NOEXCEPT_EXCEPT_BADALLOC;
+
+    GenericGF(int primitive, int size, int b) MB_NOEXCEPT_EXCEPT_BADALLOC;
     
   public:
     static Ref<GenericGF> AZTEC_DATA_12;
@@ -53,21 +56,27 @@ namespace zxing {
     static Ref<GenericGF> DATA_MATRIX_FIELD_256;
     static Ref<GenericGF> MAXICODE_FIELD_64;
     
-    GenericGF(int primitive, int size, int b);
-    
-    Ref<GenericGFPoly> getZero();
-    Ref<GenericGFPoly> getOne();
+    static FallibleRef<GenericGF> createGenericGF(int primitive, int size, int b) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<GenericGFPoly> getZero() MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<GenericGFPoly> getOne() MB_NOEXCEPT_EXCEPT_BADALLOC;
     int getSize();
     int getGeneratorBase();
-    Ref<GenericGFPoly> buildMonomial(int degree, int coefficient);
+    FallibleRef<GenericGFPoly> buildMonomial(int degree, int coefficient) MB_NOEXCEPT_EXCEPT_BADALLOC;
     
     static int addOrSubtract(int a, int b);
-    int exp(int a);
-    int log(int a);
-    int inverse(int a);
-    int multiply(int a, int b);
+    Fallible<int> exp(int a) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    Fallible<int> log(int a) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    Fallible<int> inverse(int a) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    Fallible<int> multiply(int a, int b) MB_NOEXCEPT_EXCEPT_BADALLOC;
+      
+    bool operator==(GenericGF other) {
+      return (other.getSize() == this->size_ &&
+              other.primitive_ == this->primitive_);
+    }
+    
+    //#warning todo: add print method
+    
   };
 }
 
-#endif //GENERICGF_H
 

@@ -19,30 +19,29 @@
  * limitations under the License.
  */
 
-#include <zxing/common/DetectorResult.h>
+#include <zxing/common/DetectorResult.h>  // for DetectorResult
+#include <vector>                         // for vector
 
-#ifndef ZXingWidget_AtztecDetecorResult_h
-#define ZXingWidget_AtztecDetecorResult_h
+namespace pping {
+class BitMatrix;
+class ResultPoint;
+template <typename T> class Ref;
+}  // namespace pping
 
-namespace zxing {
-namespace aztec {
+#pragma once
 
-class AztecDetectorResult : public DetectorResult {
- private:
-  bool compact_;
-  int nbDatablocks_, nbLayers_;
- public:
-  AztecDetectorResult(Ref<BitMatrix> bits, 
-                      ArrayRef< Ref<ResultPoint> > points,
-                      bool compact,
-                      int nbDatablocks,
-                      int nbLayers);
-  bool isCompact();
-  int getNBDatablocks();
-  int getNBLayers();
-};
-
+namespace pping {
+    namespace aztec {
+        class AztecDetectorResult : public DetectorResult {
+        private:
+            bool compact_;
+            int nbDatablocks_, nbLayers_;
+        public:
+            AztecDetectorResult(Ref<BitMatrix> bits, std::vector<Ref<ResultPoint> > points, bool compact, int nbDatablocks, int nbLayers);
+            bool isCompact();
+            int getNBDatablocks();
+            int getNBLayers();
+        };
+    }
 }
-}
 
-#endif

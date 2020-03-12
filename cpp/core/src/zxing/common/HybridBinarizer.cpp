@@ -18,12 +18,17 @@
  * limitations under the License.
  */
 
+#include <stddef.h>                                 // for NULL
 #include <zxing/common/HybridBinarizer.h>
 
-#include <zxing/common/IllegalArgumentException.h>
+#include "zxing/Binarizer.h"                        // for Binarizer
+#include "zxing/LuminanceSource.h"                  // for LuminanceSource
+#include "zxing/common/BitArray.h"                  // for BitArray
+#include "zxing/common/BitMatrix.h"                 // for BitMatrix
+#include "zxing/common/GlobalHistogramBinarizer.h"  // for GlobalHistogramBinarizer
 
 using namespace std;
-using namespace zxing;
+using namespace pping;
 
 namespace {
   const int BLOCK_SIZE_POWER = 3;
@@ -32,16 +37,17 @@ namespace {
   const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
 }
 
-HybridBinarizer::HybridBinarizer(Ref<LuminanceSource> source) :
-  GlobalHistogramBinarizer(source), matrix_(NULL), cached_row_(NULL) {
+HybridBinarizer::HybridBinarizer(Ref<LuminanceSource> source) noexcept :
+  GlobalHistogramBinarizer(source),
+  matrix_(NULL),
+  cached_row_(NULL) {
+//  cached_row_num_(-1) {
 }
 
-HybridBinarizer::~HybridBinarizer() {
-}
-
+HybridBinarizer::~HybridBinarizer() = default;
 
 Ref<Binarizer>
-HybridBinarizer::createBinarizer(Ref<LuminanceSource> source) {
+HybridBinarizer::createBinarizer(Ref<LuminanceSource> source) const MB_NOEXCEPT_EXCEPT_BADALLOC {
   return Ref<Binarizer> (new HybridBinarizer(source));
 }
 
@@ -51,7 +57,7 @@ HybridBinarizer::createBinarizer(Ref<LuminanceSource> source) {
  * constructor instead, but there are some advantages to doing it lazily, such as making
  * profiling easier, and not doing heavy lifting when callers don't expect it.
  */
-Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
+FallibleRef<BitMatrix> HybridBinarizer::getBlackMatrix() const MB_NOEXCEPT_EXCEPT_BADALLOC {
   if (matrix_) {
     return matrix_;
   }
@@ -59,7 +65,7 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
   int width = source.getWidth();
   int height = source.getHeight();
   if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
-    ArrayRef<char> luminances = source.getMatrix();
+    unsigned char* luminances = source.getMatrix();
     int subWidth = width >> BLOCK_SIZE_POWER;
     if ((width & BLOCK_SIZE_MASK) != 0) {
       subWidth++;
@@ -68,7 +74,7 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
     if ((height & BLOCK_SIZE_MASK) != 0) {
       subHeight++;
     }
-    ArrayRef<int> blackPoints =
+    int* blackPoints =
       calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
     Ref<BitMatrix> newMatrix (new BitMatrix(width, height));
@@ -80,27 +86,37 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
                                blackPoints,
                                newMatrix);
     matrix_ = newMatrix;
+
+    // N.B.: these deletes are inadequate if anything between the new
+    // and this point can throw.  As of this writing, it doesn't look
+    // like they do.
+
+    delete [] blackPoints;
+    delete [] luminances;
   } else {
     // If the image is too small, fall back to the global histogram approach.
-    matrix_ = GlobalHistogramBinarizer::getBlackMatrix();
+    auto blackMatrix(GlobalHistogramBinarizer::getBlackMatrix());
+    if (!blackMatrix)
+        return blackMatrix.error();
+    matrix_ = std::move(*blackMatrix);
   }
   return matrix_;
 }
 
 namespace {
-  inline int cap(int value, int min, int max) {
+  int cap(int value, int min, int max) noexcept {
     return value < min ? min : value > max ? max : value;
   }
 }
 
 void
-HybridBinarizer::calculateThresholdForBlock(ArrayRef<char> luminances,
+HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances,
                                             int subWidth,
                                             int subHeight,
                                             int width,
                                             int height,
-                                            ArrayRef<int> blackPoints,
-                                            Ref<BitMatrix> const& matrix) {
+                                            int blackPoints[],
+                                            Ref<BitMatrix> const& matrix) const noexcept {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
     int maxYOffset = height - BLOCK_SIZE;
@@ -130,12 +146,12 @@ HybridBinarizer::calculateThresholdForBlock(ArrayRef<char> luminances,
   }
 }
 
-void HybridBinarizer::thresholdBlock(ArrayRef<char> luminances,
+void HybridBinarizer::thresholdBlock(unsigned char* luminances,
                                      int xoffset,
                                      int yoffset,
                                      int threshold,
                                      int stride,
-                                     Ref<BitMatrix> const& matrix) {
+                                     Ref<BitMatrix> const& matrix) const noexcept {
   for (int y = 0, offset = yoffset * stride + xoffset;
        y < BLOCK_SIZE;
        y++,  offset += stride) {
@@ -149,7 +165,7 @@ void HybridBinarizer::thresholdBlock(ArrayRef<char> luminances,
 }
 
 namespace {
-  inline int getBlackPointFromNeighbors(ArrayRef<int> blackPoints, int subWidth, int x, int y) {
+  int getBlackPointFromNeighbors(int* blackPoints, int subWidth, int x, int y) noexcept {
     return (blackPoints[(y-1)*subWidth+x] +
             2*blackPoints[y*subWidth+x-1] +
             blackPoints[(y-1)*subWidth+x-1]) >> 2;
@@ -157,14 +173,14 @@ namespace {
 }
 
 
-ArrayRef<int> HybridBinarizer::calculateBlackPoints(ArrayRef<char> luminances,
-                                                    int subWidth,
-                                                    int subHeight,
-                                                    int width,
-                                                    int height) {
+int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances,
+                                           int subWidth,
+                                           int subHeight,
+                                           int width,
+                                           int height) const MB_NOEXCEPT_EXCEPT_BADALLOC {
   const int minDynamicRange = 24;
 
-  ArrayRef<int> blackPoints (subHeight * subWidth);
+  int *blackPoints = new int[subHeight * subWidth];
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
     int maxYOffset = height - BLOCK_SIZE;

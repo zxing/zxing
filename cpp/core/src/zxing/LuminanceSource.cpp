@@ -18,37 +18,19 @@
  * limitations under the License.
  */
 
-#include <sstream>
 #include <zxing/LuminanceSource.h>
-#include <zxing/InvertedLuminanceSource.h>
-#include <zxing/common/IllegalArgumentException.h>
+#include <zxing/common/IllegalArgumentException.h>  // for IllegalArgumentException
 
-using zxing::Ref;
-using zxing::LuminanceSource;
+#include "zxing/common/Counted.h"                   // for Ref
+#include "Utils/stringstreamlite.hpp"
 
-LuminanceSource::LuminanceSource(int width_, int height_) :width(width_), height(height_) {}
+#include <boost/assert.hpp>
 
-LuminanceSource::~LuminanceSource() {}
+namespace pping {
 
-bool LuminanceSource::isCropSupported() const {
-  return false;
-}
-
-Ref<LuminanceSource> LuminanceSource::crop(int, int, int, int) const {
-  throw IllegalArgumentException("This luminance source does not support cropping.");
-}
-
-bool LuminanceSource::isRotateSupported() const {
-  return false;
-}
-
-Ref<LuminanceSource> LuminanceSource::rotateCounterClockwise() const {
-  throw IllegalArgumentException("This luminance source does not support rotation.");
-}
-
-LuminanceSource::operator std::string() const {
-  ArrayRef<char> row;
-  std::ostringstream oss;
+LuminanceSource::operator std::string() const MB_NOEXCEPT_EXCEPT_BADALLOC {
+  unsigned char* row = 0;
+  mb::stringstreamlite oss;
   for (int y = 0; y < getHeight(); y++) {
     row = getRow(y, row);
     for (int x = 0; x < getWidth(); x++) {
@@ -67,20 +49,8 @@ LuminanceSource::operator std::string() const {
     }
     oss << '\n';
   }
+  delete [] row;
   return oss.str();
 }
 
-Ref<LuminanceSource> LuminanceSource::invert() const {
-
-  // N.B.: this only works because we use counted objects with the
-  // count in the object. This is _not_ how things like shared_ptr
-  // work. They do not allow you to make a smart pointer from a native
-  // pointer more than once. If we ever switch to (something like)
-  // shared_ptr's, the luminace source is going to have keep a weak
-  // pointer to itself from which it can create a strong pointer as
-  // needed. And, FWIW, that has nasty semantics in the face of
-  // exceptions during construction.
-
-  return Ref<LuminanceSource>
-      (new InvertedLuminanceSource(Ref<LuminanceSource>(const_cast<LuminanceSource*>(this))));
 }

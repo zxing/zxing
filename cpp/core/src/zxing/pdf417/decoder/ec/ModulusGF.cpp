@@ -1,4 +1,3 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  * Copyright 2012 ZXing authors
  *
@@ -17,12 +16,17 @@
  * 2012-09-19 HFN translation from Java into C++
  */
 
-#include <zxing/pdf417/decoder/ec/ModulusGF.h>
-#include <zxing/pdf417/decoder/ec/ModulusPoly.h>
+#include "zxing/pdf417/decoder/ec/ModulusGF.h"
 
-using zxing::Ref;
-using zxing::pdf417::decoder::ec::ModulusGF;
-using zxing::pdf417::decoder::ec::ModulusPoly;
+#include "zxing/common/Array.h"                     // for ArrayRef, Array
+#include "zxing/common/Counted.h"                   // for Ref
+#include "zxing/common/IllegalArgumentException.h"  // for IllegalArgumentException
+#include "zxing/pdf417/decoder/ec/ModulusPoly.h"    // for ModulusPoly
+
+#include <Utils/Macros.h>
+
+namespace pping {
+namespace pdf417 {
 
 /**
  * The central Modulus Galois Field for PDF417 with prime number 929
@@ -40,81 +44,90 @@ ModulusGF ModulusGF::PDF417_GF(929,3);
  
 ModulusGF::ModulusGF(int modulus, int generator)
     : modulus_(modulus) {
-	expTable_ = new Array<int>(modulus_);
-	logTable_ = new Array<int>(modulus_);
-  int x = 1,i;
-  for (i = 0; i < modulus_; i++) {
-    expTable_[i] = x;
-    x = (x * generator) % modulus_;
-  }
-  for (i = 0; i < modulus_-1; i++) {
-    logTable_[expTable_[i]] = i;
-  }
-  // logTable[0] == 0 but this should never be used
-	ArrayRef<int>aZero(new Array<int>(1)),aOne(new Array<int>(1));
-	aZero[0]=0;aOne[0]=1;
-  zero_ = new ModulusPoly(*this, aZero);
-  one_ = new ModulusPoly(*this, aOne);
+    expTable_ = new Array<int>(modulus_);
+    logTable_ = new Array<int>(modulus_);
+    int x = 1,i;
+    for (i = 0; i < modulus_; i++) {
+      expTable_[i] = x;
+      x = (x * generator) % modulus_;
+    }
+    for (i = 0; i < modulus_-1; i++) {
+      logTable_[expTable_[i]] = i;
+    }
+    // logTable[0] == 0 but this should never be used
+    ArrayRef<int>aZero(new Array<int>(1)),aOne(new Array<int>(1));
+    aZero[0]=0;aOne[0]=1;
+
+    /* calling ModulusPoly constructor directly beacuse coefficients are definitely not empty at this point */
+    zero_ = new ModulusPoly(*this, aZero);
+    one_ = new ModulusPoly(*this, aOne);
 }
  
 Ref<ModulusPoly> ModulusGF::getZero() {
-  return zero_;
+    return zero_;
 }
 
 Ref<ModulusPoly> ModulusGF::getOne() {
-  return one_;
+    return one_;
 }
 
-Ref<ModulusPoly> ModulusGF::buildMonomial(int degree, int coefficient)
+FallibleRef<ModulusPoly> ModulusGF::buildMonomial(int degree, int coefficient) MB_NOEXCEPT_EXCEPT_BADALLOC
 {
-  if (degree < 0) {
-    throw IllegalArgumentException("monomial: degree < 0!");
-  }
-  if (coefficient == 0) {
-    return zero_;
-  }
-	int nCoefficients = degree + 1;
-  ArrayRef<int> coefficients (new Array<int>(nCoefficients));
-  coefficients[0] = coefficient;
-	Ref<ModulusPoly> result(new ModulusPoly(*this,coefficients));
-  return result;
+    if (degree < 0) {
+        return failure<IllegalArgumentException>("monomial: degree < 0!");
+    }
+    if (coefficient == 0) {
+      return zero_;
+    }
+    int nCoefficients = degree + 1;
+    ArrayRef<int> coefficients (new Array<int>(nCoefficients));
+    coefficients[0] = coefficient;
+
+
+    /* calling ModulusPoly constructor directly beacuse coefficients are definitely not empty at this point */
+    Ref<ModulusPoly> result(new ModulusPoly(*this,coefficients));
+
+    return result;
 }
 
  
 
-int ModulusGF::add(int a, int b) {
-  return (a + b) % modulus_;
-}
-
-int ModulusGF::subtract(int a, int b) {
-  return (modulus_ + a - b) % modulus_;
-}
-
-int ModulusGF::exp(int a) {
-  return expTable_[a];
-}
-
-int ModulusGF::log(int a) {
-  if (a == 0) {
-    throw IllegalArgumentException("log of zero!");
+  int ModulusGF::add(int a, int b) {
+    return (a + b) % modulus_;
   }
-  return logTable_[a];
-}
 
-int ModulusGF::inverse(int a) {
-  if (a == 0) {
-    throw IllegalArgumentException("inverse of zero!");;
+  int ModulusGF::subtract(int a, int b) {
+    return (modulus_ + a - b) % modulus_;
   }
-  return expTable_[modulus_ - logTable_[a] - 1];
-}
 
-int ModulusGF::multiply(int a, int b) {
-  if (a == 0 || b == 0) {
-    return 0;
+  int ModulusGF::exp(int a) {
+    return expTable_[a];
   }
-  return expTable_[(logTable_[a] + logTable_[b]) % (modulus_ - 1)];
-}
 
-int ModulusGF::getSize() {
-  return modulus_;
-}
+  Fallible<int> ModulusGF::log(int a) noexcept {
+    if (a == 0) {
+      return failure<IllegalArgumentException>("log of zero!");
+    }
+    return logTable_[a];
+  }
+
+  Fallible<int> ModulusGF::inverse(int a) noexcept {
+    if (a == 0) {
+      return failure<IllegalArgumentException>("inverse of zero!");;
+    }
+    return expTable_[modulus_ - logTable_[a] - 1];
+  }
+
+  int ModulusGF::multiply(int a, int b) {
+    if (a == 0 || b == 0) {
+      return 0;
+    }
+    return expTable_[(logTable_[a] + logTable_[b]) % (modulus_ - 1)];
+  }
+
+  int ModulusGF::getSize() {
+    return modulus_;
+  }
+
+} /* namespace pdf417 */
+} /* namespace zxing */

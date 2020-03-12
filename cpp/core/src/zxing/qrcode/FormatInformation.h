@@ -1,5 +1,4 @@
-#ifndef __FORMAT_INFORMATION_H__
-#define __FORMAT_INFORMATION_H__
+#pragma once
 
 /*
  *  FormatInformation.h
@@ -20,12 +19,17 @@
  * limitations under the License.
  */
 
-#include <zxing/qrcode/ErrorCorrectionLevel.h>
-#include <zxing/common/Counted.h>
-#include <iostream>
+#include <zxing/common/Counted.h>  // for Ref, Counted
 
-namespace zxing {
+#include "zxing/common/Error.hpp"
+
+#include <string>
+#include <Utils/Macros.h>
+
+namespace pping {
 namespace qrcode {
+
+class ErrorCorrectionLevel;
 
 class FormatInformation : public Counted {
 private:
@@ -35,20 +39,19 @@ private:
   static int BITS_SET_IN_HALF_BYTE[];
 
   ErrorCorrectionLevel &errorCorrectionLevel_;
-  char dataMask_;
+  unsigned char dataMask_;
 
-  FormatInformation(int formatInfo);
+  static FallibleRef<FormatInformation> createFormatInformation(int formatInfo) MB_NOEXCEPT_EXCEPT_BADALLOC;
+  FormatInformation(ErrorCorrectionLevel & errorCorrectionLevel, unsigned char const dataMask) noexcept;
 
 public:
-  static int numBitsDiffering(int a, int b);
-  static Ref<FormatInformation> decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
-  static Ref<FormatInformation> doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
-  ErrorCorrectionLevel &getErrorCorrectionLevel();
-  char getDataMask();
+  static int numBitsDiffering(unsigned int a, unsigned int b);
+  static FallibleRef<FormatInformation> decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) MB_NOEXCEPT_EXCEPT_BADALLOC;
+  static FallibleRef<FormatInformation> doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) MB_NOEXCEPT_EXCEPT_BADALLOC;
+  ErrorCorrectionLevel &getErrorCorrectionLevel() noexcept;
+  unsigned char getDataMask() noexcept;
   friend bool operator==(const FormatInformation &a, const FormatInformation &b);
-  friend std::ostream& operator<<(std::ostream& out, const FormatInformation& fi);
 };
 }
 }
 
-#endif // __FORMAT_INFORMATION_H__

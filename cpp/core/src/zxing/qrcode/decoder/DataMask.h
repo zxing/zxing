@@ -1,5 +1,4 @@
-#ifndef __DATA_MASK_H__
-#define __DATA_MASK_H__
+#pragma once
 
 /*
  *  DataMask.h
@@ -20,13 +19,19 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Array.h>
-#include <zxing/common/Counted.h>
-#include <zxing/common/BitMatrix.h>
+#include <stddef.h>                // for size_t
+#include <zxing/common/Counted.h>  // for Counted
 
-#include <vector>
+#include "zxing/common/Error.hpp"
 
-namespace zxing {
+#include <vector>                  // for vector
+
+namespace pping {
+class BitMatrix;
+}  // namespace pping
+
+
+namespace pping {
 namespace qrcode {
 
 class DataMask : public Counted {
@@ -37,14 +42,13 @@ protected:
 
 public:
   static int buildDataMasks();
-  DataMask();
+  DataMask() noexcept;
   virtual ~DataMask();
   void unmaskBitMatrix(BitMatrix& matrix, size_t dimension);
   virtual bool isMasked(size_t x, size_t y) = 0;
-  static DataMask& forReference(int reference);
+  static FallibleRef<DataMask> forReference(int reference) noexcept;
 };
 
 }
 }
 
-#endif // __DATA_MASK_H__

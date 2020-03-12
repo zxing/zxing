@@ -1,5 +1,4 @@
-#ifndef __REED_SOLOMON_DECODER_H__
-#define __REED_SOLOMON_DECODER_H__
+#pragma once
 
 /*
  *  ReedSolomonDecoder.h
@@ -20,16 +19,15 @@
  * limitations under the License.
  */
 
-#include <memory>
-#include <vector>
-#include <zxing/common/Counted.h>
-#include <zxing/common/Array.h>
-#include <zxing/common/reedsolomon/GenericGFPoly.h>
-#include <zxing/common/reedsolomon/GenericGF.h>
+#include "zxing/common/Array.h"    // for ArrayRef
+#include "zxing/common/Counted.h"  // for Ref
+#include "zxing/common/Error.hpp"  // for Fallible
 
-namespace zxing {
-class GenericGFPoly;
+#include <vector>                  // for vector
+
+namespace pping {
 class GenericGF;
+class GenericGFPoly;
 
 class ReedSolomonDecoder {
 private:
@@ -37,13 +35,12 @@ private:
 public:
   ReedSolomonDecoder(Ref<GenericGF> fld);
   ~ReedSolomonDecoder();
-  void decode(ArrayRef<int> received, int twoS);
-  std::vector<Ref<GenericGFPoly> > runEuclideanAlgorithm(Ref<GenericGFPoly> a, Ref<GenericGFPoly> b, int R);
+  Fallible<void> decode(ArrayRef<int> received, int twoS) MB_NOEXCEPT_EXCEPT_BADALLOC;
+  Fallible<std::vector<Ref<GenericGFPoly>>> runEuclideanAlgorithm(Ref<GenericGFPoly> a, Ref<GenericGFPoly> b, int R);
 
 private:
-  ArrayRef<int> findErrorLocations(Ref<GenericGFPoly> errorLocator);
-  ArrayRef<int> findErrorMagnitudes(Ref<GenericGFPoly> errorEvaluator, ArrayRef<int> errorLocations);
+  Fallible<ArrayRef<int>> findErrorLocations(Ref<GenericGFPoly> errorLocator);
+  Fallible<ArrayRef<int>> findErrorMagnitudes(Ref<GenericGFPoly> errorEvaluator, ArrayRef<int> errorLocations);
 };
 }
 
-#endif // __REED_SOLOMON_DECODER_H__

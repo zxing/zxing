@@ -1,5 +1,4 @@
-#ifndef __DECODER_RESULT_H__
-#define __DECODER_RESULT_H__
+#pragma once
 
 /*
  *  DecoderResult.h
@@ -20,32 +19,37 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/common/Array.h>
-#include <string>
-#include <zxing/common/Str.h>
+#include <zxing/common/Array.h>    // for ArrayRef
+#include <zxing/common/Counted.h>  // for Ref, Counted
+#include <zxing/common/Str.h>      // for String
+#include <string>                  // for string
 
-namespace zxing {
+namespace pping {
+
+enum class SegmentsMetadata : uint8_t {
+    TEXT_DATA,
+    BYTE_DATA
+};
 
 class DecoderResult : public Counted {
 private:
-  ArrayRef<char> rawBytes_;
+  ArrayRef<unsigned char> rawBytes_;
   Ref<String> text_;
-  ArrayRef< ArrayRef<char> > byteSegments_;
+  ArrayRef< ArrayRef<unsigned char> > byteSegments_;
   std::string ecLevel_;
 
 public:
-  DecoderResult(ArrayRef<char> rawBytes,
+  DecoderResult(ArrayRef<unsigned char> rawBytes,
                 Ref<String> text,
-                ArrayRef< ArrayRef<char> >& byteSegments,
+                ArrayRef< ArrayRef<unsigned char> >& byteSegments,
                 std::string const& ecLevel);
 
-  DecoderResult(ArrayRef<char> rawBytes, Ref<String> text);
+  DecoderResult(ArrayRef<unsigned char> rawBytes, Ref<String> text);
 
-  ArrayRef<char> getRawBytes();
+  ArrayRef<unsigned char> getRawBytes();
   Ref<String> getText();
+  ArrayRef<ArrayRef<unsigned char> > getByteSegments();
 };
 
 }
 
-#endif // __DECODER_RESULT_H__

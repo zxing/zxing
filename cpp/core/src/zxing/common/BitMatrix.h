@@ -1,6 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __BIT_MATRIX_H__
-#define __BIT_MATRIX_H__
+#pragma once
 
 /*
  *  BitMatrix.h
@@ -21,22 +20,23 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/common/Array.h>
-#include <limits>
+#include "Utils/stringstreamlite.hpp"
 
-namespace zxing {
+#include <zxing/common/Counted.h>  // for Counted, Ref
+#include <zxing/common/Error.hpp>
+#include <limits>                  // for numeric_limits, numeric_limits<>::digits
+#include <cstddef>                // for size_t
+
+namespace pping {
+
+class BitArray;
 
 class BitMatrix : public Counted {
-public:
-  static const int bitsPerWord = std::numeric_limits<unsigned int>::digits;
-
 private:
-  int width;
-  int height;
-  int rowSize;
-  ArrayRef<int> bits;
+  size_t width_;
+  size_t height_;
+  size_t words_;
+  unsigned int* bits_;
 
 #define ZX_LOG_DIGITS(digits) \
     ((digits == 8) ? 3 : \
@@ -46,46 +46,48 @@ private:
         ((digits == 128) ? 7 : \
          (-1))))))
 
-  static const int logBits = ZX_LOG_DIGITS(bitsPerWord);
-  static const int bitsMask = (1 << logBits) - 1;
+  static const unsigned int bitsPerWord =
+    std::numeric_limits<unsigned int>::digits;
+  static const unsigned int logBits = ZX_LOG_DIGITS(bitsPerWord);
+  static const unsigned int bitsMask = (1 << logBits) - 1;
 
 public:
-  BitMatrix(int dimension);
-  BitMatrix(int width, int height);
+  BitMatrix(size_t dimension);
+  BitMatrix(size_t width, size_t height);
 
   ~BitMatrix();
 
-  bool get(int x, int y) const {
-    int offset = y * rowSize + (x >> logBits);
-    return ((((unsigned)bits[offset]) >> (x & bitsMask)) & 1) != 0;
+  bool get(size_t x, size_t y) const {
+    size_t offset = x + width_ * y;
+    return ((bits_[offset >> logBits] >> (offset & bitsMask)) & 0x01) != 0;
   }
 
-  void set(int x, int y) {
-    int offset = y * rowSize + (x >> logBits);
-    bits[offset] |= 1 << (x & bitsMask);
+  void set(size_t x, size_t y) {
+    size_t offset = x + width_ * y;
+    bits_[offset >> logBits] |= static_cast< unsigned int >( 1 << (offset & bitsMask) );
   }
 
-  void flip(int x, int y);
+  void flip(size_t x, size_t y);
   void clear();
-  void setRegion(int left, int top, int width, int height);
+  Fallible<void> setRegion(size_t left, size_t top, size_t width, size_t height);
+
   Ref<BitArray> getRow(int y, Ref<BitArray> row);
 
-  int getWidth() const;
-  int getHeight() const;
+  size_t getDimension() const;
+  size_t getWidth() const;
+  size_t getHeight() const;
 
-  ArrayRef<int> getTopLeftOnBit() const;
-  ArrayRef<int> getBottomRightOnBit() const;
+  unsigned int* getBits() const;
 
-  friend std::ostream& operator<<(std::ostream &out, const BitMatrix &bm);
+  friend mb::stringstreamlite& operator<<(mb::stringstreamlite &out, const BitMatrix &bm);
   const char *description();
 
 private:
-  inline void init(int, int);
-
   BitMatrix(const BitMatrix&);
   BitMatrix& operator =(const BitMatrix&);
+
+  bool isRegionValid(size_t right, size_t bottom, size_t width, size_t height);
 };
 
 }
 
-#endif // __BIT_MATRIX_H__

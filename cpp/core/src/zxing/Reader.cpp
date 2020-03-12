@@ -20,11 +20,13 @@
 
 #include <zxing/Reader.h>
 
-namespace zxing {
+#include "zxing/BinaryBitmap.h"  // for BinaryBitmap
+#include "zxing/DecodeHints.h"   // for DecodeHints, DecodeHints::DEFAULT_HINT
+#include "zxing/Result.h"        // for Result
 
-Reader::~Reader() { }
+namespace pping {
 
-Ref<Result> Reader::decode(Ref<BinaryBitmap> image) {
+FallibleRef<Result> Reader::decode(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC {
   return decode(image, DecodeHints::DEFAULT_HINT);
 }
 

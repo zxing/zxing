@@ -20,7 +20,9 @@
 
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 
-namespace zxing {
+#include "zxing/Exception.h"  // for Exception
+
+namespace pping {
 ReedSolomonException::ReedSolomonException(const char *msg) throw() :
     Exception(msg) {
 }

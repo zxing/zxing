@@ -1,5 +1,4 @@
-#ifndef __REED_SOLOMON_EXCEPTION_H__
-#define __REED_SOLOMON_EXCEPTION_H__
+#pragma once
 
 /*
  *  ReedSolomonException.h
@@ -20,9 +19,9 @@
  * limitations under the License.
  */
 
-#include <zxing/Exception.h>
+#include <zxing/Exception.h>  // for Exception
 
-namespace zxing {
+namespace pping {
 class ReedSolomonException : public Exception {
 public:
   ReedSolomonException(const char *msg) throw();
@@ -30,4 +29,3 @@ public:
 };
 }
 
-#endif // __REED_SOLOMON_EXCEPTION_H__

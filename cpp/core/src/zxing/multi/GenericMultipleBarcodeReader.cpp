@@ -1,4 +1,3 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  Copyright 2011 ZXing authors All rights reserved.
  *
@@ -15,51 +14,43 @@
  * limitations under the License.
  */
 
+#include <zxing/ReaderException.h>  // for ReaderException
+#include <zxing/ResultPoint.h>      // for ResultPoint
 #include <zxing/multi/GenericMultipleBarcodeReader.h>
-#include <zxing/ReaderException.h>
-#include <zxing/ResultPoint.h>
+#include <string>                   // for string
 
-using std::vector;
-using zxing::Ref;
-using zxing::Result;
-using zxing::multi::GenericMultipleBarcodeReader;
+#include "zxing/BinaryBitmap.h"     // for BinaryBitmap
+#include "zxing/Reader.h"           // for Reader
+#include "zxing/Result.h"           // for Result
+#include "zxing/common/Str.h"       // for String
 
-// VC++
-using zxing::Reader;
-using zxing::BinaryBitmap;
-using zxing::DecodeHints;
-
-GenericMultipleBarcodeReader::GenericMultipleBarcodeReader(Reader& delegate)
-    : delegate_(delegate) {}
+namespace pping {
+namespace multi {
+GenericMultipleBarcodeReader::GenericMultipleBarcodeReader(Reader& delegate) : 
+  delegate_(delegate)
+{
+}
 
 GenericMultipleBarcodeReader::~GenericMultipleBarcodeReader(){}
 
-vector<Ref<Result> > GenericMultipleBarcodeReader::decodeMultiple(Ref<BinaryBitmap> image,
-                                                                  DecodeHints hints) {
-  vector<Ref<Result> > results;
-  doDecodeMultiple(image, hints, results, 0, 0, 0);
+Fallible<std::vector<Ref<Result>>> GenericMultipleBarcodeReader::decodeMultiple(
+  Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC
+{
+  std::vector<Ref<Result> > results;
+  doDecodeMultiple(image, hints, results, 0, 0);
   if (results.empty()){
-    throw ReaderException("No code detected");
+    return failure<ReaderException>("No code detected");
   }
   return results;
 }
 
 void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image, 
-                                                    DecodeHints hints,
-                                                    vector<Ref<Result> >& results,
-                                                    int xOffset,
-                                                    int yOffset,
-                                                    int currentDepth) {
-  if (currentDepth > MAX_DEPTH) {
+  DecodeHints hints, std::vector<Ref<Result> >& results, int xOffset, int yOffset)
+{
+  auto const result(delegate_.decode(image, hints));
+  if (!result || (*result).empty())
     return;
-  }
-  Ref<Result> result;
-  try {
-    result = delegate_.decode(image, hints);
-  } catch (ReaderException const& ignored) {
-    (void)ignored;
-    return;
-  }
+
   bool alreadyFound = false;
   for (unsigned int i = 0; i < results.size(); i++) {
     Ref<Result> existingResult = results[i];
@@ -68,22 +59,23 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
       break;
     }
   }
-  if (!alreadyFound) {
-    results.push_back(translateResultPoints(result, xOffset, yOffset));
+  if (alreadyFound) {
+    return;
   }
   
-  ArrayRef< Ref<ResultPoint> > resultPoints = result->getResultPoints();
-  if (resultPoints->empty()) {
+  results.push_back(translateResultPoints(*result, xOffset, yOffset));
+  const std::vector<Ref<ResultPoint> > resultPoints = result->getResultPoints();
+  if (resultPoints.empty()) {
     return;
   }
 
   int width = image->getWidth();
   int height = image->getHeight();
-  float minX = float(width);
-  float minY = float(height);
+  float minX = (float)width;
+  float minY =(float) height;
   float maxX = 0.0f;
   float maxY = 0.0f;
-  for (int i = 0; i < resultPoints->size(); i++) {
+  for (unsigned int i = 0; i < resultPoints.size(); i++) {
     Ref<ResultPoint> point = resultPoints[i];
     float x = point->getX();
     float y = point->getY();
@@ -104,34 +96,37 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
   // Decode left of barcode
   if (minX > MIN_DIMENSION_TO_RECUR) {
     doDecodeMultiple(image->crop(0, 0, (int) minX, height), 
-                     hints, results, xOffset, yOffset, currentDepth+1);
+                     hints, results, xOffset, yOffset);
   }
   // Decode above barcode
   if (minY > MIN_DIMENSION_TO_RECUR) {
     doDecodeMultiple(image->crop(0, 0, width, (int) minY), 
-                     hints, results, xOffset, yOffset, currentDepth+1);
+                     hints, results, xOffset, yOffset);
   }
   // Decode right of barcode
-  if (maxX < width - MIN_DIMENSION_TO_RECUR) {
+  if (maxX < static_cast<float>(width - MIN_DIMENSION_TO_RECUR)) {
     doDecodeMultiple(image->crop((int) maxX, 0, width - (int) maxX, height), 
-                     hints, results, xOffset + (int) maxX, yOffset, currentDepth+1);
+                     hints, results, xOffset + (int) maxX, yOffset);
   }
   // Decode below barcode
-  if (maxY < height - MIN_DIMENSION_TO_RECUR) {
+  if (maxY < static_cast<float>(height - MIN_DIMENSION_TO_RECUR)) {
     doDecodeMultiple(image->crop(0, (int) maxY, width, height - (int) maxY), 
-                     hints, results, xOffset, yOffset + (int) maxY, currentDepth+1);
+                     hints, results, xOffset, yOffset + (int) maxY);
   }
 }
 
 Ref<Result> GenericMultipleBarcodeReader::translateResultPoints(Ref<Result> result, int xOffset, int yOffset){
-    ArrayRef< Ref<ResultPoint> > oldResultPoints = result->getResultPoints();
-  if (oldResultPoints->empty()) {
+  const std::vector<Ref<ResultPoint> > oldResultPoints = result->getResultPoints();
+  if (oldResultPoints.empty()) {
     return result;
   }
-  ArrayRef< Ref<ResultPoint> > newResultPoints;
-  for (int i = 0; i < oldResultPoints->size(); i++) {
+  std::vector<Ref<ResultPoint> > newResultPoints;
+  for (unsigned int i = 0; i < oldResultPoints.size(); i++) {
     Ref<ResultPoint> oldPoint = oldResultPoints[i];
-    newResultPoints->values().push_back(Ref<ResultPoint>(new ResultPoint(oldPoint->getX() + xOffset, oldPoint->getY() + yOffset)));
+    newResultPoints.push_back(Ref<ResultPoint>(new ResultPoint(oldPoint->getX() + (float)xOffset, oldPoint->getY() + (float)yOffset)));
   }
   return Ref<Result>(new Result(result->getText(), result->getRawBytes(), newResultPoints, result->getBarcodeFormat()));
 }
+
+} // End zxing::multi namespace
+} // End zxing namespace

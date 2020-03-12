@@ -1,5 +1,4 @@
-#ifndef __RESULT_H__
-#define __RESULT_H__
+#pragma once
 
 /*
  *  Result.h
@@ -20,36 +19,35 @@
  * limitations under the License.
  */
 
-#include <string>
+#include <zxing/BarcodeFormat.h>
 #include <zxing/common/Array.h>
 #include <zxing/common/Counted.h>
-#include <zxing/common/Str.h>
-#include <zxing/ResultPoint.h>
-#include <zxing/BarcodeFormat.h>
+#include <string>
+#include <vector>
 
-namespace zxing {
+namespace pping {
+
+class ResultPoint;
+class String;
 
 class Result : public Counted {
 private:
   Ref<String> text_;
-  ArrayRef<char> rawBytes_;
-  ArrayRef< Ref<ResultPoint> > resultPoints_;
+  ArrayRef<unsigned char> rawBytes_;
+  std::vector<Ref<ResultPoint> > resultPoints_;
   BarcodeFormat format_;
+  ArrayRef< ArrayRef<unsigned char> > byteSegments_;
 
 public:
-  Result(Ref<String> text,
-         ArrayRef<char> rawBytes,
-         ArrayRef< Ref<ResultPoint> > resultPoints,
-         BarcodeFormat format);
-  ~Result();
+  Result(Ref<String> text, ArrayRef<unsigned char> rawBytes, std::vector<Ref<ResultPoint> > const & resultPoints,
+         BarcodeFormat format, ArrayRef< ArrayRef<unsigned char> > byteSegments = ArrayRef< ArrayRef<unsigned char> >());
+  ~Result() = default;
   Ref<String> getText();
-  ArrayRef<char> getRawBytes();
-  ArrayRef< Ref<ResultPoint> > const& getResultPoints() const;
-  ArrayRef< Ref<ResultPoint> >& getResultPoints();
+  ArrayRef<unsigned char> getRawBytes();
+  const std::vector<Ref<ResultPoint> >& getResultPoints() const;
+  std::vector<Ref<ResultPoint> >& getResultPoints();
   BarcodeFormat getBarcodeFormat() const;
-
-  friend std::ostream& operator<<(std::ostream &out, Result& result);
+  ArrayRef< ArrayRef<unsigned char> > getByteSegments();
 };
 
 }
-#endif // __RESULT_H__

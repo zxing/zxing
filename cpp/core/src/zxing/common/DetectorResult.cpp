@@ -21,19 +21,20 @@
 
 #include <zxing/common/DetectorResult.h>
 
-namespace zxing {
+#include "zxing/ResultPoint.h"                  // for ResultPoint
+#include "zxing/common/BitMatrix.h"             // for BitMatrix
+#include "zxing/common/Counted.h"               // for Ref
+#include "zxing/common/PerspectiveTransform.h"  // for PerspectiveTransform
 
-DetectorResult::DetectorResult(Ref<BitMatrix> bits,
-                               ArrayRef< Ref<ResultPoint> > points)
-  : bits_(bits), points_(points) {
+namespace pping {
+
+DetectorResult::DetectorResult(Ref<BitMatrix> bits, std::vector<Ref<ResultPoint> > points, 
+    pping::Ref<pping::PerspectiveTransform> perspectiveTransform) :
+  bits_(bits), points_(points), perspectiveTransform_(perspectiveTransform) {
 }
 
-Ref<BitMatrix> DetectorResult::getBits() {
-  return bits_;
-}
-
-ArrayRef< Ref<ResultPoint> > DetectorResult::getPoints() {
-  return points_;
+DetectorResult::DetectorResult(Ref<BitMatrix> bits, std::vector<Ref<ResultPoint> > points) :
+  bits_(bits), points_(points) {
 }
 
 }

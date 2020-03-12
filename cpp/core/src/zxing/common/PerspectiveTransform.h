@@ -1,5 +1,4 @@
-#ifndef __PERSPECTIVE_TANSFORM_H__
-#define __PERSPECTIVE_TANSFORM_H__
+#pragma once
 
 /*
  *  PerspectiveTransform.h
@@ -21,14 +20,15 @@
  */
 
 #include <zxing/common/Counted.h>
+#include <string>
 #include <vector>
 
-namespace zxing {
+namespace pping {
 class PerspectiveTransform : public Counted {
 private:
   float a11, a12, a13, a21, a22, a23, a31, a32, a33;
   PerspectiveTransform(float a11, float a21, float a31, float a12, float a22, float a32, float a13, float a23,
-                       float a33);
+                       float a33) noexcept;
 
 public:
   static Ref<PerspectiveTransform>
@@ -40,10 +40,7 @@ public:
       float x3, float y3);
   Ref<PerspectiveTransform> buildAdjoint();
   Ref<PerspectiveTransform> times(Ref<PerspectiveTransform> other);
-  void transformPoints(std::vector<float> &points);
-
-  friend std::ostream& operator<<(std::ostream& out, const PerspectiveTransform &pt);
+  void transformPoints(std::vector<float> &points) noexcept;
 };
 }
 
-#endif // __PERSPECTIVE_TANSFORM_H__

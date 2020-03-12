@@ -19,31 +19,37 @@
  * limitations under the License.
  */
 
-#include <zxing/Reader.h>
-#include <zxing/aztec/decoder/Decoder.h>
-#include <zxing/DecodeHints.h>
+#include <zxing/DecodeHints.h>            // for DecodeHints
+#include <zxing/Reader.h>                 // for Reader
+#include <zxing/aztec/decoder/Decoder.h>  // for Decoder
 
-#ifndef ZXingWidget_AztecReader_h
-#define ZXingWidget_AztecReader_h
+#include "zxing/common/Counted.h"         // for Ref
+#include "zxing/common/Error.hpp"
 
-namespace zxing {
-namespace aztec {
+namespace pping {
+class BinaryBitmap;
+class Result;
+}  // namespace pping
+
+#pragma once
+
+namespace pping {
+    namespace aztec {
         
-class AztecReader : public Reader {
- private:
-  Decoder decoder_;
+        class AztecReader : public Reader {
+        private:
+            Decoder decoder_;
             
- protected:
-  Decoder &getDecoder();
+        protected:
+            Decoder &getDecoder();
             
- public:
-  AztecReader();
-  virtual Ref<Result> decode(Ref<BinaryBitmap> image);
-  virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
-  virtual ~AztecReader();
-};
+        public:
+            AztecReader();
+            virtual FallibleRef<Result> decode(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC override;
+            virtual FallibleRef<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC override;
+            virtual ~AztecReader();
+        };
         
-}
+    }
 }
 
-#endif

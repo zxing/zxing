@@ -19,18 +19,19 @@
  * limitations under the License.
  */
 
+#include <math.h>                              // for sqrt
 #include <zxing/ResultPoint.h>
-#include <zxing/common/detector/MathUtils.h>
+#include <zxing/common/detector/math_utils.h>  // for distance, math_utils
 
-using zxing::common::detector::MathUtils;
+#include "zxing/common/Counted.h"              // for Ref
 
-namespace zxing {
+namespace math_utils = pping::common::detector::math_utils;
+
+namespace pping {
 
 ResultPoint::ResultPoint() : posX_(0), posY_(0) {}
 
 ResultPoint::ResultPoint(float x, float y) : posX_(x), posY_(y) {}
-
-ResultPoint::ResultPoint(int x, int y) : posX_(float(x)), posY_(float(y)) {}
   
 ResultPoint::~ResultPoint() {}
 
@@ -88,10 +89,10 @@ void ResultPoint::orderBestPatterns(std::vector<Ref<ResultPoint> > &patterns) {
 }
 
   float ResultPoint::distance(Ref<ResultPoint> pattern1, Ref<ResultPoint> pattern2) {
-  return MathUtils::distance(pattern1->posX_,
-                             pattern1->posY_,
-                             pattern2->posX_,
-                             pattern2->posY_);
+  return math_utils::distance(pattern1->posX_,
+                              pattern1->posY_,
+                              pattern2->posX_,
+                              pattern2->posY_);
 }
 
 float ResultPoint::distance(float x1, float x2, float y1, float y2) {

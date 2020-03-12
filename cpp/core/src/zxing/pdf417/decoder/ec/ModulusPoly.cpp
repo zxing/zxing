@@ -1,4 +1,3 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  * Copyright 2012 ZXing authors
  *
@@ -17,268 +16,315 @@
  * 2012-09-19 HFN translation from Java into C++
  */
 
+#include <stddef.h>                                 // for size_t
+#include <zxing/pdf417/decoder/ec/ModulusGF.h>      // for ModulusGF
 #include <zxing/pdf417/decoder/ec/ModulusPoly.h>
-#include <zxing/pdf417/decoder/ec/ModulusGF.h>
 
-using zxing::Ref;
-using zxing::ArrayRef;
-using zxing::pdf417::decoder::ec::ModulusGF;
-using zxing::pdf417::decoder::ec::ModulusPoly;
+#include "zxing/common/Array.h"                     // for ArrayRef, Array
+#include "zxing/common/Counted.h"                   // for Ref
+#include "zxing/common/IllegalArgumentException.h"  // for IllegalArgumentException
+
+#include <Utils/Macros.h>
 
 /**
  * @author Sean Owen
  * @see com.google.zxing.common.reedsolomon.GenericGFPoly
  */
 
-ModulusPoly::ModulusPoly(ModulusGF& field, ArrayRef<int> coefficients)
-    : field_(field)
+namespace pping {
+namespace pdf417 {
+
+
+ModulusPoly::ModulusPoly(ModulusGF& field, ArrayRef<int> coefficients) MB_NOEXCEPT_EXCEPT_BADALLOC
+: field_(field)
 {
-  if (coefficients->size() == 0) {
-    throw IllegalArgumentException("no coefficients!");
-  }
-  int coefficientsLength = coefficients->size();
-  if (coefficientsLength > 1 && coefficients[0] == 0) {
-    // Leading term must be non-zero for anything except the constant polynomial "0"
-    int firstNonZero = 1;
-    while (firstNonZero < coefficientsLength && coefficients[firstNonZero] == 0) {
-      firstNonZero++;
-    }
-    if (firstNonZero == coefficientsLength) {
-	    coefficientsLength = field_.getZero()->getCoefficients()->size();
-      coefficients_.reset(new Array<int> (coefficientsLength));
-      *coefficients_ = *(field_.getZero()->getCoefficients());
-    } else {
-      ArrayRef<int> c(coefficients);
-      coefficientsLength -= firstNonZero;
-      coefficients_.reset(new Array<int> (coefficientsLength));
-      for (int i = 0; i < coefficientsLength; i++) {
-        coefficients_[i] = c[i + firstNonZero];
+    MB_ASSERTM(coefficients.size() != 0, "%s", "ModulusPoly needs coefficients");
+
+    int coefficientsLength = (int)coefficients.size();
+    if (coefficientsLength > 1 && coefficients[0] == 0) {
+      // Leading term must be non-zero for anything except the constant polynomial "0"
+      int firstNonZero = 1;
+      while (firstNonZero < coefficientsLength && coefficients[firstNonZero] == 0) {
+        firstNonZero++;
       }
+      if (firstNonZero == coefficientsLength) {
+        coefficientsLength = (int)field_.getZero()->getCoefficients()->size();
+        coefficients_.reset(new Array<int> (coefficientsLength));
+        *coefficients_ = *(field_.getZero()->getCoefficients());
+      } else {
+        ArrayRef<int> c(coefficients);
+        coefficientsLength -= firstNonZero;
+        coefficients_.reset(new Array<int> (coefficientsLength));
+        for (int i = 0; i < coefficientsLength; i++) {
+          coefficients_[i] = c[i + firstNonZero];
+        }
       /*
         coefficientsLength -= firstNonZero;
         coefficients_.reset(new Array<int>(coefficientsLength - firstNonZero));
         for (int i = 0; i < coefficientsLength; i++) {
-        coefficients_[i] = coefficients[i + firstNonZero];
+          coefficients_[i] = coefficients[i + firstNonZero];
         }
       */
+      }
+    } else {
+      coefficients_ = coefficients;
     }
-  } else {
-    coefficients_ = coefficients;
+}
+
+FallibleRef<ModulusPoly> ModulusPoly::createModulusPoly(ModulusGF &field, ArrayRef<int> coefficients) MB_NOEXCEPT_EXCEPT_BADALLOC
+{
+    if (coefficients.size() == 0) {
+      return failure<IllegalArgumentException>("no coefficients!");
+    }
+    return new ModulusPoly(field, coefficients);
+}
+
+  ArrayRef<int> ModulusPoly::getCoefficients() {
+    return coefficients_;
   }
-}
 
-ArrayRef<int> ModulusPoly::getCoefficients() {
-  return coefficients_;
-}
-
-/**
- * @return degree of this polynomial
- */
-int ModulusPoly::getDegree() {
-  return coefficients_->size() - 1;
-}
-
-/**
- * @return true iff this polynomial is the monomial "0"
- */
-bool ModulusPoly::isZero() {
-  return coefficients_[0] == 0;
-}
-
-/**
- * @return coefficient of x^degree term in this polynomial
- */
-int ModulusPoly::getCoefficient(int degree) {
-  return coefficients_[coefficients_->size() - 1 - degree];
-}
-
-/**
- * @return evaluation of this polynomial at a given point
- */
-int ModulusPoly::evaluateAt(int a) {
-	int i;
-  if (a == 0) {
-    // Just return the x^0 coefficient
-    return getCoefficient(0);
+  /**
+   * @return degree of this polynomial
+   */
+  int ModulusPoly::getDegree() {
+    return (int)coefficients_.size() - 1;
   }
-  int size = coefficients_->size();
-  if (a == 1) {
-    // Just the sum of the coefficients
-    int result = 0;
-	  for (i = 0; i < size; i++) {
-      result = field_.add(result, coefficients_[i]);
-	  }
+
+  /**
+   * @return true iff this polynomial is the monomial "0"
+   */
+  bool ModulusPoly::isZero() {
+    return coefficients_[0] == 0;
+  }
+
+  /**
+   * @return coefficient of x^degree term in this polynomial
+   */
+  int ModulusPoly::getCoefficient(int degree) {
+    return coefficients_[coefficients_.size() - 1 - degree];
+  }
+
+  /**
+   * @return evaluation of this polynomial at a given point
+   */
+  int ModulusPoly::evaluateAt(int a) {
+    int i;
+    if (a == 0) {
+      // Just return the x^0 coefficient
+      return getCoefficient(0);
+    }
+    int size = (int)coefficients_.size();
+    if (a == 1) {
+      // Just the sum of the coefficients
+      int result = 0;
+      for (i = 0; i < size; i++) {
+        result = field_.add(result, coefficients_[i]);
+      }
+      return result;
+    }
+    int result = coefficients_[0];
+    for (i = 1; i < size; i++) {
+      result = field_.add(field_.multiply(a, result), coefficients_[i]);
+    }
     return result;
   }
-  int result = coefficients_[0];
-  for (i = 1; i < size; i++) {
-    result = field_.add(field_.multiply(a, result), coefficients_[i]);
-  }
-  return result;
-}
 
-Ref<ModulusPoly> ModulusPoly::add(Ref<ModulusPoly> other) {
-  if (&field_ != &other->field_) {
-    throw IllegalArgumentException("ModulusPolys do not have same ModulusGF field");
-  }
-  if (isZero()) {
-    return other;
-  }
-  if (other->isZero()) {
-    return Ref<ModulusPoly>(this);
-  }
-
-  ArrayRef<int> smallerCoefficients = coefficients_;
-  ArrayRef<int> largerCoefficients = other->coefficients_;
-  if (smallerCoefficients->size() > largerCoefficients->size()) {
-    ArrayRef<int> temp(smallerCoefficients);
-    smallerCoefficients = largerCoefficients;
-    largerCoefficients = temp;
-  }
-  ArrayRef<int>  sumDiff (new Array<int>(largerCoefficients->size()));
-  int lengthDiff = largerCoefficients->size() - smallerCoefficients->size();
-  // Copy high-order terms only found in higher-degree polynomial's coefficients
-	for (int i = 0; i < lengthDiff; i++) {
-		sumDiff[i] = largerCoefficients[i];
-	}
-
-  for (int i = lengthDiff; i < largerCoefficients->size(); i++) {
-    sumDiff[i] = field_.add(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
-  }
-
-  return Ref<ModulusPoly>(new ModulusPoly(field_, sumDiff));
-}
-
-Ref<ModulusPoly> ModulusPoly::subtract(Ref<ModulusPoly> other) {
-  if (&field_ != &other->field_) {
-    throw new IllegalArgumentException("ModulusPolys do not have same ModulusGF field");
-  }
-  if (other->isZero()) {
-    return Ref<ModulusPoly>(this);
-  }
-  return add(other->negative());
-}
-
-Ref<ModulusPoly> ModulusPoly::multiply(Ref<ModulusPoly> other) {
-  if (&field_ != &other->field_) {
-    throw new IllegalArgumentException("ModulusPolys do not have same ModulusGF field");
-  }
-  if (isZero() || other->isZero()) {
-    return field_.getZero();
-  }
-	int i,j;
-  ArrayRef<int> aCoefficients = coefficients_;
-  int aLength = aCoefficients->size();
-  ArrayRef<int> bCoefficients = other->coefficients_;
-  int bLength = bCoefficients->size();
-  ArrayRef<int> product (new Array<int>(aLength + bLength - 1));
-  for (i = 0; i < aLength; i++) {
-    int aCoeff = aCoefficients[i];
-    for (j = 0; j < bLength; j++) {
-      product[i + j] = field_.add(product[i + j], field_.multiply(aCoeff, bCoefficients[j]));
+  FallibleRef<ModulusPoly> ModulusPoly::add(Ref<ModulusPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    if (&field_ != &other->field_) {
+      return failure<IllegalArgumentException>("ModulusPolys do not have same ModulusGF field");
     }
-  }
-  return Ref<ModulusPoly>(new ModulusPoly(field_, product));
-}
+    if (isZero()) {
+      return other;
+    }
+    if (other->isZero()) {
+      return Ref<ModulusPoly>(this);
+    }
 
-Ref<ModulusPoly> ModulusPoly::negative() {
-  int size = coefficients_->size();
-  ArrayRef<int> negativeCoefficients (new Array<int>(size));
-  for (int i = 0; i < size; i++) {
-    negativeCoefficients[i] = field_.subtract(0, coefficients_[i]);
-  }
-  return Ref<ModulusPoly>(new ModulusPoly(field_, negativeCoefficients));
-}
+    ArrayRef<int> smallerCoefficients = coefficients_;
+    ArrayRef<int> largerCoefficients = other->coefficients_;
+    if (smallerCoefficients.size() > largerCoefficients.size()) {
+      ArrayRef<int> temp(smallerCoefficients);
+      smallerCoefficients = largerCoefficients;
+      largerCoefficients = temp;
+    }
+    ArrayRef<int>  sumDiff (new Array<int>(largerCoefficients.size()));
+    int lengthDiff = (int)(largerCoefficients.size() - smallerCoefficients.size());
+    // Copy high-order terms only found in higher-degree polynomial's coefficients
+    for (int i = 0; i < lengthDiff; i++) {
+        sumDiff[i] = largerCoefficients[i];
+    }
 
-Ref<ModulusPoly> ModulusPoly::multiply(int scalar) {
-  if (scalar == 0) {
-    return field_.getZero();
-  }
-  if (scalar == 1) {
-    return Ref<ModulusPoly>(this);
-  }
-  int size = coefficients_->size();
-  ArrayRef<int> product( new Array<int>(size));
-  for (int i = 0; i < size; i++) {
-    product[i] = field_.multiply(coefficients_[i], scalar);
-  }
-  return Ref<ModulusPoly>(new ModulusPoly(field_, product));
-}
+    for (size_t i = lengthDiff; i < largerCoefficients.size(); i++) {
+      sumDiff[i] = field_.add(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
+    }
 
-Ref<ModulusPoly> ModulusPoly::multiplyByMonomial(int degree, int coefficient) {
-  if (degree < 0) {
-    throw new IllegalArgumentException("negative degree!");
-  }
-  if (coefficient == 0) {
-    return field_.getZero();
-  }
-  int size = coefficients_->size();
-  ArrayRef<int> product (new Array<int>(size + degree));
-  for (int i = 0; i < size; i++) {
-    product[i] = field_.multiply(coefficients_[i], coefficient);
-  }
-  return Ref<ModulusPoly>(new ModulusPoly(field_, product));
-}
-
-std::vector<Ref<ModulusPoly> > ModulusPoly::divide(Ref<ModulusPoly> other) {
-  if (&field_ != &other->field_) {
-    throw new IllegalArgumentException("ModulusPolys do not have same ModulusGF field");
-  }
-  if (other->isZero()) {
-    throw new IllegalArgumentException("Divide by 0");
+    return createModulusPoly(field_, sumDiff);
   }
 
-  Ref<ModulusPoly> quotient (field_.getZero());
-  Ref<ModulusPoly> remainder (this);
+  FallibleRef<ModulusPoly> ModulusPoly::subtract(Ref<ModulusPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    if (&field_ != &other->field_) {
+      return failure<IllegalArgumentException>("ModulusPolys do not have same ModulusGF field");
+    }
+    if (other->isZero()) {
+      return Ref<ModulusPoly>(this);
+    }
+    auto const tryCreateNegative(other->negative());
+    if(!tryCreateNegative)
+        return tryCreateNegative.error();
 
-  int denominatorLeadingTerm = other->getCoefficient(other->getDegree());
-  int inverseDenominatorLeadingTerm = field_.inverse(denominatorLeadingTerm);
-
-  while (remainder->getDegree() >= other->getDegree() && !remainder->isZero()) {
-    int degreeDifference = remainder->getDegree() - other->getDegree();
-    int scale = field_.multiply(remainder->getCoefficient(remainder->getDegree()), inverseDenominatorLeadingTerm);
-    Ref<ModulusPoly> term (other->multiplyByMonomial(degreeDifference, scale));
-    Ref<ModulusPoly> iterationQuotient (field_.buildMonomial(degreeDifference, scale));
-    quotient = quotient->add(iterationQuotient);
-    remainder = remainder->subtract(term);
+    return add(*tryCreateNegative);
   }
 
-	std::vector<Ref<ModulusPoly> > result(2);
-	result[0] = quotient;
-	result[1] = remainder;
-  return result;
-}
+  FallibleRef<ModulusPoly> ModulusPoly::multiply(Ref<ModulusPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    if (&field_ != &other->field_) {
+      return failure<IllegalArgumentException>("ModulusPolys do not have same ModulusGF field");
+    }
+    if (isZero() || other->isZero()) {
+      return field_.getZero();
+    }
+    int i,j;
+    ArrayRef<int> aCoefficients = coefficients_;
+    int aLength = (int)aCoefficients.size();
+    ArrayRef<int> bCoefficients = other->coefficients_;
+    int bLength = (int)bCoefficients.size();
+    ArrayRef<int> product (new Array<int>(aLength + bLength - 1));
+    for (i = 0; i < aLength; i++) {
+      int aCoeff = aCoefficients[i];
+      for (j = 0; j < bLength; j++) {
+        product[i + j] = field_.add(product[i + j], field_.multiply(aCoeff, bCoefficients[j]));
+      }
+    }
+    return createModulusPoly(field_, product);
+  }
+
+  FallibleRef<ModulusPoly> ModulusPoly::negative() {
+    int size = (int)coefficients_.size();
+    ArrayRef<int> negativeCoefficients (new Array<int>(size));
+    for (int i = 0; i < size; i++) {
+      negativeCoefficients[i] = field_.subtract(0, coefficients_[i]);
+    }
+    return createModulusPoly(field_, negativeCoefficients);
+  }
+
+  FallibleRef<ModulusPoly> ModulusPoly::multiply(int scalar) {
+    if (scalar == 0) {
+      return field_.getZero();
+    }
+    if (scalar == 1) {
+      return Ref<ModulusPoly>(this);
+    }
+    int size = (int)coefficients_.size();
+    ArrayRef<int> product( new Array<int>(size));
+    for (int i = 0; i < size; i++) {
+      product[i] = field_.multiply(coefficients_[i], scalar);
+    }
+    return createModulusPoly(field_, product);
+  }
+
+  FallibleRef<ModulusPoly> ModulusPoly::multiplyByMonomial(int degree, int coefficient) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    if (degree < 0) {
+      return failure<IllegalArgumentException>("negative degree!");
+    }
+    if (coefficient == 0) {
+      return field_.getZero();
+    }
+    int size = (int)coefficients_.size();
+    ArrayRef<int> product (new Array<int>(size + degree));
+    for (int i = 0; i < size; i++) {
+      product[i] = field_.multiply(coefficients_[i], coefficient);
+    }
+    return createModulusPoly(field_, product);
+  }
+
+  Fallible<std::vector<Ref<ModulusPoly> >> ModulusPoly::divide(Ref<ModulusPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC {
+    if (&field_ != &other->field_) {
+      return failure<IllegalArgumentException>("ModulusPolys do not have same ModulusGF field");
+    }
+    if (other->isZero()) {
+      return failure<IllegalArgumentException>("Divide by 0");
+    }
+
+    Ref<ModulusPoly> quotient (field_.getZero());
+    Ref<ModulusPoly> remainder (*this);
+
+    int denominatorLeadingTerm = other->getCoefficient(other->getDegree());
+
+    auto const tryInverse(field_.inverse(denominatorLeadingTerm));
+    if(!tryInverse)
+        return tryInverse.error();
+
+    int inverseDenominatorLeadingTerm = *tryInverse;
+
+    while (remainder->getDegree() >= other->getDegree() && !remainder->isZero()) {
+      int degreeDifference = remainder->getDegree() - other->getDegree();
+      int scale = field_.multiply(remainder->getCoefficient(remainder->getDegree()), inverseDenominatorLeadingTerm);
+
+      auto const tryMult(other->multiplyByMonomial(degreeDifference, scale));
+      if(!tryMult)
+          return tryMult.error();
+
+      Ref<ModulusPoly> term (*tryMult);
+
+      auto const tryBuildMonomial(field_.buildMonomial(degreeDifference, scale));
+      if(!tryBuildMonomial)
+          return tryBuildMonomial.error();
+
+      Ref<ModulusPoly> iterationQuotient (*tryBuildMonomial);
+
+      auto const tryAdd(quotient->add(iterationQuotient));
+      if(!tryAdd)
+          return tryAdd.error();
+      quotient = *tryAdd;
+
+      auto const trySub(remainder->subtract(term));
+      if(!trySub)
+          return trySub.error();
+      remainder = *trySub;
+    }
+
+    std::vector<Ref<ModulusPoly> > result(2);
+    result[0] = quotient;
+    result[1] = remainder;
+    return result;
+  }
 
 #if 0
-@Override
-public String toString() {
-  StringBuilder result = new StringBuilder(8 * getDegree());
-  for (int degree = getDegree(); degree >= 0; degree--) {
-    int coefficient = getCoefficient(degree);
-    if (coefficient != 0) {
-      if (coefficient < 0) {
-        result.append(" - ");
-        coefficient = -coefficient;
-      } else {
-        if (result.length() > 0) {
-          result.append(" + ");
-        }
-      }
-      if (degree == 0 || coefficient != 1) {
-        result.append(coefficient);
-      }
-      if (degree != 0) {
-        if (degree == 1) {
-          result.append('x');
+  @Override
+  public String toString() {
+    StringBuilder result = new StringBuilder(8 * getDegree());
+    for (int degree = getDegree(); degree >= 0; degree--) {
+      int coefficient = getCoefficient(degree);
+      if (coefficient != 0) {
+        if (coefficient < 0) {
+          result.append(" - ");
+          coefficient = -coefficient;
         } else {
-          result.append("x^");
-          result.append(degree);
+          if (result.length() > 0) {
+            result.append(" + ");
+          }
+        }
+        if (degree == 0 || coefficient != 1) {
+          result.append(coefficient);
+        }
+        if (degree != 0) {
+          if (degree == 1) {
+            result.append('x');
+          } else {
+            result.append("x^");
+            result.append(degree);
+          }
         }
       }
     }
+    return result.toString();
   }
-  return result.toString();
-}
 #endif
 
-ModulusPoly::~ModulusPoly() {}
+ModulusPoly::~ModulusPoly()
+{
+
+}
+
+} /* namespace pdf417 */
+} /* namespace zxing */
+

@@ -1,5 +1,4 @@
-#ifndef BINARIZER_H_
-#define BINARIZER_H_
+#pragma once
 
 /*
  *  Binarizer.h
@@ -20,31 +19,32 @@
  * limitations under the License.
  */
 
-#include <zxing/LuminanceSource.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/common/BitMatrix.h>
-#include <zxing/common/Counted.h>
+#include <zxing/common/Counted.h>  // for Ref, Counted
+#include "zxing/common/Error.hpp"
 
-namespace zxing {
+namespace pping {
+
+class BitArray;
+class BitMatrix;
+class LuminanceSource;
 
 class Binarizer : public Counted {
  private:
   Ref<LuminanceSource> source_;
 
  public:
-  Binarizer(Ref<LuminanceSource> source);
-  virtual ~Binarizer();
+  Binarizer(Ref<LuminanceSource> source) noexcept;
+  virtual ~Binarizer() = default;
 
-  virtual Ref<BitArray> getBlackRow(int y, Ref<BitArray> row) = 0;
-  virtual Ref<BitMatrix> getBlackMatrix() = 0;
+  virtual FallibleRef<BitArray > getBlackRow   (int y, Ref<BitArray> row) const MB_NOEXCEPT_EXCEPT_BADALLOC = 0;
+  virtual FallibleRef<BitMatrix> getBlackMatrix(                        ) const MB_NOEXCEPT_EXCEPT_BADALLOC = 0;
 
-  Ref<LuminanceSource> getLuminanceSource() const ;
-  virtual Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source) = 0;
+  auto const & getLuminanceSource() const noexcept { return source_; }
+  virtual Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source) const MB_NOEXCEPT_EXCEPT_BADALLOC = 0;
 
-  int getWidth() const;
-  int getHeight() const;
+  int getWidth () const noexcept;
+  int getHeight() const noexcept;
 
 };
 
 }
-#endif /* BINARIZER_H_ */

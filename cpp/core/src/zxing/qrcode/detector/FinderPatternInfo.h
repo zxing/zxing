@@ -1,5 +1,4 @@
-#ifndef __FINDER_PATTERN_INFO_H__
-#define __FINDER_PATTERN_INFO_H__
+#pragma once
 
 /*
  *  FinderPatternInfo.h
@@ -20,12 +19,11 @@
  * limitations under the License.
  */
 
-#include <zxing/qrcode/detector/FinderPattern.h>
-#include <zxing/common/Counted.h>
-#include <zxing/common/Array.h>
-#include <vector>
+#include <zxing/common/Counted.h>                            // for Ref, Counted
+#include <zxing/qrcode/detector/ZXingQRCodeFinderPattern.h>  // for FinderPattern
+#include <vector>                                            // for vector
 
-namespace zxing {
+namespace pping {
 namespace qrcode {
 
 class FinderPatternInfo : public Counted {
@@ -44,4 +42,3 @@ public:
 }
 }
 
-#endif // __FINDER_PATTERN_INFO_H__

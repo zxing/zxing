@@ -1,6 +1,4 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __READER_EXCEPTION_H__
-#define __READER_EXCEPTION_H__
+#pragma once
 
 /*
  *  ReaderException.h
@@ -21,17 +19,15 @@
  * limitations under the License.
  */
 
-#include <zxing/Exception.h>
+#include <zxing/Exception.h>  // for Exception
 
-namespace zxing {
+namespace pping {
 
 class ReaderException : public Exception {
- public:
-  ReaderException() throw() {}
-  ReaderException(char const* msg) throw() : Exception(msg) {}
-  ~ReaderException() throw() {}
+public:
+  ReaderException();
+  ReaderException(const char *msg);
+  ~ReaderException() throw();
 };
 
 }
-
-#endif // __READER_EXCEPTION_H__

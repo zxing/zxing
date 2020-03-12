@@ -1,7 +1,5 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
+#pragma once
 
-#ifndef __ERROR_CORRECTION_PDF_H__
-#define __ERROR_CORRECTION_PDF_H__
 /*
  * Copyright 2012 ZXing authors
  *
@@ -20,18 +18,14 @@
  * 2012-09-17 HFN translation from Java into C++
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/common/Array.h>
-#include <zxing/common/DecoderResult.h>
-#include <zxing/common/BitMatrix.h>
-#include <zxing/pdf417/decoder/ec/ModulusGF.h>
-#include <zxing/pdf417/decoder/ec/ModulusPoly.h>
-#include <zxing/common/reedsolomon/ReedSolomonException.h>
+#include <zxing/common/Array.h>    // for ArrayRef
+#include <zxing/common/Counted.h>  // for Counted
+#include "zxing/common/Error.hpp"
 
-namespace zxing {
+#include <vector>                  // for vector
+
+namespace pping {
 namespace pdf417 {
-namespace decoder {
-namespace ec {
 
 
 /**
@@ -43,29 +37,29 @@ namespace ec {
  * @author Sean Owen
  * @see com.google.zxing.common.reedsolomon.ReedSolomonDecoder
  */
+class ModulusGF;
+class ModulusPoly;
+
 class ErrorCorrection: public Counted {
 
- private:
-  ModulusGF &field_;
+  private:
+    ModulusGF &field_;
 
- public:
-  ErrorCorrection();
-  void decode(ArrayRef<int> received,
-              int numECCodewords,
-              ArrayRef<int> erasures);
+  public:
+    ErrorCorrection();
+    Fallible<void> decode(ArrayRef<int> received,
+                     int numECCodewords,
+                     ArrayRef<int> erasures) MB_NOEXCEPT_EXCEPT_BADALLOC;
 
- private:
-  std::vector<Ref<ModulusPoly> > runEuclideanAlgorithm(Ref<ModulusPoly> a, Ref<ModulusPoly> b, int R);
+  private:
+    Fallible<std::vector<Ref<ModulusPoly> > > runEuclideanAlgorithm(Ref<ModulusPoly> a, Ref<ModulusPoly> b, int R) MB_NOEXCEPT_EXCEPT_BADALLOC;
 
-  ArrayRef<int> findErrorLocations(Ref<ModulusPoly> errorLocator);
-  ArrayRef<int> findErrorMagnitudes(Ref<ModulusPoly> errorEvaluator,
+    Fallible<ArrayRef<int> > findErrorLocations(Ref<ModulusPoly> errorLocator) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    Fallible<ArrayRef<int> > findErrorMagnitudes(Ref<ModulusPoly> errorEvaluator,
                                     Ref<ModulusPoly> errorLocator,
-                                    ArrayRef<int> errorLocations);
+                                    ArrayRef<int> errorLocations) MB_NOEXCEPT_EXCEPT_BADALLOC;
 };
 
-}
-}
-}
-}
+} /* namespace pdf417 */
+} /* namespace zxing */
 
-#endif /* __ERROR_CORRECTION_PDF_H__ */

@@ -1,6 +1,6 @@
+
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __COUNTED_H__
-#define __COUNTED_H__
+#pragma once
 
 /*
  *  Copyright 2010 ZXing authors All rights reserved.
@@ -18,66 +18,140 @@
  * limitations under the License.
  */
 
-#include <iostream>
+//#define DEBUG_COUNTING
 
-namespace zxing {
+#include <boost/config.hpp>
+#include <boost/assert.hpp>
+
+#include <cstdint>
+#include <limits>
+#include <string>
+
+namespace pping {
 
 /* base class for reference-counted objects */
 class Counted {
 private:
-  unsigned int count_;
+  std::uint_fast16_t references_;
+  template< typename T > friend void intrusive_ptr_add_ref( T* ) noexcept;
+  template< typename T > friend void intrusive_ptr_release( T* ) noexcept;
+protected:
+    virtual ~Counted() noexcept = default;
 public:
-  Counted() :
-      count_(0) {
+  Counted() noexcept :
+      references_(0) {
+#ifdef DEBUG_COUNTING
+    cout << "instantiating " << typeid(*this).name() << " " << this <<
+         " @ " << count_ << "\n";
+#endif
   }
-  virtual ~Counted() {
+  Counted(const Counted&) noexcept :
+      references_(0) {
   }
-  Counted *retain() {
-    count_++;
+  Counted& operator=(const Counted& other) noexcept {
+      if (this != &other) {
+          // don't change count
+      }
+      return *this;
+  }
+  Counted *retain() noexcept {
+#ifdef DEBUG_COUNTING
+    cout << "retaining " << typeid(*this).name() << " " << this <<
+         " @ " << count_;
+#endif
+    BOOST_ASSERT( references_ < std::numeric_limits<decltype( references_ )>::max() );
+    ++references_;
+#ifdef DEBUG_COUNTING
+    cout << "->" << count_ << "\n";
+#endif
     return this;
   }
-  void release() {
-    count_--;
-    if (count_ == 0) {
-      count_ = 0xDEADF001;
+  void release() noexcept {
+#ifdef DEBUG_COUNTING
+    cout << "releasing " << typeid(*this).name() << " " << this <<
+         " @ " << count_;
+#endif
+    BOOST_ASSERT_MSG( references_ != 0, "Overreleasing already-deleted object" );
+    if ( BOOST_UNLIKELY( --references_ == 0 ) ) {
+#ifdef DEBUG_COUNTING
+      cout << "deleting " << typeid(*this).name() << " " << this << "\n";
+#endif
       delete this;
     }
   }
 
 
   /* return the current count for denugging purposes or similar */
-  int count() const {
-    return count_;
+  int count() const noexcept {
+    return references_;
   }
 };
+
+template< typename T >
+void intrusive_ptr_add_ref( T* x ) noexcept {
+    BOOST_ASSERT( x->references_ < std::numeric_limits<decltype( x->references_ )>::max() );
+    ++x->references_;
+}
+
+template< typename T >
+void intrusive_ptr_release( T* x ) noexcept {
+    if ( BOOST_UNLIKELY( --x->references_ == 0 ) ) delete x;
+}
 
 /* counting reference to reference-counted objects */
 template<typename T> class Ref {
 private:
 public:
   T *object_;
-  explicit Ref(T *o = 0) :
+  explicit Ref(T *o = 0) noexcept :
       object_(0) {
+#ifdef DEBUG_COUNTING
+    cout << "instantiating Ref " << this << " from pointer" << o << "\n";
+#endif
     reset(o);
   }
-  Ref(const Ref &other) :
+
+  explicit Ref(const T &o) noexcept :
       object_(0) {
+#ifdef DEBUG_COUNTING
+    cout << "instantiating Ref " << this << " from reference\n";
+#endif
+    reset(const_cast<T *>(&o));
+  }
+
+  Ref(const Ref &other) noexcept :
+      object_(0) {
+#ifdef DEBUG_COUNTING
+    cout << "instantiating Ref " << this << " from Ref " << &other << "\n";
+#endif
     reset(other.object_);
   }
 
   template<class Y>
-  Ref(const Ref<Y> &other) :
+  Ref(const Ref<Y> &other) noexcept :
       object_(0) {
+#ifdef DEBUG_COUNTING
+    cout << "instantiating Ref " << this << " from reference\n";
+#endif
     reset(other.object_);
   }
 
-  ~Ref() {
+  ~Ref() noexcept {
+#ifdef DEBUG_COUNTING
+    cout << "destroying Ref " << this << " with " <<
+         (object_ ? typeid(*object_).name() : "NULL") << " " << object_ << "\n";
+#endif
     if (object_) {
       object_->release();
     }
   }
 
-  void reset(T *o) {
+  void reset(T *o) noexcept {
+#ifdef DEBUG_COUNTING
+    cout << "resetting Ref " << this << " from " <<
+         (object_ ? typeid(*object_).name() : "NULL") << " " << object_ <<
+         " to " << (o ? typeid(*o).name() : "NULL") << " " << o << "\n";
+#endif
     if (o) {
       o->retain();
     }
@@ -86,55 +160,53 @@ public:
     }
     object_ = o;
   }
-  Ref& operator=(const Ref &other) {
+  Ref& operator=(const Ref &other) noexcept {
     reset(other.object_);
     return *this;
   }
   template<class Y>
-  Ref& operator=(const Ref<Y> &other) {
+  Ref& operator=(const Ref<Y> &other) noexcept {
     reset(other.object_);
     return *this;
   }
-  Ref& operator=(T* o) {
+  Ref& operator=(T* o) noexcept {
     reset(o);
     return *this;
   }
   template<class Y>
-  Ref& operator=(Y* o) {
+  Ref& operator=(Y* o) noexcept {
     reset(o);
     return *this;
   }
 
-  T& operator*() {
+  T& operator*() noexcept {
     return *object_;
   }
-  T* operator->() const {
+  T* operator->() const noexcept {
     return object_;
   }
-  operator T*() const {
+  operator T*() const noexcept {
     return object_;
   }
 
-  bool operator==(const T* that) {
+  bool operator==(const T* that) noexcept {
     return object_ == that;
   }
-  bool operator==(const Ref &other) const {
+  bool operator==(const Ref &other) const noexcept {
     return object_ == other.object_ || *object_ == *(other.object_);
   }
   template<class Y>
-  bool operator==(const Ref<Y> &other) const {
+  bool operator==(const Ref<Y> &other) const noexcept {
     return object_ == other.object_ || *object_ == *(other.object_);
   }
 
-  bool operator!=(const T* that) {
+  bool operator!=(const T* that) noexcept {
     return !(*this == that);
   }
 
-  bool empty() const {
+  bool empty() const noexcept {
     return object_ == 0;
   }
 };
-
 }
 
-#endif // __COUNTED_H__

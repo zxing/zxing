@@ -1,6 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __RESULT_POINT_H__
-#define __RESULT_POINT_H__
+#pragma once
 
 /*
  *  ResultPoint.h
@@ -21,20 +20,19 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
-#include <vector>
+#include <zxing/common/Counted.h>  // for Counted
+#include <vector>                  // for vector
 
-namespace zxing {
+namespace pping {
 
 class ResultPoint : public Counted {
 protected:
-  const float posX_;
-  const float posY_;
+  float posX_;
+  float posY_;
   
 public:
   ResultPoint();
   ResultPoint(float x, float y);
-  ResultPoint(int x, int y);
   virtual ~ResultPoint();
 
   virtual float getX() const;
@@ -52,4 +50,3 @@ private:
 
 }
 
-#endif // __RESULT_POINT_H__

@@ -15,41 +15,54 @@
  * limitations under the License.
  */
 
+#include <zxing/BarcodeFormat.h>                        // for BarcodeFormat::QR_CODE
+#include <zxing/ReaderException.h>                      // for ReaderException
 #include <zxing/multi/qrcode/QRCodeMultiReader.h>
-#include <zxing/ReaderException.h>
-#include <zxing/multi/qrcode/detector/MultiDetector.h>
-#include <zxing/BarcodeFormat.h>
+#include <zxing/multi/qrcode/detector/MultiDetector.h>  // for MultiDetector
 
-namespace zxing {
+#include "zxing/BinaryBitmap.h"                         // for BinaryBitmap
+#include "zxing/Result.h"                               // for Result
+#include "zxing/ResultPoint.h"                          // for ResultPoint
+#include "zxing/common/BitMatrix.h"                     // for BitMatrix
+#include "zxing/common/Counted.h"                       // for Ref
+#include "zxing/common/DecoderResult.h"                 // for DecoderResult
+#include "zxing/common/DetectorResult.h"                // for DetectorResult
+#include "zxing/common/Str.h"                           // for String
+#include "zxing/qrcode/decoder/ZXingQRCodeDecoder.h"    // for Decoder
+
+namespace pping {
 namespace multi {
 QRCodeMultiReader::QRCodeMultiReader(){}
 
 QRCodeMultiReader::~QRCodeMultiReader(){}
 
-std::vector<Ref<Result> > QRCodeMultiReader::decodeMultiple(Ref<BinaryBitmap> image, 
-  DecodeHints hints)
+Fallible<std::vector<Ref<Result>>> QRCodeMultiReader::decodeMultiple(Ref<BinaryBitmap> image,
+  DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC
 {
+  auto blackMatrix(image->getBlackMatrix());
+  if (!blackMatrix)
+      return blackMatrix.error();
+  MultiDetector detector(*blackMatrix);
   std::vector<Ref<Result> > results;
-  MultiDetector detector(image->getBlackMatrix());
 
-  std::vector<Ref<DetectorResult> > detectorResult =  detector.detectMulti(hints);
+  auto const tryGetDetectorResult(detector.detectMulti(hints));
+  if(!tryGetDetectorResult)
+      return tryGetDetectorResult.error();
+
+  std::vector<Ref<DetectorResult> > detectorResult = *tryGetDetectorResult;
   for (unsigned int i = 0; i < detectorResult.size(); i++) {
-    try {
-      Ref<DecoderResult> decoderResult = getDecoder().decode(detectorResult[i]->getBits());
-      ArrayRef< Ref<ResultPoint> > points = detectorResult[i]->getPoints();
-      Ref<Result> result = Ref<Result>(new Result(decoderResult->getText(),
-      decoderResult->getRawBytes(), 
-      points, BarcodeFormat::QR_CODE));
+      auto const decoderResult(getDecoder().decode(detectorResult[i]->getBits()));
+      if (!decoderResult)
+          continue;
+      auto const & points(detectorResult[i]->getPoints());
+      Ref<Result> result(Ref<Result>(new Result(decoderResult->getText(), decoderResult->getRawBytes(),
+                                        points, BarcodeFormat::QR_CODE)));
       // result->putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult->getByteSegments());
       // result->putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult->getECLevel().toString());
       results.push_back(result);
-    } catch (ReaderException const& re) {
-      (void)re;
-      // ignore and continue 
-    }
   }
   if (results.empty()){
-    throw ReaderException("No code detected");
+    return failure<ReaderException>("No code detected");
   }
   return results;
 }

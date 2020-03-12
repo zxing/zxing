@@ -1,5 +1,4 @@
-#ifndef __RESULT_POINT_CALLBACK_H__
-#define __RESULT_POINT_CALLBACK_H__
+#pragma once
 
 /*
  *  ResultPointCallback.h
@@ -20,20 +19,22 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
+#include <zxing/common/Counted.h>  // for Counted
 
-namespace zxing {
+namespace pping {
 
 class ResultPoint;
 
 class ResultPointCallback : public Counted {
 protected:
-  ResultPointCallback() {}
+    ResultPointCallback() {}
 public:
-  virtual void foundPossibleResultPoint(ResultPoint const& point) = 0;
-  virtual ~ResultPointCallback();
+    virtual ~ResultPointCallback();
+
+    virtual void foundPossibleResultPoint(ResultPoint const& point) = 0;
+
+    virtual void finishedFindingPoints() = 0;
 };
 
 }
 
-#endif // __RESULT_POINT_CALLBACK_H__

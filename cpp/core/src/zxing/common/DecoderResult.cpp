@@ -21,26 +21,34 @@
 
 #include <zxing/common/DecoderResult.h>
 
-using namespace std;
-using namespace zxing;
+#include "zxing/common/Array.h"    // for ArrayRef
+#include "zxing/common/Counted.h"  // for Ref
+#include "zxing/common/Str.h"      // for String
 
-DecoderResult::DecoderResult(ArrayRef<char> rawBytes,
+using namespace std;
+using namespace pping;
+
+DecoderResult::DecoderResult(ArrayRef<unsigned char> rawBytes,
                              Ref<String> text,
-                             ArrayRef< ArrayRef<char> >& byteSegments,
+                             ArrayRef< ArrayRef<unsigned char> >& byteSegments,
                              string const& ecLevel) :
   rawBytes_(rawBytes),
   text_(text),
   byteSegments_(byteSegments),
   ecLevel_(ecLevel) {}
 
-DecoderResult::DecoderResult(ArrayRef<char> rawBytes,
+DecoderResult::DecoderResult(ArrayRef<unsigned char> rawBytes,
                              Ref<String> text)
   : rawBytes_(rawBytes), text_(text) {}
 
-ArrayRef<char> DecoderResult::getRawBytes() {
+ArrayRef<unsigned char> DecoderResult::getRawBytes() {
   return rawBytes_;
 }
 
 Ref<String> DecoderResult::getText() {
   return text_;
+}
+
+ArrayRef<ArrayRef<unsigned char> > DecoderResult::getByteSegments() {
+    return byteSegments_;
 }

@@ -19,9 +19,13 @@
  */
 
 #include <zxing/qrcode/FormatInformation.h>
-#include <limits>
+#include <limits>                               // for numeric_limits
 
-namespace zxing {
+#include "zxing/common/Counted.h"               // for Ref
+#include "zxing/qrcode/ErrorCorrectionLevel.h"  // for ErrorCorrectionLevel
+#include "zxing/ReaderException.h"
+
+namespace pping {
 namespace qrcode {
 
 using namespace std;
@@ -38,19 +42,28 @@ int FormatInformation::N_FORMAT_INFO_DECODE_LOOKUPS = 32;
 
 int FormatInformation::BITS_SET_IN_HALF_BYTE[] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 };
 
-FormatInformation::FormatInformation(int formatInfo) :
-    errorCorrectionLevel_(ErrorCorrectionLevel::forBits((formatInfo >> 3) & 0x03)), dataMask_((char)(formatInfo & 0x07)) {
-}
-
-ErrorCorrectionLevel& FormatInformation::getErrorCorrectionLevel() {
+ErrorCorrectionLevel& FormatInformation::getErrorCorrectionLevel() noexcept {
   return errorCorrectionLevel_;
 }
 
-char FormatInformation::getDataMask() {
+unsigned char FormatInformation::getDataMask() noexcept {
   return dataMask_;
 }
 
-int FormatInformation::numBitsDiffering(int a, int b) {
+FallibleRef<FormatInformation> FormatInformation::createFormatInformation(int formatInfo) MB_NOEXCEPT_EXCEPT_BADALLOC
+{
+    auto const bits = (formatInfo >> 3) & 0x03;
+
+    if((bits < 0) || (bits >= ErrorCorrectionLevel::getNumberOfLevels())) {
+        LOGE("Invalid bits, cannot determine error correction level");
+        return failure<ReaderException>("Invalid bits, cannot determine error correction level");
+    }
+    return new FormatInformation(ErrorCorrectionLevel::forBits(bits), formatInfo & 0x07);
+}
+
+FormatInformation::FormatInformation(ErrorCorrectionLevel & errorCorrectionLevel, unsigned char const dataMask) noexcept : errorCorrectionLevel_(errorCorrectionLevel), dataMask_(dataMask) {}
+
+int FormatInformation::numBitsDiffering(unsigned int a, unsigned int b) {
   a ^= b;
   return BITS_SET_IN_HALF_BYTE[a & 0x0F] + BITS_SET_IN_HALF_BYTE[(a >> 4 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 8
          & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 12 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 16 & 0x0F)]
@@ -58,10 +71,10 @@ int FormatInformation::numBitsDiffering(int a, int b) {
          + BITS_SET_IN_HALF_BYTE[(a >> 28 & 0x0F)];
 }
 
-Ref<FormatInformation> FormatInformation::decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
-  Ref<FormatInformation> result(doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2));
-  if (result != 0) {
-    return result;
+FallibleRef<FormatInformation> FormatInformation::decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) MB_NOEXCEPT_EXCEPT_BADALLOC {
+  auto const result(doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2));
+  if (result && (*result) != 0) {
+    return *result;
   }
   // Should return null, but, some QR codes apparently
   // do not mask this info. Try again by actually masking the pattern
@@ -69,7 +82,7 @@ Ref<FormatInformation> FormatInformation::decodeFormatInformation(int maskedForm
   return doDecodeFormatInformation(maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR,
                                    maskedFormatInfo2  ^ FORMAT_INFO_MASK_QR);
 }
-Ref<FormatInformation> FormatInformation::doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
+FallibleRef<FormatInformation> FormatInformation::doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) MB_NOEXCEPT_EXCEPT_BADALLOC {
   // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
   int bestDifference = numeric_limits<int>::max();
   int bestFormatInfo = 0;
@@ -77,9 +90,9 @@ Ref<FormatInformation> FormatInformation::doDecodeFormatInformation(int maskedFo
     int* decodeInfo = FORMAT_INFO_DECODE_LOOKUP[i];
     int targetInfo = decodeInfo[0];
     if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
+
       // Found an exact match
-      Ref<FormatInformation> result(new FormatInformation(decodeInfo[1]));
-      return result;
+      return createFormatInformation(decodeInfo[1]);
     }
     int bitsDifference = numBitsDiffering(maskedFormatInfo1, targetInfo);
     if (bitsDifference < bestDifference) {
@@ -96,21 +109,14 @@ Ref<FormatInformation> FormatInformation::doDecodeFormatInformation(int maskedFo
       }
   }
   if (bestDifference <= 3) {
-    Ref<FormatInformation> result(new FormatInformation(bestFormatInfo));
-    return result;
+    return createFormatInformation(bestFormatInfo);
   }
-  Ref<FormatInformation> result;
-  return result;
+  LOGE("Failed to read format information");
+  return failure<ReaderException>("Failed to read format information");
 }
 
 bool operator==(const FormatInformation &a, const FormatInformation &b) {
   return &(a.errorCorrectionLevel_) == &(b.errorCorrectionLevel_) && a.dataMask_ == b.dataMask_;
-}
-
-ostream& operator<<(ostream& out, const FormatInformation& fi) {
-  const FormatInformation *fip = &fi;
-  out << "FormatInformation @ " << fip;
-  return out;
 }
 
 }

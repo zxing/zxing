@@ -16,12 +16,17 @@
 
 #include <zxing/multi/MultipleBarcodeReader.h>
 
-namespace zxing {
+#include "zxing/BinaryBitmap.h"    // for BinaryBitmap
+#include "zxing/DecodeHints.h"     // for DecodeHints, DecodeHints::DEFAULT_HINT
+#include "zxing/Result.h"          // for Result
+#include "zxing/common/Counted.h"  // for Ref
+
+namespace pping {
 namespace multi {
 
 MultipleBarcodeReader::~MultipleBarcodeReader() { }
 
-std::vector<Ref<Result> > MultipleBarcodeReader::decodeMultiple(Ref<BinaryBitmap> image) {
+Fallible<std::vector<Ref<Result>>> MultipleBarcodeReader::decodeMultiple(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC {
   return decodeMultiple(image, DecodeHints::DEFAULT_HINT);
 }
 

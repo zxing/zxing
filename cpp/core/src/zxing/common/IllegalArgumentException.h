@@ -1,5 +1,4 @@
-#ifndef __ILLEGAL_ARGUMENT_EXCEPTION_H__
-#define __ILLEGAL_ARGUMENT_EXCEPTION_H__
+#pragma once
 
 /*
  *  IllegalArgumentException.h
@@ -20,17 +19,13 @@
  * limitations under the License.
  */
 
-#include <zxing/Exception.h>
+#include <zxing/Exception.h>  // for Exception
 
-namespace zxing {
-
-class IllegalArgumentException : public Exception {
+namespace pping {
+class IllegalArgumentException : public pping::Exception {
 public:
-  IllegalArgumentException();
   IllegalArgumentException(const char *msg);
   ~IllegalArgumentException() throw();
 };
-
 }
 
-#endif // __ILLEGAL_ARGUMENT_EXCEPTION_H__

@@ -1,5 +1,4 @@
-#ifndef __MULTI_FORMAT_READER_H__
-#define __MULTI_FORMAT_READER_H__
+#pragma once
 
 /*
  *  MultiFormatBarcodeReader.h
@@ -21,15 +20,21 @@
  */
 
  
-#include <zxing/Reader.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/Result.h>
-#include <zxing/DecodeHints.h>
+#include <zxing/DecodeHints.h>     // for DecodeHints
+#include <zxing/Reader.h>          // for Reader
+#include <vector>                  // for vector
 
-namespace zxing {
+#include "zxing/common/Counted.h"  // for Ref
+#include "zxing/common/Error.hpp"
+
+namespace pping {
+class BinaryBitmap;
+class Result;
+
   class MultiFormatReader : public Reader {
+    
   private:
-    Ref<Result> decodeInternal(Ref<BinaryBitmap> image);
+    FallibleRef<Result> decodeInternal(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC;
   
     std::vector<Ref<Reader> > readers_;
     DecodeHints hints_;
@@ -37,12 +42,11 @@ namespace zxing {
   public:
     MultiFormatReader();
     
-    Ref<Result> decode(Ref<BinaryBitmap> image);
-    Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
-    Ref<Result> decodeWithState(Ref<BinaryBitmap> image);
+    FallibleRef<Result> decode(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    FallibleRef<Result> decodeWithState(Ref<BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC;
     void setHints(DecodeHints hints);
     ~MultiFormatReader();
   };
 }
 
-#endif

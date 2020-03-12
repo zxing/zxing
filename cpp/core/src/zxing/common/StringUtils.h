@@ -1,7 +1,6 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 
-#ifndef __STRING_UTILS__
-#define __STRING_UTILS__
+#pragma once
 
 /*
  * Copyright (C) 2010-2011 ZXing authors
@@ -19,14 +18,18 @@
  * limitations under the License.
  */
 
-#include <string>
-#include <map>
+
 #include <zxing/DecodeHints.h>
+#include <map>
+#include <string>
 
-namespace zxing {
-namespace common {
+namespace pping {
+  namespace common {
+    class StringUtils;
+  }
+}
 
-class StringUtils {
+class pping::common::StringUtils {
 private:
   static char const* const PLATFORM_DEFAULT_ENCODING;
 
@@ -43,10 +46,6 @@ public:
 
   typedef std::map<DecodeHintType, std::string> Hashtable;
 
-  static std::string guessEncoding(char* bytes, int length, Hashtable const& hints);
+  static std::string guessEncoding(unsigned char* bytes, int length, Hashtable const& hints);
 };
 
-}
-}
-
-#endif

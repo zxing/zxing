@@ -1,5 +1,4 @@
-#ifndef __CORNER_FINDER_H__
-#define __CORNER_FINDER_H__
+#pragma once
 
 /*
  *  CornerPoint.h
@@ -21,23 +20,25 @@
  * limitations under the License.
  */
 
-#include <zxing/ResultPoint.h>
-#include <cmath>
+#include <zxing/ResultPoint.h>  // for ResultPoint
 
-namespace zxing {
-	namespace datamatrix {
-			
-		class CornerPoint : public ResultPoint {
-		private:
-			int counter_;
-			
-		public:
-			CornerPoint(float posX, float posY);
-			int getCount() const;
-			void incrementCount();
-			bool equals(Ref<CornerPoint> other) const;
-		};
-	}
+namespace pping {
+template <typename T> class Ref;
+}  // namespace pping
+
+namespace pping {
+    namespace datamatrix {
+            
+        class CornerPoint : public ResultPoint {
+        private:
+            int counter_;
+            
+        public:
+            CornerPoint(float posX, float posY);
+            int getCount() const;
+            void incrementCount();
+            bool equals(Ref<CornerPoint> other) const;
+        };
+    }
 }
 
-#endif // __CORNER_FINDER_H__

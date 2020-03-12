@@ -1,5 +1,4 @@
-#ifndef __FORMAT_EXCEPTION_H__
-#define __FORMAT_EXCEPTION_H__
+#pragma once
 
 /*
  *  FormatException.h
@@ -20,18 +19,15 @@
  * limitations under the License.
  */
 
-#include <zxing/ReaderException.h>
+#include <zxing/ReaderException.h>  // for ReaderException
 
-namespace zxing {
+namespace pping {
 
 class FormatException : public ReaderException {
 public:
   FormatException();
   FormatException(const char *msg);
   ~FormatException() throw();
-
-  static FormatException const& getFormatInstance();
 };
 
 }
-#endif // __FORMAT_EXCEPTION_H__

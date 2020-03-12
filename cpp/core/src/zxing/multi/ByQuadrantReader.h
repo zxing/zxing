@@ -1,5 +1,4 @@
-#ifndef __BY_QUADRANT_READER_H__
-#define __BY_QUADRANT_READER_H__
+#pragma once
 
 /*
  *  Copyright 2011 ZXing authors All rights reserved.
@@ -17,26 +16,28 @@
  * limitations under the License.
  */
 
-#include <zxing/Reader.h>
-#include <zxing/BinaryBitmap.h>
-#include <zxing/Result.h>
-#include <zxing/DecodeHints.h>
+#include <zxing/DecodeHints.h>     // for DecodeHints
+#include <zxing/Reader.h>          // for Reader
 
-namespace zxing {
+#include "zxing/common/Counted.h"  // for Ref
+
+namespace pping {
+class BinaryBitmap;
+class Result;
+}  // namespace pping
+
+namespace pping {
 namespace multi {
-
-class ByQuadrantReader : public Reader {
+class ByQuadrantReader final : public Reader {
   private:
     Reader& delegate_;
 
   public:
-    ByQuadrantReader(Reader& delegate);
-    virtual ~ByQuadrantReader();
-    virtual Ref<Result> decode(Ref<BinaryBitmap> image);
-    virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+    ByQuadrantReader(Reader& delegate) noexcept : delegate_(delegate) {}
+
+    virtual FallibleRef<Result> decode(Ref<BinaryBitmap> image                   ) MB_NOEXCEPT_EXCEPT_BADALLOC override;
+    virtual FallibleRef<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC override;
 };
+} // End zxing::multi namespace
+} // End zxing namespace
 
-}
-}
-
-#endif // __BY_QUADRANT_READER_H__

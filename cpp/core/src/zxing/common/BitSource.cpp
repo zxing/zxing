@@ -20,16 +20,16 @@
  */
 
 #include <zxing/common/BitSource.h>
-#include <sstream>
-#include <zxing/common/IllegalArgumentException.h>
+#include <zxing/common/IllegalArgumentException.h>  // for IllegalArgumentException
+#include <string>                                   // for basic_string
 
-namespace zxing {
+#include "zxing/common/Array.h"                     // for ArrayRef
 
-int BitSource::readBits(int numBits) {
+namespace pping {
+
+Fallible<int> BitSource::readBits(int numBits) MB_NOEXCEPT_EXCEPT_BADALLOC {
   if (numBits < 0 || numBits > 32 || numBits > available()) {
-    std::ostringstream oss;
-    oss << numBits;
-    throw IllegalArgumentException(oss.str().c_str());
+    return failure<IllegalArgumentException>("Number of bits should be between 0 and 32, and less than available");
   }
 
   int result = 0;
@@ -71,6 +71,6 @@ int BitSource::readBits(int numBits) {
 }
 
 int BitSource::available() {
-  return 8 * (bytes_->size() - byteOffset_) - bitOffset_;
+  return 8 * ((int)bytes_.size() - byteOffset_) - bitOffset_;
 }
 }

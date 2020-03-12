@@ -1,5 +1,7 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
+ *  ReedSolomonDecoder.cpp
+ *  zxing
+ *
  *  Created by Christian Brunschen on 05/05/2008.
  *  Copyright 2008 Google UK. All rights reserved.
  *
@@ -16,60 +18,109 @@
  * limitations under the License.
  */
 
-#include <iostream>
+#include "zxing/common/reedsolomon/ReedSolomonDecoder.h"
+#include "zxing/common/Array.h"                             // for ArrayRef, Array
+#include "zxing/common/Counted.h"                           // for Ref
+#include "zxing/common/reedsolomon/GenericGF.h"             // for GenericGF, GenericGF::DATA_MATRIX_FIELD_256
+#include "zxing/common/reedsolomon/GenericGFPoly.h"         // for GenericGFPoly
+#include "zxing/common/reedsolomon/ReedSolomonException.h"  // for ReedSolomonException
 
-#include <memory>
-#include <zxing/common/reedsolomon/ReedSolomonDecoder.h>
-#include <zxing/common/reedsolomon/ReedSolomonException.h>
-#include <zxing/common/IllegalArgumentException.h>
-#include <zxing/IllegalStateException.h>
+#include <Log.h>                                            // for LOGV
+#include <Utils/Macros.h>
 
-using std::vector;
-using zxing::Ref;
-using zxing::ArrayRef;
-using zxing::ReedSolomonDecoder;
-using zxing::GenericGFPoly;
-using zxing::IllegalStateException;
+using pping::Ref;
+using pping::ArrayRef;
+using pping::ReedSolomonDecoder;
+using pping::GenericGFPoly;
 
 // VC++
-using zxing::GenericGF;
+using pping::GenericGF;
 
-ReedSolomonDecoder::ReedSolomonDecoder(Ref<GenericGF> field_) : field(field_) {}
+namespace pping {
+
+ReedSolomonDecoder::ReedSolomonDecoder(Ref<GenericGF> fld) :
+    field(fld) {
+}
 
 ReedSolomonDecoder::~ReedSolomonDecoder() {
 }
 
-void ReedSolomonDecoder::decode(ArrayRef<int> received, int twoS) {
-  Ref<GenericGFPoly> poly(new GenericGFPoly(field, received));
-  ArrayRef<int> syndromeCoefficients(twoS);
+Fallible<void> ReedSolomonDecoder::decode(ArrayRef<int> received, int twoS) MB_NOEXCEPT_EXCEPT_BADALLOC {
+  if(twoS < 0) return failure<ReedSolomonException>("twoS should be >= 0");
+
+  auto const tryCreatePoly(GenericGFPoly::createGenericGFPoly(*field, received));
+  if(!tryCreatePoly)
+      return tryCreatePoly.error();
+
+  Ref<GenericGFPoly> poly(*tryCreatePoly);
+  ArrayRef<int> syndromeCoefficients(new Array<int> (twoS));
+
+  LOGV("syndromeCoefficients array = %p", syndromeCoefficients.array_);
+
+  bool dataMatrix = (field.object_ == GenericGF::DATA_MATRIX_FIELD_256.object_);
   bool noError = true;
   for (int i = 0; i < twoS; i++) {
-    int eval = poly->evaluateAt(field->exp(i + field->getGeneratorBase()));
+    auto const tryGetExp(field->exp(dataMatrix ? i + 1 : i));
+    if(!tryGetExp)
+        return tryGetExp.error();
+
+    auto const tryEval(poly->evaluateAt(*tryGetExp));
+    if(!tryEval)
+        return tryEval.error();
+
+    int eval = *tryEval;
     syndromeCoefficients[syndromeCoefficients->size() - 1 - i] = eval;
     if (eval != 0) {
       noError = false;
     }
   }
   if (noError) {
-    return;
+    return success();
   }
-  Ref<GenericGFPoly> syndrome(new GenericGFPoly(field, syndromeCoefficients));
-  vector<Ref<GenericGFPoly> > sigmaOmega =
-    runEuclideanAlgorithm(field->buildMonomial(twoS, 1), syndrome, twoS);
+  auto const tryCreatePolySyndrome(GenericGFPoly::createGenericGFPoly(*field, syndromeCoefficients));
+  if(!tryCreatePolySyndrome)
+      return tryCreatePolySyndrome.error();
+
+  Ref<GenericGFPoly> syndrome(*tryCreatePolySyndrome);
+
+  auto const tryBuildMonomial(field->buildMonomial(twoS, 1));
+  if(!tryBuildMonomial)
+      return tryBuildMonomial.error();
+
+  auto const getSigmaOmega(runEuclideanAlgorithm((*tryBuildMonomial), syndrome, twoS));
+  if(!getSigmaOmega)
+      return getSigmaOmega.error();
+
+  std::vector<Ref<GenericGFPoly> > sigmaOmega = *getSigmaOmega;
   Ref<GenericGFPoly> sigma = sigmaOmega[0];
   Ref<GenericGFPoly> omega = sigmaOmega[1];
-  ArrayRef<int> errorLocations = findErrorLocations(sigma);
-  ArrayRef<int> errorMagitudes = findErrorMagnitudes(omega, errorLocations);
-  for (int i = 0; i < errorLocations->size(); i++) {
-    int position = received->size() - 1 - field->log(errorLocations[i]);
-    if (position < 0) {
-      throw ReedSolomonException("Bad error location");
-    }
+
+  auto const errorLocations(findErrorLocations(sigma));
+  if(!errorLocations)
+      return errorLocations.error();
+
+  auto const tryGetErrorMagnitudes(findErrorMagnitudes(omega, *errorLocations));
+  if(!tryGetErrorMagnitudes)
+      return tryGetErrorMagnitudes.error();
+
+  ArrayRef<int> errorMagitudes = *tryGetErrorMagnitudes;
+  for (int i = 0; i < (int) (*errorLocations).size(); i++) {
+
+    auto const getLog(field->log((*errorLocations)[i]));
+    if(!getLog)
+        return getLog.error();
+
+    int position = (int)received->size() - 1 - (*getLog);
+
+    if(position < 0)
+        return failure<ReedSolomonException>("Bad error location");
+
     received[position] = GenericGF::addOrSubtract(received[position], errorMagitudes[i]);
   }
+  return success();
 }
 
-vector<Ref<GenericGFPoly> > ReedSolomonDecoder::runEuclideanAlgorithm(Ref<GenericGFPoly> a,
+Fallible<std::vector<Ref<GenericGFPoly>>> ReedSolomonDecoder::runEuclideanAlgorithm(Ref<GenericGFPoly> a,
                                                                       Ref<GenericGFPoly> b,
                                                                       int R) {
   // Assume a's degree is >= b's
@@ -81,8 +132,21 @@ vector<Ref<GenericGFPoly> > ReedSolomonDecoder::runEuclideanAlgorithm(Ref<Generi
 
   Ref<GenericGFPoly> rLast(a);
   Ref<GenericGFPoly> r(b);
-  Ref<GenericGFPoly> tLast(field->getZero());
-  Ref<GenericGFPoly> t(field->getOne());
+
+  Ref<GenericGFPoly> tLast;
+  {
+      auto const tryGetZero(field->getZero());
+      if(!tryGetZero)
+          return tryGetZero.error();
+
+      tLast = *tryGetZero;
+  }
+
+  auto const tryGetOne(field->getOne());
+  if(!tryGetOne)
+      return tryGetOne.error();
+
+  Ref<GenericGFPoly> t(*tryGetOne);
 
   // Run Euclidean algorithm until r's degree is less than R/2
   while (r->getDegree() >= R / 2) {
@@ -91,46 +155,103 @@ vector<Ref<GenericGFPoly> > ReedSolomonDecoder::runEuclideanAlgorithm(Ref<Generi
     rLast = r;
     tLast = t;
 
+
     // Divide rLastLast by rLast, with quotient q and remainder r
     if (rLast->isZero()) {
       // Oops, Euclidean algorithm already terminated?
-      throw ReedSolomonException("r_{i-1} was zero");
+      return failure<ReedSolomonException>("r_{i-1} was zero");
     }
     r = rLastLast;
-    Ref<GenericGFPoly> q = field->getZero();
+
+    auto const tryGetZero(field->getZero());
+    if(!tryGetZero)
+        return tryGetZero.error();
+
+    Ref<GenericGFPoly> q(*tryGetZero);
     int denominatorLeadingTerm = rLast->getCoefficient(rLast->getDegree());
-    int dltInverse = field->inverse(denominatorLeadingTerm);
+
+    auto const invDenominatorLeadTerm(field->inverse(denominatorLeadingTerm));
+    if(!invDenominatorLeadTerm)
+        return invDenominatorLeadTerm.error();
+
+    int dltInverse = *invDenominatorLeadTerm;
+
     while (r->getDegree() >= rLast->getDegree() && !r->isZero()) {
       int degreeDiff = r->getDegree() - rLast->getDegree();
-      int scale = field->multiply(r->getCoefficient(r->getDegree()), dltInverse);
-      q = q->addOrSubtract(field->buildMonomial(degreeDiff, scale));
-      r = r->addOrSubtract(rLast->multiplyByMonomial(degreeDiff, scale));
-    }
 
-    t = q->multiply(tLast)->addOrSubtract(tLastLast);
+      auto const tryMultForScale(field->multiply(r->getCoefficient(r->getDegree()), dltInverse));
+      if(!tryMultForScale)
+          return tryMultForScale.error();
+
+      int scale = *tryMultForScale;
+
+      auto const tryBuildMonomial(field->buildMonomial(degreeDiff, scale));
+      if(!tryBuildMonomial)
+          return tryBuildMonomial.error();
+
+      auto const tryOp1(q->addOrSubtract(*tryBuildMonomial));
+      if(!tryOp1)
+          return tryOp1.error();
+
+      q = *tryOp1;
+
+      auto const tryMult(rLast->multiplyByMonomial(degreeDiff, scale));
+      if(!tryMult)
+          return tryMult.error();
+
+      auto const tryOp2(r->addOrSubtract(*tryMult));
+      if(!tryOp2)
+          return tryOp2.error();
+
+      r = *tryOp2;
+    }
+    auto const tryMultByLast(q->multiply(tLast));
+    if(!tryMultByLast)
+        return tryMultByLast.error();
+
+    auto const tryOp((*tryMultByLast)->addOrSubtract(tLastLast));
+    if(!tryOp)
+        return tryOp.error();
+
+    t = *tryOp;
 
     if (r->getDegree() >= rLast->getDegree()) {
-      throw IllegalStateException("Division algorithm failed to reduce polynomial?");
+        // After updating ZXing 05.05.2015, not to have new Exception Class
+        // throw IllegalStateException("Division algorithm failed to reduce polynomial?");
+        return failure<ReedSolomonException>("Division algorithm failed to reduce polynomial?");
     }
   }
 
   int sigmaTildeAtZero = t->getCoefficient(0);
-  if (sigmaTildeAtZero == 0) {
-    throw ReedSolomonException("sigmaTilde(0) was zero");
-  }
 
-  int inverse = field->inverse(sigmaTildeAtZero);
-  Ref<GenericGFPoly> sigma(t->multiply(inverse));
-  Ref<GenericGFPoly> omega(r->multiply(inverse));
-  vector<Ref<GenericGFPoly> > result(2);
+  auto const getInverse(field->inverse(sigmaTildeAtZero));
+  if(!getInverse)
+      return getInverse.error();
+
+  int inverse = *getInverse;
+
+  auto const tryMultForSigma(t->multiply(inverse));
+  if(!tryMultForSigma)
+      return tryMultForSigma.error();
+
+  Ref<GenericGFPoly> sigma(*tryMultForSigma);
+
+  auto const tryMultForOmega(r->multiply(inverse));
+  if(!tryMultForOmega)
+      return tryMultForOmega.error();
+
+  Ref<GenericGFPoly> omega(*tryMultForOmega);
+
+  std::vector<Ref<GenericGFPoly> > result(2);
   result[0] = sigma;
   result[1] = omega;
   return result;
 }
 
-ArrayRef<int> ReedSolomonDecoder::findErrorLocations(Ref<GenericGFPoly> errorLocator) {
+Fallible<ArrayRef<int>> ReedSolomonDecoder::findErrorLocations(Ref<GenericGFPoly> errorLocator) {
   // This is a direct application of Chien's search
   int numErrors = errorLocator->getDegree();
+
   if (numErrors == 1) { // shortcut
     ArrayRef<int> result(new Array<int>(1));
     result[0] = errorLocator->getCoefficient(1);
@@ -139,36 +260,80 @@ ArrayRef<int> ReedSolomonDecoder::findErrorLocations(Ref<GenericGFPoly> errorLoc
   ArrayRef<int> result(new Array<int>(numErrors));
   int e = 0;
   for (int i = 1; i < field->getSize() && e < numErrors; i++) {
-    if (errorLocator->evaluateAt(i) == 0) {
-      result[e] = field->inverse(i);
-      e++;
+    // cout << "errorLocator(" << i << ") == " << errorLocator->evaluateAt(i) << endl;
+    auto const tryEval(errorLocator->evaluateAt(i));
+    if(!tryEval)
+        return tryEval.error();
+
+    if ((*tryEval) == 0) {
+
+        auto const getInverse(field->inverse(i));
+        if(!getInverse)
+            return getInverse.error();
+
+        result[e] = *getInverse;
+        e++;
     }
   }
   if (e != numErrors) {
-    throw ReedSolomonException("Error locator degree does not match number of roots");
+      return failure<ReedSolomonException>("Error locator degree does not match number of roots");
   }
   return result;
 }
 
-ArrayRef<int> ReedSolomonDecoder::findErrorMagnitudes(Ref<GenericGFPoly> errorEvaluator, ArrayRef<int> errorLocations) {
+Fallible<ArrayRef<int>> ReedSolomonDecoder::findErrorMagnitudes(Ref<GenericGFPoly> errorEvaluator, ArrayRef<int> errorLocations) {
   // This is directly applying Forney's Formula
-  int s = errorLocations->size();
+  int s = (int)errorLocations.size();
   ArrayRef<int> result(new Array<int>(s));
   for (int i = 0; i < s; i++) {
-    int xiInverse = field->inverse(errorLocations[i]);
+
+      auto const getInverse(field->inverse(errorLocations[i]));
+      if(!getInverse)
+          return getInverse.error();
+
+      int xiInverse = *getInverse;
+
     int denominator = 1;
     for (int j = 0; j < s; j++) {
       if (i != j) {
-        int term = field->multiply(errorLocations[j], xiInverse);
+
+        auto const tryMult(field->multiply(errorLocations[j], xiInverse));
+        if(!tryMult)
+            return tryMult.error();
+
+        int term = *tryMult;
         int termPlus1 = (term & 0x1) == 0 ? term | 1 : term & ~1;
-        denominator = field->multiply(denominator, termPlus1);
+
+        auto const tryMultDenom(field->multiply(denominator, termPlus1));
+        if(!tryMultDenom)
+            return tryMultDenom.error();
+
+        denominator = *tryMultDenom;
       }
     }
-    result[i] = field->multiply(errorEvaluator->evaluateAt(xiInverse),
-                                field->inverse(denominator));
+    auto const getInverseDenominator(field->inverse(denominator));
+    if(!getInverseDenominator)
+        return getInverseDenominator.error();
+
+    auto const tryEval(errorEvaluator->evaluateAt(xiInverse));
+    if(!tryEval)
+        return tryEval.error();
+
+    auto const tryMultEval(field->multiply(*tryEval, *getInverseDenominator));
+    if(!tryMultEval)
+        return tryMultEval.error();
+
+    result[i] = *tryMultEval;
+
     if (field->getGeneratorBase() != 0) {
-      result[i] = field->multiply(result[i], xiInverse);
+
+        auto const tryMultForResult(field->multiply(result[i], xiInverse));
+        if(!tryMultForResult)
+            return tryMultForResult.error();
+
+        result[i] = *tryMultForResult;
     }
   }
   return result;
+}
 }

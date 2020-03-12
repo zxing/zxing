@@ -18,13 +18,17 @@
  * limitations under the License.
  */
 
+#include <stddef.h>                             // for size_t
+#include <zxing/ReaderException.h>              // for ReaderException
 #include <zxing/common/GridSampler.h>
-#include <zxing/common/PerspectiveTransform.h>
-#include <zxing/ReaderException.h>
-#include <iostream>
-#include <sstream>
+#include <zxing/common/PerspectiveTransform.h>  // for PerspectiveTransform
+#include <string>                               // for allocator, basic_string, char_traits
 
-namespace zxing {
+#include "zxing/common/BitMatrix.h"             // for BitMatrix
+#include "zxing/common/Counted.h"               // for Ref
+#include "zxing/common/Error.hpp"
+
+namespace pping {
 using namespace std;
 
 GridSampler GridSampler::gridSampler;
@@ -32,20 +36,33 @@ GridSampler GridSampler::gridSampler;
 GridSampler::GridSampler() {
 }
 
-Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimension, Ref<PerspectiveTransform> transform) {
+FallibleRef<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimension, Ref<PerspectiveTransform> transform) MB_NOEXCEPT_EXCEPT_BADALLOC
+#if !defined( DEBUG ) && defined( __clang__ )
+    /** @note
+     * In release mode, ASAN finds container-overflow when accessing first
+     * vector element, even though it is correctly initialised.
+     *                            (08.01.2018.) (Nenad Miksa)
+     */
+    __attribute__(( no_sanitize( "address" ) ))
+#endif
+{
   Ref<BitMatrix> bits(new BitMatrix(dimension));
-  vector<float> points(dimension << 1, (const float)0.0f);
+  vector<float> points(dimension << 1, (float)0.0f);
   for (int y = 0; y < dimension; y++) {
-    int max = points.size();
+    int max = (int)points.size();
     float yValue = (float)y + 0.5f;
     for (int x = 0; x < max; x += 2) {
       points[x] = (float)(x >> 1) + 0.5f;
       points[x + 1] = yValue;
     }
     transform->transformPoints(points);
-    checkAndNudgePoints(image, points);
+
+    auto const tryCheckAndNudge(checkAndNudgePoints(image, points));
+    if(!tryCheckAndNudge)
+        return tryCheckAndNudge.error();
+
     for (int x = 0; x < max; x += 2) {
-      if (image->get((int)points[x], (int)points[x + 1])) {
+      if (image->get((int)(points[x]+0.5), (int)(points[x + 1]+0.5))) {
         bits->set(x >> 1, y);
       }
     }
@@ -53,18 +70,31 @@ Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimension, Ref<
   return bits;
 }
 
-Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimensionX, int dimensionY, Ref<PerspectiveTransform> transform) {
+FallibleRef<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimensionX, int dimensionY, Ref<PerspectiveTransform> transform) MB_NOEXCEPT_EXCEPT_BADALLOC
+#if !defined( DEBUG ) && defined( __clang__ )
+    /** @note
+     * In release mode, ASAN finds container-overflow when accessing first
+     * vector element, even though it is correctly initialised.
+     *                            (08.01.2018.) (Nenad Miksa)
+     */
+    __attribute__(( no_sanitize( "address" ) ))
+#endif
+{
   Ref<BitMatrix> bits(new BitMatrix(dimensionX, dimensionY));
-  vector<float> points(dimensionX << 1, (const float)0.0f);
+  vector<float> points(dimensionX << 1, (float)0.0f);
   for (int y = 0; y < dimensionY; y++) {
-    int max = points.size();
+    int max = (int)points.size();
     float yValue = (float)y + 0.5f;
     for (int x = 0; x < max; x += 2) {
       points[x] = (float)(x >> 1) + 0.5f;
       points[x + 1] = yValue;
     }
     transform->transformPoints(points);
-    checkAndNudgePoints(image, points);
+
+    auto const tryCheckAndNudge(checkAndNudgePoints(image, points));
+    if(!tryCheckAndNudge)
+        return tryCheckAndNudge.error();
+
     for (int x = 0; x < max; x += 2) {
       if (image->get((int)points[x], (int)points[x + 1])) {
         bits->set(x >> 1, y);
@@ -74,9 +104,9 @@ Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimensionX, int
   return bits;
 }
 
-Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimension, float p1ToX, float p1ToY, float p2ToX,
+FallibleRef<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimension, float p1ToX, float p1ToY, float p2ToX,
                                        float p2ToY, float p3ToX, float p3ToY, float p4ToX, float p4ToY, float p1FromX, float p1FromY, float p2FromX,
-                                       float p2FromY, float p3FromX, float p3FromY, float p4FromX, float p4FromY) {
+                                       float p2FromY, float p3FromX, float p3FromY, float p4FromX, float p4FromY) MB_NOEXCEPT_EXCEPT_BADALLOC {
   Ref<PerspectiveTransform> transform(PerspectiveTransform::quadrilateralToQuadrilateral(p1ToX, p1ToY, p2ToX, p2ToY,
                                       p3ToX, p3ToY, p4ToX, p4ToY, p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY));
 
@@ -84,9 +114,18 @@ Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimension, floa
 
 }
 
-void GridSampler::checkAndNudgePoints(Ref<BitMatrix> image, vector<float> &points) {
-  int width = image->getWidth();
-  int height = image->getHeight();
+Fallible<void> GridSampler::checkAndNudgePoints(Ref<BitMatrix> image, vector<float> &points)
+#if !defined( DEBUG ) && defined( __clang__ )
+    /** @note
+     * In release mode, ASAN finds container-overflow when accessing first
+     * vector element, even though it is correctly initialised.
+     *                            (08.01.2018.) (Nenad Miksa)
+     */
+    __attribute__(( no_sanitize( "address" ) ))
+#endif
+{
+  int width = (int)image->getWidth();
+  int height = (int)image->getHeight();
 
 
   // The Java code assumes that if the start and end points are in bounds, the rest will also be.
@@ -96,27 +135,28 @@ void GridSampler::checkAndNudgePoints(Ref<BitMatrix> image, vector<float> &point
   for (size_t offset = 0; offset < points.size(); offset += 2) {
     int x = (int)points[offset];
     int y = (int)points[offset + 1];
+
     if (x < -1 || x > width || y < -1 || y > height) {
-      ostringstream s;
-      s << "Transformed point out of bounds at " << x << "," << y;
-      throw ReaderException(s.str().c_str());
+      auto const s("Transformed point out of bounds at " + std::to_string(x) + "," + std::to_string(y));
+
+      return failure<ReaderException>(s.c_str());
     }
 
     if (x == -1) {
       points[offset] = 0.0f;
     } else if (x == width) {
-      points[offset] = float(width - 1);
+      points[offset] = (float)(width - 1);
     }
     if (y == -1) {
       points[offset + 1] = 0.0f;
     } else if (y == height) {
-      points[offset + 1] = float(height - 1);
+      points[offset + 1] = (float)(height - 1);
     }
   }
-
+  return success();
 }
 
-GridSampler &GridSampler::getInstance() {
+GridSampler &GridSampler::getInstance() noexcept {
   return gridSampler;
 }
 }

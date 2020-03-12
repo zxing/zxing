@@ -1,6 +1,4 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __GLOBALHISTOGRAMBINARIZER_H__
-#define __GLOBALHISTOGRAMBINARIZER_H__
+#pragma once
 /*
  *  GlobalHistogramBinarizer.h
  *  zxing
@@ -20,29 +18,35 @@
  * limitations under the License.
  */
 
-#include <zxing/Binarizer.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/common/BitMatrix.h>
-#include <zxing/common/Array.h>
+#include <zxing/Binarizer.h>       // for Binarizer
 
-namespace zxing {
-	
-class GlobalHistogramBinarizer : public Binarizer {
-private:
-  ArrayRef<char> luminances;
-  ArrayRef<int> buckets;
-public:
-  GlobalHistogramBinarizer(Ref<LuminanceSource> source);
-  virtual ~GlobalHistogramBinarizer();
-		
-  virtual Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
-  virtual Ref<BitMatrix> getBlackMatrix();
-  static int estimateBlackPoint(ArrayRef<int> const& buckets);
-  Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
-private:
-  void initArrays(int luminanceSize);
-};
+#include "zxing/common/Counted.h"  // for Ref
+#include "zxing/common/Error.hpp"
 
+#include <vector>                  // for vector
+
+
+namespace pping {
+    
+class BitArray;
+class BitMatrix;
+class LuminanceSource;
+
+    class GlobalHistogramBinarizer : public Binarizer {
+     private:
+      mutable Ref<BitMatrix> cached_matrix_;
+      mutable Ref<BitArray > cached_row_;
+      mutable int            cached_row_num_;
+
+    public:
+        GlobalHistogramBinarizer(Ref<LuminanceSource> source) noexcept;
+        ~GlobalHistogramBinarizer();
+        
+        virtual FallibleRef<BitArray > getBlackRow   (int y, Ref<BitArray> row) const MB_NOEXCEPT_EXCEPT_BADALLOC override;
+        virtual FallibleRef<BitMatrix> getBlackMatrix(                        ) const MB_NOEXCEPT_EXCEPT_BADALLOC override;
+        virtual Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source) const MB_NOEXCEPT_EXCEPT_BADALLOC override;
+        static Fallible<int> estimate(std::vector<int> &histogram) noexcept;
+    };
+    
 }
-	
-#endif /* GLOBALHISTOGRAMBINARIZER_H_ */
+

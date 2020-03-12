@@ -17,52 +17,56 @@
 
 #include <zxing/common/BitArray.h>
 
-using std::vector;
-using zxing::BitArray;
+#include "zxing/common/IllegalArgumentException.h"  // for IllegalArgumentException
 
-// VC++
-using zxing::Ref;
+#include <Utils/Macros.h>
 
-int BitArray::makeArraySize(int size) {
-  return (size + bitsPerWord-1) >> logBits;
+using namespace std;
+
+namespace pping {
+
+
+size_t BitArray::wordsForBits(size_t bits) {
+  size_t arraySize = (bits + (size_t)bitsPerWord_ - 1) >> (size_t)logBits_;
+  return arraySize;
 }
 
-BitArray::BitArray(int size_)
-  : size(size_), bits(makeArraySize(size)) {}
+BitArray::BitArray(size_t size) :
+    size_(size), bits_(wordsForBits(size), (unsigned int)0) {
+}
 
 BitArray::~BitArray() {
 }
 
-int BitArray::getSize() const {
-  return size;
+size_t BitArray::getSize() {
+    return size_;
 }
 
-void BitArray::setBulk(int i, int newBits) {
-  bits[i >> logBits] = newBits;
+Fallible<bool> BitArray::get(size_t i) const
+{
+    if((i >> logBits_) >= bits_.size())
+        return DisambiguationWrapper{ failure<IllegalArgumentException>("Out of range for BitArray") };
+    return (bits_.at(i >> logBits_) & static_cast< unsigned int >(1 << (i & bitsMask_))) != 0;
 }
 
-void BitArray::clear() {
-  int max = bits->size();
-  for (int i = 0; i < max; i++) {
-    bits[i] = 0;
-  }
+void BitArray::setBulk(size_t i, unsigned int newBits) {
+  bits_[i >> logBits_] = newBits;
 }
 
-bool BitArray::isRange(int start, int end, bool value) {
-  if (end < start) {
-    throw IllegalArgumentException();
-  }
+void BitArray::setRange(int start, int end) {
+    MB_ASSERTM(end >= start, "%s", "Invalid call to BitArray::setRange");
+
   if (end == start) {
-    return true; // empty range matches
+    return;
   }
   end--; // will be easier to treat this as the last actually set bit -- inclusive
-  int firstInt = start >> logBits;
-  int lastInt = end >> logBits;
+  int firstInt = start >> 5;
+  int lastInt = end >> 5;
   for (int i = firstInt; i <= lastInt; i++) {
-    int firstBit = i > firstInt ? 0 : start & bitsMask;
-    int lastBit = i < lastInt ? (bitsPerWord-1) : end & bitsMask;
+    int firstBit = i > firstInt ? 0 : start & 0x1F;
+    int lastBit = i < lastInt ? 31 : end & 0x1F;
     int mask;
-    if (firstBit == 0 && lastBit == (bitsPerWord-1)) {
+    if (firstBit == 0 && lastBit == 31) {
       mask = -1;
     } else {
       mask = 0;
@@ -70,86 +74,66 @@ bool BitArray::isRange(int start, int end, bool value) {
         mask |= 1 << j;
       }
     }
-    
-    // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
-    // equals the mask, or we're looking for 0s and the masked portion is not all 0s
-    if ((bits[i] & mask) != (value ? mask : 0)) {
-      return false;
+    bits_[i] |= mask;
+  }
+}
+
+void BitArray::clear() {
+  size_t max = bits_.size();
+  for (size_t i = 0; i < max; i++) {
+    bits_[i] = 0;
+  }
+}
+
+Fallible<bool> BitArray::isRange(size_t start, size_t end, bool value) noexcept {
+
+    if(end < start)
+        return DisambiguationWrapper{ failure<IllegalArgumentException>("End must be >= start") };
+
+  if (end == start) {
+    return true;
+  }
+  // treat the 'end' as inclusive, rather than exclusive
+  end--;
+  size_t firstWord = start >> logBits_;
+  size_t lastWord = end >> logBits_;
+  for (size_t i = firstWord; i <= lastWord; i++) {
+    size_t firstBit = i > firstWord ? 0 : start & bitsMask_;
+    size_t lastBit = i < lastWord ? bitsPerWord_ - 1: end & bitsMask_;
+    unsigned int mask;
+    if (firstBit == 0 && lastBit == bitsPerWord_ - 1) {
+      mask = numeric_limits<unsigned int>::max();
+    } else {
+      mask = 0;
+      for (size_t j = firstBit; j <= lastBit; j++) {
+        mask |= static_cast< unsigned int >( 1 << j );
+      }
+    }
+    if (value) {
+      if ((bits_[i] & mask) != mask) {
+        return false;
+      }
+    } else {
+      if ((bits_[i] & mask) != 0) {
+        return false;
+      }
     }
   }
   return true;
 }
 
-vector<int>& BitArray::getBitArray() {
-  return bits->values();
+vector<unsigned int>& BitArray::getBitArray() {
+  return bits_;
 }
 
 void BitArray::reverse() {
-  ArrayRef<int> newBits(bits->size());
-  int size = this->size;
-  for (int i = 0; i < size; i++) {
-    if (get(size - i - 1)) {
-      newBits[i >> logBits] |= 1 << (i & bitsMask);
+  std::vector<unsigned int> newBits(bits_.size(),(unsigned int) 0);
+  for (size_t i = 0; i < size_; i++) {
+    auto const getAt(get(size_ - i - 1));
+    if (getAt && *getAt) {
+      newBits[i >> logBits_] |= static_cast< unsigned int >( 1<< (i & bitsMask_) );
     }
   }
-  bits = newBits;
+  bits_ = newBits;
 }
-
-BitArray::Reverse::Reverse(Ref<BitArray> array_) : array(array_) {
-  array->reverse();
-}
-
-BitArray::Reverse::~Reverse() {
-  array->reverse();
-}
-
-namespace {
-  // N.B.: This only works for 32 bit ints ...
-  int numberOfTrailingZeros(int i) {
-    // HD, Figure 5-14
-    int y;
-    if (i == 0) return 32;
-    int n = 31;
-    y = i <<16; if (y != 0) { n = n -16; i = y; }
-    y = i << 8; if (y != 0) { n = n - 8; i = y; }
-    y = i << 4; if (y != 0) { n = n - 4; i = y; }
-    y = i << 2; if (y != 0) { n = n - 2; i = y; }
-    return n - (((unsigned int)(i << 1)) >> 31);
-  }
-}
-
-int BitArray::getNextSet(int from) {
-  if (from >= size) {
-    return size;
-  }
-  int bitsOffset = from >> logBits;
-  int currentBits = bits[bitsOffset];
-  // mask off lesser bits first
-  currentBits &= ~((1 << (from & bitsMask)) - 1);
-  while (currentBits == 0) {
-    if (++bitsOffset == (int)bits->size()) {
-      return size;
-    }
-    currentBits = bits[bitsOffset];
-  }
-  int result = (bitsOffset << logBits) + numberOfTrailingZeros(currentBits);
-  return result > size ? size : result;
-}
-
-int BitArray::getNextUnset(int from) {
-  if (from >= size) {
-    return size;
-  }
-  int bitsOffset = from >> logBits;
-  int currentBits = ~bits[bitsOffset];
-  // mask off lesser bits first
-  currentBits &= ~((1 << (from & bitsMask)) - 1);
-  while (currentBits == 0) {
-    if (++bitsOffset == (int)bits->size()) {
-      return size;
-    }
-    currentBits = ~bits[bitsOffset];
-  }
-  int result = (bitsOffset << logBits) + numberOfTrailingZeros(currentBits);
-  return result > size ? size : result;
 }

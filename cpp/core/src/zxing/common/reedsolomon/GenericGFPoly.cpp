@@ -19,25 +19,27 @@
  * limitations under the License.
  */
 
-#include <iostream>
+#include <zxing/common/IllegalArgumentException.h>  // for IllegalArgumentException
+#include <zxing/common/reedsolomon/GenericGF.h>     // for GenericGF
 #include <zxing/common/reedsolomon/GenericGFPoly.h>
-#include <zxing/common/reedsolomon/GenericGF.h>
-#include <zxing/common/IllegalArgumentException.h>
 
-using zxing::GenericGFPoly;
-using zxing::ArrayRef;
-using zxing::Ref;
+#include "zxing/common/Array.h"                     // for ArrayRef, Array
+#include "zxing/common/Counted.h"                   // for Ref
 
-// VC++
-using zxing::GenericGF;
+#include <Utils/Macros.h>
 
-GenericGFPoly::GenericGFPoly(Ref<GenericGF> field,
-                             ArrayRef<int> coefficients)
+using pping::GenericGFPoly;
+using pping::GenericGF;
+using pping::ArrayRef;
+using pping::Ref;
+
+GenericGFPoly::GenericGFPoly(pping::GenericGF &field,
+                             ArrayRef<int> coefficients) MB_NOEXCEPT_EXCEPT_BADALLOC
   :  field_(field) {
-  if (coefficients->size() == 0) {
-    throw IllegalArgumentException("need coefficients");
-  }
-  int coefficientsLength = coefficients->size();
+
+  MB_ASSERTM(coefficients.size() != 0, "%s", "GenericGFPoly requires coefficients");
+
+  int coefficientsLength = (int)coefficients.size();
   if (coefficientsLength > 1 && coefficients[0] == 0) {
     // Leading term must be non-zero for anything except the constant polynomial "0"
     int firstNonZero = 1;
@@ -45,10 +47,10 @@ GenericGFPoly::GenericGFPoly(Ref<GenericGF> field,
       firstNonZero++;
     }
     if (firstNonZero == coefficientsLength) {
-      coefficients_ = field->getZero()->getCoefficients();
+      coefficients_ = field.getZero()->getCoefficients();
     } else {
       coefficients_ = ArrayRef<int>(new Array<int>(coefficientsLength-firstNonZero));
-      for (int i = 0; i < (int)coefficients_->size(); i++) {
+      for (int i = 0; i < (int)coefficients_.size(); i++) {
         coefficients_[i] = coefficients[i + firstNonZero];
       }
     }
@@ -56,13 +58,21 @@ GenericGFPoly::GenericGFPoly(Ref<GenericGF> field,
     coefficients_ = coefficients;
   }
 }
+
+pping::FallibleRef<pping::GenericGFPoly> GenericGFPoly::createGenericGFPoly(pping::GenericGF &field, ArrayRef<int> coefficients) MB_NOEXCEPT_EXCEPT_BADALLOC
+{
+    if (coefficients.size() == 0) {
+      return failure<IllegalArgumentException>("need coefficients");
+    }
+    return new GenericGFPoly(field, coefficients);
+}
   
 ArrayRef<int> GenericGFPoly::getCoefficients() {
   return coefficients_;
 }
   
 int GenericGFPoly::getDegree() {
-  return coefficients_->size() - 1;
+  return (int)coefficients_.size() - 1;
 }
   
 bool GenericGFPoly::isZero() {
@@ -70,16 +80,16 @@ bool GenericGFPoly::isZero() {
 }
   
 int GenericGFPoly::getCoefficient(int degree) {
-  return coefficients_[coefficients_->size() - 1 - degree];
+  return coefficients_[coefficients_.size() - 1 - degree];
 }
   
-int GenericGFPoly::evaluateAt(int a) {
+pping::Fallible<int> GenericGFPoly::evaluateAt(int a) MB_NOEXCEPT_EXCEPT_BADALLOC {
   if (a == 0) {
     // Just return the x^0 coefficient
     return getCoefficient(0);
   }
     
-  int size = coefficients_->size();
+  int size = (int)coefficients_.size();
   if (a == 1) {
     // Just the sum of the coefficients
     int result = 0;
@@ -90,14 +100,19 @@ int GenericGFPoly::evaluateAt(int a) {
   }
   int result = coefficients_[0];
   for (int i = 1; i < size; i++) {
-    result = GenericGF::addOrSubtract(field_->multiply(a, result), coefficients_[i]);
+
+    auto const tryMult(field_.multiply(a, result));
+    if(!tryMult)
+        return tryMult.error();
+
+    result = GenericGF::addOrSubtract(*tryMult, coefficients_[i]);
   }
   return result;
 }
   
-Ref<GenericGFPoly> GenericGFPoly::addOrSubtract(Ref<zxing::GenericGFPoly> other) {
-  if (!(field_.object_ == other->field_.object_)) {
-    throw IllegalArgumentException("GenericGFPolys do not have same GenericGF field");
+pping::FallibleRef<GenericGFPoly> GenericGFPoly::addOrSubtract(Ref<pping::GenericGFPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC {
+  if (!(&field_ == &other->field_)) {
+    return failure<IllegalArgumentException>("GenericGFPolys do not have same GenericGF field");
   }
   if (isZero()) {
     return other;
@@ -108,107 +123,153 @@ Ref<GenericGFPoly> GenericGFPoly::addOrSubtract(Ref<zxing::GenericGFPoly> other)
     
   ArrayRef<int> smallerCoefficients = coefficients_;
   ArrayRef<int> largerCoefficients = other->getCoefficients();
-  if (smallerCoefficients->size() > largerCoefficients->size()) {
+  if (smallerCoefficients.size() > largerCoefficients.size()) {
     ArrayRef<int> temp = smallerCoefficients;
     smallerCoefficients = largerCoefficients;
     largerCoefficients = temp;
   }
     
-  ArrayRef<int> sumDiff(new Array<int>(largerCoefficients->size()));
-  int lengthDiff = largerCoefficients->size() - smallerCoefficients->size();
+  ArrayRef<int> sumDiff(new Array<int>(largerCoefficients.size()));
+  int lengthDiff = (int)largerCoefficients.size() - (int)smallerCoefficients.size();
   // Copy high-order terms only found in higher-degree polynomial's coefficients
   for (int i = 0; i < lengthDiff; i++) {
     sumDiff[i] = largerCoefficients[i];
   }
     
-  for (int i = lengthDiff; i < (int)largerCoefficients->size(); i++) {
+  for (int i = lengthDiff; i < (int)largerCoefficients.size(); i++) {
     sumDiff[i] = GenericGF::addOrSubtract(smallerCoefficients[i-lengthDiff],
                                           largerCoefficients[i]);
   }
     
-  return Ref<GenericGFPoly>(new GenericGFPoly(field_, sumDiff));
+  return createGenericGFPoly(field_, sumDiff);
 }
   
-Ref<GenericGFPoly> GenericGFPoly::multiply(Ref<zxing::GenericGFPoly> other) {
-  if (!(field_.object_ == other->field_.object_)) {
-    throw IllegalArgumentException("GenericGFPolys do not have same GenericGF field");
+pping::FallibleRef<GenericGFPoly> GenericGFPoly::multiply(Ref<pping::GenericGFPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC {
+  if (!(&field_ == &other->field_)) {
+    return failure<IllegalArgumentException>("GenericGFPolys do not have same GenericGF field");
   }
     
   if (isZero() || other->isZero()) {
-    return field_->getZero();
+    return field_.getZero();
   }
     
   ArrayRef<int> aCoefficients = coefficients_;
-  int aLength = aCoefficients->size();
+  int aLength = (int)aCoefficients.size();
     
   ArrayRef<int> bCoefficients = other->getCoefficients();
-  int bLength = bCoefficients->size();
+  int bLength = (int)bCoefficients.size();
+
+  if(aLength + bLength < 1) return failure<IllegalArgumentException>("Invalid coefficients length");
     
   ArrayRef<int> product(new Array<int>(aLength + bLength - 1));
   for (int i = 0; i < aLength; i++) {
     int aCoeff = aCoefficients[i];
     for (int j = 0; j < bLength; j++) {
-      product[i+j] = GenericGF::addOrSubtract(product[i+j], 
-                                              field_->multiply(aCoeff, bCoefficients[j]));
+
+      auto const tryMult(field_.multiply(aCoeff, bCoefficients[j]));
+      if(!tryMult)
+          return tryMult.error();
+
+      product[i+j] = GenericGF::addOrSubtract(product[i+j], *tryMult);
     }
   }
-    
-  return Ref<GenericGFPoly>(new GenericGFPoly(field_, product));
+  return createGenericGFPoly(field_, product);
 }
   
-Ref<GenericGFPoly> GenericGFPoly::multiply(int scalar) {
+pping::FallibleRef<GenericGFPoly> GenericGFPoly::multiply(int scalar) MB_NOEXCEPT_EXCEPT_BADALLOC {
   if (scalar == 0) {
-    return field_->getZero();
+    return field_.getZero();
   }
   if (scalar == 1) {
     return Ref<GenericGFPoly>(this);
   }
-  int size = coefficients_->size();
+  int size = (int)coefficients_.size();
   ArrayRef<int> product(new Array<int>(size));
   for (int i = 0; i < size; i++) {
-    product[i] = field_->multiply(coefficients_[i], scalar);
+
+    auto const tryMult(field_.multiply(coefficients_[i], scalar));
+    if(!tryMult)
+        return tryMult.error();
+
+    product[i] = *tryMult;
   }
-  return Ref<GenericGFPoly>(new GenericGFPoly(field_, product));
+  return createGenericGFPoly(field_, product);
 }
   
-Ref<GenericGFPoly> GenericGFPoly::multiplyByMonomial(int degree, int coefficient) {
+pping::FallibleRef<GenericGFPoly> GenericGFPoly::multiplyByMonomial(int degree, int coefficient) MB_NOEXCEPT_EXCEPT_BADALLOC {
   if (degree < 0) {
-    throw IllegalArgumentException("degree must not be less then 0");
+    return failure<IllegalArgumentException>("degree must not be less then 0");
   }
   if (coefficient == 0) {
-    return field_->getZero();
+    return field_.getZero();
   }
-  int size = coefficients_->size();
+  int size = (int)coefficients_.size();
   ArrayRef<int> product(new Array<int>(size+degree));
   for (int i = 0; i < size; i++) {
-    product[i] = field_->multiply(coefficients_[i], coefficient);
+
+    auto const tryMult(field_.multiply(coefficients_[i], coefficient));
+    if(!tryMult)
+        return tryMult.error();
+
+    product[i] = *tryMult;
   }
-  return Ref<GenericGFPoly>(new GenericGFPoly(field_, product));
+  return createGenericGFPoly(field_, product);
 }
   
-std::vector<Ref<GenericGFPoly> > GenericGFPoly::divide(Ref<GenericGFPoly> other) {
-  if (!(field_.object_ == other->field_.object_)) {
-    throw IllegalArgumentException("GenericGFPolys do not have same GenericGF field");
-  }
-  if (other->isZero()) {
-    throw IllegalArgumentException("divide by 0");
-  }
+pping::Fallible<std::vector<Ref<GenericGFPoly>>> GenericGFPoly::divide(Ref<GenericGFPoly> other) MB_NOEXCEPT_EXCEPT_BADALLOC {
+  if (!(&field_ == &other->field_))
+    return failure<IllegalArgumentException>("GenericGFPolys do not have same GenericGF field");
+
+  if (other->isZero())
+    return failure<IllegalArgumentException>("divide by 0");
     
-  Ref<GenericGFPoly> quotient = field_->getZero();
+  auto const tryGetZero(field_.getZero());
+  if(!tryGetZero)
+      return tryGetZero.error();
+
+  Ref<GenericGFPoly> quotient = *tryGetZero;
   Ref<GenericGFPoly> remainder = Ref<GenericGFPoly>(this);
     
   int denominatorLeadingTerm = other->getCoefficient(other->getDegree());
-  int inverseDenominatorLeadingTerm = field_->inverse(denominatorLeadingTerm);
+  if(denominatorLeadingTerm == 0)
+      return failure<IllegalArgumentException>("Denominator leading term is zero");
+
+  auto const inverseDenominatorLeadingTerm(field_.inverse(denominatorLeadingTerm));
+  if(!inverseDenominatorLeadingTerm)
+      return inverseDenominatorLeadingTerm.error();
     
   while (remainder->getDegree() >= other->getDegree() && !remainder->isZero()) {
     int degreeDifference = remainder->getDegree() - other->getDegree();
-    int scale = field_->multiply(remainder->getCoefficient(remainder->getDegree()),
-                                 inverseDenominatorLeadingTerm);
-    Ref<GenericGFPoly> term = other->multiplyByMonomial(degreeDifference, scale);
-    Ref<GenericGFPoly> iterationQuotiont = field_->buildMonomial(degreeDifference,
-                                                                 scale);
-    quotient = quotient->addOrSubtract(iterationQuotiont);
-    remainder = remainder->addOrSubtract(term);
+    auto const tryMultRemainder(field_.multiply(remainder->getCoefficient(remainder->getDegree()),
+                                       *inverseDenominatorLeadingTerm));
+    if(!tryMultRemainder)
+        return tryMultRemainder.error();
+
+    int scale = *tryMultRemainder;
+
+    auto const tryMult(other->multiplyByMonomial(degreeDifference, scale));
+    if(!tryMult)
+        return tryMult.error();
+    Ref<GenericGFPoly> term = *tryMult;
+
+    auto const tryBuildMonomial(field_.buildMonomial(degreeDifference,
+                                                     scale));
+    if(!tryBuildMonomial)
+        return tryBuildMonomial.error();
+
+    Ref<GenericGFPoly> iterationQuotiont = *tryBuildMonomial;
+
+    auto const tryOp1(quotient->addOrSubtract(iterationQuotiont));
+    if(!tryOp1)
+        return tryOp1.error();
+
+    quotient = *tryOp1;
+
+    auto const tryOp2(remainder->addOrSubtract(term));
+    if(!tryOp2)
+        return tryOp2.error();
+
+    remainder = *tryOp2;
   }
     
   std::vector<Ref<GenericGFPoly> > returnValue;

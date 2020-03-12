@@ -19,50 +19,27 @@
  * limitations under the License.
  */
 
-#include <zxing/NotFoundException.h>
+#include <stddef.h>                            // for NULL
+#include <zxing/NotFoundException.h>           // for NotFoundException
 #include <zxing/common/detector/WhiteRectangleDetector.h>
-#include <zxing/common/detector/MathUtils.h>
-#include <sstream>
+#include <zxing/common/detector/math_utils.h>  // for round, distance, math_utils
 
-using std::vector;
-using zxing::Ref;
-using zxing::ResultPoint;
-using zxing::WhiteRectangleDetector;
-using zxing::common::detector::MathUtils;
+#include "zxing/ResultPoint.h"                 // for ResultPoint
+#include "zxing/common/BitMatrix.h"            // for BitMatrix
+#include "zxing/common/Counted.h"              // for Ref
 
-// VC++
-using zxing::BitMatrix;
+namespace math_utils = pping::common::detector::math_utils;
+
+namespace pping {
+using namespace std;
 
 int WhiteRectangleDetector::INIT_SIZE = 30;
 int WhiteRectangleDetector::CORR = 1;
 
-WhiteRectangleDetector::WhiteRectangleDetector(Ref<BitMatrix> image) : image_(image) {
-  width_ = image->getWidth();
-  height_ = image->getHeight();
-  
-  leftInit_ = (width_ - INIT_SIZE) >> 1;
-  rightInit_ = (width_ + INIT_SIZE) >> 1;
-  upInit_ = (height_ - INIT_SIZE) >> 1;
-  downInit_ = (height_ + INIT_SIZE) >> 1;
-  
-  if (upInit_ < 0 || leftInit_ < 0 || downInit_ >= height_ || rightInit_ >= width_) {
-    throw NotFoundException("Invalid dimensions WhiteRectangleDetector");
-}
-}
-
-WhiteRectangleDetector::WhiteRectangleDetector(Ref<BitMatrix> image, int initSize, int x, int y) : image_(image) {
-  width_ = image->getWidth();
-  height_ = image->getHeight();
-  
-  int halfsize = initSize >> 1;
-  leftInit_ = x - halfsize;
-  rightInit_ = x + halfsize;
-  upInit_ = y - halfsize;
-  downInit_ = y + halfsize;
-  
-  if (upInit_ < 0 || leftInit_ < 0 || downInit_ >= height_ || rightInit_ >= width_) {
-    throw NotFoundException("Invalid dimensions WhiteRectangleDetector");
-  }
+WhiteRectangleDetector::WhiteRectangleDetector(Ref<BitMatrix> image, int leftInit, int rightInit, int upInit, int downInit) noexcept : image_(image), leftInit_(leftInit), rightInit_(rightInit), downInit_(downInit), upInit_(upInit)
+{
+    width_ = static_cast<int>(image->getWidth());
+    height_ = static_cast<int>(image->getHeight());
 }
 
 /**
@@ -77,9 +54,41 @@ WhiteRectangleDetector::WhiteRectangleDetector(Ref<BitMatrix> image, int initSiz
  *         are the second and third. The first point will be the topmost
  *         point and the last, the bottommost. The second point will be
  *         leftmost and the third, the rightmost
- * @throws NotFoundException if no Data Matrix Code can be found
 */
-std::vector<Ref<ResultPoint> > WhiteRectangleDetector::detect() {
+FallibleRef<WhiteRectangleDetector> WhiteRectangleDetector::createWhiteRectangleDetector(Ref<BitMatrix> image) MB_NOEXCEPT_EXCEPT_BADALLOC
+{
+    auto const width = (int)image->getWidth();
+    auto const height = (int)image->getHeight();
+
+    auto const leftInit = (width - INIT_SIZE) >> 1;
+    auto const rightInit = (width + INIT_SIZE) >> 1;
+    auto const upInit = (height - INIT_SIZE) >> 1;
+    auto const downInit = (height + INIT_SIZE) >> 1;
+
+    if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width)
+      return failure<NotFoundException>("Invalid dimensions for WhiteRectangleDetector");
+
+    return new WhiteRectangleDetector(image, leftInit, rightInit, upInit, downInit);
+}
+
+FallibleRef<WhiteRectangleDetector> WhiteRectangleDetector::createWhiteRectangleDetector(Ref<BitMatrix> image, int initSize, int x, int y) MB_NOEXCEPT_EXCEPT_BADALLOC
+{
+    auto const width = (int)image->getWidth();
+    auto const height = (int)image->getHeight();
+
+    int halfsize = initSize >> 1;
+    auto const leftInit = x - halfsize;
+    auto const rightInit = x + halfsize;
+    auto const upInit = y - halfsize;
+    auto const downInit = y + halfsize;
+
+    if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width)
+      return failure<NotFoundException>("Invalid dimensions for WhiteRectangleDetector");
+
+    return new WhiteRectangleDetector(image, leftInit, rightInit, upInit, downInit);
+}
+
+Fallible<std::vector<Ref<ResultPoint>>> WhiteRectangleDetector::detect() MB_NOEXCEPT_EXCEPT_BADALLOC {
   int left = leftInit_;
   int right = rightInit_;
   int up = upInit_;
@@ -172,74 +181,72 @@ std::vector<Ref<ResultPoint> > WhiteRectangleDetector::detect() {
     Ref<ResultPoint> z(NULL);
     //go up right
     for (int i = 1; i < maxSize; i++) {
-      z = getBlackPointOnSegment(left, down - i, left + i, down);
+      z = getBlackPointOnSegment((float)left, (float)(down - i), (float)(left + i), (float)down);
       if (z != NULL) {
         break;
       }
     }
 
     if (z == NULL) {
-      throw NotFoundException("z == NULL");
+      return failure<NotFoundException>("z == NULL");
     }
 
     Ref<ResultPoint> t(NULL);
     //go down right
     for (int i = 1; i < maxSize; i++) {
-      t = getBlackPointOnSegment(left, up + i, left + i, up);
+      t = getBlackPointOnSegment((float)left, (float)(up + i), (float)(left + i), (float)up);
       if (t != NULL) {
         break;
       }
     }
 
     if (t == NULL) {
-      throw NotFoundException("t == NULL");
+      return failure<NotFoundException>("t == NULL");
     }
 
     Ref<ResultPoint> x(NULL);
     //go down left
     for (int i = 1; i < maxSize; i++) {
-      x = getBlackPointOnSegment(right, up + i, right - i, up);
+      x = getBlackPointOnSegment((float)right, (float)(up + i), (float)(right - i), (float)up);
       if (x != NULL) {
         break;
       }
     }
 
     if (x == NULL) {
-      throw NotFoundException("x == NULL");
+      return failure<NotFoundException>("x == NULL");
     }
 
     Ref<ResultPoint> y(NULL);
     //go up left
     for (int i = 1; i < maxSize; i++) {
-      y = getBlackPointOnSegment(right, down - i, right - i, down);
+      y = getBlackPointOnSegment((float)right, (float)(down - i), (float)(right - i), (float)down);
       if (y != NULL) {
         break;
       }
     }
 
     if (y == NULL) {
-      throw NotFoundException("y == NULL");
+      return failure<NotFoundException>("y == NULL");
     }
 
     return centerEdges(y, z, x, t);
 
   } else {
-    throw NotFoundException("No black point found on border");
+    return failure<NotFoundException>("No black point found on border");
   }
 }
 
-Ref<ResultPoint>
-WhiteRectangleDetector::getBlackPointOnSegment(int aX_, int aY_, int bX_, int bY_) {
-  float aX = float(aX_), aY = float(aY_), bX = float(bX_), bY = float(bY_);
-  int dist = MathUtils::round(MathUtils::distance(aX, aY, bX, bY));
-  float xStep = (bX - aX) / dist;
-  float yStep = (bY - aY) / dist;
+Ref<ResultPoint> WhiteRectangleDetector::getBlackPointOnSegment(float aX, float aY, float bX, float bY) {
+  int dist = math_utils::round(math_utils::distance(aX, aY, bX, bY));
+  float xStep = (bX - aX) / (float)dist;
+  float yStep = (bY - aY) / (float)dist;
 
   for (int i = 0; i < dist; i++) {
-    int x = MathUtils::round(aX + i * xStep);
-    int y = MathUtils::round(aY + i * yStep);
+    int x = math_utils::round(aX + (float)i * xStep);
+    int y = math_utils::round(aY + (float)i * yStep);
     if (image_->get(x, y)) {
-      Ref<ResultPoint> point(new ResultPoint(float(x), float(y)));
+      Ref<ResultPoint> point(new ResultPoint((float)x, (float)y));
       return point;
     }
   }
@@ -280,24 +287,24 @@ vector<Ref<ResultPoint> > WhiteRectangleDetector::centerEdges(Ref<ResultPoint> y
   float tj = t->getY();
 
   std::vector<Ref<ResultPoint> > corners(4);
-  if (yi < (float)width_/2.0f) {
-    Ref<ResultPoint> pointA(new ResultPoint(ti - CORR, tj + CORR));
-    Ref<ResultPoint> pointB(new ResultPoint(zi + CORR, zj + CORR));
-    Ref<ResultPoint> pointC(new ResultPoint(xi - CORR, xj - CORR));
-    Ref<ResultPoint> pointD(new ResultPoint(yi + CORR, yj - CORR));
-	  corners[0].reset(pointA);
-	  corners[1].reset(pointB);
-	  corners[2].reset(pointC);
-	  corners[3].reset(pointD);
+  if (yi < (float)width_/2) {
+    Ref<ResultPoint> pointA(new ResultPoint(ti - (float)CORR, tj + (float)CORR));
+    Ref<ResultPoint> pointB(new ResultPoint(zi + (float)CORR, zj + (float)CORR));
+    Ref<ResultPoint> pointC(new ResultPoint(xi - (float)CORR, xj - (float)CORR));
+    Ref<ResultPoint> pointD(new ResultPoint(yi + (float)CORR, yj - (float)CORR));
+      corners[0].reset(pointA);
+      corners[1].reset(pointB);
+      corners[2].reset(pointC);
+      corners[3].reset(pointD);
   } else {
-    Ref<ResultPoint> pointA(new ResultPoint(ti + CORR, tj + CORR));
-    Ref<ResultPoint> pointB(new ResultPoint(zi + CORR, zj - CORR));
-    Ref<ResultPoint> pointC(new ResultPoint(xi - CORR, xj + CORR));
-    Ref<ResultPoint> pointD(new ResultPoint(yi - CORR, yj - CORR));
-	  corners[0].reset(pointA);
-	  corners[1].reset(pointB);
-	  corners[2].reset(pointC);
-	  corners[3].reset(pointD);
+    Ref<ResultPoint> pointA(new ResultPoint(ti + (float)CORR, tj + (float)CORR));
+    Ref<ResultPoint> pointB(new ResultPoint(zi + (float)CORR, zj - (float)CORR));
+    Ref<ResultPoint> pointC(new ResultPoint(xi - (float)CORR, xj + (float)CORR));
+    Ref<ResultPoint> pointD(new ResultPoint(yi - (float)CORR, yj - (float)CORR));
+      corners[0].reset(pointA);
+      corners[1].reset(pointB);
+      corners[2].reset(pointC);
+      corners[3].reset(pointD);
   }
   return corners;
 }
@@ -327,4 +334,5 @@ bool WhiteRectangleDetector::containsBlackPoint(int a, int b, int fixed, bool ho
   }
 
   return false;
+}
 }

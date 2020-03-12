@@ -1,6 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __QR_CODE_READER_H__
-#define __QR_CODE_READER_H__
+#pragma once
 
 /*
  *  QRCodeReader.h
@@ -21,28 +20,31 @@
  * limitations under the License.
  */
 
-#include <zxing/Reader.h>
-#include <zxing/qrcode/decoder/Decoder.h>
-#include <zxing/DecodeHints.h>
+#include <zxing/DecodeHints.h>                        // for DecodeHints
+#include <zxing/Reader.h>                             // for Reader
+#include <zxing/qrcode/decoder/ZXingQRCodeDecoder.h>  // for Decoder
 
-namespace zxing {
-namespace qrcode {
-		
-class QRCodeReader : public Reader {
- private:
-  Decoder decoder_;
-			
- protected:
-  Decoder& getDecoder();
+#include "zxing/common/Counted.h"                     // for Ref
 
- public:
-  QRCodeReader();
-  virtual ~QRCodeReader();
-			
-  Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
-};
+namespace pping {
+class BinaryBitmap;
+class Result;
+}  // namespace pping
 
+namespace pping {
+    namespace qrcode {
+        
+        class QRCodeReader : public Reader {
+        private:
+            Decoder decoder_;
+            
+    protected:
+      Decoder& getDecoder();
+
+        public:
+            QRCodeReader() noexcept;
+            virtual FallibleRef<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC override;
+        };
+    }
 }
-}
 
-#endif // __QR_CODE_READER_H__

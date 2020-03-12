@@ -1,5 +1,4 @@
-#ifndef __BINARYBITMAP_H__
-#define __BINARYBITMAP_H__
+#pragma once
 
 /*
  *  BinaryBitmap.h
@@ -20,37 +19,40 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/common/BitMatrix.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/Binarizer.h>
+#include <zxing/common/Counted.h>  // for Ref, Counted
+#include "zxing/common/Error.hpp"
 
-namespace zxing {
-	
-	class BinaryBitmap : public Counted {
-	private:
-		Ref<Binarizer> binarizer_;
-		
-	public:
-		BinaryBitmap(Ref<Binarizer> binarizer);
-		virtual ~BinaryBitmap();
-		
-		Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
-		Ref<BitMatrix> getBlackMatrix();
-		
-		Ref<LuminanceSource> getLuminanceSource() const;
+namespace pping {
+    
+class Binarizer;
+class BitArray;
+class BitMatrix;
+class LuminanceSource;
 
-		int getWidth() const;
-		int getHeight() const;
+    class BinaryBitmap : public Counted {
+    private:
+        Ref<Binarizer> binarizer_;
+//		int cached_y_;
+        
+    public:
+        BinaryBitmap(Ref<Binarizer> binarizer);
+        virtual ~BinaryBitmap() = default;
+        
+        FallibleRef<BitArray > getBlackRow   (int y, Ref<BitArray> row) const MB_NOEXCEPT_EXCEPT_BADALLOC;
+        FallibleRef<BitMatrix> getBlackMatrix(                        ) const MB_NOEXCEPT_EXCEPT_BADALLOC;
+        
+        Ref<LuminanceSource> getLuminanceSource() const;
 
-		bool isRotateSupported() const;
-		Ref<BinaryBitmap> rotateCounterClockwise();
+        int getWidth() const;
+        int getHeight() const;
 
-		bool isCropSupported() const;
-		Ref<BinaryBitmap> crop(int left, int top, int width, int height);
+        bool isRotateSupported() const;
+        Ref<BinaryBitmap> rotateCounterClockwise();
 
-	};
-	
+        bool isCropSupported() const;
+        Ref<BinaryBitmap> crop(int left, int top, int width, int height) MB_NOEXCEPT_EXCEPT_BADALLOC;
+
+    };
+    
 }
 
-#endif /* BINARYBITMAP_H_ */

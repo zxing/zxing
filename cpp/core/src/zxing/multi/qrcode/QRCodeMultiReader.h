@@ -1,5 +1,4 @@
-#ifndef __QRCODE_MULTI_READER_H__
-#define __QRCODE_MULTI_READER_H__
+#pragma once
 
 /*
  *  Copyright 2011 ZXing authors All rights reserved.
@@ -17,20 +16,27 @@
  * limitations under the License.
  */
 
-#include <zxing/multi/MultipleBarcodeReader.h>
-#include <zxing/qrcode/QRCodeReader.h>
+#include <zxing/multi/MultipleBarcodeReader.h>  // for MultipleBarcodeReader
+#include <zxing/qrcode/QRCodeReader.h>          // for QRCodeReader
+#include <vector>                               // for vector
 
-namespace zxing {
+#include "zxing/DecodeHints.h"                  // for DecodeHints
+#include "zxing/common/Error.hpp"
+
+namespace pping {
+class BinaryBitmap;
+class Result;
+template <typename T> class Ref;
+}  // namespace pping
+
+namespace pping {
 namespace multi {
-
-class QRCodeMultiReader: public zxing::qrcode::QRCodeReader, public MultipleBarcodeReader {
+class QRCodeMultiReader: public pping::qrcode::QRCodeReader, public MultipleBarcodeReader {
   public:
     QRCodeMultiReader();
     virtual ~QRCodeMultiReader();
-    virtual std::vector<Ref<Result> > decodeMultiple(Ref<BinaryBitmap> image, DecodeHints hints);
+    virtual Fallible<std::vector<Ref<Result>>> decodeMultiple(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC override;
 };
+} // End zxing::multi namespace
+} // End zxing namespace
 
-}
-}
-
-#endif // __QRCODE_MULTI_READER_H__

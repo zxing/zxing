@@ -1,6 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __HYBRIDBINARIZER_H__
-#define __HYBRIDBINARIZER_H__
+#pragma once
 /*
  *  HybridBinarizer.h
  *  zxing
@@ -20,48 +19,50 @@
  * limitations under the License.
  */
 
-#include <vector>
-#include <zxing/Binarizer.h>
-#include <zxing/common/GlobalHistogramBinarizer.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/common/BitMatrix.h>
+#include <zxing/common/GlobalHistogramBinarizer.h>  // for GlobalHistogramBinarizer
 
-namespace zxing {
-	
-	class HybridBinarizer : public GlobalHistogramBinarizer {
-	 private:
-    Ref<BitMatrix> matrix_;
-	  Ref<BitArray> cached_row_;
+#include "zxing/common/Counted.h"                   // for Ref
 
-	public:
-		HybridBinarizer(Ref<LuminanceSource> source);
-		virtual ~HybridBinarizer();
-		
-		virtual Ref<BitMatrix> getBlackMatrix();
-		Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
+namespace pping {
+    
+class Binarizer;
+class BitArray;
+class BitMatrix;
+class LuminanceSource;
+
+    class HybridBinarizer : public GlobalHistogramBinarizer {
+    private:
+      mutable Ref<BitMatrix> matrix_;
+      mutable Ref<BitArray > cached_row_;
+
+    public:
+        HybridBinarizer(Ref<LuminanceSource> source) noexcept;
+        ~HybridBinarizer();
+        
+        virtual FallibleRef<BitMatrix> getBlackMatrix() const MB_NOEXCEPT_EXCEPT_BADALLOC override;
+        Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source) const MB_NOEXCEPT_EXCEPT_BADALLOC override;
   private:
     // We'll be using one-D arrays because C++ can't dynamically allocate 2D
     // arrays
-    ArrayRef<int> calculateBlackPoints(ArrayRef<char> luminances,
-                                       int subWidth,
-                                       int subHeight,
-                                       int width,
-                                       int height);
-    void calculateThresholdForBlock(ArrayRef<char> luminances,
+    int* calculateBlackPoints(unsigned char* luminances,
+                              int subWidth,
+                              int subHeight,
+                              int width,
+                              int height) const MB_NOEXCEPT_EXCEPT_BADALLOC;
+    void calculateThresholdForBlock(unsigned char* luminances,
                                     int subWidth,
                                     int subHeight,
                                     int width,
                                     int height,
-                                    ArrayRef<int> blackPoints,
-                                    Ref<BitMatrix> const& matrix);
-    void thresholdBlock(ArrayRef<char>luminances,
+                                    int blackPoints[],
+                                    Ref<BitMatrix> const& matrix) const noexcept;
+    void thresholdBlock(unsigned char* luminances,
                         int xoffset,
                         int yoffset,
                         int threshold,
                         int stride,
-                        Ref<BitMatrix> const& matrix);
-	};
+                        Ref<BitMatrix> const& matrix) const noexcept;
+    };
 
 }
 
-#endif

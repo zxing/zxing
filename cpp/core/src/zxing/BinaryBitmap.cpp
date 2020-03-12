@@ -1,5 +1,7 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
+ *  BinaryBitmap.cpp
+ *  zxing
+ *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,54 +19,43 @@
 
 #include <zxing/BinaryBitmap.h>
 
-using zxing::Ref;
-using zxing::BitArray;
-using zxing::BitMatrix;
-using zxing::LuminanceSource;
-using zxing::BinaryBitmap;
-	
-// VC++
-using zxing::Binarizer;
+#include "zxing/Binarizer.h"         // for Binarizer
+#include "zxing/LuminanceSource.h"   // for LuminanceSource
+#include "zxing/common/BitArray.h"   // for BitArray
+#include "zxing/common/BitMatrix.h"  // for BitMatrix
+#include "zxing/common/Counted.h"    // for Ref
 
-BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : binarizer_(binarizer) {
-}
-	
-BinaryBitmap::~BinaryBitmap() {
-}
-	
-Ref<BitArray> BinaryBitmap::getBlackRow(int y, Ref<BitArray> row) {
-  return binarizer_->getBlackRow(y, row);
-}
-	
-Ref<BitMatrix> BinaryBitmap::getBlackMatrix() {
-  return binarizer_->getBlackMatrix();
-}
-	
-int BinaryBitmap::getWidth() const {
-  return getLuminanceSource()->getWidth();
-}
-	
-int BinaryBitmap::getHeight() const {
-  return getLuminanceSource()->getHeight();
-}
-	
-Ref<LuminanceSource> BinaryBitmap::getLuminanceSource() const {
-  return binarizer_->getLuminanceSource();
-}
-	
+namespace pping {
 
-bool BinaryBitmap::isCropSupported() const {
-  return getLuminanceSource()->isCropSupported();
-}
+    BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : binarizer_(binarizer) {
 
-Ref<BinaryBitmap> BinaryBitmap::crop(int left, int top, int width, int height) {
-  return Ref<BinaryBitmap> (new BinaryBitmap(binarizer_->createBinarizer(getLuminanceSource()->crop(left, top, width, height))));
-}
+    }
 
-bool BinaryBitmap::isRotateSupported() const {
-  return getLuminanceSource()->isRotateSupported();
-}
+    FallibleRef<BitArray > BinaryBitmap::getBlackRow(int y, Ref<BitArray> row) const MB_NOEXCEPT_EXCEPT_BADALLOC {
+        return binarizer_->getBlackRow(y, row);
+    }
 
-Ref<BinaryBitmap> BinaryBitmap::rotateCounterClockwise() {
-  return Ref<BinaryBitmap> (new BinaryBitmap(binarizer_->createBinarizer(getLuminanceSource()->rotateCounterClockwise())));
+    FallibleRef<BitMatrix> BinaryBitmap::getBlackMatrix() const MB_NOEXCEPT_EXCEPT_BADALLOC {
+        return binarizer_->getBlackMatrix();
+    }
+
+    int BinaryBitmap::getWidth() const {
+        return getLuminanceSource()->getWidth();
+    }
+
+    int BinaryBitmap::getHeight() const {
+        return getLuminanceSource()->getHeight();
+    }
+
+    Ref<LuminanceSource> BinaryBitmap::getLuminanceSource() const {
+        return binarizer_->getLuminanceSource();
+    }
+
+    bool BinaryBitmap::isRotateSupported() const {
+      return getLuminanceSource()->isRotateSupported();
+    }
+
+    Ref<BinaryBitmap> BinaryBitmap::rotateCounterClockwise() {
+      return Ref<BinaryBitmap> (new BinaryBitmap(binarizer_->createBinarizer(getLuminanceSource()->rotateCounterClockwise())));
+    }
 }

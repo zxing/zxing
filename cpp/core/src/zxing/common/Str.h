@@ -1,6 +1,4 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __STR_H__
-#define __STR_H__
+#pragma once
 
 /*
  *  Str.h
@@ -21,31 +19,48 @@
  * limitations under the License.
  */
 
-#include <string>
-#include <iostream>
 #include <zxing/common/Counted.h>
+#include <string>
 
-namespace zxing {
-
-class String;
-std::ostream& operator << (std::ostream& out, String const& s);
+namespace pping {
 
 class String : public Counted {
 private:
   std::string text_;
 public:
-  explicit String(const std::string &text);
-  explicit String(int);
-  char charAt(int) const;
-  Ref<String> substring(int) const;
-  const std::string& getText() const;
-  int size() const;
-  void append(std::string const& tail);
+  String(const std::string &text);
+  const std::string &getText() const;
+  void append(const std::string &tail);
   void append(char c);
-  int length() const;
-  friend std::ostream& zxing::operator << (std::ostream& out, String const& s);
+};
+
+#if (defined _MSC_VER) && (_MSC_VER<1300)      //* hfn for eMbedded c++ compiler
+        //* 2012-05-07 hfn class StringComposer, that uses the operator "<<" similarly
+        //* as the stream classes. For eMbedded VC++ only because stream classes are not
+        //* defined there.
+namespace hfn {
+
+class StringComposer: public String {
+public:
+    StringComposer();
+    virtual ~StringComposer();
+    StringComposer(const String &s);
+    StringComposer& operator<< (char c);
+    StringComposer& operator<< (const std::string src);
+    StringComposer& operator<< (int n);
+    operator const char*() const;
+    const std::string &str() const;
 };
 
 }
 
-#endif // __COMMON__STRING_H__
+#endif
+
+#if (!defined _MSC_VER) || (_MSC_VER>=1300)		//* hfn not for eMbedded c++ compiler
+#define _STRING_RESULT		mb::stringstreamlite
+#else
+#define _STRING_RESULT		hfn::StringComposer
+#endif
+
+}
+

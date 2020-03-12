@@ -21,7 +21,9 @@
 
 #include <zxing/FormatException.h>
 
-namespace zxing {
+#include "zxing/ReaderException.h"  // for ReaderException
+
+namespace pping {
 
 FormatException::FormatException() {}
 
@@ -30,12 +32,6 @@ FormatException::FormatException(const char *msg) :
 }
 
 FormatException::~FormatException() throw() {
-}
-
-FormatException const&
-FormatException::getFormatInstance() {
-  static FormatException instance;
-  return instance;
 }
 
 }

@@ -1,5 +1,4 @@
-#ifndef __WHITERECTANGLEDETECTOR_H__
-#define __WHITERECTANGLEDETECTOR_H__
+#pragma once
 
 /*
  *  WhiteRectangleDetector.h
@@ -21,15 +20,16 @@
  * limitations under the License.
  */
 
-#include <vector>
-#include <zxing/ReaderException.h>
-#include <zxing/ResultPoint.h>
-#include <zxing/common/BitMatrix.h>
-#include <zxing/common/Counted.h>
-#include <zxing/ResultPoint.h>
+#include <zxing/common/BitMatrix.h>  // for BitMatrix
+#include <zxing/common/Counted.h>    // for Ref, Counted
+#include "zxing/common/Error.hpp"
+
+#include <vector>                    // for vector
 
 
-namespace zxing {
+namespace pping {
+
+class ResultPoint;
 
 class WhiteRectangleDetector : public Counted {
   private:
@@ -44,16 +44,18 @@ class WhiteRectangleDetector : public Counted {
     int upInit_;
 
   public:
-    WhiteRectangleDetector(Ref<BitMatrix> image);
-    WhiteRectangleDetector(Ref<BitMatrix> image, int initSize, int x, int y);
-    std::vector<Ref<ResultPoint> > detect();
+    static FallibleRef<WhiteRectangleDetector> createWhiteRectangleDetector(Ref<BitMatrix> image) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    static FallibleRef<WhiteRectangleDetector> createWhiteRectangleDetector(Ref<BitMatrix> image, int initSize, int x, int y) MB_NOEXCEPT_EXCEPT_BADALLOC;
+
+    Fallible<std::vector<Ref<ResultPoint> > > detect() MB_NOEXCEPT_EXCEPT_BADALLOC;
 
   private: 
-    Ref<ResultPoint> getBlackPointOnSegment(int aX, int aY, int bX, int bY);
+    WhiteRectangleDetector(Ref<BitMatrix> image, int leftInit, int rightInit, int upInit, int downInit) noexcept;
+
+    Ref<ResultPoint> getBlackPointOnSegment(float aX, float aY, float bX, float bY);
     std::vector<Ref<ResultPoint> > centerEdges(Ref<ResultPoint> y, Ref<ResultPoint> z,
                                     Ref<ResultPoint> x, Ref<ResultPoint> t);
     bool containsBlackPoint(int a, int b, int fixed, bool horizontal);
 };
 }
 
-#endif

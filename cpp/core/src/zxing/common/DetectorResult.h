@@ -1,5 +1,4 @@
-#ifndef __DETECTOR_RESULT_H__
-#define __DETECTOR_RESULT_H__
+#pragma once
 
 /*
  *  DetectorResult.h
@@ -20,24 +19,30 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/common/Array.h>
-#include <zxing/common/BitMatrix.h>
-#include <zxing/ResultPoint.h>
+#include <zxing/ResultPoint.h>                  // for ResultPoint
+#include <zxing/common/BitMatrix.h>             // for BitMatrix
+#include <zxing/common/Counted.h>               // for Ref, Counted
+#include <zxing/common/PerspectiveTransform.h>  // for PerspectiveTransform
+#include <zxing/common/Error.hpp>
+#include <vector>                               // for vector
 
-namespace zxing {
+namespace pping {
 
 class DetectorResult : public Counted {
 private:
   Ref<BitMatrix> bits_;
-  ArrayRef< Ref<ResultPoint> > points_;
+  std::vector<Ref<ResultPoint>> points_;
+  pping::Ref<pping::PerspectiveTransform> perspectiveTransform_;
 
 public:
-  DetectorResult(Ref<BitMatrix> bits, ArrayRef< Ref<ResultPoint> > points);
-  Ref<BitMatrix> getBits();
-  ArrayRef< Ref<ResultPoint> > getPoints();
-};
+        DetectorResult(Ref<BitMatrix> bits, std::vector<Ref<ResultPoint>> points,
+          pping::Ref<pping::PerspectiveTransform> perspectiveTransform);
 
+        DetectorResult(Ref<BitMatrix> bits, std::vector<Ref<ResultPoint>> points);
+
+  auto const & getBits                () const noexcept { return bits_                ; }
+  auto const & getPoints              () const noexcept { return points_              ; }
+  auto const & getPerspectiveTransform() const noexcept { return perspectiveTransform_; }
+};
 }
 
-#endif // __DETECTOR_RESULT_H__

@@ -1,4 +1,3 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  GreyscaleRotatedLuminanceSource.cpp
  *  zxing
@@ -19,63 +18,61 @@
  */
 
 
+#include <stddef.h>                                 // for NULL
 #include <zxing/common/GreyscaleRotatedLuminanceSource.h>
-#include <zxing/common/IllegalArgumentException.h>
+#include <zxing/common/IllegalArgumentException.h>  // for IllegalArgumentException
 
-using zxing::ArrayRef;
-using zxing::GreyscaleRotatedLuminanceSource;
+#include <boost/assert.hpp>
+#include <Utils/Macros.h>
 
-// Note that dataWidth and dataHeight are not reversed, as we need to
-// be able to traverse the greyData correctly, which does not get
-// rotated.
-GreyscaleRotatedLuminanceSource::
-GreyscaleRotatedLuminanceSource(ArrayRef<char> greyData,
-                                int dataWidth, int dataHeight,
-                                int left, int top,
-                                int width, int height)
-    : Super(width, height),
-      greyData_(greyData),
-      dataWidth_(dataWidth),
-      left_(left), top_(top) {
+namespace pping {
+
+// Note that dataWidth and dataHeight are not reversed, as we need to be able to traverse the
+// greyData correctly, which does not get rotated.
+GreyscaleRotatedLuminanceSource::GreyscaleRotatedLuminanceSource(unsigned char* greyData,
+    int dataWidth, int dataHeight, int left, int top, int width, int height) noexcept : greyData_(greyData),
+    dataWidth_(dataWidth),
+//    dataHeight_(dataHeight),
+    left_(left), top_(top), width_(width),
+    height_(height) {
+
+    (void)dataHeight;
   // Intentionally comparing to the opposite dimension since we're rotated.
-  if (left + width > dataHeight || top + height > dataWidth) {
-    throw IllegalArgumentException("Crop rectangle does not fit within image data.");
-  }
+    MB_ASSERTM((left + width <= dataHeight) && (top + height <= dataWidth),
+               "%s", "Crop rectangle does not fit within image data.");
 }
 
 // The API asks for rows, but we're rotated, so we return columns.
-ArrayRef<char>
-GreyscaleRotatedLuminanceSource::getRow(int y, ArrayRef<char> row) const {
-  if (y < 0 || y >= getHeight()) {
-    throw IllegalArgumentException("Requested row is outside the image.");
+unsigned char* GreyscaleRotatedLuminanceSource::getRow(int y, unsigned char* row) const MB_NOEXCEPT_EXCEPT_BADALLOC {
+  BOOST_ASSERT_MSG(!(y < 0 || y >= getHeight()), "Requested row is outside the image.");
+
+  int width = getWidth();
+  if (row == NULL) {
+    row = new unsigned char[width];
   }
-  if (!row || row->size() < getWidth()) {
-    row = ArrayRef<char>(getWidth());
-  }
-  int offset = (left_ * dataWidth_) + (dataWidth_ - 1 - (y + top_));
-  using namespace std;
-  if (false) {
-    cerr << offset << " = "
-         << top_ << " " << left_ << " "
-         << getHeight() << " " << getWidth() << " "
-         << y << endl;
-  }
-  for (int x = 0; x < getWidth(); x++) {
+//  int offset = (left_ * dataWidth_) + (dataWidth_ - 1 - (y + top_));
+  int offset = (left_ * dataWidth_) + top_ + y;
+  for (int x = 0; x < width; x++) {
     row[x] = greyData_[offset];
     offset += dataWidth_;
   }
   return row;
 }
 
-ArrayRef<char> GreyscaleRotatedLuminanceSource::getMatrix() const {
-  ArrayRef<char> result (getWidth() * getHeight());
-  for (int y = 0; y < getHeight(); y++) {
-    char* row = &result[y * getWidth()];
-    int offset = (left_ * dataWidth_) + (dataWidth_ - 1 - (y + top_));
-    for (int x = 0; x < getWidth(); x++) {
-      row[x] = greyData_[offset];
-      offset += dataWidth_;
-    }
+unsigned char* GreyscaleRotatedLuminanceSource::getMatrix() const MB_NOEXCEPT_EXCEPT_BADALLOC {
+  unsigned char* result = new unsigned char[width_ * height_];
+  // This depends on getRow() honoring its second parameter.
+  for (int y = 0; y < height_; y++) {
+    getRow(y, &result[y * width_]);
   }
   return result;
 }
+
+Ref<LuminanceSource> GreyscaleRotatedLuminanceSource::rotateCounterClockwise() MB_NOEXCEPT_EXCEPT_BADALLOC
+{
+    MB_ASSERTM(false, "%s", "This source doesn't implement rotation");
+
+    return Ref<LuminanceSource>(nullptr);
+}
+
+} // namespace

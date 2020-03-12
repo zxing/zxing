@@ -1,6 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __LUMINANCESOURCE_H__
-#define __LUMINANCESOURCE_H__
+#pragma once
 /*
  *  LuminanceSource.h
  *  zxing
@@ -20,40 +19,30 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/common/Array.h>
-#include <string.h>
+#include <zxing/common/Counted.h>  // for Ref, Counted
+#include <zxing/common/Error.hpp>
 
-namespace zxing {
+#include <string>
+
+namespace pping {
 
 class LuminanceSource : public Counted {
- private:
-  const int width;
-  const int height;
+public:
+  LuminanceSource() = default;
+  virtual ~LuminanceSource() = default;
 
- public:
-  LuminanceSource(int width, int height);
-  virtual ~LuminanceSource();
-
-  int getWidth() const { return width; }
-  int getHeight() const { return height; }
+  virtual int getWidth() const noexcept = 0;
+  virtual int getHeight() const noexcept = 0;
 
   // Callers take ownership of the returned memory and must call delete [] on it themselves.
-  virtual ArrayRef<char> getRow(int y, ArrayRef<char> row) const = 0;
-  virtual ArrayRef<char> getMatrix() const = 0;
+  virtual unsigned char* getRow(int y, unsigned char* row) const MB_NOEXCEPT_EXCEPT_BADALLOC = 0;
+  virtual unsigned char* getMatrix() const MB_NOEXCEPT_EXCEPT_BADALLOC = 0;
 
-  virtual bool isCropSupported() const;
-  virtual Ref<LuminanceSource> crop(int left, int top, int width, int height) const;
+  virtual bool isRotateSupported() const noexcept = 0;
+  virtual Ref<LuminanceSource> rotateCounterClockwise() MB_NOEXCEPT_EXCEPT_BADALLOC = 0;
 
-  virtual bool isRotateSupported() const;
-
-  virtual Ref<LuminanceSource> invert() const;
-  
-  virtual Ref<LuminanceSource> rotateCounterClockwise() const;
-
-  operator std::string () const;
+  operator std::string () const MB_NOEXCEPT_EXCEPT_BADALLOC;
 };
 
 }
 
-#endif /* LUMINANCESOURCE_H_ */

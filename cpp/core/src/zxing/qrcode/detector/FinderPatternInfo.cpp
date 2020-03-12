@@ -20,7 +20,10 @@
 
 #include <zxing/qrcode/detector/FinderPatternInfo.h>
 
-namespace zxing {
+#include "zxing/common/Counted.h"                            // for Ref
+#include "zxing/qrcode/detector/ZXingQRCodeFinderPattern.h"  // for FinderPattern
+
+namespace pping {
 namespace qrcode {
 
 FinderPatternInfo::FinderPatternInfo(std::vector<Ref<FinderPattern> > patternCenters) :

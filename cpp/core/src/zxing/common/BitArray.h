@@ -1,6 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __BIT_ARRAY_H__
-#define __BIT_ARRAY_H__
+#pragma once
 
 /*
  *  Copyright 2010 ZXing authors. All rights reserved.
@@ -18,64 +17,54 @@
  * limitations under the License.
  */
 
-#include <zxing/ZXing.h>
-#include <zxing/common/Counted.h>
-#include <zxing/common/IllegalArgumentException.h>
-#include <zxing/common/Array.h>
-#include <vector>
-#include <limits>
-#include <iostream>
+#include "zxing/common/Error.hpp"
 
-namespace zxing {
+#include <stddef.h>                // for size_t
+#include <zxing/common/Counted.h>  // for Counted
+
+#include <Utils/Macros.h>
+#include <limits>                  // for numeric_limits, numeric_limits<>::digits
+#include <vector>                  // for vector, allocator
+
+namespace pping {
+
+#define ZX_LOG_DIGITS(digits) \
+    ((digits == 8) ? 3 : \
+     ((digits == 16) ? 4 : \
+      ((digits == 32) ? 5 : \
+       ((digits == 64) ? 6 : \
+        ((digits == 128) ? 7 : \
+         (-1))))))
 
 class BitArray : public Counted {
-public:
-  static const int bitsPerWord = std::numeric_limits<unsigned int>::digits;
-
 private:
-  int size;
-  ArrayRef<int> bits;
-  static const int logBits = ZX_LOG_DIGITS(bitsPerWord);
-  static const int bitsMask = (1 << logBits) - 1;
+  size_t size_;
+  std::vector<unsigned int> bits_;
+  static const unsigned int bitsPerWord_ =
+    std::numeric_limits<unsigned int>::digits;
+  static const unsigned int logBits_ = ZX_LOG_DIGITS(bitsPerWord_);
+  static const unsigned int bitsMask_ = (1 << logBits_) - 1;
+  static size_t wordsForBits(size_t bits);
+  explicit BitArray();
 
 public:
-  BitArray(int size);
+  BitArray(size_t size);
   ~BitArray();
-  int getSize() const;
+  size_t getSize();
 
-  bool get(int i) const {
-    return (bits[i >> logBits] & (1 << (i & bitsMask))) != 0;
+  Fallible<bool> get(size_t i) const;
+
+  void set(size_t i) {
+    bits_[i >> logBits_] |= static_cast< unsigned int >( 1 << (i & bitsMask_) );
   }
 
-  void set(int i) {
-    bits[i >> logBits] |= 1 << (i & bitsMask);
-  }
-
-  int getNextSet(int from);
-  int getNextUnset(int from);
-
-  void setBulk(int i, int newBits);
+  void setBulk(size_t i, unsigned int newBits);
   void setRange(int start, int end);
   void clear();
-  bool isRange(int start, int end, bool value);
-  std::vector<int>& getBitArray();
-  
+  Fallible<bool> isRange(size_t start, size_t end, bool value) noexcept;
+  std::vector<unsigned int>& getBitArray();
   void reverse();
-
-  class Reverse {
-   private:
-    Ref<BitArray> array;
-   public:
-    Reverse(Ref<BitArray> array);
-    ~Reverse();
-  };
-
-private:
-  static int makeArraySize(int size);
 };
-
-std::ostream& operator << (std::ostream&, BitArray const&);
 
 }
 
-#endif // __BIT_ARRAY_H__

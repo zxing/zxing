@@ -1,4 +1,3 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  String.cpp
  *  zxing
@@ -21,41 +20,80 @@
 
 #include <zxing/common/Str.h>
 
-using std::string;
-using zxing::String;
-using zxing::Ref;
+namespace pping {
+using namespace std;
 
 String::String(const std::string &text) :
-  text_(text) {
-}
-
-String::String(int capacity) {
-  text_.reserve(capacity);
+    text_(text) {
 }
 
 const std::string& String::getText() const {
   return text_;
 }
 
-char String::charAt(int i) const { return text_[i]; }
-
-int String::size() const { return text_.size(); }
-
-int String::length() const { return text_.size(); }
-
-Ref<String> String::substring(int i) const {
-  return Ref<String>(new String(text_.substr(i)));
+//* 2012-06-01 two methods "append" added, needed in DecodedBitStreamParser (PDF417)
+void String::append(const std::string &tail)
+{
+    text_.append(tail);
 }
 
-void String::append(const std::string &tail) {
-  text_.append(tail);
+void String::append(char c)
+{
+    text_.append(1,c);
 }
 
-void String::append(char c) {
-  text_.append(1,c);
+#if (!defined _MSC_VER) || (_MSC_VER>=1300)		//* hfn not for eMbedded c++ compiler
+
+
+#else
+
+namespace hfn {
+
+StringComposer::StringComposer()
+: String(std::string(""))
+{
 }
 
-std::ostream& zxing::operator << (std::ostream& out, String const& s) {
-  out << s.text_;
-  return out;
+StringComposer::~StringComposer()
+{
+}
+
+StringComposer::StringComposer(const String &s)
+: String(s.getText())
+{}
+
+StringComposer& StringComposer::operator<< (char c)
+{
+    *this = StringComposer(String(getText() + c));
+    return *this;
+}
+
+StringComposer& StringComposer::operator<< (const std::string src)
+{
+    *this = StringComposer(String(getText() + src));
+    return *this;
+}
+
+StringComposer& StringComposer::operator<< (int n)
+{
+    char buf[32];
+    sprintf(buf,"%d",n);
+    *this = StringComposer(String(getText() + std::string(buf)));
+    return *this;
+}
+
+StringComposer::operator const char*() const
+{
+    return getText().c_str();
+}
+
+const std::string &StringComposer::str() const
+{
+    return getText();
+}
+
+}
+
+#endif
+
 }

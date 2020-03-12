@@ -1,5 +1,5 @@
-#ifndef __MODULUS_GF_PDF_H__
-#define __MODULUS_GF_PDF_H__
+#pragma once
+
 /*
  * Copyright 2012 ZXing authors
  *
@@ -18,17 +18,14 @@
  * 2012-09-17 HFN translation from Java into C++
  */
 
-#include <zxing/common/Counted.h>
-#include <zxing/common/Array.h>
-#include <zxing/common/DecoderResult.h>
-#include <zxing/common/BitMatrix.h>
+#include <zxing/common/Array.h>                   // for ArrayRef
+#include <zxing/common/Counted.h>                 // for Ref
+#include "zxing/common/Error.hpp"
 
-namespace zxing {
+#include "zxing/pdf417/decoder/ec/ModulusPoly.h"  // for ModulusPoly
+
+namespace pping {
 namespace pdf417 {
-namespace decoder {
-namespace ec {
-
-class ModulusPoly;
 
 /**
  * <p>A field based on powers of a generator integer, modulo some modulus.</p>
@@ -39,34 +36,32 @@ class ModulusPoly;
 class ModulusGF {
 
   public: 
-	static ModulusGF PDF417_GF;
+    static ModulusGF PDF417_GF;
 
   private:
-	ArrayRef<int> expTable_;
-	ArrayRef<int> logTable_;
-	Ref<ModulusPoly> zero_;
-	Ref<ModulusPoly> one_;
-	int modulus_;
+    ArrayRef<int> expTable_;
+    ArrayRef<int> logTable_;
+    Ref<ModulusPoly> zero_;
+    Ref<ModulusPoly> one_;
+    int modulus_;
+    ModulusGF(int modulus, int generator);
 
   public:
-	ModulusGF(int modulus, int generator);
-	Ref<ModulusPoly> getZero();
-	Ref<ModulusPoly> getOne();
-	Ref<ModulusPoly> buildMonomial(int degree, int coefficient);
+    static FallibleRef<ModulusGF> createModulusGF(int modulus, int generator) MB_NOEXCEPT_EXCEPT_BADALLOC;
+    Ref<ModulusPoly> getZero();
+    Ref<ModulusPoly> getOne();
+    FallibleRef<ModulusPoly> buildMonomial(int degree, int coefficient) MB_NOEXCEPT_EXCEPT_BADALLOC;
 
-	int add(int a, int b);
-	int subtract(int a, int b);
-	int exp(int a);
-	int log(int a);
-	int inverse(int a);
-	int multiply(int a, int b);
-	int getSize();
+    int add(int a, int b);
+    int subtract(int a, int b);
+    int exp(int a);
+    Fallible<int> log(int a) noexcept;
+    Fallible<int> inverse(int a) noexcept;
+    int multiply(int a, int b);
+    int getSize();
   
 };
 
-}
-}
-}
-}
+} /* namespace pdf417 */
+} /* namespace zxing */
 
-#endif /* __MODULUS_GF_PDF_H__ */

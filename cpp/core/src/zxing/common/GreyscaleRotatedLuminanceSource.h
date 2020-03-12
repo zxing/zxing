@@ -1,6 +1,4 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __GREYSCALE_ROTATED_LUMINANCE_SOURCE__
-#define __GREYSCALE_ROTATED_LUMINANCE_SOURCE__
+#pragma once
 /*
  *  GreyscaleRotatedLuminanceSource.h
  *  zxing
@@ -21,26 +19,42 @@
  */
 
 
-#include <zxing/LuminanceSource.h>
+#include <zxing/LuminanceSource.h>  // for LuminanceSource
 
-namespace zxing {
+namespace pping {
 
 class GreyscaleRotatedLuminanceSource : public LuminanceSource {
  private:
-  typedef LuminanceSource Super;
-  ArrayRef<char> greyData_;
-  const int dataWidth_;
-  const int left_;
-  const int top_;
+  unsigned char* greyData_;
+  int dataWidth_;
+//  int dataHeight_;
+  int left_;
+  int top_;
+  int width_;
+  int height_;
 
 public:
-  GreyscaleRotatedLuminanceSource(ArrayRef<char> greyData, int dataWidth, int dataHeight,
-      int left, int top, int width, int height);
+  GreyscaleRotatedLuminanceSource(unsigned char* greyData, int dataWidth, int dataHeight,
+      int left, int top, int width, int height) noexcept;
 
-  ArrayRef<char> getRow(int y, ArrayRef<char> row) const;
-  ArrayRef<char> getMatrix() const;
+  virtual unsigned char* getRow(int y, unsigned char* row) const MB_NOEXCEPT_EXCEPT_BADALLOC override;
+  virtual unsigned char* getMatrix() const MB_NOEXCEPT_EXCEPT_BADALLOC override;
+
+  virtual bool isRotateSupported() const noexcept override {
+    return false;
+  }
+
+  virtual int getWidth() const noexcept override {
+    return width_;
+  }
+
+  virtual int getHeight() const noexcept override {
+    return height_;
+  }
+
+  virtual Ref<LuminanceSource> rotateCounterClockwise() MB_NOEXCEPT_EXCEPT_BADALLOC override;
+
 };
 
-}
+} /* namespace */
 
-#endif

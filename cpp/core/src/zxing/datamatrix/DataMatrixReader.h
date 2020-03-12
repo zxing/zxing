@@ -1,5 +1,4 @@
-#ifndef __DATA_MATRIX_READER_H__
-#define __DATA_MATRIX_READER_H__
+#pragma once
 
 /*
  *  DataMatrixReader.h
@@ -21,11 +20,19 @@
  * limitations under the License.
  */
 
-#include <zxing/Reader.h>
-#include <zxing/DecodeHints.h>
-#include <zxing/datamatrix/decoder/Decoder.h>
+#include <zxing/DecodeHints.h>                                // for DecodeHints
+#include <zxing/Reader.h>                                     // for Reader
+#include <zxing/datamatrix/decoder/ZXingDataMatrixDecoder.h>  // for Decoder
 
-namespace zxing {
+#include "zxing/common/Counted.h"                             // for Ref
+#include "zxing/common/Error.hpp"
+
+namespace pping {
+class BinaryBitmap;
+class Result;
+}  // namespace pping
+
+namespace pping {
 namespace datamatrix {
 
 class DataMatrixReader : public Reader {
@@ -33,8 +40,8 @@ private:
   Decoder decoder_;
 
 public:
-  DataMatrixReader();
-  virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+  DataMatrixReader() noexcept;
+  virtual FallibleRef<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC override;
   virtual ~DataMatrixReader();
 
 };
@@ -42,4 +49,3 @@ public:
 }
 }
 
-#endif // __DATA_MATRIX_READER_H__
