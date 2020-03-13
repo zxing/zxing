@@ -21,6 +21,9 @@
 
 #ifndef NO_ICONV
 #   include "Wrappers/Iconv.hpp"                            // for iconv, iconv_close, iconv_open, iconv_t
+#   ifdef __APPLE__
+#       include <TargetConditionals.h>
+#   endif
 #endif
 
 
@@ -65,7 +68,7 @@ void add( string& result, unsigned char character )
     char*   ds = d;
     size_t  dl = sizeof( d );
     iconv_t ic = iconv_open( "UTF-8", "ISO-8859-1" );
-#if defined( PLATFORM_IOS ) && !defined( ICONV_FROM_SOURCE )
+#if TARGET_OS_IPHONE || defined( __EMSCRIPTEN__ )
     char * ss = s;
 #else
     char const* ss = s;

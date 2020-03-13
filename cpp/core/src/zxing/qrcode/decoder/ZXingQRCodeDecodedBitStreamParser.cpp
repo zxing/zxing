@@ -28,6 +28,9 @@
 
 #ifndef NO_ICONV
 #   include "Wrappers/Iconv.hpp"                    // for iconv_close, iconv, iconv_open, iconv_t
+#   ifdef __APPLE__
+#       include <TargetConditionals.h>
+#   endif
 #endif
 #include "zxing/ReaderException.h"                  // for ReaderException
 #include "zxing/common/Array.h"                     // for ArrayRef, Array
@@ -48,14 +51,13 @@ class Version;
 }  // namespace qrcode
 }  // namespace pping
 
-// Required for compatibility. TODO: test on Symbian
-#ifdef ZXING_ICONV_CONST
-#undef ICONV_CONST
-#define ICONV_CONST const
-#endif
 
-#ifndef ICONV_CONST
-#define ICONV_CONST const
+#ifndef NO_ICONV
+#   if TARGET_OS_IPHONE || defined( __EMSCRIPTEN__ )
+#       define ICONV_CONST
+#   else
+#       define ICONV_CONST const
+#   endif
 #endif
 
 using namespace std;
@@ -101,11 +103,7 @@ Fallible<void> DecodedBitStreamParser::append(std::string &result,
   size_t nTo = maxOut;
 
   while (nFrom > 0) {
-#if defined( PLATFORM_IOS ) && !defined( ICONV_FROM_SOURCE )
-    char *fromPtr = (char *)bufIn;
-#else
     ICONV_CONST char *fromPtr = (ICONV_CONST char *)bufIn;
-#endif
     size_t oneway = iconv(cd, &fromPtr, &nFrom, &toPtr, &nTo);
     if (oneway == (size_t)(-1)) {
       iconv_close(cd);
