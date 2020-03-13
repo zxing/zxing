@@ -75,7 +75,7 @@ namespace pping {
                 LOGV("   %f, %f", points[i]->getX() ,points[i]->getY());
             }
             mb::stringstreamlite ss;
-            ss << *(detectorResult->getBits());
+            ss << *((*detectorResult)->getBits());
             LOGV("bits:\n%s", ss.str().c_str());
 #endif
 

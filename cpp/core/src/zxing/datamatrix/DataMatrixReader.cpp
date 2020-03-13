@@ -82,7 +82,7 @@ FallibleRef<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image, DecodeHint
     LOGV("   %f, %f", points[i]->getX(), points[i]->getY());
   }
   mb::stringstreamlite ss;
-  ss << *(detectorResult->getBits());
+  ss << *((*detectorResult)->getBits());
   LOGV("bits:%s", ss.str().c_str());
 #endif
 
