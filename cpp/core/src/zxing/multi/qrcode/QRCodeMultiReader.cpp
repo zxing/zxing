@@ -55,7 +55,7 @@ Fallible<std::vector<Ref<Result>>> QRCodeMultiReader::decodeMultiple(Ref<BinaryB
       if (!decoderResult)
           continue;
       auto const & points(detectorResult[i]->getPoints());
-      Ref<Result> result(Ref<Result>(new Result(decoderResult->getText(), decoderResult->getRawBytes(),
+      Ref<Result> result(Ref<Result>(new Result((*decoderResult)->getText(), (*decoderResult)->getRawBytes(),
                                         points, BarcodeFormat::QR_CODE)));
       // result->putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult->getByteSegments());
       // result->putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult->getECLevel().toString());

@@ -66,12 +66,12 @@ FallibleRef<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image, DecodeHint
 
   LOGV("(2) detected, have detectorResult %p", detectorResult.object_);
 
-  std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
-    
+  std::vector<Ref<ResultPoint> > points((*detectorResult)->getPoints());
+
     for (const auto& point : points) {
         hints.getResultPointCallback()->foundPossibleResultPoint(*point.object_);
     }
-    
+
     hints.getResultPointCallback()->finishedFindingPoints();
 
 
@@ -86,14 +86,14 @@ FallibleRef<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image, DecodeHint
   LOGV("bits:%s", ss.str().c_str());
 #endif
 
-  auto const decoderResult(decoder_.decode(detectorResult->getBits()));
+  auto const decoderResult(decoder_.decode((*detectorResult)->getBits()));
   if(!decoderResult)
       return decoderResult.error();
 
   LOGV("(4) decoded, have decoderResult %p", decoderResult.object_);
 
   Ref<Result> result(
-    new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat::DATA_MATRIX));
+    new Result((*decoderResult)->getText(), (*decoderResult)->getRawBytes(), points, BarcodeFormat::DATA_MATRIX));
   LOGV("(5) created result %p, returning", result.object_);
 
   return result;

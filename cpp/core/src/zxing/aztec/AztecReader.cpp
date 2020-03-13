@@ -36,24 +36,24 @@
 
 namespace pping {
   namespace aztec {
-        
+
     AztecReader::AztecReader() : decoder_() {
       // nothing
     }
-        
+
     FallibleRef<Result> AztecReader::decode(Ref<pping::BinaryBitmap> image) MB_NOEXCEPT_EXCEPT_BADALLOC {
       auto const blackMatrix(image->getBlackMatrix());
       if (!blackMatrix)
           return blackMatrix.error();
       Detector detector(*blackMatrix);
-            
+
 
       auto const detectorResult(detector.detect());
       if(!detectorResult)
           return detectorResult.error();
-            
-      std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
-            
+
+      std::vector<Ref<ResultPoint> > points(detectorResult.result()->getPoints());
+
       auto const getDecoderResult(decoder_.decode(*detectorResult));
       if(!getDecoderResult)
           return getDecoderResult.error();
@@ -65,22 +65,22 @@ namespace pping {
                                     points,
                                     BarcodeFormat::AZTEC_BARCODE,
                                     decoderResult->getByteSegments()));
-            
+
       return result;
     }
-        
+
     FallibleRef<Result> AztecReader::decode(Ref<BinaryBitmap> image, DecodeHints) MB_NOEXCEPT_EXCEPT_BADALLOC {
       //cout << "decoding with hints not supported for aztec" << "\n" << flush;
       return this->decode(image);
     }
-        
+
     AztecReader::~AztecReader() {
       // nothing
     }
-        
+
     Decoder& AztecReader::getDecoder() {
       return decoder_;
     }
-        
+
   }
 }

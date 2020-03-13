@@ -153,13 +153,13 @@ Fallible<ArrayRef<unsigned char>> BitMatrixParser::readCodewords() {
 
   //	cout << (int)formatInfo->getDataMask() << endl;
   int dimension = (int)bitMatrix_->getDimension();
-  dataMask->unmaskBitMatrix(*bitMatrix_, dimension);
+  (*dataMask)->unmaskBitMatrix(*bitMatrix_, dimension);
 
 
   //		cerr << *bitMatrix_ << endl;
   //	cerr << version->getTotalCodewords() << endl;
 
-  auto const getFunctionPattern(version->buildFunctionPattern());
+  auto const getFunctionPattern((*version)->buildFunctionPattern());
   if(!getFunctionPattern)
       return getFunctionPattern.error();
 
@@ -168,7 +168,7 @@ Fallible<ArrayRef<unsigned char>> BitMatrixParser::readCodewords() {
   //	cout << *functionPattern << endl;
 
   bool readingUp = true;
-  ArrayRef<unsigned char> result(version->getTotalCodewords());
+  ArrayRef<unsigned char> result((*version)->getTotalCodewords());
   int resultOffset = 0;
   int currentByte = 0;
   int bitsRead = 0;
@@ -203,7 +203,7 @@ Fallible<ArrayRef<unsigned char>> BitMatrixParser::readCodewords() {
     readingUp = !readingUp; // switch directions
   }
 
-  if (resultOffset != version->getTotalCodewords()) {
+  if (resultOffset != (*version)->getTotalCodewords()) {
     return failure<ReaderException>("Did not read all codewords");
   }
   return result;
@@ -223,7 +223,7 @@ Fallible<void> BitMatrixParser::remask()
 
     auto const dimension = bitMatrix_->getHeight();
 
-    dataMask->unmaskBitMatrix(*bitMatrix_, dimension);
+    (*dataMask)->unmaskBitMatrix(*bitMatrix_, dimension);
     return success();
 }
 

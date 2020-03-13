@@ -43,20 +43,20 @@
 
 namespace pping {
     namespace qrcode {
-        
+
         using namespace std;
-        
+
         QRCodeReader::QRCodeReader() noexcept : decoder_() {}
 
         //TODO: see if any of the other files in the qrcode tree need tryHarder
         FallibleRef<Result> QRCodeReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) MB_NOEXCEPT_EXCEPT_BADALLOC {
             LOGV("decoding image %p", image.object_);
-            
+
             auto const blackMatrix(image->getBlackMatrix());
             if (!blackMatrix)
                 return blackMatrix.error();
             Detector detector(*blackMatrix);
-            
+
             LOGV("(1) created detector %p", &detector);
 
             auto const detectorResult(detector.detect(hints));
@@ -64,10 +64,10 @@ namespace pping {
                 return detectorResult.error();
 
             LOGV("(2) detected, have detectorResult %p", detectorResult.object_);
-            
-            std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
-            
-            
+
+            std::vector<Ref<ResultPoint> > points((*detectorResult)->getPoints());
+
+
 #ifdef DEBUG
             LOGV("(3) extracted points %p", &points);
             LOGV("found " JL_SIZE_T_SPECIFIER " points:", points.size());
@@ -78,19 +78,19 @@ namespace pping {
             ss << *(detectorResult->getBits());
             LOGV("bits:\n%s", ss.str().c_str());
 #endif
-            
-            auto const decoderResult(decoder_.decode(detectorResult->getBits()));
+
+            auto const decoderResult(decoder_.decode((*detectorResult)->getBits()));
             if (!decoderResult)
                 return decoderResult.error();
             LOGV("(4) decoded, have decoderResult %p", decoderResult->object_);
-            
+
             Ref<Result> result(
-                               new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat::QR_CODE));
+                               new Result((*decoderResult)->getText(), (*decoderResult)->getRawBytes(), points, BarcodeFormat::QR_CODE));
             LOGV("(5) created result %p, returning", result.object_);
-            
+
             return result;
         }
-        
+
     Decoder& QRCodeReader::getDecoder() {
         return decoder_;
     }
