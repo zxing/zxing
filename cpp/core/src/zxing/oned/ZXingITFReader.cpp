@@ -107,7 +107,7 @@ namespace pping {
 //          }
 //        }
         bool lengthOK = false;
-        if (length % 2 == 0 && length >= 6 && length <= 50){
+        if (length % 2 == 0 && length >= 4 && length <= 50){
             lengthOK = true;
         }
         if (!lengthOK) {
