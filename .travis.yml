@@ -1,23 +1,26 @@
 language: java
-sudo: false
+os: linux
+dist: bionic
 install: mvn -Ptravis -DskipTests=true -nsu -B install
 script:
   - mvn -Ptravis ${JACOCO} -nsu -B test
   - find $HOME/.m2/repository/com/google/zxing -path "*SNAPSHOT/*" -delete
   - find $HOME/.m2/repository/com/google/zxing -name "*SNAPSHOT" -type d -delete
-matrix:
+jobs:
  include:
    - jdk: openjdk8
      env:
        - JACOCO=-Pjacoco
        - ANDROID_HOME=$HOME/android-sdk-linux
      before_install: if [ ! -d $HOME/android-sdk-linux/platforms ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C $HOME; else ls -l $HOME/android-sdk-linux; fi
-   - jdk: oraclejdk11
+   - jdk: openjdk11
+   - jdk: openjdk14
 cache:
   directories:
     - $HOME/.m2
     - $HOME/android-sdk-linux
 git:
+  quiet: true
   depth: 10
 after_success: if [ -n "$JACOCO" ]; then bash <(curl -s https://codecov.io/bash); fi
 
