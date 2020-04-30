@@ -199,7 +199,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
     List<ExpandedPair> ps = null;
     try {
-      ps = checkRows(new ArrayList<>(), 0);
+      ps = checkRows(new ArrayList<ExpandedRow>(), 0);
     } catch (NotFoundException e) {
       // OK
     }
