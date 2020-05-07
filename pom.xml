@@ -474,6 +474,7 @@
           <version>0.13</version>
           <configuration>
             <excludes>
+              <exclude>.reuse/*</exclude>
               <exclude>**/.*</exclude>
               <exclude>**/.settings/**</exclude>
               <exclude>**/*.iml</exclude>
