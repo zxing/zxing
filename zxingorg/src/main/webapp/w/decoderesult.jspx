@@ -27,12 +27,13 @@
   response.setHeader("X-Robots-Tag", "none");
 </jsp:scriptlet>
 <jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8"/>
     <meta name="robots" content="none"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Decode Succeeded</title>
-    <link rel="stylesheet" href="style.css" type="text/css"/>    
+    <link rel="stylesheet" href="style.css" type="text/css"/>
     <style type="text/css">
       td { vertical-align: top; padding: 0.1in; background-color: #EEEEEE; font-family: monospace; }
     </style>

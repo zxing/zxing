@@ -18,9 +18,11 @@
 <jsp:directive.page contentType="text/html" session="false"/>
 <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
 <jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8"/>
+    <meta name="description" content="Online barcode decoder from the ZXing project"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>ZXing Decoder Online</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>
   </head>
@@ -58,15 +60,15 @@
       <table id="upload">
         <form action="decode" method="get">
           <tr>
-            <td style="text-align:right">Enter an image URL:</td>
-            <td><input type="text" size="80" name="u"/></td>
+            <td style="text-align:right">Enter an <label for="u">image URL</label>:</td>
+            <td><input type="text" size="80" name="u" id="u"/></td>
             <td><input type="submit"/></td>
           </tr>
         </form>
         <form action="decode" method="post" enctype="multipart/form-data">
           <tr>
-            <td style="text-align:right">Or upload a file (&amp;lt;10MB, &amp;lt;10MP):</td>
-            <td><input type="file" name="f"/></td>
+            <td style="text-align:right">Or <label for="f">upload a file</label> (&amp;lt;10MB, &amp;lt;10MP):</td>
+            <td><input type="file" name="f" id="f"/></td>
             <td><input type="submit"/></td>
           </tr>
         </form>
