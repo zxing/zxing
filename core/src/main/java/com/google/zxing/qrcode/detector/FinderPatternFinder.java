@@ -624,7 +624,6 @@ public class FinderPatternFinder {
     possibleCenters.sort(moduleComparator);
 
     double distortion = Double.MAX_VALUE;
-    double[] squares = new double[3];
     FinderPattern[] bestPatterns = new FinderPattern[3];
 
     for (int i = 0; i < possibleCenters.size() - 2; i++) {
@@ -643,17 +642,49 @@ public class FinderPatternFinder {
             continue;
           }
 
-          squares[0] = squares0;
-          squares[1] = squaredDistance(fpj, fpk);
-          squares[2] = squaredDistance(fpi, fpk);
-          Arrays.sort(squares);
+          double a = squares0;
+          double b = squaredDistance(fpj, fpk);
+          double c = squaredDistance(fpi, fpk);
+
+          // sorts ascending - inlined
+          if (a < b) {
+            if (b > c) {
+              if (a < c) {
+                double temp = b;
+                b = c;
+                c = temp;
+              } else {
+                double temp = a;
+                a = c;
+                c = b;
+                b = temp;
+              }
+            }
+          } else {
+            if (b < c) {
+              if (a < c) {
+                double temp = a;
+                a = b;
+                b = temp;
+              } else {
+                double temp = a;
+                a = b;
+                b = c;
+                c = temp;
+              }
+            } else {
+              double temp = a;
+              a = c;
+              c = temp;
+            }
+          }
 
           // a^2 + b^2 = c^2 (Pythagorean theorem), and a = b (isosceles triangle).
           // Since any right triangle satisfies the formula c^2 - b^2 - a^2 = 0,
           // we need to check both two equal sides separately.
           // The value of |c^2 - 2 * b^2| + |c^2 - 2 * a^2| increases as dissimilarity
           // from isosceles right triangle.
-          double d = Math.abs(squares[2] - 2 * squares[1]) + Math.abs(squares[2] - 2 * squares[0]);
+          double d = Math.abs(c - 2 * b) + Math.abs(c - 2 * a);
           if (d < distortion) {
             distortion = d;
             bestPatterns[0] = fpi;
