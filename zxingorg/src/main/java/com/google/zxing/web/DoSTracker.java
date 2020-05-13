@@ -16,11 +16,13 @@
 
 package com.google.zxing.web;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 /**
@@ -32,49 +34,101 @@ final class DoSTracker {
 
   private static final Logger log = Logger.getLogger(DoSTracker.class.getName());
 
-  private final long maxAccessesPerTime;
-  private final Map<String,AtomicLong> numRecentAccesses;
+  private volatile int maxAccessesPerTime;
+  private final Map<String,AtomicInteger> numRecentAccesses;
 
-  DoSTracker(Timer timer, final String name, final int maxAccessesPerTime, long accessTimeMS, int maxEntries) {
+  /**
+   * @param timer {@link Timer} to use for scheduling update tasks
+   * @param name identifier for this tracker
+   * @param maxAccessesPerTime maximum number of accesses allowed from one source per {@code accessTimeMS}
+   * @param accessTimeMS interval in milliseconds over which up to {@code maxAccessesPerTime} accesses are allowed
+   * @param maxEntries maximum number of source entries to track before forgetting least recent ones
+   * @param maxLoad if set, dynamically adjust {@code maxAccessesPerTime} downwards when average load per core
+   *                exceeds this value, and upwards when below this value
+   */
+  DoSTracker(Timer timer,
+             final String name,
+             final int maxAccessesPerTime,
+             long accessTimeMS,
+             int maxEntries,
+             Double maxLoad) {
     this.maxAccessesPerTime = maxAccessesPerTime;
     this.numRecentAccesses = new LRUMap<>(maxEntries);
-    timer.schedule(new TimerTask() {
-      @Override
-      public void run() {
-        synchronized (numRecentAccesses) {
-          Iterator<Map.Entry<String,AtomicLong>> accessIt = numRecentAccesses.entrySet().iterator();
-          while (accessIt.hasNext()) {
-            Map.Entry<String,AtomicLong> entry = accessIt.next();
-            AtomicLong count = entry.getValue();
-            // If number of accesses is below the threshold, remove it entirely
-            if (count.get() <= maxAccessesPerTime) {
-              accessIt.remove();
-            } else {
-              // Else it exceeded the max, so log it (again)
-              log.warning(name + ": Blocking " + entry.getKey() + " (" + count + " outstanding)");
-              // Reduce count of accesses held against the host
-              count.getAndAdd(-maxAccessesPerTime);
-            }
-          }
-        }
-      }
-    }, accessTimeMS, accessTimeMS);
-
+    timer.schedule(new TrackerTask(name, maxLoad), accessTimeMS, accessTimeMS);
   }
 
   boolean isBanned(String event) {
     if (event == null) {
       return true;
     }
-    AtomicLong count;
+    AtomicInteger count;
     synchronized (numRecentAccesses) {
       count = numRecentAccesses.get(event);
       if (count == null) {
-        numRecentAccesses.put(event, new AtomicLong(1));
+        numRecentAccesses.put(event, new AtomicInteger(1));
         return false;
       }
     }
     return count.incrementAndGet() > maxAccessesPerTime;
+  }
+
+  private final class TrackerTask extends TimerTask {
+
+    private final String name;
+    private final Double maxLoad;
+
+    private TrackerTask(String name, Double maxLoad) {
+      this.name = name;
+      this.maxLoad = maxLoad;
+    }
+
+    @Override
+    public void run() {
+      // largest count <= maxAccessesPerTime
+      int maxAllowedCount = 1;
+      // smallest count > maxAccessesPerTime
+      int minDisallowedCount = Integer.MAX_VALUE;
+      int localMAPT = maxAccessesPerTime;
+      synchronized (numRecentAccesses) {
+        Iterator<Map.Entry<String,AtomicInteger>> accessIt = numRecentAccesses.entrySet().iterator();
+        while (accessIt.hasNext()) {
+          Map.Entry<String,AtomicInteger> entry = accessIt.next();
+          AtomicInteger atomicCount = entry.getValue();
+          int count = atomicCount.get();
+          // If number of accesses is below the threshold, remove it entirely
+          if (count <= localMAPT) {
+            accessIt.remove();
+            maxAllowedCount = Math.max(maxAllowedCount, count);
+          } else {
+            // Else it exceeded the max, so log it (again)
+            log.warning(name + ": Blocking " + entry.getKey() + " (" + count + " outstanding)");
+            // Reduce count of accesses held against the host
+            atomicCount.getAndAdd(-localMAPT);
+            minDisallowedCount = Math.min(minDisallowedCount, count);
+          }
+        }
+      }
+      if (maxLoad != null) {
+        OperatingSystemMXBean mxBean = ManagementFactory.getOperatingSystemMXBean();
+        if (mxBean == null) {
+          log.warning("Could not obtain OperatingSystemMXBean; ignoring load");
+        } else {
+          double loadAvg = mxBean.getSystemLoadAverage();
+          if (loadAvg >= 0.0) {
+            int cores = mxBean.getAvailableProcessors();
+            double loadRatio = loadAvg / cores;
+            log.info(name + ": Load ratio: " + loadRatio + " (" + loadAvg + '/' + cores + ") vs " + maxLoad);
+            if (loadRatio > maxLoad) {
+              maxAccessesPerTime = Math.min(maxAllowedCount, maxAccessesPerTime);
+            } else {
+              maxAccessesPerTime = Math.max(minDisallowedCount, maxAccessesPerTime);
+            }
+            log.info(name + ": New maxAccessesPerTime: " + maxAccessesPerTime);
+          }
+        }
+      }
+    }
+
   }
 
 }

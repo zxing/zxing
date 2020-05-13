@@ -39,7 +39,10 @@ public final class WelcomeFilterTestCase extends Assert {
     FilterChain chain = new MockFilterChain();
     new WelcomeFilter().doFilter(request, response, chain);
     assertEquals(HttpServletResponse.SC_MOVED_PERMANENTLY, response.getStatus());
-    assertEquals("/w/decode.jspx", response.getHeader(HttpHeaders.LOCATION));
+    String location = response.getHeader(HttpHeaders.LOCATION);
+    assertNotNull(location);
+    assertTrue(location.startsWith("https://"));
+    assertTrue(location.endsWith("/w/decode.jspx"));
   }
 
 }

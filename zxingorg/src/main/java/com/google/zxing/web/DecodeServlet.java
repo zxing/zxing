@@ -103,7 +103,6 @@ public final class DecodeServlet extends HttpServlet {
   private static final long MAX_IMAGE_SIZE = 1L << 26;
   // No real reason to deal with more than ~32 megapixels
   private static final int MAX_PIXELS = 1 << 25;
-  private static final byte[] REMAINDER_BUFFER = new byte[1 << 16];
   private static final Map<DecodeHintType,Object> HINTS;
   private static final Map<DecodeHintType,Object> HINTS_PURE;
 
@@ -144,7 +143,7 @@ public final class DecodeServlet extends HttpServlet {
 
     String name = getClass().getSimpleName();
     timer = new Timer(name);
-    destHostTracker = new DoSTracker(timer, name, maxAccessPerTime, accessTimeMS, maxEntries);
+    destHostTracker = new DoSTracker(timer, name, maxAccessPerTime, accessTimeMS, maxEntries, null);
     // Hack to try to avoid odd OOM due to memory leak in JAI?
     timer.scheduleAtFixedRate(
       new TimerTask() {
@@ -198,7 +197,7 @@ public final class DecodeServlet extends HttpServlet {
       errorResponse(request, response, "badurl");
       return;
     }
-    
+
     // Shortcut for data URI
     if ("data".equals(imageURI.getScheme())) {
       BufferedImage image;
@@ -226,8 +225,8 @@ public final class DecodeServlet extends HttpServlet {
       errorResponse(request, response, "badurl");
       return;
     }
-    
-    URL imageURL;    
+
+    URL imageURL;
     try {
       imageURL = imageURI.toURL();
     } catch (MalformedURLException ignored) {
@@ -273,30 +272,26 @@ public final class DecodeServlet extends HttpServlet {
     }
 
     try (InputStream is = connection.getInputStream()) {
-      try {
-        if (connection.getResponseCode() != HttpServletResponse.SC_OK) {
-          log.info("Unsuccessful return code " + connection.getResponseCode() + " from " + imageURIString);
-          errorResponse(request, response, "badurl");
-          return;
-        }
-        if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
-          log.info("Too large: " + imageURIString);
-          errorResponse(request, response, "badimage");
-          return;
-        }
-        // Assume we'll only handle image/* content types
-        String contentType = connection.getContentType();
-        if (contentType != null && !contentType.startsWith("image/")) {
-          log.info("Wrong content type " + contentType + ": " + imageURIString);
-          errorResponse(request, response, "badimage");
-          return;
-        }
-
-        log.info("Decoding " + imageURIString);
-        processStream(is, request, response);
-      } finally {
-        consumeRemainder(is);
+      if (connection.getResponseCode() != HttpServletResponse.SC_OK) {
+        log.info("Unsuccessful return code " + connection.getResponseCode() + " from " + imageURIString);
+        errorResponse(request, response, "badurl");
+        return;
       }
+      if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
+        log.info("Too large: " + imageURIString);
+        errorResponse(request, response, "badimage");
+        return;
+      }
+      // Assume we'll only handle image/* content types
+      String contentType = connection.getContentType();
+      if (contentType != null && !contentType.startsWith("image/")) {
+        log.info("Wrong content type " + contentType + ": " + imageURIString);
+        errorResponse(request, response, "badimage");
+        return;
+      }
+
+      log.info("Decoding " + imageURIString);
+      processStream(is, request, response);
     } catch (IOException ioe) {
       log.info("Error " + ioe + " processing " + imageURIString);
       errorResponse(request, response, "badurl");
@@ -304,17 +299,6 @@ public final class DecodeServlet extends HttpServlet {
       connection.disconnect();
     }
 
-  }
-
-  private static void consumeRemainder(InputStream is) {
-    try {
-      while (is.read(REMAINDER_BUFFER) > 0) {
-        // don't care about value, or collision
-      }
-    } catch (IOException | IndexOutOfBoundsException ioe) {
-      // sun.net.www.http.ChunkedInputStream.read is throwing IndexOutOfBoundsException
-      // continue
-    }
   }
 
   @Override
@@ -378,7 +362,7 @@ public final class DecodeServlet extends HttpServlet {
       image.flush();
     }
   }
-  
+
   private static void processImage(BufferedImage image,
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws IOException, ServletException {
@@ -401,7 +385,7 @@ public final class DecodeServlet extends HttpServlet {
       } catch (ReaderException re) {
         savedException = re;
       }
-  
+
       if (results.isEmpty()) {
         try {
           // Look for pure barcode
@@ -413,7 +397,7 @@ public final class DecodeServlet extends HttpServlet {
           savedException = re;
         }
       }
-  
+
       if (results.isEmpty()) {
         try {
           // Look for normal barcode in photo
@@ -425,7 +409,7 @@ public final class DecodeServlet extends HttpServlet {
           savedException = re;
         }
       }
-  
+
       if (results.isEmpty()) {
         try {
           // Try again with other binarizer
@@ -438,7 +422,7 @@ public final class DecodeServlet extends HttpServlet {
           savedException = re;
         }
       }
-  
+
       if (results.isEmpty()) {
         try {
           throw savedException == null ? NotFoundException.getNotFoundInstance() : savedException;

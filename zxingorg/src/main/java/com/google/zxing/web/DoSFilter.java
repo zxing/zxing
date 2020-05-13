@@ -45,15 +45,28 @@ public abstract class DoSFilter implements Filter {
   public void init(FilterConfig filterConfig) {
     int maxAccessPerTime = Integer.parseInt(filterConfig.getInitParameter("maxAccessPerTime"));
     Preconditions.checkArgument(maxAccessPerTime > 0);
+
     int accessTimeSec = Integer.parseInt(filterConfig.getInitParameter("accessTimeSec"));
     Preconditions.checkArgument(accessTimeSec > 0);
     long accessTimeMS = TimeUnit.MILLISECONDS.convert(accessTimeSec, TimeUnit.SECONDS);
-    int maxEntries = Integer.parseInt(filterConfig.getInitParameter("maxEntries"));
-    Preconditions.checkArgument(maxEntries > 0);
+
+    String maxEntriesValue = filterConfig.getInitParameter("maxEntries");
+    int maxEntries = Integer.MAX_VALUE;
+    if (maxEntriesValue != null) {
+      maxEntries = Integer.parseInt(maxEntriesValue);
+      Preconditions.checkArgument(maxEntries > 0);
+    }
+
+    String maxLoadValue = filterConfig.getInitParameter("maxLoad");
+    Double maxLoad = null;
+    if (maxLoadValue != null) {
+      maxLoad = Double.valueOf(maxLoadValue);
+      Preconditions.checkArgument(maxLoad > 0.0);
+    }
 
     String name = getClass().getSimpleName();
     timer = new Timer(name);
-    sourceAddrTracker = new DoSTracker(timer, name, maxAccessPerTime, accessTimeMS, maxEntries);
+    sourceAddrTracker = new DoSTracker(timer, name, maxAccessPerTime, accessTimeMS, maxEntries, maxLoad);
   }
 
   @Override

@@ -31,7 +31,7 @@ public final class WelcomeFilter extends AbstractFilter {
   public void doFilter(ServletRequest servletRequest,
                        ServletResponse servletResponse,
                        FilterChain filterChain) {
-    redirect(servletResponse, "/w/decode.jspx");
+    redirect(servletResponse, "https://" + servletRequest.getServerName() + "/w/decode.jspx");
   }
 
 }

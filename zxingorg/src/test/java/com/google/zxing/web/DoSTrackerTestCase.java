@@ -31,7 +31,7 @@ public final class DoSTrackerTestCase extends Assert {
     Timer timer = new Timer();
     long timerTimeMS = 500;
     int maxAccessPerTime = 2;
-    DoSTracker tracker = new DoSTracker(timer, "test", maxAccessPerTime, timerTimeMS, 3);
+    DoSTracker tracker = new DoSTracker(timer, "test", maxAccessPerTime, timerTimeMS, 3, null);
 
     // 2 requests allowed per time; 3rd should be banned
     assertFalse(tracker.isBanned("A"));
