@@ -188,6 +188,7 @@
           <version>3.2.0</version>
           <configuration>
             <javadocVersion>${java.version}</javadocVersion>
+            <source>${java.version}</source>
             <quiet>true</quiet>
             <notimestamp>true</notimestamp>
             <encoding>${project.build.sourceEncoding}</encoding>
@@ -806,13 +807,6 @@
             <artifactId>maven-source-plugin</artifactId>
             <configuration>
               <skipSource>true</skipSource>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <skip>true</skip>
             </configuration>
           </plugin>
         </plugins>
