@@ -118,7 +118,7 @@ final class MatrixUtil {
   private MatrixUtil() {
     // do nothing
   }
-  
+
   // Set all cells to -1.  -1 means that the cell is empty (not set yet).
   //
   // JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
@@ -179,17 +179,18 @@ final class MatrixUtil {
       int y1 = coordinates[1];
       matrix.set(x1, y1, bit);
 
+      int x2;
+      int y2;
       if (i < 8) {
         // Right top corner.
-        int x2 = matrix.getWidth() - i - 1;
-        int y2 = 8;
-        matrix.set(x2, y2, bit);
+        x2 = matrix.getWidth() - i - 1;
+        y2 = 8;
       } else {
         // Left bottom corner.
-        int x2 = 8;
-        int y2 = matrix.getHeight() - 7 + (i - 8);
-        matrix.set(x2, y2, bit);
+        x2 = 8;
+        y2 = matrix.getHeight() - 7 + (i - 8);
       }
+      matrix.set(x2, y2, bit);
     }
   }
 
