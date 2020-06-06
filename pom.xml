@@ -188,6 +188,7 @@
           <version>3.2.0</version>
           <configuration>
             <javadocVersion>${java.version}</javadocVersion>
+            <source>${java.version}</source>
             <quiet>true</quiet>
             <notimestamp>true</notimestamp>
             <encoding>${project.build.sourceEncoding}</encoding>
