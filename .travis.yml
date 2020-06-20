@@ -15,6 +15,8 @@ jobs:
      before_install: if [ ! -d $HOME/android-sdk-linux/platforms ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C $HOME; else ls -l $HOME/android-sdk-linux; fi
    - jdk: openjdk11
    - jdk: openjdk14
+   - jdk: openjdk8
+     arch: arm64
 cache:
   directories:
     - $HOME/.m2
@@ -33,7 +35,7 @@ after_success: if [ -n "$JACOCO" ]; then bash <(curl -s https://codecov.io/bash)
 # unzip *.zip; rm *.zip
 #
 # # Or different, more recent versions; see sdkmanager --list
-# ./tools/bin/sdkmanager "platforms;android-22" "build-tools;28.0.2"
+# ./tools/bin/sdkmanager "platforms;android-22" "build-tools;28.0.2"
 # # Accept license
 #
 # ./tools/bin/sdkmanager --update
