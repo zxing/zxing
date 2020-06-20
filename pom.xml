@@ -469,6 +469,8 @@
           <artifactId>apache-rat-plugin</artifactId>
           <version>0.13</version>
           <configuration>
+            <consoleOutput>true</consoleOutput>
+            <ignoreErrors>true</ignoreErrors>
             <excludes>
               <exclude>.reuse/*</exclude>
               <exclude>**/.*</exclude>
