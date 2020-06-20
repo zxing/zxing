@@ -17,6 +17,11 @@ jobs:
    - jdk: openjdk14
    - jdk: openjdk11
      arch: arm64
+     before_install:
+       - curl -O https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+       - tar xzf apache-maven-3.6.3-bin.tar.gz
+       - export PATH=`pwd`/apache-maven-3.6.3/bin:$PATH
+       - mvn -v
 cache:
   directories:
     - $HOME/.m2
