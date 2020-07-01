@@ -228,7 +228,10 @@ public abstract class ResultParser {
             element = element.trim();
           }
           if (!element.isEmpty()) {
-            matches.add(element);
+            List<String> mailAdresses = element.split(','); // split the email adresses by comma 
+            for(String mail : mailAdresses){
+              matches.add(mail);
+            }
           }
           i++;
           more = false;
