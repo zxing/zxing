@@ -51,8 +51,8 @@
         </ul></td>
         <td><ul>
           <li>Data Matrix</li>
-          <li>Aztec ('beta' quality)</li>
-          <li>PDF 417 ('alpha' quality)</li>
+          <li>Aztec</li>
+          <li>PDF 417</li>
           <li>MaxiCode</li>
         </ul></td>
       </tr></table>

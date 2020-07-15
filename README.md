@@ -20,8 +20,8 @@ library implemented in Java, with ports to other languages.
 |:----------------------|:--------------|:---------------|
 | UPC-A                 | Code 39       | QR Code        |
 | UPC-E                 | Code 93       | Data Matrix    |
-| EAN-8                 | Code 128      | Aztec (beta)   |
-| EAN-13                | Codabar       | PDF 417 (beta) |
+| EAN-8                 | Code 128      | Aztec          |
+| EAN-13                | Codabar       | PDF 417        |
 | UPC/EAN Extension 2/5 | ITF           | MaxiCode       |
 |                       |               | RSS-14         |
 |                       |               | RSS-Expanded   |
