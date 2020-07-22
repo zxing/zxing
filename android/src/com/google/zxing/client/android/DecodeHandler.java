@@ -29,15 +29,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 final class DecodeHandler extends Handler {
-
-  private static final String TAG = DecodeHandler.class.getSimpleName();
 
   private final CaptureActivity activity;
   private final MultiFormatReader multiFormatReader;
@@ -74,7 +70,6 @@ final class DecodeHandler extends Handler {
    * @param height The height of the preview frame.
    */
   private void decode(byte[] data, int width, int height) {
-    long start = System.nanoTime();
     Result rawResult = null;
     PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, width, height);
     if (source != null) {
@@ -91,12 +86,10 @@ final class DecodeHandler extends Handler {
     Handler handler = activity.getHandler();
     if (rawResult != null) {
       // Don't log the barcode contents for security.
-      long end = System.nanoTime();
-      Log.d(TAG, "Found barcode in " + TimeUnit.NANOSECONDS.toMillis(end - start) + " ms");
       if (handler != null) {
         Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
         Bundle bundle = new Bundle();
-        bundleThumbnail(source, bundle);        
+        bundleThumbnail(source, bundle);
         message.setData(bundle);
         message.sendToTarget();
       }
@@ -113,7 +106,7 @@ final class DecodeHandler extends Handler {
     int width = source.getThumbnailWidth();
     int height = source.getThumbnailHeight();
     Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
-    ByteArrayOutputStream out = new ByteArrayOutputStream();    
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
     bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
     bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
     bundle.putFloat(DecodeThread.BARCODE_SCALED_FACTOR, (float) width / source.getWidth());

@@ -145,14 +145,10 @@ public final class EncodeActivity extends Activity {
       return;
     }
     File barcodeFile = new File(barcodesRoot, makeBarcodeFileName(contents) + ".png");
-    if (!barcodeFile.delete()) {
-      Log.w(TAG, "Could not delete " + barcodeFile);
-      // continue anyway
-    }
     try (FileOutputStream fos = new FileOutputStream(barcodeFile)) {
       bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
     } catch (IOException ioe) {
-      Log.w(TAG, "Couldn't access file " + barcodeFile + " due to " + ioe);
+      Log.w(TAG, "Couldn't access barcode file", ioe);
       showErrorMessage(R.string.msg_unmount_usb);
       return;
     }
