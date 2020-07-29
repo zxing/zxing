@@ -62,7 +62,11 @@ FallibleRef<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimensi
         return tryCheckAndNudge.error();
 
     for (int x = 0; x < max; x += 2) {
-      if (image->get((int)(points[x]+0.5), (int)(points[x + 1]+0.5))) {
+      auto const imageX = static_cast<size_t>(points[x] + 0.5f);
+      auto const imageY = static_cast<size_t>(points[x + 1] + 0.5f);
+
+      if (imageX < image->getWidth() && imageY < image->getHeight() && image->get(imageX, imageY))
+      {
         bits->set(x >> 1, y);
       }
     }
