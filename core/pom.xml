@@ -41,9 +41,6 @@
   <profiles>
     <profile>
       <id>proguard-library</id>
-      <activation>
-        <jdk>[,9)</jdk> <!-- Proguard won't work with JDK 9 -->
-      </activation>
       <build>
         <plugins>
           <plugin>
@@ -66,7 +63,7 @@
       <plugin>
         <groupId>biz.aQute.bnd</groupId>
         <artifactId>bnd-maven-plugin</artifactId>
-        <version>5.0.1</version>
+        <version>5.1.2</version>
         <executions>
           <execution>
             <goals>

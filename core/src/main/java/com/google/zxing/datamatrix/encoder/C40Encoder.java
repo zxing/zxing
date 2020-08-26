@@ -76,7 +76,7 @@ class C40Encoder implements Encoder {
   }
 
   static void writeNextTriplet(EncoderContext context, StringBuilder buffer) {
-    context.writeCodewords(encodeToCodewords(buffer, 0));
+    context.writeCodewords(encodeToCodewords(buffer));
     buffer.delete(0, 3);
   }
 
@@ -168,11 +168,8 @@ class C40Encoder implements Encoder {
     return len;
   }
 
-  private static String encodeToCodewords(CharSequence sb, int startPos) {
-    char c1 = sb.charAt(startPos);
-    char c2 = sb.charAt(startPos + 1);
-    char c3 = sb.charAt(startPos + 2);
-    int v = (1600 * c1) + (40 * c2) + c3 + 1;
+  private static String encodeToCodewords(CharSequence sb) {
+    int v = (1600 * sb.charAt(0)) + (40 * sb.charAt(1)) + sb.charAt(2) + 1;
     char cw1 = (char) (v / 256);
     char cw2 = (char) (v % 256);
     return new String(new char[] {cw1, cw2});

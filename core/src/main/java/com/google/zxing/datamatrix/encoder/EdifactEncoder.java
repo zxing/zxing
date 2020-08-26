@@ -34,7 +34,7 @@ final class EdifactEncoder implements Encoder {
 
       int count = buffer.length();
       if (count >= 4) {
-        context.writeCodewords(encodeToCodewords(buffer, 0));
+        context.writeCodewords(encodeToCodewords(buffer));
         buffer.delete(0, 4);
 
         int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
@@ -80,7 +80,7 @@ final class EdifactEncoder implements Encoder {
         throw new IllegalStateException("Count must not exceed 4");
       }
       int restChars = count - 1;
-      String encoded = encodeToCodewords(buffer, 0);
+      String encoded = encodeToCodewords(buffer);
       boolean endOfSymbolReached = !context.hasMoreCharacters();
       boolean restInAscii = endOfSymbolReached && restChars <= 2;
 
@@ -115,15 +115,15 @@ final class EdifactEncoder implements Encoder {
     }
   }
 
-  private static String encodeToCodewords(CharSequence sb, int startPos) {
-    int len = sb.length() - startPos;
+  private static String encodeToCodewords(CharSequence sb) {
+    int len = sb.length();
     if (len == 0) {
       throw new IllegalStateException("StringBuilder must not be empty");
     }
-    char c1 = sb.charAt(startPos);
-    char c2 = len >= 2 ? sb.charAt(startPos + 1) : 0;
-    char c3 = len >= 3 ? sb.charAt(startPos + 2) : 0;
-    char c4 = len >= 4 ? sb.charAt(startPos + 3) : 0;
+    char c1 = sb.charAt(0);
+    char c2 = len >= 2 ? sb.charAt(1) : 0;
+    char c3 = len >= 3 ? sb.charAt(2) : 0;
+    char c4 = len >= 4 ? sb.charAt(3) : 0;
 
     int v = (c1 << 18) + (c2 << 12) + (c3 << 6) + c4;
     char cw1 = (char) ((v >> 16) & 255);
