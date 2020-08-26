@@ -55,8 +55,6 @@ import java.util.Map;
  */
 final class QRCodeEncoder {
 
-  private static final String TAG = QRCodeEncoder.class.getSimpleName();
-
   private static final int WHITE = 0xFFFFFFFF;
   private static final int BLACK = 0xFF000000;
 

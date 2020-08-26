@@ -117,11 +117,11 @@ public final class BitMatrix implements Cloneable {
           nRows++;
         }
         pos++;
-      }  else if (stringRepresentation.substring(pos, pos + setString.length()).equals(setString)) {
+      }  else if (stringRepresentation.startsWith(setString, pos)) {
         pos += setString.length();
         bits[bitsPos] = true;
         bitsPos++;
-      } else if (stringRepresentation.substring(pos, pos + unsetString.length()).equals(unsetString)) {
+      } else if (stringRepresentation.startsWith(unsetString, pos)) {
         pos += unsetString.length();
         bits[bitsPos] = false;
         bitsPos++;

@@ -25,23 +25,6 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${slf4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-jdk14</artifactId>
-        <version>${slf4j.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>jcl-over-slf4j</artifactId>
-        <version>${slf4j.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
         <groupId>com.google.zxing</groupId>
         <artifactId>core</artifactId>
         <version>${zxing.version}</version>
@@ -83,9 +66,8 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <android.home>${env.ANDROID_HOME}</android.home>
-    <proguard.version>6.3.0beta1</proguard.version>
-    <proguard.plugin.version>2.2.0</proguard.plugin.version>
-    <slf4j.version>1.8.0-beta4</slf4j.version>
+    <proguard.version>7.0.0</proguard.version>
+    <proguard.plugin.version>2.3.0</proguard.plugin.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.4.1-SNAPSHOT</zxing.version>
     <android.platform>22</android.platform>
@@ -230,7 +212,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -305,7 +287,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -327,7 +309,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M4</version>
+          <version>3.0.0-M5</version>
           <configuration>
             <forkCount>0.5C</forkCount>
             <systemPropertyVariables>
@@ -338,7 +320,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.3</version>
+          <version>3.3.1</version>
         </plugin>
         <plugin>
           <groupId>com.simpligility.maven.plugins</groupId>
@@ -384,8 +366,13 @@
           </configuration>
           <dependencies>
             <dependency>
-              <groupId>net.sf.proguard</groupId>
+              <groupId>com.guardsquare</groupId>
               <artifactId>proguard-base</artifactId>
+              <version>${proguard.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.guardsquare</groupId>
+              <artifactId>proguard-core</artifactId>
               <version>${proguard.version}</version>
             </dependency>
           </dependencies>
@@ -419,8 +406,14 @@
           </configuration>
           <dependencies>
             <dependency>
-              <groupId>net.sf.proguard</groupId>
+              <groupId>com.guardsquare</groupId>
               <artifactId>proguard-base</artifactId>
+              <version>${proguard.version}</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>com.guardsquare</groupId>
+              <artifactId>proguard-core</artifactId>
               <version>${proguard.version}</version>
               <scope>runtime</scope>
             </dependency>
@@ -429,13 +422,13 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.9.0</version>
+          <version>3.9.1</version>
           <inherited>false</inherited>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -460,7 +453,7 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.32</version>
+              <version>8.35</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -688,6 +681,17 @@
     <url>https://github.com/zxing/zxing</url>
     <tag>HEAD</tag>
   </scm>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>bintray-guardsquare-proguard</id>
+      <name>bintray</name>
+      <url>https://dl.bintray.com/guardsquare/proguard</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <distributionManagement>
     <repository>
