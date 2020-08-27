@@ -111,7 +111,7 @@ FallibleRef<FormatInformation> FormatInformation::doDecodeFormatInformation(int 
   if (bestDifference <= 3) {
     return createFormatInformation(bestFormatInfo);
   }
-  LOGE("Failed to read format information");
+  LOGD("Failed to read format information");
   return failure<ReaderException>("Failed to read format information");
 }
 

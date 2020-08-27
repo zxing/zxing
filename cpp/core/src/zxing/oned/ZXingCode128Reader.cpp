@@ -499,8 +499,8 @@ FallibleRef<Result> Code128Reader::decodeRow(int rowNumber, Ref<BitArray> row) M
         for (int j = 0; j < (int) tmpString.size(); ++j) {
             resultBytes[j] = tmpString[j];
         }
-//        LOGE("Row num = %d", rowNumber);
-//        return Ref<Result>();
+        //        LOGD("Row num = %d", rowNumber);
+        //        return Ref<Result>();
         return Ref<Result>(new Result(resultString, resultBytes, resultPoints, BarcodeFormat::CODE_128));
 }
 

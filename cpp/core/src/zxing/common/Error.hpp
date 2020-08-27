@@ -75,11 +75,11 @@ inline void logError( Failure const & failure ) noexcept
 {
 #if defined( NDEBUG ) || defined( PLATFORM_IOS ) || ( defined( __ANDROID__ ) && defined( __arm__ ) ) || defined( BOOST_NO_EXCEPTIONS )
     boost::ignore_unused( failure );
-    LOGE( "ZXing failure" );
+    LOGD( "ZXing failure" );
 #else
     try { std::rethrow_exception( failure ); }
-    catch (std::exception const & e) { LOGE("ZXing failure: %s", e.what()); }
-    catch (...)                      { LOGE("ZXing failure"); }
+    catch (std::exception const & e) { LOGD("ZXing failure: %s", e.what()); }
+    catch (...)                      { LOGD("ZXing failure"); }
 #endif // NDEBUG
 }
 
