@@ -17,7 +17,6 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
@@ -29,7 +28,7 @@ import org.junit.Test;
 public final class Code39WriterTestCase extends Assert {
 
   @Test
-  public void testEncode() throws WriterException {
+  public void testEncode() {
     doTest("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
            "000001001011011010110101001011010110100101101101101001010101011001011011010110010101" +
            "011011001010101010011011011010100110101011010011010101011001101011010101001101011010" +
@@ -40,7 +39,7 @@ public final class Code39WriterTestCase extends Assert {
 
     // extended mode blocks
     doTest("\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f",
-           "000001001011011010101001001001011001010101101001001001010110101001011010010010010101" + 
+           "000001001011011010101001001001011001010101101001001001010110101001011010010010010101" +
            "011010010110100100100101011011010010101001001001010101011001011010010010010101101011" +
            "001010100100100101010110110010101001001001010101010011011010010010010101101010011010" +
            "100100100101010110100110101001001001010101011001101010010010010101101010100110100100" +
@@ -86,7 +85,7 @@ public final class Code39WriterTestCase extends Assert {
            "011011001010010110110100000");
   }
 
-  private static void doTest(String input, CharSequence expected) throws WriterException {
+  private static void doTest(String input, CharSequence expected) {
     BitMatrix result = new Code39Writer().encode(input, BarcodeFormat.CODE_39, 0, 0);
     assertEquals(input, expected, BitMatrixTestCase.matrixToString(result));
   }

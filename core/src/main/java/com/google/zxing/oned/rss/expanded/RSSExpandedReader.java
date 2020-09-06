@@ -166,7 +166,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     }
 
     boolean tryStackedDecode = !this.rows.isEmpty();
-    storeRow(rowNumber, false); // TODO: deal with reversed rows
+    storeRow(rowNumber); // TODO: deal with reversed rows
     if (tryStackedDecode) {
       // When the image is 180-rotated, then rows are sorted in wrong direction.
       // Try twice with both the directions.
@@ -263,7 +263,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     return false;
   }
 
-  private void storeRow(int rowNumber, boolean wasReversed) {
+  private void storeRow(int rowNumber) {
     // Discard if duplicate above or below; otherwise insert in order by row number.
     int insertPos = 0;
     boolean prevIsSame = false;
@@ -290,7 +290,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       return;
     }
 
-    this.rows.add(insertPos, new ExpandedRow(this.pairs, rowNumber, wasReversed));
+    this.rows.add(insertPos, new ExpandedRow(this.pairs, rowNumber, false));
 
     removePartialRows(this.pairs, this.rows);
   }

@@ -95,6 +95,7 @@ abstract class ContactEncoder {
     }
   }
 
+  @SuppressWarnings("deprecation")
   static String formatPhone(String phoneData) {
     // Just collect the call to a deprecated method in one place
     return PhoneNumberUtils.formatNumber(phoneData);

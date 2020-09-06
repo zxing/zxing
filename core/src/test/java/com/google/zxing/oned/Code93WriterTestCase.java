@@ -17,7 +17,6 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
@@ -29,7 +28,7 @@ import org.junit.Test;
 public final class Code93WriterTestCase extends Assert {
 
   @Test
-  public void testEncode() throws WriterException {
+  public void testEncode() {
     doTest("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
            "000001010111101101010001101001001101000101100101001100100101100010101011010001011001" +
            "001011000101001101001000110101010110001010011001010001101001011001000101101101101001" +
@@ -54,7 +53,7 @@ public final class Code93WriterTestCase extends Assert {
            "101011110" + "100000");
   }
 
-  private static void doTest(String input, CharSequence expected) throws WriterException {
+  private static void doTest(String input, CharSequence expected) {
     BitMatrix result = new Code93Writer().encode(input, BarcodeFormat.CODE_93, 0, 0);
     assertEquals(expected, BitMatrixTestCase.matrixToString(result));
   }

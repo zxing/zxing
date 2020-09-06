@@ -44,7 +44,7 @@ public final class DoSFilterTestCase extends Assert {
         for (int i = 0; i < MAX_ACCESS_PER_TIME; i++) {
           testRequest(filter, "1.2.3.4", null, HttpServletResponse.SC_OK);
         }
-        testRequest(filter, "1.2.3.4", null, HttpServletResponse.SC_FORBIDDEN);
+        testRequest(filter, "1.2.3.4", null, 429);
       } finally {
         filter.destroy();
       }
@@ -56,8 +56,8 @@ public final class DoSFilterTestCase extends Assert {
     Filter filter = new DecodeDoSFilter();
     initFilter(filter);
     try {
-      testRequest(filter, null, null, HttpServletResponse.SC_FORBIDDEN);
-      testRequest(filter, null, "1.1.1.1", HttpServletResponse.SC_FORBIDDEN);
+      testRequest(filter, null, null, 429);
+      testRequest(filter, null, "1.1.1.1", 429);
     } finally {
       filter.destroy();
     }
@@ -71,7 +71,7 @@ public final class DoSFilterTestCase extends Assert {
       for (int i = 0; i < MAX_ACCESS_PER_TIME; i++) {
         testRequest(filter, "1.2.3.4", "1.1.1." + i + ", proxy1", HttpServletResponse.SC_OK);
       }
-      testRequest(filter, "1.2.3.4", "1.1.1.0", HttpServletResponse.SC_FORBIDDEN);
+      testRequest(filter, "1.2.3.4", "1.1.1.0", 429);
     } finally {
       filter.destroy();
     }
