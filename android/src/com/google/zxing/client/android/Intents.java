@@ -124,7 +124,7 @@ public final class Intents {
      * of the app which requested the scan via
      * {@link android.app.Activity#startActivityForResult(android.content.Intent, int)}
      * The barcodes contents can be retrieved with
-     * {@link android.content.Intent#getStringExtra(String)}. 
+     * {@link android.content.Intent#getStringExtra(String)}.
      * If the user presses Back, the result code will be {@link android.app.Activity#RESULT_CANCELED}.
      */
     public static final String RESULT = "SCAN_RESULT";
@@ -202,7 +202,7 @@ public final class Intents {
 
     /**
      * The data to encode. Use {@link android.content.Intent#putExtra(String, String)} or
-     * {@link android.content.Intent#putExtra(String, android.os.Bundle)}, 
+     * {@link android.content.Intent#putExtra(String, android.os.Bundle)},
      * depending on the type and format specified. Non-QR Code formats should
      * just use a String here. For QR Code, see Contents for details.
      */
@@ -299,5 +299,6 @@ public final class Intents {
   // Not the best place for this, but, better than a new class
   // Should be FLAG_ACTIVITY_NEW_DOCUMENT in API 21+.
   // Defined once here because the current value is deprecated, so generates just one warning
+  @SuppressWarnings("deprecation")
   public static final int FLAG_NEW_DOC = Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
 }

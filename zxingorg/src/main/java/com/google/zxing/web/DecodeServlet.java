@@ -59,7 +59,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -144,14 +143,6 @@ public final class DecodeServlet extends HttpServlet {
     String name = getClass().getSimpleName();
     timer = new Timer(name);
     destHostTracker = new DoSTracker(timer, name, maxAccessPerTime, accessTimeMS, maxEntries, null);
-    // Hack to try to avoid odd OOM due to memory leak in JAI?
-    timer.scheduleAtFixedRate(
-      new TimerTask() {
-        @Override
-        public void run() {
-          System.gc();
-        }
-      }, 0L, TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES));
   }
 
   @Override

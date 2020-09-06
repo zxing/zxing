@@ -76,7 +76,7 @@ public abstract class DoSFilter implements Filter {
     if (isBanned((HttpServletRequest) request)) {
       HttpServletResponse servletResponse = (HttpServletResponse) response;
       // Send very short response as requests may be very frequent
-      servletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+      servletResponse.setStatus(429); // 429 = Too Many Requests from RFC 6585
       servletResponse.getWriter().write("Forbidden");
     } else {
       chain.doFilter(request, response);

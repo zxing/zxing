@@ -17,7 +17,6 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
@@ -29,19 +28,19 @@ import org.junit.Test;
 public final class ITFWriterTestCase extends Assert {
 
   @Test
-  public void testEncode() throws WriterException {
+  public void testEncode() {
     doTest("00123456789012",
            "0000010101010111000111000101110100010101110001110111010001010001110100011" +
            "100010101000101011100011101011101000111000101110100010101110001110100000");
   }
 
-  private static void doTest(String input, CharSequence expected) throws WriterException {
+  private static void doTest(String input, CharSequence expected) {
     BitMatrix result = new ITFWriter().encode(input, BarcodeFormat.ITF, 0, 0);
     assertEquals(expected, BitMatrixTestCase.matrixToString(result));
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testEncodeIllegalCharacters() throws WriterException {
+  public void testEncodeIllegalCharacters() {
     new ITFWriter().encode("00123456789abc", BarcodeFormat.ITF, 0, 0);
   }
 

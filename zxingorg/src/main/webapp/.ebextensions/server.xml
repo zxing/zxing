@@ -17,7 +17,7 @@
 -->
 
 <!-- Additional config:
-JAVA_OPTS="-Djava.security.egd=file:/dev/urandom -Djava.awt.headless=true -Xmx320m -Xmx320m -XX:+UseG1GC"
+JAVA_OPTS="-Djava.security.egd=file:/dev/urandom -Djava.awt.headless=true -Xmx2560m"
 -->
 
 <Server port="-1" shutdown="">
@@ -30,10 +30,10 @@ JAVA_OPTS="-Djava.security.egd=file:/dev/urandom -Djava.awt.headless=true -Xmx32
 
   <Service name="Catalina">
 
-    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-" maxThreads="4" minSpareThreads="1"/>
+    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-" maxThreads="8" minSpareThreads="1"/>
 
     <Connector port="80" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
-               redirectPort="443" 
+               redirectPort="443"
                server="Apache" compression="8192"
                executor="tomcatThreadPool"
                URIEncoding="UTF-8"/>
