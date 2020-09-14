@@ -46,7 +46,7 @@ import java.util.Map;
  * @author Sean Owen
  * @author Hannes Erven
  */
-final class MultiFinderPatternFinder extends FinderPatternFinder {
+public final class MultiFinderPatternFinder extends FinderPatternFinder {
 
   private static final FinderPatternInfo[] EMPTY_RESULT_ARRAY = new FinderPatternInfo[0];
   private static final FinderPattern[] EMPTY_FP_ARRAY = new FinderPattern[0];
@@ -86,7 +86,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
     }
   }
 
-  MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback) {
+  public MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback) {
     super(image, resultPointCallback);
   }
 
