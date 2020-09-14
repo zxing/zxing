@@ -86,7 +86,7 @@ public final class MultiFinderPatternFinder extends FinderPatternFinder {
     }
   }
 
-  MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback) {
+  public MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback) {
     super(image, resultPointCallback);
   }
 
