@@ -303,7 +303,7 @@
   - Many small updates to the Android app, Barcode Scanner, including rare bug fixes and translation updates.
     The 2.1 release corresponds substantially to v4.3.1.
   - Many ports of Java updates to C++ port
-  
+
 2.2 (14 May 2013)
 
   - Retire Symbian port
@@ -392,3 +392,10 @@
   - No more releases of the Barcode Scanner app
   - Minor bug fixes to Code93Writer
   - Minor improvements to QR code detection
+
+3.4.1 (30 Sep 2020)
+
+  - Wifi QR codes now recognize PH2:, not H:, for phase 2 method
+  - Minor bug fixes and improvements
+
+Note that further release notes will be published at https://github.com/zxing/zxing/releases

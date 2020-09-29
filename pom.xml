@@ -67,7 +67,7 @@
     <java.version>1.8</java.version>
     <android.home>${env.ANDROID_HOME}</android.home>
     <proguard.version>7.0.0</proguard.version>
-    <proguard.plugin.version>2.3.0</proguard.plugin.version>
+    <proguard.plugin.version>2.3.1</proguard.plugin.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.4.1-SNAPSHOT</zxing.version>
     <android.platform>22</android.platform>
@@ -287,7 +287,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -453,7 +453,7 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.35</version>
+              <version>8.36.2</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -519,7 +519,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.5</version>
+          <version>0.8.6</version>
           <executions>
             <execution>
               <goals>
