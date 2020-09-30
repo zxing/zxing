@@ -19,7 +19,7 @@
 
   <groupId>com.google.zxing</groupId>
   <artifactId>zxing-parent</artifactId>
-  <version>3.4.1-SNAPSHOT</version>
+  <version>3.4.1</version>
   <packaging>pom</packaging>
 
   <dependencyManagement>
@@ -69,7 +69,7 @@
     <proguard.version>7.0.0</proguard.version>
     <proguard.plugin.version>2.3.1</proguard.plugin.version>
     <!-- This can't reference project.version as some subprojects version differently -->
-    <zxing.version>3.4.1-SNAPSHOT</zxing.version>
+    <zxing.version>3.4.1</zxing.version>
     <android.platform>22</android.platform>
   </properties>
 
@@ -671,7 +671,7 @@
     <connection>scm:git:https://github.com/zxing/zxing.git</connection>
     <developerConnection>scm:git:https://github.com/zxing/zxing.git</developerConnection>
     <url>https://github.com/zxing/zxing</url>
-    <tag>HEAD</tag>
+    <tag>zxing-3.4.1</tag>
   </scm>
 
   <pluginRepositories>
