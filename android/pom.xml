@@ -64,6 +64,15 @@
           <skip>true</skip>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <configLocation>../src/checkstyle/checkstyle.xml</configLocation>
+          <!-- Android generated files -->
+          <excludes>**/R.java,**/BuildConfig.java,**/Manifest.java</excludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 

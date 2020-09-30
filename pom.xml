@@ -428,8 +428,6 @@
           <version>3.1.1</version>
           <configuration>
             <configLocation>src/checkstyle/checkstyle.xml</configLocation>
-            <!-- Android generated files -->
-            <excludes>**/R.java,**/BuildConfig.java,**/Manifest.java</excludes>
             <includeTestSourceDirectory>true</includeTestSourceDirectory>
           </configuration>
           <executions>
