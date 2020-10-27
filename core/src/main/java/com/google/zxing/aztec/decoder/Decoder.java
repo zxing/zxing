@@ -19,11 +19,15 @@ package com.google.zxing.aztec.decoder;
 import com.google.zxing.FormatException;
 import com.google.zxing.aztec.AztecDetectorResult;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -68,6 +72,8 @@ public final class Decoder {
       "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", ".", "CTRL_UL", "CTRL_US"
   };
 
+  private static final Charset DEFAULT_ENCODING = StandardCharsets.ISO_8859_1;
+
   private AztecDetectorResult ddata;
 
   public DecoderResult decode(AztecDetectorResult detectorResult) throws FormatException {
@@ -83,7 +89,7 @@ public final class Decoder {
   }
 
   // This method is used for testing the high-level encoder
-  public static String highLevelDecode(boolean[] correctedBits) {
+  public static String highLevelDecode(boolean[] correctedBits) throws FormatException {
     return getEncodedData(correctedBits);
   }
 
@@ -92,11 +98,20 @@ public final class Decoder {
    *
    * @return the decoded string
    */
-  private static String getEncodedData(boolean[] correctedBits) {
+  private static String getEncodedData(boolean[] correctedBits) throws FormatException {
     int endIndex = correctedBits.length;
     Table latchTable = Table.UPPER; // table most recently latched to
     Table shiftTable = Table.UPPER; // table to use for the next read
-    StringBuilder result = new StringBuilder(20);
+
+    // Final decoded string result
+    // (correctedBits-5) / 4 is an upper bound on the size (all-digit result)
+    StringBuilder result = new StringBuilder((correctedBits.length - 5) / 4);
+
+    // Intermediary buffer of decoded bytes, which is decoded into a string and flushed
+    // when character encoding changes (ECI) or input ends.
+    ByteArrayOutputStream decodedBytes = new ByteArrayOutputStream();
+    Charset encoding = DEFAULT_ENCODING;
+
     int index = 0;
     while (index < endIndex) {
       if (shiftTable == Table.BINARY) {
@@ -118,7 +133,7 @@ public final class Decoder {
             break;
           }
           int code = readCode(correctedBits, index, 8);
-          result.append((char) code);
+          decodedBytes.write((byte) code);
           index += 8;
         }
         // Go back to whatever mode we had been in
@@ -142,8 +157,13 @@ public final class Decoder {
               result.append((char) 29);  // translate FNC1 as ASCII 29
               break;
             case 7:
-              throw new IllegalArgumentException("FLG(7) is reserved and illegal");
+              throw FormatException.getFormatInstance(); // FLG(7) is reserved and illegal
             default:
+              // flush bytes before changing character set
+              result.append(new String(decodedBytes.toByteArray(), encoding));
+              decodedBytes.reset();
+
+              // ECI is decimal integer encoded as 1-6 codes in DIGIT mode
               int eci = 0;
               if (endIndex - index < 4 * n) {
                 break;
@@ -152,10 +172,12 @@ public final class Decoder {
                 int nextDigit = readCode(correctedBits, index, 4);
                 index += 4;
                 if (nextDigit < 2 || nextDigit > 11) {
-                  throw new IllegalArgumentException(String.format("Not a legal ECI digit: '%c'", getCharacter(Table.DIGIT, nextDigit)));
+                  throw FormatException.getFormatInstance(); // Not a decimal digit
                 }
                 eci = eci * 10 + (nextDigit - 2);
               }
+              CharacterSetECI charsetECI = CharacterSetECI.getCharacterSetECIByValue(eci);
+              encoding = Charset.forName(charsetECI.name());
           }
           // Go back to whatever mode we had been in
           shiftTable = latchTable;
@@ -170,12 +192,15 @@ public final class Decoder {
             latchTable = shiftTable;
           }
         } else {
-          result.append(str);
+          // Though stored as a table of strings for convenience, codes actually represent 1 or 2 *bytes*.
+          byte[] b = str.getBytes(StandardCharsets.US_ASCII);
+          decodedBytes.write(b, 0, b.length);
           // Go back to whatever mode we had been in
           shiftTable = latchTable;
         }
       }
     }
+    result.append(new String(decodedBytes.toByteArray(), encoding));
     return result.toString();
   }
 
