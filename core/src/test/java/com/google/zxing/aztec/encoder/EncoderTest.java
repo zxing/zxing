@@ -556,7 +556,7 @@ public final class EncoderTest extends Assert {
                  stripSpace(expected), stripSpace(stuffed.toString()));
   }
 
-  private static BitArray toBitArray(CharSequence bits) {
+  public static BitArray toBitArray(CharSequence bits) {
     BitArray in = new BitArray();
     char[] str = DOTX.matcher(bits).replaceAll("").toCharArray();
     for (char aStr : str) {
@@ -565,7 +565,7 @@ public final class EncoderTest extends Assert {
     return in;
   }
 
-  private static boolean[] toBooleanArray(BitArray bitArray) {
+  public static boolean[] toBooleanArray(BitArray bitArray) {
     boolean[] result = new boolean[bitArray.getSize()];
     for (int i = 0; i < result.length; i++) {
       result[i] = bitArray.get(i);
@@ -588,7 +588,7 @@ public final class EncoderTest extends Assert {
     assertEquals(s, Decoder.highLevelDecode(toBooleanArray(bits)));
   }
 
-  private static String stripSpace(String s) {
+  public static String stripSpace(String s) {
     return SPACES.matcher(s).replaceAll("");
   }
 

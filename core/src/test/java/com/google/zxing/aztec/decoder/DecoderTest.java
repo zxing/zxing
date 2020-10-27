@@ -15,9 +15,12 @@
  */
 package com.google.zxing.aztec.decoder;
 
+import com.google.zxing.aztec.encoder.EncoderTest;
+
 import com.google.zxing.FormatException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.aztec.AztecDetectorResult;
+import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import org.junit.Test;
@@ -29,7 +32,32 @@ import org.junit.Assert;
 public final class DecoderTest extends Assert {
 
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
-  
+
+  @Test
+  public void testHighLevelDecode() throws FormatException {
+      // no ECI codes
+      testHighLevelDecodeString("A. b.",
+          // 'A'  P/S   '. ' L/L    b    D/L    '.'
+          "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
+
+      // initial ECI code 26 (switch to UTF-8)
+      testHighLevelDecodeString("Ça",
+          // P/S FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+          "..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+
+      // initial character without ECI (must be interpreted as ISO_8859_1)
+      // followed by ECI code 26 (= UTF-8) and UTF-8 text
+      testHighLevelDecodeString("±Ça",
+         // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+         "XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+  }
+
+  private static void testHighLevelDecodeString(String expectedString, String b) throws FormatException {
+      BitArray bits = EncoderTest.toBitArray(EncoderTest.stripSpace(b));
+      assertEquals("highLevelDecode() failed for input bits: " + b,
+                   expectedString, Decoder.highLevelDecode(EncoderTest.toBooleanArray(bits)));
+  }
+
   @Test
   public void testAztecResult() throws FormatException {
     BitMatrix matrix = BitMatrix.parse(
@@ -66,6 +94,34 @@ public final class DecoderTest extends Assert {
             90, -42, -80},
         result.getRawBytes());
     assertEquals(180, result.getNumBits());
+  }
+
+  @Test
+  public void testAztecResultECI() throws FormatException {
+    BitMatrix matrix = BitMatrix.parse(
+        "      X     X X X   X           X     \n" +
+        "    X X   X X   X X X X X X X   X     \n" +
+        "    X X                         X   X \n" +
+        "  X X X X X X X X X X X X X X X X X   \n" +
+        "      X                       X       \n" +
+        "      X   X X X X X X X X X   X   X   \n" +
+        "  X X X   X               X   X X X   \n" +
+        "  X   X   X   X X X X X   X   X X X   \n" +
+        "      X   X   X       X   X   X X X   \n" +
+        "  X   X   X   X   X   X   X   X   X   \n" +
+        "X   X X   X   X       X   X   X     X \n" +
+        "  X X X   X   X X X X X   X   X X     \n" +
+        "      X   X               X   X X   X \n" +
+        "      X   X X X X X X X X X   X   X X \n" +
+        "  X   X                       X       \n" +
+        "X X   X X X X X X X X X X X X X X X   \n" +
+        "X X     X   X         X X X       X X \n" +
+        "  X   X   X   X X X X X     X X   X   \n" +
+        "X     X       X X   X X X       X     \n",
+        "X ", "  ");
+    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 15, 1);
+    DecoderResult result = new Decoder().decode(r);
+    assertEquals("Français", result.getText());
   }
 
   @Test(expected = FormatException.class)
