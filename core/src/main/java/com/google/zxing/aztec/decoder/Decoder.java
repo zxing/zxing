@@ -60,7 +60,7 @@ public final class Decoder {
   };
 
   private static final String[] PUNCT_TABLE = {
-      "", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
+      "FLG(n)", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
       "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{", "}", "CTRL_UL"
   };
 
@@ -131,7 +131,35 @@ public final class Decoder {
         int code = readCode(correctedBits, index, size);
         index += size;
         String str = getCharacter(shiftTable, code);
-        if (str.startsWith("CTRL_")) {
+        if ("FLG(n)".equals(str)) {
+          if (endIndex - index < 3) {
+            break;
+          }
+          int n = readCode(correctedBits, index, 3);
+          index += 3;
+          switch (n) {
+            case 0:
+              result.append((char) 29);  // translate FNC1 as ASCII 29
+              break;
+            case 7:
+              throw new IllegalArgumentException("FLG(7) is reserved and illegal");
+            default:
+              int eci = 0;
+              if (endIndex - index < 4 * n) {
+                break;
+              }
+              while (n-- > 0) {
+                int nextDigit = readCode(correctedBits, index, 4);
+                index += 4;
+                if (nextDigit < 2 || nextDigit > 11) {
+                  throw new IllegalArgumentException(String.format("Not a legal ECI digit: '%c'", getCharacter(Table.DIGIT, nextDigit)));
+                }
+                eci = eci * 10 + (nextDigit - 2);
+              }
+          }
+          // Go back to whatever mode we had been in
+          shiftTable = latchTable;
+        } else if (str.startsWith("CTRL_")) {
           // Table changes
           // ISO/IEC 24778:2008 prescribes ending a shift sequence in the mode from which it was invoked.
           // That's including when that mode is a shift.
