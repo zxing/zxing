@@ -74,11 +74,11 @@ public final class Decoder {
     ddata = detectorResult;
     BitMatrix matrix = detectorResult.getBits();
     boolean[] rawbits = extractBits(matrix);
-    boolean[] correctedBits = correctBits(rawbits);
-    byte[] rawBytes = convertBoolArrayToByteArray(correctedBits);
-    String result = getEncodedData(correctedBits);
-    DecoderResult decoderResult = new DecoderResult(rawBytes, result, null, null);
-    decoderResult.setNumBits(correctedBits.length);
+    CorrectedBitsResult correctedBits = correctBits(rawbits);
+    byte[] rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
+    String result = getEncodedData(correctedBits.correctBits);
+    DecoderResult decoderResult = new DecoderResult(rawBytes, result, null, String.format("%d%%", correctedBits.ecLevel));
+    decoderResult.setNumBits(correctedBits.correctBits.length);
     return decoderResult;
   }
 
@@ -224,13 +224,23 @@ public final class Decoder {
     }
   }
 
+  static final class CorrectedBitsResult {
+    private final boolean[] correctBits;
+    private final int ecLevel;
+
+    CorrectedBitsResult(boolean[] correctBits, int ecLevel) {
+      this.correctBits = correctBits;
+      this.ecLevel = ecLevel;
+    }
+  }
+
   /**
    * <p>Performs RS error correction on an array of bits.</p>
    *
    * @return the corrected array
    * @throws FormatException if the input contains too many errors
    */
-  private boolean[] correctBits(boolean[] rawbits) throws FormatException {
+  private CorrectedBitsResult correctBits(boolean[] rawbits) throws FormatException {
     GenericGF gf;
     int codewordSize;
 
@@ -294,7 +304,8 @@ public final class Decoder {
         }
       }
     }
-    return correctedBits;
+
+    return new CorrectedBitsResult(correctedBits, 100 * (numCodewords - numDataCodewords) / numCodewords);
   }
 
   /**
