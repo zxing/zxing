@@ -51,7 +51,7 @@ public final class EncoderTest extends Assert {
   // real life tests
 
   @Test
-  public void testEncode1() {
+  public void testEncode1() throws FormatException {
     testEncode("This is an example Aztec symbol for Wikipedia.", true, 3,
         "X     X X       X     X X     X     X         \n" +
         "X         X     X X     X   X X   X X       X \n" +
@@ -79,7 +79,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testEncode2() {
+  public void testEncode2() throws FormatException {
     testEncode("Aztec Code is a public domain 2D matrix barcode symbology" +
                 " of nominally square symbols built on a square grid with a " +
                 "distinctive square bullseye pattern at their center.", false, 6,
@@ -277,7 +277,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testHighLevelEncode() {
+  public void testHighLevelEncode() throws FormatException {
     testHighLevelEncodeString("A. b.",
         // 'A'  P/S   '. ' L/L    b    D/L    '.'
         "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
@@ -307,7 +307,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testHighLevelEncodeBinary() {
+  public void testHighLevelEncodeBinary() throws FormatException {
     // binary short form single byte
     testHighLevelEncodeString("N\0N",
         // 'N'  B/S    =1   '\0'      N
@@ -394,7 +394,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testHighLevelEncodePairs() {
+  public void testHighLevelEncodePairs() throws FormatException {
     // Typical usage
     testHighLevelEncodeString("ABC. DEF\r\n",
         //  A     B    C    P/S   .<sp>   D    E     F    P/S   \r\n
@@ -417,7 +417,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testUserSpecifiedLayers() {
+  public void testUserSpecifiedLayers() throws FormatException {
     byte[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".getBytes(StandardCharsets.ISO_8859_1);
     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
     assertEquals(2, aztec.getLayers());
@@ -443,7 +443,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testBorderCompact4Case() {
+  public void testBorderCompact4Case() throws FormatException {
     // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
     // be error correction
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -471,7 +471,7 @@ public final class EncoderTest extends Assert {
 
   // Helper routines
 
-  private static void testEncode(String data, boolean compact, int layers, String expected) {
+  private static void testEncode(String data, boolean compact, int layers, String expected) throws FormatException {
     AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1), 33, Encoder.DEFAULT_AZTEC_LAYERS);
     assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
@@ -556,7 +556,7 @@ public final class EncoderTest extends Assert {
                  stripSpace(expected), stripSpace(stuffed.toString()));
   }
 
-  private static BitArray toBitArray(CharSequence bits) {
+  public static BitArray toBitArray(CharSequence bits) {
     BitArray in = new BitArray();
     char[] str = DOTX.matcher(bits).replaceAll("").toCharArray();
     for (char aStr : str) {
@@ -565,7 +565,7 @@ public final class EncoderTest extends Assert {
     return in;
   }
 
-  private static boolean[] toBooleanArray(BitArray bitArray) {
+  public static boolean[] toBooleanArray(BitArray bitArray) {
     boolean[] result = new boolean[bitArray.getSize()];
     for (int i = 0; i < result.length; i++) {
       result[i] = bitArray.get(i);
@@ -573,14 +573,14 @@ public final class EncoderTest extends Assert {
     return result;
   }
 
-  private static void testHighLevelEncodeString(String s, String expectedBits) {
+  private static void testHighLevelEncodeString(String s, String expectedBits) throws FormatException {
     BitArray bits = new HighLevelEncoder(s.getBytes(StandardCharsets.ISO_8859_1)).encode();
     String receivedBits = stripSpace(bits.toString());
     assertEquals("highLevelEncode() failed for input string: " + s, stripSpace(expectedBits), receivedBits);
     assertEquals(s, Decoder.highLevelDecode(toBooleanArray(bits)));
   }
 
-  private static void testHighLevelEncodeString(String s, int expectedReceivedBits) {
+  private static void testHighLevelEncodeString(String s, int expectedReceivedBits) throws FormatException {
     BitArray bits = new HighLevelEncoder(s.getBytes(StandardCharsets.ISO_8859_1)).encode();
     int receivedBitCount = stripSpace(bits.toString()).length();
     assertEquals("highLevelEncode() failed for input string: " + s,
@@ -588,7 +588,7 @@ public final class EncoderTest extends Assert {
     assertEquals(s, Decoder.highLevelDecode(toBooleanArray(bits)));
   }
 
-  private static String stripSpace(String s) {
+  public static String stripSpace(String s) {
     return SPACES.matcher(s).replaceAll("");
   }
 
