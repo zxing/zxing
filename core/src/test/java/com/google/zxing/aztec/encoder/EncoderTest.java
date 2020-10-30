@@ -128,7 +128,9 @@ public final class EncoderTest extends Assert {
 
   @Test
   public void testAztecWriter() throws Exception {
-    testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
+    testWriter("Espa\u00F1ol", null, 25, true, 1);                     // Without ECI (implicit ISO-8859-1)
+    testWriter("Espa\u00F1ol", "ISO-8859-1", 25, true, 1);             // Explicit ISO-8859-1
+    testWriter("\u20AC 1 sample data.", "Windows-1252", 25, true, 2);  // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
     testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
     testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
     testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
@@ -138,7 +140,7 @@ public final class EncoderTest extends Assert {
     String data = "In ut magna vel mauris malesuada";
     AztecWriter writer = new AztecWriter();
     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-    AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1),
+    AztecCode aztec = Encoder.encode(data,
         Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
     BitMatrix expectedMatrix = aztec.getMatrix();
     assertEquals(matrix, expectedMatrix);
@@ -504,16 +506,16 @@ public final class EncoderTest extends Assert {
                                  int eccPercent,
                                  boolean compact,
                                  int layers) throws FormatException {
-    // 1. Perform an encode-decode round-trip because it can be lossy.
-    // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
-    String expectedData = new String(data.getBytes(Charset.forName(charset)), StandardCharsets.ISO_8859_1);
+    // Perform an encode-decode round-trip because it can be lossy.
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
-    hints.put(EncodeHintType.CHARACTER_SET, charset);
+    if (null != charset) {
+        hints.put(EncodeHintType.CHARACTER_SET, charset);
+    }
     hints.put(EncodeHintType.ERROR_CORRECTION, eccPercent);
     AztecWriter writer = new AztecWriter();
     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
-    AztecCode aztec = Encoder.encode(data.getBytes(Charset.forName(charset)), eccPercent,
-        Encoder.DEFAULT_AZTEC_LAYERS);
+    AztecCode aztec = Encoder.encode(data, eccPercent,
+        Encoder.DEFAULT_AZTEC_LAYERS, charset == null ? null : Charset.forName(charset));
     assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
     BitMatrix matrix2 = aztec.getMatrix();
@@ -521,7 +523,7 @@ public final class EncoderTest extends Assert {
     AztecDetectorResult r =
         new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     DecoderResult res = new Decoder().decode(r);
-    assertEquals(expectedData, res.getText());
+    assertEquals(data, res.getText());
     // Check error correction by introducing up to eccPercent/2 errors
     int ecWords = aztec.getCodeWords() * eccPercent / 100 / 2;
     Random random = getPseudoRandom();
@@ -537,7 +539,7 @@ public final class EncoderTest extends Assert {
     }
     r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     res = new Decoder().decode(r);
-    assertEquals(expectedData, res.getText());
+    assertEquals(data, res.getText());
   }
 
   private static Random getPseudoRandom() {
