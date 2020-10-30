@@ -36,9 +36,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 /**
  * Aztec 2D generator unit tests.
  *
@@ -47,6 +44,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public final class EncoderTest extends Assert {
 
+  private static final Charset ISO_8859_1 = StandardCharsets.ISO_8859_1;
+  private static final Charset UTF_8 = StandardCharsets.UTF_8;
   private static final Charset SHIFT_JIS = Charset.forName("Shift_JIS");
   private static final Charset ISO_8859_15 = Charset.forName("ISO-8859-15");
   private static final Charset WINDOWS_1252 = Charset.forName("Windows-1252");
@@ -516,13 +515,13 @@ public final class EncoderTest extends Assert {
     // Perform an encode-decode round-trip because it can be lossy.
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     if (null != charset) {
-        hints.put(EncodeHintType.CHARACTER_SET, charset);
+        hints.put(EncodeHintType.CHARACTER_SET, charset.name());
     }
     hints.put(EncodeHintType.ERROR_CORRECTION, eccPercent);
     AztecWriter writer = new AztecWriter();
     BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
     AztecCode aztec = Encoder.encode(data, eccPercent,
-        Encoder.DEFAULT_AZTEC_LAYERS, charset == null ? null : Charset.forName(charset));
+        Encoder.DEFAULT_AZTEC_LAYERS, charset);
     assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
     BitMatrix matrix2 = aztec.getMatrix();

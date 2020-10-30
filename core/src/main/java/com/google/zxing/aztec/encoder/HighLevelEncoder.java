@@ -169,7 +169,7 @@ public final class HighLevelEncoder {
   public BitArray encode() {
     State initialState = State.INITIAL_STATE;
     if (charset != null) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(charset.name());
+      CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(charset);
       if (null == eci) {
         throw new IllegalArgumentException("No ECI code for character set " + charset.toString());
       }
