@@ -24,7 +24,6 @@ import com.google.zxing.aztec.encoder.Encoder;
 import com.google.zxing.common.BitMatrix;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -39,7 +38,7 @@ public final class AztecWriter implements Writer {
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType,?> hints) {
-    Charset charset = StandardCharsets.ISO_8859_1;
+    Charset charset = null; // Do not add any ECI code by default
     int eccPercent = Encoder.DEFAULT_EC_PERCENT;
     int layers = Encoder.DEFAULT_AZTEC_LAYERS;
     if (hints != null) {
@@ -62,7 +61,7 @@ public final class AztecWriter implements Writer {
     if (format != BarcodeFormat.AZTEC) {
       throw new IllegalArgumentException("Can only encode AZTEC, but got " + format);
     }
-    AztecCode aztec = Encoder.encode(contents.getBytes(charset), eccPercent, layers);
+    AztecCode aztec = Encoder.encode(contents, eccPercent, layers, charset);
     return renderResult(aztec, width, height);
   }
 
