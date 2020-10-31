@@ -36,6 +36,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Aztec 2D generator unit tests.
  *
@@ -43,6 +46,10 @@ import java.util.regex.Pattern;
  * @author Frank Yellin
  */
 public final class EncoderTest extends Assert {
+
+  private static final Charset SHIFT_JIS = Charset.forName("Shift_JIS");
+  private static final Charset ISO_8859_15 = Charset.forName("ISO-8859-15");
+  private static final Charset WINDOWS_1252 = Charset.forName("Windows-1252");
 
   private static final Pattern DOTX = Pattern.compile("[^.X]");
   private static final Pattern SPACES = Pattern.compile("\\s+");
@@ -128,15 +135,15 @@ public final class EncoderTest extends Assert {
 
   @Test
   public void testAztecWriter() throws Exception {
-    testWriter("Espa\u00F1ol", null, 25, true, 1);                     // Without ECI (implicit ISO-8859-1)
-    testWriter("Espa\u00F1ol", "ISO-8859-1", 25, true, 1);             // Explicit ISO-8859-1
-    testWriter("\u20AC 1 sample data.", "Windows-1252", 25, true, 2);  // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
-    testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
-    testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
-    testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
-    testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
-    testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
-    testWriter("The capital of Japan is named \u6771\u4EAC.", "Shift_JIS", 25, true, 3);
+    testWriter("Espa\u00F1ol", null, 25, true, 1);                   // Without ECI (implicit ISO-8859-1)
+    testWriter("Espa\u00F1ol", ISO_8859_1, 25, true, 1);             // Explicit ISO-8859-1
+    testWriter("\u20AC 1 sample data.", WINDOWS_1252, 25, true, 2);  // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
+    testWriter("\u20AC 1 sample data.", ISO_8859_15, 25, true, 2);
+    testWriter("\u20AC 1 sample data.", UTF_8, 25, true, 2);
+    testWriter("\u20AC 1 sample data.", UTF_8, 100, true, 3);
+    testWriter("\u20AC 1 sample data.", UTF_8, 300, true, 4);
+    testWriter("\u20AC 1 sample data.", UTF_8, 500, false, 5);
+    testWriter("The capital of Japan is named \u6771\u4EAC.", SHIFT_JIS, 25, true, 3);
     // Test AztecWriter defaults
     String data = "In ut magna vel mauris malesuada";
     AztecWriter writer = new AztecWriter();
@@ -502,7 +509,7 @@ public final class EncoderTest extends Assert {
   }
 
   private static void testWriter(String data,
-                                 String charset,
+                                 Charset charset,
                                  int eccPercent,
                                  boolean compact,
                                  int layers) throws FormatException {
