@@ -27,7 +27,6 @@ import com.google.zxing.common.DecoderResult;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -62,7 +61,7 @@ public final class DetectorTest extends Assert {
 
   // Test that we can tolerate errors in the parameter locator bits
   private static void testErrorInParameterLocator(String data) throws Exception {
-    AztecCode aztec = Encoder.encode(data.getBytes(StandardCharsets.ISO_8859_1), 25, Encoder.DEFAULT_AZTEC_LAYERS);
+    AztecCode aztec = Encoder.encode(data, 25, Encoder.DEFAULT_AZTEC_LAYERS);
     Random random = new Random(aztec.getMatrix().hashCode());   // pseudo-random, but deterministic
     int layers = aztec.getLayers();
     boolean compact = aztec.isCompact();
