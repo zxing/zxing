@@ -17,6 +17,7 @@
 package com.google.zxing.common;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import com.google.zxing.DecodeHintType;
@@ -29,15 +30,17 @@ import com.google.zxing.DecodeHintType;
  */
 public final class StringUtils {
 
-  private static final String PLATFORM_DEFAULT_ENCODING = Charset.defaultCharset().name();
+  private static final Charset PLATFORM_DEFAULT_ENCODING = Charset.defaultCharset();
+  public static final Charset SHIFT_JIS_CHARSET = Charset.forName("SJIS");
+  public static final Charset GB2312_CHARSET = Charset.forName("GB2312");
+  private static final Charset EUC_JP = Charset.forName("EUC_JP");
+  private static final boolean ASSUME_SHIFT_JIS =
+      SHIFT_JIS_CHARSET.equals(PLATFORM_DEFAULT_ENCODING) ||
+      EUC_JP.equals(PLATFORM_DEFAULT_ENCODING);
+
+  // Retained for ABI compatibility with earlier versions
   public static final String SHIFT_JIS = "SJIS";
   public static final String GB2312 = "GB2312";
-  private static final String EUC_JP = "EUC_JP";
-  private static final String UTF8 = "UTF8";
-  private static final String ISO88591 = "ISO8859_1";
-  private static final boolean ASSUME_SHIFT_JIS =
-      SHIFT_JIS.equalsIgnoreCase(PLATFORM_DEFAULT_ENCODING) ||
-      EUC_JP.equalsIgnoreCase(PLATFORM_DEFAULT_ENCODING);
 
   private StringUtils() { }
 
@@ -45,12 +48,32 @@ public final class StringUtils {
    * @param bytes bytes encoding a string, whose encoding should be guessed
    * @param hints decode hints if applicable
    * @return name of guessed encoding; at the moment will only guess one of:
-   *  {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the platform
-   *  default encoding if none of these can possibly be correct
+   *  "SJIS", "UTF8", "ISO8859_1", or the platform default encoding if none
+   *  of these can possibly be correct
    */
   public static String guessEncoding(byte[] bytes, Map<DecodeHintType,?> hints) {
+      Charset c = guessCharset(bytes, hints);
+      if (c == SHIFT_JIS_CHARSET) {
+          return "SJIS";
+      } else if (c == StandardCharsets.UTF_8) {
+          return "UTF8";
+      } else if (c == StandardCharsets.ISO_8859_1) {
+          return "ISO8859_1";
+      }
+      return c.name();
+  }
+
+  /**
+   * @param bytes bytes encoding a string, whose encoding should be guessed
+   * @param hints decode hints if applicable
+   * @return Charset of guessed encoding; at the moment will only guess one of:
+   *  {@link #SHIFT_JIS_CHARSET}, {@link StandardCharsets#UTF_8},
+   *  {@link StandardCharsets#ISO_8859_1}, or the platform default encoding if
+   *  none of these can possibly be correct
+   */
+  public static Charset guessCharset(byte[] bytes, Map<DecodeHintType,?> hints) {
     if (hints != null && hints.containsKey(DecodeHintType.CHARACTER_SET)) {
-      return hints.get(DecodeHintType.CHARACTER_SET).toString();
+      return Charset.forName(hints.get(DecodeHintType.CHARACTER_SET).toString());
     }
     // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,
     // which should be by far the most common encodings.
@@ -164,11 +187,11 @@ public final class StringUtils {
 
     // Easy -- if there is BOM or at least 1 valid not-single byte character (and no evidence it can't be UTF-8), done
     if (canBeUTF8 && (utf8bom || utf2BytesChars + utf3BytesChars + utf4BytesChars > 0)) {
-      return UTF8;
+      return StandardCharsets.UTF_8;
     }
     // Easy -- if assuming Shift_JIS or >= 3 valid consecutive not-ascii characters (and no evidence it can't be), done
     if (canBeShiftJIS && (ASSUME_SHIFT_JIS || sjisMaxKatakanaWordLength >= 3 || sjisMaxDoubleBytesWordLength >= 3)) {
-      return SHIFT_JIS;
+      return SHIFT_JIS_CHARSET;
     }
     // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough for short words. The crude heuristic is:
     // - If we saw
@@ -177,18 +200,18 @@ public final class StringUtils {
     // - then we conclude Shift_JIS, else ISO-8859-1
     if (canBeISO88591 && canBeShiftJIS) {
       return (sjisMaxKatakanaWordLength == 2 && sjisKatakanaChars == 2) || isoHighOther * 10 >= length
-          ? SHIFT_JIS : ISO88591;
+          ? SHIFT_JIS_CHARSET : StandardCharsets.ISO_8859_1;
     }
 
     // Otherwise, try in order ISO-8859-1, Shift JIS, UTF-8 and fall back to default platform encoding
     if (canBeISO88591) {
-      return ISO88591;
+      return StandardCharsets.ISO_8859_1;
     }
     if (canBeShiftJIS) {
-      return SHIFT_JIS;
+      return SHIFT_JIS_CHARSET;
     }
     if (canBeUTF8) {
-      return UTF8;
+      return StandardCharsets.UTF_8;
     }
     // Otherwise, we take a wild guess with platform encoding
     return PLATFORM_DEFAULT_ENCODING;

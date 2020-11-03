@@ -19,6 +19,7 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
@@ -26,7 +27,6 @@ import com.google.zxing.qrcode.decoder.Version;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -127,7 +127,7 @@ public final class EncoderTestCase extends Assert {
           ">>\n";
     assertEquals(expected, qrCode.toString());
   }
-  
+
   @Test
   public void testEncodeWithVersion() throws WriterException {
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
@@ -135,7 +135,7 @@ public final class EncoderTestCase extends Assert {
     QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
     assertTrue(qrCode.toString().contains(" version: 7\n"));
   }
-  
+
   @Test(expected = WriterException.class)
   public void testEncodeWithVersionTooSmall() throws WriterException {
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
@@ -742,12 +742,8 @@ public final class EncoderTestCase extends Assert {
     assertEquals(expected, qrCode.toString());
   }
 
-  private static String shiftJISString(byte[] bytes) throws WriterException {
-    try {
-      return new String(bytes, "Shift_JIS");
-    } catch (UnsupportedEncodingException uee) {
-      throw new WriterException(uee.toString());
-    }
+  private static String shiftJISString(byte[] bytes) {
+    return new String(bytes, StringUtils.SHIFT_JIS_CHARSET);
   }
 
 }
