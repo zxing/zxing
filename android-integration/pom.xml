@@ -38,7 +38,7 @@
 
   <repositories>
     <repository>
-      <id>google-maven-central</id>
+      <id>google-maven-repo</id>
       <name>Google Maven</name>
       <url>https://maven.google.com</url>
     </repository>
