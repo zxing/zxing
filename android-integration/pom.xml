@@ -14,7 +14,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>android-integration</artifactId>
@@ -30,13 +31,23 @@
       <groupId>androidx.fragment</groupId>
       <artifactId>fragment</artifactId>
       <version>1.2.5</version>
+      <type>aar</type>
     </dependency>
     <dependency>
       <groupId>androidx.activity</groupId>
       <artifactId>activity</artifactId>
       <version>1.1.0</version>
+      <type>aar</type>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>google-maven-central</id>
+      <name>Google Maven</name>
+      <url>https://maven.google.com</url>
+    </repository>
+  </repositories>
 
   <build>
     <pluginManagement>
