@@ -23,8 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.Activity;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import androidx.fragment.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -146,6 +147,7 @@ public class IntentIntegrator {
 
   private final Activity activity;
   private final Fragment fragment;
+  private final androidx.fragment.app.Fragment supportFragment;
 
   private String title;
   private String message;
@@ -171,6 +173,17 @@ public class IntentIntegrator {
   public IntentIntegrator(Fragment fragment) {
     this.activity = fragment.getActivity();
     this.fragment = fragment;
+    initializeConfiguration();
+  }
+
+  /**
+   * @param fragment {@link androidx.fragment.app.Fragment} invoking the integration.
+   *                 {@link #startActivityForResult(Intent, int)} will be called on the {@link Fragment} instead
+   *                 of an {@link Activity}
+   */
+  public IntentIntegrator(androidx.fragment.app.Fragment fragment) {
+    this.activity = fragment.getActivity();
+    this.supportFragment = fragment;
     initializeConfiguration();
   }
 
@@ -339,12 +352,15 @@ public class IntentIntegrator {
    * @param code Request code for the activity
    * @see Activity#startActivityForResult(Intent, int)
    * @see Fragment#startActivityForResult(Intent, int)
+   * @see androidx.fragment.app.Fragment#startActivityForResult(Intent, int)
    */
   protected void startActivityForResult(Intent intent, int code) {
-    if (fragment == null) {
-      activity.startActivityForResult(intent, code);
+    if (this.fragment != null) {
+      this.fragment.startActivityForResult(intent, code);
+    } else if (this.supportFragment != null) {
+      this.supportFragment.startActivityForResult(intent, code);
     } else {
-      fragment.startActivityForResult(intent, code);
+      this.activity.startActivityForResult(intent, code);
     }
   }
 
@@ -389,10 +405,12 @@ public class IntentIntegrator {
         Uri uri = Uri.parse("market://details?id=" + packageName);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         try {
-          if (fragment == null) {
-            activity.startActivity(intent);
-          } else {
+          if (fragment != null) {
             fragment.startActivity(intent);
+          } else if (supportFragment != null) {
+            supportFragment.startActivity(intent);
+          } else {
+            activity.startActivity(intent);
           }
         } catch (ActivityNotFoundException anfe) {
           // Hmm, market is not installed
@@ -473,10 +491,12 @@ public class IntentIntegrator {
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     intent.addFlags(FLAG_NEW_DOC);
     attachMoreExtras(intent);
-    if (fragment == null) {
-      activity.startActivity(intent);
-    } else {
+    if (fragment != null) {
       fragment.startActivity(intent);
+    } else if (supportFragment != null) {
+      supportFragment.startActivity(intent);
+    } else {
+      activity.startActivity(intent);
     }
     return null;
   }

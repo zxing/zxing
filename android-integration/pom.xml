@@ -32,12 +32,7 @@
       <artifactId>fragment</artifactId>
       <version>1.2.5</version>
       <type>aar</type>
-    </dependency>
-    <dependency>
-      <groupId>androidx.activity</groupId>
-      <artifactId>activity</artifactId>
-      <version>1.1.0</version>
-      <type>aar</type>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
