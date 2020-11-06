@@ -33,6 +33,40 @@
       <version>1.2.5</version>
       <type>aar</type>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>androidx.arch.core</groupId>
+          <artifactId>core-common</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>androidx.lifecycle</groupId>
+          <artifactId>lifecycle-viewmodel</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>androidx.lifecycle</groupId>
+          <artifactId>lifecycle-livedata-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>androidx.core</groupId>
+          <artifactId>core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>androidx.lifecycle</groupId>
+          <artifactId>lifecycle-runtime</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>androidx.lifecycle</groupId>
+          <artifactId>lifecycle-viewmodel-savedstate</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>androidx.annotation</groupId>
+          <artifactId>annotation</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>androidx.collection</groupId>
+          <artifactId>collection</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>androidx.arch.core</groupId>
