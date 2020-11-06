@@ -34,6 +34,55 @@
       <type>aar</type>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>androidx.arch.core</groupId>
+      <artifactId>core-common</artifactId>
+      <version>2.0.1</version>
+      <type>aar</type>
+    </dependency>
+    <dependency>
+      <groupId>androidx.lifecycle</groupId>
+      <artifactId>lifecycle-viewmodel</artifactId>
+      <version>2.2.0</version>
+      <type>aar</type>
+    </dependency>
+    <dependency>
+      <groupId>androidx.lifecycle</groupId>
+      <artifactId>lifecycle-livedata-core</artifactId>
+      <version>2.2.0</version>
+      <type>aar</type>
+    </dependency>
+    <dependency>
+      <groupId>androidx.core</groupId>
+      <artifactId>core</artifactId>
+      <version>1.1.0</version>
+      <type>aar</type>
+    </dependency>
+    <dependency>
+      <groupId>androidx.lifecycle</groupId>
+      <artifactId>lifecycle-runtime</artifactId>
+      <version>2.2.0</version>
+      <type>aar</type>
+    </dependency>
+    <dependency>
+      <groupId>androidx.lifecycle</groupId>
+      <artifactId>lifecycle-viewmodel-savedstate</artifactId>
+      <version>2.2.0</version>
+      <type>aar</type>
+    </dependency>
+    <dependency>
+      <groupId>androidx.annotation</groupId>
+      <artifactId>annotation</artifactId>
+      <version>1.1.0</version>
+      <type>aar</type>
+    </dependency>
+    <dependency>
+      <groupId>androidx.collection</groupId>
+      <artifactId>collection</artifactId>
+      <version>1.1.0</version>
+      <type>aar</type>
+    </dependency>
+    
   </dependencies>
 
   <repositories>
