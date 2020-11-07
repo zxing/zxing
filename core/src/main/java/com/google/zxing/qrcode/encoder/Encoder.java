@@ -19,6 +19,7 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
@@ -26,7 +27,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -47,7 +49,7 @@ public final class Encoder {
       25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
   };
 
-  static final String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
+  static final Charset DEFAULT_BYTE_MODE_ENCODING = StandardCharsets.ISO_8859_1;
 
   private Encoder() {
   }
@@ -77,10 +79,10 @@ public final class Encoder {
                               Map<EncodeHintType,?> hints) throws WriterException {
 
     // Determine what character encoding has been specified by the caller, if any
-    String encoding = DEFAULT_BYTE_MODE_ENCODING;
+    Charset encoding = DEFAULT_BYTE_MODE_ENCODING;
     boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
     if (hasEncodingHint) {
-      encoding = hints.get(EncodeHintType.CHARACTER_SET).toString();
+      encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
     }
 
     // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
@@ -93,7 +95,7 @@ public final class Encoder {
 
     // Append ECI segment if applicable
     if (mode == Mode.BYTE && hasEncodingHint) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
+      CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
       if (eci != null) {
         appendECI(eci, headerBits);
       }
@@ -221,8 +223,8 @@ public final class Encoder {
    * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
-  private static Mode chooseMode(String content, String encoding) {
-    if ("Shift_JIS".equals(encoding) && isOnlyDoubleByteKanji(content)) {
+  private static Mode chooseMode(String content, Charset encoding) {
+    if (StringUtils.SHIFT_JIS_CHARSET.equals(encoding) && isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
       return Mode.KANJI;
     }
@@ -248,12 +250,7 @@ public final class Encoder {
   }
 
   private static boolean isOnlyDoubleByteKanji(String content) {
-    byte[] bytes;
-    try {
-      bytes = content.getBytes("Shift_JIS");
-    } catch (UnsupportedEncodingException ignored) {
-      return false;
-    }
+    byte[] bytes = content.getBytes(StringUtils.SHIFT_JIS_CHARSET);
     int length = bytes.length;
     if (length % 2 != 0) {
       return false;
@@ -512,7 +509,7 @@ public final class Encoder {
   static void appendBytes(String content,
                           Mode mode,
                           BitArray bits,
-                          String encoding) throws WriterException {
+                          Charset encoding) throws WriterException {
     switch (mode) {
       case NUMERIC:
         appendNumericBytes(content, bits);
@@ -579,26 +576,15 @@ public final class Encoder {
     }
   }
 
-  static void append8BitBytes(String content, BitArray bits, String encoding)
-      throws WriterException {
-    byte[] bytes;
-    try {
-      bytes = content.getBytes(encoding);
-    } catch (UnsupportedEncodingException uee) {
-      throw new WriterException(uee);
-    }
+  static void append8BitBytes(String content, BitArray bits, Charset encoding) {
+    byte[] bytes = content.getBytes(encoding);
     for (byte b : bytes) {
       bits.appendBits(b, 8);
     }
   }
 
   static void appendKanjiBytes(String content, BitArray bits) throws WriterException {
-    byte[] bytes;
-    try {
-      bytes = content.getBytes("Shift_JIS");
-    } catch (UnsupportedEncodingException uee) {
-      throw new WriterException(uee);
-    }
+    byte[] bytes = content.getBytes(StringUtils.SHIFT_JIS_CHARSET);
     if (bytes.length % 2 != 0) {
       throw new WriterException("Kanji byte size not even");
     }

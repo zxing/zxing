@@ -19,6 +19,7 @@ package com.google.zxing.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.charset.Charset;
 
 /**
@@ -28,34 +29,42 @@ public final class StringUtilsTestCase extends Assert {
 
   @Test
   public void testShortShiftJIS1() {
-    // ÈáëÈ≠ö
-    doTest(new byte[] { (byte) 0x8b, (byte) 0xe0, (byte) 0x8b, (byte) 0x9b, }, "SJIS");
+    // 金魚
+    doTest(new byte[] { (byte) 0x8b, (byte) 0xe0, (byte) 0x8b, (byte) 0x9b, }, StringUtils.SHIFT_JIS_CHARSET, "SJIS");
   }
 
   @Test
   public void testShortISO885911() {
-    // b√•d
-    doTest(new byte[] { (byte) 0x62, (byte) 0xe5, (byte) 0x64, }, "ISO-8859-1");
+    // båd
+    doTest(new byte[] { (byte) 0x62, (byte) 0xe5, (byte) 0x64, }, StandardCharsets.ISO_8859_1, "ISO8859_1");
+  }
+
+  @Test
+  public void testShortUTF81() {
+    // Español
+    doTest(new byte[] { (byte) 0x45, (byte) 0x73, (byte) 0x70, (byte) 0x61, (byte) 0xc3,
+                        (byte) 0xb1, (byte) 0x6f, (byte) 0x6c },
+           StandardCharsets.UTF_8, "UTF8");
   }
 
   @Test
   public void testMixedShiftJIS1() {
-    // Hello Èáë!
+    // Hello 金!
     doTest(new byte[] { (byte) 0x48, (byte) 0x65, (byte) 0x6c, (byte) 0x6c, (byte) 0x6f,
                         (byte) 0x20, (byte) 0x8b, (byte) 0xe0, (byte) 0x21, },
-           "SJIS");
+           StringUtils.SHIFT_JIS_CHARSET, "SJIS");
   }
 
-  private static void doTest(byte[] bytes, String charsetName) {
-    Charset charset = Charset.forName(charsetName);
-    String guessedName = StringUtils.guessEncoding(bytes, null);
-    Charset guessedEncoding = Charset.forName(guessedName);
-    assertEquals(charset, guessedEncoding);
+  private static void doTest(byte[] bytes, Charset charset, String encoding) {
+    Charset guessedCharset = StringUtils.guessCharset(bytes, null);
+    String guessedEncoding = StringUtils.guessEncoding(bytes, null);
+    assertEquals(charset, guessedCharset);
+    assertEquals(encoding, guessedEncoding);
   }
 
   /**
    * Utility for printing out a string in given encoding as a Java statement, since it's better
-   * to write that into the Java source file rather than risk character encoding issues in the 
+   * to write that into the Java source file rather than risk character encoding issues in the
    * source file itself.
    *
    * @param args command line arguments

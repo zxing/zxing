@@ -169,7 +169,7 @@ final class PDF417HighLevelEncoder {
     if (encoding == null) {
       encoding = DEFAULT_ENCODING;
     } else if (!DEFAULT_ENCODING.equals(encoding)) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding.name());
+      CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
       if (eci != null) {
         encodingECI(eci.getValue(), sb);
       }

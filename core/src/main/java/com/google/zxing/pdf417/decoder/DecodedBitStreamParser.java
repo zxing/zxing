@@ -125,7 +125,7 @@ final class DecodedBitStreamParser {
         case ECI_CHARSET:
           CharacterSetECI charsetECI =
               CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
-          encoding = Charset.forName(charsetECI.name());
+          encoding = charsetECI.getCharset();
           break;
         case ECI_GENERAL_PURPOSE:
           // Can't do anything with generic ECI; skip its 2 characters

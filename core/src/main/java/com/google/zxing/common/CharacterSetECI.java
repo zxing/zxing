@@ -18,6 +18,8 @@ package com.google.zxing.common;
 
 import com.google.zxing.FormatException;
 
+import java.nio.charset.Charset;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,6 +93,19 @@ public enum CharacterSetECI {
 
   public int getValue() {
     return values[0];
+  }
+
+  public Charset getCharset() {
+    return Charset.forName(name());
+  }
+
+  /**
+   * @param charset Java character set object
+   * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
+   *   but unsupported
+   */
+  public static CharacterSetECI getCharacterSetECI(Charset charset) {
+    return NAME_TO_ECI.get(charset.name());
   }
 
   /**

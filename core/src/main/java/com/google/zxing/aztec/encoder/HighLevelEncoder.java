@@ -17,6 +17,9 @@
 package com.google.zxing.aztec.encoder;
 
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.CharacterSetECI;
+
+import java.nio.charset.Charset;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -148,16 +151,31 @@ public final class HighLevelEncoder {
   }
 
   private final byte[] text;
+  private final Charset charset;
 
   public HighLevelEncoder(byte[] text) {
     this.text = text;
+    this.charset = null;
+  }
+
+  public HighLevelEncoder(byte[] text, Charset charset) {
+    this.text = text;
+    this.charset = charset;
   }
 
   /**
    * @return text represented by this encoder encoded as a {@link BitArray}
    */
   public BitArray encode() {
-    Collection<State> states = Collections.singletonList(State.INITIAL_STATE);
+    State initialState = State.INITIAL_STATE;
+    if (charset != null) {
+      CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(charset);
+      if (null == eci) {
+        throw new IllegalArgumentException("No ECI code for character set " + charset.toString());
+      }
+      initialState = initialState.appendFLGn(eci.getValue());
+    }
+    Collection<State> states = Collections.singletonList(initialState);
     for (int index = 0; index < text.length; index++) {
       int pairCode;
       int nextChar = index + 1 < text.length ? text[index + 1] : 0;

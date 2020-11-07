@@ -21,6 +21,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Generates Aztec 2D barcodes.
  *
@@ -42,13 +45,66 @@ public final class Encoder {
   }
 
   /**
-   * Encodes the given binary content as an Aztec symbol
+   * Encodes the given string content as an Aztec symbol (without ECI code)
+   *
+   * @param data input data string; must be encodable as ISO/IEC 8859-1 (Latin-1)
+   * @return Aztec symbol matrix with metadata
+   */
+  public static AztecCode encode(String data) {
+    return encode(data.getBytes(StandardCharsets.ISO_8859_1));
+  }
+
+  /**
+   * Encodes the given string content as an Aztec symbol (without ECI code)
+   *
+   * @param data input data string; must be encodable as ISO/IEC 8859-1 (Latin-1)
+   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+   *                      a minimum of 23% + 3 words is recommended)
+   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+   * @return Aztec symbol matrix with metadata
+   */
+  public static AztecCode encode(String data, int minECCPercent, int userSpecifiedLayers) {
+    return encode(data.getBytes(StandardCharsets.ISO_8859_1), minECCPercent, userSpecifiedLayers, null);
+  }
+
+  /**
+   * Encodes the given string content as an Aztec symbol
+   *
+   * @param data input data string
+   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+   *                      a minimum of 23% + 3 words is recommended)
+   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+   * @param charset character set in which to encode string using ECI; if null, no ECI code
+   *                will be inserted, and the string must be encodable as ISO/IEC 8859-1
+   *                (Latin-1), the default encoding of the symbol.
+   * @return Aztec symbol matrix with metadata
+   */
+  public static AztecCode encode(String data, int minECCPercent, int userSpecifiedLayers, Charset charset) {
+    byte[] bytes = data.getBytes(null != charset ? charset : StandardCharsets.ISO_8859_1);
+    return encode(bytes, minECCPercent, userSpecifiedLayers, charset);
+  }
+
+  /**
+   * Encodes the given binary content as an Aztec symbol (without ECI code)
    *
    * @param data input data string
    * @return Aztec symbol matrix with metadata
    */
   public static AztecCode encode(byte[] data) {
-    return encode(data, DEFAULT_EC_PERCENT, DEFAULT_AZTEC_LAYERS);
+    return encode(data, DEFAULT_EC_PERCENT, DEFAULT_AZTEC_LAYERS, null);
+  }
+
+  /**
+   * Encodes the given binary content as an Aztec symbol (without ECI code)
+   *
+   * @param data input data string
+   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+   *                      a minimum of 23% + 3 words is recommended)
+   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+   * @return Aztec symbol matrix with metadata
+   */
+  public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers) {
+    return encode(data, minECCPercent, userSpecifiedLayers, null);
   }
 
   /**
@@ -58,11 +114,13 @@ public final class Encoder {
    * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
    *                      a minimum of 23% + 3 words is recommended)
    * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+   * @param charset character set to mark using ECI; if null, no ECI code will be inserted, and the
+   *                default encoding of ISO/IEC 8859-1 will be assuming by readers.
    * @return Aztec symbol matrix with metadata
    */
-  public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers) {
+  public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers, Charset charset) {
     // High-level encode
-    BitArray bits = new HighLevelEncoder(data).encode();
+    BitArray bits = new HighLevelEncoder(data, charset).encode();
 
     // stuff bits and choose symbol size
     int eccBits = bits.getSize() * minECCPercent / 100 + 11;
