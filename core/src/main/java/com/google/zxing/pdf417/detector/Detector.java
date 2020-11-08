@@ -61,7 +61,7 @@ public final class Detector {
   }
 
   /**
-   * <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
+   * <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
    *
    * @param image barcode image to decode
    * @param hints optional hints to detector
@@ -79,9 +79,14 @@ public final class Detector {
     BitMatrix bitMatrix = image.getBlackMatrix();
 
     List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
-    if (barcodeCoordinates.isEmpty()) {
+    // Try 180, 270, 90 degree rotations, in that order
+    for (int rotate = 0; barcodeCoordinates.isEmpty() && rotate < 3; rotate++) {
       bitMatrix = bitMatrix.clone();
-      bitMatrix.rotate180();
+      if (rotate != 1) {
+        bitMatrix.rotate180();
+      } else {
+        bitMatrix.rotate90();
+      }
       barcodeCoordinates = detect(multiple, bitMatrix);
     }
     return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);

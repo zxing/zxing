@@ -158,6 +158,22 @@ public final class BitMatrixTestCase extends Assert {
   }
 
   @Test
+  public void testRotate90Simple() {
+    BitMatrix matrix = new BitMatrix(3, 3);
+    matrix.set(0, 0);
+    matrix.set(0, 1);
+    matrix.set(1, 2);
+    matrix.set(2, 1);
+
+    matrix.rotate90();
+
+    assertTrue(matrix.get(0, 2));
+    assertTrue(matrix.get(1, 2));
+    assertTrue(matrix.get(2, 1));
+    assertTrue(matrix.get(1, 0));
+  }
+
+  @Test
   public void testRotate180Simple() {
     BitMatrix matrix = new BitMatrix(3, 3);
     matrix.set(0, 0);
