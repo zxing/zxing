@@ -35,10 +35,10 @@ import java.util.Arrays;
  */
 public final class BitMatrix implements Cloneable {
 
-  private final int width;
-  private final int height;
-  private final int rowSize;
-  private final int[] bits;
+  private int width;
+  private int height;
+  private int rowSize;
+  private int[] bits;
 
   /**
    * Creates an empty square {@code BitMatrix}.
@@ -292,6 +292,32 @@ public final class BitMatrix implements Cloneable {
       setRow(i, bottomRow);
       setRow(bottomRowIndex, topRow);
     }
+  }
+
+  /**
+   * Modifies this {@code BitMatrix} to represent the same but rotated 90 degrees counterclockwise
+   */
+  public void rotate90() {
+    int newWidth = height;
+    int newHeight = width;
+    int newRowSize = (newWidth + 31) / 32;
+    int[] newBits = new int[newRowSize * newHeight];
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        int offset = y * rowSize + (x / 32);
+        if (((bits[offset] >>> (x & 0x1f)) & 1) != 0) {
+          int newY = newHeight - 1 - x;
+          int newX = y;
+          int newOffset = newY * newRowSize + (newX / 32);
+          newBits[newOffset] |= 1 << (newX & 0x1f);
+        }
+      }
+    }
+    width = newWidth;
+    height = newHeight;
+    rowSize = newRowSize;
+    bits = newBits;
   }
 
   /**
