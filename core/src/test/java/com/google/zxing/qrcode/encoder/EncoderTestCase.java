@@ -66,7 +66,7 @@ public final class EncoderTestCase extends Assert {
   }
 
   @Test
-  public void testChooseMode() throws WriterException {
+  public void testChooseMode() {
     // Numeric mode.
     assertSame(Mode.NUMERIC, Encoder.chooseMode("0"));
     assertSame(Mode.NUMERIC, Encoder.chooseMode("0123456789"));
@@ -580,7 +580,7 @@ public final class EncoderTestCase extends Assert {
   }
 
   @Test
-  public void testAppend8BitBytes() throws WriterException {
+  public void testAppend8BitBytes() {
     // 0x61, 0x62, 0x63
     BitArray bits = new BitArray();
     Encoder.append8BitBytes("abc", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);

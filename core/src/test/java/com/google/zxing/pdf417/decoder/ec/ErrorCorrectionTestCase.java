@@ -18,7 +18,6 @@ package com.google.zxing.pdf417.decoder.ec;
 
 import com.google.zxing.ChecksumException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Random;
@@ -79,31 +78,6 @@ public final class ErrorCorrectionTestCase extends AbstractErrorCorrectionTestCa
     corrupt(received, MAX_ERRORS + 1, random);
     try {
       checkDecode(received);
-      fail("Should not have decoded");
-    } catch (ChecksumException ce) {
-      // good
-    }
-  }
-
-  @Ignore("Erasures not implemented yet")
-  @Test
-  public void testMaxErasures() throws ChecksumException {
-    Random random = getRandom();
-    for (int test : PDF417_TEST) { // # iterations is kind of arbitrary
-      int[] received = PDF417_TEST_WITH_EC.clone();
-      int[] erasures = erase(received, MAX_ERASURES, random);
-      checkDecode(received, erasures);
-    }
-  }
-
-  @Ignore("Erasures not implemented yet")
-  @Test
-  public void testTooManyErasures() {
-    Random random = getRandom();
-    int[] received = PDF417_TEST_WITH_EC.clone();
-    int[] erasures = erase(received, MAX_ERASURES + 1, random);
-    try {
-      checkDecode(received, erasures);
       fail("Should not have decoded");
     } catch (ChecksumException ce) {
       // good

@@ -59,7 +59,7 @@ final class TextEncoder extends C40Encoder {
     }
     if (c == '`') {
       sb.append('\2'); //Shift 3 Set
-      sb.append((char) (c - 96));
+      sb.append((char) 0); // '`' - 96 == 0
       return 2;
     }
     if (c <= 'Z') {

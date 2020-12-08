@@ -57,7 +57,7 @@ public final class EncoderTest extends Assert {
   // real life tests
 
   @Test
-  public void testEncode1() throws FormatException {
+  public void testEncode1() {
     testEncode("This is an example Aztec symbol for Wikipedia.", true, 3,
         "X     X X       X     X X     X     X         \n" +
         "X         X     X X     X   X X   X X       X \n" +
@@ -85,7 +85,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testEncode2() throws FormatException {
+  public void testEncode2() {
     testEncode("Aztec Code is a public domain 2D matrix barcode symbology" +
                 " of nominally square symbols built on a square grid with a " +
                 "distinctive square bullseye pattern at their center.", false, 6,
@@ -426,7 +426,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testUserSpecifiedLayers() throws FormatException {
+  public void testUserSpecifiedLayers() {
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
     assertEquals(2, aztec.getLayers());
@@ -452,7 +452,7 @@ public final class EncoderTest extends Assert {
   }
 
   @Test
-  public void testBorderCompact4Case() throws FormatException {
+  public void testBorderCompact4Case() {
     // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
     // be error correction
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -479,7 +479,7 @@ public final class EncoderTest extends Assert {
 
   // Helper routines
 
-  private static void testEncode(String data, boolean compact, int layers, String expected) throws FormatException {
+  private static void testEncode(String data, boolean compact, int layers, String expected) {
     AztecCode aztec = Encoder.encode(data, 33, Encoder.DEFAULT_AZTEC_LAYERS);
     assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());

@@ -185,7 +185,7 @@ final class GeneralAppIdDecoder {
       current.setAlpha();
       current.incrementPosition(4);
     }
-    return new BlockParsedResult(false);
+    return new BlockParsedResult();
   }
 
   private BlockParsedResult parseIsoIec646Block() throws FormatException {
@@ -212,7 +212,7 @@ final class GeneralAppIdDecoder {
 
       current.setAlpha();
     }
-    return new BlockParsedResult(false);
+    return new BlockParsedResult();
   }
 
   private BlockParsedResult parseAlphaBlock() {
@@ -240,7 +240,7 @@ final class GeneralAppIdDecoder {
 
       current.setIsoIec646();
     }
-    return new BlockParsedResult(false);
+    return new BlockParsedResult();
   }
 
   private boolean isStillIsoIec646(int pos) {

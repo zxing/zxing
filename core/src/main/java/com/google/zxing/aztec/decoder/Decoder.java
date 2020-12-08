@@ -26,6 +26,7 @@ import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -160,7 +161,12 @@ public final class Decoder {
               throw FormatException.getFormatInstance(); // FLG(7) is reserved and illegal
             default:
               // flush bytes before changing character set
-              result.append(new String(decodedBytes.toByteArray(), encoding));
+              try {
+                result.append(decodedBytes.toString(encoding.name()));
+              } catch (UnsupportedEncodingException uee) {
+                // can't happen
+                throw new IllegalStateException(uee);
+              }
               decodedBytes.reset();
 
               // ECI is decimal integer encoded as 1-6 codes in DIGIT mode
@@ -200,7 +206,12 @@ public final class Decoder {
         }
       }
     }
-    result.append(new String(decodedBytes.toByteArray(), encoding));
+    try {
+      result.append(decodedBytes.toString(encoding.name()));
+    } catch (UnsupportedEncodingException uee) {
+      // can't happen
+      throw new IllegalStateException(uee);
+    }
     return result.toString();
   }
 

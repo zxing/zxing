@@ -66,7 +66,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <android.home>${env.ANDROID_HOME}</android.home>
-    <proguard.version>7.0.0</proguard.version>
+    <proguard.version>7.0.1</proguard.version>
     <proguard.plugin.version>2.3.1</proguard.plugin.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.4.2-SNAPSHOT</zxing.version>
@@ -168,7 +168,6 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.2.0</version>
           <configuration>
-            <javadocVersion>${java.version}</javadocVersion>
             <source>${java.version}</source>
             <quiet>true</quiet>
             <notimestamp>true</notimestamp>
@@ -443,7 +442,7 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.36.2</version>
+              <version>8.38</version>
             </dependency>
           </dependencies>
         </plugin>

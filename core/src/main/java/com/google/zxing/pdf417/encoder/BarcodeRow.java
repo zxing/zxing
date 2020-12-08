@@ -63,12 +63,6 @@ final class BarcodeRow {
     }
   }
 
-  /*
-  byte[] getRow() {
-    return row;
-  }
-   */
-
   /**
    * This function scales the row
    *

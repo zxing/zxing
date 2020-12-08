@@ -28,9 +28,6 @@ public final class Maxicode1TestCase extends AbstractBlackBoxTestCase {
   public Maxicode1TestCase() {
     super("src/test/resources/blackbox/maxicode-1", new MultiFormatReader(), BarcodeFormat.MAXICODE);
     addTest(5, 5, 0.0f);
-    //addTest(5, 5, 90.0f);
-    //addTest(5, 5, 180.0f);
-    //addTest(5, 5, 270.0f);
   }
 
 }

@@ -48,12 +48,6 @@ final class State {
     this.mode = mode;
     this.binaryShiftByteCount = binaryBytes;
     this.bitCount = bitCount;
-    // Make sure we match the token
-    //int binaryShiftBitCount = (binaryShiftByteCount * 8) +
-    //    (binaryShiftByteCount == 0 ? 0 :
-    //     binaryShiftByteCount <= 31 ? 10 :
-    //     binaryShiftByteCount <= 62 ? 20 : 21);
-    //assert this.bitCount == token.getTotalBitCount() + binaryShiftBitCount;
   }
 
   int getMode() {
@@ -83,8 +77,8 @@ final class State {
     } else {
       byte[] eciDigits = Integer.toString(eci).getBytes(StandardCharsets.ISO_8859_1);
       token = token.add(eciDigits.length, 3); // 1-6: number of ECI digits
-      for (int ii = 0; ii < eciDigits.length; ii++) {
-        token = token.add(eciDigits[ii] - '0' + 2, 4);
+      for (byte eciDigit : eciDigits) {
+        token = token.add(eciDigit - '0' + 2, 4);
       }
       bitsAdded += eciDigits.length * 4;
     }

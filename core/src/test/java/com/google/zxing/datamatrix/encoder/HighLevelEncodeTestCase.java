@@ -16,11 +16,8 @@
 
 package com.google.zxing.datamatrix.encoder;
 
-import java.nio.charset.StandardCharsets;
-
 import junit.framework.ComparisonFailure;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -68,7 +65,7 @@ public final class HighLevelEncodeTestCase extends Assert {
     //230 shifts to C40 encodation, 254 unlatches, "else" case
   }
 
-  @Test  
+  @Test
   public void testC40EncodationBasic2() {
 
     String visualized = encodeHighLevel("AIMAIAB");
@@ -100,14 +97,14 @@ public final class HighLevelEncodeTestCase extends Assert {
     //"else" case
   }
 
-  @Test  
+  @Test
   public void testC40EncodationSpecExample() {
     //Example in Figure 1 in the spec
     String visualized = encodeHighLevel("A1B2C3D4E5F6G7H8I9J0K1L2");
     assertEquals("230 88 88 40 8 107 147 59 67 126 206 78 126 144 121 35 47 254", visualized);
   }
 
-  @Test  
+  @Test
   public void testC40EncodationSpecialCases1() {
 
     //Special tests avoiding ultra-long test strings because these tests are only used
@@ -136,7 +133,7 @@ public final class HighLevelEncodeTestCase extends Assert {
     //case "d": Skip Unlatch and write last character in ASCII
   }
 
-  @Test  
+  @Test
   public void testC40EncodationSpecialCases2() {
 
     String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIMAI");
@@ -144,7 +141,7 @@ public final class HighLevelEncodeTestCase extends Assert {
     //available > 2, rest = 2 --> unlatch and encode as ASCII
   }
 
-  @Test  
+  @Test
   public void testTextEncodation() {
 
     String visualized = encodeHighLevel("aimaimaim");
@@ -166,7 +163,7 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("239 91 11 91 11 91 11 16 218 236 107 181 69 254 129 237", visualized);
   }
 
-  @Test  
+  @Test
   public void testX12Encodation() {
 
     //238 shifts to X12 encodation, 254 unlatches
@@ -188,7 +185,7 @@ public final class HighLevelEncodeTestCase extends Assert {
 
   }
 
-  @Test  
+  @Test
   public void testEDIFACTEncodation() {
 
     //240 shifts to EDIFACT encodation
@@ -223,7 +220,7 @@ public final class HighLevelEncodeTestCase extends Assert {
                  visualized);
   }
 
-  @Test  
+  @Test
   public void testBase256Encodation() {
 
     //231 shifts to Base256 encodation
@@ -283,28 +280,28 @@ public final class HighLevelEncodeTestCase extends Assert {
     }
   }
 
-  @Test  
+  @Test
   public void testUnlatchingFromC40() {
 
     String visualized = encodeHighLevel("AIMAIMAIMAIMaimaimaim");
     assertEquals("230 91 11 91 11 91 11 254 66 74 78 239 91 11 91 11 91 11", visualized);
   }
 
-  @Test  
+  @Test
   public void testUnlatchingFromText() {
 
     String visualized = encodeHighLevel("aimaimaimaim12345678");
     assertEquals("239 91 11 91 11 91 11 91 11 254 142 164 186 208 129 237", visualized);
   }
 
-  @Test  
+  @Test
   public void testHelloWorld() {
 
     String visualized = encodeHighLevel("Hello World!");
     assertEquals("73 239 116 130 175 123 148 64 158 233 254 34", visualized);
   }
 
-  @Test  
+  @Test
   public void testBug1664266() {
     //There was an exception and the encoder did not handle the unlatching from
     //EDIFACT encoding correctly
@@ -331,7 +328,7 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("238 9 10 104 141", visualized);
   }
 
-  @Test  
+  @Test
   public void testBug3048549() {
     //There was an IllegalArgumentException for an illegal character here because
     //of an encoding problem of the character 0x0060 in Java source code.
@@ -341,7 +338,7 @@ public final class HighLevelEncodeTestCase extends Assert {
 
   }
 
-  @Test  
+  @Test
   public void testMacroCharacters() {
 
     String visualized = encodeHighLevel("[)>\u001E05\u001D5555\u001C6666\u001E\u0004");
@@ -356,28 +353,12 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("238 10 99 164 204 254 240 82 220 70 180 209 83 80 80 200", visualized);
   }
 
-  @Ignore
-  @Test  
-  public void testDataURL() {
-
-    byte[] data = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A,
-        0x7E, 0x7F, (byte) 0x80, (byte) 0x81, (byte) 0x82};
-    String expected = encodeHighLevel(new String(data, StandardCharsets.ISO_8859_1));
-    String visualized = encodeHighLevel("url(data:text/plain;charset=iso-8859-1,"
-                                            + "%00%01%02%03%04%05%06%07%08%09%0A%7E%7F%80%81%82)");
-    assertEquals(expected, visualized);
-    assertEquals("1 2 3 4 5 6 7 8 9 10 11 231 153 173 67 218 112 7", visualized);
-
-    visualized = encodeHighLevel("url(data:;base64,flRlc3R+)");
-    assertEquals("127 85 102 116 117 127 129 56", visualized);
-  }
-
   private static String encodeHighLevel(String msg) {
     CharSequence encoded = HighLevelEncoder.encodeHighLevel(msg);
     //DecodeHighLevel.decode(encoded);
     return visualize(encoded);
   }
-  
+
   /**
    * Convert a string of char codewords into a different string which lists each character
    * using its decimal value.

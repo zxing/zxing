@@ -48,12 +48,6 @@ public final class FinderPattern extends ResultPoint {
     return count;
   }
 
-  /*
-  void incrementCount() {
-    this.count++;
-  }
-   */
-
   /**
    * <p>Determines if this finder pattern "about equals" a finder pattern at the stated
    * position and size -- meaning, it is at nearly the same center with nearly the same size.</p>

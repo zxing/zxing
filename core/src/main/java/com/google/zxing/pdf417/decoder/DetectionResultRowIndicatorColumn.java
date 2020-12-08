@@ -64,14 +64,6 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       }
       Codeword codeword = codewords[codewordsRow];
 
-      //      float expectedRowNumber = (codewordsRow - firstRow) / averageRowHeight;
-      //      if (Math.abs(codeword.getRowNumber() - expectedRowNumber) > 2) {
-      //        SimpleLog.log(LEVEL.WARNING,
-      //            "Removing codeword, rowNumberSkew too high, codeword[" + codewordsRow + "]: Expected Row: " +
-      //                expectedRowNumber + ", RealRow: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
-      //        codewords[codewordsRow] = null;
-      //      }
-
       int rowDifference = codeword.getRowNumber() - barcodeRow;
 
       // TODO improve handling with case where first row indicator doesn't start with 0

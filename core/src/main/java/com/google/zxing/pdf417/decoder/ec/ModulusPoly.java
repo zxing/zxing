@@ -200,34 +200,6 @@ final class ModulusPoly {
     return new ModulusPoly(field, product);
   }
 
-  /*
-  ModulusPoly[] divide(ModulusPoly other) {
-    if (!field.equals(other.field)) {
-      throw new IllegalArgumentException("ModulusPolys do not have same ModulusGF field");
-    }
-    if (other.isZero()) {
-      throw new IllegalArgumentException("Divide by 0");
-    }
-
-    ModulusPoly quotient = field.getZero();
-    ModulusPoly remainder = this;
-
-    int denominatorLeadingTerm = other.getCoefficient(other.getDegree());
-    int inverseDenominatorLeadingTerm = field.inverse(denominatorLeadingTerm);
-
-    while (remainder.getDegree() >= other.getDegree() && !remainder.isZero()) {
-      int degreeDifference = remainder.getDegree() - other.getDegree();
-      int scale = field.multiply(remainder.getCoefficient(remainder.getDegree()), inverseDenominatorLeadingTerm);
-      ModulusPoly term = other.multiplyByMonomial(degreeDifference, scale);
-      ModulusPoly iterationQuotient = field.buildMonomial(degreeDifference, scale);
-      quotient = quotient.add(iterationQuotient);
-      remainder = remainder.subtract(term);
-    }
-
-    return new ModulusPoly[] { quotient, remainder };
-  }
-   */
-
   @Override
   public String toString() {
     StringBuilder result = new StringBuilder(8 * getDegree());

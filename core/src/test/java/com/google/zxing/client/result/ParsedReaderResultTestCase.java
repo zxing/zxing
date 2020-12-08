@@ -45,7 +45,7 @@ public final class ParsedReaderResultTestCase extends Assert {
   public void testTextType() {
     doTestResult("", "", ParsedResultType.TEXT);
     doTestResult("foo", "foo", ParsedResultType.TEXT);
-    doTestResult("Hi.", "Hi.", ParsedResultType.TEXT);    
+    doTestResult("Hi.", "Hi.", ParsedResultType.TEXT);
     doTestResult("This is a test", "This is a test", ParsedResultType.TEXT);
     doTestResult("This is a test\nwith newlines", "This is a test\nwith newlines",
         ParsedResultType.TEXT);
@@ -267,7 +267,7 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("SMS:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("sms:+15551212;via=999333", "+15551212", ParsedResultType.SMS);
     doTestResult("sms:+15551212?subject=foo&body=bar", "+15551212\nfoo\nbar", ParsedResultType.SMS);
-    doTestResult("sms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);    
+    doTestResult("sms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);
   }
 
   @Test
@@ -292,7 +292,7 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("MMS:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("mms:+15551212;via=999333", "+15551212", ParsedResultType.SMS);
     doTestResult("mms:+15551212?subject=foo&body=bar", "+15551212\nfoo\nbar", ParsedResultType.SMS);
-    doTestResult("mms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);        
+    doTestResult("mms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);
   }
 
   @Test
@@ -307,42 +307,6 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("mmsto:212-555-1212:Here's a longer message. Should be fine.",
         "212-555-1212\nHere's a longer message. Should be fine.", ParsedResultType.SMS);
   }
-
-  /*
-  @Test
-  public void testNDEFText() {
-    doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,
-                             (byte)0x02,(byte)0x65,(byte)0x6E,(byte)0x68,
-                             (byte)0x69},
-                 ParsedResultType.TEXT);
-  }
-
-  @Test
-  public void testNDEFURI() {
-    doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,
-                             (byte)0x01,(byte)0x6E,(byte)0x66,(byte)0x63,
-                             (byte)0x2E,(byte)0x63,(byte)0x6F,(byte)0x6D},
-                 ParsedResultType.URI);
-  }
-
-  @Test
-  public void testNDEFSmartPoster() {
-    doTestResult(new byte[] {(byte)0xD1,(byte)0x02,(byte)0x2F,(byte)0x53,
-                             (byte)0x70,(byte)0x91,(byte)0x01,(byte)0x0E,
-                             (byte)0x55,(byte)0x01,(byte)0x6E,(byte)0x66,
-                             (byte)0x63,(byte)0x2D,(byte)0x66,(byte)0x6F,
-                             (byte)0x72,(byte)0x75,(byte)0x6D,(byte)0x2E,
-                             (byte)0x6F,(byte)0x72,(byte)0x67,(byte)0x11,
-                             (byte)0x03,(byte)0x01,(byte)0x61,(byte)0x63,
-                             (byte)0x74,(byte)0x00,(byte)0x51,(byte)0x01,
-                             (byte)0x12,(byte)0x54,(byte)0x05,(byte)0x65,
-                             (byte)0x6E,(byte)0x2D,(byte)0x55,(byte)0x53,
-                             (byte)0x48,(byte)0x65,(byte)0x6C,(byte)0x6C,
-                             (byte)0x6F,(byte)0x2C,(byte)0x20,(byte)0x77,
-                             (byte)0x6F,(byte)0x72,(byte)0x6C,(byte)0x64},
-                 ParsedResultType.NDEF_SMART_POSTER);
-  }
-   */
 
   private static void doTestResult(String contents,
                                    String goldenResult,
