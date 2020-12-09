@@ -18,7 +18,7 @@ package com.google.zxing.web;
 
 /**
  * Utility functions for {@code decoderesult.jspx}.
- * 
+ *
  * @author Sean Owen
  */
 public final class OutputUtils {
@@ -42,17 +42,14 @@ public final class OutputUtils {
       } else if (i % HALF_BYTES_PER_LINE == 0) {
         result.append("   ");
       } else {
-        result.append(' ');        
+        result.append(' ');
       }
     }
     return result.toString();
   }
-  
+
   private static char hexChar(int value) {
-    if (value < 0 || value > 15) {
-      throw new IllegalArgumentException("Bad hex digit value " + value);
-    }
     return (char) (value < 10 ? ('0' + value) : ('a' + (value - 10)));
   }
-  
+
 }

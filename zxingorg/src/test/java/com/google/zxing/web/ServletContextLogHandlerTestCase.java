@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 ZXing authors
+ * Copyright 2020 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,28 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.j2se;
+package com.google.zxing.web;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.mock.web.MockServletContext;
+
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 /**
- * Tests {@link CommandLineRunner}.
+ * Tests {@link ServletContextLogHandler}.
  */
-public final class CommandLineRunnerTestCase extends Assert {
+public final class ServletContextLogHandlerTestCase extends Assert {
 
   @Test
-  public void testCommandLineRunner() throws Exception {
-    String[] args = { "--pure_barcode", "--try_harder",
-      DecodeWorkerTestCase.IMAGE_DATA_URI, DecodeWorkerTestCase.IMAGE_NOBARCODE_DATA_URI };
-    // Not a lot to do here but make sure it runs
-    CommandLineRunner.main(args);
+  public void testLogHandler() {
+    // Can't test much here
+    MockServletContext context = new MockServletContext();
+    ServletContextLogHandler handler = new ServletContextLogHandler(context);
+    handler.publish(new LogRecord(Level.INFO, "test log message"));
+    handler.flush();
+    handler.close();
   }
 
 }

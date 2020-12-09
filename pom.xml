@@ -467,6 +467,7 @@
               <exclude>**/*.properties</exclude>
               <exclude>**/*.cfg</exclude>
               <exclude>**/*.config</exclude>
+              <exclude>**/*.yml</exclude>
               <exclude>**/*.yaml</exclude>
               <exclude>**/gen/**</exclude>
               <exclude>**/resources/**</exclude>

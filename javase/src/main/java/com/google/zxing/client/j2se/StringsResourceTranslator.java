@@ -49,7 +49,9 @@ import java.util.regex.Pattern;
  * <p>You must set your Google Translate API key into the environment with -DtranslateAPI.key=...</p>
  *
  * @author Sean Owen
+ * @deprecated without replacement since 3.4.2
  */
+@Deprecated
 public final class StringsResourceTranslator {
 
   private static final String API_KEY = System.getProperty("translateAPI.key");
@@ -58,7 +60,7 @@ public final class StringsResourceTranslator {
       throw new IllegalArgumentException("translateAPI.key is not specified");
     }
   }
-  
+
   private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
   private static final Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile("values-(.+)");
   private static final Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile("translatedText\":\\s*\"([^\"]+)\"");

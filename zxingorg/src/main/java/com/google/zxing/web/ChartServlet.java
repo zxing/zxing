@@ -114,7 +114,7 @@ public final class ChartServlet extends HttpServlet {
     } else {
       imageFormat = "PNG";
     }
-    
+
     String contentType;
     switch (imageFormat) {
       case "PNG":
@@ -129,7 +129,7 @@ public final class ChartServlet extends HttpServlet {
       default:
         throw new IllegalArgumentException("Unknown format " + imageFormat);
     }
-    
+
     ByteArrayOutputStream imageOut = new ByteArrayOutputStream(1024);
     MatrixToImageWriter.writeToStream(matrix, imageFormat, imageOut);
     byte[] imageData = imageOut.toByteArray();
@@ -143,7 +143,8 @@ public final class ChartServlet extends HttpServlet {
   private static ChartServletRequestParameters doParseParameters(ServletRequest request, boolean readBody)
       throws IOException {
 
-    Preconditions.checkArgument("qr".equals(request.getParameter("cht")), "Bad type");
+    String chartType = request.getParameter("cht");
+    Preconditions.checkArgument(chartType == null || "qr".equals(chartType), "Bad type");
 
     String widthXHeight = request.getParameter("chs");
     Preconditions.checkNotNull(widthXHeight, "No size");
@@ -156,8 +157,10 @@ public final class ChartServlet extends HttpServlet {
     Preconditions.checkArgument(width <= MAX_DIMENSION && height <= MAX_DIMENSION, "Bad size");
 
     String outputEncodingName = request.getParameter("choe");
-    Charset outputEncoding = StandardCharsets.UTF_8;
-    if (outputEncodingName != null) {
+    Charset outputEncoding;
+    if (outputEncodingName == null) {
+      outputEncoding = StandardCharsets.UTF_8;
+    } else {
       outputEncoding = Charset.forName(outputEncodingName);
       Preconditions.checkArgument(SUPPORTED_OUTPUT_ENCODINGS.contains(outputEncoding), "Bad output encoding");
     }

@@ -19,13 +19,22 @@ package com.google.zxing.common;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 /**
  * Tests {@link StringUtils}.
  */
 public final class StringUtilsTestCase extends Assert {
+
+  @Test
+  public void testRandom() {
+    Random r = new Random(1234L);
+    byte[] bytes = new byte[1000];
+    r.nextBytes(bytes);
+    assertEquals(Charset.defaultCharset(), StringUtils.guessCharset(bytes, null));
+  }
 
   @Test
   public void testShortShiftJIS1() {
