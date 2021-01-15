@@ -91,7 +91,7 @@ import javax.servlet.http.Part;
 @WebServlet(value = "/w/decode", loadOnStartup = 1, initParams = {
   @WebInitParam(name = "maxAccessPerTime", value = "120"),
   @WebInitParam(name = "accessTimeSec", value = "120"),
-  @WebInitParam(name = "maxEntries", value = "10000")
+  @WebInitParam(name = "maxEntries", value = "100000")
 })
 public final class DecodeServlet extends HttpServlet {
 
@@ -212,7 +212,11 @@ public final class DecodeServlet extends HttpServlet {
       return;
     }
 
-    if (destHostTracker.isBanned(imageURI.getHost())) {
+    String host = imageURI.getHost();
+    // Also should parse for 172.x subnets
+    if (host == null || host.startsWith("10.") || host.startsWith("192.168.") ||
+        "127.0.0.1".equals(host) || "localhost".equals(host) ||
+        destHostTracker.isBanned(host)) {
       errorResponse(request, response, "badurl");
       return;
     }

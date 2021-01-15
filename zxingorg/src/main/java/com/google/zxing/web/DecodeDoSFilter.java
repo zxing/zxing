@@ -25,7 +25,7 @@ import javax.servlet.annotation.WebInitParam;
 @WebFilter(urlPatterns = {"/w/decode"}, initParams = {
   @WebInitParam(name = "maxAccessPerTime", value = "60"),
   @WebInitParam(name = "accessTimeSec", value = "60"),
-  @WebInitParam(name = "maxEntries", value = "10000"),
+  @WebInitParam(name = "maxEntries", value = "100000"),
   @WebInitParam(name = "maxLoad", value = "0.9")
 })
 public final class DecodeDoSFilter extends DoSFilter {
