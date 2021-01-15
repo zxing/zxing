@@ -48,7 +48,7 @@ final class BitMatrixParser {
   }
 
   /**
-   * <p>Creates the version object based on the dimension of the original bit matrix from 
+   * <p>Creates the version object based on the dimension of the original bit matrix from
    * the datamatrix code.</p>
    *
    * <p>See ISO 16022:2006 Table 7 - ECC 200 symbol attributes</p>
@@ -136,7 +136,8 @@ final class BitMatrixParser {
       }
     } while ((row < numRows) || (column < numColumns));
 
-    if (resultOffset != version.getTotalCodewords()) {
+    if (resultOffset != version.getTotalCodewords() &&
+        resultOffset != version.getTotalCodewords() - 1) {
       throw FormatException.getFormatInstance();
     }
     return result;
