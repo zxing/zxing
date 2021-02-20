@@ -68,13 +68,22 @@ public final class StringUtils {
    * @param hints decode hints if applicable
    * @return Charset of guessed encoding; at the moment will only guess one of:
    *  {@link #SHIFT_JIS_CHARSET}, {@link StandardCharsets#UTF_8},
-   *  {@link StandardCharsets#ISO_8859_1}, or the platform default encoding if
+   *  {@link StandardCharsets#ISO_8859_1}, {@link StandardCharsets#UTF_16},
+   *  or the platform default encoding if
    *  none of these can possibly be correct
    */
   public static Charset guessCharset(byte[] bytes, Map<DecodeHintType,?> hints) {
     if (hints != null && hints.containsKey(DecodeHintType.CHARACTER_SET)) {
       return Charset.forName(hints.get(DecodeHintType.CHARACTER_SET).toString());
     }
+
+    // First try UTF-16, assuming anything with its BOM is UTF-16
+    if (bytes.length > 2 &&
+        ((bytes[0] == (byte) 0xFE && bytes[1] == (byte) 0xFF) ||
+         (bytes[0] == (byte) 0xFF && bytes[1] == (byte) 0xFE))) {
+      return StandardCharsets.UTF_16;
+    }
+
     // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,
     // which should be by far the most common encodings.
     int length = bytes.length;
