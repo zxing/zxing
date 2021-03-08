@@ -118,6 +118,46 @@ public final class DecodedBitStreamParserTestCase extends Assert {
     );
   }
 
+  @Test
+  public void testByteStreamsNumeric() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x01, 4); // Numeric mode
+    builder.write(0x01, 10); // 1 numeric
+    builder.write(0x08, 4);
+
+    DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
+      Version.getVersionForNumber(1), null, null);
+    assertEquals(1, result.getByteSegments().size());
+    assertEquals(56, result.getByteSegments().get(0)[0]); // 56 is ascii for number 8
+  }
+
+  @Test
+  public void testByteStreamsAlphaNumeric() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x02, 4); // AlphaNumeric mode
+    builder.write(0x01, 9); // 1 alpha numeric
+    builder.write(0x0C, 6); // 12th char with 0-9 first = C
+
+    DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
+      Version.getVersionForNumber(1), null, null);
+    assertEquals(1, result.getByteSegments().size());
+    assertEquals(67, result.getByteSegments().get(0)[0]); // 67 is ascii for number C
+  }
+
+
+  @Test
+  public void testByteStreamsKanji() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x08, 4); // Kanji mode
+    builder.write(0x01, 8); // 1 Kanji char
+    builder.write(0x01, 13); // First kanji char?
+
+    DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
+      Version.getVersionForNumber(1), null, null);
+    assertEquals(1, result.getByteSegments().size());
+  }
+
+
   public static byte[] combine(byte[] a, byte[] b) {
     byte[] keys = new byte[a.length + b.length];
     System.arraycopy(a, 0, keys, 0, a.length);
