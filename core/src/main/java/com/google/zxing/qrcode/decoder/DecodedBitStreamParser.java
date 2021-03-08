@@ -102,7 +102,7 @@ final class DecodedBitStreamParser {
             int subset = bits.readBits(4);
             int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
             if (subset == GB2312_SUBSET) {
-              decodeHanziSegment(bits, result, countHanzi);
+              decodeHanziSegment(bits, result, countHanzi, byteSegments);
             }
             break;
           default:
@@ -111,16 +111,16 @@ final class DecodedBitStreamParser {
             int count = bits.readBits(mode.getCharacterCountBits(version));
             switch (mode) {
               case NUMERIC:
-                decodeNumericSegment(bits, result, count);
+                decodeNumericSegment(bits, result, count, byteSegments);
                 break;
               case ALPHANUMERIC:
-                decodeAlphanumericSegment(bits, result, count, fc1InEffect);
+                decodeAlphanumericSegment(bits, result, count, fc1InEffect, byteSegments);
                 break;
               case BYTE:
                 decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
                 break;
               case KANJI:
-                decodeKanjiSegment(bits, result, count);
+                decodeKanjiSegment(bits, result, count, byteSegments);
                 break;
               default:
                 throw FormatException.getFormatInstance();
@@ -146,7 +146,8 @@ final class DecodedBitStreamParser {
    */
   private static void decodeHanziSegment(BitSource bits,
                                          StringBuilder result,
-                                         int count) throws FormatException {
+                                         int count,
+                                         List<byte[]> byteSegments) throws FormatException {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
       throw FormatException.getFormatInstance();
@@ -172,13 +173,14 @@ final class DecodedBitStreamParser {
       offset += 2;
       count--;
     }
-
+    byteSegments.add(buffer);
     result.append(new String(buffer, StringUtils.GB2312_CHARSET));
   }
 
   private static void decodeKanjiSegment(BitSource bits,
                                          StringBuilder result,
-                                         int count) throws FormatException {
+                                         int count,
+                                         List<byte[]> byteSegments) throws FormatException {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
       throw FormatException.getFormatInstance();
@@ -204,6 +206,7 @@ final class DecodedBitStreamParser {
       offset += 2;
       count--;
     }
+    byteSegments.add(buffer);
     result.append(new String(buffer, StringUtils.SHIFT_JIS_CHARSET));
   }
 
@@ -247,7 +250,11 @@ final class DecodedBitStreamParser {
   private static void decodeAlphanumericSegment(BitSource bits,
                                                 StringBuilder result,
                                                 int count,
-                                                boolean fc1InEffect) throws FormatException {
+                                                boolean fc1InEffect,
+                                                List<byte[]> byteSegments) throws FormatException {
+    byte[] byteSegment = new byte[count];
+    int byteCounter = 0;
+
     // Read two characters at a time
     int start = result.length();
     while (count > 1) {
@@ -255,6 +262,10 @@ final class DecodedBitStreamParser {
         throw FormatException.getFormatInstance();
       }
       int nextTwoCharsBits = bits.readBits(11);
+
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar(nextTwoCharsBits / 45);
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar(nextTwoCharsBits % 45);
+
       result.append(toAlphaNumericChar(nextTwoCharsBits / 45));
       result.append(toAlphaNumericChar(nextTwoCharsBits % 45));
       count -= 2;
@@ -264,7 +275,9 @@ final class DecodedBitStreamParser {
       if (bits.available() < 6) {
         throw FormatException.getFormatInstance();
       }
-      result.append(toAlphaNumericChar(bits.readBits(6)));
+      int digitBits = bits.readBits(6);
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar(digitBits);
+      result.append(toAlphaNumericChar(digitBits));
     }
     // See section 6.4.8.1, 6.4.8.2
     if (fc1InEffect) {
@@ -274,18 +287,31 @@ final class DecodedBitStreamParser {
           if (i < result.length() - 1 && result.charAt(i + 1) == '%') {
             // %% is rendered as %
             result.deleteCharAt(i + 1);
+            byteSegment = removeByte(byteSegment, i + 1);
           } else {
             // In alpha mode, % should be converted to FNC1 separator 0x1D
             result.setCharAt(i, (char) 0x1D);
+            byteSegment[i] = 0x1D;
           }
         }
       }
     }
+    byteSegments.add(byteSegment);
+  }
+
+  private static byte[] removeByte(byte[] bytes, int idx) {
+    byte[] res = new byte[bytes.length - 1];
+    System.arraycopy(bytes, 0, res, 0, idx);
+    System.arraycopy(bytes, idx + 1, res, idx, bytes.length - idx - 1);
+    return res;
   }
 
   private static void decodeNumericSegment(BitSource bits,
                                            StringBuilder result,
-                                           int count) throws FormatException {
+                                           int count,
+                                           List<byte[]> byteSegments) throws FormatException {
+    byte[] byteSegment = new byte[count];
+    int byteCounter = 0;
     // Read three digits at a time
     while (count >= 3) {
       // Each 10 bits encodes three digits
@@ -296,6 +322,10 @@ final class DecodedBitStreamParser {
       if (threeDigitsBits >= 1000) {
         throw FormatException.getFormatInstance();
       }
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar(threeDigitsBits / 100);
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar((threeDigitsBits / 10) % 10);
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar(threeDigitsBits % 10);
+
       result.append(toAlphaNumericChar(threeDigitsBits / 100));
       result.append(toAlphaNumericChar((threeDigitsBits / 10) % 10));
       result.append(toAlphaNumericChar(threeDigitsBits % 10));
@@ -310,6 +340,9 @@ final class DecodedBitStreamParser {
       if (twoDigitsBits >= 100) {
         throw FormatException.getFormatInstance();
       }
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar(twoDigitsBits / 10);
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar(twoDigitsBits % 10);
+
       result.append(toAlphaNumericChar(twoDigitsBits / 10));
       result.append(toAlphaNumericChar(twoDigitsBits % 10));
     } else if (count == 1) {
@@ -321,8 +354,10 @@ final class DecodedBitStreamParser {
       if (digitBits >= 10) {
         throw FormatException.getFormatInstance();
       }
+      byteSegment[byteCounter++] = (byte) toAlphaNumericChar(digitBits);
       result.append(toAlphaNumericChar(digitBits));
     }
+    byteSegments.add(byteSegment);
   }
 
   private static int parseECIValue(BitSource bits) throws FormatException {
