@@ -132,6 +132,20 @@ public final class DecodedBitStreamParserTestCase extends Assert {
   }
 
   @Test
+  public void testByteStreamsTwoNumeric() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x01, 4); // Numeric mode
+    builder.write(0x02, 10); // 2 numeric
+    builder.write(0x0C, 7); // C = 12
+
+    DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
+      Version.getVersionForNumber(1), null, null);
+    assertEquals(1, result.getByteSegments().size());
+    assertEquals(49, result.getByteSegments().get(0)[0]); // 49 is ascii for number 1
+    assertEquals(50, result.getByteSegments().get(0)[1]); // 50 is ascii for number 2
+  }
+
+  @Test
   public void testByteStreamsAlphaNumeric() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x02, 4); // AlphaNumeric mode
@@ -144,6 +158,43 @@ public final class DecodedBitStreamParserTestCase extends Assert {
     assertEquals(67, result.getByteSegments().get(0)[0]); // 67 is ascii for number C
   }
 
+  /**
+   * Single % should be replaced with hex 1D after decoding in FNC1 mode.
+   *
+   * @throws Exception  Could throw FormatException if alpha numeric mode is not formatted correctly.
+   */
+  @Test
+  public void testByteStreamsAlphaNumericWithSinglePercent() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x05, 4); // FNC1 mode
+    builder.write(0x02, 4); // AlphaNumeric mode
+    builder.write(0x01, 9); // 1 alpha numeric
+    builder.write(0x26, 6); // %
+
+    DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
+      Version.getVersionForNumber(1), null, null);
+    assertEquals(1, result.getByteSegments().size());
+    assertEquals(29, result.getByteSegments().get(0)[0]); // 29 hex = 1D which is the correct replacement
+  }
+
+  /**
+   * Double %% should be replaced with single % after decoding in FNC1 mode.
+   *
+   * @throws Exception  Could throw FormatException if alpha numeric mode is not formatted correctly.
+   */
+  @Test
+  public void testByteStreamsAlphaNumericWithDoublePercent() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x05, 4); // FNC1 mode
+    builder.write(0x02, 4); // AlphaNumeric mode
+    builder.write(0x02, 9); // 1 alpha numeric
+    builder.write(0x6D4, 11); // %%
+
+    DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
+      Version.getVersionForNumber(1), null, null);
+    assertEquals(1, result.getByteSegments().size());
+    assertEquals(37, result.getByteSegments().get(0)[0]); // 37 is ascii for number %
+  }
 
   @Test
   public void testByteStreamsKanji() throws Exception {
