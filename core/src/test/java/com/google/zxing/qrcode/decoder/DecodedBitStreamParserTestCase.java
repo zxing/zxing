@@ -155,7 +155,7 @@ public final class DecodedBitStreamParserTestCase extends Assert {
     DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
       Version.getVersionForNumber(1), null, null);
     assertEquals(1, result.getByteSegments().size());
-    assertEquals(67, result.getByteSegments().get(0)[0]); // 67 is ascii for number C
+    assertEquals(67, result.getByteSegments().get(0)[0]); // 67 is ascii for char C
   }
 
   /**
@@ -193,7 +193,33 @@ public final class DecodedBitStreamParserTestCase extends Assert {
     DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
       Version.getVersionForNumber(1), null, null);
     assertEquals(1, result.getByteSegments().size());
-    assertEquals(37, result.getByteSegments().get(0)[0]); // 37 is ascii for number %
+    assertEquals(37, result.getByteSegments().get(0)[0]); // 37 is ascii for char %
+  }
+
+  /**
+   * Double %% should be replaced with single % after decoding in FNC1 mode.
+   * This tests the removeByte function when you have other chars in the stream.
+   *
+   * @throws Exception  Could throw FormatException if alpha numeric mode is not formatted correctly.
+   */
+  @Test
+  public void testByteStreamsAlphaNumericWithDoublePercentWithChars() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x05, 4); // FNC1 mode
+    builder.write(0x02, 4); // AlphaNumeric mode
+    builder.write(0x06, 9); // 1 alpha numeric
+    builder.write(0x2E, 11); // 11
+    builder.write(0x6D4, 11); // %%
+    builder.write(0x2E, 11); // 11
+
+    DecoderResult result = DecodedBitStreamParser.decode(builder.toByteArray(),
+      Version.getVersionForNumber(1), null, null);
+    assertEquals(1, result.getByteSegments().size());
+    assertEquals(49, result.getByteSegments().get(0)[0]); // 49 is ascii for number 1
+    assertEquals(49, result.getByteSegments().get(0)[1]); // 49 is ascii for number 1
+    assertEquals(37, result.getByteSegments().get(0)[2]); // 37 is ascii for char %
+    assertEquals(49, result.getByteSegments().get(0)[3]); // 49 is ascii for number 1
+    assertEquals(49, result.getByteSegments().get(0)[4]); // 49 is ascii for number 1
   }
 
   @Test
