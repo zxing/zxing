@@ -136,8 +136,7 @@ final class BitMatrixParser {
       }
     } while ((row < numRows) || (column < numColumns));
 
-    if (resultOffset != version.getTotalCodewords() &&
-        resultOffset != version.getTotalCodewords() - 1) {
+    if (resultOffset != version.getTotalCodewords()) {
       throw FormatException.getFormatInstance();
     }
     return result;
@@ -161,6 +160,9 @@ final class BitMatrixParser {
     if (column < 0) {
       column += numColumns;
       row += 4 - ((numColumns + 4) & 0x07);
+    }
+    if (row >= numRows) {
+      row -= numRows;
     }
     readMappingMatrix.set(column, row);
     return mappingBitMatrix.get(column, row);
