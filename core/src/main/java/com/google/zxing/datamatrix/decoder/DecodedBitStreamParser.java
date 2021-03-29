@@ -24,6 +24,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -43,7 +45,8 @@ final class DecodedBitStreamParser {
     TEXT_ENCODE,
     ANSIX12_ENCODE,
     EDIFACT_ENCODE,
-    BASE256_ENCODE
+    BASE256_ENCODE,
+    ECI_ENCODE
   }
 
   /**
@@ -89,16 +92,18 @@ final class DecodedBitStreamParser {
     List<byte[]> byteSegments = new ArrayList<>(1);
     int symbologyModifier = 0;
     Mode mode = Mode.ASCII_ENCODE;
+    Map fnc1Positions = new HashMap();
+    boolean isECIencoded = false;
     do {
       if (mode == Mode.ASCII_ENCODE) {
-        mode = decodeAsciiSegment(bits, result, resultTrailer);
+        mode = decodeAsciiSegment(bits, result, resultTrailer, fnc1Positions);
       } else {
         switch (mode) {
           case C40_ENCODE:
-            decodeC40Segment(bits, result);
+            decodeC40Segment(bits, result, fnc1Positions);
             break;
           case TEXT_ENCODE:
-            decodeTextSegment(bits, result);
+            decodeTextSegment(bits, result, fnc1Positions);
             break;
           case ANSIX12_ENCODE:
             decodeAnsiX12Segment(bits, result);
@@ -108,6 +113,9 @@ final class DecodedBitStreamParser {
             break;
           case BASE256_ENCODE:
             decodeBase256Segment(bits, result, byteSegments);
+            break;
+          case ECI_ENCODE:
+            isECIencoded = true; // ECI detection only, atm continue decoding as ASCII
             break;
           default:
             throw FormatException.getFormatInstance();
@@ -144,7 +152,8 @@ final class DecodedBitStreamParser {
    */
   private static Mode decodeAsciiSegment(BitSource bits,
                                          StringBuilder result,
-                                         StringBuilder resultTrailer) throws FormatException {
+                                         StringBuilder resultTrailer,
+                                         Map fnc1positions) throws FormatException {
     boolean upperShift = false;
     do {
       int oneByte = bits.readBits(8);
@@ -197,10 +206,7 @@ final class DecodedBitStreamParser {
           case 240: // Latch to EDIFACT encodation
             return Mode.EDIFACT_ENCODE;
           case 241: // ECI Character
-            // TODO(bbrown): I think we need to support ECI
-            //throw ReaderException.getInstance();
-            // Ignore this symbol for now
-            break;
+            return Mode.ECI_ENCODE;
           default:
             // Not to be used in ASCII encodation
             // but work around encoders that end with 254, latch back to ASCII
@@ -217,7 +223,7 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
    */
-  private static void decodeC40Segment(BitSource bits, StringBuilder result) throws FormatException {
+  private static void decodeC40Segment(BitSource bits, StringBuilder result, Map fnc1positions) throws FormatException {
     // Three C40 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
@@ -307,7 +313,7 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
    */
-  private static void decodeTextSegment(BitSource bits, StringBuilder result) throws FormatException {
+  private static void decodeTextSegment(BitSource bits, StringBuilder result, Map fnc1positions) throws FormatException {
     // Three Text values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
