@@ -240,6 +240,9 @@ public abstract class UPCEANReader extends OneDReader {
         decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
       }
     }
+    if (format == BarcodeFormat.EAN_8) {
+      symbologyIdentifier = 4;
+    }
 
     decodeResult.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]E" + symbologyIdentifier);
 
