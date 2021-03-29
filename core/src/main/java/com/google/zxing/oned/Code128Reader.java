@@ -22,6 +22,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
@@ -341,6 +342,11 @@ public final class Code128Reader extends OneDReader {
             }
             switch (code) {
               case CODE_FNC_1:
+                if (result.length() == 0) { // FNC1 at first or second character determines the symbology
+                  symbology_modifier = "1";
+                } else if (result.length() == 1) {
+                  symbology_modifier = "2";
+                }
                 if (convertFNC1) {
                   if (result.length() == 0) {
                     // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
@@ -353,6 +359,8 @@ public final class Code128Reader extends OneDReader {
                 }
                 break;
               case CODE_FNC_2:
+                symbology_modifier = "4";
+                break;
               case CODE_FNC_3:
                 // do nothing?
                 break;
@@ -397,6 +405,11 @@ public final class Code128Reader extends OneDReader {
             }
             switch (code) {
               case CODE_FNC_1:
+                if (result.length() == 0) { // FNC1 at first or second character determines the symbology
+                  symbology_modifier = "1";
+                } else if (result.length() == 1) {
+                  symbology_modifier = "2";
+                }
                 if (convertFNC1) {
                   if (result.length() == 0) {
                     // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
@@ -409,6 +422,8 @@ public final class Code128Reader extends OneDReader {
                 }
                 break;
               case CODE_FNC_2:
+                symbology_modifier = "4";
+                break;
               case CODE_FNC_3:
                 // do nothing?
                 break;
@@ -451,6 +466,11 @@ public final class Code128Reader extends OneDReader {
             }
             switch (code) {
               case CODE_FNC_1:
+                if (result.length() == 0) { // FNC1 at first or second character determines the symbology
+                  symbology_modifier = "1";
+                } else if (result.length() == 1) {
+                  symbology_modifier = "2";
+                }
                 if (convertFNC1) {
                   if (result.length() == 0) {
                     // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
@@ -461,6 +481,9 @@ public final class Code128Reader extends OneDReader {
                     result.append((char) 29);
                   }
                 }
+                break;
+              case CODE_FNC_2:
+                symbology_modifier = "4";
                 break;
               case CODE_CODE_A:
                 codeSet = CODE_CODE_A;
