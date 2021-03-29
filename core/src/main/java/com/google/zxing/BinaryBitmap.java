@@ -138,6 +138,16 @@ public final class BinaryBitmap {
     return new BinaryBitmap(binarizer.createBinarizer(newSource));
   }
 
+  /**
+   * Returns a new object with negative image data.
+   *
+   * @return An inverted version of this object.
+   */
+  public BinaryBitmap invert() {
+    LuminanceSource newSource = binarizer.getLuminanceSource().invert();
+    return new BinaryBitmap(binarizer.createBinarizer(newSource));
+  }
+
   @Override
   public String toString() {
     try {
