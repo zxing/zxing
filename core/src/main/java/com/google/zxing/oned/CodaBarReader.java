@@ -20,6 +20,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
@@ -152,13 +153,16 @@ public final class CodaBarReader extends OneDReader {
       runningCount += counters[i];
     }
     float right = runningCount;
-    return new Result(
+
+    Result result = new Result(
         decodeRowResult.toString(),
         null,
         new ResultPoint[]{
             new ResultPoint(left, rowNumber),
             new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODABAR);
+    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]F0");
+    return result;
   }
 
   private void validatePattern(int start) throws NotFoundException {

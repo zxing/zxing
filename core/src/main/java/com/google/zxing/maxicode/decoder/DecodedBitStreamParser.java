@@ -100,7 +100,7 @@ final class DecodedBitStreamParser {
         result.append(getMessage(bytes, 1, 77));
         break;
     }
-    return new DecoderResult(bytes, result.toString(), null, String.valueOf(mode));
+    return new DecoderResult(bytes, result.toString(), null, String.valueOf(mode), 0);
   }
 
   private static int getBit(int bit, byte[] bytes) {

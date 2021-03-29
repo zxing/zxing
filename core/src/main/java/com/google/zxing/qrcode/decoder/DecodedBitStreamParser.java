@@ -58,6 +58,7 @@ final class DecodedBitStreamParser {
     List<byte[]> byteSegments = new ArrayList<>(1);
     int symbolSequence = -1;
     int parityData = -1;
+    int symbologyModifier = 1;
 
     try {
       CharacterSetECI currentCharacterSetECI = null;
@@ -138,7 +139,8 @@ final class DecodedBitStreamParser {
                              byteSegments.isEmpty() ? null : byteSegments,
                              ecLevel == null ? null : ecLevel.toString(),
                              symbolSequence,
-                             parityData);
+                             parityData,
+                             symbologyModifier);
   }
 
   /**

@@ -238,6 +238,8 @@ public final class Code128Reader extends OneDReader {
 
     boolean convertFNC1 = hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1);
 
+    String symbology_modifier = "0";
+
     int[] startPatternInfo = findStartPattern(row);
     int startCode = startPatternInfo[2];
 
@@ -525,14 +527,15 @@ public final class Code128Reader extends OneDReader {
     for (int i = 0; i < rawCodesSize; i++) {
       rawBytes[i] = rawCodes.get(i);
     }
-
-    return new Result(
+    Result resultObject = new Result(
         result.toString(),
         rawBytes,
         new ResultPoint[]{
             new ResultPoint(left, rowNumber),
             new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_128);
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]C" + symbology_modifier);
+    return resultObject;
 
   }
 

@@ -87,6 +87,7 @@ final class DecodedBitStreamParser {
     StringBuilder result = new StringBuilder(100);
     StringBuilder resultTrailer = new StringBuilder(0);
     List<byte[]> byteSegments = new ArrayList<>(1);
+    int symbologyModifier = 0;
     Mode mode = Mode.ASCII_ENCODE;
     do {
       if (mode == Mode.ASCII_ENCODE) {
@@ -117,7 +118,25 @@ final class DecodedBitStreamParser {
     if (resultTrailer.length() > 0) {
       result.append(resultTrailer);
     }
-    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments, null);
+    if (isECIencoded) {
+      if (fnc1Positions.containsKey(0) || fnc1Positions.containsKey(4)) {
+        symbologyModifier = 5;
+      } else if (fnc1Positions.containsKey(1) || fnc1Positions.containsKey(5)) {
+        symbologyModifier = 6;
+      } else {
+        symbologyModifier = 4;
+      }
+    } else {
+      if (fnc1Positions.containsKey(0) || fnc1Positions.containsKey(4)) {
+        symbologyModifier = 2;
+      } else if (fnc1Positions.containsKey(1) || fnc1Positions.containsKey(5)) {
+        symbologyModifier = 3;
+      } else {
+        symbologyModifier = 1;
+      }
+    }
+
+    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments, null, symbologyModifier);
   }
 
   /**
