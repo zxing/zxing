@@ -63,6 +63,8 @@ final class DecodedBitStreamParser {
     try {
       CharacterSetECI currentCharacterSetECI = null;
       boolean fc1InEffect = false;
+      boolean hasFNC1first = false;
+      boolean hasFNC1second = false;
       Mode mode;
       do {
         // While still another segment to read...
@@ -76,7 +78,12 @@ final class DecodedBitStreamParser {
           case TERMINATOR:
             break;
           case FNC1_FIRST_POSITION:
+            hasFNC1first = true; // symbology detection
+            // We do little with FNC1 except alter the parsed result a bit according to the spec
+            fc1InEffect = true;
+            break;
           case FNC1_SECOND_POSITION:
+            hasFNC1second = true; // symbology detection
             // We do little with FNC1 except alter the parsed result a bit according to the spec
             fc1InEffect = true;
             break;
@@ -129,6 +136,25 @@ final class DecodedBitStreamParser {
             break;
         }
       } while (mode != Mode.TERMINATOR);
+
+      if (currentCharacterSetECI != null) {
+        if (hasFNC1first) {
+          symbologyModifier = 4;
+        } else if (hasFNC1second) {
+          symbologyModifier = 6;
+        } else {
+          symbologyModifier = 2;
+        }
+      } else {
+        if (hasFNC1first) {
+          symbologyModifier = 3;
+        } else if (hasFNC1second) {
+          symbologyModifier = 5;
+        } else {
+          symbologyModifier = 1;
+        }
+      }
+
     } catch (IllegalArgumentException iae) {
       // from readBits() calls
       throw FormatException.getFormatInstance();
