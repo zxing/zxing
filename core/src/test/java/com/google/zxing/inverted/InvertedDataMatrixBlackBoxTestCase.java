@@ -28,7 +28,7 @@ public final class InvertedDataMatrixBlackBoxTestCase extends AbstractBlackBoxTe
 
   public InvertedDataMatrixBlackBoxTestCase() {
     super("src/test/resources/blackbox/inverted", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX);
-    addHint(DecodeHintType.POSITIVE_AND_NEGATIVE);
+    addHint(DecodeHintType.ALSO_INVERTED);
     addTest(1, 1, 0.0f);
     addTest(1, 1, 90.0f);
     addTest(1, 1, 180.0f);
