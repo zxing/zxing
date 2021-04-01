@@ -42,9 +42,25 @@ public final class DecoderResult {
   public DecoderResult(byte[] rawBytes,
                        String text,
                        List<byte[]> byteSegments,
+                       String ecLevel) {
+    this(rawBytes, text, byteSegments, ecLevel, -1, -1, 0);
+  }
+
+  public DecoderResult(byte[] rawBytes,
+                       String text,
+                       List<byte[]> byteSegments,
                        String ecLevel,
                        int symbologyModifier) {
     this(rawBytes, text, byteSegments, ecLevel, -1, -1, symbologyModifier);
+  }
+
+  public DecoderResult(byte[] rawBytes,
+                       String text,
+                       List<byte[]> byteSegments,
+                       String ecLevel,
+                       int saSequence,
+                       int saParity) {
+    this(rawBytes, text, byteSegments, ecLevel, saSequence, saParity, 0);
   }
 
   public DecoderResult(byte[] rawBytes,
