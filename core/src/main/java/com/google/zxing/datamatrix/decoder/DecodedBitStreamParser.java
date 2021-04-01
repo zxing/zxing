@@ -92,7 +92,7 @@ final class DecodedBitStreamParser {
     List<byte[]> byteSegments = new ArrayList<>(1);
     int symbologyModifier = 0;
     Mode mode = Mode.ASCII_ENCODE;
-    Map fnc1Positions = new HashMap();
+    Map<Integer,Integer> fnc1Positions = new HashMap<Integer,Integer>();
     boolean isECIencoded = false;
     do {
       if (mode == Mode.ASCII_ENCODE) {
@@ -126,7 +126,7 @@ final class DecodedBitStreamParser {
     if (resultTrailer.length() > 0) {
       result.append(resultTrailer);
     }
-    if (isECIencoded) {
+    if (isECIencoded) { // Examples for this numbers can be found in this documentation of a hardware barcode scanner: https://honeywellaidc.force.com/supportppr/s/article/List-of-barcode-symbology-AIM-Identifiers
       if (fnc1Positions.containsKey(0) || fnc1Positions.containsKey(4)) {
         symbologyModifier = 5;
       } else if (fnc1Positions.containsKey(1) || fnc1Positions.containsKey(5)) {
@@ -153,7 +153,7 @@ final class DecodedBitStreamParser {
   private static Mode decodeAsciiSegment(BitSource bits,
                                          StringBuilder result,
                                          StringBuilder resultTrailer,
-                                         Map fnc1positions) throws FormatException {
+                                         Map<Integer,Integer> fnc1positions) throws FormatException {
     boolean upperShift = false;
     do {
       int oneByte = bits.readBits(8);
@@ -181,6 +181,7 @@ final class DecodedBitStreamParser {
           case 231: // Latch to Base 256 encodation
             return Mode.BASE256_ENCODE;
           case 232: // FNC1
+            fnc1positions.put(result.length(), null);
             result.append((char) 29); // translate as ASCII 29
             break;
           case 233: // Structured Append
@@ -223,7 +224,7 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
    */
-  private static void decodeC40Segment(BitSource bits, StringBuilder result, Map fnc1positions) throws FormatException {
+  private static void decodeC40Segment(BitSource bits, StringBuilder result, Map<Integer,Integer> fnc1positions) throws FormatException {
     // Three C40 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
@@ -283,6 +284,7 @@ final class DecodedBitStreamParser {
             } else {
               switch (cValue) {
                 case 27: // FNC1
+                  fnc1positions.put(result.length(), null);
                   result.append((char) 29); // translate as ASCII 29
                   break;
                 case 30: // Upper Shift
@@ -313,7 +315,7 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
    */
-  private static void decodeTextSegment(BitSource bits, StringBuilder result, Map fnc1positions) throws FormatException {
+  private static void decodeTextSegment(BitSource bits, StringBuilder result, Map<Integer,Integer> fnc1positions) throws FormatException {
     // Three Text values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
@@ -373,6 +375,7 @@ final class DecodedBitStreamParser {
             } else {
               switch (cValue) {
                 case 27: // FNC1
+                  fnc1positions.put(result.length(), null);
                   result.append((char) 29); // translate as ASCII 29
                   break;
                 case 30: // Upper Shift
