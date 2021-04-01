@@ -175,6 +175,17 @@ public final class MultiFormatReader implements Reader {
           // continue
         }
       }
+      if (hints != null && hints.containsKey(DecodeHintType.ALSO_INVERTED)) {
+        // Calling all readers again with inverted image
+        image.getBlackMatrix().flip();
+        for (Reader reader : readers) {
+          try {
+            return reader.decode(image, hints);
+          } catch (ReaderException re) {
+            // continue
+          }
+        }
+      }
     }
     throw NotFoundException.getNotFoundInstance();
   }

@@ -190,6 +190,16 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * <p>Flips every bit in the matrix.</p>
+   */
+  public void flip() {
+    int max = bits.length;
+    for (int i = 0; i < max; i++) {
+      bits[i] = ~bits[i];
+    }
+  }
+
+  /**
    * Exclusive-or (XOR): Flip the bit in this {@code BitMatrix} if the corresponding
    * mask bit is set.
    *

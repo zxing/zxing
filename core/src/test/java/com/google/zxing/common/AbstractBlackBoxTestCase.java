@@ -62,6 +62,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
   private final Reader barcodeReader;
   private final BarcodeFormat expectedFormat;
   private final List<TestResult> testResults;
+  private final EnumMap<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
 
   public static Path buildTestBase(String testBasePathSuffix) {
     // A little workaround to prevent aggravation in my IDE
@@ -90,6 +91,10 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
 
   protected final void addTest(int mustPassCount, int tryHarderCount, float rotation) {
     addTest(mustPassCount, tryHarderCount, 0, 0, rotation);
+  }
+
+  protected void addHint(DecodeHintType hint) {
+    hints.put(hint, Boolean.TRUE);
   }
 
   /**
@@ -252,7 +257,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
 
     String suffix = String.format(" (%srotation: %d)", tryHarder ? "try harder, " : "", (int) rotation);
 
-    Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
+    Map<DecodeHintType,Object> hints = this.hints.clone();
     if (tryHarder) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }
