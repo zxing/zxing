@@ -239,7 +239,7 @@ public final class Code128Reader extends OneDReader {
 
     boolean convertFNC1 = hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1);
 
-    String symbology_modifier = "0";
+    String symbologyModifier = "0";
 
     int[] startPatternInfo = findStartPattern(row);
     int startCode = startPatternInfo[2];
@@ -343,9 +343,9 @@ public final class Code128Reader extends OneDReader {
             switch (code) {
               case CODE_FNC_1:
                 if (result.length() == 0) { // FNC1 at first or second character determines the symbology
-                  symbology_modifier = "1";
+                  symbologyModifier = "1";
                 } else if (result.length() == 1) {
-                  symbology_modifier = "2";
+                  symbologyModifier = "2";
                 }
                 if (convertFNC1) {
                   if (result.length() == 0) {
@@ -359,7 +359,7 @@ public final class Code128Reader extends OneDReader {
                 }
                 break;
               case CODE_FNC_2:
-                symbology_modifier = "4";
+                symbologyModifier = "4";
                 break;
               case CODE_FNC_3:
                 // do nothing?
@@ -406,9 +406,9 @@ public final class Code128Reader extends OneDReader {
             switch (code) {
               case CODE_FNC_1:
                 if (result.length() == 0) { // FNC1 at first or second character determines the symbology
-                  symbology_modifier = "1";
+                  symbologyModifier = "1";
                 } else if (result.length() == 1) {
-                  symbology_modifier = "2";
+                  symbologyModifier = "2";
                 }
                 if (convertFNC1) {
                   if (result.length() == 0) {
@@ -422,7 +422,7 @@ public final class Code128Reader extends OneDReader {
                 }
                 break;
               case CODE_FNC_2:
-                symbology_modifier = "4";
+                symbologyModifier = "4";
                 break;
               case CODE_FNC_3:
                 // do nothing?
@@ -467,9 +467,9 @@ public final class Code128Reader extends OneDReader {
             switch (code) {
               case CODE_FNC_1:
                 if (result.length() == 0) { // FNC1 at first or second character determines the symbology
-                  symbology_modifier = "1";
+                  symbologyModifier = "1";
                 } else if (result.length() == 1) {
-                  symbology_modifier = "2";
+                  symbologyModifier = "2";
                 }
                 if (convertFNC1) {
                   if (result.length() == 0) {
@@ -483,7 +483,7 @@ public final class Code128Reader extends OneDReader {
                 }
                 break;
               case CODE_FNC_2:
-                symbology_modifier = "4";
+                symbologyModifier = "4";
                 break;
               case CODE_CODE_A:
                 codeSet = CODE_CODE_A;
@@ -557,7 +557,7 @@ public final class Code128Reader extends OneDReader {
             new ResultPoint(left, rowNumber),
             new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_128);
-    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]C" + symbology_modifier);
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]C" + symbologyModifier);
     return resultObject;
 
   }
