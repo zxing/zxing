@@ -160,7 +160,7 @@ final class DecodedBitStreamParser {
     if (result.length() == 0) {
       throw FormatException.getFormatInstance();
     }
-    DecoderResult decoderResult = new DecoderResult(null, result.toString(), null, ecLevel, 0);
+    DecoderResult decoderResult = new DecoderResult(null, result.toString(), null, ecLevel);
     decoderResult.setOther(resultMetadata);
     return decoderResult;
   }
