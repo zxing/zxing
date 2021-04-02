@@ -94,4 +94,8 @@ public enum ResultMetadataType {
    */
   STRUCTURED_APPEND_PARITY,
 
+  /**
+   * Barcode Symbology Identifier.
+   */
+  SYMBOLOGY_IDENTIFIER,
 }

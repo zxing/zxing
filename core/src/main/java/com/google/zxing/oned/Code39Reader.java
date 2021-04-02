@@ -22,6 +22,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
@@ -165,14 +166,16 @@ public final class Code39Reader extends OneDReader {
 
     float left = (start[1] + start[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
-    return new Result(
+
+    Result resultObject = new Result(
         resultString,
         null,
         new ResultPoint[]{
             new ResultPoint(left, rowNumber),
             new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_39);
-
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]A0");
+    return resultObject;
   }
 
   private static int[] findAsteriskPattern(BitArray row, int[] counters) throws NotFoundException {

@@ -37,12 +37,21 @@ public final class DecoderResult {
   private Object other;
   private final int structuredAppendParity;
   private final int structuredAppendSequenceNumber;
+  private final int symbologyModifier;
 
   public DecoderResult(byte[] rawBytes,
                        String text,
                        List<byte[]> byteSegments,
                        String ecLevel) {
-    this(rawBytes, text, byteSegments, ecLevel, -1, -1);
+    this(rawBytes, text, byteSegments, ecLevel, -1, -1, 0);
+  }
+
+  public DecoderResult(byte[] rawBytes,
+                       String text,
+                       List<byte[]> byteSegments,
+                       String ecLevel,
+                       int symbologyModifier) {
+    this(rawBytes, text, byteSegments, ecLevel, -1, -1, symbologyModifier);
   }
 
   public DecoderResult(byte[] rawBytes,
@@ -51,6 +60,16 @@ public final class DecoderResult {
                        String ecLevel,
                        int saSequence,
                        int saParity) {
+    this(rawBytes, text, byteSegments, ecLevel, saSequence, saParity, 0);
+  }
+
+  public DecoderResult(byte[] rawBytes,
+                       String text,
+                       List<byte[]> byteSegments,
+                       String ecLevel,
+                       int saSequence,
+                       int saParity,
+                       int symbologyModifier) {
     this.rawBytes = rawBytes;
     this.numBits = rawBytes == null ? 0 : 8 * rawBytes.length;
     this.text = text;
@@ -58,6 +77,7 @@ public final class DecoderResult {
     this.ecLevel = ecLevel;
     this.structuredAppendParity = saParity;
     this.structuredAppendSequenceNumber = saSequence;
+    this.symbologyModifier = symbologyModifier;
   }
 
   /**
@@ -147,6 +167,10 @@ public final class DecoderResult {
 
   public int getStructuredAppendSequenceNumber() {
     return structuredAppendSequenceNumber;
+  }
+
+  public int getSymbologyModifier() {
+    return symbologyModifier;
   }
 
 }

@@ -153,6 +153,7 @@ public abstract class UPCEANReader extends OneDReader {
 
     ResultPointCallback resultPointCallback = hints == null ? null :
         (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+    int symbologyIdentifier = 0;
 
     if (resultPointCallback != null) {
       resultPointCallback.foundPossibleResultPoint(new ResultPoint(
@@ -239,6 +240,11 @@ public abstract class UPCEANReader extends OneDReader {
         decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
       }
     }
+    if (format == BarcodeFormat.EAN_8) {
+      symbologyIdentifier = 4;
+    }
+
+    decodeResult.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]E" + symbologyIdentifier);
 
     return decodeResult;
   }
