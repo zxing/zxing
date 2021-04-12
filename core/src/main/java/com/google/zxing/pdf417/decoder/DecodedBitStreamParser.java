@@ -157,7 +157,7 @@ final class DecodedBitStreamParser {
         throw FormatException.getFormatInstance();
       }
     }
-    if (result.length() == 0) {
+    if (result.length() == 0 && resultMetadata.getFileId() == null) {
       throw FormatException.getFormatInstance();
     }
     DecoderResult decoderResult = new DecoderResult(null, result.toString(), null, ecLevel);
@@ -179,9 +179,19 @@ final class DecodedBitStreamParser {
     resultMetadata.setSegmentIndex(Integer.parseInt(decodeBase900toBase10(segmentIndexArray,
         NUMBER_OF_SEQUENCE_CODEWORDS)));
 
-    StringBuilder fileId = new StringBuilder();
-    codeIndex = textCompaction(codewords, codeIndex, fileId);
-    resultMetadata.setFileId(fileId.toString());
+    // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
+    // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
+    // the fileId using text compaction, so in those cases the fileId will appear mangled.
+    String fileId = "";
+    for (int i = 0; codeIndex < codewords[0] && codewords[codeIndex] != MACRO_PDF417_TERMINATOR
+                    && codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD; i++, codeIndex++) {
+      fileId += String.format("%03d", codewords[codeIndex]);
+    }
+    if (fileId.length() == 0) {
+      // at least one fileId codeword is required (Annex H.2)
+      throw FormatException.getFormatInstance();
+    }
+    resultMetadata.setFileId(fileId);
 
     int optionalFieldsStart = -1;
     if (codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {

@@ -18,6 +18,7 @@ package com.google.zxing.pdf417.decoder;
 
 import com.google.zxing.FormatException;
 import com.google.zxing.pdf417.PDF417ResultMetadata;
+import com.google.zxing.common.DecoderResult;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class PDF417DecoderTestCase extends Assert {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
     assertEquals(0, resultMetadata.getSegmentIndex());
-    assertEquals("ARBX", resultMetadata.getFileId());
+    assertEquals("017053", resultMetadata.getFileId());
     assertFalse(resultMetadata.isLastSegment());
     assertEquals(4, resultMetadata.getSegmentCount());
     assertEquals("CEN BE", resultMetadata.getSender());
@@ -66,7 +67,7 @@ public class PDF417DecoderTestCase extends Assert {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
 
     assertEquals(3, resultMetadata.getSegmentIndex());
-    assertEquals("ARBX", resultMetadata.getFileId());
+    assertEquals("017053", resultMetadata.getFileId());
     assertTrue(resultMetadata.isLastSegment());
     assertEquals(4, resultMetadata.getSegmentCount());
     assertNull(resultMetadata.getAddressee());
@@ -79,6 +80,32 @@ public class PDF417DecoderTestCase extends Assert {
         104, optionalData[optionalData.length - 1]);
   }
 
+
+  /**
+   * Tests the example given in ISO/IEC 15438:2015(E) - Annex H.6
+   */
+  @Test
+  public void testStandardSample3() throws FormatException {
+    PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
+    int[] sampleCodes = {7, 928, 111, 100, 100, 200, 300,
+      0}; // Final dummy ECC codeword required to avoid ArrayIndexOutOfBounds
+
+    DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
+
+    assertEquals(0, resultMetadata.getSegmentIndex());
+    assertEquals("100200300", resultMetadata.getFileId());
+    assertFalse(resultMetadata.isLastSegment());
+    assertEquals(-1, resultMetadata.getSegmentCount());
+    assertNull(resultMetadata.getAddressee());
+    assertNull(resultMetadata.getSender());
+    assertNull(resultMetadata.getOptionalData());
+
+    // Check that symbol containing no data except Macro is accepted (see note in Annex H.2)
+    DecoderResult decoderResult = DecodedBitStreamParser.decode(sampleCodes, "0");
+    assertEquals("", decoderResult.getText());
+    assertNotNull(decoderResult.getOther());
+  }
+
   @Test
   public void testSampleWithFilename() throws FormatException {
     int[] sampleCodes = {23, 477, 928, 111, 100, 0, 252, 21, 86, 923, 0, 815, 251, 133, 12, 148, 537, 593,
@@ -89,7 +116,7 @@ public class PDF417DecoderTestCase extends Assert {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
     assertEquals(0, resultMetadata.getSegmentIndex());
-    assertEquals("AAIMAVC ", resultMetadata.getFileId());
+    assertEquals("000252021086", resultMetadata.getFileId());
     assertFalse(resultMetadata.isLastSegment());
     assertEquals(2, resultMetadata.getSegmentCount());
     assertNull(resultMetadata.getAddressee());
@@ -106,12 +133,62 @@ public class PDF417DecoderTestCase extends Assert {
     DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
 
     assertEquals(0, resultMetadata.getSegmentIndex());
-    assertEquals("AAIMAVC ", resultMetadata.getFileId());
+    assertEquals("000252021086", resultMetadata.getFileId());
     assertFalse(resultMetadata.isLastSegment());
 
     assertEquals(180980729000000L, resultMetadata.getTimestamp());
     assertEquals(30, resultMetadata.getFileSize());
     assertEquals(260013, resultMetadata.getChecksum());
+  }
+
+  @Test
+  public void testSampleWithMacroTerminatorOnly() throws FormatException {
+    int[] sampleCodes = {7, 477, 928, 222, 198, 0, 922};
+    PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
+
+    DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 3, resultMetadata);
+
+    assertEquals(99998, resultMetadata.getSegmentIndex());
+    assertEquals("000", resultMetadata.getFileId());
+    assertTrue(resultMetadata.isLastSegment());
+    assertEquals(-1, resultMetadata.getSegmentCount());
+    assertNull(resultMetadata.getOptionalData());
+  }
+
+  @Test
+  public void testSampleWithBadSequenceIndexMacro() throws FormatException {
+    int[] sampleCodes = {3, 928, 222, 0};
+    PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
+
+    try {
+      DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
+    } catch (FormatException expected) {
+      // continue
+    }
+  }
+
+  @Test
+  public void testSampleWithNoFileIdMacro() throws FormatException {
+    int[] sampleCodes = {4, 928, 222, 198, 0};
+    PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
+
+    try {
+      DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
+    } catch (FormatException expected) {
+      // continue
+    }
+  }
+
+  @Test
+  public void testSampleWithNoDataNoMacro() throws FormatException {
+    int[] sampleCodes = {3, 899, 899, 0};
+
+    try {
+      DecodedBitStreamParser.decode(sampleCodes, "0");
+    } catch (FormatException expected) {
+      // continue
+    }
+
   }
 
 }
