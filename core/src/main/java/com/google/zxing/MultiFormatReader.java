@@ -52,7 +52,7 @@ public final class MultiFormatReader implements Reader {
    * @throws NotFoundException Any errors which occurred
    */
   @Override
-  public Result decode(BinaryBitmap image) throws NotFoundException {
+  public Result decode(AbstractBinaryBitmap image) throws NotFoundException {
     setHints(null);
     return decodeInternal(image);
   }
@@ -66,7 +66,7 @@ public final class MultiFormatReader implements Reader {
    * @throws NotFoundException Any errors which occurred
    */
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException {
+  public Result decode(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException {
     setHints(hints);
     return decodeInternal(image);
   }
@@ -79,7 +79,7 @@ public final class MultiFormatReader implements Reader {
    * @return The contents of the image
    * @throws NotFoundException Any errors which occurred
    */
-  public Result decodeWithState(BinaryBitmap image) throws NotFoundException {
+  public Result decodeWithState(AbstractBinaryBitmap image) throws NotFoundException {
     // Make sure to set up the default state so we don't crash
     if (readers == null) {
       setHints(null);
@@ -166,7 +166,7 @@ public final class MultiFormatReader implements Reader {
     }
   }
 
-  private Result decodeInternal(BinaryBitmap image) throws NotFoundException {
+  private Result decodeInternal(AbstractBinaryBitmap image) throws NotFoundException {
     if (readers != null) {
       for (Reader reader : readers) {
         try {

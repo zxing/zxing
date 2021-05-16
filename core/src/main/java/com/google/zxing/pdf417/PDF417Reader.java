@@ -16,8 +16,8 @@
 
 package com.google.zxing.pdf417;
 
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
@@ -53,12 +53,12 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
    * @throws FormatException if a PDF417 cannot be decoded
    */
   @Override
-  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException, ChecksumException {
+  public Result decode(AbstractBinaryBitmap image) throws NotFoundException, FormatException, ChecksumException {
     return decode(image, null);
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException, FormatException,
+  public Result decode(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException, FormatException,
       ChecksumException {
     Result[] result = decode(image, hints, false);
     if (result.length == 0 || result[0] == null) {
@@ -68,12 +68,12 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
   }
 
   @Override
-  public Result[] decodeMultiple(BinaryBitmap image) throws NotFoundException {
+  public Result[] decodeMultiple(AbstractBinaryBitmap image) throws NotFoundException {
     return decodeMultiple(image, null);
   }
 
   @Override
-  public Result[] decodeMultiple(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException {
+  public Result[] decodeMultiple(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException {
     try {
       return decode(image, hints, true);
     } catch (FormatException | ChecksumException ignored) {
@@ -81,7 +81,7 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
     }
   }
 
-  private static Result[] decode(BinaryBitmap image, Map<DecodeHintType, ?> hints, boolean multiple)
+  private static Result[] decode(AbstractBinaryBitmap image, Map<DecodeHintType, ?> hints, boolean multiple)
       throws NotFoundException, FormatException, ChecksumException {
     List<Result> results = new ArrayList<>();
     PDF417DetectorResult detectorResult = Detector.detect(image, hints, multiple);

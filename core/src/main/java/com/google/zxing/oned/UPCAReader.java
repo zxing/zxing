@@ -16,8 +16,8 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
@@ -53,12 +53,12 @@ public final class UPCAReader extends UPCEANReader {
   }
 
   @Override
-  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
+  public Result decode(AbstractBinaryBitmap image) throws NotFoundException, FormatException {
     return maybeReturnResult(ean13Reader.decode(image));
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+  public Result decode(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, FormatException {
     return maybeReturnResult(ean13Reader.decode(image, hints));
   }

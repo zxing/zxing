@@ -16,6 +16,7 @@
 
 package com.google.zxing.pdf417;
 
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.BufferedImageLuminanceSource;
@@ -166,7 +167,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         ResultMetadataType.PDF417_EXTRA_METADATA);
   }
 
-  private Result[] decode(BinaryBitmap source, boolean tryHarder) throws ReaderException {
+  private Result[] decode(AbstractBinaryBitmap source, boolean tryHarder) throws ReaderException {
     Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
     if (tryHarder) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);

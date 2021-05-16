@@ -25,7 +25,7 @@ import com.google.zxing.common.BitMatrix;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class BinaryBitmap {
+public final class BinaryBitmap implements AbstractBinaryBitmap {
 
   private final Binarizer binarizer;
   private BitMatrix matrix;
@@ -40,6 +40,7 @@ public final class BinaryBitmap {
   /**
    * @return The width of the bitmap.
    */
+  @Override
   public int getWidth() {
     return binarizer.getWidth();
   }
@@ -47,6 +48,7 @@ public final class BinaryBitmap {
   /**
    * @return The height of the bitmap.
    */
+  @Override
   public int getHeight() {
     return binarizer.getHeight();
   }
@@ -62,6 +64,7 @@ public final class BinaryBitmap {
    * @return The array of bits for this row (true means black).
    * @throws NotFoundException if row can't be binarized
    */
+  @Override
   public BitArray getBlackRow(int y, BitArray row) throws NotFoundException {
     return binarizer.getBlackRow(y, row);
   }
@@ -75,6 +78,7 @@ public final class BinaryBitmap {
    * @return The 2D array of bits for the image (true means black).
    * @throws NotFoundException if image can't be binarized to make a matrix
    */
+  @Override
   public BitMatrix getBlackMatrix() throws NotFoundException {
     // The matrix is created on demand the first time it is requested, then cached. There are two
     // reasons for this:
@@ -90,6 +94,7 @@ public final class BinaryBitmap {
   /**
    * @return Whether this bitmap can be cropped.
    */
+  @Override
   public boolean isCropSupported() {
     return binarizer.getLuminanceSource().isCropSupported();
   }
@@ -104,6 +109,7 @@ public final class BinaryBitmap {
    * @param height The height of the rectangle to crop.
    * @return A cropped version of this object.
    */
+  @Override
   public BinaryBitmap crop(int left, int top, int width, int height) {
     LuminanceSource newSource = binarizer.getLuminanceSource().crop(left, top, width, height);
     return new BinaryBitmap(binarizer.createBinarizer(newSource));
@@ -112,8 +118,19 @@ public final class BinaryBitmap {
   /**
    * @return Whether this bitmap supports counter-clockwise rotation.
    */
+  @Override
   public boolean isRotateSupported() {
     return binarizer.getLuminanceSource().isRotateSupported();
+  }
+
+  @Override
+  public boolean isRotate90Supported() {
+    return isRotateSupported();
+  }
+
+  @Override
+  public boolean isRotate45Supported() {
+    return isRotateSupported();
   }
 
   /**
@@ -122,6 +139,7 @@ public final class BinaryBitmap {
    *
    * @return A rotated version of this object.
    */
+  @Override
   public BinaryBitmap rotateCounterClockwise() {
     LuminanceSource newSource = binarizer.getLuminanceSource().rotateCounterClockwise();
     return new BinaryBitmap(binarizer.createBinarizer(newSource));
@@ -133,6 +151,7 @@ public final class BinaryBitmap {
    *
    * @return A rotated version of this object.
    */
+  @Override
   public BinaryBitmap rotateCounterClockwise45() {
     LuminanceSource newSource = binarizer.getLuminanceSource().rotateCounterClockwise45();
     return new BinaryBitmap(binarizer.createBinarizer(newSource));

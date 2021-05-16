@@ -17,7 +17,7 @@
 package com.google.zxing.datamatrix;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
@@ -55,12 +55,12 @@ public final class DataMatrixReader implements Reader {
    * @throws ChecksumException if error correction fails
    */
   @Override
-  public Result decode(BinaryBitmap image) throws NotFoundException, ChecksumException, FormatException {
+  public Result decode(AbstractBinaryBitmap image) throws NotFoundException, ChecksumException, FormatException {
     return decode(image, null);
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+  public Result decode(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
     DecoderResult decoderResult;
     ResultPoint[] points;

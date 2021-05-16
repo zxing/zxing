@@ -16,7 +16,7 @@
 
 package com.google.zxing.multi;
 
-import com.google.zxing.BinaryBitmap;
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
@@ -45,13 +45,13 @@ public final class ByQuadrantReader implements Reader {
   }
 
   @Override
-  public Result decode(BinaryBitmap image)
+  public Result decode(AbstractBinaryBitmap image)
       throws NotFoundException, ChecksumException, FormatException {
     return decode(image, null);
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+  public Result decode(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
 
     int width = image.getWidth();
@@ -92,7 +92,7 @@ public final class ByQuadrantReader implements Reader {
 
     int quarterWidth = halfWidth / 2;
     int quarterHeight = halfHeight / 2;
-    BinaryBitmap center = image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
+    AbstractBinaryBitmap center = image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
     Result result = delegate.decode(center, hints);
     makeAbsolute(result.getResultPoints(), quarterWidth, quarterHeight);
     return result;
@@ -109,7 +109,7 @@ public final class ByQuadrantReader implements Reader {
         ResultPoint relative = points[i];
         if (relative != null) {
           points[i] = new ResultPoint(relative.getX() + leftOffset, relative.getY() + topOffset);
-        }    
+        }
       }
     }
   }

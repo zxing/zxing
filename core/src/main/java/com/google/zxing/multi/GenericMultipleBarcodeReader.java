@@ -16,7 +16,7 @@
 
 package com.google.zxing.multi;
 
-import com.google.zxing.BinaryBitmap;
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
@@ -56,12 +56,12 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
   }
 
   @Override
-  public Result[] decodeMultiple(BinaryBitmap image) throws NotFoundException {
+  public Result[] decodeMultiple(AbstractBinaryBitmap image) throws NotFoundException {
     return decodeMultiple(image, null);
   }
 
   @Override
-  public Result[] decodeMultiple(BinaryBitmap image, Map<DecodeHintType,?> hints)
+  public Result[] decodeMultiple(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException {
     List<Result> results = new ArrayList<>();
     doDecodeMultiple(image, hints, results, 0, 0, 0);
@@ -71,7 +71,7 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     return results.toArray(EMPTY_RESULT_ARRAY);
   }
 
-  private void doDecodeMultiple(BinaryBitmap image,
+  private void doDecodeMultiple(AbstractBinaryBitmap image,
                                 Map<DecodeHintType,?> hints,
                                 List<Result> results,
                                 int xOffset,

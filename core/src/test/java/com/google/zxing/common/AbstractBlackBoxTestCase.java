@@ -16,6 +16,7 @@
 
 package com.google.zxing.common;
 
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.BufferedImageLuminanceSource;
@@ -249,7 +250,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     }
   }
 
-  private boolean decode(BinaryBitmap source,
+  private boolean decode(AbstractBinaryBitmap source,
                          float rotation,
                          String expectedText,
                          Map<?,?> expectedMetadata,

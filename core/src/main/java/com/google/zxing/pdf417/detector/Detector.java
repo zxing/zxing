@@ -16,7 +16,7 @@
 
 package com.google.zxing.pdf417.detector;
 
-import com.google.zxing.BinaryBitmap;
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
@@ -70,7 +70,7 @@ public final class Detector {
    * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code
    * @throws NotFoundException if no PDF417 Code can be found
    */
-  public static PDF417DetectorResult detect(BinaryBitmap image, Map<DecodeHintType,?> hints, boolean multiple)
+  public static PDF417DetectorResult detect(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints, boolean multiple)
       throws NotFoundException {
     // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even
     // different binarizers

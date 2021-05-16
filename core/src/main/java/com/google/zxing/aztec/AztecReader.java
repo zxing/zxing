@@ -17,7 +17,7 @@
 package com.google.zxing.aztec;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
@@ -48,12 +48,12 @@ public final class AztecReader implements Reader {
    * @throws FormatException if a Data Matrix code cannot be decoded
    */
   @Override
-  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
+  public Result decode(AbstractBinaryBitmap image) throws NotFoundException, FormatException {
     return decode(image, null);
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+  public Result decode(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, FormatException {
 
     NotFoundException notFoundException = null;

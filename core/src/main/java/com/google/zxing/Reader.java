@@ -41,7 +41,7 @@ public interface Reader {
    * @throws ChecksumException if a potential barcode is found but does not pass its checksum
    * @throws FormatException if a potential barcode is found but format is invalid
    */
-  Result decode(BinaryBitmap image) throws NotFoundException, ChecksumException, FormatException;
+  Result decode(AbstractBinaryBitmap image) throws NotFoundException, ChecksumException, FormatException;
 
   /**
    * Locates and decodes a barcode in some format within an image. This method also accepts
@@ -57,7 +57,7 @@ public interface Reader {
    * @throws ChecksumException if a potential barcode is found but does not pass its checksum
    * @throws FormatException if a potential barcode is found but format is invalid
    */
-  Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+  Result decode(AbstractBinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException;
 
   /**

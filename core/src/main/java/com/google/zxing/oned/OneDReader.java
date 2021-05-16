@@ -16,7 +16,7 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.BinaryBitmap;
+import com.google.zxing.AbstractBinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
@@ -42,20 +42,20 @@ import java.util.Map;
 public abstract class OneDReader implements Reader {
 
   @Override
-  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
+  public Result decode(AbstractBinaryBitmap image) throws NotFoundException, FormatException {
     return decode(image, null);
   }
 
   // Note that we don't try rotation without the try harder flag, even if rotation was supported.
   @Override
-  public Result decode(BinaryBitmap image,
+  public Result decode(AbstractBinaryBitmap image,
                        Map<DecodeHintType,?> hints) throws NotFoundException, FormatException {
     try {
       return doDecode(image, hints);
     } catch (NotFoundException nfe) {
       boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-      if (tryHarder && image.isRotateSupported()) {
-        BinaryBitmap rotatedImage = image.rotateCounterClockwise();
+      if (tryHarder && image.isRotate90Supported()) {
+        AbstractBinaryBitmap rotatedImage = image.rotateCounterClockwise();
         Result result = doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW
         Map<ResultMetadataType,?> metadata = result.getResultMetadata();
@@ -100,7 +100,7 @@ public abstract class OneDReader implements Reader {
    * @return The contents of the decoded barcode
    * @throws NotFoundException Any spontaneous errors which occur
    */
-  private Result doDecode(BinaryBitmap image,
+  private Result doDecode(AbstractBinaryBitmap image,
                           Map<DecodeHintType,?> hints) throws NotFoundException {
     int width = image.getWidth();
     int height = image.getHeight();
