@@ -58,7 +58,7 @@ final class DecodedBitStreamParser {
     List<byte[]> byteSegments = new ArrayList<>(1);
     int symbolSequence = -1;
     int parityData = -1;
-    int symbologyModifier = 1;
+    int symbologyModifier;
 
     try {
       CharacterSetECI currentCharacterSetECI = null;

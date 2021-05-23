@@ -47,8 +47,8 @@ final class DoSTracker {
    *                exceeds this value, and upwards when below this value
    */
   DoSTracker(Timer timer,
-             final String name,
-             final int maxAccessesPerTime,
+             String name,
+             int maxAccessesPerTime,
              long accessTimeMS,
              int maxEntries,
              Double maxLoad) {
@@ -104,8 +104,6 @@ final class DoSTracker {
             maxAllowedCount = Math.max(maxAllowedCount, count);
             clearedEntries++;
           } else {
-            // Else it exceeded the max, so log it (again)
-            log.warning(name + ": Blocking " + entry.getKey() + " (" + count + " outstanding)");
             // Reduce count of accesses held against the host
             atomicCount.getAndAdd(-localMAPT);
             minDisallowedCount = Math.min(minDisallowedCount, count);

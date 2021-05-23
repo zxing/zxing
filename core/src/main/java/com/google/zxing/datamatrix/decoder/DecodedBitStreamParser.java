@@ -90,9 +90,9 @@ final class DecodedBitStreamParser {
     StringBuilder result = new StringBuilder(100);
     StringBuilder resultTrailer = new StringBuilder(0);
     List<byte[]> byteSegments = new ArrayList<>(1);
-    int symbologyModifier = 0;
     Mode mode = Mode.ASCII_ENCODE;
-    Set<Integer> fnc1Positions = new HashSet<Integer>(); // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
+    Set<Integer> fnc1Positions = new HashSet<>(); // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
+    int symbologyModifier;
     boolean isECIencoded = false;
     do {
       if (mode == Mode.ASCII_ENCODE) {

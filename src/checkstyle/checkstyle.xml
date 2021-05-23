@@ -126,7 +126,7 @@
     <module name="WhitespaceAround">
       <property name="allowEmptyConstructors" value="true"/>
     </module>
-    <module name="UnnecessaryParentheses"/>
+    <!-- <module name="UnnecessaryParentheses"/> -->
 
 
     <!-- Modifier Checks                                    -->

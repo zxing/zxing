@@ -170,7 +170,7 @@ public final class DecodeServlet extends HttpServlet {
       for (CharSequence substring : blockedURLSubstrings) {
         if (imageURIString.contains(substring)) {
           log.info("Disallowed URI " + imageURIString);
-          errorResponse(request, response, "badurl");
+          errorResponse(request, response, HttpServletResponse.SC_FORBIDDEN, "badurl");
           return;
         }
       }
@@ -217,7 +217,7 @@ public final class DecodeServlet extends HttpServlet {
     if (host == null || host.startsWith("10.") || host.startsWith("192.168.") ||
         "127.0.0.1".equals(host) || "localhost".equals(host) ||
         destHostTracker.isBanned(host)) {
-      errorResponse(request, response, "badurl");
+      errorResponse(request, response, HttpServletResponse.SC_FORBIDDEN, "badurl");
       return;
     }
 
@@ -272,16 +272,22 @@ public final class DecodeServlet extends HttpServlet {
         errorResponse(request, response, "badurl");
         return;
       }
-      if (connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, 0) > MAX_IMAGE_SIZE) {
+      int contentLength = connection.getHeaderFieldInt(HttpHeaders.CONTENT_LENGTH, -1);
+      if (contentLength <= 0) {
+        log.info("Bad content length: " + imageURIString);
+        errorResponse(request, response, HttpServletResponse.SC_LENGTH_REQUIRED, "badimage");
+        return;
+      }
+      if (contentLength > MAX_IMAGE_SIZE) {
         log.info("Too large: " + imageURIString);
-        errorResponse(request, response, "badimage");
+        errorResponse(request, response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE, "badimage");
         return;
       }
       // Assume we'll only handle image/* content types
       String contentType = connection.getContentType();
       if (contentType != null && !contentType.startsWith("image/")) {
         log.info("Wrong content type " + contentType + ": " + imageURIString);
-        errorResponse(request, response, "badimage");
+        errorResponse(request, response, HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "badimage");
         return;
       }
 
@@ -346,9 +352,13 @@ public final class DecodeServlet extends HttpServlet {
     try {
       int height = image.getHeight();
       int width = image.getWidth();
-      if (height <= 1 || width <= 1 || height * width > MAX_PIXELS) {
-        log.info("Dimensions out of bounds: " + width + 'x' + height);
+      if (height <= 1 || width <= 1) {
+        log.info("Dimensions too small: " + width + 'x' + height);
         errorResponse(request, response, "badimage");
+        return;
+      } else if (height * width > MAX_PIXELS) {
+        log.info("Dimensions too large: " + width + 'x' + height);
+        errorResponse(request, response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE, "badimage");
         return;
       }
 
@@ -451,9 +461,15 @@ public final class DecodeServlet extends HttpServlet {
       request.getRequestDispatcher("decoderesult.jspx").forward(request, response);
     }
   }
+  private static void errorResponse(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    String key) throws ServletException, IOException {
+    errorResponse(request, response, HttpServletResponse.SC_BAD_REQUEST, key);
+  }
 
   private static void errorResponse(HttpServletRequest request,
                                     HttpServletResponse response,
+                                    int httpStatus,
                                     String key) throws ServletException, IOException {
     Locale locale = request.getLocale();
     if (locale == null) {
@@ -468,7 +484,7 @@ public final class DecodeServlet extends HttpServlet {
     if (dispatcher == null) {
       log.warning("Can't obtain RequestDispatcher");
     } else {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.setStatus(httpStatus);
       dispatcher.forward(request, response);
     }
   }

@@ -171,7 +171,7 @@ public final class HighLevelEncoder {
     if (charset != null) {
       CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(charset);
       if (null == eci) {
-        throw new IllegalArgumentException("No ECI code for character set " + charset.toString());
+        throw new IllegalArgumentException("No ECI code for character set " + charset);
       }
       initialState = initialState.appendFLGn(eci.getValue());
     }
