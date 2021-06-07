@@ -21,6 +21,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
@@ -139,12 +140,14 @@ public final class ITFReader extends OneDReader {
       throw FormatException.getFormatInstance();
     }
 
-    return new Result(
+    Result resultObject = new Result(
         resultString,
         null, // no natural byte representation for these barcodes
         new ResultPoint[] {new ResultPoint(startRange[1], rowNumber),
                            new ResultPoint(endRange[0], rowNumber)},
         BarcodeFormat.ITF);
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]I0");
+    return resultObject;
   }
 
   /**
