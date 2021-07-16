@@ -425,10 +425,12 @@ public final class Detector {
 
     int corr = 3;
 
-    p1 = new Point(p1.getX() - corr, p1.getY() + corr);
-    p2 = new Point(p2.getX() - corr, p2.getY() - corr);
-    p3 = new Point(p3.getX() + corr, p3.getY() - corr);
-    p4 = new Point(p4.getX() + corr, p4.getY() + corr);
+    p1 = new Point(Math.max(0, p1.getX() - corr), Math.min(image.getHeight() - 1, p1.getY() + corr));
+    p2 = new Point(Math.max(0, p2.getX() - corr), Math.max(0, p2.getY() - corr));
+    p3 = new Point(Math.min(image.getWidth() - 1, p3.getX() + corr),
+                   Math.max(0, Math.min(image.getHeight() - 1, p3.getY() - corr)));
+    p4 = new Point(Math.min(image.getWidth() - 1, p4.getX() + corr),
+                   Math.min(image.getHeight() - 1, p4.getY() + corr));
 
     int cInit = getColor(p4, p1);
 
