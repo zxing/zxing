@@ -96,7 +96,7 @@ public enum ResultMetadataType {
 
   /**
    * Barcode Symbology Identifier.
-   * Note: According to the GS1 specification the identifer may have to replace a leading FNC1/GS character when prepending to the barcode content.
+   * Note: According to the GS1 specification the identifier may have to replace a leading FNC1/GS character when prepending to the barcode content.
    */
   SYMBOLOGY_IDENTIFIER,
 }
