@@ -174,7 +174,7 @@ public final class CodaBarReader extends OneDReader {
     // We break out of this loop in the middle, in order to handle
     // inter-character spaces properly.
     int pos = start;
-    for (int i = 0; true; i++) {
+    for (int i = 0; i <= end; i++) {
       int pattern = CHARACTER_ENCODINGS[decodeRowResult.charAt(i)];
       for (int j = 6; j >= 0; j--) {
         // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
@@ -183,9 +183,6 @@ public final class CodaBarReader extends OneDReader {
         sizes[category] += counters[pos + j];
         counts[category]++;
         pattern >>= 1;
-      }
-      if (i >= end) {
-        break;
       }
       // We ignore the inter-character space - it could be of any size.
       pos += 8;
@@ -206,7 +203,7 @@ public final class CodaBarReader extends OneDReader {
 
     // Now verify that all of the stripes are within the thresholds.
     pos = start;
-    for (int i = 0; true; i++) {
+    for (int i = 0; i <= end; i++) {
       int pattern = CHARACTER_ENCODINGS[decodeRowResult.charAt(i)];
       for (int j = 6; j >= 0; j--) {
         // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
@@ -217,9 +214,6 @@ public final class CodaBarReader extends OneDReader {
           throw NotFoundException.getNotFoundInstance();
         }
         pattern >>= 1;
-      }
-      if (i >= end) {
-        break;
       }
       pos += 8;
     }

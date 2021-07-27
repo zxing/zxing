@@ -291,7 +291,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       return;
     }
 
-    this.rows.add(insertPos, new ExpandedRow(this.pairs, rowNumber, false));
+    this.rows.add(insertPos, new ExpandedRow(this.pairs, rowNumber));
 
     removePartialRows(this.pairs, this.rows);
   }

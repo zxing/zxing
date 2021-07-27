@@ -182,16 +182,16 @@ final class DecodedBitStreamParser {
     // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
     // the fileId using text compaction, so in those cases the fileId will appear mangled.
-    String fileId = "";
+    StringBuilder fileId = new StringBuilder();
     for (int i = 0; codeIndex < codewords[0] && codewords[codeIndex] != MACRO_PDF417_TERMINATOR
                     && codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD; i++, codeIndex++) {
-      fileId += String.format("%03d", codewords[codeIndex]);
+      fileId.append(String.format("%03d", codewords[codeIndex]));
     }
     if (fileId.length() == 0) {
       // at least one fileId codeword is required (Annex H.2)
       throw FormatException.getFormatInstance();
     }
-    resultMetadata.setFileId(fileId);
+    resultMetadata.setFileId(fileId.toString());
 
     int optionalFieldsStart = -1;
     if (codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {

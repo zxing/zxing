@@ -155,40 +155,24 @@ public class PDF417DecoderTestCase extends Assert {
     assertNull(resultMetadata.getOptionalData());
   }
 
-  @Test
+  @Test(expected = FormatException.class)
   public void testSampleWithBadSequenceIndexMacro() throws FormatException {
     int[] sampleCodes = {3, 928, 222, 0};
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
-
-    try {
-      DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
-    } catch (FormatException expected) {
-      // continue
-    }
+    DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
   }
 
-  @Test
+  @Test(expected = FormatException.class)
   public void testSampleWithNoFileIdMacro() throws FormatException {
     int[] sampleCodes = {4, 928, 222, 198, 0};
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
-
-    try {
-      DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
-    } catch (FormatException expected) {
-      // continue
-    }
+    DecodedBitStreamParser.decodeMacroBlock(sampleCodes, 2, resultMetadata);
   }
 
-  @Test
+  @Test(expected = FormatException.class)
   public void testSampleWithNoDataNoMacro() throws FormatException {
     int[] sampleCodes = {3, 899, 899, 0};
-
-    try {
-      DecodedBitStreamParser.decode(sampleCodes, "0");
-    } catch (FormatException expected) {
-      // continue
-    }
-
+    DecodedBitStreamParser.decode(sampleCodes, "0");
   }
 
 }

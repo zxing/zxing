@@ -425,8 +425,17 @@ public final class EncoderTest extends Assert {
         "...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X.......");
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testUserSpecifiedLayers() {
+    doTestUserSpecifiedLayers(33);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUserSpecifiedLayers2() {
+    doTestUserSpecifiedLayers(-1);
+  }
+
+  private void doTestUserSpecifiedLayers(int userSpecifiedLayers) {
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     AztecCode aztec = Encoder.encode(alphabet, 25, -2);
     assertEquals(2, aztec.getLayers());
@@ -436,19 +445,17 @@ public final class EncoderTest extends Assert {
     assertEquals(32, aztec.getLayers());
     assertFalse(aztec.isCompact());
 
-    try {
-      Encoder.encode(alphabet, 25, 33);
-      fail("Encode should have failed.  No such thing as 33 layers");
-    } catch (IllegalArgumentException expected) {
-      // continue
-    }
+    Encoder.encode(alphabet, 25, userSpecifiedLayers);
+  }
 
-    try {
-      Encoder.encode(alphabet, 25, -1);
-      fail("Encode should have failed.  Text can't fit in 1-layer compact");
-    } catch (IllegalArgumentException expected) {
-      // continue
-    }
+  @Test(expected = IllegalArgumentException.class)
+  public void testBorderCompact4CaseFailed() {
+    // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
+    // be error correction
+    String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // encodes as 26 * 5 * 4 = 520 bits of data
+    String alphabet4 = alphabet + alphabet + alphabet + alphabet;
+    Encoder.encode(alphabet4, 0, -4);
   }
 
   @Test
@@ -458,12 +465,6 @@ public final class EncoderTest extends Assert {
     String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     // encodes as 26 * 5 * 4 = 520 bits of data
     String alphabet4 = alphabet + alphabet + alphabet + alphabet;
-    try {
-      Encoder.encode(alphabet4, 0, -4);
-      fail("Encode should have failed.  Text can't fit in 1-layer compact");
-    } catch (IllegalArgumentException expected) {
-      // continue
-    }
 
     // If we just try to encode it normally, it will go to a non-compact 4 layer
     AztecCode aztecCode = Encoder.encode(alphabet4, 0, Encoder.DEFAULT_AZTEC_LAYERS);
