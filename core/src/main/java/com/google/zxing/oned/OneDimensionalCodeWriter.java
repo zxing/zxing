@@ -33,8 +33,11 @@ import java.util.regex.Pattern;
 public abstract class OneDimensionalCodeWriter implements Writer {
   private static final Pattern NUMERIC = Pattern.compile("[0-9]+");
 
+  protected Map<EncodeHintType,?> hints;
+
   @Override
   public final BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
+    this.hints = null;
     return encode(contents, format, width, height, null);
   }
 
@@ -69,6 +72,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     if (hints != null && hints.containsKey(EncodeHintType.MARGIN)) {
       sidesMargin = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
     }
+    this.hints = hints;
 
     boolean[] code = encode(contents);
     return renderResult(code, width, height, sidesMargin);

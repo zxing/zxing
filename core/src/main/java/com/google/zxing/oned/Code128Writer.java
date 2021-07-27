@@ -17,6 +17,7 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.common.BitMatrix;
 
 import java.util.ArrayList;
@@ -71,6 +72,23 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
       throw new IllegalArgumentException(
           "Contents length should be between 1 and 80 characters, but got " + length);
     }
+
+    // Check for forced code set hint.
+    int forcedCodeSet = -1;
+    if (hints != null && hints.containsKey(EncodeHintType.FORCE_CODE_SET)) {
+      switch (hints.get(EncodeHintType.FORCE_CODE_SET).toString()) {
+        case "A":
+          forcedCodeSet = CODE_CODE_A;
+          break;
+        case "B":
+          forcedCodeSet = CODE_CODE_B;
+          break;
+        case "C":
+          forcedCodeSet = CODE_CODE_C;
+          break;
+      }
+    }
+
     // Check content
     for (int i = 0; i < length; i++) {
       char c = contents.charAt(i);
@@ -79,12 +97,32 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
         case ESCAPE_FNC_2:
         case ESCAPE_FNC_3:
         case ESCAPE_FNC_4:
-          break;
+          continue;
         default:
           if (c > 127) {
             // support for FNC4 isn't implemented, no full Latin-1 character set available at the moment
             throw new IllegalArgumentException("Bad character in input: " + c);
           }
+      }
+      switch (forcedCodeSet) {
+        case CODE_CODE_A:
+          if (c > 95) {
+            // the last 32 ASCII characters are not present in code set A
+            throw new IllegalArgumentException("Bad character in input for forced code set A: " + c);
+          }
+          break;
+        case CODE_CODE_B:
+          if (c < 32) {
+            // the first 32 ASCII characters are not present in code set B
+            throw new IllegalArgumentException("Bad character in input for forced code set B: " + c);
+          }
+          break;
+        case CODE_CODE_C:
+          if (c < 48 || c > 57 || c == ESCAPE_FNC_2 || c == ESCAPE_FNC_3 || c == ESCAPE_FNC_4) {
+            // only digits 0 to 9 and FNC1 are allowed in code set C
+            throw new IllegalArgumentException("Bad character in input for forced code set C: " + c);
+          }
+          break;
       }
     }
 
@@ -96,7 +134,12 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
 
     while (position < length) {
       //Select code to use
-      int newCodeSet = chooseCode(contents, position, codeSet);
+      int newCodeSet;
+      if (forcedCodeSet == -1) {
+        newCodeSet = chooseCode(contents, position, codeSet);
+      } else {
+        newCodeSet = forcedCodeSet;
+      }
 
       //Get the pattern index
       int patternIndex;
@@ -135,6 +178,10 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
                 break;
               default:
                 // CODE_CODE_C
+                if (position + 1 == length) {
+                  // this is the last character, but the encoding is C, which always encodes two characers
+                  throw new IllegalArgumentException("Bad number of characters for digit only encoding.");
+                }
                 patternIndex = Integer.parseInt(contents.substring(position, position + 2));
                 position++; // Also incremented below
                 break;
