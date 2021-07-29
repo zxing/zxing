@@ -67,11 +67,11 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
 
   @Override
   public boolean[] encode(String contents) {
-    return encodeWithHints(contents, null);
+    return encode(contents, null);
   }
 
   @Override
-  protected boolean[] encodeWithHints(String contents, Map<EncodeHintType,?> hints) {
+  protected boolean[] encode(String contents, Map<EncodeHintType,?> hints) {
     int length = contents.length();
     // Check length
     if (length < 1 || length > 80) {
