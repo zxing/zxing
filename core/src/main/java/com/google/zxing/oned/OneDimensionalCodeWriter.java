@@ -31,12 +31,9 @@ import java.util.Map;
  */
 public abstract class OneDimensionalCodeWriter implements Writer {
 
-  protected Map<EncodeHintType,?> hints;
-
   @Override
   public final BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       throws WriterException {
-    this.hints = null;
     return encode(contents, format, width, height, null);
   }
 
@@ -66,9 +63,8 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     if (hints != null && hints.containsKey(EncodeHintType.MARGIN)) {
       sidesMargin = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
     }
-    this.hints = hints;
 
-    boolean[] code = encode(contents);
+    boolean[] code = encodeWithHints(contents, hints);
     return renderResult(code, width, height, sidesMargin);
   }
 
@@ -129,5 +125,15 @@ public abstract class OneDimensionalCodeWriter implements Writer {
    * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
    */
   public abstract boolean[] encode(String contents);
+
+  /**
+   * Can be overwritten if the encode requires to read the hints map. Otherwise it defaults to {@code encode}.
+   * @param contents barcode contents to encode
+   * @param hints encoding hints
+   * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
+   */
+  protected boolean[] encodeWithHints(String contents, Map<EncodeHintType,?> hints) {
+    return encode(contents);
+  }
 }
 

@@ -74,6 +74,11 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
 
   @Override
   public boolean[] encode(String contents) {
+    return encodeWithHints(contents, null);
+  }
+
+  @Override
+  protected boolean[] encodeWithHints(String contents, Map<EncodeHintType,?> hints) {
     int length = contents.length();
     // Check length
     if (length < 1 || length > 80) {
@@ -105,32 +110,17 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
         case ESCAPE_FNC_2:
         case ESCAPE_FNC_3:
         case ESCAPE_FNC_4:
-          continue;
+          break;
         default:
           if (c > 127) {
-            // support for FNC4 isn't implemented, no full Latin-1 character set available at the moment
-            throw new IllegalArgumentException("Bad character in input: " + c);
+            // no full Latin-1 character set available at the moment
+            throw new IllegalArgumentException("Bad character in input: ascii value=" + (int) c);
           }
       }
-      switch (forcedCodeSet) {
-        case CODE_CODE_A:
-          if (c > 95) {
-            // the last 32 ASCII characters are not present in code set A
-            throw new IllegalArgumentException("Bad character in input for forced code set A: " + c);
-          }
-          break;
-        case CODE_CODE_B:
-          if (c < 32) {
-            // the first 32 ASCII characters are not present in code set B
-            throw new IllegalArgumentException("Bad character in input for forced code set B: " + c);
-          }
-          break;
-        case CODE_CODE_C:
-          if (c < 48 || c > 57 || c == ESCAPE_FNC_2 || c == ESCAPE_FNC_3 || c == ESCAPE_FNC_4) {
-            // only digits 0 to 9 and FNC1 are allowed in code set C
-            throw new IllegalArgumentException("Bad character in input for forced code set C: " + c);
-          }
-          break;
+      if ((forcedCodeSet == CODE_CODE_A && c > 95) ||
+          (forcedCodeSet == CODE_CODE_B && c < 32) ||
+          (forcedCodeSet == CODE_CODE_C && (c < 48 || (c > 57 && c != ESCAPE_FNC_1)))) {
+        throw new IllegalArgumentException("Bad character in input for forced code set: ascii value=" + (int) c);
       }
     }
 
