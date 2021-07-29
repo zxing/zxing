@@ -156,58 +156,54 @@ public class Code128WriterTestCase extends Assert {
     assertEquals(toEncode, actualRoundtripResultText);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testEncodeWithForcedCodeSetFailureCodeSetABadCharacter() throws Exception {
+    // Lower case characters should not be accepted when the code set is forced to A.
     String toEncode = "ASDFx0123";
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "A");
-    try {
-      BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail("Lower case characters should not be accepted when the code set is forced to A.");
-    } catch (IllegalArgumentException e) { }
+    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testEncodeWithForcedCodeSetFailureCodeSetBBadCharacter() throws Exception {
     String toEncode = "ASdf\00123"; // \0 (ascii value 0)
+    // Characters with ASCII value below 32 should not be accepted when the code set is forced to B.
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "B");
-    try {
-      BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail("Characters with ASCII value below 32 should not be accepted when the code set is forced to B.");
-    } catch (IllegalArgumentException e) { }
+    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
-  @Test
-  public void testEncodeWithForcedCodeSetFailureCodeSetCBadCharacters() throws Exception {
+  @Test(expected = IllegalArgumentException.class)
+  public void testEncodeWithForcedCodeSetFailureCodeSetCBadCharactersNonNum() throws Exception {
     String toEncode = "123a5678";
+    // Non-digit characters should not be accepted when the code set is forced to C.
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "C");
-    try {
-      BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail("Non-digit characters should not be accepted when the code set is forced to C.");
-    } catch (IllegalArgumentException e) { }
-
-    toEncode = "123\u00f2a678";
-    try {
-      BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail("Function codes other than 1 should not be accepted when the code set is forced to C.");
-    } catch (IllegalArgumentException e) { }
+    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
+  public void testEncodeWithForcedCodeSetFailureCodeSetCBadCharactersFncCode() throws Exception {
+    String toEncode = "123\u00f2a678";
+    // Function codes other than 1 should not be accepted when the code set is forced to C.
+
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.FORCE_CODE_SET, "C");
+    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
   public void testEncodeWithForcedCodeSetFailureCodeSetCWrongAmountOfDigits() throws Exception {
     String toEncode = "123456789";
+    // An uneven amount of digits should not be accepted when the code set is forced to C.
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "C");
-    try {
-      BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
-      fail("An uneven amount of digits should not be accepted when the code set is forced to C.");
-    } catch (IllegalArgumentException e) { }
+    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
   @Test

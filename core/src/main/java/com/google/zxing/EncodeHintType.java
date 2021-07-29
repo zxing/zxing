@@ -117,7 +117,7 @@ public enum EncodeHintType {
   GS1_FORMAT,
 
   /**
-   * Forces which encoding will be used. Introduced for Code-128 code sets (Type {@link String}).
+   * Forces which encoding will be used. Currently only used for Code-128 code sets (Type {@link String}). Valid values are "A", "B", "C".
    */
   FORCE_CODE_SET,
 }
