@@ -33,6 +33,25 @@ import java.util.regex.Pattern;
 public abstract class OneDimensionalCodeWriter implements Writer {
   private static final Pattern NUMERIC = Pattern.compile("[0-9]+");
 
+  /**
+   * Encode the contents to boolean array expression of one-dimensional barcode.
+   * Start code and end code should be included in result, and side margins should not be included.
+   *
+   * @param contents barcode contents to encode
+   * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
+   */
+  public abstract boolean[] encode(String contents);
+
+  /**
+   * Can be overwritten if the encode requires to read the hints map. Otherwise it defaults to {@code encode}.
+   * @param contents barcode contents to encode
+   * @param hints encoding hints
+   * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
+   */
+  protected boolean[] encode(String contents, Map<EncodeHintType,?> hints) {
+    return encode(contents);
+  }
+
   @Override
   public final BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
     return encode(contents, format, width, height, null);
@@ -70,7 +89,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
       sidesMargin = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
     }
 
-    boolean[] code = encode(contents);
+    boolean[] code = encode(contents, hints);
     return renderResult(code, width, height, sidesMargin);
   }
 
@@ -135,14 +154,5 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     // This seems like a decent idea for a default for all formats.
     return 10;
   }
-
-  /**
-   * Encode the contents to boolean array expression of one-dimensional barcode.
-   * Start code and end code should be included in result, and side margins should not be included.
-   *
-   * @param contents barcode contents to encode
-   * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
-   */
-  public abstract boolean[] encode(String contents);
 }
 
