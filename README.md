@@ -1,5 +1,7 @@
 <img align="right" src="https://raw.github.com/wiki/zxing/zxing/zxing-logo.png"/>
 
+[![Maintainability](https://cloud.quality-gate.com/dashboard/api/badge?projectName=zxing_zxing&branchName=master)](https://cloud.quality-gate.com/dashboard/branches/26387#overview)
+
 ## Project in Maintenance Mode Only
 
 The project is in maintenance mode, meaning, changes are driven by contributed patches.
