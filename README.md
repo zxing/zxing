@@ -95,7 +95,12 @@ on StackOverflow](https://stackoverflow.com/questions/tagged/zxing).
 [![Coverity Status](https://scan.coverity.com/projects/1924/badge.svg)](https://scan.coverity.com/projects/1924)
 [![codecov.io](https://codecov.io/github/zxing/zxing/coverage.svg?branch=master)](https://codecov.io/github/zxing/zxing?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7270e4b57c50483699448bf32721ab10)](https://www.codacy.com/app/srowen/zxing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing/zxing&amp;utm_campaign=Badge_Grade)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fzxing%2Fzxing.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fzxing%2Fzxing?ref=badge_shield)
 
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
 
 Optimized with [![JProfiler](https://www.ej-technologies.com/images/banners/jprofiler_small.png)](https://www.ej-technologies.com/products/jprofiler/overview.html)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fzxing%2Fzxing.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fzxing%2Fzxing?ref=badge_large)
