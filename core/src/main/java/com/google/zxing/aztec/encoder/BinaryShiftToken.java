@@ -20,15 +20,15 @@ import com.google.zxing.common.BitArray;
 
 final class BinaryShiftToken extends Token {
 
-  private final short binaryShiftStart;
-  private final short binaryShiftByteCount;
+  private final int binaryShiftStart;
+  private final int binaryShiftByteCount;
 
   BinaryShiftToken(Token previous,
                    int binaryShiftStart,
                    int binaryShiftByteCount) {
     super(previous);
-    this.binaryShiftStart = (short) binaryShiftStart;
-    this.binaryShiftByteCount = (short) binaryShiftByteCount;
+    this.binaryShiftStart = binaryShiftStart;
+    this.binaryShiftByteCount = binaryShiftByteCount;
   }
 
   @Override
