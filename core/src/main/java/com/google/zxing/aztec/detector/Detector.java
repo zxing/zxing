@@ -472,7 +472,7 @@ public final class Detector {
 
     boolean colorModel = image.get(p1.getX(), p1.getY());
 
-    int iMax = (int) Math.ceil(d);
+    int iMax = (int) Math.floor(d);
     for (int i = 0; i < iMax; i++) {
       px += dx;
       py += dy;
