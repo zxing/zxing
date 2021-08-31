@@ -166,6 +166,9 @@ public final class ErrorCorrection {
                                     ModulusPoly errorLocator,
                                     int[] errorLocations) {
     int errorLocatorDegree = errorLocator.getDegree();
+    if (errorLocatorDegree < 1) {
+      return new int[0];
+    }
     int[] formalDerivativeCoefficients = new int[errorLocatorDegree];
     for (int i = 1; i <= errorLocatorDegree; i++) {
       formalDerivativeCoefficients[errorLocatorDegree - i] =
