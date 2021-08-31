@@ -463,6 +463,9 @@ public final class Detector {
    */
   private int getColor(Point p1, Point p2) {
     float d = distance(p1, p2);
+    if (d == 0.0f) {
+      return 0;
+    }
     float dx = (p2.getX() - p1.getX()) / d;
     float dy = (p2.getY() - p1.getY()) / d;
     int error = 0;
@@ -474,11 +477,11 @@ public final class Detector {
 
     int iMax = (int) Math.floor(d);
     for (int i = 0; i < iMax; i++) {
-      px += dx;
-      py += dy;
       if (image.get(MathUtils.round(px), MathUtils.round(py)) != colorModel) {
         error++;
       }
+      px += dx;
+      py += dy;
     }
 
     float errRatio = error / d;
