@@ -76,7 +76,7 @@ public final class Detector {
       dimensionTop = dimensionRight = Math.max(dimensionTop, dimensionRight);
     }
 
-    BitMatrix bits = sampleGrid(image, 
+    BitMatrix bits = sampleGrid(image,
                                 topLeft,
                                 bottomLeft,
                                 bottomRight,
@@ -343,7 +343,8 @@ public final class Detector {
     int fromX = (int) from.getX();
     int fromY = (int) from.getY();
     int toX = (int) to.getX();
-    int toY = (int) to.getY();
+    int toY = Math.min(image.getHeight() - 1, (int) to.getY());
+
     boolean steep = Math.abs(toY - fromY) > Math.abs(toX - fromX);
     if (steep) {
       int temp = fromX;
