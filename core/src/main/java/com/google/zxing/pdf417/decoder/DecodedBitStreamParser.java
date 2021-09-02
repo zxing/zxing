@@ -126,6 +126,9 @@ final class DecodedBitStreamParser {
         case ECI_CHARSET:
           CharacterSetECI charsetECI =
               CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
+          if (charsetECI == null) {
+            throw FormatException.getFormatInstance();
+          }
           encoding = charsetECI.getCharset();
           break;
         case ECI_GENERAL_PURPOSE:

@@ -183,6 +183,9 @@ public final class Decoder {
                 eci = eci * 10 + (nextDigit - 2);
               }
               CharacterSetECI charsetECI = CharacterSetECI.getCharacterSetECIByValue(eci);
+              if (charsetECI == null) {
+                throw FormatException.getFormatInstance();
+              }
               encoding = charsetECI.getCharset();
           }
           // Go back to whatever mode we had been in
