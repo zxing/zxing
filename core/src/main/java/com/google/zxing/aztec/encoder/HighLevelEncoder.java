@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -301,7 +302,7 @@ public final class HighLevelEncoder {
   }
 
   private static Collection<State> simplifyStates(Iterable<State> states) {
-    Collection<State> result = new LinkedList<>();
+    Deque<State> result = new LinkedList<>();
     for (State newState : states) {
       boolean add = true;
       for (Iterator<State> iterator = result.iterator(); iterator.hasNext();) {
@@ -315,7 +316,7 @@ public final class HighLevelEncoder {
         }
       }
       if (add) {
-        result.add(newState);
+        result.addFirst(newState);
       }
     }
     return result;
