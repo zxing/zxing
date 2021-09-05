@@ -550,7 +550,7 @@ public final class Detector {
   }
 
   private boolean isValid(int x, int y) {
-    return x >= 0 && x < image.getWidth() && y > 0 && y < image.getHeight();
+    return x >= 0 && x < image.getWidth() && y >= 0 && y < image.getHeight();
   }
 
   private boolean isValid(ResultPoint point) {
