@@ -19,4 +19,9 @@
     <className>com/google/zxing/*Translator</className>
     <differenceType>8001</differenceType>
   </difference>
+  <difference>
+    <className>com/google/zxing/common/CharacterSetECI</className>
+    <differenceType>6001</differenceType>
+    <field>ISO8859*</field>
+  </difference>
 </differences>
