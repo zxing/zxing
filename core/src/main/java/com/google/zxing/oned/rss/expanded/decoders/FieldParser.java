@@ -28,164 +28,106 @@ package com.google.zxing.oned.rss.expanded.decoders;
 
 import com.google.zxing.NotFoundException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 final class FieldParser {
 
-  private static final Object VARIABLE_LENGTH = new Object();
-
-  private static final Object [][] TWO_DIGIT_DATA_LENGTH = {
-    // "DIGITS", new Integer(LENGTH)
-    //    or
-    // "DIGITS", VARIABLE_LENGTH, new Integer(MAX_SIZE)
-
-    { "00", 18},
-    { "01", 14},
-    { "02", 14},
-
-    { "10", VARIABLE_LENGTH, 20},
-    { "11", 6},
-    { "12", 6},
-    { "13", 6},
-    { "15", 6},
-    { "17", 6},
-
-    { "20", 2},
-    { "21", VARIABLE_LENGTH, 20},
-    { "22", VARIABLE_LENGTH, 29},
-
-    { "30", VARIABLE_LENGTH, 8},
-    { "37", VARIABLE_LENGTH, 8},
-
+  private static final Map<String,DataLength> TWO_DIGIT_DATA_LENGTH = new HashMap<>();
+  static {
+    TWO_DIGIT_DATA_LENGTH.put("00", DataLength.fixed(18));
+    TWO_DIGIT_DATA_LENGTH.put("01", DataLength.fixed(14));
+    TWO_DIGIT_DATA_LENGTH.put("02", DataLength.fixed(14));
+    TWO_DIGIT_DATA_LENGTH.put("10", DataLength.variable(20));
+    TWO_DIGIT_DATA_LENGTH.put("11", DataLength.fixed(6));
+    TWO_DIGIT_DATA_LENGTH.put("12", DataLength.fixed(6));
+    TWO_DIGIT_DATA_LENGTH.put("13", DataLength.fixed(6));
+    TWO_DIGIT_DATA_LENGTH.put("15", DataLength.fixed(6));
+    TWO_DIGIT_DATA_LENGTH.put("17", DataLength.fixed(6));
+    TWO_DIGIT_DATA_LENGTH.put("20", DataLength.fixed(2));
+    TWO_DIGIT_DATA_LENGTH.put("21", DataLength.variable(20));
+    TWO_DIGIT_DATA_LENGTH.put("22", DataLength.variable(29));
+    TWO_DIGIT_DATA_LENGTH.put("30", DataLength.variable(8));
+    TWO_DIGIT_DATA_LENGTH.put("37", DataLength.variable(8));
     //internal company codes
-    { "90", VARIABLE_LENGTH, 30},
-    { "91", VARIABLE_LENGTH, 30},
-    { "92", VARIABLE_LENGTH, 30},
-    { "93", VARIABLE_LENGTH, 30},
-    { "94", VARIABLE_LENGTH, 30},
-    { "95", VARIABLE_LENGTH, 30},
-    { "96", VARIABLE_LENGTH, 30},
-    { "97", VARIABLE_LENGTH, 30},
-    { "98", VARIABLE_LENGTH, 30},
-    { "99", VARIABLE_LENGTH, 30},
-  };
+    for (int i = 90; i <= 99; i++) {
+      TWO_DIGIT_DATA_LENGTH.put(String.valueOf(i), DataLength.variable(30));
+    }
+  }
 
-  private static final Object [][] THREE_DIGIT_DATA_LENGTH = {
-    // Same format as above
+  private static final Map<String,DataLength> THREE_DIGIT_DATA_LENGTH = new HashMap<>();
+  static {
+    THREE_DIGIT_DATA_LENGTH.put("240", DataLength.variable(30));
+    THREE_DIGIT_DATA_LENGTH.put("241", DataLength.variable(30));
+    THREE_DIGIT_DATA_LENGTH.put("242", DataLength.variable(6));
+    THREE_DIGIT_DATA_LENGTH.put("250", DataLength.variable(30));
+    THREE_DIGIT_DATA_LENGTH.put("251", DataLength.variable(30));
+    THREE_DIGIT_DATA_LENGTH.put("253", DataLength.variable(17));
+    THREE_DIGIT_DATA_LENGTH.put("254", DataLength.variable(20));
+    THREE_DIGIT_DATA_LENGTH.put("400", DataLength.variable(30));
+    THREE_DIGIT_DATA_LENGTH.put("401", DataLength.variable(30));
+    THREE_DIGIT_DATA_LENGTH.put("402", DataLength.fixed(17));
+    THREE_DIGIT_DATA_LENGTH.put("403", DataLength.variable(30));
+    THREE_DIGIT_DATA_LENGTH.put("410", DataLength.fixed(13));
+    THREE_DIGIT_DATA_LENGTH.put("411", DataLength.fixed(13));
+    THREE_DIGIT_DATA_LENGTH.put("412", DataLength.fixed(13));
+    THREE_DIGIT_DATA_LENGTH.put("413", DataLength.fixed(13));
+    THREE_DIGIT_DATA_LENGTH.put("414", DataLength.fixed(13));
+    THREE_DIGIT_DATA_LENGTH.put("420", DataLength.variable(20));
+    THREE_DIGIT_DATA_LENGTH.put("421", DataLength.variable(15));
+    THREE_DIGIT_DATA_LENGTH.put("422", DataLength.fixed(3));
+    THREE_DIGIT_DATA_LENGTH.put("423", DataLength.variable(15));
+    THREE_DIGIT_DATA_LENGTH.put("424", DataLength.fixed(3));
+    THREE_DIGIT_DATA_LENGTH.put("425", DataLength.fixed(3));
+    THREE_DIGIT_DATA_LENGTH.put("426", DataLength.fixed(3));
+  }
 
-    { "240", VARIABLE_LENGTH, 30},
-    { "241", VARIABLE_LENGTH, 30},
-    { "242", VARIABLE_LENGTH, 6},
-    { "250", VARIABLE_LENGTH, 30},
-    { "251", VARIABLE_LENGTH, 30},
-    { "253", VARIABLE_LENGTH, 17},
-    { "254", VARIABLE_LENGTH, 20},
+  private static final Map<String,DataLength> THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = new HashMap<>();
+  static {
+    for (int i = 310; i <= 316; i++) {
+      THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put(String.valueOf(i), DataLength.fixed(6));
+    }
+    for (int i = 320; i <= 336; i++) {
+      THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put(String.valueOf(i), DataLength.fixed(6));
+    }
+    for (int i = 340; i <= 357; i++) {
+      THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put(String.valueOf(i), DataLength.fixed(6));
+    }
+    for (int i = 360; i <= 369; i++) {
+      THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put(String.valueOf(i), DataLength.fixed(6));
+    }
+    THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put("390", DataLength.variable(15));
+    THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put("391", DataLength.variable(18));
+    THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put("392", DataLength.variable(15));
+    THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put("393", DataLength.variable(18));
+    THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.put("703", DataLength.variable(30));
+  }
 
-    { "400", VARIABLE_LENGTH, 30},
-    { "401", VARIABLE_LENGTH, 30},
-    { "402", 17},
-    { "403", VARIABLE_LENGTH, 30},
-    { "410", 13},
-    { "411", 13},
-    { "412", 13},
-    { "413", 13},
-    { "414", 13},
-    { "420", VARIABLE_LENGTH, 20},
-    { "421", VARIABLE_LENGTH, 15},
-    { "422", 3},
-    { "423", VARIABLE_LENGTH, 15},
-    { "424", 3},
-    { "425", 3},
-    { "426", 3},
-  };
-
-  private static final Object [][] THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = {
-    // Same format as above
-
-    { "310", 6},
-    { "311", 6},
-    { "312", 6},
-    { "313", 6},
-    { "314", 6},
-    { "315", 6},
-    { "316", 6},
-    { "320", 6},
-    { "321", 6},
-    { "322", 6},
-    { "323", 6},
-    { "324", 6},
-    { "325", 6},
-    { "326", 6},
-    { "327", 6},
-    { "328", 6},
-    { "329", 6},
-    { "330", 6},
-    { "331", 6},
-    { "332", 6},
-    { "333", 6},
-    { "334", 6},
-    { "335", 6},
-    { "336", 6},
-    { "340", 6},
-    { "341", 6},
-    { "342", 6},
-    { "343", 6},
-    { "344", 6},
-    { "345", 6},
-    { "346", 6},
-    { "347", 6},
-    { "348", 6},
-    { "349", 6},
-    { "350", 6},
-    { "351", 6},
-    { "352", 6},
-    { "353", 6},
-    { "354", 6},
-    { "355", 6},
-    { "356", 6},
-    { "357", 6},
-    { "360", 6},
-    { "361", 6},
-    { "362", 6},
-    { "363", 6},
-    { "364", 6},
-    { "365", 6},
-    { "366", 6},
-    { "367", 6},
-    { "368", 6},
-    { "369", 6},
-    { "390", VARIABLE_LENGTH, 15},
-    { "391", VARIABLE_LENGTH, 18},
-    { "392", VARIABLE_LENGTH, 15},
-    { "393", VARIABLE_LENGTH, 18},
-    { "703", VARIABLE_LENGTH, 30},
-  };
-
-  private static final Object [][] FOUR_DIGIT_DATA_LENGTH = {
-    // Same format as above
-
-    { "7001", 13},
-    { "7002", VARIABLE_LENGTH, 30},
-    { "7003", 10},
-
-    { "8001", 14},
-    { "8002", VARIABLE_LENGTH, 20},
-    { "8003", VARIABLE_LENGTH, 30},
-    { "8004", VARIABLE_LENGTH, 30},
-    { "8005", 6},
-    { "8006", 18},
-    { "8007", VARIABLE_LENGTH, 30},
-    { "8008", VARIABLE_LENGTH, 12},
-    { "8018", 18},
-    { "8020", VARIABLE_LENGTH, 25},
-    { "8100", 6},
-    { "8101", 10},
-    { "8102", 2},
-    { "8110", VARIABLE_LENGTH, 70},
-    { "8200", VARIABLE_LENGTH, 70},
-  };
+  private static final Map<String,DataLength> FOUR_DIGIT_DATA_LENGTH = new HashMap<>();
+  static {
+    FOUR_DIGIT_DATA_LENGTH.put("7001", DataLength.fixed(13));
+    FOUR_DIGIT_DATA_LENGTH.put("7002", DataLength.variable(30));
+    FOUR_DIGIT_DATA_LENGTH.put("7003", DataLength.fixed(10));
+    FOUR_DIGIT_DATA_LENGTH.put("8001", DataLength.fixed(14));
+    FOUR_DIGIT_DATA_LENGTH.put("8002", DataLength.variable(20));
+    FOUR_DIGIT_DATA_LENGTH.put("8003", DataLength.variable(30));
+    FOUR_DIGIT_DATA_LENGTH.put("8004", DataLength.variable(30));
+    FOUR_DIGIT_DATA_LENGTH.put("8005", DataLength.fixed(6));
+    FOUR_DIGIT_DATA_LENGTH.put("8006", DataLength.fixed(18));
+    FOUR_DIGIT_DATA_LENGTH.put("8007", DataLength.variable(30));
+    FOUR_DIGIT_DATA_LENGTH.put("8008", DataLength.variable(12));
+    FOUR_DIGIT_DATA_LENGTH.put("8018", DataLength.fixed(18));
+    FOUR_DIGIT_DATA_LENGTH.put("8020", DataLength.variable(25));
+    FOUR_DIGIT_DATA_LENGTH.put("8100", DataLength.fixed(6));
+    FOUR_DIGIT_DATA_LENGTH.put("8101", DataLength.fixed(10));
+    FOUR_DIGIT_DATA_LENGTH.put("8102", DataLength.fixed(2));
+    FOUR_DIGIT_DATA_LENGTH.put("8110", DataLength.variable(70));
+    FOUR_DIGIT_DATA_LENGTH.put("8200", DataLength.variable(70));
+  }
 
   private FieldParser() {
   }
@@ -201,15 +143,12 @@ final class FieldParser {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    String firstTwoDigits = rawInformation.substring(0, 2);
-
-    for (Object[] dataLength : TWO_DIGIT_DATA_LENGTH) {
-      if (dataLength[0].equals(firstTwoDigits)) {
-        if (dataLength[1] == VARIABLE_LENGTH) {
-          return processVariableAI(2, (Integer) dataLength[2], rawInformation);
-        }
-        return processFixedAI(2, (Integer) dataLength[1], rawInformation);
+    DataLength twoDigitDataLength = TWO_DIGIT_DATA_LENGTH.get(rawInformation.substring(0, 2));
+    if (twoDigitDataLength != null) {
+      if (twoDigitDataLength.variable) {
+        return processVariableAI(2, twoDigitDataLength.length, rawInformation);
       }
+      return processFixedAI(2, twoDigitDataLength.length, rawInformation);
     }
 
     if (rawInformation.length() < 3) {
@@ -217,39 +156,32 @@ final class FieldParser {
     }
 
     String firstThreeDigits = rawInformation.substring(0, 3);
-
-    for (Object[] dataLength : THREE_DIGIT_DATA_LENGTH) {
-      if (dataLength[0].equals(firstThreeDigits)) {
-        if (dataLength[1] == VARIABLE_LENGTH) {
-          return processVariableAI(3, (Integer) dataLength[2], rawInformation);
-        }
-        return processFixedAI(3, (Integer) dataLength[1], rawInformation);
+    DataLength threeDigitDataLength = THREE_DIGIT_DATA_LENGTH.get(firstThreeDigits);
+    if (threeDigitDataLength != null) {
+      if (threeDigitDataLength.variable) {
+        return processVariableAI(3, threeDigitDataLength.length, rawInformation);
       }
-    }
-
-
-    for (Object[] dataLength : THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH) {
-      if (dataLength[0].equals(firstThreeDigits)) {
-        if (dataLength[1] == VARIABLE_LENGTH) {
-          return processVariableAI(4, (Integer) dataLength[2], rawInformation);
-        }
-        return processFixedAI(4, (Integer) dataLength[1], rawInformation);
-      }
+      return processFixedAI(3, threeDigitDataLength.length, rawInformation);
     }
 
     if (rawInformation.length() < 4) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    String firstFourDigits = rawInformation.substring(0, 4);
-
-    for (Object[] dataLength : FOUR_DIGIT_DATA_LENGTH) {
-      if (dataLength[0].equals(firstFourDigits)) {
-        if (dataLength[1] == VARIABLE_LENGTH) {
-          return processVariableAI(4, (Integer) dataLength[2], rawInformation);
-        }
-        return processFixedAI(4, (Integer) dataLength[1], rawInformation);
+    DataLength threeDigitPlusDigitDataLength = THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.get(firstThreeDigits);
+    if (threeDigitPlusDigitDataLength != null) {
+      if (threeDigitPlusDigitDataLength.variable) {
+        return processVariableAI(4, threeDigitPlusDigitDataLength.length, rawInformation);
       }
+      return processFixedAI(4, threeDigitPlusDigitDataLength.length, rawInformation);
+    }
+
+    DataLength firstFourDigitLength = FOUR_DIGIT_DATA_LENGTH.get(rawInformation.substring(0, 4));
+    if (firstFourDigitLength != null) {
+      if (firstFourDigitLength.variable) {
+        return processVariableAI(4, firstFourDigitLength.length, rawInformation);
+      }
+      return processFixedAI(4, firstFourDigitLength.length, rawInformation);
     }
 
     throw NotFoundException.getNotFoundInstance();
@@ -283,4 +215,25 @@ final class FieldParser {
     String parsedAI = parseFieldsInGeneralPurpose(remaining);
     return parsedAI == null ? result : result + parsedAI;
   }
+
+  private static final class DataLength {
+
+    final boolean variable;
+    final int length;
+
+    private DataLength(boolean variable, int length) {
+      this.variable = variable;
+      this.length = length;
+    }
+
+    static DataLength fixed(int length) {
+      return new DataLength(false, length);
+    }
+
+    static DataLength variable(int length) {
+      return new DataLength(true, length);
+    }
+
+  }
+
 }
