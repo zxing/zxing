@@ -187,9 +187,12 @@ final class DecodedBitStreamParser {
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
     // the fileId using text compaction, so in those cases the fileId will appear mangled.
     StringBuilder fileId = new StringBuilder();
-    for (int i = 0; codeIndex < codewords[0] && codewords[codeIndex] != MACRO_PDF417_TERMINATOR
-                    && codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD; i++, codeIndex++) {
+    while (codeIndex < codewords[0] &&
+           codeIndex < codewords.length &&
+           codewords[codeIndex] != MACRO_PDF417_TERMINATOR &&
+           codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
       fileId.append(String.format("%03d", codewords[codeIndex]));
+      codeIndex++;
     }
     if (fileId.length() == 0) {
       // at least one fileId codeword is required (Annex H.2)
