@@ -18,8 +18,8 @@ package com.google.zxing.aztec.encoder;
 
 import java.nio.charset.StandardCharsets;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.zxing.common.BitArray;
 
@@ -166,18 +166,15 @@ final class State {
   }
 
   BitArray toBitArray(byte[] text) {
-    // Reverse the tokens, so that they are in the order that they should
-    // be output
-    Deque<Token> symbols = new LinkedList<>();
+    List<Token> symbols = new ArrayList<>();
     for (Token token = endBinaryShift(text.length).token; token != null; token = token.getPrevious()) {
-      symbols.addFirst(token);
+      symbols.add(token);
     }
     BitArray bitArray = new BitArray();
-    // Add each token to the result.
-    for (Token symbol : symbols) {
-      symbol.appendTo(bitArray, text);
+    // Add each token to the result in forward order
+    for (int i = symbols.size() - 1; i >= 0; i--) {
+      symbols.get(i).appendTo(bitArray, text);
     }
-    //assert bitArray.getSize() == this.bitCount;
     return bitArray;
   }
 

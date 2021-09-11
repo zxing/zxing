@@ -233,10 +233,15 @@ public final class BitArray implements Cloneable {
     if (numBits < 0 || numBits > 32) {
       throw new IllegalArgumentException("Num bits must be between 0 and 32");
     }
-    ensureCapacity(size + numBits);
-    for (int numBitsLeft = numBits; numBitsLeft > 0; numBitsLeft--) {
-      appendBit(((value >> (numBitsLeft - 1)) & 0x01) == 1);
+    int nextSize = size;
+    ensureCapacity(nextSize + numBits);
+    for (int numBitsLeft = numBits - 1; numBitsLeft >= 0; numBitsLeft--) {
+      if ((value & (1 << numBitsLeft)) != 0) {
+        bits[nextSize / 32] |= 1 << (nextSize & 0x1F);
+      }
+      nextSize++;
     }
+    size = nextSize;
   }
 
   public void appendBitArray(BitArray other) {
@@ -296,13 +301,7 @@ public final class BitArray implements Cloneable {
     int len = (size - 1) / 32;
     int oldBitsLen = len + 1;
     for (int i = 0; i < oldBitsLen; i++) {
-      long x = bits[i];
-      x = ((x >>  1) & 0x55555555L) | ((x & 0x55555555L) <<  1);
-      x = ((x >>  2) & 0x33333333L) | ((x & 0x33333333L) <<  2);
-      x = ((x >>  4) & 0x0f0f0f0fL) | ((x & 0x0f0f0f0fL) <<  4);
-      x = ((x >>  8) & 0x00ff00ffL) | ((x & 0x00ff00ffL) <<  8);
-      x = ((x >> 16) & 0x0000ffffL) | ((x & 0x0000ffffL) << 16);
-      newBits[len - i] = (int) x;
+      newBits[len - i] = Integer.reverse(bits[i]);
     }
     // now correct the int's if the bit size isn't a multiple of 32
     if (size != oldBitsLen * 32) {
