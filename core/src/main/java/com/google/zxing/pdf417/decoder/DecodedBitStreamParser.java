@@ -180,8 +180,16 @@ final class DecodedBitStreamParser {
       segmentIndexArray[i] = codewords[codeIndex];
     }
     String segmentIndexString = decodeBase900toBase10(segmentIndexArray, NUMBER_OF_SEQUENCE_CODEWORDS);
-    int segmentIndex = segmentIndexString.isEmpty() ? 0 : Integer.parseInt(segmentIndexString);
-    resultMetadata.setSegmentIndex(segmentIndex);
+    if (segmentIndexString.isEmpty()) {
+      resultMetadata.setSegmentIndex(0);
+    } else {
+      try {
+        resultMetadata.setSegmentIndex(Integer.parseInt(segmentIndexString));
+      } catch (NumberFormatException nfe) {
+        // too large; bad input?
+        throw FormatException.getFormatInstance();
+      }
+    }
 
     // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
