@@ -100,7 +100,7 @@ public final class ReedSolomonDecoder {
     GenericGFPoly t = field.getOne();
 
     // Run Euclidean algorithm until r's degree is less than R/2
-    while (r.getDegree() >= R / 2) {
+    while (2 * r.getDegree() >= R) {
       GenericGFPoly rLastLast = rLast;
       GenericGFPoly tLastLast = tLast;
       rLast = r;
@@ -125,7 +125,8 @@ public final class ReedSolomonDecoder {
       t = q.multiply(tLast).addOrSubtract(tLastLast);
 
       if (r.getDegree() >= rLast.getDegree()) {
-        throw new IllegalStateException("Division algorithm failed to reduce polynomial?");
+        throw new IllegalStateException("Division algorithm failed to reduce polynomial? " +
+          "r: " + r + ", rLast: " + rLast);
       }
     }
 
