@@ -155,6 +155,14 @@ public final class Decoder {
           index += 3;
           switch (n) {
             case 0:
+              //  flush bytes before outputting FNC1
+              try {
+                  result.append(decodedBytes.toString(encoding.name()));
+              } catch (UnsupportedEncodingException uee) {
+                  throw new IllegalStateException(uee);
+              }
+              decodedBytes.reset();
+
               result.append((char) 29);  // translate FNC1 as ASCII 29
               break;
             case 7:

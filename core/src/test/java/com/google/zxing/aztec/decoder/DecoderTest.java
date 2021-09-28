@@ -50,6 +50,11 @@ public final class DecoderTest extends Assert {
       testHighLevelDecodeString("±Ça",
          // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
          "XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+
+      // GS1 data
+      testHighLevelDecodeString("101233742",
+         // P/S FLG(n) 0  D/L   1    0    1    2    3    P/S  FLG(n) 0  3    7    4    2
+         "..... ..... ... XXXX. ..XX ..X. ..XX .X.. .X.X .... ..... ... .X.X X..X .XX. .X..");
   }
 
   private static void testHighLevelDecodeString(String expectedString, String b) throws FormatException {
