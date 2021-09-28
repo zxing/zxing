@@ -165,6 +165,17 @@ final class DecodeWorker implements Callable<Integer> {
             result.getText() + "\n" +
             "Parsed result:\n" +
             parsedResult.getDisplayResult() + "\n");
+
+        if (config.outputRaw) {
+            String rawData = "";
+
+            for (byte b : result.getRawBytes()) {
+                rawData = rawData + String.format("%02X", b & 0xff) + ' ';
+            }
+
+            output.write("Raw bits:\n" + rawData + "\n");
+        }
+
         ResultPoint[] resultPoints = result.getResultPoints();
         int numResultPoints = resultPoints.length;
         output.write("Found " + numResultPoints + " result points.\n");

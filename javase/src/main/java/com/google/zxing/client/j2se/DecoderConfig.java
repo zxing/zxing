@@ -58,6 +58,10 @@ final class DecoderConfig {
       description = "Only output one line per file, omitting the contents")
   boolean brief;
 
+  @Parameter(names = "--raw",
+      description = "Output raw bitstream, before decoding symbols")
+  boolean outputRaw;
+
   @Parameter(names = "--recursive",
       description = "Descend into subdirectories")
   boolean recursive;
