@@ -110,6 +110,14 @@ public enum EncodeHintType {
    */
   QR_MASK_PATTERN,
 
+
+  /**
+   * Specifies whether to use compact mode for QR code (type {@link Boolean}, or "true" or "false"
+   * When compaction is performed the value for {@link CHARACTER_SET} is ignored.
+   * {@link String} value).
+   */
+  QR_COMPACT,
+
   /**
    * Specifies whether the data should be encoded to the GS1 standard (type {@link Boolean}, or "true" or "false"
    * {@link String } value).
