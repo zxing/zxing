@@ -49,8 +49,6 @@ public final class Encoder {
       25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
   };
 
-//@Sean: Is the default encoding indeed ISO-8859-1? I also implemented the MinimalEncoder assuming this but now I looked at the specification and find
-//       in "8.3.1 Extended Channel Interpretation (ECI) Mode" the sentence "The default interpretation for QR Code is ECI 000020 representing the JIS8 and Shift JIS character sets".
   static final Charset DEFAULT_BYTE_MODE_ENCODING = StandardCharsets.ISO_8859_1;
 
   private Encoder() {
@@ -87,8 +85,6 @@ public final class Encoder {
     boolean hasGS1FormatHint = hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT) && Boolean.parseBoolean(hints.get(EncodeHintType.GS1_FORMAT).toString());
     boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.QR_COMPACT) && Boolean.parseBoolean(hints.get(EncodeHintType.QR_COMPACT).toString());
 
-//@Sean: I only smoke tested a little now and things seem to be working but I initially developed against version 3.4.1 and had the patch a little different so mea culpa if
-//       something doesn't work. A nice test is to produce the GS1 bar code '1001114670010%01201220%107211220%140045003267781' in regular and compacted mode.
     if (hasCompactionHint) {
         mode = Mode.BYTE;
 
@@ -276,7 +272,7 @@ public final class Encoder {
     return Mode.BYTE;
   }
 
-  private static boolean isOnlyDoubleByteKanji(String content) {
+  static boolean isOnlyDoubleByteKanji(String content) {
     byte[] bytes = content.getBytes(StringUtils.SHIFT_JIS_CHARSET);
     int length = bytes.length;
     if (length % 2 != 0) {
@@ -324,7 +320,7 @@ public final class Encoder {
    * @return true if the number of input bits will fit in a code with the specified version and
    * error correction level.
    */
-  private static boolean willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
+  static boolean willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
       // In the following comments, we use numbers of Version 7-H.
       // numBytes = 196
       int numBytes = version.getTotalCodewords();
@@ -533,6 +529,10 @@ public final class Encoder {
   /**
    * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
    */
+//@Sean: Needed to remove "private" on this and willFit() because they are currently called from MinimalEncoder. The class MinimalEncoder could be moved to be an inner class of this class to avoid that. 
+//       It is also possible to move all functions from MinimalEncoder into this class without needing to introduce any new member variables in this class. The functions could all be static. Right now, none 
+//       of the methods in MinimalEncoder modify a member variable (apart from the constructor). The methods are only partially static because some methods do read the memeber variables but that 
+//       could be changed. It would however bloat the signatures of those methods since those members would have to be passed to the function (e.g. the encoder array or the input string).
   static void appendBytes(String content,
                           Mode mode,
                           BitArray bits,
