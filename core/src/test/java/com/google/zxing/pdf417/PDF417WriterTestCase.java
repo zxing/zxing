@@ -31,6 +31,7 @@ import org.junit.Test;
  */
 public final class PDF417WriterTestCase extends Assert {
 
+  @SuppressWarnings("checkstyle:lineLength")
   @Test
   public void testDataMatrixImageWriter() throws WriterException {
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);

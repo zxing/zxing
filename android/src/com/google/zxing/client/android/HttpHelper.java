@@ -35,8 +35,8 @@ import java.util.HashSet;
 public final class HttpHelper {
 
   private static final Collection<String> REDIRECTOR_DOMAINS = new HashSet<>(Arrays.asList(
-    "amzn.to", "bit.ly", "bitly.com", "fb.me", "goo.gl", "is.gd", "j.mp", "lnkd.in", "ow.ly",
-    "R.BEETAGG.COM", "r.beetagg.com", "SCN.BY", "su.pr", "t.co", "tinyurl.com", "tr.im"
+      "amzn.to", "bit.ly", "bitly.com", "fb.me", "goo.gl", "is.gd", "j.mp", "lnkd.in", "ow.ly",
+      "R.BEETAGG.COM", "r.beetagg.com", "SCN.BY", "su.pr", "t.co", "tinyurl.com", "tr.im"
   ));
 
   private HttpHelper() {
@@ -182,7 +182,7 @@ public final class HttpHelper {
       connection.disconnect();
     }
   }
-  
+
   private static HttpURLConnection safelyOpenConnection(URL url) throws IOException {
     URLConnection conn;
     try {

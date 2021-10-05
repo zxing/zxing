@@ -69,7 +69,8 @@ public final class StringUtilsTestCase extends Assert {
     // 调压柜
     doTest(new byte[] { (byte) 0xFE, (byte) 0xFF, (byte) 0x8c, (byte) 0x03, (byte) 0x53, (byte) 0x8b,
                         (byte) 0x67, (byte) 0xdc, },
-      StandardCharsets.UTF_16, StandardCharsets.UTF_16.name());
+           StandardCharsets.UTF_16,
+           StandardCharsets.UTF_16.name());
   }
 
   @Test
@@ -77,7 +78,8 @@ public final class StringUtilsTestCase extends Assert {
     // 调压柜
     doTest(new byte[] { (byte) 0xFF, (byte) 0xFE, (byte) 0x03, (byte) 0x8c, (byte) 0x8b, (byte) 0x53,
                         (byte) 0xdc, (byte) 0x67, },
-      StandardCharsets.UTF_16, StandardCharsets.UTF_16.name());
+           StandardCharsets.UTF_16,
+           StandardCharsets.UTF_16.name());
   }
 
   private static void doTest(byte[] bytes, Charset charset, String encoding) {

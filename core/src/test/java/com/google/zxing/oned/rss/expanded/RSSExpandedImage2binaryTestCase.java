@@ -52,8 +52,8 @@ public final class RSSExpandedImage2binaryTestCase extends Assert {
   @Test
   public void testDecodeRow2binary1() throws Exception {
     // (11)100224(17)110224(3102)000100
-    assertCorrectImage2binary(
-        "1.png", " ...X...X .X....X. .XX...X. X..X...X ...XX.X. ..X.X... ..X.X..X ...X..X. X.X....X .X....X. .....X.. X...X...");
+    assertCorrectImage2binary("1.png",
+        " ...X...X .X....X. .XX...X. X..X...X ...XX.X. ..X.X... ..X.X..X ...X..X. X.X....X .X....X. .....X.. X...X...");
   }
 
   @Test
@@ -82,18 +82,20 @@ public final class RSSExpandedImage2binaryTestCase extends Assert {
         "5.png", " ..X.X... .XXXX.X. XX..XXXX ....XX.. X....... ....X... ....X..X .XX.");
   }
 
+  @SuppressWarnings("checkstyle:lineLength")
   @Test
   public void testDecodeRow2binary10() throws Exception {
     // (01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456(423)0123456789012
-    assertCorrectImage2binary(
-        "10.png", " .X.XX..X XX.XXXX. .XXX.XX. XX..X... .XXXXX.. XX.X..X. ..XX...X XX.X.... X.X.X.X. X.X..X.X .X....X. XX...X.. ...XX.X. .XXXXXX. .X..XX.. X.X.X... .X...... XXXX.... XX.XX... XXXXX.X. ...XXXXX .....X.X ...X.... X.XXX..X X.X.X... XX.XX..X .X..X..X .X.X.X.X X.XX...X .XX.XXX. XXX.X.XX ..X.");
+    assertCorrectImage2binary("10.png",
+        " .X.XX..X XX.XXXX. .XXX.XX. XX..X... .XXXXX.. XX.X..X. ..XX...X XX.X.... X.X.X.X. X.X..X.X .X....X. XX...X.. ...XX.X. .XXXXXX. .X..XX.. X.X.X... .X...... XXXX.... XX.XX... XXXXX.X. ...XXXXX .....X.X ...X.... X.XXX..X X.X.X... XX.XX..X .X..X..X .X.X.X.X X.XX...X .XX.XXX. XXX.X.XX ..X.");
   }
 
+  @SuppressWarnings("checkstyle:lineLength")
   @Test
   public void testDecodeRow2binary11() throws Exception {
     // (01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456
-    assertCorrectImage2binary(
-        "11.png", " .X.XX..X XX.XXXX. .XXX.XX. XX..X... .XXXXX.. XX.X..X. ..XX...X XX.X.... X.X.X.X. X.X..X.X .X....X. XX...X.. ...XX.X. .XXXXXX. .X..XX.. X.X.X... .X...... XXXX.... XX.XX... XXXXX.X. ...XXXXX .....X.X ...X.... X.XXX..X X.X.X... ....");
+    assertCorrectImage2binary("11.png",
+        " .X.XX..X XX.XXXX. .XXX.XX. XX..X... .XXXXX.. XX.X..X. ..XX...X XX.X.... X.X.X.X. X.X..X.X .X....X. XX...X.. ...XX.X. .XXXXXX. .X..XX.. X.X.X... .X...... XXXX.... XX.XX... XXXXX.X. ...XXXXX .....X.X ...X.... X.XXX..X X.X.X... ....");
   }
 
   @Test

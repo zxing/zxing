@@ -91,7 +91,8 @@ final class DecodedBitStreamParser {
     StringBuilder resultTrailer = new StringBuilder(0);
     List<byte[]> byteSegments = new ArrayList<>(1);
     Mode mode = Mode.ASCII_ENCODE;
-    Set<Integer> fnc1Positions = new HashSet<>(); // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
+    // Could look directly at 'bytes', if we're sure of not having to account for multi byte values
+    Set<Integer> fnc1Positions = new HashSet<>();
     int symbologyModifier;
     boolean isECIencoded = false;
     do {
@@ -146,7 +147,11 @@ final class DecodedBitStreamParser {
       }
     }
 
-    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments, null, symbologyModifier);
+    return new DecoderResult(bytes,
+                             result.toString(),
+                             byteSegments.isEmpty() ? null : byteSegments,
+                             null,
+                             symbologyModifier);
   }
 
   /**
@@ -226,7 +231,8 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
    */
-  private static void decodeC40Segment(BitSource bits, StringBuilder result, Set<Integer> fnc1positions) throws FormatException {
+  private static void decodeC40Segment(BitSource bits, StringBuilder result, Set<Integer> fnc1positions)
+      throws FormatException {
     // Three C40 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
@@ -317,7 +323,8 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
    */
-  private static void decodeTextSegment(BitSource bits, StringBuilder result, Set<Integer> fnc1positions) throws FormatException {
+  private static void decodeTextSegment(BitSource bits, StringBuilder result, Set<Integer> fnc1positions)
+      throws FormatException {
     // Three Text values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time

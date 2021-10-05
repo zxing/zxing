@@ -40,7 +40,14 @@ public final class WifiParsedResult extends ParsedResult {
     this(networkEncryption, ssid, password, hidden, null, null, null, null);
   }
 
-  public WifiParsedResult(String networkEncryption, String ssid, String password, boolean hidden, String identity, String anonymousIdentity, String eapMethod, String phase2Method) {
+  public WifiParsedResult(String networkEncryption,
+                          String ssid,
+                          String password,
+                          boolean hidden,
+                          String identity,
+                          String anonymousIdentity,
+                          String eapMethod,
+                          String phase2Method) {
     super(ParsedResultType.WIFI);
     this.ssid = ssid;
     this.networkEncryption = networkEncryption;

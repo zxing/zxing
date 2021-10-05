@@ -35,6 +35,7 @@ public final class URIParsedResultTestCase extends Assert {
     doTest("MEBKM:URL:google.com;TITLE:Google;", "http://google.com", "Google");
   }
 
+  @SuppressWarnings("checkstyle:lineLength")
   @Test
   public void testURI() {
     doTest("google.com", "http://google.com", null);
@@ -122,7 +123,7 @@ public final class URIParsedResultTestCase extends Assert {
     assertEquals(uri, uriResult.getURI());
     assertEquals(title, uriResult.getTitle());
   }
-  
+
   private static void doTestNotUri(String text) {
     Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);

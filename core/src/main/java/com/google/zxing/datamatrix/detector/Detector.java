@@ -219,11 +219,11 @@ public final class Detector {
     trRight = transitionsBetween(pointCs, pointD);
 
     ResultPoint candidate1 = new ResultPoint(
-      pointD.getX() + (pointC.getX() - pointB.getX()) / (trTop + 1),
-      pointD.getY() + (pointC.getY() - pointB.getY()) / (trTop + 1));
+        pointD.getX() + (pointC.getX() - pointB.getX()) / (trTop + 1),
+        pointD.getY() + (pointC.getY() - pointB.getY()) / (trTop + 1));
     ResultPoint candidate2 = new ResultPoint(
-      pointD.getX() + (pointA.getX() - pointB.getX()) / (trRight + 1),
-      pointD.getY() + (pointA.getY() - pointB.getY()) / (trRight + 1));
+        pointD.getX() + (pointA.getX() - pointB.getX()) / (trRight + 1),
+        pointD.getY() + (pointA.getY() - pointB.getY()) / (trRight + 1));
 
     if (!isValid(candidate1)) {
       if (isValid(candidate2)) {

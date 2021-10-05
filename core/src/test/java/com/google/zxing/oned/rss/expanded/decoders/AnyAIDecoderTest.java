@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* 
+/*
  * These authors would like to acknowledge the Spanish Ministry of Industry,
  * Tourism and Trade, for the support in the project TSI020301-2008-2
  * "PIRAmIDE: Personalizable Interactions with Resources on AmI-enabled
@@ -53,7 +53,8 @@ public final class AnyAIDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void testAnyAIDecoder3() throws Exception {
-    CharSequence data = header + numeric10 + numeric2alpha + alpha2isoiec646 + i646B + i646C + isoiec6462alpha + alphaA + alpha2numeric + numeric10;
+    CharSequence data = header + numeric10 + numeric2alpha + alpha2isoiec646 + i646B + i646C + isoiec6462alpha +
+        alphaA + alpha2numeric + numeric10;
     String expected = "(10)BCA10";
 
     assertCorrectBinaryString(data, expected);

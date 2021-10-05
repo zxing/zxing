@@ -52,8 +52,9 @@ public final class Detector {
   // if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
   // if we set the value too high, then we might detect the start pattern from a neighbor barcode.
   private static final int SKIPPED_ROW_COUNT_MAX = 25;
-  // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
-  // 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
+  // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width.
+  // Therefore it should be at least 9 pixels tall. To be conservative, we use about half the size to
+  // ensure we don't miss it.
   private static final int ROW_STEP = 5;
   private static final int BARCODE_MIN_HEIGHT = 10;
 
