@@ -97,7 +97,7 @@ final class MinimalEncoder {
     
 
 /**Encoding is optional (default ISO-8859-1) and version is optional (minimal version is computed if not specified*/
-  MinimalEncoder(String stringToEncode,Version version,boolean isGS1) {
+  MinimalEncoder(String stringToEncode,Version version,boolean isGS1) throws WriterException {
     this.stringToEncode = stringToEncode;
     if (version != null) {
       this.version = version;
@@ -105,6 +105,7 @@ final class MinimalEncoder {
     this.isGS1 = isGS1;
     CharsetEncoder[] isoEncoders = new CharsetEncoder[15];
     isoEncoders[0] = StandardCharsets.ISO_8859_1.newEncoder();
+    boolean needUnicodeEncoder = false;
     for (int i = 0; i < stringToEncode.length(); i++) {
       int cnt = 0;
       int j;
@@ -131,6 +132,12 @@ final class MinimalEncoder {
             } catch (UnsupportedCharsetException e) { }
           }
         }
+        if (j >= 15) {
+          if (!StandardCharsets.UTF_16BE.newEncoder().canEncode(stringToEncode.charAt(i))) {
+              throw new WriterException("Can not encode character \\u" + String.format("%04X",(int) stringToEncode.charAt(i)) + " at position " + i + " in input \"" + stringToEncode + "\"");
+          }
+          needUnicodeEncoder = true;
+        }
       }
     }
     int numberOfEncoders = 0;
@@ -139,7 +146,7 @@ final class MinimalEncoder {
         numberOfEncoders++;
       }
     }
-    if (numberOfEncoders == 1) {
+    if (numberOfEncoders == 1 && !needUnicodeEncoder) {
       encoders = new CharsetEncoder[1];
       encoders[0] = isoEncoders[0];
     } else {
@@ -549,7 +556,6 @@ final class MinimalEncoder {
       }
       return result;
     } else {
-//TODO: we get here if the input contains the replacement character \uFFFD (357 277 275).
         throw new WriterException("Internal error: failed to encode");
     }
   }
