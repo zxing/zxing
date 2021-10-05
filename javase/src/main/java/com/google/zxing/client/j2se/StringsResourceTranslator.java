@@ -98,7 +98,7 @@ public final class StringsResourceTranslator {
     Collection<String> forceRetranslation = Arrays.asList(args).subList(1, args.length);
 
     DirectoryStream.Filter<Path> filter = entry ->
-      Files.isDirectory(entry) && !Files.isSymbolicLink(entry) &&
+        Files.isDirectory(entry) && !Files.isSymbolicLink(entry) &&
         VALUES_DIR_PATTERN.matcher(entry.getFileName().toString()).matches();
     try (DirectoryStream<Path> dirs = Files.newDirectoryStream(resDir, filter)) {
       for (Path dir : dirs) {
@@ -206,7 +206,8 @@ public final class StringsResourceTranslator {
     URLConnection connection = translateURI.toURL().openConnection();
     connection.connect();
     StringBuilder translateResult = new StringBuilder(200);
-    try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+    try (BufferedReader in =
+           new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
       char[] buffer = new char[8192];
       int charsRead;
       while ((charsRead = in.read(buffer)) > 0) {

@@ -51,7 +51,7 @@ public final class Dimension {
 
   @Override
   public int hashCode() {
-      return width * 32713 + height;
+    return width * 32713 + height;
   }
 
   @Override

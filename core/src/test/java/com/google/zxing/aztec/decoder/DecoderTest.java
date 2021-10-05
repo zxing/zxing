@@ -35,32 +35,32 @@ public final class DecoderTest extends Assert {
 
   @Test
   public void testHighLevelDecode() throws FormatException {
-      // no ECI codes
-      testHighLevelDecodeString("A. b.",
-          // 'A'  P/S   '. ' L/L    b    D/L    '.'
-          "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
+    // no ECI codes
+    testHighLevelDecodeString("A. b.",
+        // 'A'  P/S   '. ' L/L    b    D/L    '.'
+        "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
 
-      // initial ECI code 26 (switch to UTF-8)
-      testHighLevelDecodeString("Ça",
-          // P/S FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
-          "..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+    // initial ECI code 26 (switch to UTF-8)
+    testHighLevelDecodeString("Ça",
+        // P/S FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+        "..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
 
-      // initial character without ECI (must be interpreted as ISO_8859_1)
-      // followed by ECI code 26 (= UTF-8) and UTF-8 text
-      testHighLevelDecodeString("±Ça",
-         // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
-         "XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+    // initial character without ECI (must be interpreted as ISO_8859_1)
+    // followed by ECI code 26 (= UTF-8) and UTF-8 text
+    testHighLevelDecodeString("±Ça",
+        // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+        "XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
 
-      // GS1 data
-      testHighLevelDecodeString("101233742",
-         // P/S FLG(n) 0  D/L   1    0    1    2    3    P/S  FLG(n) 0  3    7    4    2
-         "..... ..... ... XXXX. ..XX ..X. ..XX .X.. .X.X .... ..... ... .X.X X..X .XX. .X..");
+    // GS1 data
+    testHighLevelDecodeString("101233742",
+        // P/S FLG(n) 0  D/L   1    0    1    2    3    P/S  FLG(n) 0  3    7    4    2
+        "..... ..... ... XXXX. ..XX ..X. ..XX .X.. .X.X .... ..... ... .X.X X..X .XX. .X..");
   }
 
   private static void testHighLevelDecodeString(String expectedString, String b) throws FormatException {
-      BitArray bits = EncoderTest.toBitArray(EncoderTest.stripSpace(b));
-      assertEquals("highLevelDecode() failed for input bits: " + b,
-                   expectedString, Decoder.highLevelDecode(EncoderTest.toBooleanArray(bits)));
+    BitArray bits = EncoderTest.toBitArray(EncoderTest.stripSpace(b));
+    assertEquals("highLevelDecode() failed for input bits: " + b,
+                 expectedString, Decoder.highLevelDecode(EncoderTest.toBooleanArray(bits)));
   }
 
   @Test

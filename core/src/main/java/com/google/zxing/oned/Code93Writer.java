@@ -39,8 +39,8 @@ public class Code93Writer extends OneDimensionalCodeWriter {
     contents = convertToExtended(contents);
     int length = contents.length();
     if (length > 80) {
-      throw new IllegalArgumentException(
-        "Requested contents should be less than 80 digits long after converting to extended encoding, but got " + length);
+      throw new IllegalArgumentException("Requested contents should be less than 80 digits long after " +
+          "converting to extended encoding, but got " + length);
     }
 
     //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar

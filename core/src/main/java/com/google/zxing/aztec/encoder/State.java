@@ -129,8 +129,8 @@ final class State {
       mode = HighLevelEncoder.MODE_UPPER;
     }
     int deltaBitCount =
-      (binaryShiftByteCount == 0 || binaryShiftByteCount == 31) ? 18 :
-      (binaryShiftByteCount == 62) ? 9 : 8;
+        (binaryShiftByteCount == 0 || binaryShiftByteCount == 31) ? 18 :
+        (binaryShiftByteCount == 62) ? 9 : 8;
     State result = new State(token, mode, binaryShiftByteCount + 1, bitCount + deltaBitCount);
     if (result.binaryShiftByteCount == 2047 + 31) {
       // The string is as long as it's allowed to be.  We should end it.

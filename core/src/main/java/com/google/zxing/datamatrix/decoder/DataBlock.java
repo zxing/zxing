@@ -52,7 +52,7 @@ final class DataBlock {
     int totalBlocks = 0;
     Version.ECB[] ecBlockArray = ecBlocks.getECBlocks();
     for (Version.ECB ecBlock : ecBlockArray) {
-       totalBlocks += ecBlock.getCount();
+      totalBlocks += ecBlock.getCount();
     }
 
     // Now establish DataBlocks of the appropriate size and number of data codewords

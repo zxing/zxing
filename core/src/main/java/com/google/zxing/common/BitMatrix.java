@@ -462,7 +462,7 @@ public final class BitMatrix implements Cloneable {
     hash = 31 * hash + width;
     hash = 31 * hash + height;
     hash = 31 * hash + rowSize;
-     hash = 31 * hash + Arrays.hashCode(bits);
+    hash = 31 * hash + Arrays.hashCode(bits);
     return hash;
   }
 

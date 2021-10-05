@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  */
 public final class BinaryUtilTest extends Assert {
 
-   private static final Pattern SPACE = Pattern.compile(" ");
+  private static final Pattern SPACE = Pattern.compile(" ");
 
   @Test
   public void testBuildBitArrayFromString() {

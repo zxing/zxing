@@ -129,10 +129,10 @@ public final class MultiFormatReader implements Reader {
         readers.add(new AztecReader());
       }
       if (formats.contains(BarcodeFormat.PDF_417)) {
-         readers.add(new PDF417Reader());
+        readers.add(new PDF417Reader());
       }
       if (formats.contains(BarcodeFormat.MAXICODE)) {
-         readers.add(new MaxiCodeReader());
+        readers.add(new MaxiCodeReader());
       }
       // At end in "try harder" mode
       if (addOneDReader && tryHarder) {

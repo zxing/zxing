@@ -89,7 +89,8 @@ public final class DataMatrixWriter implements Writer {
     String codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo);
 
     //3. step: Module placement in Matrix
-    DefaultPlacement placement = new DefaultPlacement(codewords, symbolInfo.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
+    DefaultPlacement placement =
+        new DefaultPlacement(codewords, symbolInfo.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
     placement.place();
 
     //4. step: low-level encoding

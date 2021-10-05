@@ -288,8 +288,8 @@ public class IntentIntegrator {
   }
 
   /**
-   * Initiates a scan, using the specified camera, only for a certain set of barcode types, given as strings corresponding
-   * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
+   * Initiates a scan, using the specified camera, only for a certain set of barcode types, given as strings
+   * corresponding to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
    * like {@link #PRODUCT_CODE_TYPES} for example.
    *
    * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for

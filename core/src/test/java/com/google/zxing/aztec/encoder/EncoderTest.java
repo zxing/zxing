@@ -136,7 +136,7 @@ public final class EncoderTest extends Assert {
   public void testAztecWriter() throws Exception {
     testWriter("Espa\u00F1ol", null, 25, true, 1);                   // Without ECI (implicit ISO-8859-1)
     testWriter("Espa\u00F1ol", ISO_8859_1, 25, true, 1);             // Explicit ISO-8859-1
-    testWriter("\u20AC 1 sample data.", WINDOWS_1252, 25, true, 2);  // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
+    testWriter("\u20AC 1 sample data.", WINDOWS_1252, 25, true, 2);  // ISO-8859-1 can't encode Euro; Windows-1252 can
     testWriter("\u20AC 1 sample data.", ISO_8859_15, 25, true, 2);
     testWriter("\u20AC 1 sample data.", UTF_8, 25, true, 2);
     testWriter("\u20AC 1 sample data.", UTF_8, 100, true, 3);
@@ -220,42 +220,42 @@ public final class EncoderTest extends Assert {
   @Test
   public void testEncodeDecode31() throws Exception {
     testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
-      " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
-      " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
-      " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
-      " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
-      " elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend." +
-      " Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus" +
-      " justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu" +
-      " tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus" +
-      " quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec" +
-      " laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida," +
-      " justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec" +
-      " lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar" +
-      " nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat" +
-      " eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra" +
-      " fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo" +
-      " diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla" +
-      " ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
-      " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
-      " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit" +
-      " felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo" +
-      " erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit" +
-      " placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at" +
-      " pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est." +
-      " Ut justo diam, lobortis eu tristique ac, p.In ut magna vel mauris malesuada" +
-      " dictum. Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id" +
-      " justo rutrum sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum" +
-      " sit amet. Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat," +
-      " eget hendrerit felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet" +
-      " laoreet, justo erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac" +
-      " nunc sodales elit placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula," +
-      " massa at pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus" +
-      " sed est. Ut justo diam, lobortis eu tris. In ut magna vel mauris malesuada dictum." +
-      " Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
-      " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
-      " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget" +
-      " hendrerit felis turpis nec lorem.", false, 31);
+        " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
+        " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
+        " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
+        " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
+        " elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend." +
+        " Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus" +
+        " justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu" +
+        " tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus" +
+        " quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec" +
+        " laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida," +
+        " justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec" +
+        " lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar" +
+        " nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat" +
+        " eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra" +
+        " fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo" +
+        " diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla" +
+        " ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
+        " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
+        " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit" +
+        " felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo" +
+        " erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit" +
+        " placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at" +
+        " pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est." +
+        " Ut justo diam, lobortis eu tristique ac, p.In ut magna vel mauris malesuada" +
+        " dictum. Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id" +
+        " justo rutrum sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum" +
+        " sit amet. Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat," +
+        " eget hendrerit felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet" +
+        " laoreet, justo erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac" +
+        " nunc sodales elit placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula," +
+        " massa at pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus" +
+        " sed est. Ut justo diam, lobortis eu tris. In ut magna vel mauris malesuada dictum." +
+        " Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
+        " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
+        " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget" +
+        " hendrerit felis turpis nec lorem.", false, 31);
   }
 
   @Test
@@ -417,8 +417,7 @@ public final class EncoderTest extends Assert {
     // Latch to DIGIT rather than shift to PUNCT
     testHighLevelEncodeString("A. 1234",
         // 'A'  D/L   '.'  ' '  '1' '2'   '3'  '4'
-        "...X. XXXX. XX.X ...X ..XX .X.. .X.X .X X."
-        );
+        "...X. XXXX. XX.X ...X ..XX .X.. .X.X .X X.");
     // Don't bother leaving Binary Shift.
     testHighLevelEncodeString("A\200. \200",
         // 'A'  B/S    =2    \200      "."     " "     \200
@@ -516,7 +515,7 @@ public final class EncoderTest extends Assert {
     // Perform an encode-decode round-trip because it can be lossy.
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     if (null != charset) {
-        hints.put(EncodeHintType.CHARACTER_SET, charset.name());
+      hints.put(EncodeHintType.CHARACTER_SET, charset.name());
     }
     hints.put(EncodeHintType.ERROR_CORRECTION, eccPercent);
     AztecWriter writer = new AztecWriter();

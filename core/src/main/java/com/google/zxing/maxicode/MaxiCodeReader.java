@@ -103,8 +103,8 @@ public final class MaxiCodeReader implements Reader {
         // srowen: I don't quite understand why the formula below is necessary, but it
         // can walk off the image if left + width = the right boundary. So cap it.
         int ix = left + Math.min(
-          (x * width + width / 2 + (y & 0x01) * width / 2) / MATRIX_WIDTH,
-          width - 1);
+            (x * width + width / 2 + (y & 0x01) * width / 2) / MATRIX_WIDTH,
+            width - 1);
         if (image.get(ix, iy)) {
           bits.set(x, y);
         }
