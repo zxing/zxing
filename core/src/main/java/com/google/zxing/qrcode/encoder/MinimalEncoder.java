@@ -154,10 +154,10 @@ final class MinimalEncoder {
       encoders[index++] = StandardCharsets.UTF_16BE.newEncoder();
     }
   }
-  static ResultNode encode(String stringToEncode,Version version,boolean isGS1) {
+  static ResultNode encode(String stringToEncode,Version version,boolean isGS1) throws WriterException {
     return new MinimalEncoder(stringToEncode,version,isGS1).encode();
   }
-  ResultNode encode() {
+  ResultNode encode() throws WriterException {
     if (version == null) { //compute minimal encoding trying the three version sizes.
       ResultNode[] results = {encode(getVersion(VersionSize.SMALL)),
                               encode(getVersion(VersionSize.MEDIUM)),
@@ -387,12 +387,12 @@ final class MinimalEncoder {
   }
 
 /** encodes minimally using Dijkstra.*/
-  ResultNode encode(Version version) {
+  ResultNode encode(Version version) throws WriterException {
 /* A vertex represents a tuple a character in the input, a mode and an encoding. An edge leading to such a vertex encodes the character left of the one that the
  * vertex represents and encodes it in the same encoding and mode as the vertex.
  * The edges leading to a vertex are stored in such a way that there is a fast way to enumerate the edges ending on a particular vertex.
  * The algorithm processes the input string from left to right.
- * For every vertex repesenting the character to the left of the current character, the algorithm enmerated the edges ending on the vertex and removes all but the shortest from that list.
+ * For every vertex repesenting the character to the left of the current character, the algorithm enumerates the edges ending on the vertex and removes all but the shortest from that list.
  * Then it creates a vertex for the current character and computes all possible outgoing edges.
  * Examples:
  * The process is illustrated by showing the graph (edges) after each iteration from left to right over the input: 
@@ -541,12 +541,17 @@ final class MinimalEncoder {
       }
     }
     assert minimalJ != -1;
-    ResultNode result = vertices[inputLength][minimalJ][minimalK].get(0);
-    while (result.previous != null) {
-      result.previous.append(result);
-      result = result.previous;
+    if (minimalJ >= 0) {
+      ResultNode result = vertices[inputLength][minimalJ][minimalK].get(0);
+      while (result.previous != null) {
+        result.previous.append(result);
+        result = result.previous;
+      }
+      return result;
+    } else {
+//TODO: we get here if the input contains the replacement character \uFFFD (357 277 275).
+        throw new WriterException("Internal error: failed to encode");
     }
-    return result;
   }
     
   byte[] getBytesOfCharacter(int position,int charsetEncoderIndex) {
