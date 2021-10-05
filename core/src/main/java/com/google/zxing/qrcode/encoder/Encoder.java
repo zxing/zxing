@@ -86,77 +86,80 @@ public final class Encoder {
     boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.QR_COMPACT) && Boolean.parseBoolean(hints.get(EncodeHintType.QR_COMPACT).toString());
 
     if (hasCompactionHint) {
-        mode = Mode.BYTE;
+      mode = Mode.BYTE;
 
-        MinimalEncoder.ResultNode rn = MinimalEncoder.encode(content,null,hasGS1FormatHint);
-        while (!willFit(rn.getSize(), rn.getVersion(ecLevel), ecLevel)) {
-            if (rn.getVersion(ecLevel).getVersionNumber() <= 26) {
-                System.err.println("DEBUG: INFO: " + rn.getSize() + " bits don't fit in version " + rn.getVersion(ecLevel) + ". Trying next size..");
-                int nextVersionNumber = rn.getVersion(ecLevel).getVersionNumber() <= 9 ? 10 : 27 ;
-                rn = MinimalEncoder.encode(content,Version.getVersionForNumber(nextVersionNumber),hasGS1FormatHint);
-            } else {
-                throw new WriterException("Data too big for any version");
-            }
-        }
-        headerAndDataBits = new BitArray();
-        rn.getBits(headerAndDataBits);
-        version = rn.getVersion(ecLevel);
-    } else {
-        // Determine what character encoding has been specified by the caller, if any
-        Charset encoding = DEFAULT_BYTE_MODE_ENCODING;
-        boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
-        if (hasEncodingHint) {
-          encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
-        }
-    
-        // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
-        // multiple modes / segments even if that were more efficient. Twould be nice.
-        mode = chooseMode(content, encoding);
-    
-        // This will store the header information, like mode and
-        // length, as well as "header" segments like an ECI segment.
-        BitArray headerBits = new BitArray();
-    
-        // Append ECI segment if applicable
-        if (mode == Mode.BYTE && hasEncodingHint) {
-          CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
-          if (eci != null) {
-            appendECI(eci, headerBits);
-          }
-        }
-    
-        // Append the FNC1 mode header for GS1 formatted data if applicable
-        if (hasGS1FormatHint) {
-          // GS1 formatted codes are prefixed with a FNC1 in first position mode header
-          appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
-        }
-    
-        // (With ECI in place,) Write the mode marker
-        appendModeInfo(mode, headerBits);
-    
-        // Collect data within the main segment, separately, to count its size if needed. Don't add it to
-        // main payload yet.
-        BitArray dataBits = new BitArray();
-        appendBytes(content, mode, dataBits, encoding);
-    
-        if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
-          int versionNumber = Integer.parseInt(hints.get(EncodeHintType.QR_VERSION).toString());
-          version = Version.getVersionForNumber(versionNumber);
-          int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
-          if (!willFit(bitsNeeded, version, ecLevel)) {
-            throw new WriterException("Data too big for requested version");
-          }
+      MinimalEncoder.ResultNode rn = MinimalEncoder.encode(content,null,hasGS1FormatHint);
+
+      while (!willFit(rn.getSize(), rn.getVersion(ecLevel), ecLevel)) {
+        if (rn.getVersion(ecLevel).getVersionNumber() <= 26) {
+//          System.err.println("DEBUG: INFO: " + rn.getSize() + " bits don't fit in version " + rn.getVersion(ecLevel) + ". Trying next size..");
+          int nextVersionNumber = rn.getVersion(ecLevel).getVersionNumber() <= 9 ? 10 : 27 ;
+          rn = MinimalEncoder.encode(content,Version.getVersionForNumber(nextVersionNumber),hasGS1FormatHint);
         } else {
-          version = recommendVersion(ecLevel, mode, headerBits, dataBits);
+          throw new WriterException("Data too big for any version");
         }
+      }
+
+      headerAndDataBits = new BitArray();
+      rn.getBits(headerAndDataBits);
+      version = rn.getVersion(ecLevel);
+
+    } else {
+      // Determine what character encoding has been specified by the caller, if any
+      Charset encoding = DEFAULT_BYTE_MODE_ENCODING;
+      boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
+      if (hasEncodingHint) {
+        encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
+      }
     
-        headerAndDataBits = new BitArray();
-        headerAndDataBits.appendBitArray(headerBits);
-        // Find "length" of main segment and write it
-        int numLetters = mode == Mode.BYTE ? dataBits.getSizeInBytes() : content.length();
-        appendLengthInfo(numLetters, version, mode, headerAndDataBits);
-        // Put data together into the overall payload
-        headerAndDataBits.appendBitArray(dataBits);
+      // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
+      // multiple modes / segments even if that were more efficient. Twould be nice.
+      mode = chooseMode(content, encoding);
+  
+      // This will store the header information, like mode and
+      // length, as well as "header" segments like an ECI segment.
+      BitArray headerBits = new BitArray();
+  
+      // Append ECI segment if applicable
+      if (mode == Mode.BYTE && hasEncodingHint) {
+        CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
+        if (eci != null) {
+          appendECI(eci, headerBits);
+        }
+      }
+  
+      // Append the FNC1 mode header for GS1 formatted data if applicable
+      if (hasGS1FormatHint) {
+        // GS1 formatted codes are prefixed with a FNC1 in first position mode header
+        appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
+      }
+    
+      // (With ECI in place,) Write the mode marker
+      appendModeInfo(mode, headerBits);
+  
+      // Collect data within the main segment, separately, to count its size if needed. Don't add it to
+      // main payload yet.
+      BitArray dataBits = new BitArray();
+      appendBytes(content, mode, dataBits, encoding);
+  
+      if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
+        int versionNumber = Integer.parseInt(hints.get(EncodeHintType.QR_VERSION).toString());
+        version = Version.getVersionForNumber(versionNumber);
+        int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
+        if (!willFit(bitsNeeded, version, ecLevel)) {
+          throw new WriterException("Data too big for requested version");
+        }
+      } else {
+        version = recommendVersion(ecLevel, mode, headerBits, dataBits);
+      }
+    
+      headerAndDataBits = new BitArray();
+      headerAndDataBits.appendBitArray(headerBits);
+      // Find "length" of main segment and write it
+      int numLetters = mode == Mode.BYTE ? dataBits.getSizeInBytes() : content.length();
+      appendLengthInfo(numLetters, version, mode, headerAndDataBits);
+      // Put data together into the overall payload
+      headerAndDataBits.appendBitArray(dataBits);
     }
 
     Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);

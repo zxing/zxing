@@ -72,7 +72,7 @@ import java.nio.charset.UnsupportedCharsetException;
  */
 final class MinimalEncoder {
 
-  static final boolean DEBUG = false;
+  //static final boolean DEBUG = false;
 
   private enum VersionSize {
     SMALL("Version 1-9)"),
@@ -96,16 +96,19 @@ final class MinimalEncoder {
   private CharsetEncoder[] encoders;
     
 
-/**Encoding is optional (default ISO-8859-1) and version is optional (minimal version is computed if not specified*/
+  /**Encoding is optional (default ISO-8859-1) and version is optional (minimal version is computed if not specified*/
   MinimalEncoder(String stringToEncode,Version version,boolean isGS1) throws WriterException {
+
     this.stringToEncode = stringToEncode;
     if (version != null) {
       this.version = version;
     }
+
     this.isGS1 = isGS1;
-    CharsetEncoder[] isoEncoders = new CharsetEncoder[15];
+    CharsetEncoder[] isoEncoders = new CharsetEncoder[15]; //room for the 15 ISO-8859 charsets 1 through 16.
     isoEncoders[0] = StandardCharsets.ISO_8859_1.newEncoder();
     boolean needUnicodeEncoder = false;
+
     for (int i = 0; i < stringToEncode.length(); i++) {
       int cnt = 0;
       int j;
@@ -117,9 +120,11 @@ final class MinimalEncoder {
           }
         }
       }
+
       if (cnt == 14) { //we need all. Can stop looking further.
         break;
       }
+
       if (j >= 15) { //no encoder found 
         for (j = 0; j < 15; j++) {
           if (j != 11 && isoEncoders[j] == null) { // ISO-8859-12 doesn't exist
@@ -140,12 +145,14 @@ final class MinimalEncoder {
         }
       }
     }
+
     int numberOfEncoders = 0;
     for (int j = 0; j < 15; j++) {
       if (isoEncoders[j] != null) {
         numberOfEncoders++;
       }
     }
+
     if (numberOfEncoders == 1 && !needUnicodeEncoder) {
       encoders = new CharsetEncoder[1];
       encoders[0] = isoEncoders[0];
@@ -157,13 +164,16 @@ final class MinimalEncoder {
           encoders[index++] = isoEncoders[j];
         }
       }
+
       encoders[index++] = StandardCharsets.UTF_8.newEncoder();
       encoders[index++] = StandardCharsets.UTF_16BE.newEncoder();
     }
   }
+
   static ResultNode encode(String stringToEncode,Version version,boolean isGS1) throws WriterException {
     return new MinimalEncoder(stringToEncode,version,isGS1).encode();
   }
+
   ResultNode encode() throws WriterException {
     if (version == null) { //compute minimal encoding trying the three version sizes.
       ResultNode[] results = {encode(getVersion(VersionSize.SMALL)),
@@ -200,7 +210,7 @@ final class MinimalEncoder {
     return Encoder.getAlphanumericCode(c) != -1;
   }
 
-/** Example: to encode alphanumerically at least 2 characters are needed (5.5 bits per character). Similarily three digits are needed to encode numerically (3+1/3 bits per digit)*/
+  /** Example: to encode alphanumerically at least 2 characters are needed (5.5 bits per character). Similarily three digits are needed to encode numerically (3+1/3 bits per digit)*/
   static int getEncodingGranularity(Mode mode) {
     switch (mode) {
       case KANJI: return 1;
@@ -212,7 +222,7 @@ final class MinimalEncoder {
     }
   }
 
-/** Example: to encode alphanumerically 11 bits are used per 2 characters. Similarily 10 bits are used to encode 3 numeric digits.*/
+  /** Example: to encode alphanumerically 11 bits are used per 2 characters. Similarily 10 bits are used to encode 3 numeric digits.*/
   static int getBitsPerEncodingUnit(Mode mode) {
     switch (mode) {
       case KANJI: return 16;
@@ -225,7 +235,7 @@ final class MinimalEncoder {
     }
   }
 
-/** Returns the maximum number of encodeable characters in the given mode for the given version. Example: in Version 1, 2^10 digits or 2^8 bytes can be encoded. In Version 3 it is 2^14 digits and 2^16 bytes*/
+  /** Returns the maximum number of encodeable characters in the given mode for the given version. Example: in Version 1, 2^10 digits or 2^8 bytes can be encoded. In Version 3 it is 2^14 digits and 2^16 bytes*/
   static int getMaximumNumberOfEncodeableCharacters(Version version,Mode mode) {
     int count = mode.getCharacterCountBits(version);
     return count == 0 ? 0 : 1 << count;
@@ -319,13 +329,13 @@ final class MinimalEncoder {
     rn = rn.getHead();
     rn.setPrevious(previous);
 
-    if (DEBUG) {
-      if (rn.previous == null) {
-        System.err.println("DEBUG adding edge " + rn + " from " + rn.position + " to " + vertexIndex + " with an accumulated size of " + rn.getSize(true));
-      } else {
-        System.err.println("DEBUG adding edge " + rn + " from " + vertexToString(previous.position,previous) + " to " + vertexToString(vertexIndex,rn) + " with an accumulated size of " + rn.getSize(true));
-      }
-    }
+//    if (DEBUG) {
+//      if (rn.previous == null) {
+//        System.err.println("DEBUG adding edge " + rn + " from " + rn.position + " to " + vertexIndex + " with an accumulated size of " + rn.getSize(true));
+//      } else {
+//        System.err.println("DEBUG adding edge " + rn + " from " + vertexToString(previous.position,previous) + " to " + vertexToString(vertexIndex,rn) + " with an accumulated size of " + rn.getSize(true));
+//      }
+//    }
   }
 
   void addEdges(Version version,Vector<ResultNode>[][][] vertices,int from,ResultNode previous) {
@@ -353,47 +363,47 @@ final class MinimalEncoder {
     }
   }
 
-/** used for debugging*/
-  static String edgeToString(ResultNode rn) {
-    String result = rn.toString();
-    ResultNode current = rn.previous;
-    while (current != null) {
-      result = current.toString() + "," + result;
-      current = current.previous;
-    }
-    return result;
-  }
+//  /** used for debugging*/
+//  static String edgeToString(ResultNode rn) {
+//    String result = rn.toString();
+//    ResultNode current = rn.previous;
+//    while (current != null) {
+//      result = current.toString() + "," + result;
+//      current = current.previous;
+//    }
+//    return result;
+//  }
+//
+//  /** used for debugging*/
+//  String vertexToString(int position, ResultNode rn) {
+//    return (position >= stringToEncode.length() ? "end vertex" : "vertex for character '" + stringToEncode.charAt(position) + "' at position " + position) + " with encoding " + encoders[rn.charsetEncoderIndex].charset().name() + " and mode " + rn.mode;
+//  }
+//  /** used for debugging*/
+//  void printEdges(Vector<ResultNode>[][][] vertices) {
+//    boolean willHaveECI = encoders.length > 1;
+//    int inputLength = stringToEncode.length();
+//    for (int i = 1; i <= inputLength; i++) {
+//      for (int j = 0; j < encoders.length; j++) {
+//        for (int k = 0; k < 4; k++) {
+//          if (vertices[i][j][k] != null) {
+//            Vector<ResultNode> edges = vertices[i][j][k];
+//            assert edges.size() > 0;
+//            if (edges.size() > 0) {
+//              ResultNode rn = edges.get(0);
+//              String vertexKey = "" + i + "_" + rn.mode + (willHaveECI ? "_" + encoders[rn.charsetEncoderIndex].charset().name() : "");
+//              int fromPosition = rn.position;
+//              ResultNode previous = rn.previous == null ? null : rn.previous.mode == Mode.ECI ? rn.previous.previous : rn.previous;
+//              String fromKEY = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode + (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
+//              int toPosition = fromPosition + getEncodingGranularity(rn.mode);
+//              System.err.println("DEBUG: (" + fromKEY + ") -- " + rn.mode + (toPosition - fromPosition > 0 ? "(" + stringToEncode.substring(fromPosition, toPosition) + ")" : "") + " (" + rn.getSize(true) + ")" + " --> " + "(" + vertexKey + ")");
+//            }
+//          }
+//        }
+//      }
+//    }
+//  }
 
-/** used for debugging*/
-  String vertexToString(int position, ResultNode rn) {
-    return (position >= stringToEncode.length() ? "end vertex" : "vertex for character '" + stringToEncode.charAt(position) + "' at position " + position) + " with encoding " + encoders[rn.charsetEncoderIndex].charset().name() + " and mode " + rn.mode;
-  }
-/** used for debugging*/
-  void printEdges(Vector<ResultNode>[][][] vertices) {
-    boolean willHaveECI = encoders.length > 1;
-    int inputLength = stringToEncode.length();
-    for (int i = 1; i <= inputLength; i++) {
-      for (int j = 0; j < encoders.length; j++) {
-        for (int k = 0; k < 4; k++) {
-          if (vertices[i][j][k] != null) {
-            Vector<ResultNode> edges = vertices[i][j][k];
-            assert edges.size() > 0;
-            if (edges.size() > 0) {
-              ResultNode rn = edges.get(0);
-              String vertexKey = "" + i + "_" + rn.mode + (willHaveECI ? "_" + encoders[rn.charsetEncoderIndex].charset().name() : "");
-              int fromPosition = rn.position;
-              ResultNode previous = rn.previous == null ? null : rn.previous.mode == Mode.ECI ? rn.previous.previous : rn.previous;
-              String fromKEY = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode + (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
-              int toPosition = fromPosition + getEncodingGranularity(rn.mode);
-              System.err.println("DEBUG: (" + fromKEY + ") -- " + rn.mode + (toPosition - fromPosition > 0 ? "(" + stringToEncode.substring(fromPosition, toPosition) + ")" : "") + " (" + rn.getSize(true) + ")" + " --> " + "(" + vertexKey + ")");
-            }
-          }
-        }
-      }
-    }
-  }
-
-/** encodes minimally using Dijkstra.*/
+  /** encodes minimally using Dijkstra.*/
   ResultNode encode(Version version) throws WriterException {
 /* A vertex represents a tuple a character in the input, a mode and an encoding. An edge leading to such a vertex encodes the character left of the one that the
  * vertex represents and encodes it in the same encoding and mode as the vertex.
@@ -486,12 +496,12 @@ final class MinimalEncoder {
 //Array that represents vertices. There is a vertex for every character, encoding and mode. The vertex contains a list of
 //all edges that lead to it that have the same encoding and mode.
 //The lists are created lazily
-    Vector<ResultNode>[][][] vertices = new Vector[inputLength + 1][encoders.length][4];
+    Vector<ResultNode>[][][] vertices = new Vector[inputLength + 1][encoders.length][4]; //last dimension encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the function getCompactedOrdinal(Mode)
     addEdges(version,vertices,0,null);
-    if (DEBUG) {
-        System.err.println("DEBUG Initial situation");
-        printEdges(vertices);
-    }
+//    if (DEBUG) {
+//        System.err.println("DEBUG Initial situation");
+//        printEdges(vertices);
+//    }
     for (int i = 1; i <= inputLength; i++) {
       for (int j = 0; j < encoders.length; j++) {
         for (int k = 0; k < 4; k++) {
@@ -517,18 +527,18 @@ final class MinimalEncoder {
             }
             if (i < inputLength) {
               assert minimalEdge != null;
-              if (DEBUG && minimalEdge != null) {
-                System.err.println("DEBUG processing " + vertexToString(i,minimalEdge) + ". The minimal edge leading to this vertex is " + edgeToString(minimalEdge) + " with a size of " + minimalEdge.getSize(true));
-              }
+//              if (DEBUG && minimalEdge != null) {
+//                System.err.println("DEBUG processing " + vertexToString(i,minimalEdge) + ". The minimal edge leading to this vertex is " + edgeToString(minimalEdge) + " with a size of " + minimalEdge.getSize(true));
+//              }
               addEdges(version,vertices,i,minimalEdge);
             }
           }
         }
       }
-      if (DEBUG) {
-        System.err.println("DEBUG situation after adding edges to vertices at position " + i);
-        printEdges(vertices);
-      }
+//      if (DEBUG) {
+//        System.err.println("DEBUG situation after adding edges to vertices at position " + i);
+//        printEdges(vertices);
+//      }
     }
     int minimalJ = -1;
     int minimalK = -1;
@@ -565,14 +575,14 @@ final class MinimalEncoder {
     return stringToEncode.substring(position,position + 1).getBytes(encoders[charsetEncoderIndex].charset());
  }
 
-  class ResultNode {
-    Mode mode;
-    Version version;
-    boolean declaresMode;
-    int position;
-    int charsetEncoderIndex;
-    ResultNode next;
-    ResultNode previous;
+  final class ResultNode {
+    private Mode mode;
+    private Version version;
+    private boolean declaresMode;
+    private int position;
+    private int charsetEncoderIndex;
+    private ResultNode next;
+    private ResultNode previous;
     ResultNode(Mode mode,Version version,boolean declaresMode,int position,int charsetEncoderIndex,ResultNode next) {
       assert mode != null;
       this.mode = mode;
@@ -583,7 +593,7 @@ final class MinimalEncoder {
       this.next = next;
     }
 
-    ResultNode getHead() {
+    private ResultNode getHead() {
       ResultNode current = this;
       while (current.previous != null) {
         current = current.previous;
@@ -591,7 +601,7 @@ final class MinimalEncoder {
       return current;
     }
  
-    void setPrevious(ResultNode previous) {
+    private void setPrevious(ResultNode previous) {
       this.previous = previous;
       declaresMode = true;
       if (previous != null) {
@@ -602,7 +612,7 @@ final class MinimalEncoder {
       }
     }
 
-    int getSize(boolean walkPrevious) {
+    private int getSize(boolean walkPrevious) {
       int result = 0;
       ResultNode current = this;
       if (walkPrevious) {
@@ -619,7 +629,7 @@ final class MinimalEncoder {
       return result;
     }
 
-    int getLength(boolean walkPrevious) {
+    private int getLength(boolean walkPrevious) {
       int result = 0;
       ResultNode current = this;
       if (walkPrevious) {
@@ -641,8 +651,8 @@ final class MinimalEncoder {
       return result;
     }
 
-/** returns the size of this one encoding unit in bits*/
-    int getLocalSize() {
+    /** returns the size of this one encoding unit in bits*/
+    private int getLocalSize() {
       int size = declaresMode ? 4 + mode.getCharacterCountBits(version) : 0;
       if (mode == Mode.ECI) {
         size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
@@ -654,28 +664,28 @@ final class MinimalEncoder {
       return size;
     }
 
-/** returns the size in bits*/
+    /** returns the size in bits*/
     int getSize() {
       return getSize(false);
     }
 
-/** returns the length of this one uncoding unit in encoding units*/
-    int getLocalLength() {
+    /** returns the length of this one uncoding unit in encoding units*/
+    private int getLocalLength() {
       return getBitsPerEncodingUnit(mode) == 0 ? 0 : 1;
     }
 
-/** returns the length in encoding units*/
-    int getLength() {
+    /** returns the length in encoding units*/
+    private int getLength() {
       return getLength(false);
     }
 
-    public void getBits(BitArray bits) throws WriterException {
+    void getBits(BitArray bits) throws WriterException {
       ResultNode next = getLocalBits(bits);
       while (next != null) {
         next = next.getLocalBits(bits);
       }
     }
-    ResultNode getLocalBits(BitArray bits) throws WriterException {
+    private ResultNode getLocalBits(BitArray bits) throws WriterException {
       // append mode
       bits.appendBits(mode.getBits(),4);
       if (mode == Mode.ECI) {
@@ -706,7 +716,7 @@ final class MinimalEncoder {
       } 
     }
 
-    public Version getVersion(ErrorCorrectionLevel ecLevel) {
+    Version getVersion(ErrorCorrectionLevel ecLevel) {
       int versionNumber = version.getVersionNumber();
       int lowerLimit;
       int upperLimit;
@@ -736,7 +746,7 @@ final class MinimalEncoder {
       return Version.getVersionForNumber(versionNumber);
     }
 
-    void append(ResultNode rn) {
+    private void append(ResultNode rn) {
       ResultNode current = this;
       while (current.next != null) {
         current = current.next;
@@ -763,7 +773,7 @@ final class MinimalEncoder {
       return result;
     }
 
-    String makePrintable(String s) {
+    private String makePrintable(String s) {
       String result = "";
       for (int i = 0; i < s.length(); i++) {
         if (s.charAt(i) < 32 || s.charAt(i) > 126) {
