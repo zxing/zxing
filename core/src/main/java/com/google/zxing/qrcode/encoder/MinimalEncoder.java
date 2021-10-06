@@ -96,6 +96,10 @@ final class MinimalEncoder {
     }
   }
 
+//None of the member variables are modified by any of the methods but the constructor so that all methods that are not
+//declared as static, can be thought of as being "const" in the C++ sense. Technically all methods could therefore be 
+//declared as static by adding these members to the signature of methods that read them, but for the purpose of improved
+//readability this variant was chosen.
   private String stringToEncode;
   private Version version = null;
   private boolean isGS1 = false;
@@ -436,17 +440,27 @@ final class MinimalEncoder {
 
   /** encodes minimally using Dijkstra.*/
   ResultNode encode(Version version) throws WriterException {
-/* A vertex represents a tuple of a position in the input, a mode and an encoding where position 0 denotes the position
- * left of the first character, 1 the position left of the second character and so on. An edge leading to such a vertex 
- * encodes the character left of the position that the vertex represents and encodes it in the same encoding and mode 
- * as the vertex. In other words, all edges leading to a particular vertex encode the same characters in the same mode
- * with the same character encoding.
+/* A vertex represents a tuple of a position in the input, a mode and an a character encoding where position 0 
+ * denotes the position left of the first character, 1 the position left of the second character and so on. 
+ * Likewise the end vertices are located after the last character at position stringToEncode.length().
+ *
+ * An edge leading to such a vertex encodes one or more of the characters left of the position that the vertex 
+ * represents and encodes it in the same encoding and mode as the vertex on which the edge ends. In other words,
+ * all edges leading to a particular vertex encode the same characters in the same mode with the same character
+ * encoding. They differ only by their source vertices who are all located at i+1 minus the number of encoded 
+ * characters.
+ *
  * The edges leading to a vertex are stored in such a way that there is a fast way to enumerate the edges ending on a
  * particular vertex.
- * The algorithm processes the input string from left to right.
- * For every vertex repesenting the character to the left of the current character, the algorithm enumerates the edges 
- * ending on the vertex and removes all but the shortest from that list.
- * Then it creates a vertex for the current character and computes all possible outgoing edges.
+ *
+ * The algorithm processes the vertices in order of their position therby performing the following:
+ *
+ * For every vertex at position i the algorithm enumerates the edges ending on the vertex and removes all but the 
+ * shortest from that list.
+ * Then it processes the vertices for the position i+1. If i+1 == stringToEncode.length() then the algorithm ends
+ * and chooses the the edge with the smallest size from any of the edges leading to vertices at this position.
+ * Otherwise the algorithm computes all possible outgoing edges for the vertices at the position i+1
+ *
  * Examples:
  * The process is illustrated by showing the graph (edges) after each iteration from left to right over the input: 
  * An edge is drawn as follows "(" + fromVertex + ") -- " + encodingMode + "(" + encodedInput + ") (" + 
