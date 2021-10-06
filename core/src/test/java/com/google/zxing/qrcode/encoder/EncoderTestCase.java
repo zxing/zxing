@@ -789,22 +789,27 @@ public final class EncoderTestCase extends Assert {
 
   @Test
   public void testMinimalEncoder25() throws WriterException {
-    assertEquals(MinimalEncoder.encode("ABC1234" ,null,false).toString(),"ALPHANUMERIC(AB,C1),NUMERIC(234),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("ABC1234" ,null,false).toString(),"ALPHANUMERIC(AB,C1),NUMERIC(234),TERMINATO" +
+        "R()");
   }
 
   @Test
   public void testMinimalEncoder26() throws WriterException {
-    assertEquals(MinimalEncoder.encode("http://foo.com" ,null,false).toString(),"BYTE(h,t,t,p,:,/,/,f,o,o,.,c,o,m),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("http://foo.com" ,null,false).toString(),"BYTE(h,t,t,p,:,/,/,f,o,o,.,c,o,m),T" +
+        "ERMINATOR()");
   }
 
   @Test
   public void testMinimalEncoder27() throws WriterException {
-    assertEquals(MinimalEncoder.encode("HTTP://FOO.COM" ,null,false).toString(),"ALPHANUMERIC(HT,TP,:/,/F,OO,.C,OM),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("HTTP://FOO.COM" ,null,false).toString(),"ALPHANUMERIC(HT,TP,:/,/F,OO,.C,OM)," +
+        "TERMINATOR()");
   }
 
   @Test
   public void testMinimalEncoder28() throws WriterException {
-    assertEquals(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781" ,null,false).toString(),"NUMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(045,003,267,781),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781" ,null,false).toString(),"N" +
+        "UMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(045,003,267,781),TERMINAT" +
+        "OR()");
   }
 
   @Test
@@ -824,27 +829,38 @@ public final class EncoderTestCase extends Assert {
 
   @Test
   public void testMinimalEncoder32() throws WriterException {
-    assertEquals(MinimalEncoder.encode("\u0150\u0150\u015C\u015C" ,null,false).toString(),"ECI(ISO-8859-2),BYTE(.,.),ECI(ISO-8859-3),BYTE(.,.),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("\u0150\u0150\u015C\u015C" ,null,false).toString(),"ECI(ISO-8859-2),BYTE(.,.)" +
+        ",ECI(ISO-8859-3),BYTE(.,.),TERMINATOR()");
   }
 
   @Test
   public void testMinimalEncoder33() throws WriterException {
-    assertEquals(MinimalEncoder.encode("abcdef\u0150ghij" ,null,false).toString(),"ECI(ISO-8859-2),BYTE(a,b,c,d,e,f,.,g,h,i,j),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("abcdef\u0150ghij" ,null,false).toString(),"ECI(ISO-8859-2),BYTE(a,b,c,d,e,f," +
+        ".,g,h,i,j),TERMINATOR()");
   }
 
   @Test
   public void testMinimalEncoder34() throws WriterException {
-    assertEquals(MinimalEncoder.encode("2938928329832983\u01502938928329832983\u015C2938928329832983" ,null,false).toString(),"NUMERIC(293,892,832,983,298),ECI(ISO-8859-2),BYTE(3,.,2),NUMERIC(938,928,329,832,983),ECI(ISO-8859-3),BYTE(.,2),NUMERIC(938,928,329,832,983),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("2938928329832983\u01502938928329832983\u015C2938928329832983" ,null,false)
+        .toString(),"NUMERIC(293,892,832,983,298),ECI(ISO-8859-2),BYTE(3,.,2),NUMERIC(938,928,329,832,983),ECI(ISO-8" +
+        "859-3),BYTE(.,2),NUMERIC(938,928,329,832,983),TERMINATOR()");
   }
 
   @Test
   public void testMinimalEncoder35() throws WriterException {
-    assertEquals(MinimalEncoder.encode("that particularly stands out to me is \u0625\u0650\u062C\u064E\u0651\u0627\u0635 (\u02BEijj\u0101\u1E63) \u201Cpear\u201D, suggested to have originated from Hebrew \u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)" ,null,false).toString(),"ECI(ISO-8859-6),BYTE(t,h,a,t, ,p,a,r,t,i,c,u,l,a,r,l,y, ,s,t,a,n,d,s, ,o,u,t, ,t,o, ,m,e, ,i,s, ,.,.,.,.,.,.,., ,(),ECI(UTF-8),BYTE(.,i,j,j,.,.,), ,.,p,e,a,r,.,,, ,s,u,g,g,e,s,t,e,d, ,t,o, ,h,a,v,e, ,o,r,i,g,i,n,a,t,e,d, ,f,r,o,m, ,H,e,b,r,e,w, ,.,.,.,.,.,., ,(,a,g,.,s,)),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("that particularly stands out to me is \u0625\u0650\u062C\u064E\u0651\u0627" +
+        "\u0635 (\u02BEijj\u0101\u1E63) \u201Cpear\u201D, suggested to have originated from Hebrew \u05D0\u05B7" +
+        "\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)" ,null,false).toString(),"ECI(ISO-8859-6),BYTE(t,h,a,t, ,p,a,r,t,i,c,u" +
+        ",l,a,r,l,y, ,s,t,a,n,d,s, ,o,u,t, ,t,o, ,m,e, ,i,s, ,.,.,.,.,.,.,., ,(),ECI(UTF-8),BYTE(.,i,j,j,.,.,), ,.,p" +
+        ",e,a,r,.,,, ,s,u,g,g,e,s,t,e,d, ,t,o, ,h,a,v,e, ,o,r,i,g,i,n,a,t,e,d, ,f,r,o,m, ,H,e,b,r,e,w, ,.,.,.,.,.,.," +
+        " ,(,a,g,.,s,)),TERMINATOR()");
   }
 
   @Test
   public void testMinimalEncoder36() throws WriterException {
-    assertEquals(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781" ,null,true).toString(),"FNC1_FIRST_POSITION(),NUMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(045,003,267,781),TERMINATOR()");
+    assertEquals(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781" ,null,true).toString(),
+        "FNC1_FIRST_POSITION(),NUMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(04" +
+        "5,003,267,781),TERMINATOR()");
   }
 
   private static void verifyGS1EncodedData(QRCode qrCode) {
