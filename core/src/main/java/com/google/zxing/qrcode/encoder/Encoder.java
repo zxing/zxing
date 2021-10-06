@@ -82,8 +82,10 @@ public final class Encoder {
     BitArray headerAndDataBits;
     Mode mode;
 
-    boolean hasGS1FormatHint = hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT) && Boolean.parseBoolean(hints.get(EncodeHintType.GS1_FORMAT).toString());
-    boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.QR_COMPACT) && Boolean.parseBoolean(hints.get(EncodeHintType.QR_COMPACT).toString());
+    boolean hasGS1FormatHint = hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT) &&
+        Boolean.parseBoolean(hints.get(EncodeHintType.GS1_FORMAT).toString());
+    boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.QR_COMPACT) &&
+        Boolean.parseBoolean(hints.get(EncodeHintType.QR_COMPACT).toString());
 
     if (hasCompactionHint) {
       mode = Mode.BYTE;
@@ -92,7 +94,6 @@ public final class Encoder {
 
       while (!willFit(rn.getSize(), rn.getVersion(ecLevel), ecLevel)) {
         if (rn.getVersion(ecLevel).getVersionNumber() <= 26) {
-//          System.err.println("DEBUG: INFO: " + rn.getSize() + " bits don't fit in version " + rn.getVersion(ecLevel) + ". Trying next size..");
           int nextVersionNumber = rn.getVersion(ecLevel).getVersionNumber() <= 9 ? 10 : 27 ;
           rn = MinimalEncoder.encode(content,Version.getVersionForNumber(nextVersionNumber),hasGS1FormatHint);
         } else {
@@ -324,16 +325,16 @@ public final class Encoder {
    * error correction level.
    */
   static boolean willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
-      // In the following comments, we use numbers of Version 7-H.
-      // numBytes = 196
-      int numBytes = version.getTotalCodewords();
-      // getNumECBytes = 130
-      Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
-      int numEcBytes = ecBlocks.getTotalECCodewords();
-      // getNumDataBytes = 196 - 130 = 66
-      int numDataBytes = numBytes - numEcBytes;
-      int totalInputBytes = (numInputBits + 7) / 8;
-      return numDataBytes >= totalInputBytes;
+    // In the following comments, we use numbers of Version 7-H.
+    // numBytes = 196
+    int numBytes = version.getTotalCodewords();
+    // getNumECBytes = 130
+    Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
+    int numEcBytes = ecBlocks.getTotalECCodewords();
+    // getNumDataBytes = 196 - 130 = 66
+    int numDataBytes = numBytes - numEcBytes;
+    int totalInputBytes = (numInputBits + 7) / 8;
+    return numDataBytes >= totalInputBytes;
   }
 
   /**
@@ -532,10 +533,6 @@ public final class Encoder {
   /**
    * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
    */
-//@Sean: Needed to remove "private" on this and willFit() because they are currently called from MinimalEncoder. The class MinimalEncoder could be moved to be an inner class of this class to avoid that. 
-//       It is also possible to move all functions from MinimalEncoder into this class without needing to introduce any new member variables in this class. The functions could all be static. Right now, none 
-//       of the methods in MinimalEncoder modify a member variable (apart from the constructor). The methods are only partially static because some methods do read the memeber variables but that 
-//       could be changed. It would however bloat the signatures of those methods since those members would have to be passed to the function (e.g. the encoder array or the input string).
   static void appendBytes(String content,
                           Mode mode,
                           BitArray bits,

@@ -34,14 +34,18 @@ import java.nio.charset.UnsupportedCharsetException;
 /** Encoder that encodes minimally
  *
  * Version selection:
- * The version can be preset in the constructor. If it isn't specified then the algorithm will compute three solutions for the three different version classes 1-9, 10-26 and 27-40.
+ * The version can be preset in the constructor. If it isn't specified then the algorithm will compute three solutions
+ * for the three different version classes 1-9, 10-26 and 27-40.
  *
- * It is not clear to me if ever a solution using for example Medium (Versions 10-26) could be smaller than a Small solution (Versions 1-9) (proof for or against would be nice to have).
- * With hypothetical values for the number of length bits, the number of bits per mode and the number of bits per encoded character it can be shown that it can happen at all as follows:
- * We hypothetically assume that a mode is encoded using 1 bit (instead of 4) and a character is encoded in BYTE mode using 2 bit (instead of 8). Using these values we now attempt to encode the 
- * four characters "1234".
- * If we furthermore assume that in Version 1-9 the length field has 1 bit length so that it can encode up to 2 characters and that in Version 10-26 it has 2 bits length so that we can encode up
- * to 2 characters then it is more efficient to encode with Version 10-26 than with Version 1-9 as shown below:
+ * It is not clear to me if ever a solution using for example Medium (Versions 10-26) could be smaller than a Small 
+ * solution (Versions 1-9) (proof for or against would be nice to have).
+ * With hypothetical values for the number of length bits, the number of bits per mode and the number of bits per 
+ * encoded character it can be shown that it can happen at all as follows:
+ * We hypothetically assume that a mode is encoded using 1 bit (instead of 4) and a character is encoded in BYTE mode
+ * using 2 bit (instead of 8). Using these values we now attempt to encode the four characters "1234".
+ * If we furthermore assume that in Version 1-9 the length field has 1 bit length so that it can encode up to 2 
+ * characters and that in Version 10-26 it has 2 bits length so that we can encode up to 2 characters then it is more 
+ * efficient to encode with Version 10-26 than with Version 1-9 as shown below:
  *
  * Number of length bits small version (1-9): 1
  * Number of length bits large version (10-26): 2
@@ -50,7 +54,8 @@ import java.nio.charset.UnsupportedCharsetException;
  * BYTE(1,2),BYTE(3,4): 1+1+2+2,1+1+2+2=12 bits
  * BYTE(1,2,3,4): 1+2+2+2+2+2          =11 bits
  *
- * If we however change the capacity of the large encoding from 2 bit to 4 bit so that it potentially can encode 16 items, then it is more efficient to encode using the small encoding
+ * If we however change the capacity of the large encoding from 2 bit to 4 bit so that it potentially can encode 16
+ * items, then it is more efficient to encode using the small encoding
  * as shown below:
  *
  * Number of length bits small version (1-9): 1
@@ -65,8 +70,9 @@ import java.nio.charset.UnsupportedCharsetException;
  * ECI switching:
  *
  * In multi language content the algorithm selects the most compact representation using ECI modes. For example the
- * it is more compactly represented using one ECI to UTF-8 rather than two ECIs to ISO-8859-6 and ISO-8859-1 if the text contains more ASCII characters (since they are represented as
- * one byte sequence) as opposed to the case where there are proportionally more Arabic characters that require two bytes in UTF-8 and only one in ISO-8859-6.
+ * it is more compactly represented using one ECI to UTF-8 rather than two ECIs to ISO-8859-6 and ISO-8859-1 if the 
+ * text contains more ASCII characters (since they are represented as one byte sequence) as opposed to the case where
+ * there are proportionally more Arabic characters that require two bytes in UTF-8 and only one in ISO-8859-6.
  *
  * @author Alex Geller
  */
@@ -82,11 +88,11 @@ final class MinimalEncoder {
     String description;
 
     VersionSize(String description) {
-        this.description = description;
+      this.description = description;
     }
 
     public String toString() {
-        return description;
+      return description;
     }
   }
 
@@ -96,7 +102,7 @@ final class MinimalEncoder {
   private CharsetEncoder[] encoders;
     
 
-  /**Encoding is optional (default ISO-8859-1) and version is optional (minimal version is computed if not specified*/
+  /**Encoding is optional (default ISO-8859-1) and version is optional (minimal version is computed if not specified.*/
   MinimalEncoder(String stringToEncode,Version version,boolean isGS1) throws WriterException {
 
     this.stringToEncode = stringToEncode;
@@ -139,7 +145,8 @@ final class MinimalEncoder {
         }
         if (j >= 15) {
           if (!StandardCharsets.UTF_16BE.newEncoder().canEncode(stringToEncode.charAt(i))) {
-              throw new WriterException("Can not encode character \\u" + String.format("%04X",(int) stringToEncode.charAt(i)) + " at position " + i + " in input \"" + stringToEncode + "\"");
+            throw new WriterException("Can not encode character \\u" + String.format("%04X",
+                (int) stringToEncode.charAt(i)) + " at position " + i + " in input \"" + stringToEncode + "\"");
           }
           needUnicodeEncoder = true;
         }
@@ -186,15 +193,19 @@ final class MinimalEncoder {
   }
 
   static VersionSize getVersionSize(Version version) {
-    return version.getVersionNumber() <= 9 ? VersionSize.SMALL : version.getVersionNumber() <= 26 ? VersionSize.MEDIUM : VersionSize.LARGE;
+    return version.getVersionNumber() <= 9 ? VersionSize.SMALL : version.getVersionNumber() <= 26 ? 
+      VersionSize.MEDIUM : VersionSize.LARGE;
   }
 
   static Version getVersion(VersionSize versionSize) {
     switch (versionSize) {
-      case SMALL: return Version.getVersionForNumber(9);
-      case MEDIUM: return Version.getVersionForNumber(26);
+      case SMALL:
+        return Version.getVersionForNumber(9);
+      case MEDIUM:
+        return Version.getVersionForNumber(26);
       case LARGE: 
-      default: return Version.getVersionForNumber(40);
+      default:
+        return Version.getVersionForNumber(40);
     }
   }
 
@@ -210,7 +221,8 @@ final class MinimalEncoder {
     return Encoder.getAlphanumericCode(c) != -1;
   }
 
-  /** Example: to encode alphanumerically at least 2 characters are needed (5.5 bits per character). Similarily three digits are needed to encode numerically (3+1/3 bits per digit)*/
+  /** Example: to encode alphanumerically at least 2 characters are needed (5.5 bits per character). Similarily three 
+   * digits are needed to encode numerically (3+1/3 bits per digit)*/
   static int getEncodingGranularity(Mode mode) {
     switch (mode) {
       case KANJI: return 1;
@@ -222,7 +234,8 @@ final class MinimalEncoder {
     }
   }
 
-  /** Example: to encode alphanumerically 11 bits are used per 2 characters. Similarily 10 bits are used to encode 3 numeric digits.*/
+  /** Example: to encode alphanumerically 11 bits are used per 2 characters. Similarily 10 bits are used to encode 3 
+   * numeric digits.*/
   static int getBitsPerEncodingUnit(Mode mode) {
     switch (mode) {
       case KANJI: return 16;
@@ -235,7 +248,8 @@ final class MinimalEncoder {
     }
   }
 
-  /** Returns the maximum number of encodeable characters in the given mode for the given version. Example: in Version 1, 2^10 digits or 2^8 bytes can be encoded. In Version 3 it is 2^14 digits and 2^16 bytes*/
+  /** Returns the maximum number of encodeable characters in the given mode for the given version. Example: in 
+   * Version 1, 2^10 digits or 2^8 bytes can be encoded. In Version 3 it is 2^14 digits and 2^16 bytes*/
   static int getMaximumNumberOfEncodeableCharacters(Version version,Mode mode) {
     int count = mode.getCharacterCountBits(version);
     return count == 0 ? 0 : 1 << count;
@@ -249,7 +263,8 @@ final class MinimalEncoder {
       case KANJI: return isDoubleByteKanji(c) ;
       case ALPHANUMERIC: return isAlphanumeric(c) ;
       case NUMERIC: return isNumeric(c) ;
-      case BYTE: return true; //any character can be encoded as byte(s). Up to the caller to manage splitting into multiple bytes when String.getBytes(Charset) return more than one byte.
+      case BYTE: return true; //any character can be encoded as byte(s). Up to the caller to manage splitting into 
+                              //multiple bytes when String.getBytes(Charset) return more than one byte.
       default:
         return false;
     }
@@ -260,12 +275,16 @@ final class MinimalEncoder {
       return 0;
     }
     switch (mode) {
-      case KANJI: return 0;
-      case ALPHANUMERIC: return 1;
-      case NUMERIC: return 2;
+      case KANJI:
+        return 0;
+      case ALPHANUMERIC:
+        return 1;
+      case NUMERIC:
+        return 2;
       case ECI:
-      case BYTE: return 3;
-      default:
+      case BYTE:
+        return 3;
+      default: 
         assert false;
         return -1;
     }
@@ -316,7 +335,8 @@ final class MinimalEncoder {
       current = current.next;
     }
     //Add TERMINATOR according to "8.4.8 Terminator"
-    current.next = new ResultNode(Mode.TERMINATOR,result.version,true,stringToEncode.length(),result.charsetEncoderIndex,null);
+    current.next = new ResultNode(Mode.TERMINATOR,result.version,true,stringToEncode.length(),
+      result.charsetEncoderIndex,null);
     return result;
   }
     
@@ -331,9 +351,11 @@ final class MinimalEncoder {
 
 //    if (DEBUG) {
 //      if (rn.previous == null) {
-//        System.err.println("DEBUG adding edge " + rn + " from " + rn.position + " to " + vertexIndex + " with an accumulated size of " + rn.getSize(true));
+//        System.err.println("DEBUG adding edge " + rn + " from " + rn.position + " to " + vertexIndex + " with an 
+//          accumulated size of " + rn.getSize(true));
 //      } else {
-//        System.err.println("DEBUG adding edge " + rn + " from " + vertexToString(previous.position,previous) + " to " + vertexToString(vertexIndex,rn) + " with an accumulated size of " + rn.getSize(true));
+//        System.err.println("DEBUG adding edge " + rn + " from " + vertexToString(previous.position,previous) + 
+//          " to " + vertexToString(vertexIndex,rn) + " with an accumulated size of " + rn.getSize(true));
 //      }
 //    }
   }
@@ -355,10 +377,12 @@ final class MinimalEncoder {
       addEdge(vertices,new ResultNode(Mode.KANJI,version,true,from,0,null),previous);
     }
     int inputLength = stringToEncode.length();
-    if (from + 1 < inputLength && canEncode(Mode.ALPHANUMERIC,stringToEncode.charAt(from)) && canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
+    if (from + 1 < inputLength && canEncode(Mode.ALPHANUMERIC,stringToEncode.charAt(from)) && 
+        canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
       addEdge(vertices,new ResultNode(Mode.ALPHANUMERIC,version,true,from,0,null),previous);
     }
-    if (from + 2 < inputLength && canEncode(Mode.NUMERIC,stringToEncode.charAt(from)) && canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 1)) && canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
+    if (from + 2 < inputLength && canEncode(Mode.NUMERIC,stringToEncode.charAt(from)) && canEncode(Mode.NUMERIC, 
+        stringToEncode.charAt(from + 1)) && canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
       addEdge(vertices,new ResultNode(Mode.NUMERIC,version,true,from,0,null),previous);
     }
   }
@@ -376,7 +400,9 @@ final class MinimalEncoder {
 //
 //  /** used for debugging*/
 //  String vertexToString(int position, ResultNode rn) {
-//    return (position >= stringToEncode.length() ? "end vertex" : "vertex for character '" + stringToEncode.charAt(position) + "' at position " + position) + " with encoding " + encoders[rn.charsetEncoderIndex].charset().name() + " and mode " + rn.mode;
+//    return (position >= stringToEncode.length() ? "end vertex" : "vertex for character '" + 
+//      stringToEncode.charAt(position) + "' at position " + position) + " with encoding " + 
+//        encoders[rn.charsetEncoderIndex].charset().name() + " and mode " + rn.mode;
 //  }
 //  /** used for debugging*/
 //  void printEdges(Vector<ResultNode>[][][] vertices) {
@@ -390,12 +416,17 @@ final class MinimalEncoder {
 //            assert edges.size() > 0;
 //            if (edges.size() > 0) {
 //              ResultNode rn = edges.get(0);
-//              String vertexKey = "" + i + "_" + rn.mode + (willHaveECI ? "_" + encoders[rn.charsetEncoderIndex].charset().name() : "");
+//              String vertexKey = "" + i + "_" + rn.mode + (willHaveECI ? "_" + 
+//                encoders[rn.charsetEncoderIndex].charset().name() : "");
 //              int fromPosition = rn.position;
-//              ResultNode previous = rn.previous == null ? null : rn.previous.mode == Mode.ECI ? rn.previous.previous : rn.previous;
-//              String fromKEY = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode + (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
+//              ResultNode previous = rn.previous == null ? null : rn.previous.mode == Mode.ECI ? 
+//                rn.previous.previous : rn.previous;
+//              String fromKEY = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode + 
+//                (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
 //              int toPosition = fromPosition + getEncodingGranularity(rn.mode);
-//              System.err.println("DEBUG: (" + fromKEY + ") -- " + rn.mode + (toPosition - fromPosition > 0 ? "(" + stringToEncode.substring(fromPosition, toPosition) + ")" : "") + " (" + rn.getSize(true) + ")" + " --> " + "(" + vertexKey + ")");
+//              System.err.println("DEBUG: (" + fromKEY + ") -- " + rn.mode + (toPosition - fromPosition > 0 ? "(" + 
+//                stringToEncode.substring(fromPosition, toPosition) + ")" : "") + " (" + rn.getSize(true) + ")" +
+//                " --> " + "(" + vertexKey + ")");
 //            }
 //          }
 //        }
@@ -405,15 +436,25 @@ final class MinimalEncoder {
 
   /** encodes minimally using Dijkstra.*/
   ResultNode encode(Version version) throws WriterException {
-/* A vertex represents a tuple a character in the input, a mode and an encoding. An edge leading to such a vertex encodes the character left of the one that the
- * vertex represents and encodes it in the same encoding and mode as the vertex.
- * The edges leading to a vertex are stored in such a way that there is a fast way to enumerate the edges ending on a particular vertex.
+/* A vertex represents a tuple of a position in the input, a mode and an encoding where position 0 denotes the position
+ * left of the first character, 1 the position left of the second character and so on. An edge leading to such a vertex 
+ * encodes the character left of the position that the vertex represents and encodes it in the same encoding and mode 
+ * as the vertex. In other words, all edges leading to a particular vertex encode the same characters in the same mode
+ * with the same character encoding.
+ * The edges leading to a vertex are stored in such a way that there is a fast way to enumerate the edges ending on a
+ * particular vertex.
  * The algorithm processes the input string from left to right.
- * For every vertex repesenting the character to the left of the current character, the algorithm enumerates the edges ending on the vertex and removes all but the shortest from that list.
+ * For every vertex repesenting the character to the left of the current character, the algorithm enumerates the edges 
+ * ending on the vertex and removes all but the shortest from that list.
  * Then it creates a vertex for the current character and computes all possible outgoing edges.
  * Examples:
  * The process is illustrated by showing the graph (edges) after each iteration from left to right over the input: 
- * An edge is drawn as follows "(" + fromVertex + ") -- " + encodingMode + "(" + encodedInput + ") (" + accumulatedSize + ") --> (" + toVertex + ")"
+ * An edge is drawn as follows "(" + fromVertex + ") -- " + encodingMode + "(" + encodedInput + ") (" + 
+ * accumulatedSize + ") --> (" + toVertex + ")"
+ *
+ * The coding conversions of this project require lines to not exceed 120 characters. In order to view the examples 
+ * below join lines that end with a backslash. This can be achieved by running the command 
+ * sed -e ':a' -e 'N' -e '$!ba' -e 's/\\\n *[*]/ /g' on this file.
  *
  * Example 1 encoding the string "ABCDE":
  *
@@ -423,7 +464,7 @@ final class MinimalEncoder {
  * 
  * Situation after adding edges to vertices at position 1
  * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE)
-                               * (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC)
+ *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC)
  * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC)
  * 
  * Situation after adding edges to vertices at position 2
@@ -432,28 +473,41 @@ final class MinimalEncoder {
  * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE)
                                * (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC)
  * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- BYTE(C) (44) --> (3_BYTE)
-                                                            * (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC)
+ *                                                            (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
+ *        (35) --> (4_ALPHANUMERIC)
  * 
  * Situation after adding edges to vertices at position 3
  * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE)
-                               * (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- BYTE(D) (64) --> (4_BYTE)
-                                                                                                 * (3_ALPHANUMERIC) -- ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
- * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC)
-                                                            * (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC)
+ *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- \
+ *BYTE(D) (64) --> (4_BYTE)
+ *                                                                                                 (3_ALPHANUMERIC) -- \
+ *ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
+ * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
+ *        (35) --> (4_ALPHANUMERIC)
+ *                                                            (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
+ *        (35) --> (4_ALPHANUMERIC)
  * 
  * Situation after adding edges to vertices at position 4
- * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE) -- BYTE(D)         (44) --> (4_BYTE)
-                               * (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
- * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC) -- BYTE(E) (55) --> (5_BYTE)
+ * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE) -- BYTE(D) \
+ *(44) --> (4_BYTE)
+ *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- \
+ *ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
+ * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
+ *        (35) --> (4_ALPHANUMERIC) -- BYTE(E) (55) --> (5_BYTE)
  * 
  * Situation after adding edges to vertices at position 5
- * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE) -- BYTE(D)         (44) --> (4_BYTE) -- BYTE(E)         (52) --> (5_BYTE)
-                               * (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
- * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC)
+ * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE) -- BYTE(D) \
+ *        (44) --> (4_BYTE) -- BYTE(E)         (52) --> (5_BYTE)
+ *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- \
+ *ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
+ * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
+ *        (35) --> (4_ALPHANUMERIC)
  *
- * Encoding as BYTE(ABCDE) has the smallest size of 52 and is hence chosen. The encodation ALPHANUMERIC(ABCD), BYTE(E) is longer with a size of 55.
+ * Encoding as BYTE(ABCDE) has the smallest size of 52 and is hence chosen. The encodation ALPHANUMERIC(ABCD), BYTE(E) 
+ * is longer with a size of 55.
  *
- * Example 2 encoding the string "XXYY" where X denotes a character unique to character set ISO-8859-2 and Y a character unique to ISO-8859-3. Both characters encode as double byte in UTF-8:
+ * Example 2 encoding the string "XXYY" where X denotes a character unique to character set ISO-8859-2 and Y a 
+ * character unique to ISO-8859-3. Both characters encode as double byte in UTF-8:
  *
  * Initial situation
  * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2)
@@ -462,41 +516,57 @@ final class MinimalEncoder {
  * 
  * Situation after adding edges to vertices at position 1
  * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2)
-                               * (1_BYTE_ISO-8859-2) -- BYTE(X) (72) --> (2_BYTE_UTF-8)
-                               * (1_BYTE_ISO-8859-2) -- BYTE(X) (72) --> (2_BYTE_UTF-16BE)
+ *                               (1_BYTE_ISO-8859-2) -- BYTE(X) (72) --> (2_BYTE_UTF-8)
+ *                               (1_BYTE_ISO-8859-2) -- BYTE(X) (72) --> (2_BYTE_UTF-16BE)
  * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-8)
  * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE)
  * 
  * Situation after adding edges to vertices at position 2
  * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2)
-                                                                       * (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYTE_ISO-8859-3)
-                                                                       * (2_BYTE_ISO-8859-2) -- BYTE(Y) (80) --> (3_BYTE_UTF-8)
-                                                                       * (2_BYTE_ISO-8859-2) -- BYTE(Y) (80) --> (3_BYTE_UTF-16BE)
+ *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYT\
+ *E_ISO-8859-3)
+ *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (80) --> (3_BYT\
+ *E_UTF-8)
+ *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (80) --> (3_BYT\
+ *E_UTF-16BE)
  * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-8) -- BYTE(X) (56) --> (2_BYTE_UTF-8)
  * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE)
  * 
  * Situation after adding edges to vertices at position 3
- * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYTE_ISO-8859-3)
-                                                                                                               * (3_BYTE_ISO-8859-3) -- BYTE(Y) (80) --> (4_BYTE_ISO-8859-3)
-                                                                                                               * (3_BYTE_ISO-8859-3) -- BYTE(Y) (112) --> (4_BYTE_UTF-8)
-                                                                                                               * (3_BYTE_ISO-8859-3) -- BYTE(Y) (112) --> (4_BYTE_UTF-16BE)
+ * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYT\
+ *E_ISO-8859-3)
+ *                                                                                                               (3_BYT\
+ *E_ISO-8859-3) -- BYTE(Y) (80) --> (4_BYTE_ISO-8859-3)
+ *                                                                                                               (3_BYT\
+ *E_ISO-8859-3) -- BYTE(Y) (112) --> (4_BYTE_UTF-8)
+ *                                                                                                               (3_BYT\
+ *E_ISO-8859-3) -- BYTE(Y) (112) --> (4_BYTE_UTF-16BE)
  * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-8) -- BYTE(X) (56) --> (2_BYTE_UTF-8) -- BYTE(Y) (72) --> (3_BYTE_UTF-8)
- * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE) -- BYTE(Y) (72) --> (3_BYTE_UTF-16BE)
+ * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE) -- BYTE(Y) (72) --> (3_BYTE_UT\
+ *F-16BE)
  * 
  * Situation after adding edges to vertices at position 4
- * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYTE_ISO-8859-3) -- BYTE(Y) (80) --> (4_BYTE_ISO-8859-3)
-                                                                                                               * (3_BYTE_UTF-8) -- BYTE(Y) (88) --> (4_BYTE_UTF-8)
-                                                                                                               * (3_BYTE_UTF-16BE) -- BYTE(Y) (88) --> (4_BYTE_UTF-16BE)
+ * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYT\
+ *E_ISO-8859-3) -- BYTE(Y) (80) --> (4_BYTE_ISO-8859-3)
+ *                                                                                                               (3_BYT\
+ *E_UTF-8) -- BYTE(Y) (88) --> (4_BYTE_UTF-8)
+ *                                                                                                               (3_BYT\
+ *E_UTF-16BE) -- BYTE(Y) (88) --> (4_BYTE_UTF-16BE)
  * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-8) -- BYTE(X) (56) --> (2_BYTE_UTF-8) -- BYTE(Y) (72) --> (3_BYTE_UTF-8)
- * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE) -- BYTE(Y) (72) --> (3_BYTE_UTF-16BE)
+ * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE) -- BYTE(Y) (72) --> (3_BYTE_UT\
+ *F-16BE)
  *
- * Encoding as ECI(ISO-8859-2),BYTE(XX),ECI(ISO-8859-3),BYTE(YY) has the smallest size of 80 and is hence chosen. The encodation ECI(UTF-8),BYTE(XXYY) is longer with a size of 88.
+ * Encoding as ECI(ISO-8859-2),BYTE(XX),ECI(ISO-8859-3),BYTE(YY) has the smallest size of 80 and is hence chosen. The 
+ * encodation ECI(UTF-8),BYTE(XXYY) is longer with a size of 88.
  */
     int inputLength = stringToEncode.length();
-//Array that represents vertices. There is a vertex for every character, encoding and mode. The vertex contains a list of
-//all edges that lead to it that have the same encoding and mode.
+//Array that represents vertices. There is a vertex for every character, encoding and mode. The vertex contains a list
+//of all edges that lead to it that have the same encoding and mode.
 //The lists are created lazily
-    Vector<ResultNode>[][][] vertices = new Vector[inputLength + 1][encoders.length][4]; //last dimension encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the function getCompactedOrdinal(Mode)
+
+//The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the 
+//function getCompactedOrdinal(Mode)
+    Vector<ResultNode>[][][] vertices = new Vector[inputLength + 1][encoders.length][4];
     addEdges(version,vertices,0,null);
 //    if (DEBUG) {
 //        System.err.println("DEBUG Initial situation");
@@ -508,7 +578,7 @@ final class MinimalEncoder {
           ResultNode minimalEdge = null;
           if (vertices[i][j][k] != null) {
             Vector<ResultNode> edges = vertices[i][j][k];
-            if (edges.size() == 1) { //Optimization: if there is only one edge then that one is the minimal one
+            if (edges.size() == 1) { //Optimization: if there is only one edge then that's the minimal one
               minimalEdge = edges.get(0);
             } else {
               int minimalIndex = -1;
@@ -528,7 +598,9 @@ final class MinimalEncoder {
             if (i < inputLength) {
               assert minimalEdge != null;
 //              if (DEBUG && minimalEdge != null) {
-//                System.err.println("DEBUG processing " + vertexToString(i,minimalEdge) + ". The minimal edge leading to this vertex is " + edgeToString(minimalEdge) + " with a size of " + minimalEdge.getSize(true));
+//                System.err.println("DEBUG processing " + vertexToString(i,minimalEdge) +
+//                  ". The minimal edge leading to this vertex is " + edgeToString(minimalEdge) + " with a size of " +
+//                  minimalEdge.getSize(true));
 //              }
               addEdges(version,vertices,i,minimalEdge);
             }
@@ -566,14 +638,14 @@ final class MinimalEncoder {
       }
       return result;
     } else {
-        throw new WriterException("Internal error: failed to encode");
+      throw new WriterException("Internal error: failed to encode");
     }
   }
     
   byte[] getBytesOfCharacter(int position,int charsetEncoderIndex) {
     //TODO: Is there a more efficient way for a single character?
     return stringToEncode.substring(position,position + 1).getBytes(encoders[charsetEncoderIndex].charset());
- }
+  }
 
   final class ResultNode {
     private Mode mode;
@@ -605,8 +677,10 @@ final class MinimalEncoder {
       this.previous = previous;
       declaresMode = true;
       if (previous != null) {
-//TODO: Verify that it is correct to call getLength() (character count) here instead of using number of bytes for a BYTE mode depending on the character set.
-        if (previous.mode == mode && mode != Mode.ECI && previous.getLength(true) + getLength(true) < getMaximumNumberOfEncodeableCharacters(version,mode)) {
+//TODO: Verify that it is correct to call getLength() (character count) here instead of using number of bytes for a 
+//      BYTE mode depending on the character set.
+        if (previous.mode == mode && mode != Mode.ECI && previous.getLength(true) + getLength(true) < 
+            getMaximumNumberOfEncodeableCharacters(version,mode)) {
           declaresMode = false;
         }
       }
@@ -699,7 +773,8 @@ final class MinimalEncoder {
           String pieceToEncode = stringToEncode.substring(position,position + characterLength);
           // append length
           try {
-            bits.appendBits(mode == Mode.BYTE ? pieceToEncode.getBytes(canonicalCharsetName).length : characterLength,mode.getCharacterCountBits(version));
+            bits.appendBits(mode == Mode.BYTE ? pieceToEncode.getBytes(canonicalCharsetName).length : characterLength,
+                mode.getCharacterCountBits(version));
           } catch (UnsupportedEncodingException uee) {
             throw new WriterException(uee);
           }
@@ -734,13 +809,15 @@ final class MinimalEncoder {
           lowerLimit = 27;
           upperLimit = 40;
           break;
-     }
+      }
  //increase version if needed
-      while (versionNumber < upperLimit && !Encoder.willFit(getSize(), Version.getVersionForNumber(versionNumber), ecLevel)) {
+      while (versionNumber < upperLimit && !Encoder.willFit(getSize(), Version.getVersionForNumber(versionNumber),
+        ecLevel)) {
         versionNumber++;
       }
 //shrink version if possible
-      while (versionNumber > lowerLimit && Encoder.willFit(getSize(), Version.getVersionForNumber(versionNumber - 1), ecLevel)) {
+      while (versionNumber > lowerLimit && Encoder.willFit(getSize(), Version.getVersionForNumber(versionNumber - 1),
+        ecLevel)) {
         versionNumber--;
       }
       return Version.getVersionForNumber(versionNumber);
