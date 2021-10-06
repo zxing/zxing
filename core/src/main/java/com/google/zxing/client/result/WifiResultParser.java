@@ -18,6 +18,7 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
+@SuppressWarnings("checkstyle:lineLength")
 /**
  * <p>Parses a WIFI configuration string. Strings will be of the form:</p>
  *

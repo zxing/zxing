@@ -101,6 +101,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   private static final int FINDER_PAT_E = 4;
   private static final int FINDER_PAT_F = 5;
 
+  @SuppressWarnings("checkstyle:lineLength")
   private static final int[][] FINDER_PATTERN_SEQUENCES = {
     { FINDER_PAT_A, FINDER_PAT_A },
     { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },

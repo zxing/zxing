@@ -285,10 +285,10 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   private static int chooseCode(CharSequence value, int start, int oldCode) {
     CType lookahead = findCType(value, start);
     if (lookahead == CType.ONE_DIGIT) {
-       if (oldCode == CODE_CODE_A) {
-         return CODE_CODE_A;
-       }
-       return CODE_CODE_B;
+      if (oldCode == CODE_CODE_A) {
+        return CODE_CODE_A;
+      }
+      return CODE_CODE_B;
     }
     if (lookahead == CType.UNCODABLE) {
       if (start < value.length()) {

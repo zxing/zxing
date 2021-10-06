@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 public final class DecodeServletTestCase extends Assert {
 
   private static final String IMAGE_DATA_URI =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhAQAAAAB/n//CAAAAkklEQVR42mP4DwQNDJjkB4" +
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhAQAAAAB/n//CAAAAkklEQVR42mP4DwQNDJjkB4" +
       "E77A0M369N/d7A8CV6rjiQjPMFkWG1QPL7RVGg%2BAfREKCa/5/vA9V/nFSQ3sDwb7/KdiDJqX4dSH4pXN/A8DfyDVD2" +
       "988HQPUfPVaqA0XKz%2BgD9bIk1AP1fgwvB7KlS9VBdqXbA82PT9AH2fiaH2SXGdDM71fDgeIfhIvKsbkTTAIAKYVr0N" +
       "z5IloAAAAASUVORK5CYII=";

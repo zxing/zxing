@@ -256,18 +256,18 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
       return WifiEnterpriseConfig.Eap.NONE;
     }
     switch (eapString) {
-    case "NONE":
-      return WifiEnterpriseConfig.Eap.NONE;
-    case "PEAP":
-      return WifiEnterpriseConfig.Eap.PEAP;
-    case "PWD":
-      return WifiEnterpriseConfig.Eap.PWD;
-    case "TLS":
-      return WifiEnterpriseConfig.Eap.TLS;
-    case "TTLS":
-      return WifiEnterpriseConfig.Eap.TTLS;
-    default:
-      throw new IllegalArgumentException("Unknown value for EAP method: " + eapString);
+      case "NONE":
+        return WifiEnterpriseConfig.Eap.NONE;
+      case "PEAP":
+        return WifiEnterpriseConfig.Eap.PEAP;
+      case "PWD":
+        return WifiEnterpriseConfig.Eap.PWD;
+      case "TLS":
+        return WifiEnterpriseConfig.Eap.TLS;
+      case "TTLS":
+        return WifiEnterpriseConfig.Eap.TTLS;
+      default:
+        throw new IllegalArgumentException("Unknown value for EAP method: " + eapString);
     }
   }
 
@@ -276,18 +276,18 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
       return WifiEnterpriseConfig.Phase2.NONE;
     }
     switch (phase2String) {
-    case "GTC":
-      return WifiEnterpriseConfig.Phase2.GTC;
-    case "MSCHAP":
-      return WifiEnterpriseConfig.Phase2.MSCHAP;
-    case "MSCHAPV2":
-      return WifiEnterpriseConfig.Phase2.MSCHAPV2;
-    case "NONE":
-      return WifiEnterpriseConfig.Phase2.NONE;
-    case "PAP":
-      return WifiEnterpriseConfig.Phase2.PAP;
-    default:
-      throw new IllegalArgumentException("Unknown value for phase 2 method: " + phase2String);
+      case "GTC":
+        return WifiEnterpriseConfig.Phase2.GTC;
+      case "MSCHAP":
+        return WifiEnterpriseConfig.Phase2.MSCHAP;
+      case "MSCHAPV2":
+        return WifiEnterpriseConfig.Phase2.MSCHAPV2;
+      case "NONE":
+        return WifiEnterpriseConfig.Phase2.NONE;
+      case "PAP":
+        return WifiEnterpriseConfig.Phase2.PAP;
+      default:
+        throw new IllegalArgumentException("Unknown value for phase 2 method: " + phase2String);
     }
   }
 

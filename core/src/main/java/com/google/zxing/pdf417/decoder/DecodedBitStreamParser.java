@@ -273,7 +273,8 @@ final class DecodedBitStreamParser {
         // do not include terminator
         optionalFieldsLength--;
       }
-      resultMetadata.setOptionalData(Arrays.copyOfRange(codewords, optionalFieldsStart, optionalFieldsStart + optionalFieldsLength));
+      resultMetadata.setOptionalData(
+          Arrays.copyOfRange(codewords, optionalFieldsStart, optionalFieldsStart + optionalFieldsLength));
     }
 
     return codeIndex;

@@ -24,6 +24,7 @@ import com.google.zxing.common.BitMatrix;
  */
 final class BitMatrixParser {
 
+  @SuppressWarnings("checkstyle:lineLength")
   private static final int[][] BITNR = {
     {121,120,127,126,133,132,139,138,145,144,151,150,157,156,163,162,169,168,175,174,181,180,187,186,193,192,199,198, -2, -2},
     {123,122,129,128,135,134,141,140,147,146,153,152,159,158,165,164,171,170,177,176,183,182,189,188,195,194,201,200,816, -3},

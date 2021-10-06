@@ -63,8 +63,9 @@ public class Code128WriterTestCase extends Assert {
   @Test
   public void testEncodeWithFunc3() throws WriterException {
     String toEncode = "\u00f3" + "123";
-    //                                                       "1"            "2"             "3"          check digit 51
-    String expected = QUIET_SPACE + START_CODE_B + FNC3 + "10011100110" + "11001110010" + "11001011100" + "11101000110" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE + START_CODE_B + FNC3 +
+        // "1"            "2"             "3"            check digit 51
+        "10011100110" + "11001110010" + "11001011100" + "11101000110" + STOP + QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -75,8 +76,9 @@ public class Code128WriterTestCase extends Assert {
   @Test
   public void testEncodeWithFunc2() throws WriterException {
     String toEncode = "\u00f2" + "123";
-    //                                                       "1"            "2"             "3"          check digit 56
-    String expected = QUIET_SPACE + START_CODE_B + FNC2 + "10011100110" + "11001110010" + "11001011100" + "11100010110" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE + START_CODE_B + FNC2 +
+        // "1"            "2"             "3"             check digit 56
+        "10011100110" + "11001110010" + "11001011100" + "11100010110" + STOP + QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -87,8 +89,9 @@ public class Code128WriterTestCase extends Assert {
   @Test
   public void testEncodeWithFunc1() throws WriterException {
     String toEncode = "\u00f1" + "123";
-    //                                                       "12"                           "3"          check digit 92
-    String expected = QUIET_SPACE + START_CODE_C + FNC1 + "10110011100" + SWITCH_CODE_B + "11001011100" + "10101111000" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE + START_CODE_C + FNC1 +
+        // "12"                           "3"            check digit 92
+        "10110011100" + SWITCH_CODE_B + "11001011100" + "10101111000" + STOP + QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -111,8 +114,9 @@ public class Code128WriterTestCase extends Assert {
   @Test
   public void testEncodeWithFunc4() throws WriterException {
     String toEncode = "\u00f4" + "123";
-    //                                                       "1"            "2"             "3"          check digit 59
-    String expected = QUIET_SPACE + START_CODE_B + FNC4B + "10011100110" + "11001110010" + "11001011100" + "11100011010" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE + START_CODE_B + FNC4B +
+        // "1"            "2"             "3"            check digit 59
+        "10011100110" + "11001110010" + "11001011100" + "11100011010" + STOP + QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -124,7 +128,8 @@ public class Code128WriterTestCase extends Assert {
   public void testEncodeWithFncsAndNumberInCodesetA() throws Exception {
     String toEncode = "\n" + "\u00f1" + "\u00f4" + "1" + "\n";
 
-    String expected = QUIET_SPACE + START_CODE_A + LF + FNC1 + FNC4A + "10011100110" + LF + "10101111000" + STOP + QUIET_SPACE;
+    String expected = QUIET_SPACE + START_CODE_A + LF + FNC1 + FNC4A +
+        "10011100110" + LF + "10101111000" + STOP + QUIET_SPACE;
 
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
@@ -136,20 +141,26 @@ public class Code128WriterTestCase extends Assert {
   @Test
   public void testEncodeSwitchBetweenCodesetsAAndB() throws Exception {
     // start with A switch to B and back to A
-    //                                                      "\0"            "A"             "B"             Switch to B     "a"             "b"             Switch to A     "\u0010"        check digit
-    testEncode("\0ABab\u0010", QUIET_SPACE + START_CODE_A + "10100001100" + "10100011000" + "10001011000" + SWITCH_CODE_B + "10010110000" + "10010000110" + SWITCH_CODE_A + "10100111100" + "11001110100" + STOP + QUIET_SPACE);
+    testEncode("\0ABab\u0010", QUIET_SPACE + START_CODE_A +
+        // "\0"            "A"             "B"             Switch to B     "a"             "b"
+        "10100001100" + "10100011000" + "10001011000" + SWITCH_CODE_B + "10010110000" + "10010000110" +
+        // Switch to A    "\u0010"        check digit
+        SWITCH_CODE_A + "10100111100" + "11001110100" + STOP + QUIET_SPACE);
 
     // start with B switch to A and back to B
-    //                                                "a"             "b"             Switch to A     "\0             "Switch to B"   "a"             "b"             check digit
-    testEncode("ab\0ab", QUIET_SPACE + START_CODE_B + "10010110000" + "10010000110" + SWITCH_CODE_A + "10100001100" + SWITCH_CODE_B + "10010110000" + "10010000110" + "11010001110" + STOP + QUIET_SPACE);
+    testEncode("ab\0ab", QUIET_SPACE + START_CODE_B +
+        //  "a"             "b"            Switch to A     "\0"           Switch to B
+        "10010110000" + "10010000110" + SWITCH_CODE_A + "10100001100" + SWITCH_CODE_B +
+        //  "a"             "b"            check digit
+        "10010110000" + "10010000110" + "11010001110" + STOP + QUIET_SPACE);
   }
-  
+
   private void testEncode(String toEncode, String expected) throws Exception {
     BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
     String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(toEncode, expected, actual);
-    
+
     BitArray row = result.getRow(0, null);
     Result rtResult = reader.decodeRow(0, row, null);
     String actualRoundtripResultText = rtResult.getText();
@@ -209,8 +220,10 @@ public class Code128WriterTestCase extends Assert {
   @Test
   public void testEncodeWithForcedCodeSetFailureCodeSetA() throws Exception {
     String toEncode = "AB123";
-    //                          would default to B             "A"             "B"             "1"             "2"             "3"  check digit 10
-    String expected = QUIET_SPACE + START_CODE_A + "10100011000" + "10001011000" + "10011100110" + "11001110010" + "11001011100" + "11001000100" + STOP + QUIET_SPACE;
+    //                          would default to B   "A"             "B"             "1"
+    String expected = QUIET_SPACE + START_CODE_A + "10100011000" + "10001011000" + "10011100110" +
+        // "2"             "3"           check digit 10
+        "11001110010" + "11001011100" + "11001000100" + STOP + QUIET_SPACE;
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "A");
@@ -223,8 +236,10 @@ public class Code128WriterTestCase extends Assert {
   @Test
   public void testEncodeWithForcedCodeSetFailureCodeSetB() throws Exception {
     String toEncode = "1234";
-    //                          would default to C           "1"             "2"             "3"             "4"  check digit 88
-    String expected = QUIET_SPACE + START_CODE_B + "10011100110" + "11001110010" + "11001011100" + "11001001110" + "11110010010" + STOP + QUIET_SPACE;
+    //                          would default to C   "1"             "2"             "3"
+    String expected = QUIET_SPACE + START_CODE_B + "10011100110" + "11001110010" + "11001011100" +
+        // "4"           check digit 88
+        "11001001110" + "11110010010" + STOP + QUIET_SPACE;
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "B");

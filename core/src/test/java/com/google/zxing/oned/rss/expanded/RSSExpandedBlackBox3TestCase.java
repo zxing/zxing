@@ -34,11 +34,11 @@ import com.google.zxing.common.AbstractBlackBoxTestCase;
  * A test of {@link RSSExpandedReader} against a fixed test set of images.
  */
 public final class RSSExpandedBlackBox3TestCase extends AbstractBlackBoxTestCase {
-    
-    public RSSExpandedBlackBox3TestCase() {
-        super("src/test/resources/blackbox/rssexpanded-3", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED);
-        addTest(117, 117, 0.0f);
-        addTest(117, 117, 180.0f);
-    }
+
+  public RSSExpandedBlackBox3TestCase() {
+    super("src/test/resources/blackbox/rssexpanded-3", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED);
+    addTest(117, 117, 0.0f);
+    addTest(117, 117, 180.0f);
+  }
 }
-    
+

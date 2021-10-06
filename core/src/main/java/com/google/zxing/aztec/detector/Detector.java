@@ -66,7 +66,7 @@ public final class Detector {
    * @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
    * @throws NotFoundException if no Aztec Code can be found
    */
-   public AztecDetectorResult detect(boolean isMirror) throws NotFoundException {
+  public AztecDetectorResult detect(boolean isMirror) throws NotFoundException {
 
     // 1. Get the center of the aztec matrix
     Point pCenter = getMatrixCenter();

@@ -52,7 +52,8 @@ public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void test01310X111() throws Exception {
-    CharSequence data = header310x11 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
+    CharSequence data = header310x11 + compressedGtin900123456798908 + compressed20bitWeight1750 +
+        compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3100)001750(11)100312";
 
     assertCorrectBinaryString(data, expected);
@@ -60,7 +61,8 @@ public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void test01320X111() throws Exception {
-    CharSequence data = header320x11 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
+    CharSequence data = header320x11 + compressedGtin900123456798908 + compressed20bitWeight1750 +
+        compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3200)001750(11)100312";
 
     assertCorrectBinaryString(data, expected);
@@ -68,7 +70,8 @@ public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void test01310X131() throws Exception {
-    CharSequence data = header310x13 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
+    CharSequence data = header310x13 + compressedGtin900123456798908 + compressed20bitWeight1750 +
+        compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3100)001750(13)100312";
 
     assertCorrectBinaryString(data, expected);
@@ -76,7 +79,8 @@ public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void test01320X131() throws Exception {
-    CharSequence data = header320x13 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
+    CharSequence data = header320x13 + compressedGtin900123456798908 + compressed20bitWeight1750 +
+        compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3200)001750(13)100312";
 
     assertCorrectBinaryString(data, expected);
@@ -84,7 +88,8 @@ public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void test01310X151() throws Exception {
-    CharSequence data = header310x15 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
+    CharSequence data = header310x15 + compressedGtin900123456798908 + compressed20bitWeight1750 +
+        compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3100)001750(15)100312";
 
     assertCorrectBinaryString(data, expected);
@@ -92,7 +97,8 @@ public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void test01320X151() throws Exception {
-    CharSequence data = header320x15 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
+    CharSequence data = header320x15 + compressedGtin900123456798908 + compressed20bitWeight1750 +
+        compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3200)001750(15)100312";
 
     assertCorrectBinaryString(data, expected);
@@ -100,7 +106,8 @@ public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void test01310X171() throws Exception {
-    CharSequence data = header310x17 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
+    CharSequence data = header310x17 + compressedGtin900123456798908 + compressed20bitWeight1750 +
+        compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3100)001750(17)100312";
 
     assertCorrectBinaryString(data, expected);
@@ -108,7 +115,8 @@ public final class AI013X0X1XDecoderTest extends AbstractDecoderTest {
 
   @Test
   public void test01320X171() throws Exception {
-    CharSequence data = header320x17 + compressedGtin900123456798908 + compressed20bitWeight1750 + compressedDateMarch12th2010;
+    CharSequence data = header320x17 + compressedGtin900123456798908 + compressed20bitWeight1750 +
+        compressedDateMarch12th2010;
     String expected = "(01)90012345678908(3200)001750(17)100312";
 
     assertCorrectBinaryString(data, expected);

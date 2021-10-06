@@ -696,7 +696,7 @@ public class FinderPatternFinder {
     }
 
     if (distortion == Double.MAX_VALUE) {
-        throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     return bestPatterns;

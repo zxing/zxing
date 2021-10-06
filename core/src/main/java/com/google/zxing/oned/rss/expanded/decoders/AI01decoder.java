@@ -60,7 +60,7 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
       buf.append(currentBlock);
     }
 
-      appendCheckDigit(buf, initialBufferPosition);
+    appendCheckDigit(buf, initialBufferPosition);
   }
 
   private static void appendCheckDigit(StringBuilder buf, int currentPos) {

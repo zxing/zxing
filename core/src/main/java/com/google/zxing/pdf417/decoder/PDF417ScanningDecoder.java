@@ -55,7 +55,8 @@ public final class PDF417ScanningDecoder {
                                      ResultPoint imageTopRight,
                                      ResultPoint imageBottomRight,
                                      int minCodewordWidth,
-                                     int maxCodewordWidth) throws NotFoundException, FormatException, ChecksumException {
+                                     int maxCodewordWidth)
+      throws NotFoundException, FormatException, ChecksumException {
     BoundingBox boundingBox = new BoundingBox(image, imageTopLeft, imageBottomLeft, imageTopRight, imageBottomRight);
     DetectionResultRowIndicatorColumn leftRowIndicatorColumn = null;
     DetectionResultRowIndicatorColumn rightRowIndicatorColumn = null;

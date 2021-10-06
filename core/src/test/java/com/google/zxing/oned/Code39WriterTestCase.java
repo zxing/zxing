@@ -27,6 +27,7 @@ import org.junit.Test;
  */
 public final class Code39WriterTestCase extends Assert {
 
+  @SuppressWarnings("checkstyle:lineLength")
   @Test
   public void testEncode() {
     doTest("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",

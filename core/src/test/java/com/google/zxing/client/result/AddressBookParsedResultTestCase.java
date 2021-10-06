@@ -30,7 +30,8 @@ public final class AddressBookParsedResultTestCase extends Assert {
 
   @Test
   public void testAddressBookDocomo() {
-    doTest("MECARD:N:Sean Owen;;", null, new String[] {"Sean Owen"}, null, null, null, null, null, null, null, null, null);
+    doTest("MECARD:N:Sean Owen;;", null, new String[] {"Sean Owen"},
+        null, null, null, null, null, null, null, null, null);
     doTest("MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;",
         null, new String[] {"Sean Owen"}, null, null, new String[] {"srowen@example.org"}, null, null, null,
         new String[] {"google.com"}, null, "ZXing Team");
@@ -45,7 +46,8 @@ public final class AddressBookParsedResultTestCase extends Assert {
   @Test
   public void testVCard() {
     doTest("BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD",
-           null, new String[] {"Sean Owen"}, null, new String[] {"123 Main St"}, null, null, null, null, null, null, null);
+           null, new String[] {"Sean Owen"}, null, new String[] {"123 Main St"},
+           null, null, null, null, null, null, null);
   }
 
   @Test
@@ -69,13 +71,15 @@ public final class AddressBookParsedResultTestCase extends Assert {
   @Test
   public void testVCardCaseInsensitive() {
     doTest("begin:vcard\r\nadr;HOME:123 Main St\r\nVersion:2.1\r\nn:Owen;Sean\r\nEND:VCARD",
-           null, new String[] {"Sean Owen"}, null, new String[] {"123 Main St"}, null, null, null, null, null, null, null);
+           null, new String[] {"Sean Owen"}, null, new String[] {"123 Main St"},
+           null, null, null, null, null, null, null);
   }
 
   @Test
   public void testEscapedVCard() {
     doTest("BEGIN:VCARD\r\nADR;HOME:123\\;\\\\ Main\\, St\\nHome\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD",
-           null, new String[] {"Sean Owen"}, null, new String[] {"123;\\ Main, St\nHome"}, null, null, null, null, null, null, null);
+           null, new String[] {"Sean Owen"}, null, new String[] {"123;\\ Main, St\nHome"},
+           null, null, null, null, null, null, null);
   }
 
   @Test
