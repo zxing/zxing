@@ -295,8 +295,7 @@ final class MinimalEncoder {
       case BYTE:
         return 3;
       default: 
-        assert false;
-        return -1;
+        throw new IllegalStateException("Illegal mode " + mode);
     }
   }
 
@@ -679,11 +678,11 @@ final class MinimalEncoder {
   }
 
   final class ResultNode {
-    private Mode mode;
-    private Version version;
+    private final Mode mode;
+    private final Version version;
     private boolean declaresMode;
-    private int position;
-    private int charsetEncoderIndex;
+    private final int position;
+    private final int charsetEncoderIndex;
     private ResultNode next;
     private ResultNode previous;
     ResultNode(Mode mode, Version version, boolean declaresMode, int position, int charsetEncoderIndex,
