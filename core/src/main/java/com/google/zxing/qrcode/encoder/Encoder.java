@@ -90,7 +90,7 @@ public final class Encoder {
     if (hasCompactionHint) {
       mode = Mode.BYTE;
 
-      MinimalEncoder.ResultNode rn = MinimalEncoder.encode(content, null, hasGS1FormatHint);
+      MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, hasGS1FormatHint);
 
       while (!willFit(rn.getSize(), rn.getVersion(ecLevel), ecLevel)) {
         if (rn.getVersion(ecLevel).getVersionNumber() <= 26) {

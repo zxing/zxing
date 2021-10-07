@@ -27,6 +27,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Iterator;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.UnsupportedCharsetException;
@@ -178,13 +180,13 @@ final class MinimalEncoder {
     }
   }
 
-  static ResultNode encode(String stringToEncode, Version version, boolean isGS1) throws WriterException {
+  static ResultList encode(String stringToEncode, Version version, boolean isGS1) throws WriterException {
     return new MinimalEncoder(stringToEncode, version, isGS1).encode();
   }
 
-  ResultNode encode() throws WriterException {
+  ResultList encode() throws WriterException {
     if (version == null) { //compute minimal encoding trying the three version sizes.
-      ResultNode[] results = {encode(getVersion(VersionSize.SMALL)),
+      ResultList[] results = {encode(getVersion(VersionSize.SMALL)),
                               encode(getVersion(VersionSize.MEDIUM)),
                               encode(getVersion(VersionSize.LARGE))};
       return postProcess(smallest(results));
@@ -299,8 +301,8 @@ final class MinimalEncoder {
     }
   }
 
-  static ResultNode smallest(ResultNode[] results) {
-    ResultNode smallestResult = null;
+  static ResultList smallest(ResultList[] results) {
+    ResultList smallestResult = null;
     for (int i = 0; i < results.length; i++) {
       if (smallestResult == null || (results[i] != null && results[i].getSize() < smallestResult.getSize())) {
         smallestResult = results[i];
@@ -309,140 +311,166 @@ final class MinimalEncoder {
     return smallestResult;
   }
 
-  static ResultNode smallest(ArrayList<ResultNode> results) {
-    ResultNode smallestResult = null;
-    for (int i = 0; i < results.size(); i++) {
-      if (smallestResult == null || (results.get(i) != null && results.get(i).getSize() < smallestResult.getSize())) {
-        smallestResult = results.get(i);
-      }
-    }
-    return smallestResult;
-  }
-
-  ResultNode postProcess(ResultNode result) {
+  ResultList postProcess(ResultList result) {
     if (isGS1) {
-      if (result.mode != Mode.ECI) {
-        ResultNode current = result.next;
-        while (current != null && current.mode != Mode.ECI) {
-          current = current.next;
-        }
-        if (current != null) { // there is an ECI somewhere
-          //prepend a default character set ECI
-          result = new ResultNode(Mode.ECI, result.version, true, 0, 0, result);
+      ResultList.ResultNode first = result.getFirst();
+      if (first != null) {
+        if (first.mode != Mode.ECI) {
+          boolean haveECI = false;
+          for (Iterator<ResultList.ResultNode> it = result.iterator(); it.hasNext();) {
+            if (it.next().mode == Mode.ECI) {
+              haveECI = true;
+              break;
+            }
+          }
+          if (haveECI) {
+            //prepend a default character set ECI
+            result.addFirst(result.new ResultNode(Mode.ECI, 0, 0));
+          }
         }
       }
-      if (result.mode != Mode.ECI) {
+
+      first = result.getFirst();
+      if (first.mode != Mode.ECI) {
         //prepend a FNC1_FIRST_POSITION
-        result = new ResultNode(Mode.FNC1_FIRST_POSITION, result.version, true, 0, 0, result);
+        result.addFirst(result.new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0));
       } else {
         //insert a FNC1_FIRST_POSITION after the ECI
-        result.next = new ResultNode(Mode.FNC1_FIRST_POSITION, result.version, true, 0, 0, result.next);
+        result.add(1,result.new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0));
       }
-    }
-    ResultNode current = result;
-    while (current.next != null) {
-      current = current.next;
     }
     //Add TERMINATOR according to "8.4.8 Terminator"
     //TODO: The terminiator can be omitted if there are less than 4 bit in the capacity of the symbol.
-    current.next = new ResultNode(Mode.TERMINATOR, result.version, true, stringToEncode.length(),
-      result.charsetEncoderIndex, null);
+    result.add(result.new ResultNode(Mode.TERMINATOR, stringToEncode.length(), 0));
     return result;
   }
     
-  void addEdge(ArrayList<ResultNode>[][][] vertices, ResultNode rn, ResultNode previous) {
-    int vertexIndex = rn.position + (rn.mode == Mode.ECI ? 1 : getEncodingGranularity(rn.mode));
-    if (vertices[vertexIndex][rn.charsetEncoderIndex][getCompactedOrdinal(rn.mode)] == null) {
-      vertices[vertexIndex][rn.charsetEncoderIndex][getCompactedOrdinal(rn.mode)] = new ArrayList<ResultNode>();
-    }
-    vertices[vertexIndex][rn.charsetEncoderIndex][getCompactedOrdinal(rn.mode)].add(rn);
-    rn = rn.getHead();
-    rn.setPrevious(previous);
-
-//    if (DEBUG) {
-//      if (rn.previous == null) {
-//        System.err.println("DEBUG adding edge " + rn + " from " + rn.position + " to " + vertexIndex + " with an 
-//          accumulated size of " + rn.getSize(true));
-//      } else {
-//        System.err.println("DEBUG adding edge " + rn + " from " + vertexToString(previous.position, previous) + 
-//          " to " + vertexToString(vertexIndex, rn) + " with an accumulated size of " + rn.getSize(true));
-//      }
-//    }
+  int getEdgeCharsetEncoderIndex(ResultList edge) {
+    ResultList.ResultNode last = edge.getLast();
+    assert last != null;
+    return last != null ? last.charsetEncoderIndex : 0;
   }
 
-  void addEdges(Version version, ArrayList<ResultNode>[][][] vertices, int from, ResultNode previous) {
+  Mode getEdgeMode(ResultList edge) {
+    ResultList.ResultNode last = edge.getLast();
+    assert last != null;
+    return last != null ? last.mode : Mode.BYTE;
+  }
+
+  int getEdgePosition(ResultList edge) {
+    ResultList.ResultNode last = edge.getLast();
+    assert last != null;
+    return last != null ? last.position : 0;
+  }
+
+  int getEdgeLength(ResultList edge) {
+    ResultList.ResultNode last = edge.getLast();
+    assert last != null;
+    return last != null ? last.getCharacterLength() : 0;
+  }
+
+  ResultList.ResultNode getEdgePrevious(ResultList edge) {
+    Iterator<ResultList.ResultNode> it = edge.descendingIterator();
+    assert it.hasNext();
+    if (!it.hasNext()) {
+      return null;
+    }
+    it.next();
+    if (!it.hasNext()) {
+      return null;
+    }
+    ResultList.ResultNode result = it.next();
+    if (result.mode == Mode.ECI) {
+      if (!it.hasNext()) {
+        return null;
+      }
+      result = it.next();
+    }
+    return result;
+  }
+
+  void addEdge(ArrayList<ResultList>[][][] vertices, ResultList edge, ResultList previous) {
+    int vertexIndex = getEdgePosition(edge) + getEdgeLength(edge);
+    if (vertices[vertexIndex][getEdgeCharsetEncoderIndex(edge)][getCompactedOrdinal(getEdgeMode(edge))] == null) {
+      vertices[vertexIndex][getEdgeCharsetEncoderIndex(edge)][getCompactedOrdinal(getEdgeMode(edge))] = new 
+         ArrayList<ResultList>();
+    }
+    vertices[vertexIndex][getEdgeCharsetEncoderIndex(edge)][getCompactedOrdinal(getEdgeMode(edge))].add(edge);
+
+//    if (DEBUG) {
+//      if (previous == null) {
+//        System.err.println("DEBUG adding edge " + edge + " from " + edge.getPosition() + " to " + vertexIndex +
+//          " with an accumulated size of " + edge.getSize());
+//      } else {
+//        System.err.println("DEBUG adding edge " + edge + " from " + vertexToString(previous.getPosition(), previous)
+//        + " to " + vertexToString(vertexIndex, edge) + " with an accumulated size of " + edge.getSize());
+//      }
+//    }
+
+    if (previous != null) {
+      edge.addFirst(previous);
+    }
+  }
+
+  void addEdges(Version version, ArrayList<ResultList>[][][] vertices, int from, ResultList previous) {
     for (int i = 0; i < encoders.length; i++) {
       if (encoders[i].canEncode(stringToEncode.charAt(from))) {
-        ResultNode edge = new ResultNode(Mode.BYTE, version, true, from, i, null);
+        ResultList edge = new ResultList(version, Mode.BYTE, from, i);
         boolean needECI = (previous == null && i > 0) ||
-                          (previous != null && previous.charsetEncoderIndex != i);
+                          (previous != null && getEdgeCharsetEncoderIndex(previous) != i);
         if (needECI) {
-          ResultNode eci = new ResultNode(Mode.ECI, version, true, from, i, null);
-          edge.setPrevious(eci);
+          ResultList.ResultNode eci = edge.new ResultNode(Mode.ECI, from, i);
+          edge.addFirst(eci);
         }
         addEdge(vertices, edge, previous);
       }
     }
     if (canEncode(Mode.KANJI, stringToEncode.charAt(from))) {
-      addEdge(vertices, new ResultNode(Mode.KANJI, version, true, from, 0, null), previous);
+      addEdge(vertices, new ResultList(version, Mode.KANJI, from, 0), previous);
     }
     int inputLength = stringToEncode.length();
     if (from + 1 < inputLength && canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from)) && 
         canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
-      addEdge(vertices, new ResultNode(Mode.ALPHANUMERIC, version, true, from, 0, null), previous);
+      addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0), previous);
     }
     if (from + 2 < inputLength && canEncode(Mode.NUMERIC, stringToEncode.charAt(from)) && canEncode(Mode.NUMERIC, 
         stringToEncode.charAt(from + 1)) && canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
-      addEdge(vertices, new ResultNode(Mode.NUMERIC, version, true, from, 0, null), previous);
+      addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0), previous);
     }
   }
 
-//  /**
-//   * used for debugging
-//   */
-//  static String edgeToString(ResultNode rn) {
-//    String result = rn.toString();
-//    ResultNode current = rn.previous;
-//    while (current != null) {
-//      result = current.toString() + "," + result;
-//      current = current.previous;
-//    }
-//    return result;
-//  }
-//
 //  /** 
 //   * used for debugging
 //   */
-//  String vertexToString(int position, ResultNode rn) {
+//  String vertexToString(int position, ResultList rl) {
 //    return (position >= stringToEncode.length() ? "end vertex" : "vertex for character '" + 
 //      stringToEncode.charAt(position) + "' at position " + position) + " with encoding " + 
-//        encoders[rn.charsetEncoderIndex].charset().name() + " and mode " + rn.mode;
+//        encoders[getEdgeCharsetEncoderIndex(rl)].charset().name() + " and mode " + getEdgeMode(rl);
 //  }
 //  /** 
 //   * used for debugging
 //   */
-//  void printEdges(ArrayList<ResultNode>[][][] vertices) {
+//  void printEdges(ArrayList<ResultList>[][][] vertices) {
 //    boolean willHaveECI = encoders.length > 1;
 //    int inputLength = stringToEncode.length();
 //    for (int i = 1; i <= inputLength; i++) {
 //      for (int j = 0; j < encoders.length; j++) {
 //        for (int k = 0; k < 4; k++) {
 //          if (vertices[i][j][k] != null) {
-//            ArrayList<ResultNode> edges = vertices[i][j][k];
+//            ArrayList<ResultList> edges = vertices[i][j][k];
 //            assert edges.size() > 0;
 //            if (edges.size() > 0) {
-//              ResultNode rn = edges.get(0);
-//              String vertexKey = "" + i + "_" + rn.mode + (willHaveECI ? "_" + 
-//                encoders[rn.charsetEncoderIndex].charset().name() : "");
-//              int fromPosition = rn.position;
-//              ResultNode previous = rn.previous == null ? null : rn.previous.mode == Mode.ECI ? 
-//                rn.previous.previous : rn.previous;
+//              ResultList edge = edges.get(0);
+//              String vertexKey = "" + i + "_" + getEdgeMode(edge) + (willHaveECI ? "_" + 
+//                encoders[getEdgeCharsetEncoderIndex(edge)].charset().name() : "");
+//              int fromPosition = getEdgePosition(edge);
+//              ResultList.ResultNode previous = getEdgePrevious(edge);
 //              String fromKEY = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode + 
 //                (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
-//              int toPosition = fromPosition + getEncodingGranularity(rn.mode);
-//              System.err.println("DEBUG: (" + fromKEY + ") -- " + rn.mode + (toPosition - fromPosition > 0 ? "(" + 
-//                stringToEncode.substring(fromPosition, toPosition) + ")" : "") + " (" + rn.getSize(true) + ")" +
-//                " --> " + "(" + vertexKey + ")");
+//              int toPosition = fromPosition + getEncodingGranularity(getEdgeMode(edge));
+//              System.err.println("DEBUG: (" + fromKEY + ") -- " + getEdgeMode(edge) + (toPosition - fromPosition > 0
+//               ? "(" + stringToEncode.substring(fromPosition, toPosition) + ")" : "") + " (" + edge.getSize() + ")"
+//               + " --> " + "(" + vertexKey + ")");
 //            }
 //          }
 //        }
@@ -453,7 +481,7 @@ final class MinimalEncoder {
   /**
    * encodes minimally using Dijkstra.
    */
-  ResultNode encode(Version version) throws WriterException {
+  ResultList encode(Version version) throws WriterException {
 
 /* A vertex represents a tuple of a position in the input, a mode and an a character encoding where position 0 
  * denotes the position left of the first character, 1 the position left of the second character and so on. 
@@ -596,7 +624,7 @@ final class MinimalEncoder {
 
 //The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the 
 //function getCompactedOrdinal(Mode)
-    ArrayList<ResultNode>[][][] vertices = new ArrayList[inputLength + 1][encoders.length][4];
+    ArrayList<ResultList>[][][] vertices = new ArrayList[inputLength + 1][encoders.length][4];
     addEdges(version, vertices, 0, null);
 //    if (DEBUG) {
 //        System.err.println("DEBUG Initial situation");
@@ -605,19 +633,19 @@ final class MinimalEncoder {
     for (int i = 1; i <= inputLength; i++) {
       for (int j = 0; j < encoders.length; j++) {
         for (int k = 0; k < 4; k++) {
-          ResultNode minimalEdge = null;
+          ResultList minimalEdge = null;
           if (vertices[i][j][k] != null) {
-            ArrayList<ResultNode> edges = vertices[i][j][k];
+            ArrayList<ResultList> edges = vertices[i][j][k];
             if (edges.size() == 1) { //Optimization: if there is only one edge then that's the minimal one
               minimalEdge = edges.get(0);
             } else {
               int minimalIndex = -1;
               int minimalSize = Integer.MAX_VALUE;
               for (int l = 0; l < edges.size(); l++) {
-                ResultNode rn = edges.get(l);
-                if (rn.getSize(true) < minimalSize) {
+                ResultList edge = edges.get(l);
+                if (edge.getSize() < minimalSize) {
                   minimalIndex = l;
-                  minimalSize = rn.getSize(true);
+                  minimalSize = edge.getSize();
                 }
               }
               assert minimalIndex != -1;
@@ -629,8 +657,8 @@ final class MinimalEncoder {
               assert minimalEdge != null;
 //              if (DEBUG && minimalEdge != null) {
 //                System.err.println("DEBUG processing " + vertexToString(i, minimalEdge) +
-//                  ". The minimal edge leading to this vertex is " + edgeToString(minimalEdge) + " with a size of " +
-//                  minimalEdge.getSize(true));
+//                  ". The minimal edge leading to this vertex is " + minimalEdge + " with a size of " +
+//                  minimalEdge.getSize());
 //              }
               addEdges(version, vertices, i, minimalEdge);
             }
@@ -648,11 +676,11 @@ final class MinimalEncoder {
     for (int j = 0; j < encoders.length; j++) {
       for (int k = 0; k < 4; k++) {
         if (vertices[inputLength][j][k] != null) {
-          ArrayList<ResultNode> edges = vertices[inputLength][j][k];
+          ArrayList<ResultList> edges = vertices[inputLength][j][k];
           assert edges.size() == 1;
-          ResultNode result = edges.get(0);
-          if (result.getSize(true) < minimalSize) {
-            minimalSize = result.getSize(true);
+          ResultList edge = edges.get(0);
+          if (edge.getSize() < minimalSize) {
+            minimalSize = edge.getSize();
             minimalJ = j;
             minimalK = k;
           }
@@ -661,12 +689,11 @@ final class MinimalEncoder {
     }
     assert minimalJ != -1;
     if (minimalJ >= 0) {
-      ResultNode result = vertices[inputLength][minimalJ][minimalK].get(0);
-      while (result.previous != null) {
-        result.previous.append(result);
-        result = result.previous;
-      }
-      return result;
+//      if (DEBUG) {
+//        System.err.println("DEBUG the minimal solution for version " + version + " is " + vertices[inputLength]
+//          [minimalJ][minimalK].get(0)); 
+//      }
+      return vertices[inputLength][minimalJ][minimalK].get(0);
     } else {
       throw new WriterException("Internal error: failed to encode");
     }
@@ -677,157 +704,84 @@ final class MinimalEncoder {
     return stringToEncode.substring(position, position + 1).getBytes(encoders[charsetEncoderIndex].charset());
   }
 
-  final class ResultNode {
-    private final Mode mode;
+  final class ResultList extends LinkedList<ResultList.ResultNode> {
+
     private final Version version;
-    private boolean declaresMode;
-    private final int position;
-    private final int charsetEncoderIndex;
-    private ResultNode next;
-    private ResultNode previous;
-    ResultNode(Mode mode, Version version, boolean declaresMode, int position, int charsetEncoderIndex,
-        ResultNode next) {
-      assert mode != null;
-      this.mode = mode;
+
+    private ResultList(Version version) {
       this.version = version;
-      this.declaresMode = declaresMode;
-      this.position = position;
-      this.charsetEncoderIndex = charsetEncoderIndex;
-      this.next = next;
     }
 
-    private ResultNode getHead() {
-      ResultNode current = this;
-      while (current.previous != null) {
-        current = current.previous;
-      }
-      return current;
-    }
- 
-    private void setPrevious(ResultNode previous) {
-      this.previous = previous;
-      declaresMode = true;
-      if (previous != null) {
-//TODO: Verify that it is correct to call getLength() (character count) here instead of using number of bytes for a 
-//      BYTE mode depending on the character set.
-        if (previous.mode == mode && mode != Mode.ECI && previous.getLength(true) + getLength(true) < 
-            getMaximumNumberOfEncodeableCharacters(version, mode)) {
-          declaresMode = false;
-        }
-      }
-    }
-
-    private int getSize(boolean walkPrevious) {
-      int result = 0;
-      ResultNode current = this;
-      if (walkPrevious) {
-        while (current != null) {
-          result += current.getLocalSize();
-          current = current.previous;
-        }
-      } else {
-        while (current != null) {
-          result += current.getLocalSize();
-          current = current.next;
-        }
-      }
-      return result;
-    }
-
-    private int getLength(boolean walkPrevious) {
-      int result = 0;
-      ResultNode current = this;
-      if (walkPrevious) {
-        while (current != null) {
-          result += current.getLocalLength();
-          if (current.declaresMode) {
-            break;
-          }
-          current = current.previous;
-        }
-      } else {
-        result = current.getLocalLength();
-        current = current.next;
-        while (current != null && !current.declaresMode) {
-          result += current.getLocalLength();
-          current = current.next;
-        }
-      }
-      return result;
-    }
-
-    /** 
-     * returns the size of this one encoding unit in bits
+    /**
+     * Short for rl=new ResultList(version); rl.add(rl.new ResultNode(modes, position, charsetEncoderIndex));
      */
-    private int getLocalSize() {
-      int size = declaresMode ? 4 + mode.getCharacterCountBits(version) : 0;
-      if (mode == Mode.ECI) {
-        size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
-      } else if (mode == Mode.BYTE) {
-        size += 8 * getBytesOfCharacter(position, charsetEncoderIndex).length;
-      } else {
-        size += getBitsPerEncodingUnit(mode);
+    private ResultList(Version version, Mode mode, int position, int charsetEncoderIndex) {
+      this(version);
+      add(new ResultNode(mode, position, charsetEncoderIndex));
+    }
+
+    private void addFirst(ResultList resultList) {
+      for (Iterator<ResultNode> it = resultList.descendingIterator(); it.hasNext();) {
+        addFirst(it.next());
       }
-      return size;
+    }
+
+    /**
+     * Prepends n and may modify this.getFirst().declaresMode before doing so.
+     */
+    @Override
+    public void addFirst(ResultNode n) {
+
+      ResultNode next = getFirst();
+      if (next != null) {
+        next.declaresMode = true;
+//TODO: Verify that it is correct to call getCharacterLength() here instead of using number of bytes for a 
+//      BYTE mode depending on the character set.
+        if (n.mode == next.mode && next.mode != Mode.ECI && n.getCharacterLength() + next.getCharacterLength() < 
+              getMaximumNumberOfEncodeableCharacters(version, next.mode)) {
+          next.declaresMode = false;
+        }
+      }
+
+      super.addFirst(n);
     }
 
     /**
      * returns the size in bits
      */
     int getSize() {
-      return getSize(false);
-    }
-
-    /**
-     * returns the length of this one uncoding unit in encoding units
-     */
-    private int getLocalLength() {
-      return getBitsPerEncodingUnit(mode) == 0 ? 0 : 1;
-    }
-
-    /**
-     * returns the length in encoding units
-     */
-    private int getLength() {
-      return getLength(false);
-    }
-
-    void getBits(BitArray bits) throws WriterException {
-      ResultNode next = getLocalBits(bits);
-      while (next != null) {
-        next = next.getLocalBits(bits);
+      int result = 0;
+      for (Iterator<ResultNode> it = iterator(); it.hasNext();) {
+        result += it.next().getSize();
       }
+      return result;
     }
-    private ResultNode getLocalBits(BitArray bits) throws WriterException {
-      // append mode
-      bits.appendBits(mode.getBits(), 4);
-      if (mode == Mode.ECI) {
-        String canonicalCharsetName = encoders[charsetEncoderIndex].charset().name();
-        bits.appendBits(CharacterSetECI.getCharacterSetECIByName(canonicalCharsetName).getValue(), 8);
-        return next;
-      } else {
-        int characterLength = getLength() * getEncodingGranularity(mode);
-        if (characterLength > 0) {
-          String canonicalCharsetName = encoders[charsetEncoderIndex].charset().name();
-          String pieceToEncode = stringToEncode.substring(position, position + characterLength);
-          // append length
-          try {
-            bits.appendBits(mode == Mode.BYTE ? pieceToEncode.getBytes(canonicalCharsetName).length : characterLength,
-                mode.getCharacterCountBits(version));
-          } catch (UnsupportedEncodingException uee) {
-            throw new WriterException(uee);
-          }
-          // append data
-          Encoder.appendBytes(pieceToEncode, mode, bits, encoders[charsetEncoderIndex].charset());
-          ResultNode current = next;
-          while (current != null && !current.declaresMode) {
-            current = current.next;
-          }
-          return current;
-        } else {
-          return next;
-        }
-      } 
+
+    /**
+     * returns the start position
+     */
+    private int getPosition() {
+      return getFirst() != null ? getFirst().position : 0;
+    }
+
+    /**
+     * returns the length in characters
+     */
+    int getCharacterLength() {
+      int result = 0;
+      for (Iterator<ResultNode> it = iterator(); it.hasNext();) {
+        result += it.next().getCharacterLength();
+      }
+      return result;
+    }
+
+    /** 
+     * appends the bits
+     */
+    void getBits(BitArray bits) throws WriterException {
+      for (Iterator<ResultNode> it = iterator(); it.hasNext();) {
+        it.next().getBits(bits);
+      }
     }
 
     Version getVersion(ErrorCorrectionLevel ecLevel) {
@@ -862,42 +816,114 @@ final class MinimalEncoder {
       return Version.getVersionForNumber(versionNumber);
     }
 
-    private void append(ResultNode rn) {
-      ResultNode current = this;
-      while (current.next != null) {
-        current = current.next;
-      }
-      current.next = rn;
-    }
-
     public String toString() {
       StringBuilder result = new StringBuilder();
-      if (declaresMode) {
-        result.append(mode + "(");
+      ResultNode previous = null;
+      for (Iterator<ResultNode> it = iterator(); it.hasNext();) {
+        ResultNode current = it.next();
+        if (previous != null) {
+          if (current.declaresMode) {
+            result.append(")");
+          }
+          result.append(",");
+        }
+        result.append(current.toString());
+        previous = current;
       }
-      if (mode == Mode.ECI) {
-        result.append(encoders[charsetEncoderIndex].charset().displayName());
-      } else {
-        result.append(makePrintable(stringToEncode.substring(position, position + getEncodingGranularity(mode))));
-      }
-      if (next != null) {
-        result.append((next.declaresMode ? ")," : ",") + next.toString());
-      } else {
+      if (previous != null) {
         result.append(")");
       }
       return result.toString();
     }
 
-    private String makePrintable(String s) {
-      String result = "";
-      for (int i = 0; i < s.length(); i++) {
-        if (s.charAt(i) < 32 || s.charAt(i) > 126) {
-          result += ".";
-        } else {
-          result += s.charAt(i);
-        }
+    final class ResultNode {
+
+      private final Mode mode;
+      private boolean declaresMode = true;
+      private final int position;
+      private final int charsetEncoderIndex;
+
+      ResultNode(Mode mode, int position, int charsetEncoderIndex) {
+
+        assert mode != null;
+        this.mode = mode;
+        this.position = position;
+        this.charsetEncoderIndex = charsetEncoderIndex;
       }
-      return result;
+
+      /** 
+       * returns the size in bits
+       */
+      private int getSize() {
+        int size = declaresMode ? 4 + mode.getCharacterCountBits(version) : 0;
+        if (mode == Mode.ECI) {
+          size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
+        } else if (mode == Mode.BYTE) {
+          size += 8 * getBytesOfCharacter(position, charsetEncoderIndex).length;
+        } else {
+          size += getBitsPerEncodingUnit(mode);
+        }
+        return size;
+      }
+
+      /**
+       * returns the length in characters
+       */
+      private int getCharacterLength() {
+        return (getBitsPerEncodingUnit(mode) == 0 ? 0 : 1) * getEncodingGranularity(mode);
+      }
+
+      /** 
+       * appends the bits
+       */
+      private void getBits(BitArray bits) throws WriterException {
+        // append mode
+        bits.appendBits(mode.getBits(), 4);
+        if (mode == Mode.ECI) {
+          String canonicalCharsetName = encoders[charsetEncoderIndex].charset().name();
+          bits.appendBits(CharacterSetECI.getCharacterSetECIByName(canonicalCharsetName).getValue(), 8);
+        } else {
+          int characterLength = getCharacterLength();
+          if (characterLength > 0) {
+            String canonicalCharsetName = encoders[charsetEncoderIndex].charset().name();
+            String pieceToEncode = stringToEncode.substring(position, position + characterLength);
+            // append length
+            try {
+              bits.appendBits(mode == Mode.BYTE ? pieceToEncode.getBytes(canonicalCharsetName).length : characterLength,
+                  mode.getCharacterCountBits(version));
+            } catch (UnsupportedEncodingException uee) {
+              throw new WriterException(uee);
+            }
+            // append data
+            Encoder.appendBytes(pieceToEncode, mode, bits, encoders[charsetEncoderIndex].charset());
+          }
+        } 
+      }
+
+      public String toString() {
+        StringBuilder result = new StringBuilder();
+        if (declaresMode) {
+          result.append(mode + "(");
+        }
+        if (mode == Mode.ECI) {
+          result.append(encoders[charsetEncoderIndex].charset().displayName());
+        } else {
+          result.append(makePrintable(stringToEncode.substring(position, position + getEncodingGranularity(mode))));
+        }
+        return result.toString();
+      }
+
+      private String makePrintable(String s) {
+        String result = "";
+        for (int i = 0; i < s.length(); i++) {
+          if (s.charAt(i) < 32 || s.charAt(i) > 126) {
+            result += ".";
+          } else {
+            result += s.charAt(i);
+          }
+        }
+        return result;
+      }
     }
   }
 }
