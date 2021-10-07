@@ -90,12 +90,12 @@ public final class Encoder {
     if (hasCompactionHint) {
       mode = Mode.BYTE;
 
-      MinimalEncoder.ResultNode rn = MinimalEncoder.encode(content,null,hasGS1FormatHint);
+      MinimalEncoder.ResultNode rn = MinimalEncoder.encode(content, null, hasGS1FormatHint);
 
       while (!willFit(rn.getSize(), rn.getVersion(ecLevel), ecLevel)) {
         if (rn.getVersion(ecLevel).getVersionNumber() <= 26) {
           int nextVersionNumber = rn.getVersion(ecLevel).getVersionNumber() <= 9 ? 10 : 27 ;
-          rn = MinimalEncoder.encode(content,Version.getVersionForNumber(nextVersionNumber),hasGS1FormatHint);
+          rn = MinimalEncoder.encode(content, Version.getVersionForNumber(nextVersionNumber), hasGS1FormatHint);
         } else {
           throw new WriterException("Data too big for any version");
         }
