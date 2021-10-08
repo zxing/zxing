@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.UnsupportedCharsetException;
 
 /**
@@ -81,7 +80,7 @@ import java.nio.charset.UnsupportedCharsetException;
  */
 final class MinimalEncoder {
 
-//  static final boolean DEBUG = true;
+//  static final boolean DEBUG = false;
 
   private enum VersionSize {
     SMALL("version 1-9"),
@@ -158,7 +157,7 @@ final class MinimalEncoder {
 
     int numberOfEncoders = 0;
     for (int j = 0; j < 15; j++) {
-      if (isoEncoders[j] != null) {
+      if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
         numberOfEncoders++;
       }
     }
@@ -170,7 +169,7 @@ final class MinimalEncoder {
       encoders = new CharsetEncoder[numberOfEncoders + 2];
       int index = 0;
       for (int j = 0; j < 15; j++) {
-        if (isoEncoders[j] != null) {
+        if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
           encoders[index++] = isoEncoders[j];
         }
       }
@@ -783,8 +782,6 @@ final class MinimalEncoder {
       ResultNode next = getFirst();
       if (next != null) {
         next.declaresMode = true;
-//TODO: Verify that it is correct to call getCharacterLength() here instead of using number of bytes for a
-//      BYTE mode depending on the character set.
         if (n.mode == next.mode && next.mode != Mode.ECI && n.getCharacterLength() + next.getCharacterLength() <
               getMaximumNumberOfEncodeableCharacters(version, next.mode)) {
           next.declaresMode = false;
@@ -819,6 +816,18 @@ final class MinimalEncoder {
       int result = 0;
       for (Iterator<ResultNode> it = iterator(); it.hasNext();) {
         result += it.next().getCharacterLength();
+      }
+      return result;
+    }
+
+    /**
+     * returns the length in characters according to the specification (differs from getCharacterLength() in BYTE mode
+     * for multi byte encoded characters)
+     */
+    int getCharacterCountIndicator() {
+      int result = 0;
+      for (Iterator<ResultNode> it = iterator(); it.hasNext();) {
+        result += it.next().getCharacterCountIndicator();
       }
       return result;
     }
@@ -922,29 +931,34 @@ final class MinimalEncoder {
       }
 
       /**
+       * returns the length in characters according to the specification (differs from getCharacterLength() in BYTE mode
+       * for multi byte encoded characters)
+       */
+      private int getCharacterCountIndicator() {
+        return mode == Mode.BYTE ? getBytesOfCharacter(position, charsetEncoderIndex).length : getCharacterLength();
+      }
+
+      /**
        * appends the bits
        */
       private void getBits(BitArray bits) throws WriterException {
-        // append mode
-        bits.appendBits(mode.getBits(), 4);
-        if (mode == Mode.ECI) {
-          String canonicalCharsetName = encoders[charsetEncoderIndex].charset().name();
-          bits.appendBits(CharacterSetECI.getCharacterSetECIByName(canonicalCharsetName).getValue(), 8);
-        } else {
-          int characterLength = getCharacterLength();
-          if (characterLength > 0) {
-            String canonicalCharsetName = encoders[charsetEncoderIndex].charset().name();
-            String pieceToEncode = stringToEncode.substring(position, position + characterLength);
-            // append length
-            try {
-              bits.appendBits(mode == Mode.BYTE ? pieceToEncode.getBytes(canonicalCharsetName).length : characterLength,
-                  mode.getCharacterCountBits(version));
-            } catch (UnsupportedEncodingException uee) {
-              throw new WriterException(uee);
+        if (declaresMode) {
+          // append mode
+          bits.appendBits(mode.getBits(), 4);
+          if (mode == Mode.ECI) {
+            bits.appendBits(CharacterSetECI.getCharacterSetECI(encoders[charsetEncoderIndex].charset()).getValue(), 8);
+          } else {
+            int characterLength = getCharacterCountIndicator();
+            if (characterLength > 0) {
+              // append length
+              bits.appendBits(characterLength, mode.getCharacterCountBits(version));
             }
-            // append data
-            Encoder.appendBytes(pieceToEncode, mode, bits, encoders[charsetEncoderIndex].charset());
           }
+        }
+        if (getCharacterLength() > 0) {
+          // append data
+          Encoder.appendBytes(stringToEncode.substring(position, position + getCharacterLength()), mode, bits, 
+              encoders[charsetEncoderIndex].charset());
         }
       }
 

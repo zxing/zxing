@@ -849,16 +849,6 @@ public final class EncoderTestCase extends Assert {
 
   @Test
   public void testMinimalEncoder35() throws WriterException {
-    assertEquals(MinimalEncoder.encode("that particularly stands out to me is \u0625\u0650\u062C\u064E\u0651\u0627" +
-        "\u0635 (\u02BEijj\u0101\u1E63) \u201Cpear\u201D, suggested to have originated from Hebrew \u05D0\u05B7" +
-        "\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)", null, false).toString(), "ECI(ISO-8859-6),BYTE(t,h,a,t, ,p,a,r,t,i,c" +
-        ",u,l,a,r,l,y, ,s,t,a,n,d,s, ,o,u,t, ,t,o, ,m,e, ,i,s, ,.,.,.,.,.,.,., ,(),ECI(UTF-8),BYTE(.,i,j,j,.,.,), ,." +
-        ",p,e,a,r,.,,, ,s,u,g,g,e,s,t,e,d, ,t,o, ,h,a,v,e, ,o,r,i,g,i,n,a,t,e,d, ,f,r,o,m, ,H,e,b,r,e,w, ,.,.,.,.,.," +
-        "., ,(,a,g,.,s,)),TERMINATOR()");
-  }
-
-  @Test
-  public void testMinimalEncoder36() throws WriterException {
     assertEquals(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781", null, true).toString(),
         "FNC1_FIRST_POSITION(),NUMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(04" +
         "5,003,267,781),TERMINATOR()");
