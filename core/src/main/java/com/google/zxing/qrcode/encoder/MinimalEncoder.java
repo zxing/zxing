@@ -81,12 +81,12 @@ import java.nio.charset.UnsupportedCharsetException;
  */
 final class MinimalEncoder {
 
-  //static final boolean DEBUG = false;
+//  static final boolean DEBUG = true;
 
   private enum VersionSize {
-    SMALL("Version 1-9)"),
-    MEDIUM("Version 10-26)"),
-    LARGE("Version 27-40");
+    SMALL("version 1-9"),
+    MEDIUM("version 10-26"),
+    LARGE("version 27-40");
 
     private final String description;
 
@@ -358,12 +358,16 @@ final class MinimalEncoder {
   }
 
   int getEdgePosition(ResultList edge) {
+//The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
+//This function works regardless if the concatenation has already taken place or not.
     ResultList.ResultNode last = edge.getLast();
     assert last != null;
     return last != null ? last.position : 0;
   }
 
   int getEdgeLength(ResultList edge) {
+//The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
+//This function works regardless if the concatenation has already taken place or not.
     ResultList.ResultNode last = edge.getLast();
     assert last != null;
     return last != null ? last.getCharacterLength() : 0;
@@ -400,10 +404,10 @@ final class MinimalEncoder {
 //    if (DEBUG) {
 //      if (previous == null) {
 //        System.err.println("DEBUG adding edge " + edge + " from " + edge.getPosition() + " to " + vertexIndex +
-//          " with an accumulated size of " + edge.getSize());
+//            " with an accumulated size of " + edge.getSize());
 //      } else {
 //        System.err.println("DEBUG adding edge " + edge + " from " + vertexToString(previous.getPosition(), previous)
-//        + " to " + vertexToString(vertexIndex, edge) + " with an accumulated size of " + edge.getSize());
+//            + " to " + vertexToString(vertexIndex, edge) + " with an accumulated size of " + edge.getSize());
 //      }
 //    }
 
@@ -439,19 +443,17 @@ final class MinimalEncoder {
     }
   }
 
-//  /**
-//   * used for debugging
-//   */
 //  String vertexToString(int position, ResultList rl) {
 //    return (position >= stringToEncode.length() ? "end vertex" : "vertex for character '" +
 //      stringToEncode.charAt(position) + "' at position " + position) + " with encoding " +
 //        encoders[getEdgeCharsetEncoderIndex(rl)].charset().name() + " and mode " + getEdgeMode(rl);
 //  }
-//  /**
-//   * used for debugging
-//   */
 //  void printEdges(ArrayList<ResultList>[][][] vertices) {
+//
+//    final boolean showCompacted = true;
+//
 //    boolean willHaveECI = encoders.length > 1;
+//    ArrayList<String> edgeStrings = new ArrayList<String>();
 //    int inputLength = stringToEncode.length();
 //    for (int i = 1; i <= inputLength; i++) {
 //      for (int j = 0; j < encoders.length; j++) {
@@ -462,19 +464,61 @@ final class MinimalEncoder {
 //            if (edges.size() > 0) {
 //              ResultList edge = edges.get(0);
 //              String vertexKey = "" + i + "_" + getEdgeMode(edge) + (willHaveECI ? "_" +
-//                encoders[getEdgeCharsetEncoderIndex(edge)].charset().name() : "");
+//                  encoders[getEdgeCharsetEncoderIndex(edge)].charset().name() : "");
 //              int fromPosition = getEdgePosition(edge);
 //              ResultList.ResultNode previous = getEdgePrevious(edge);
-//              String fromKEY = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode +
-//                (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
+//              String fromKey = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode +
+//                  (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
 //              int toPosition = fromPosition + getEncodingGranularity(getEdgeMode(edge));
-//              System.err.println("DEBUG: (" + fromKEY + ") -- " + getEdgeMode(edge) + (toPosition - fromPosition > 0
-//               ? "(" + stringToEncode.substring(fromPosition, toPosition) + ")" : "") + " (" + edge.getSize() + ")"
-//               + " --> " + "(" + vertexKey + ")");
+//              edgeStrings.add("(" + fromKey + ") -- " + getEdgeMode(edge) + (toPosition - 
+//                  fromPosition > 0 ? "(" + stringToEncode.substring(fromPosition, toPosition) + 
+//                  ")" : "") + " (" + edge.getSize() + ")" + " --> " + "(" + vertexKey + ")");
 //            }
 //          }
 //        }
 //      }
+//    }
+//
+//    if (showCompacted) {
+//      boolean modifiedSomething;
+//      do {
+//        modifiedSomething = false;
+//        for (Iterator<String> it = edgeStrings.iterator(); it.hasNext();) {
+//          String edge = it.next();
+//          if (edge.startsWith("(initial)")) {
+//            int pos = edge.lastIndexOf("--> (");
+//            String toKey = edge.substring(pos + 4);
+//            int cnt = 0;
+//            for (Iterator<String> it1 = edgeStrings.iterator(); it1.hasNext();) {
+//              String edge1 = it1.next();
+//              String fromKey = edge1.substring(0, edge1.indexOf(')') + 1);
+//              if (fromKey.equals(toKey)) {
+//                cnt++;
+//              }
+//            }
+//            for (Iterator<String> it1 = edgeStrings.iterator(); it1.hasNext();) {
+//              String edge1 = it1.next();
+//              String fromKey = edge1.substring(0, edge1.indexOf(')') + 1);
+//              if (fromKey.equals(toKey)) {
+//                modifiedSomething = true;
+//                if (cnt == 1) {
+//                  edgeStrings.remove(edgeStrings.indexOf(edge));
+//                }
+//                edgeStrings.remove(edgeStrings.indexOf(edge1));
+//                edgeStrings.add(edge.substring(0, pos + 4) + edge1);
+//                break;
+//              }
+//            }
+//            if (modifiedSomething) {
+//              break;
+//            }
+//          }
+//        }
+//      } while (modifiedSomething);
+//    }
+//  
+//    for (Iterator<String> it = edgeStrings.iterator(); it.hasNext();) {
+//      System.err.println("DEBUG " + it.next());
 //    }
 //  }
 
@@ -623,10 +667,13 @@ final class MinimalEncoder {
 //function getCompactedOrdinal(Mode)
     ArrayList<ResultList>[][][] vertices = new ArrayList[inputLength + 1][encoders.length][4];
     addEdges(version, vertices, 0, null);
+
 //    if (DEBUG) {
-//        System.err.println("DEBUG Initial situation");
-//        printEdges(vertices);
+//      System.err.println("DEBUG computing solution for " + getVersionSize(version));
+//      System.err.println("DEBUG Initial situation");
+//      printEdges(vertices);
 //    }
+
     for (int i = 1; i <= inputLength; i++) {
       for (int j = 0; j < encoders.length; j++) {
         for (int k = 0; k < 4; k++) {
@@ -652,16 +699,19 @@ final class MinimalEncoder {
             }
             if (i < inputLength) {
               assert minimalEdge != null;
+
 //              if (DEBUG && minimalEdge != null) {
 //                System.err.println("DEBUG processing " + vertexToString(i, minimalEdge) +
-//                  ". The minimal edge leading to this vertex is " + minimalEdge + " with a size of " +
-//                  minimalEdge.getSize());
+//                    ". The minimal edge leading to this vertex is " + minimalEdge + " with a size of " 
+//                    + minimalEdge.getSize());
 //              }
+
               addEdges(version, vertices, i, minimalEdge);
             }
           }
         }
       }
+
 //      if (DEBUG) {
 //        System.err.println("DEBUG situation after adding edges to vertices at position " + i);
 //        printEdges(vertices);
@@ -688,8 +738,9 @@ final class MinimalEncoder {
     if (minimalJ >= 0) {
 //      if (DEBUG) {
 //        System.err.println("DEBUG the minimal solution for version " + version + " is " + vertices[inputLength]
-//          [minimalJ][minimalK].get(0));
+//            [minimalJ][minimalK].get(0));
 //      }
+
       return vertices[inputLength][minimalJ][minimalK].get(0);
     } else {
       throw new WriterException("Internal error: failed to encode");
