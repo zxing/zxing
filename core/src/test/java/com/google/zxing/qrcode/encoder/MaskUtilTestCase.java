@@ -118,6 +118,16 @@ public final class MaskUtilTestCase extends Assert {
     matrix.set(9, 0, 0);
     matrix.set(10, 0, 0);
     assertEquals(40, MaskUtil.applyMaskPenaltyRule3(matrix));
+    // Horizontal 1011101.
+    matrix = new ByteMatrix(7, 1);
+    matrix.set(0, 0, 1);
+    matrix.set(1, 0, 0);
+    matrix.set(2, 0, 1);
+    matrix.set(3, 0, 1);
+    matrix.set(4, 0, 1);
+    matrix.set(5, 0, 0);
+    matrix.set(6, 0, 1);
+    assertEquals(0, MaskUtil.applyMaskPenaltyRule3(matrix));
     // Vertical 00001011101.
     matrix = new ByteMatrix(1, 11);
     matrix.set(0, 0, 0);
@@ -145,7 +155,16 @@ public final class MaskUtilTestCase extends Assert {
     matrix.set(0, 8, 0);
     matrix.set(0, 9, 0);
     matrix.set(0, 10, 0);
-    assertEquals(40, MaskUtil.applyMaskPenaltyRule3(matrix));
+    // Vertical 1011101.
+    matrix = new ByteMatrix(1, 7);
+    matrix.set(0, 0, 1);
+    matrix.set(0, 1, 0);
+    matrix.set(0, 2, 1);
+    matrix.set(0, 3, 1);
+    matrix.set(0, 4, 1);
+    matrix.set(0, 5, 0);
+    matrix.set(0, 6, 1);
+    assertEquals(0, MaskUtil.applyMaskPenaltyRule3(matrix));
   }
 
   @Test
