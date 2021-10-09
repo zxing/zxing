@@ -166,7 +166,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.3.1</version>
           <configuration>
             <source>${java.version}</source>
             <quiet>true</quiet>
@@ -263,7 +263,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>1.11.3</version>
+          <version>1.12.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -311,7 +311,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>3.3.1</version>
+          <version>3.3.2</version>
         </plugin>
         <plugin>
           <groupId>com.simpligility.maven.plugins</groupId>
@@ -442,7 +442,7 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.45.1</version>
+              <version>9.0</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -689,6 +689,21 @@
       <url>file:docs/</url>
     </site>
   </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>google-maven-central</id>
+      <name>GCS Maven Central mirror</name>
+      <url>https://maven-central.storage-download.googleapis.com/maven2/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>google-maven-central</id>
+      <name>GCS Maven Central mirror</name>
+      <url>https://maven-central.storage-download.googleapis.com/maven2/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <profiles>
     <profile>

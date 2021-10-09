@@ -84,7 +84,8 @@ public final class Decoder {
     CorrectedBitsResult correctedBits = correctBits(rawbits);
     byte[] rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
     String result = getEncodedData(correctedBits.correctBits);
-    DecoderResult decoderResult = new DecoderResult(rawBytes, result, null, String.format("%d%%", correctedBits.ecLevel));
+    DecoderResult decoderResult =
+        new DecoderResult(rawBytes, result, null, String.format("%d%%", correctedBits.ecLevel));
     decoderResult.setNumBits(correctedBits.correctBits.length);
     return decoderResult;
   }

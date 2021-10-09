@@ -122,11 +122,11 @@ final class DoSTracker {
             int cores = mxBean.getAvailableProcessors();
             double loadRatio = loadAvg / cores;
             int newMaxAccessesPerTime = loadRatio > maxLoad ?
-              Math.min(maxAllowedCount, Math.max(1, maxAccessesPerTime - 1)) :
-              Math.max(minDisallowedCount, maxAccessesPerTime);
+                Math.min(maxAllowedCount, Math.max(1, maxAccessesPerTime - 1)) :
+                Math.max(minDisallowedCount, maxAccessesPerTime);
             log.info(name + ": Load ratio: " + loadRatio +
-              " (" + loadAvg + '/' + cores + ") vs " + maxLoad +
-              "; new maxAccessesPerTime: " + newMaxAccessesPerTime);
+                " (" + loadAvg + '/' + cores + ") vs " + maxLoad +
+                " ; new maxAccessesPerTime: " + newMaxAccessesPerTime);
             maxAccessesPerTime = newMaxAccessesPerTime;
           }
         }

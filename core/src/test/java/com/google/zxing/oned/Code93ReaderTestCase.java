@@ -31,13 +31,15 @@ import com.google.zxing.Result;
  */
 public final class Code93ReaderTestCase extends Assert {
 
+  @SuppressWarnings("checkstyle:lineLength")
   @Test
-  public void testDecode() throws Exception {
+  public void testDecode() throws FormatException, ChecksumException, NotFoundException {
     doTest("Code93!\n$%/+ :\u001b;[{\u007f\u0000@`\u007f\u007f\u007f",
            "0000001010111101101000101001100101001011001001100101100101001001100101100100101000010101010000101110101101101010001001001101001101001110010101101011101011011101011101101110100101110101101001110101110110101101010001110110101100010101110110101000110101110110101000101101110110101101001101110110101100101101110110101100110101110110101011011001110110101011001101110110101001101101110110101001110101001100101101010001010111101111");
   }
 
-  private static void doTest(String expectedResult, String encodedResult) throws FormatException, ChecksumException, NotFoundException {
+  private static void doTest(String expectedResult, String encodedResult)
+      throws FormatException, ChecksumException, NotFoundException {
     Code93Reader sut = new Code93Reader();
     BitMatrix matrix = BitMatrix.parse(encodedResult, "1", "0");
     BitArray row = new BitArray(matrix.getWidth());

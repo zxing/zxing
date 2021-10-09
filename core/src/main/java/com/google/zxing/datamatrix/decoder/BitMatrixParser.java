@@ -126,7 +126,7 @@ final class BitMatrixParser {
         // Sweep downward diagonally to the left
         do {
           if ((row >= 0) && (column < numColumns) && !readMappingMatrix.get(column, row)) {
-             result[resultOffset++] = (byte) readUtah(row, column, numRows, numColumns);
+            result[resultOffset++] = (byte) readUtah(row, column, numRows, numColumns);
           }
           row += 2;
           column -= 2;

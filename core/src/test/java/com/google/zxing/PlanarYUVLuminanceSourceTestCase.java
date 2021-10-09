@@ -25,9 +25,9 @@ import org.junit.Test;
 public final class PlanarYUVLuminanceSourceTestCase extends Assert {
 
   private static final byte[] YUV = {
-       0,  1,  1,  2,  3,  5,
-       8, 13, 21, 34, 55, 89,
-       0,  -1,  -1,  -2,  -3,  -5,
+      0,  1,  1,  2,  3,  5,
+      8, 13, 21, 34, 55, 89,
+      0,  -1,  -1,  -2,  -3,  -5,
       -8, -13, -21, -34, -55, -89,
       127, 127, 127, 127, 127, 127,
       127, 127, 127, 127, 127, 127,

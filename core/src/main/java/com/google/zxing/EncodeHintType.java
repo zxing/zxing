@@ -110,6 +110,14 @@ public enum EncodeHintType {
    */
   QR_MASK_PATTERN,
 
+
+  /**
+   * Specifies whether to use compact mode for QR code (type {@link Boolean}, or "true" or "false"
+   * When compaction is performed the value for {@link CHARACTER_SET} is ignored.
+   * {@link String} value).
+   */
+  QR_COMPACT,
+
   /**
    * Specifies whether the data should be encoded to the GS1 standard (type {@link Boolean}, or "true" or "false"
    * {@link String } value).
@@ -117,7 +125,8 @@ public enum EncodeHintType {
   GS1_FORMAT,
 
   /**
-   * Forces which encoding will be used. Currently only used for Code-128 code sets (Type {@link String}). Valid values are "A", "B", "C".
+   * Forces which encoding will be used. Currently only used for Code-128 code sets (Type {@link String}).
+   * Valid values are "A", "B", "C".
    */
   FORCE_CODE_SET,
 }

@@ -174,7 +174,8 @@ public abstract class ResultHandler {
   }
 
   final void addPhoneOnlyContact(String[] phoneNumbers,String[] phoneTypes) {
-    addContact(null, null, null, phoneNumbers, phoneTypes, null, null, null, null, null, null, null, null, null, null, null);
+    addContact(null, null, null, phoneNumbers, phoneTypes,
+        null, null, null, null, null, null, null, null, null, null, null);
   }
 
   final void addEmailOnlyContact(String[] emails, String[] emailTypes) {

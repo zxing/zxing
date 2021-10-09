@@ -46,6 +46,7 @@ final class DecodedBitStreamParser {
   private static final char GS = '\u001D';
   private static final char RS = '\u001E';
 
+  @SuppressWarnings("checkstyle:lineLength")
   private static final String[] SETS = {
     "\nABCDEFGHIJKLMNOPQRSTUVWXYZ" + ECI + FS + GS + RS + NS + ' ' + PAD +
         "\"#$%&'()*+,-./0123456789:" + SHIFTB + SHIFTC + SHIFTD + SHIFTE + LATCHB,
