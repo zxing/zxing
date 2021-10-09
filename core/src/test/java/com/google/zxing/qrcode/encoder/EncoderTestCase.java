@@ -667,6 +667,193 @@ public final class EncoderTestCase extends Assert {
     Encoder.encode(builder.toString(), ErrorCorrectionLevel.L);
   }
 
+  @Test
+  public void testMinimalEncoder1() throws WriterException {
+    assertEquals(MinimalEncoder.encode("A", null, false).toString(), "BYTE(A),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder2() throws WriterException {
+    assertEquals(MinimalEncoder.encode("AB", null, false).toString(), "ALPHANUMERIC(AB),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder3() throws WriterException {
+    assertEquals(MinimalEncoder.encode("ABC", null, false).toString(), "BYTE(A,B,C),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder4() throws WriterException {
+    assertEquals(MinimalEncoder.encode("ABCD", null, false).toString(), "ALPHANUMERIC(AB,CD),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder5() throws WriterException {
+    assertEquals(MinimalEncoder.encode("ABCDE", null, false).toString(), "BYTE(A,B,C,D,E),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder6() throws WriterException {
+    assertEquals(MinimalEncoder.encode("ABCDEF", null, false).toString(), "ALPHANUMERIC(AB,CD,EF),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder7() throws WriterException {
+    assertEquals(MinimalEncoder.encode("ABCDEFG", null, false).toString(), "BYTE(A),ALPHANUMERIC(BC,DE,FG),TERMINATO" +
+        "R()");
+  }
+
+  @Test
+  public void testMinimalEncoder8() throws WriterException {
+    assertEquals(MinimalEncoder.encode("1", null, false).toString(), "BYTE(1),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder9() throws WriterException {
+    assertEquals(MinimalEncoder.encode("12", null, false).toString(), "ALPHANUMERIC(12),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder10() throws WriterException {
+    assertEquals(MinimalEncoder.encode("123", null, false).toString(), "NUMERIC(123),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder11() throws WriterException {
+    assertEquals(MinimalEncoder.encode("1234", null, false).toString(), "ALPHANUMERIC(12,34),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder12() throws WriterException {
+    assertEquals(MinimalEncoder.encode("12345", null, false).toString(), "NUMERIC(123),ALPHANUMERIC(45),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder13() throws WriterException {
+    assertEquals(MinimalEncoder.encode("123456", null, false).toString(), "NUMERIC(123,456),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder14() throws WriterException {
+    assertEquals(MinimalEncoder.encode("123A", null, false).toString(), "ALPHANUMERIC(12,3A),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder15() throws WriterException {
+    assertEquals(MinimalEncoder.encode("A1", null, false).toString(), "ALPHANUMERIC(A1),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder16() throws WriterException {
+    assertEquals(MinimalEncoder.encode("A12", null, false).toString(), "BYTE(A,1,2),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder17() throws WriterException {
+    assertEquals(MinimalEncoder.encode("A123", null, false).toString(), "ALPHANUMERIC(A1,23),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder18() throws WriterException {
+    assertEquals(MinimalEncoder.encode("A1234", null, false).toString(), "ALPHANUMERIC(A1),NUMERIC(234),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder19() throws WriterException {
+    assertEquals(MinimalEncoder.encode("AB1", null, false).toString(), "BYTE(A,B,1),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder20() throws WriterException {
+    assertEquals(MinimalEncoder.encode("AB12", null, false).toString(), "ALPHANUMERIC(AB,12),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder21() throws WriterException {
+    assertEquals(MinimalEncoder.encode("AB123", null, false).toString(), "ALPHANUMERIC(AB),NUMERIC(123),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder22() throws WriterException {
+    assertEquals(MinimalEncoder.encode("AB1234", null, false).toString(), "ALPHANUMERIC(AB,12,34),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder23() throws WriterException {
+    assertEquals(MinimalEncoder.encode("ABC1", null, false).toString(), "ALPHANUMERIC(AB,C1),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder24() throws WriterException {
+    assertEquals(MinimalEncoder.encode("ABC12", null, false).toString(), "BYTE(A,B,C,1,2),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder25() throws WriterException {
+    assertEquals(MinimalEncoder.encode("ABC1234", null, false).toString(), "ALPHANUMERIC(AB,C1),NUMERIC(234),TERMINA" +
+        "TOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder26() throws WriterException {
+    assertEquals(MinimalEncoder.encode("http://foo.com", null, false).toString(), "BYTE(h,t,t,p,:,/,/,f,o,o,.,c,o,m)" +
+        ",TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder27() throws WriterException {
+    assertEquals(MinimalEncoder.encode("HTTP://FOO.COM", null, false).toString(), "ALPHANUMERIC(HT,TP,:/,/F,OO,.C,OM" +
+        "),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder28() throws WriterException {
+    assertEquals(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781", null, false).toString(),
+        "NUMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(045,003,267,781),TERMINA" +
+        "TOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder29() throws WriterException {
+    assertEquals(MinimalEncoder.encode("\u0150", null, false).toString(), "ECI(ISO-8859-2),BYTE(.),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder30() throws WriterException {
+    assertEquals(MinimalEncoder.encode("\u015C", null, false).toString(), "ECI(ISO-8859-3),BYTE(.),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder31() throws WriterException {
+    assertEquals(MinimalEncoder.encode("\u0150\u015C", null, false).toString(), "ECI(UTF-8),BYTE(.,.),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder32() throws WriterException {
+    assertEquals(MinimalEncoder.encode("\u0150\u0150\u015C\u015C", null, false).toString(), "ECI(ISO-8859-2),BYTE(.," +
+        ".),ECI(ISO-8859-3),BYTE(.,.),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder33() throws WriterException {
+    assertEquals(MinimalEncoder.encode("abcdef\u0150ghij", null, false).toString(), "ECI(ISO-8859-2),BYTE(a,b,c,d,e," +
+        "f,.,g,h,i,j),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder34() throws WriterException {
+    assertEquals(MinimalEncoder.encode("2938928329832983\u01502938928329832983\u015C2938928329832983", null, false)
+        .toString(), "NUMERIC(293,892,832,983,298),ECI(ISO-8859-2),BYTE(3,.,2),NUMERIC(938,928,329,832,983),ECI(ISO-8" +
+        "859-3),BYTE(.,2),NUMERIC(938,928,329,832,983),TERMINATOR()");
+  }
+
+  @Test
+  public void testMinimalEncoder35() throws WriterException {
+    assertEquals(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781", null, true).toString(),
+        "FNC1_FIRST_POSITION(),NUMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(04" +
+        "5,003,267,781),TERMINATOR()");
+  }
+
   private static void verifyGS1EncodedData(QRCode qrCode) {
     String expected = "<<\n" +
         " mode: ALPHANUMERIC\n" +
