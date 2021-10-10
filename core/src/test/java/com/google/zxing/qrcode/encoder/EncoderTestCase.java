@@ -856,21 +856,6 @@ public final class EncoderTestCase extends Assert {
   static void verifyMinimalEncoding(String input, String expectedResult, boolean isGS1) throws Exception {
     MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, isGS1);
     assertEquals(result.toString(), expectedResult);
-//@Sean: If you are OK to make the static method DecoderBitStream.decode() accessible from this unit test
-//       then this piece of code could be activated. It checks that the bits produced by the minimal encoder can
-//       be decoded and produce the identical string. It would have discovered the regression.
-/*
-    BitArray bits = new BitArray();
-    result.getBits(bits);
-    int size = bits.getSize();
-    byte[] bytes = new byte[size / 8 + 1];
-    bits.toBytes(0, bytes, 0, size / 8);
-    com.google.zxing.common.DecoderResult decodedResult = com.google.zxing.qrcode.decoder.DecodedBitStreamParser
-        .decode(bytes, result.getVersion(ErrorCorrectionLevel.L), null, new java.util.EnumMap<>(
-        com.google.zxing.DecodeHintType.class));
-    assertNotNull(decodedResult);
-    assertEquals(input, decodedResult.getText();
-*/
   }
 
   private static void verifyGS1EncodedData(QRCode qrCode) {
