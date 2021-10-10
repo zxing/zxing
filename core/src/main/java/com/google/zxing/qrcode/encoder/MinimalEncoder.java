@@ -401,7 +401,7 @@ final class MinimalEncoder {
     if (canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from))) {
       if (from + 1 >= inputLength || !canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
         addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 1), previous);
-      } else if (from + 1 < inputLength && canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
+      } else {
         addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 2), previous);
       }
     }
@@ -410,7 +410,7 @@ final class MinimalEncoder {
         addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 1), previous);
       } else if (from + 2 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
         addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 2), previous);
-      } else if (from + 2 < inputLength && canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
+      } else {
         addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 3), previous);
       }
     }
