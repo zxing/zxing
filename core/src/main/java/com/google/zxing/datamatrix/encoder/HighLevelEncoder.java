@@ -410,20 +410,12 @@ public final class HighLevelEncoder {
    * @return the requested character count
    */
   public static int determineConsecutiveDigitCount(CharSequence msg, int startpos) {
-    int count = 0;
     int len = msg.length();
     int idx = startpos;
-    if (idx < len) {
-      char ch = msg.charAt(idx);
-      while (isDigit(ch) && idx < len) {
-        count++;
-        idx++;
-        if (idx < len) {
-          ch = msg.charAt(idx);
-        }
-      }
+    while (idx < len && isDigit(msg.charAt(idx))) {
+      idx++;
     }
-    return count;
+    return idx - startpos;
   }
 
   static void illegalCharacter(char c) {
