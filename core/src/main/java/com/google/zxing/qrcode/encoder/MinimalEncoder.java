@@ -224,40 +224,6 @@ final class MinimalEncoder {
   }
 
   /**
-   * Example: to encode alphanumerically at least 2 characters are needed (5.5 bits per character). Similarily three
-   * digits are needed to encode numerically (3+1/3 bits per digit)
-   */
-  static int getEncodingGranularity(Mode mode) {
-    switch (mode) {
-      case KANJI:
-      case BYTE:
-        return 1;
-      case ALPHANUMERIC:
-        return 2;
-      case NUMERIC:
-        return 3;
-      default:
-        return 0;
-    }
-  }
-
-  /**
-   * Example: to encode alphanumerically 11 bits are used per 2 characters. Similarily 10 bits are used to encode 3
-   * numeric digits.
-   */
-  static int getBitsPerEncodingUnit(Mode mode) {
-    switch (mode) {
-      case KANJI: return 16;
-      case ALPHANUMERIC: return 11;
-      case NUMERIC: return 10;
-      case BYTE: return 8;
-      case ECI:
-      default:
-        return 0;
-    }
-  }
-
-  /**
    * Returns the maximum number of encodeable characters in the given mode for the given version. Example: in
    * Version 1, 2^10 digits or 2^8 bytes can be encoded. In Version 3 it is 2^14 digits and 2^16 bytes
    */
@@ -324,7 +290,7 @@ final class MinimalEncoder {
           }
           if (haveECI) {
             //prepend a default character set ECI
-            result.addFirst(result.new ResultNode(Mode.ECI, 0, 0));
+            result.addFirst(result.new ResultNode(Mode.ECI, 0, 0, 0));
           }
         }
       }
@@ -332,15 +298,15 @@ final class MinimalEncoder {
       first = result.getFirst();
       if (first.mode != Mode.ECI) {
         //prepend a FNC1_FIRST_POSITION
-        result.addFirst(result.new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0));
+        result.addFirst(result.new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
       } else {
         //insert a FNC1_FIRST_POSITION after the ECI
-        result.add(1,result.new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0));
+        result.add(1,result.new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
       }
     }
     //Add TERMINATOR according to "8.4.8 Terminator"
     //TODO: The terminiator can be omitted if there are less than 4 bit in the capacity of the symbol.
-    result.add(result.new ResultNode(Mode.TERMINATOR, stringToEncode.length(), 0));
+    result.add(result.new ResultNode(Mode.TERMINATOR, stringToEncode.length(), 0, 0));
     return result;
   }
 
@@ -418,27 +384,35 @@ final class MinimalEncoder {
   void addEdges(Version version, ArrayList<ResultList>[][][] vertices, int from, ResultList previous) {
     for (int i = 0; i < encoders.length; i++) {
       if (encoders[i].canEncode(stringToEncode.charAt(from))) {
-        ResultList edge = new ResultList(version, Mode.BYTE, from, i);
+        ResultList edge = new ResultList(version, Mode.BYTE, from, i, 1);
         boolean needECI = (previous == null && i > 0) ||
                           (previous != null && getEdgeCharsetEncoderIndex(previous) != i);
         if (needECI) {
-          ResultList.ResultNode eci = edge.new ResultNode(Mode.ECI, from, i);
+          ResultList.ResultNode eci = edge.new ResultNode(Mode.ECI, from, i, 0);
           edge.addFirst(eci);
         }
         addEdge(vertices, edge, previous);
       }
     }
     if (canEncode(Mode.KANJI, stringToEncode.charAt(from))) {
-      addEdge(vertices, new ResultList(version, Mode.KANJI, from, 0), previous);
+      addEdge(vertices, new ResultList(version, Mode.KANJI, from, 0, 1), previous);
     }
     int inputLength = stringToEncode.length();
-    if (from + 1 < inputLength && canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from)) &&
-        canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
-      addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0), previous);
+    if (canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from))) {
+      if (from + 1 >= inputLength || !canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
+        addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 1), previous);
+      } else if (from + 1 < inputLength && canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
+        addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 2), previous);
+      }
     }
-    if (from + 2 < inputLength && canEncode(Mode.NUMERIC, stringToEncode.charAt(from)) && canEncode(Mode.NUMERIC,
-        stringToEncode.charAt(from + 1)) && canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
-      addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0), previous);
+    if (canEncode(Mode.NUMERIC, stringToEncode.charAt(from))) {
+      if (from + 1 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 1))) {
+        addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 1), previous);
+      } else if (from + 2 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
+        addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 2), previous);
+      } else if (from + 2 < inputLength && canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
+        addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 3), previous);
+      }
     }
   }
 
@@ -468,7 +442,7 @@ final class MinimalEncoder {
 //              ResultList.ResultNode previous = getEdgePrevious(edge);
 //              String fromKey = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode +
 //                  (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
-//              int toPosition = fromPosition + getEncodingGranularity(getEdgeMode(edge));
+//              int toPosition = fromPosition + getEdgeLength(edge);
 //              edgeStrings.add("(" + fromKey + ") -- " + getEdgeMode(edge) + (toPosition - 
 //                  fromPosition > 0 ? "(" + stringToEncode.substring(fromPosition, toPosition) + 
 //                  ")" : "") + " (" + edge.getSize() + ")" + " --> " + "(" + vertexKey + ")");
@@ -760,11 +734,11 @@ final class MinimalEncoder {
     }
 
     /**
-     * Short for rl=new ResultList(version); rl.add(rl.new ResultNode(modes, position, charsetEncoderIndex));
+     * Short for rl=new ResultList(version); rl.add(rl.new ResultNode(modes, position, charsetEncoderIndex, length));
      */
-    private ResultList(Version version, Mode mode, int position, int charsetEncoderIndex) {
+    private ResultList(Version version, Mode mode, int position, int charsetEncoderIndex, int length) {
       this(version);
-      add(new ResultNode(mode, position, charsetEncoderIndex));
+      add(new ResultNode(mode, position, charsetEncoderIndex, length));
     }
 
     private void addFirst(ResultList resultList) {
@@ -836,8 +810,24 @@ final class MinimalEncoder {
      * appends the bits
      */
     void getBits(BitArray bits) throws WriterException {
-      for (Iterator<ResultNode> it = iterator(); it.hasNext();) {
-        it.next().getBits(bits);
+      for (int i = 0; i < size(); i++) {
+        ResultNode rni = get(i);
+        if (rni.declaresMode) {
+          // append mode
+          bits.appendBits(rni.mode.getBits(), 4);
+          if (rni.getCharacterLength() > 0) {
+            int length = rni.getCharacterCountIndicator();
+            for (int j = i + 1; j < size(); j++) {
+              ResultNode rnj = get(j);
+              if (rnj.declaresMode) {
+                break;
+              }
+              length += rnj.getCharacterCountIndicator();
+            }
+            bits.appendBits(length, rni.mode.getCharacterCountBits(version));
+          }
+        }
+        rni.getBits(bits);
       }
     }
 
@@ -899,13 +889,15 @@ final class MinimalEncoder {
       private boolean declaresMode = true;
       private final int position;
       private final int charsetEncoderIndex;
+      private final int length;
 
-      ResultNode(Mode mode, int position, int charsetEncoderIndex) {
+      ResultNode(Mode mode, int position, int charsetEncoderIndex, int length) {
 
         assert mode != null;
         this.mode = mode;
         this.position = position;
         this.charsetEncoderIndex = charsetEncoderIndex;
+        this.length = length;
       }
 
       /**
@@ -913,12 +905,21 @@ final class MinimalEncoder {
        */
       private int getSize() {
         int size = declaresMode ? 4 + mode.getCharacterCountBits(version) : 0;
-        if (mode == Mode.ECI) {
-          size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
-        } else if (mode == Mode.BYTE) {
-          size += 8 * getBytesOfCharacter(position, charsetEncoderIndex).length;
-        } else {
-          size += getBitsPerEncodingUnit(mode);
+        switch (mode) {
+          case KANJI:
+            size += 13;
+            break;
+          case ALPHANUMERIC:
+            size += length == 1 ? 6 : 11;
+            break;
+          case NUMERIC:
+            size += length == 1 ? 4 : length == 2 ? 7 : 10;
+            break;
+          case BYTE:
+            size += 8 * getBytesOfCharacter(position, charsetEncoderIndex).length;
+            break;
+          case ECI:
+            size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
         }
         return size;
       }
@@ -927,7 +928,7 @@ final class MinimalEncoder {
        * returns the length in characters
        */
       private int getCharacterLength() {
-        return (getBitsPerEncodingUnit(mode) == 0 ? 0 : 1) * getEncodingGranularity(mode);
+        return length;
       }
 
       /**
@@ -942,20 +943,9 @@ final class MinimalEncoder {
        * appends the bits
        */
       private void getBits(BitArray bits) throws WriterException {
-        if (declaresMode) {
-          // append mode
-          bits.appendBits(mode.getBits(), 4);
-          if (mode == Mode.ECI) {
-            bits.appendBits(CharacterSetECI.getCharacterSetECI(encoders[charsetEncoderIndex].charset()).getValue(), 8);
-          } else {
-            int characterLength = getCharacterCountIndicator();
-            if (characterLength > 0) {
-              // append length
-              bits.appendBits(characterLength, mode.getCharacterCountBits(version));
-            }
-          }
-        }
-        if (getCharacterLength() > 0) {
+        if (mode == Mode.ECI) {
+          bits.appendBits(CharacterSetECI.getCharacterSetECI(encoders[charsetEncoderIndex].charset()).getValue(), 8);
+        } else if (getCharacterLength() > 0) {
           // append data
           Encoder.appendBytes(stringToEncode.substring(position, position + getCharacterLength()), mode, bits, 
               encoders[charsetEncoderIndex].charset());
@@ -970,7 +960,7 @@ final class MinimalEncoder {
         if (mode == Mode.ECI) {
           result.append(encoders[charsetEncoderIndex].charset().displayName());
         } else {
-          result.append(makePrintable(stringToEncode.substring(position, position + getEncodingGranularity(mode))));
+          result.append(makePrintable(stringToEncode.substring(position, position + length)));
         }
         return result.toString();
       }
