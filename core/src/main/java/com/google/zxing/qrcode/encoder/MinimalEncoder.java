@@ -810,14 +810,15 @@ final class MinimalEncoder {
      * appends the bits
      */
     void getBits(BitArray bits) throws WriterException {
-      for (int i = 0; i < size(); i++) {
+      int size = size();
+      for (int i = 0; i < size; i++) {
         ResultNode rni = get(i);
         if (rni.declaresMode) {
           // append mode
           bits.appendBits(rni.mode.getBits(), 4);
           if (rni.getCharacterLength() > 0) {
             int length = rni.getCharacterCountIndicator();
-            for (int j = i + 1; j < size(); j++) {
+            for (int j = i + 1; j < size; j++) {
               ResultNode rnj = get(j);
               if (rnj.declaresMode) {
                 break;
