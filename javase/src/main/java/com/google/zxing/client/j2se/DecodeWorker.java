@@ -175,7 +175,7 @@ final class DecodeWorker implements Callable<Integer> {
           }
           rawData.setLength(rawData.length() - 1);  // chop off final space
 
-          output.write("Raw bits:\n" + rawData.toString() + "\n");
+          output.write("Raw bits:\n" + rawData + "\n");
         }
 
         ResultPoint[] resultPoints = result.getResultPoints();

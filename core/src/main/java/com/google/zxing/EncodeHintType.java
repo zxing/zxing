@@ -113,7 +113,7 @@ public enum EncodeHintType {
 
   /**
    * Specifies whether to use compact mode for QR code (type {@link Boolean}, or "true" or "false"
-   * When compaction is performed the value for {@link CHARACTER_SET} is ignored.
+   * When compaction is performed the value for {@link #CHARACTER_SET} is ignored.
    * {@link String} value).
    */
   QR_COMPACT,

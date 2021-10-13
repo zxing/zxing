@@ -39,7 +39,7 @@ public final class QRCode {
   }
 
   /**
-   * @return the mode. Not relevant if {@link com.google.zxing.EncodeHintType.java#QR_COMPACT} is selected.
+   * @return the mode. Not relevant if {@link com.google.zxing.EncodeHintType#QR_COMPACT} is selected.
    */
   public Mode getMode() {
     return mode;
