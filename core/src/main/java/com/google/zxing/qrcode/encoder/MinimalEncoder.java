@@ -28,6 +28,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.nio.charset.UnsupportedCharsetException;
 
@@ -93,6 +95,28 @@ final class MinimalEncoder {
     public String toString() {
       return description;
     }
+  }
+
+  private static final Map<String,Integer> NAME_TO_ECI_VALUE = new HashMap<>();
+
+  static {
+    NAME_TO_ECI_VALUE.put("ISO-8859-1",1);
+    NAME_TO_ECI_VALUE.put("ISO-8859-2",4);
+    NAME_TO_ECI_VALUE.put("ISO-8859-3",5);
+    NAME_TO_ECI_VALUE.put("ISO-8859-4",6);
+    NAME_TO_ECI_VALUE.put("ISO-8859-5",7);
+    NAME_TO_ECI_VALUE.put("ISO-8859-6",8);
+    NAME_TO_ECI_VALUE.put("ISO-8859-7",9);
+    NAME_TO_ECI_VALUE.put("ISO-8859-8",10);
+    NAME_TO_ECI_VALUE.put("ISO-8859-9",11);
+    NAME_TO_ECI_VALUE.put("ISO-8859-10",12);
+    NAME_TO_ECI_VALUE.put("ISO-8859-11",13);
+    NAME_TO_ECI_VALUE.put("ISO-8859-13",15);
+    NAME_TO_ECI_VALUE.put("ISO-8859-14",16);
+    NAME_TO_ECI_VALUE.put("ISO-8859-15",17);
+    NAME_TO_ECI_VALUE.put("ISO-8859-16",18);
+    NAME_TO_ECI_VALUE.put("UTF-16BE",25);
+    NAME_TO_ECI_VALUE.put("UTF-8",26);
   }
 
   private final String stringToEncode;
@@ -463,10 +487,6 @@ final class MinimalEncoder {
      * An edge is drawn as follows "(" + fromVertex + ") -- " + encodingMode + "(" + encodedInput + ") (" +
      * accumulatedSize + ") --> (" + toVertex + ")"
      *
-     * The coding conversions of this project require lines to not exceed 120 characters. In order to view the examples
-     * below join lines that end with a backslash. This can be achieved by running the command
-     * sed -e ':a' -e 'N' -e '$!ba' -e 's/\\\n *[*]/ /g' on this file.
-     *
      * Example 1 encoding the string "ABCDE":
      *
      * Initial situation
@@ -578,11 +598,13 @@ final class MinimalEncoder {
                   minimalSize = edge.getSize();
                 }
               }
+              assert minimalIndex != -1;
               minimalEdge = edges.get(minimalIndex);
               edges.clear();
               edges.add(minimalEdge);
             }
             if (i < inputLength) {
+              assert minimalEdge != null;
               addEdges(version, vertices, i, minimalEdge);
             }
           }
@@ -597,6 +619,7 @@ final class MinimalEncoder {
       for (int k = 0; k < 4; k++) {
         if (vertices[inputLength][j][k] != null) {
           ArrayList<ResultList> edges = vertices[inputLength][j][k];
+          assert edges.size() == 1;
           ResultList edge = edges.get(0);
           if (edge.getSize() < minimalSize) {
             minimalSize = edge.getSize();
@@ -799,27 +822,9 @@ final class MinimalEncoder {
       }
 
       private int getCharacterSetECIValue() {
-        switch (encoders[charsetEncoderIndex].charset().name()) {
-          case "ISO-8895-2": return 4;
-          case "ISO-8895-3": return 5;
-          case "ISO-8895-4": return 6;
-          case "ISO-8895-5": return 7;
-          case "ISO-8895-6": return 8;
-          case "ISO-8895-7": return 9;
-          case "ISO-8895-8": return 10;
-          case "ISO-8895-9": return 11;
-          case "ISO-8895-10": return 12;
-          case "ISO-8895-11": return 13;
-          case "ISO-8895-13": return 15;
-          case "ISO-8895-14": return 16;
-          case "ISO-8895-15": return 17;
-          case "ISO-8895-16": return 18;
-          case "UTF-16BE": return 25;
-          case "UTF-8": return 26;
-          case "ISO-8895-1":
-          default:
-            return 1;
-        }
+        Integer value = NAME_TO_ECI_VALUE.get(encoders[charsetEncoderIndex].charset().name());
+        assert value != null;
+        return value.intValue();
       }
       /**
        * appends the bits
