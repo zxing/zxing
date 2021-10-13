@@ -90,7 +90,6 @@ final class State {
   // Create a new state representing this state with a latch to a (not
   // necessary different) mode, and then a code.
   State latchAndAppend(int mode, int value) {
-    //assert binaryShiftByteCount == 0;
     int bitCount = this.bitCount;
     Token token = this.token;
     if (mode != this.mode) {
@@ -106,7 +105,6 @@ final class State {
   // Create a new state representing this state, with a temporary shift
   // to a different mode to output a single value.
   State shiftAndAppend(int mode, int value) {
-    //assert binaryShiftByteCount == 0 && this.mode != mode;
     Token token = this.token;
     int thisModeBitCount = this.mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
     // Shifts exist only to UPPER and PUNCT, both with tokens size 5.
@@ -122,7 +120,6 @@ final class State {
     int mode = this.mode;
     int bitCount = this.bitCount;
     if (this.mode == HighLevelEncoder.MODE_PUNCT || this.mode == HighLevelEncoder.MODE_DIGIT) {
-      //assert binaryShiftByteCount == 0;
       int latch = HighLevelEncoder.LATCH_TABLE[mode][HighLevelEncoder.MODE_UPPER];
       token = token.add(latch & 0xFFFF, latch >> 16);
       bitCount += latch >> 16;
@@ -147,7 +144,6 @@ final class State {
     }
     Token token = this.token;
     token = token.addBinaryShift(index - binaryShiftByteCount, binaryShiftByteCount);
-    //assert token.getTotalBitCount() == this.bitCount;
     return new State(token, mode, 0, this.bitCount);
   }
 
