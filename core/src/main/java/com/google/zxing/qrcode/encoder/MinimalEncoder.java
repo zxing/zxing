@@ -130,13 +130,12 @@ final class MinimalEncoder {
    *
    * @param stringToEncode The string to encode
    * @param version The preferred {@link Version}. A minimal version is computed (see 
-   *                {@link ResultList#getVersion method} when the value of the argument is null
-   * @param priorityCharset The preferred {@link Charset}. When the value of the argument is
-   *                        null, the algorithm chooses charsets that leads to a minimal
-   *                        representation. Otherwise the algorithm will use the priority 
-   *                        charset to encode any character in the input that can be encoded
-   *                        by it if the charset is among the supported charsets.
-   * @param isGS1 <code>true</code> if a FNC1 is to be prepended; <code>false</code> otherwise
+   *   {@link ResultList#getVersion method} when the value of the argument is null
+   * @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
+   *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority 
+   *   charset to encode any character in the input that can be encoded by it if the charset is among the 
+   *   supported charsets.
+   * @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
    * @see ResultList#getVersion
    */
   MinimalEncoder(String stringToEncode, Version version, Charset priorityCharset, boolean isGS1) 
@@ -440,21 +439,14 @@ final class MinimalEncoder {
 
     int inputLength = stringToEncode.length();
     if (canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from))) {
-      if (from + 1 >= inputLength || !canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
-        addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 1), previous);
-      } else {
-        addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 2), previous);
-      }
+      addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, from + 1 >= inputLength ||
+          !canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1)) ? 1 : 2), previous);
     }
 
     if (canEncode(Mode.NUMERIC, stringToEncode.charAt(from))) {
-      if (from + 1 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 1))) {
-        addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 1), previous);
-      } else if (from + 2 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2))) {
-        addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 2), previous);
-      } else {
-        addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 3), previous);
-      }
+      addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, from + 1 >= inputLength ||
+          !canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 1)) ? 1 : from + 2 >= inputLength ||
+          !canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 2)) ? 2 : 3), previous);
     }
   }
 

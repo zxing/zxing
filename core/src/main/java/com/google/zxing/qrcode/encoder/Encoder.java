@@ -97,7 +97,7 @@ public final class Encoder {
     if (hasCompactionHint) {
       mode = Mode.BYTE;
 
-      Charset priorityEncoding = encoding == DEFAULT_BYTE_MODE_ENCODING ? null : encoding;
+      Charset priorityEncoding = encoding.equals(DEFAULT_BYTE_MODE_ENCODING) ? null : encoding;
       MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, priorityEncoding, hasGS1FormatHint);
 
       while (!willFit(rn.getSize(), rn.getVersion(ecLevel), ecLevel)) {
