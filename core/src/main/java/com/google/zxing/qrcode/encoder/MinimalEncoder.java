@@ -19,7 +19,6 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
 import com.google.zxing.common.BitArray;
-import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
@@ -102,12 +101,25 @@ final class MinimalEncoder {
   private final Version version;
   private final boolean isGS1;
   private final CharsetEncoder[] encoders;
+  private final int priorityEncoderIndex;
 
 
   /**
-   * Encoding is optional (default ISO-8859-1) and version is optional (minimal version is computed if not specified.
+   * Creates a MinimalEncoder
+   *
+   * @param stringToEncode The string to encode
+   * @param version The preferred {@link Version}. A minimal version is computed (see 
+   *                {@link ResultList#getVersion method} when the value of the argument is null
+   * @param priorityCharset The preferred {@link Charset}. When the value of the argument is
+   *                        null, the algorithm chooses charsets that leads to a minimal
+   *                        representation. Otherwise the algorithm will use the priority 
+   *                        charset to encode any character in the input that can be encoded
+   *                        by it if the charset is among the supported charsets.
+   * @param isGS1 <code>true</code> if a FNC1 is to be prepended; <code>false</code> otherwise
+   * @see ResultList#getVersion
    */
-  MinimalEncoder(String stringToEncode, Version version, boolean isGS1) throws WriterException {
+  MinimalEncoder(String stringToEncode, Version version, Charset priorityCharset, boolean isGS1) 
+      throws WriterException {
 
     this.stringToEncode = stringToEncode;
     this.version = version;
@@ -115,7 +127,7 @@ final class MinimalEncoder {
 
     CharsetEncoder[] isoEncoders = new CharsetEncoder[15]; //room for the 15 ISO-8859 charsets 1 through 16.
     isoEncoders[0] = StandardCharsets.ISO_8859_1.newEncoder();
-    boolean needUnicodeEncoder = false;
+    boolean needUnicodeEncoder = priorityCharset != null && priorityCharset.name().startsWith("UTF");
 
     for (int i = 0; i < stringToEncode.length(); i++) {
       int cnt = 0;
@@ -157,7 +169,7 @@ final class MinimalEncoder {
 
     int numberOfEncoders = 0;
     for (int j = 0; j < 15; j++) {
-      if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
+      if (isoEncoders[j] != null) {
         numberOfEncoders++;
       }
     }
@@ -169,7 +181,7 @@ final class MinimalEncoder {
       encoders = new CharsetEncoder[numberOfEncoders + 2];
       int index = 0;
       for (int j = 0; j < 15; j++) {
-        if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
+        if (isoEncoders[j] != null) {
           encoders[index++] = isoEncoders[j];
         }
       }
@@ -177,10 +189,22 @@ final class MinimalEncoder {
       encoders[index++] = StandardCharsets.UTF_8.newEncoder();
       encoders[index++] = StandardCharsets.UTF_16BE.newEncoder();
     }
+
+    int priorityEncoderIndexValue = -1;
+    if (priorityCharset != null) {
+      for (int i = 0; i < encoders.length; i++) {
+        if (priorityCharset.name().equals(encoders[i].charset().name())) {
+          priorityEncoderIndexValue = i;
+          break;
+        }
+      }
+    }
+    priorityEncoderIndex = priorityEncoderIndexValue;
   }
 
-  static ResultList encode(String stringToEncode, Version version, boolean isGS1) throws WriterException {
-    return new MinimalEncoder(stringToEncode, version, isGS1).encode();
+  static ResultList encode(String stringToEncode, Version version, Charset priorityCharset, boolean isGS1) 
+      throws WriterException {
+    return new MinimalEncoder(stringToEncode, version, priorityCharset, isGS1).encode();
   }
 
   ResultList encode() throws WriterException {
@@ -313,13 +337,13 @@ final class MinimalEncoder {
   int getEdgeCharsetEncoderIndex(ResultList edge) {
     ResultList.ResultNode last = edge.getLast();
     assert last != null;
-    return last != null ? last.charsetEncoderIndex : 0;
+    return last.charsetEncoderIndex;
   }
 
   Mode getEdgeMode(ResultList edge) {
     ResultList.ResultNode last = edge.getLast();
     assert last != null;
-    return last != null ? last.mode : Mode.BYTE;
+    return last.mode;
   }
 
   int getEdgePosition(ResultList edge) {
@@ -327,7 +351,7 @@ final class MinimalEncoder {
 //This function works regardless if the concatenation has already taken place or not.
     ResultList.ResultNode last = edge.getLast();
     assert last != null;
-    return last != null ? last.position : 0;
+    return last.position;
   }
 
   int getEdgeLength(ResultList edge) {
@@ -335,15 +359,12 @@ final class MinimalEncoder {
 //This function works regardless if the concatenation has already taken place or not.
     ResultList.ResultNode last = edge.getLast();
     assert last != null;
-    return last != null ? last.getCharacterLength() : 0;
+    return last.getCharacterLength();
   }
 
   ResultList.ResultNode getEdgePrevious(ResultList edge) {
     Iterator<ResultList.ResultNode> it = edge.descendingIterator();
     assert it.hasNext();
-    if (!it.hasNext()) {
-      return null;
-    }
     it.next();
     if (!it.hasNext()) {
       return null;
@@ -382,7 +403,14 @@ final class MinimalEncoder {
   }
 
   void addEdges(Version version, ArrayList<ResultList>[][][] vertices, int from, ResultList previous) {
-    for (int i = 0; i < encoders.length; i++) {
+    int start = 0;
+    int end = encoders.length;
+    if (priorityEncoderIndex >= 0 && encoders[priorityEncoderIndex].canEncode(stringToEncode.charAt(from))) {
+      start = priorityEncoderIndex;
+      end = priorityEncoderIndex + 1;
+    }
+
+    for (int i = start; i < end; i++) {
       if (encoders[i].canEncode(stringToEncode.charAt(from))) {
         ResultList edge = new ResultList(version, Mode.BYTE, from, i, 1);
         boolean needECI = (previous == null && i > 0) ||
@@ -394,9 +422,11 @@ final class MinimalEncoder {
         addEdge(vertices, edge, previous);
       }
     }
+
     if (canEncode(Mode.KANJI, stringToEncode.charAt(from))) {
       addEdge(vertices, new ResultList(version, Mode.KANJI, from, 0, 1), previous);
     }
+
     int inputLength = stringToEncode.length();
     if (canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from))) {
       if (from + 1 >= inputLength || !canEncode(Mode.ALPHANUMERIC, stringToEncode.charAt(from + 1))) {
@@ -405,6 +435,7 @@ final class MinimalEncoder {
         addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 2), previous);
       }
     }
+
     if (canEncode(Mode.NUMERIC, stringToEncode.charAt(from))) {
       if (from + 1 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode.charAt(from + 1))) {
         addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 1), previous);
@@ -894,7 +925,6 @@ final class MinimalEncoder {
 
       ResultNode(Mode mode, int position, int charsetEncoderIndex, int length) {
 
-        assert mode != null;
         this.mode = mode;
         this.position = position;
         this.charsetEncoderIndex = charsetEncoderIndex;
@@ -940,12 +970,35 @@ final class MinimalEncoder {
         return mode == Mode.BYTE ? getBytesOfCharacter(position, charsetEncoderIndex).length : getCharacterLength();
       }
 
+      private int getCharacterSetECIValue() {
+        switch (encoders[charsetEncoderIndex].charset().name()) {
+          case "ISO-8895-2": return 4;
+          case "ISO-8895-3": return 5;
+          case "ISO-8895-4": return 6;
+          case "ISO-8895-5": return 7;
+          case "ISO-8895-6": return 8;
+          case "ISO-8895-7": return 9;
+          case "ISO-8895-8": return 10;
+          case "ISO-8895-9": return 11;
+          case "ISO-8895-10": return 12;
+          case "ISO-8895-11": return 13;
+          case "ISO-8895-13": return 15;
+          case "ISO-8895-14": return 16;
+          case "ISO-8895-15": return 17;
+          case "ISO-8895-16": return 18;
+          case "UTF-16BE": return 25;
+          case "UTF-8": return 26;
+          case "ISO-8895-1":
+          default:
+            return 1;
+        }
+      }
       /**
        * appends the bits
        */
       private void getBits(BitArray bits) throws WriterException {
         if (mode == Mode.ECI) {
-          bits.appendBits(CharacterSetECI.getCharacterSetECI(encoders[charsetEncoderIndex].charset()).getValue(), 8);
+          bits.appendBits(getCharacterSetECIValue(), 8);
         } else if (getCharacterLength() > 0) {
           // append data
           Encoder.appendBytes(stringToEncode.substring(position, position + getCharacterLength()), mode, bits, 

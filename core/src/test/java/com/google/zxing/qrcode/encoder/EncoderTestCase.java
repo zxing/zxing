@@ -29,6 +29,8 @@ import org.junit.Test;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -669,222 +671,250 @@ public final class EncoderTestCase extends Assert {
 
   @Test
   public void testMinimalEncoder1() throws Exception {
-    verifyMinimalEncoding("A", "ALPHANUMERIC(A),TERMINATOR()", false);
+    verifyMinimalEncoding("A", "ALPHANUMERIC(A),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder2() throws Exception {
-    verifyMinimalEncoding("AB", "ALPHANUMERIC(AB),TERMINATOR()", false);
+    verifyMinimalEncoding("AB", "ALPHANUMERIC(AB),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder3() throws Exception {
-    verifyMinimalEncoding("ABC", "ALPHANUMERIC(AB,C),TERMINATOR()", false);
+    verifyMinimalEncoding("ABC", "ALPHANUMERIC(AB,C),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder4() throws Exception {
-    verifyMinimalEncoding("ABCD", "ALPHANUMERIC(AB,CD),TERMINATOR()", false);
+    verifyMinimalEncoding("ABCD", "ALPHANUMERIC(AB,CD),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder5() throws Exception {
-    verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(AB,CD,E),TERMINATOR()", false);
+    verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(AB,CD,E),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder6() throws Exception {
-    verifyMinimalEncoding("ABCDEF", "ALPHANUMERIC(AB,CD,EF),TERMINATOR()", false);
+    verifyMinimalEncoding("ABCDEF", "ALPHANUMERIC(AB,CD,EF),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder7() throws Exception {
     verifyMinimalEncoding("ABCDEFG", "ALPHANUMERIC(AB,CD,EF,G),TERMINATO" +
-        "R()", false);
+        "R()", null, false);
   }
 
   @Test
   public void testMinimalEncoder8() throws Exception {
-    verifyMinimalEncoding("1", "NUMERIC(1),TERMINATOR()", false);
+    verifyMinimalEncoding("1", "NUMERIC(1),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder9() throws Exception {
-    verifyMinimalEncoding("12", "NUMERIC(12),TERMINATOR()", false);
+    verifyMinimalEncoding("12", "NUMERIC(12),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder10() throws Exception {
-    verifyMinimalEncoding("123", "NUMERIC(123),TERMINATOR()", false);
+    verifyMinimalEncoding("123", "NUMERIC(123),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder11() throws Exception {
-    verifyMinimalEncoding("1234", "NUMERIC(123,4),TERMINATOR()", false);
+    verifyMinimalEncoding("1234", "NUMERIC(123,4),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder12() throws Exception {
-    verifyMinimalEncoding("12345", "NUMERIC(123,45),TERMINATOR()", false);
+    verifyMinimalEncoding("12345", "NUMERIC(123,45),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder13() throws Exception {
-    verifyMinimalEncoding("123456", "NUMERIC(123,456),TERMINATOR()", false);
+    verifyMinimalEncoding("123456", "NUMERIC(123,456),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder14() throws Exception {
-    verifyMinimalEncoding("123A", "ALPHANUMERIC(12,3A),TERMINATOR()", false);
+    verifyMinimalEncoding("123A", "ALPHANUMERIC(12,3A),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder15() throws Exception {
-    verifyMinimalEncoding("A1", "ALPHANUMERIC(A1),TERMINATOR()", false);
+    verifyMinimalEncoding("A1", "ALPHANUMERIC(A1),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder16() throws Exception {
-    verifyMinimalEncoding("A12", "ALPHANUMERIC(A1,2),TERMINATOR()", false);
+    verifyMinimalEncoding("A12", "ALPHANUMERIC(A1,2),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder17() throws Exception {
-    verifyMinimalEncoding("A123", "ALPHANUMERIC(A1,23),TERMINATOR()", false);
+    verifyMinimalEncoding("A123", "ALPHANUMERIC(A1,23),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder18() throws Exception {
-    verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1,23,4),TERMINATOR()", false);
+    verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1,23,4),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder19() throws Exception {
-    verifyMinimalEncoding("A12345", "ALPHANUMERIC(A1,23,45),TERMINATOR()", false);
+    verifyMinimalEncoding("A12345", "ALPHANUMERIC(A1,23,45),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder20() throws Exception {
-    verifyMinimalEncoding("A123456", "ALPHANUMERIC(A1,23,45,6),TERMINATOR()", false);
+    verifyMinimalEncoding("A123456", "ALPHANUMERIC(A1,23,45,6),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder21() throws Exception {
-    verifyMinimalEncoding("A1234567", "ALPHANUMERIC(A1,23,45,67),TERMINATOR()", false);
+    verifyMinimalEncoding("A1234567", "ALPHANUMERIC(A1,23,45,67),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder22() throws Exception {
-    verifyMinimalEncoding("A12345678", "BYTE(A),NUMERIC(123,456,78),TERMINATOR()", false);
+    verifyMinimalEncoding("A12345678", "BYTE(A),NUMERIC(123,456,78),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder23() throws Exception {
-    verifyMinimalEncoding("A123456789", "BYTE(A),NUMERIC(123,456,789),TERMINATOR()", false);
+    verifyMinimalEncoding("A123456789", "BYTE(A),NUMERIC(123,456,789),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder24() throws Exception {
-    verifyMinimalEncoding("A1234567890", "ALPHANUMERIC(A1),NUMERIC(234,567,890),TERMINATOR()", false);
+    verifyMinimalEncoding("A1234567890", "ALPHANUMERIC(A1),NUMERIC(234,567,890),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder25() throws Exception {
-    verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB,1),TERMINATOR()", false);
+    verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB,1),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder26() throws Exception {
-    verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB,12),TERMINATOR()", false);
+    verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB,12),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder27() throws Exception {
-    verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB,12,3),TERMINATOR()", false);
+    verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB,12,3),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder28() throws Exception {
-    verifyMinimalEncoding("AB1234", "ALPHANUMERIC(AB,12,34),TERMINATOR()", false);
+    verifyMinimalEncoding("AB1234", "ALPHANUMERIC(AB,12,34),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder29() throws Exception {
-    verifyMinimalEncoding("ABC1", "ALPHANUMERIC(AB,C1),TERMINATOR()", false);
+    verifyMinimalEncoding("ABC1", "ALPHANUMERIC(AB,C1),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder30() throws Exception {
-    verifyMinimalEncoding("ABC12", "ALPHANUMERIC(AB,C1,2),TERMINATOR()", false);
+    verifyMinimalEncoding("ABC12", "ALPHANUMERIC(AB,C1,2),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder31() throws Exception {
     verifyMinimalEncoding("ABC1234", "ALPHANUMERIC(AB,C1,23,4),TERMINA" +
-        "TOR()", false);
+        "TOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder32() throws Exception {
     verifyMinimalEncoding("http://foo.com", "BYTE(h,t,t,p,:,/,/,f,o,o,.,c,o,m)" +
-        ",TERMINATOR()", false);
+        ",TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder33() throws Exception {
     verifyMinimalEncoding("HTTP://FOO.COM", "ALPHANUMERIC(HT,TP,:/,/F,OO,.C,OM" +
-        "),TERMINATOR()", false);
+        "),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder34() throws Exception {
     verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781", 
         "NUMERIC(100,111,467,001,0),ALPHANUMERIC(%0,12,01,22,0%,10,72,11,22,0%),NUMERIC(140,045,003,267,781),TERMINA" +
-        "TOR()", false);
+        "TOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder35() throws Exception {
-    verifyMinimalEncoding("\u0150", "ECI(ISO-8859-2),BYTE(.),TERMINATOR()", false);
+    verifyMinimalEncoding("\u0150", "ECI(ISO-8859-2),BYTE(.),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder36() throws Exception {
-    verifyMinimalEncoding("\u015C", "ECI(ISO-8859-3),BYTE(.),TERMINATOR()", false);
+    verifyMinimalEncoding("\u015C", "ECI(ISO-8859-3),BYTE(.),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder37() throws Exception {
-    verifyMinimalEncoding("\u0150\u015C", "ECI(UTF-8),BYTE(.,.),TERMINATOR()", false);
+    verifyMinimalEncoding("\u0150\u015C", "ECI(UTF-8),BYTE(.,.),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder38() throws Exception {
     verifyMinimalEncoding("\u0150\u0150\u015C\u015C", "ECI(ISO-8859-2),BYTE(.," +
-        ".),ECI(ISO-8859-3),BYTE(.,.),TERMINATOR()", false);
+        ".),ECI(ISO-8859-3),BYTE(.,.),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder39() throws Exception {
     verifyMinimalEncoding("abcdef\u0150ghij", "ECI(ISO-8859-2),BYTE(a,b,c,d,e," +
-        "f,.,g,h,i,j),TERMINATOR()", false);
+        "f,.,g,h,i,j),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder40() throws Exception {
     verifyMinimalEncoding("2938928329832983\u01502938928329832983\u015C2938928329832983", 
         "NUMERIC(293,892,832,983,298,3),ECI(ISO-8859-2),BYTE(.),NUMERIC(293,892,832,983,298,3),ECI(ISO-8" +
-        "859-3),BYTE(.),NUMERIC(293,892,832,983,298,3),TERMINATOR()", false);
+        "859-3),BYTE(.),NUMERIC(293,892,832,983,298,3),TERMINATOR()", null, false);
   }
 
   @Test
   public void testMinimalEncoder41() throws Exception {
     verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781", "FNC1_FIRST_POSITION(),NUMERIC(100,111" +
-        ",467,001,0),ALPHANUMERIC(%0,12,01,22,0%,10,72,11,22,0%),NUMERIC(140,045,003,267,781),TERMINATOR()", true);
+        ",467,001,0),ALPHANUMERIC(%0,12,01,22,0%,10,72,11,22,0%),NUMERIC(140,045,003,267,781),TERMINATOR()", null, 
+        true);
   }
 
-  static void verifyMinimalEncoding(String input, String expectedResult, boolean isGS1) throws Exception {
-    MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, isGS1);
+  @Test
+  public void testMinimalEncoder42() throws Exception {
+    boolean haveCharsets = false;
+    try {
+      Charset.forName("ISO-8859-6");
+      Charset.forName("ISO-8859-8");
+      haveCharsets = true;
+    } catch (Exception e) { 
+      //expected. Test would fail on this platform
+    }
+    if (haveCharsets) {
+      verifyMinimalEncoding("that particularly stands out to me is \u0625\u0650\u062C\u064E\u0651\u0627\u0635 (" +
+          "\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew \u05D0\u05B7\u05D2\u05B8" +
+          "\u05BC\u05E1 (ag\u00E1s)", "ECI(ISO-8859-6),BYTE(t,h,a,t, ,p,a,r,t,i,c,u,l,a,r,l,y, ,s,t,a,n,d,s, ,o,u,t," +
+          " ,t,o, ,m,e, ,i,s, ,.,.,.,.,.,.,., ,(),ECI(UTF-8),BYTE(.,.,.,), ,\",p,e,a,r,\",,, ,s,u,g,g,e,s,t,e,d, ,t," +
+          "o, ,h,a,v,e, ,o,r,i,g,i,n,a,t,e,d, ,f,r,o,m, ,H,e,b,r,e,w, ,.,.,.,.,.,., ,(,a,g,.,s,)),TERMINATOR()", null,
+          false);
+      verifyMinimalEncoding("that particularly stands out to me is \u0625\u0650\u062C\u064E\u0651\u0627\u0635 (" +
+          "\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew \u05D0\u05B7\u05D2\u05B8" +
+          "\u05BC\u05E1 (ag\u00E1s)", "ECI(UTF-8),BYTE(t,h,a,t, ,p,a,r,t,i,c,u,l,a,r,l,y, ,s,t,a,n,d,s, ,o,u,t, ,t,o" +
+          ", ,m,e, ,i,s, ,.,.,.,.,.,.,., ,(,.,.,.,), ,\",p,e,a,r,\",,, ,s,u,g,g,e,s,t,e,d, ,t,o, ,h,a,v,e, ,o,r,i,g," +
+          "i,n,a,t,e,d, ,f,r,o,m, ,H,e,b,r,e,w, ,.,.,.,.,.,., ,(,a,g,.,s,)),TERMINATOR()", StandardCharsets.UTF_8, 
+          false);
+    }
+  }
+
+  static void verifyMinimalEncoding(String input, String expectedResult, Charset priorityCharset, boolean isGS1) 
+      throws Exception {
+    MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, priorityCharset, isGS1);
     assertEquals(result.toString(), expectedResult);
   }
 
