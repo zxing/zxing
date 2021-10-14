@@ -73,9 +73,9 @@ import java.nio.charset.UnsupportedCharsetException;
  * ECI switching:
  *
  * In multi language content the algorithm selects the most compact representation using ECI modes. For example the
- * it is more compactly represented using one ECI to UTF-8 rather than two ECIs to ISO-8859-6 and ISO-8859-1 if the
- * text contains more ASCII characters (since they are represented as one byte sequence) as opposed to the case where
- * there are proportionally more Arabic characters that require two bytes in UTF-8 and only one in ISO-8859-6.
+ * most compact representation of the string "\u0625\u05D0" is ECI(UTF-8),BYTE(arabic_aleph,hebrew_aleph) while
+ * the encoding the string "\u0625\u0625\u05D0" is most compactly represented with two ECIs as 
+ * ECI(ISO-8859-6),BYTE(arabic_aleph,arabic_aleph),ECI(ISO-8859-8),BYTE(hebew_aleph).
  *
  * @author Alex Geller
  */
@@ -225,6 +225,22 @@ final class MinimalEncoder {
     priorityEncoderIndex = priorityEncoderIndexValue;
   }
 
+  /**
+   * Encodes the string minimally
+   *
+   * @param stringToEncode The string to encode
+   * @param version The preferred {@link Version}. A minimal version is computed (see 
+   *   {@link ResultList#getVersion method} when the value of the argument is null
+   * @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
+   *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority 
+   *   charset to encode any character in the input that can be encoded by it if the charset is among the 
+   *   supported charsets.
+   * @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
+   * @return An instance of {@code ResultList} representing the minimal solution.
+   * @see ResultList#getBits
+   * @see ResultList#getVersion
+   * @see ResultList#getSize
+   */
   static ResultList encode(String stringToEncode, Version version, Charset priorityCharset, boolean isGS1) 
       throws WriterException {
     return new MinimalEncoder(stringToEncode, version, priorityCharset, isGS1).encode();
@@ -480,6 +496,8 @@ final class MinimalEncoder {
      * accumulatedSize + ") --> (" + toVertex + ")"
      *
      * Example 1 encoding the string "ABCDE":
+     * Note: This example assumes that alphanumeric encoding is only possible in multiples of two characters so that
+     * the example is both short and showing the principle. In reality this restriction does not exist. 
      *
      * Initial situation
      * (initial) -- BYTE(A) (20) --> (1_BYTE)
