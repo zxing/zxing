@@ -77,6 +77,14 @@ import java.nio.charset.UnsupportedCharsetException;
  * the encoding the string "\u0625\u0625\u05D0" is most compactly represented with two ECIs as 
  * ECI(ISO-8859-6),BYTE(arabic_aleph,arabic_aleph),ECI(ISO-8859-8),BYTE(hebew_aleph).
  *
+ * Currently the zxing decoder will not decode QR-Codes containing the ECIs for ISO-8859-6 (Arabic), 
+ * ISO-8859-8 (Hebrew), ISO-8859-10 (Nordic), ISO-8859-11 (Thai) and ISO-8859-14 (Celtic) but the minimal
+ * encoder will likely make use of those encodings when input contains characters from these languages since it
+ * is much more compact.
+ * Like for uncompressed QR-Codes it is therefore necessary to use DecodeTypeHint.CHARACTER_SET with a value
+ * of UTF-8 (see priorityCharset in {@link #encode}) when input contains characters from these languages
+ * and decoding via zxing is required.
+ *
  * @author Alex Geller
  */
 final class MinimalEncoder {
