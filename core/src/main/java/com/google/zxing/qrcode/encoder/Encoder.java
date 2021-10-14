@@ -98,21 +98,11 @@ public final class Encoder {
       mode = Mode.BYTE;
 
       Charset priorityEncoding = encoding.equals(DEFAULT_BYTE_MODE_ENCODING) ? null : encoding;
-      MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, priorityEncoding, hasGS1FormatHint);
-
-      while (!willFit(rn.getSize(), rn.getVersion(ecLevel), ecLevel)) {
-        if (rn.getVersion(ecLevel).getVersionNumber() <= 26) {
-          int nextVersionNumber = rn.getVersion(ecLevel).getVersionNumber() <= 9 ? 10 : 27 ;
-          rn = MinimalEncoder.encode(content, Version.getVersionForNumber(nextVersionNumber), priorityEncoding, 
-              hasGS1FormatHint);
-        } else {
-          throw new WriterException("Data too big for any version");
-        }
-      }
+      MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, priorityEncoding, hasGS1FormatHint, ecLevel);
 
       headerAndDataBits = new BitArray();
       rn.getBits(headerAndDataBits);
-      version = rn.getVersion(ecLevel);
+      version = rn.getVersion();
 
     } else {
     

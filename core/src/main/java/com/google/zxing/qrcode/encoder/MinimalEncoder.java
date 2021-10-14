@@ -132,6 +132,7 @@ final class MinimalEncoder {
   private final boolean isGS1;
   private final CharsetEncoder[] encoders;
   private final int priorityEncoderIndex;
+  private final ErrorCorrectionLevel ecLevel;
 
   /**
    * Creates a MinimalEncoder
@@ -144,14 +145,16 @@ final class MinimalEncoder {
    *   charset to encode any character in the input that can be encoded by it if the charset is among the 
    *   supported charsets.
    * @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
+   * @param ecLevel The error correction level.
    * @see ResultList#getVersion
    */
-  MinimalEncoder(String stringToEncode, Version version, Charset priorityCharset, boolean isGS1) 
-      throws WriterException {
+  MinimalEncoder(String stringToEncode, Version version, Charset priorityCharset, boolean isGS1,
+      ErrorCorrectionLevel ecLevel) throws WriterException {
 
     this.stringToEncode = stringToEncode;
     this.version = version;
     this.isGS1 = isGS1;
+    this.ecLevel = ecLevel;
 
     CharsetEncoder[] isoEncoders = new CharsetEncoder[15]; //room for the 15 ISO-8859 charsets 1 through 16.
     isoEncoders[0] = StandardCharsets.ISO_8859_1.newEncoder();
@@ -244,24 +247,44 @@ final class MinimalEncoder {
    *   charset to encode any character in the input that can be encoded by it if the charset is among the 
    *   supported charsets.
    * @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
+   * @param ecLevel The error correction level.
    * @return An instance of {@code ResultList} representing the minimal solution.
    * @see ResultList#getBits
    * @see ResultList#getVersion
    * @see ResultList#getSize
    */
-  static ResultList encode(String stringToEncode, Version version, Charset priorityCharset, boolean isGS1) 
-      throws WriterException {
-    return new MinimalEncoder(stringToEncode, version, priorityCharset, isGS1).encode();
+  static ResultList encode(String stringToEncode, Version version, Charset priorityCharset, boolean isGS1,
+      ErrorCorrectionLevel ecLevel) throws WriterException {
+    return new MinimalEncoder(stringToEncode, version, priorityCharset, isGS1, ecLevel).encode();
   }
 
   ResultList encode() throws WriterException {
     if (version == null) { //compute minimal encoding trying the three version sizes.
-      ResultList[] results = {encode(getVersion(VersionSize.SMALL)),
-                              encode(getVersion(VersionSize.MEDIUM)),
-                              encode(getVersion(VersionSize.LARGE))};
-      return postProcess(smallest(results));
+      final Version[] versions = {getVersion(VersionSize.SMALL),
+                                  getVersion(VersionSize.MEDIUM),
+                                  getVersion(VersionSize.LARGE)};
+      ResultList[] results = {encode(versions[0]),
+                              encode(versions[1]),
+                              encode(versions[2])};
+      int smallestSize = Integer.MAX_VALUE;
+      int smallestResult = -1;
+      for (int i = 0; i < 3; i++) {
+        int size = results[i].getSize();
+        if (Encoder.willFit(size, versions[i], ecLevel) && size < smallestSize) {
+          smallestSize = size;
+          smallestResult = i;
+        }
+      }
+      if (smallestResult < 0) {
+        throw new WriterException("Data too big for any version");
+      }
+      return results[smallestResult];
     } else { //compute minimal encoding for a given version
-      return postProcess(encode(version));
+      ResultList result = encode(version);
+      if (!Encoder.willFit(result.getSize(), getVersion(getVersionSize(result.getVersion())), ecLevel)) {
+        throw new WriterException("Data too big for version" + version);
+      }
+      return encode(version);
     }
   }
 
@@ -334,16 +357,6 @@ final class MinimalEncoder {
     }
   }
 
-  static ResultList smallest(ResultList[] results) {
-    ResultList smallestResult = null;
-    for (ResultList result : results) {
-      if (smallestResult == null || (result != null && result.getSize() < smallestResult.getSize())) {
-        smallestResult = result;
-      }
-    }
-    return smallestResult;
-  }
-
   ResultList postProcess(ResultList result) {
     if (isGS1) {
       ResultList.ResultNode first = result.getFirst();
@@ -380,13 +393,11 @@ final class MinimalEncoder {
 
   int getEdgeCharsetEncoderIndex(ResultList edge) {
     ResultList.ResultNode last = edge.getLast();
-    assert last != null;
     return last.charsetEncoderIndex;
   }
 
   Mode getEdgeMode(ResultList edge) {
     ResultList.ResultNode last = edge.getLast();
-    assert last != null;
     return last.mode;
   }
 
@@ -394,7 +405,6 @@ final class MinimalEncoder {
     // The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
     // This function works regardless if the concatenation has already taken place or not.
     ResultList.ResultNode last = edge.getLast();
-    assert last != null;
     return last.position;
   }
 
@@ -402,7 +412,6 @@ final class MinimalEncoder {
     // The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
     // This function works regardless if the concatenation has already taken place or not.
     ResultList.ResultNode last = edge.getLast();
-    assert last != null;
     return last.getCharacterLength();
   }
 
@@ -650,7 +659,7 @@ final class MinimalEncoder {
     if (minimalJ < 0) {
       throw new WriterException("Internal error: failed to encode");
     }
-    return vertices[inputLength][minimalJ][minimalK].get(0);
+    return postProcess(vertices[inputLength][minimalJ][minimalK].get(0));
   }
 
   byte[] getBytesOfCharacter(int position, int charsetEncoderIndex) {
@@ -734,7 +743,7 @@ final class MinimalEncoder {
       }
     }
 
-    Version getVersion(ErrorCorrectionLevel ecLevel) {
+    Version getVersion() {
       int versionNumber = version.getVersionNumber();
       int lowerLimit;
       int upperLimit;
