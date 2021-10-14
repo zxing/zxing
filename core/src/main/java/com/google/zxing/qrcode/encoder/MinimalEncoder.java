@@ -19,6 +19,7 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
@@ -28,8 +29,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Map;
 
 import java.nio.charset.UnsupportedCharsetException;
 
@@ -77,14 +76,6 @@ import java.nio.charset.UnsupportedCharsetException;
  * the encoding the string "\u0625\u0625\u05D0" is most compactly represented with two ECIs as 
  * ECI(ISO-8859-6),BYTE(arabic_aleph,arabic_aleph),ECI(ISO-8859-8),BYTE(hebew_aleph).
  *
- * Currently the zxing decoder will not decode QR-Codes containing the ECIs for ISO-8859-6 (Arabic), 
- * ISO-8859-8 (Hebrew), ISO-8859-10 (Nordic), ISO-8859-11 (Thai) and ISO-8859-14 (Celtic) but the minimal
- * encoder will likely make use of those encodings when input contains characters from these languages since it
- * is much more compact.
- * Like for uncompressed QR-Codes it is therefore necessary to use DecodeTypeHint.CHARACTER_SET with a value
- * of UTF-8 (see priorityCharset in {@link #encode}) when input contains characters from these languages
- * and decoding via zxing is required.
- *
  * @author Alex Geller
  */
 final class MinimalEncoder {
@@ -103,28 +94,6 @@ final class MinimalEncoder {
     public String toString() {
       return description;
     }
-  }
-
-  private static final Map<String,Integer> NAME_TO_ECI_VALUE = new HashMap<>();
-
-  static {
-    NAME_TO_ECI_VALUE.put("ISO-8859-1",1);
-    NAME_TO_ECI_VALUE.put("ISO-8859-2",4);
-    NAME_TO_ECI_VALUE.put("ISO-8859-3",5);
-    NAME_TO_ECI_VALUE.put("ISO-8859-4",6);
-    NAME_TO_ECI_VALUE.put("ISO-8859-5",7);
-    NAME_TO_ECI_VALUE.put("ISO-8859-6",8);
-    NAME_TO_ECI_VALUE.put("ISO-8859-7",9);
-    NAME_TO_ECI_VALUE.put("ISO-8859-8",10);
-    NAME_TO_ECI_VALUE.put("ISO-8859-9",11);
-    NAME_TO_ECI_VALUE.put("ISO-8859-10",12);
-    NAME_TO_ECI_VALUE.put("ISO-8859-11",13);
-    NAME_TO_ECI_VALUE.put("ISO-8859-13",15);
-    NAME_TO_ECI_VALUE.put("ISO-8859-14",16);
-    NAME_TO_ECI_VALUE.put("ISO-8859-15",17);
-    NAME_TO_ECI_VALUE.put("ISO-8859-16",18);
-    NAME_TO_ECI_VALUE.put("UTF-16BE",25);
-    NAME_TO_ECI_VALUE.put("UTF-8",26);
   }
 
   private final String stringToEncode;
@@ -204,7 +173,11 @@ final class MinimalEncoder {
     int numberOfEncoders = 0;
     for (int j = 0; j < 15; j++) {
       if (isoEncoders[j] != null) {
-        numberOfEncoders++;
+        if (CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
+          numberOfEncoders++;
+        } else {
+          needUnicodeEncoder = true;
+        }
       }
     }
 
@@ -215,7 +188,7 @@ final class MinimalEncoder {
       encoders = new CharsetEncoder[numberOfEncoders + 2];
       int index = 0;
       for (int j = 0; j < 15; j++) {
-        if (isoEncoders[j] != null) {
+        if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
           encoders[index++] = isoEncoders[j];
         }
       }
@@ -657,7 +630,7 @@ final class MinimalEncoder {
       }
     }
     if (minimalJ < 0) {
-      throw new WriterException("Internal error: failed to encode");
+      throw new WriterException("Internal error: failed to encode \"" + stringToEncode + "\"");
     }
     return postProcess(vertices[inputLength][minimalJ][minimalK].get(0));
   }
@@ -848,17 +821,12 @@ final class MinimalEncoder {
         return mode == Mode.BYTE ? getBytesOfCharacter(position, charsetEncoderIndex).length : getCharacterLength();
       }
 
-      private int getCharacterSetECIValue() {
-        Integer value = NAME_TO_ECI_VALUE.get(encoders[charsetEncoderIndex].charset().name());
-        assert value != null;
-        return value.intValue();
-      }
       /**
        * appends the bits
        */
       private void getBits(BitArray bits) throws WriterException {
         if (mode == Mode.ECI) {
-          bits.appendBits(getCharacterSetECIValue(), 8);
+          bits.appendBits(CharacterSetECI.getCharacterSetECI(encoders[charsetEncoderIndex].charset()).getValue(), 8);
         } else if (getCharacterLength() > 0) {
           // append data
           Encoder.appendBytes(stringToEncode.substring(position, position + getCharacterLength()), mode, bits,

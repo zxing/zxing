@@ -30,7 +30,6 @@ import org.junit.Test;
 import java.util.EnumMap;
 import java.util.Map;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -884,32 +883,6 @@ public final class EncoderTestCase extends Assert {
     verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781", "FNC1_FIRST_POSITION(),NUMERIC(100,111" +
         ",467,001,0),ALPHANUMERIC(%0,12,01,22,0%,10,72,11,22,0%),NUMERIC(140,045,003,267,781),TERMINATOR()", null, 
         true);
-  }
-
-  @Test
-  public void testMinimalEncoder42() throws Exception {
-    boolean haveCharsets = false;
-    try {
-      Charset.forName("ISO-8859-6");
-      Charset.forName("ISO-8859-8");
-      haveCharsets = true;
-    } catch (Exception e) { 
-      //expected. Test would fail on this platform
-    }
-    if (haveCharsets) {
-      verifyMinimalEncoding("that particularly stands out to me is \u0625\u0650\u062C\u064E\u0651\u0627\u0635 (" +
-          "\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew \u05D0\u05B7\u05D2\u05B8" +
-          "\u05BC\u05E1 (ag\u00E1s)", "ECI(ISO-8859-6),BYTE(t,h,a,t, ,p,a,r,t,i,c,u,l,a,r,l,y, ,s,t,a,n,d,s, ,o,u,t," +
-          " ,t,o, ,m,e, ,i,s, ,.,.,.,.,.,.,., ,(),ECI(UTF-8),BYTE(.,.,.,), ,\",p,e,a,r,\",,, ,s,u,g,g,e,s,t,e,d, ,t," +
-          "o, ,h,a,v,e, ,o,r,i,g,i,n,a,t,e,d, ,f,r,o,m, ,H,e,b,r,e,w, ,.,.,.,.,.,., ,(,a,g,.,s,)),TERMINATOR()", null,
-          false);
-      verifyMinimalEncoding("that particularly stands out to me is \u0625\u0650\u062C\u064E\u0651\u0627\u0635 (" +
-          "\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew \u05D0\u05B7\u05D2\u05B8" +
-          "\u05BC\u05E1 (ag\u00E1s)", "ECI(UTF-8),BYTE(t,h,a,t, ,p,a,r,t,i,c,u,l,a,r,l,y, ,s,t,a,n,d,s, ,o,u,t, ,t,o" +
-          ", ,m,e, ,i,s, ,.,.,.,.,.,.,., ,(,.,.,.,), ,\",p,e,a,r,\",,, ,s,u,g,g,e,s,t,e,d, ,t,o, ,h,a,v,e, ,o,r,i,g," +
-          "i,n,a,t,e,d, ,f,r,o,m, ,H,e,b,r,e,w, ,.,.,.,.,.,., ,(,a,g,.,s,)),TERMINATOR()", StandardCharsets.UTF_8, 
-          false);
-    }
   }
 
   static void verifyMinimalEncoding(String input, String expectedResult, Charset priorityCharset, boolean isGS1) 
