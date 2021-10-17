@@ -87,31 +87,24 @@ public final class Encoder {
     boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.QR_COMPACT) &&
         Boolean.parseBoolean(hints.get(EncodeHintType.QR_COMPACT).toString());
 
+    // Determine what character encoding has been specified by the caller, if any
+    Charset encoding = DEFAULT_BYTE_MODE_ENCODING;
+    boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
+    if (hasEncodingHint) {
+      encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
+    }
+
     if (hasCompactionHint) {
       mode = Mode.BYTE;
 
-      MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, hasGS1FormatHint);
-
-      while (!willFit(rn.getSize(), rn.getVersion(ecLevel), ecLevel)) {
-        if (rn.getVersion(ecLevel).getVersionNumber() <= 26) {
-          int nextVersionNumber = rn.getVersion(ecLevel).getVersionNumber() <= 9 ? 10 : 27 ;
-          rn = MinimalEncoder.encode(content, Version.getVersionForNumber(nextVersionNumber), hasGS1FormatHint);
-        } else {
-          throw new WriterException("Data too big for any version");
-        }
-      }
+      Charset priorityEncoding = encoding.equals(DEFAULT_BYTE_MODE_ENCODING) ? null : encoding;
+      MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, priorityEncoding, hasGS1FormatHint, ecLevel);
 
       headerAndDataBits = new BitArray();
       rn.getBits(headerAndDataBits);
-      version = rn.getVersion(ecLevel);
+      version = rn.getVersion();
 
     } else {
-      // Determine what character encoding has been specified by the caller, if any
-      Charset encoding = DEFAULT_BYTE_MODE_ENCODING;
-      boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
-      if (hasEncodingHint) {
-        encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
-      }
     
       // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
       // multiple modes / segments even if that were more efficient. Twould be nice.
