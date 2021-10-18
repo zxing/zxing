@@ -119,7 +119,7 @@ final class MinimalEncoder {
     this.isGS1 = isGS1;
     this.ecLevel = ecLevel;
 
-    CharsetEncoder[] isoEncoders = new CharsetEncoder[15]; //room for the 15 ISO-8859 charsets 1 through 16.
+    CharsetEncoder[] isoEncoders = new CharsetEncoder[15]; // room for the 15 ISO-8859 charsets 1 through 16.
     isoEncoders[0] = StandardCharsets.ISO_8859_1.newEncoder();
     boolean needUnicodeEncoder = priorityCharset != null && priorityCharset.name().startsWith("UTF");
 
@@ -135,11 +135,11 @@ final class MinimalEncoder {
         }
       }
 
-      if (cnt == 14) { //we need all. Can stop looking further.
+      if (cnt == 14) { // we need all. Can stop looking further.
         break;
       }
 
-      if (j >= 15) { //no encoder found
+      if (j >= 15) { // no encoder found
         for (j = 0; j < 15; j++) {
           if (j != 11 && isoEncoders[j] == null) { // ISO-8859-12 doesn't exist
             try {
@@ -226,7 +226,7 @@ final class MinimalEncoder {
   }
 
   ResultList encode(Version version) throws WriterException {
-    if (version == null) { //compute minimal encoding trying the three version sizes.
+    if (version == null) { // compute minimal encoding trying the three version sizes.
       final Version[] versions = {getVersion(VersionSize.SMALL),
                                   getVersion(VersionSize.MEDIUM),
                                   getVersion(VersionSize.LARGE)};
@@ -246,7 +246,7 @@ final class MinimalEncoder {
         throw new WriterException("Data too big for any version");
       }
       return results[smallestResult];
-    } else { //compute minimal encoding for a given version
+    } else { // compute minimal encoding for a given version
       ResultList result = encodeSpecificVersion(version);
       if (!Encoder.willFit(result.getSize(), getVersion(getVersionSize(result.getVersion())), ecLevel)) {
         throw new WriterException("Data too big for version" + version);
@@ -298,8 +298,8 @@ final class MinimalEncoder {
       case KANJI: return isDoubleByteKanji(c);
       case ALPHANUMERIC: return isAlphanumeric(c);
       case NUMERIC: return isNumeric(c);
-      case BYTE: return true; //any character can be encoded as byte(s). Up to the caller to manage splitting into
-                              //multiple bytes when String.getBytes(Charset) return more than one byte.
+      case BYTE: return true; // any character can be encoded as byte(s). Up to the caller to manage splitting into
+                              // multiple bytes when String.getBytes(Charset) return more than one byte.
       default:
         return false;
     }
@@ -321,42 +321,6 @@ final class MinimalEncoder {
       default:
         throw new IllegalStateException("Illegal mode " + mode);
     }
-  }
-
-  ResultList postProcess(Edge solution, Version version) {
-    ResultList result = new ResultList(version,solution);
-    Edge edge = solution;
-    if (isGS1) {
-      ResultList.ResultNode first = result.get(0);
-      if (first != null) {
-        if (first.mode != Mode.ECI) {
-          boolean haveECI = false;
-          for (ResultList.ResultNode resultNode : result) {
-            if (resultNode.mode == Mode.ECI) {
-              haveECI = true;
-              break;
-            }
-          }
-          if (haveECI) {
-            //prepend a default character set ECI
-            result.add(0,result.new ResultNode(Mode.ECI, 0, 0, 0));
-          }
-        }
-      }
-
-      first = result.get(0);
-      if (first.mode != Mode.ECI) {
-        //prepend a FNC1_FIRST_POSITION
-        result.add(0,result.new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
-      } else {
-        //insert a FNC1_FIRST_POSITION after the ECI
-        result.add(1,result.new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
-      }
-    }
-    //Add TERMINATOR according to "8.4.8 Terminator"
-    //TODO: The terminator can be omitted if there are less than 4 bit in the capacity of the symbol.
-    result.add(result.new ResultNode(Mode.TERMINATOR, stringToEncode.length(), 0, 0));
-    return result;
   }
 
   void addEdge(ArrayList<Edge>[][][] edges, int position, Edge edge) {
@@ -568,7 +532,7 @@ final class MinimalEncoder {
     if (minimalJ < 0) {
       throw new WriterException("Internal error: failed to encode \"" + stringToEncode + "\"");
     }
-    return postProcess(edges[inputLength][minimalJ][minimalK].get(0), version);
+    return new ResultList(version, isGS1, edges[inputLength][minimalJ][minimalK].get(0));
   }
 
   private final class Edge {
@@ -583,7 +547,7 @@ final class MinimalEncoder {
       this.mode = mode; 
       this.fromPosition = fromPosition;
       this.charsetEncoderIndex = mode == Mode.BYTE || previous == null ? charsetEncoderIndex :
-          previous.charsetEncoderIndex; //inherit the encoding if not of type BYTE
+          previous.charsetEncoderIndex; // inherit the encoding if not of type BYTE
       this.characterLength = characterLength;
       this.previous = previous;
 
@@ -622,10 +586,11 @@ final class MinimalEncoder {
 
     final Version version;
 
-    ResultList(Version version,Edge solution) {
-      this.version = version;
+    ResultList(Version version, boolean isGS1, Edge solution) {
       int length = 0;
       Edge current = solution;
+      boolean containsECI = false;
+
       while (current != null) {
         length += current.characterLength;
         Edge previous = current.previous;
@@ -633,6 +598,10 @@ final class MinimalEncoder {
         boolean needECI = current.mode == Mode.BYTE &&
             (previous == null && current.charsetEncoderIndex != 0) || // at the beginning and charset is not ISO-8859-1
             (previous != null && current.charsetEncoderIndex != previous.charsetEncoderIndex);
+
+        if (needECI) {
+          containsECI = true;
+        }
 
         if (previous == null || previous.mode != current.mode || needECI) {
           add(0,new ResultNode(current.mode, current.fromPosition, current.charsetEncoderIndex, length));
@@ -644,29 +613,30 @@ final class MinimalEncoder {
         }
         current = previous;
       }
-    }
 
-    /**
-     * returns the size in bits
-     */
-    int getSize() {
-      int result = 0;
-      for (ResultNode resultNode : this) {
-        result += resultNode.getSize();
+      // prepend FNC1 if needed. If the bits contain an ECI then the FNC1 must be preceeded by an ECI.
+      // If there is no ECI at the beginning then we put and ECI to the default charset (ISO-8859-1)
+      if (isGS1) {
+        ResultNode first = get(0);
+        if (first != null) {
+          if (first.mode != Mode.ECI) {
+            if (containsECI) {
+              // prepend a default character set ECI
+              add(0,new ResultNode(Mode.ECI, 0, 0, 0));
+            }
+          }
+        }
+        first = get(0);
+        if (first.mode != Mode.ECI) {
+          // prepend a FNC1_FIRST_POSITION
+          add(0,new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
+        } else {
+          // insert a FNC1_FIRST_POSITION after the ECI
+          add(1,new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
+        }
       }
-      return result;
-    }
-
-    /**
-     * appends the bits
-     */
-    void getBits(BitArray bits) throws WriterException {
-      for (ResultNode resultNode : this) {
-        resultNode.getBits(bits);
-      }
-    }
-
-    Version getVersion() {
+ 
+      // set version to smallest version into which the bits fit.
       int versionNumber = version.getVersionNumber();
       int lowerLimit;
       int upperLimit;
@@ -685,17 +655,61 @@ final class MinimalEncoder {
           upperLimit = 40;
           break;
       }
+      int size = getSize(version);
       // increase version if needed
-      while (versionNumber < upperLimit && !Encoder.willFit(getSize(), Version.getVersionForNumber(versionNumber),
+      while (versionNumber < upperLimit && !Encoder.willFit(size, Version.getVersionForNumber(versionNumber),
         ecLevel)) {
         versionNumber++;
       }
       // shrink version if possible
-      while (versionNumber > lowerLimit && Encoder.willFit(getSize(), Version.getVersionForNumber(versionNumber - 1),
+      while (versionNumber > lowerLimit && Encoder.willFit(size, Version.getVersionForNumber(versionNumber - 1),
         ecLevel)) {
         versionNumber--;
       }
-      return Version.getVersionForNumber(versionNumber);
+      if (capacityInBits(Version.getVersionForNumber(versionNumber), ecLevel) - size > 3) {
+        // The terminator only needs to be put if there is more than 3 bit space left
+        add(new ResultNode(Mode.TERMINATOR, stringToEncode.length(), 0, 0));
+      }
+      this.version = Version.getVersionForNumber(versionNumber);
+    }
+
+    private int capacityInBits(Version version, ErrorCorrectionLevel ecLevel) {
+      // In the following comments, we use numbers of Version 7-H.
+      // numBytes = 196
+      int numBytes = version.getTotalCodewords();
+      // getNumECBytes = 130
+      Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
+      int numEcBytes = ecBlocks.getTotalECCodewords();
+      // getNumDataBytes = 196 - 130 = 66
+      return 8 * (numBytes - numEcBytes);
+    }
+
+    /**
+     * returns the size in bits
+     */
+    int getSize() {
+      return getSize(version);
+    }
+
+    private int getSize(Version version) {
+      int result = 0;
+      for (ResultNode resultNode : this) {
+        result += resultNode.getSize(version);
+      }
+      return result;
+    }
+
+    /**
+     * appends the bits
+     */
+    void getBits(BitArray bits) throws WriterException {
+      for (ResultNode resultNode : this) {
+        resultNode.getBits(bits);
+      }
+    }
+
+    Version getVersion() {
+      return version;
     }
 
     public String toString() {
@@ -728,7 +742,7 @@ final class MinimalEncoder {
       /**
        * returns the size in bits
        */
-      private int getSize() {
+      private int getSize(Version version) {
         int size = 4 + mode.getCharacterCountBits(version);
         switch (mode) {
           case KANJI:
