@@ -44,8 +44,8 @@ import java.nio.charset.UnsupportedCharsetException;
  * bit byte mode ELSE select Alphanumeric mode;
  *
  * This is probably right for 99.99% of cases but there is at least this one counter example: The string "AAAAAAa"
- * encodes in 62 bits by ALPHANUMERIC(AAAAAA),BYTE(a) while BYTE(AAAAAAa) needs 64 bits.
- * Perhaps that is the only counter example but without giving proof, it remains unclear.
+ * encodes 2 bits smaller as ALPHANUMERIC(AAAAAA),BYTE(a) than by encoding it as BYTE(AAAAAAa).
+ * Perhaps that is the only counter example but without having proof, it remains unclear.
  *
  * ECI switching:
  *
