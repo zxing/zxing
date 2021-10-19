@@ -34,8 +34,10 @@ import java.nio.charset.UnsupportedCharsetException;
  * Encoder that encodes minimally
  *
  * Algorithm:
- * The eleventh commandment was "Thou Shalt Compute" or "Thou Shalt Not Compute" - I forget which. Alan Perilis
- * This implementation computes. The specification suggests heuristics like this one:
+ *
+ * The eleventh commandment was "Thou Shalt Compute" or "Thou Shalt Not Compute" - I forget which (Alan Perilis).
+ *
+ * This implementation computes. As an alternative, the QR-Code specification suggests heuristics like this one:
  *
  * If initial input data is in the exclusive subset of the Alphanumeric character set AND if there are less than
  * [6,7,8] characters followed by data from the remainder of the 8-bit byte character set, THEN select the 8-
@@ -47,10 +49,11 @@ import java.nio.charset.UnsupportedCharsetException;
  *
  * ECI switching:
  *
- * In multi language content the algorithm selects the most compact representation using ECI modes. For example the
- * most compact representation of the string "\u0625\u05D0" is ECI(UTF-8),BYTE(arabic_aleph,hebrew_aleph) while
- * the encoding the string "\u0625\u0625\u05D0" is most compactly represented with two ECIs as 
- * ECI(ISO-8859-6),BYTE(arabic_aleph,arabic_aleph),ECI(ISO-8859-8),BYTE(hebew_aleph).
+ * In multi language content the algorithm selects the most compact representation using ECI modes.
+ * For example the most compact representation of the string "\u0150\u015C" (O-double-acute, S-circumflex) is
+ * ECI(UTF-8),BYTE(\u0150\u015C) while prepending one or more times the same leading character as in
+ * "\u0150\u0150\u015C", the most compact representation  uses two ECIs so that the string is encoded as
+ * ECI(ISO-8859-2),BYTE(\u0150\u0150),ECI(ISO-8859-3),BYTE(\u015C).
  *
  * @author Alex Geller
  */
