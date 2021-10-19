@@ -33,39 +33,17 @@ import java.nio.charset.UnsupportedCharsetException;
 /**
  * Encoder that encodes minimally
  *
- * Version selection:
- * The version can be preset in the constructor. If it isn't specified then the algorithm will compute three solutions
- * for the three different version classes 1-9, 10-26 and 27-40.
+ * Algorithm:
+ * The eleventh commandment was "Thou Shalt Compute" or "Thou Shalt Not Compute" - I forget which. Alan Perilis
+ * This implementation computes. The specification suggests heuristics like this one:
  *
- * It is not clear to me if ever a solution using for example Medium (Versions 10-26) could be smaller than a Small
- * solution (Versions 1-9) (proof for or against would be nice to have).
- * With hypothetical values for the number of length bits, the number of bits per mode and the number of bits per
- * encoded character it can be shown that it can happen at all as follows:
- * We hypothetically assume that a mode is encoded using 1 bit (instead of 4) and a character is encoded in BYTE mode
- * using 2 bit (instead of 8). Using these values we now attempt to encode the four characters "1234".
- * If we furthermore assume that in Version 1-9 the length field has 1 bit length so that it can encode up to 2
- * characters and that in Version 10-26 it has 2 bits length so that we can encode up to 2 characters then it is more
- * efficient to encode with Version 10-26 than with Version 1-9 as shown below:
+ * If initial input data is in the exclusive subset of the Alphanumeric character set AND if there are less than
+ * [6,7,8] characters followed by data from the remainder of the 8-bit byte character set, THEN select the 8-
+ * bit byte mode ELSE select Alphanumeric mode;
  *
- * Number of length bits small version (1-9): 1
- * Number of length bits large version (10-26): 2
- * Number of bits per mode item: 1
- * Number of bits per character item: 2
- * BYTE(1,2),BYTE(3,4): 1+1+2+2,1+1+2+2=12 bits
- * BYTE(1,2,3,4): 1+2+2+2+2+2          =11 bits
- *
- * If we however change the capacity of the large encoding from 2 bit to 4 bit so that it potentially can encode 16
- * items, then it is more efficient to encode using the small encoding
- * as shown below:
- *
- * Number of length bits small version (1-9): 1
- * Number of length bits large version (10-26): 4
- * Number of bits per mode item: 1
- * Number of bits per character item: 2
- * BYTE(1,2),BYTE(3,4): 1+1+2+2,1+1+2+2=12 bits
- * BYTE(1,2,3,4): 1+4+2+2+2+2          =13 bits
- *
- * But as mentioned, it is not clear to me if this can ever happen with the actual values.
+ * This is probably right for 99.99% of cases but there is at least this one counter example: The string "AAAAAAa"
+ * encodes in 62 bits by ALPHANUMERIC(AAAAAA),BYTE(a) while BYTE(AAAAAAa) needs 64 bits.
+ * Perhaps that is the only counter example but without giving proof, it remains unclear.
  *
  * ECI switching:
  *
