@@ -666,22 +666,7 @@ final class MinimalEncoder {
         ecLevel)) {
         versionNumber--;
       }
-      if (capacityInBits(Version.getVersionForNumber(versionNumber), ecLevel) - size > 3) {
-        // The terminator only needs to be put if there is more than 3 bit space left
-        add(new ResultNode(Mode.TERMINATOR, stringToEncode.length(), 0, 0));
-      }
       this.version = Version.getVersionForNumber(versionNumber);
-    }
-
-    private int capacityInBits(Version version, ErrorCorrectionLevel ecLevel) {
-      // In the following comments, we use numbers of Version 7-H.
-      // numBytes = 196
-      int numBytes = version.getTotalCodewords();
-      // getNumECBytes = 130
-      Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
-      int numEcBytes = ecBlocks.getTotalECCodewords();
-      // getNumDataBytes = 196 - 130 = 66
-      return 8 * (numBytes - numEcBytes);
     }
 
     /**

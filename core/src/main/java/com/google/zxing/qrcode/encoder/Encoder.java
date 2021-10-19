@@ -339,6 +339,7 @@ public final class Encoder {
       throw new WriterException("data bits cannot fit in the QR Code" + bits.getSize() + " > " +
           capacity);
     }
+    // Append Mode.TERMINATE if there is enough space (value is 0000)
     for (int i = 0; i < 4 && bits.getSize() < capacity; ++i) {
       bits.appendBit(false);
     }
