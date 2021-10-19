@@ -75,6 +75,45 @@ final class MinimalEncoder {
     }
   }
 
+  // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
+  private static final ArrayList<CharsetEncoder> ENCODERS = new ArrayList();
+  static {
+    final String[] names = {"ISO-8859-2",
+                            "ISO-8859-3",
+                            "ISO-8859-4",
+                            "ISO-8859-5",
+                            "ISO-8859-6",
+                            "ISO-8859-7",
+                            "ISO-8859-8",
+                            "ISO-8859-9",
+                            "ISO-8859-10",
+                            "ISO-8859-11",
+                            "ISO-8859-13",
+                            "ISO-8859-14",
+                            "ISO-8859-15",
+                            "ISO-8859-16",
+                            "windows-1250",
+                            "windows-1251",
+                            "windows-1252",
+                            "windows-1253",
+                            "windows-1254",
+                            "windows-1255",
+                            "windows-1256",
+                            "windows-1257",
+                            "windows-1258",
+                            "Shift_JIS"};
+    for (int i = 0; i < names.length; i++) {
+      if (CharacterSetECI.getCharacterSetECIByName(names[i]) != null) {
+        try {
+          ENCODERS.add(Charset.forName(names[i]).newEncoder());
+        } catch (UnsupportedCharsetException e) {
+          // continue
+        }
+      }
+    }
+  }
+
+
   private final String stringToEncode;
   private final boolean isGS1;
   private final CharsetEncoder[] encoders;
@@ -100,72 +139,42 @@ final class MinimalEncoder {
     this.isGS1 = isGS1;
     this.ecLevel = ecLevel;
 
-    CharsetEncoder[] isoEncoders = new CharsetEncoder[15]; // room for the 15 ISO-8859 charsets 1 through 16.
-    isoEncoders[0] = StandardCharsets.ISO_8859_1.newEncoder();
+    ArrayList<CharsetEncoder> neededEncoders = new ArrayList();
+    neededEncoders.add(StandardCharsets.ISO_8859_1.newEncoder());
     boolean needUnicodeEncoder = priorityCharset != null && priorityCharset.name().startsWith("UTF");
 
     for (int i = 0; i < stringToEncode.length(); i++) {
-      int cnt = 0;
-      int j;
-      for (j = 0; j < 15; j++) {
-        if (isoEncoders[j] != null) {
-          cnt++;
-          if (isoEncoders[j].canEncode(stringToEncode.charAt(i))) {
+      boolean canEncode = false;
+      for (CharsetEncoder encoder : neededEncoders) {
+        if (encoder.canEncode(stringToEncode.charAt(i))) {
+          canEncode = true;
+          break;
+        }
+      }
+
+      if (!canEncode) {
+        for (CharsetEncoder encoder : ENCODERS) {
+          if (encoder.canEncode(stringToEncode.charAt(i))) {
+            neededEncoders.add(encoder);
+            canEncode = true;
             break;
           }
         }
       }
 
-      if (cnt == 14) { // we need all. Can stop looking further.
-        break;
-      }
-
-      if (j >= 15) { // no encoder found
-        for (j = 0; j < 15; j++) {
-          if (j != 11 && isoEncoders[j] == null) { // ISO-8859-12 doesn't exist
-            try {
-              CharsetEncoder ce = Charset.forName("ISO-8859-" + (j + 1)).newEncoder();
-              if (ce.canEncode(stringToEncode.charAt(i))) {
-                isoEncoders[j] = ce;
-                break;
-              }
-            } catch (UnsupportedCharsetException e) {
-              // continue
-            }
-          }
-        }
-        if (j >= 15) {
-          if (!StandardCharsets.UTF_16BE.newEncoder().canEncode(stringToEncode.charAt(i))) {
-            throw new WriterException("Can not encode character \\u" +
-                String.format("%04X", (int) stringToEncode.charAt(i)) + " at position " + i +
-                " in input \"" + stringToEncode + "\"");
-          }
-          needUnicodeEncoder = true;
-        }
+      if (!canEncode) {
+        needUnicodeEncoder = true;
       }
     }
 
-    int numberOfEncoders = 0;
-    for (int j = 0; j < 15; j++) {
-      if (isoEncoders[j] != null) {
-        if (CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
-          numberOfEncoders++;
-        } else {
-          needUnicodeEncoder = true;
-        }
-      }
-    }
-
-    if (numberOfEncoders == 1 && !needUnicodeEncoder) {
+    if (neededEncoders.size() == 1 && !needUnicodeEncoder) {
       encoders = new CharsetEncoder[1];
-      encoders[0] = isoEncoders[0];
+      encoders[0] = neededEncoders.get(0);
     } else {
-      encoders = new CharsetEncoder[numberOfEncoders + 2];
+      encoders = new CharsetEncoder[neededEncoders.size() + 2];
       int index = 0;
-      for (int j = 0; j < 15; j++) {
-        if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
-          encoders[index++] = isoEncoders[j];
-        }
+      for (CharsetEncoder encoder : neededEncoders) {
+        encoders[index++] = encoder;
       }
 
       encoders[index] = StandardCharsets.UTF_8.newEncoder();
