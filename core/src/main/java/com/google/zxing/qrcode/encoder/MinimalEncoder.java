@@ -44,16 +44,16 @@ import java.nio.charset.UnsupportedCharsetException;
  * bit byte mode ELSE select Alphanumeric mode;
  *
  * This is probably right for 99.99% of cases but there is at least this one counter example: The string "AAAAAAa"
- * encodes 2 bits smaller as ALPHANUMERIC(AAAAAA),BYTE(a) than by encoding it as BYTE(AAAAAAa).
+ * encodes 2 bits smaller as ALPHANUMERIC(AAAAAA), BYTE(a) than by encoding it as BYTE(AAAAAAa).
  * Perhaps that is the only counter example but without having proof, it remains unclear.
  *
  * ECI switching:
  *
  * In multi language content the algorithm selects the most compact representation using ECI modes.
  * For example the most compact representation of the string "\u0150\u015C" (O-double-acute, S-circumflex) is
- * ECI(UTF-8),BYTE(\u0150\u015C) while prepending one or more times the same leading character as in
+ * ECI(UTF-8), BYTE(\u0150\u015C) while prepending one or more times the same leading character as in
  * "\u0150\u0150\u015C", the most compact representation  uses two ECIs so that the string is encoded as
- * ECI(ISO-8859-2),BYTE(\u0150\u0150),ECI(ISO-8859-3),BYTE(\u015C).
+ * ECI(ISO-8859-2), BYTE(\u0150\u0150), ECI(ISO-8859-3), BYTE(\u015C).
  *
  * @author Alex Geller
  */
@@ -513,7 +513,7 @@ final class MinimalEncoder {
     if (minimalJ < 0) {
       throw new WriterException("Internal error: failed to encode \"" + stringToEncode + "\"");
     }
-    return new ResultList(version, isGS1, edges[inputLength][minimalJ][minimalK].get(0));
+    return new ResultList(version, edges[inputLength][minimalJ][minimalK].get(0));
   }
 
   private final class Edge {
@@ -567,7 +567,7 @@ final class MinimalEncoder {
 
     final Version version;
 
-    ResultList(Version version, boolean isGS1, Edge solution) {
+    ResultList(Version version, Edge solution) {
       int length = 0;
       Edge current = solution;
       boolean containsECI = false;
@@ -585,36 +585,27 @@ final class MinimalEncoder {
         }
 
         if (previous == null || previous.mode != current.mode || needECI) {
-          add(0,new ResultNode(current.mode, current.fromPosition, current.charsetEncoderIndex, length));
+          add(0, new ResultNode(current.mode, current.fromPosition, current.charsetEncoderIndex, length));
           length = 0;
         }
 
         if (needECI) {
-          add(0,new ResultNode(Mode.ECI, current.fromPosition, current.charsetEncoderIndex, 0));
+          add(0, new ResultNode(Mode.ECI, current.fromPosition, current.charsetEncoderIndex, 0));
         }
         current = previous;
       }
 
       // prepend FNC1 if needed. If the bits contain an ECI then the FNC1 must be preceeded by an ECI.
-      // If there is no ECI at the beginning then we put and ECI to the default charset (ISO-8859-1)
+      // If there is no ECI at the beginning then we put an ECI to the default charset (ISO-8859-1)
       if (isGS1) {
         ResultNode first = get(0);
-        if (first != null) {
-          if (first.mode != Mode.ECI) {
-            if (containsECI) {
-              // prepend a default character set ECI
-              add(0,new ResultNode(Mode.ECI, 0, 0, 0));
-            }
-          }
+        if (first != null && first.mode != Mode.ECI && containsECI) {
+          // prepend a default character set ECI
+          add(0, new ResultNode(Mode.ECI, 0, 0, 0));
         }
         first = get(0);
-        if (first.mode != Mode.ECI) {
-          // prepend a FNC1_FIRST_POSITION
-          add(0,new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
-        } else {
-          // insert a FNC1_FIRST_POSITION after the ECI
-          add(1,new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
-        }
+        // prepend or insert a FNC1_FIRST_POSITION after the ECI (if any)
+        add(first.mode != Mode.ECI ? 0 : 1, new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
       }
  
       // set version to smallest version into which the bits fit.
