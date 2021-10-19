@@ -885,16 +885,6 @@ public final class EncoderTestCase extends Assert {
         true);
   }
 
-  @Test
-  public void testMinimalEncoder42() throws Exception {
-    // fill a version 9 until the brim and test that terminator is suppressed
-    verifyMinimalEncoding("aaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaa" +
-        "abbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbb" +
-        "bbbbaaaaaaaaaabbbbbbbbbbaaaaaaa1234", "BYTE(aaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaa" +
-        "aaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaa" +
-        "bbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaaaaabbbbbbbbbbaaaaaaa),NUMERIC(1234)", null, false);
-  }
-
   static void verifyMinimalEncoding(String input, String expectedResult, Charset priorityCharset, boolean isGS1) 
       throws Exception {
     MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, priorityCharset, isGS1,
