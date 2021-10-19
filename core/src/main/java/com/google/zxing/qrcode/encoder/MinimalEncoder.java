@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 import java.nio.charset.UnsupportedCharsetException;
 
@@ -76,7 +77,7 @@ final class MinimalEncoder {
   }
 
   // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-  private static final ArrayList<CharsetEncoder> ENCODERS = new ArrayList();
+  private static final List<CharsetEncoder> ENCODERS = new ArrayList<CharsetEncoder>();
   static {
     final String[] names = {"ISO-8859-2",
                             "ISO-8859-3",
@@ -102,10 +103,10 @@ final class MinimalEncoder {
                             "windows-1257",
                             "windows-1258",
                             "Shift_JIS"};
-    for (int i = 0; i < names.length; i++) {
-      if (CharacterSetECI.getCharacterSetECIByName(names[i]) != null) {
+    for (String name: names) {
+      if (CharacterSetECI.getCharacterSetECIByName(name) != null) {
         try {
-          ENCODERS.add(Charset.forName(names[i]).newEncoder());
+          ENCODERS.add(Charset.forName(name).newEncoder());
         } catch (UnsupportedCharsetException e) {
           // continue
         }
@@ -139,7 +140,7 @@ final class MinimalEncoder {
     this.isGS1 = isGS1;
     this.ecLevel = ecLevel;
 
-    ArrayList<CharsetEncoder> neededEncoders = new ArrayList();
+    List<CharsetEncoder> neededEncoders = new ArrayList<CharsetEncoder>();
     neededEncoders.add(StandardCharsets.ISO_8859_1.newEncoder());
     boolean needUnicodeEncoder = priorityCharset != null && priorityCharset.name().startsWith("UTF");
 
@@ -313,15 +314,15 @@ final class MinimalEncoder {
     }
   }
 
-  void addEdge(ArrayList<Edge>[][][] edges, int position, Edge edge) {
+  void addEdge(List<Edge>[][][] edges, int position, Edge edge) {
     int vertexIndex = position + edge.characterLength;
     if (edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] == null) {
-      edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = new ArrayList<>();
+      edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = new ArrayList<Edge>();
     }
     edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)].add(edge);
   }
 
-  void addEdges(Version version, ArrayList<Edge>[][][] edges, int from, Edge previous) {
+  void addEdges(Version version, List<Edge>[][][] edges, int from, Edge previous) {
     int start = 0;
     int end = encoders.length;
     if (priorityEncoderIndex >= 0 && encoders[priorityEncoderIndex].canEncode(stringToEncode.charAt(from))) {
@@ -472,7 +473,7 @@ final class MinimalEncoder {
     // The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the
     // function getCompactedOrdinal(Mode)
     @SuppressWarnings("unchecked")
-    ArrayList<Edge>[][][] edges = new ArrayList[inputLength + 1][encoders.length][4];
+    List<Edge>[][][] edges = new ArrayList[inputLength + 1][encoders.length][4];
     addEdges(version, edges, 0, null);
 
     for (int i = 1; i <= inputLength; i++) {
@@ -480,7 +481,7 @@ final class MinimalEncoder {
         for (int k = 0; k < 4; k++) {
           Edge minimalEdge;
           if (edges[i][j][k] != null) {
-            ArrayList<Edge> localEdges = edges[i][j][k];
+            List<Edge> localEdges = edges[i][j][k];
             int minimalIndex = -1;
             int minimalSize = Integer.MAX_VALUE;
             for (int l = 0; l < localEdges.size(); l++) {
@@ -508,7 +509,7 @@ final class MinimalEncoder {
     for (int j = 0; j < encoders.length; j++) {
       for (int k = 0; k < 4; k++) {
         if (edges[inputLength][j][k] != null) {
-          ArrayList<Edge> localEdges = edges[inputLength][j][k];
+          List<Edge> localEdges = edges[inputLength][j][k];
           assert localEdges.size() == 1;
           Edge edge = localEdges.get(0);
           if (edge.cachedTotalSize < minimalSize) {
