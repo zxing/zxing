@@ -113,8 +113,10 @@ public enum EncodeHintType {
 
   /**
    * Specifies whether to use compact mode for QR code (type {@link Boolean}, or "true" or "false"
-   * When compaction is performed the value for {@link #CHARACTER_SET} is ignored.
-   * {@link String} value).
+   * Please note that when compaction is performed, the most compact character encoding is chosen
+   * for characters in the input that are not in the ISO-8859-1 character set. Based on experience,
+   * some scanners do not support encodings like cp-1256 (Arabic). In such cases the encoding can
+   * be forced to UTF-8 by means of the {@link #CHARACTER_SET} encoding hint.
    */
   QR_COMPACT,
 
