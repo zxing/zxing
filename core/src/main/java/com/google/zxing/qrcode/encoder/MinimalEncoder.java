@@ -53,7 +53,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * In multi language content the algorithm selects the most compact representation using ECI modes.
  * For example the most compact representation of the string "\u0150\u015C" (O-double-acute, S-circumflex) is
  * ECI(UTF-8), BYTE(\u0150\u015C) while prepending one or more times the same leading character as in
- * "\u0150\u0150\u015C", the most compact representation  uses two ECIs so that the string is encoded as
+ * "\u0150\u0150\u015C", the most compact representation uses two ECIs so that the string is encoded as
  * ECI(ISO-8859-2), BYTE(\u0150\u0150), ECI(ISO-8859-3), BYTE(\u015C).
  *
  * @author Alex Geller
@@ -355,7 +355,7 @@ final class MinimalEncoder {
   ResultList encodeSpecificVersion(Version version) throws WriterException {
 
     @SuppressWarnings("checkstyle:lineLength")
-    /* A vertex represents a tuple of a position in the input, a mode and an a character encoding where position 0
+    /* A vertex represents a tuple of a position in the input, a mode and a character encoding where position 0
      * denotes the position left of the first character, 1 the position left of the second character and so on.
      * Likewise the end vertices are located after the last character at position stringToEncode.length().
      *
