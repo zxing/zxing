@@ -77,7 +77,7 @@ final class MinimalEncoder {
   }
 
   // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-  private static final List<CharsetEncoder> ENCODERS = new ArrayList<CharsetEncoder>();
+  private static final List<CharsetEncoder> ENCODERS = new ArrayList<>();
   static {
     final String[] names = {"ISO-8859-2",
                             "ISO-8859-3",
@@ -140,7 +140,7 @@ final class MinimalEncoder {
     this.isGS1 = isGS1;
     this.ecLevel = ecLevel;
 
-    List<CharsetEncoder> neededEncoders = new ArrayList<CharsetEncoder>();
+    List<CharsetEncoder> neededEncoders = new ArrayList<>();
     neededEncoders.add(StandardCharsets.ISO_8859_1.newEncoder());
     boolean needUnicodeEncoder = priorityCharset != null && priorityCharset.name().startsWith("UTF");
 
@@ -317,7 +317,7 @@ final class MinimalEncoder {
   void addEdge(List<Edge>[][][] edges, int position, Edge edge) {
     int vertexIndex = position + edge.characterLength;
     if (edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] == null) {
-      edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = new ArrayList<Edge>();
+      edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = new ArrayList<>();
     }
     edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)].add(edge);
   }
