@@ -107,7 +107,7 @@ public final class Encoder {
     } else {
     
       // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
-      // multiple modes / segments even if that were more efficient. Twould be nice.
+      // multiple modes / segments even if that were more efficient.
       mode = chooseMode(content, encoding);
   
       // This will store the header information, like mode and

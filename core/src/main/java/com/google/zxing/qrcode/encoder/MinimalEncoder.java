@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 import java.nio.charset.UnsupportedCharsetException;
 
@@ -52,7 +53,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * In multi language content the algorithm selects the most compact representation using ECI modes.
  * For example the most compact representation of the string "\u0150\u015C" (O-double-acute, S-circumflex) is
  * ECI(UTF-8), BYTE(\u0150\u015C) while prepending one or more times the same leading character as in
- * "\u0150\u0150\u015C", the most compact representation  uses two ECIs so that the string is encoded as
+ * "\u0150\u0150\u015C", the most compact representation uses two ECIs so that the string is encoded as
  * ECI(ISO-8859-2), BYTE(\u0150\u0150), ECI(ISO-8859-3), BYTE(\u015C).
  *
  * @author Alex Geller
@@ -74,6 +75,45 @@ final class MinimalEncoder {
       return description;
     }
   }
+
+  // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
+  private static final List<CharsetEncoder> ENCODERS = new ArrayList<>();
+  static {
+    final String[] names = { "ISO-8859-2",
+                             "ISO-8859-3",
+                             "ISO-8859-4",
+                             "ISO-8859-5",
+                             "ISO-8859-6",
+                             "ISO-8859-7",
+                             "ISO-8859-8",
+                             "ISO-8859-9",
+                             "ISO-8859-10",
+                             "ISO-8859-11",
+                             "ISO-8859-13",
+                             "ISO-8859-14",
+                             "ISO-8859-15",
+                             "ISO-8859-16",
+                             "windows-1250",
+                             "windows-1251",
+                             "windows-1252",
+                             "windows-1253",
+                             "windows-1254",
+                             "windows-1255",
+                             "windows-1256",
+                             "windows-1257",
+                             "windows-1258",
+                             "Shift_JIS" };
+    for (String name : names) {
+      if (CharacterSetECI.getCharacterSetECIByName(name) != null) {
+        try {
+          ENCODERS.add(Charset.forName(name).newEncoder());
+        } catch (UnsupportedCharsetException e) {
+          // continue
+        }
+      }
+    }
+  }
+
 
   private final String stringToEncode;
   private final boolean isGS1;
@@ -100,72 +140,42 @@ final class MinimalEncoder {
     this.isGS1 = isGS1;
     this.ecLevel = ecLevel;
 
-    CharsetEncoder[] isoEncoders = new CharsetEncoder[15]; // room for the 15 ISO-8859 charsets 1 through 16.
-    isoEncoders[0] = StandardCharsets.ISO_8859_1.newEncoder();
+    List<CharsetEncoder> neededEncoders = new ArrayList<>();
+    neededEncoders.add(StandardCharsets.ISO_8859_1.newEncoder());
     boolean needUnicodeEncoder = priorityCharset != null && priorityCharset.name().startsWith("UTF");
 
     for (int i = 0; i < stringToEncode.length(); i++) {
-      int cnt = 0;
-      int j;
-      for (j = 0; j < 15; j++) {
-        if (isoEncoders[j] != null) {
-          cnt++;
-          if (isoEncoders[j].canEncode(stringToEncode.charAt(i))) {
+      boolean canEncode = false;
+      for (CharsetEncoder encoder : neededEncoders) {
+        if (encoder.canEncode(stringToEncode.charAt(i))) {
+          canEncode = true;
+          break;
+        }
+      }
+
+      if (!canEncode) {
+        for (CharsetEncoder encoder : ENCODERS) {
+          if (encoder.canEncode(stringToEncode.charAt(i))) {
+            neededEncoders.add(encoder);
+            canEncode = true;
             break;
           }
         }
       }
 
-      if (cnt == 14) { // we need all. Can stop looking further.
-        break;
-      }
-
-      if (j >= 15) { // no encoder found
-        for (j = 0; j < 15; j++) {
-          if (j != 11 && isoEncoders[j] == null) { // ISO-8859-12 doesn't exist
-            try {
-              CharsetEncoder ce = Charset.forName("ISO-8859-" + (j + 1)).newEncoder();
-              if (ce.canEncode(stringToEncode.charAt(i))) {
-                isoEncoders[j] = ce;
-                break;
-              }
-            } catch (UnsupportedCharsetException e) {
-              // continue
-            }
-          }
-        }
-        if (j >= 15) {
-          if (!StandardCharsets.UTF_16BE.newEncoder().canEncode(stringToEncode.charAt(i))) {
-            throw new WriterException("Can not encode character \\u" +
-                String.format("%04X", (int) stringToEncode.charAt(i)) + " at position " + i +
-                " in input \"" + stringToEncode + "\"");
-          }
-          needUnicodeEncoder = true;
-        }
+      if (!canEncode) {
+        needUnicodeEncoder = true;
       }
     }
 
-    int numberOfEncoders = 0;
-    for (int j = 0; j < 15; j++) {
-      if (isoEncoders[j] != null) {
-        if (CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
-          numberOfEncoders++;
-        } else {
-          needUnicodeEncoder = true;
-        }
-      }
-    }
-
-    if (numberOfEncoders == 1 && !needUnicodeEncoder) {
+    if (neededEncoders.size() == 1 && !needUnicodeEncoder) {
       encoders = new CharsetEncoder[1];
-      encoders[0] = isoEncoders[0];
+      encoders[0] = neededEncoders.get(0);
     } else {
-      encoders = new CharsetEncoder[numberOfEncoders + 2];
+      encoders = new CharsetEncoder[neededEncoders.size() + 2];
       int index = 0;
-      for (int j = 0; j < 15; j++) {
-        if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j].charset()) != null) {
-          encoders[index++] = isoEncoders[j];
-        }
+      for (CharsetEncoder encoder : neededEncoders) {
+        encoders[index++] = encoder;
       }
 
       encoders[index] = StandardCharsets.UTF_8.newEncoder();
@@ -304,7 +314,7 @@ final class MinimalEncoder {
     }
   }
 
-  void addEdge(ArrayList<Edge>[][][] edges, int position, Edge edge) {
+  void addEdge(List<Edge>[][][] edges, int position, Edge edge) {
     int vertexIndex = position + edge.characterLength;
     if (edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] == null) {
       edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = new ArrayList<>();
@@ -312,7 +322,7 @@ final class MinimalEncoder {
     edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)].add(edge);
   }
 
-  void addEdges(Version version, ArrayList<Edge>[][][] edges, int from, Edge previous) {
+  void addEdges(Version version, List<Edge>[][][] edges, int from, Edge previous) {
     int start = 0;
     int end = encoders.length;
     if (priorityEncoderIndex >= 0 && encoders[priorityEncoderIndex].canEncode(stringToEncode.charAt(from))) {
@@ -345,7 +355,7 @@ final class MinimalEncoder {
   ResultList encodeSpecificVersion(Version version) throws WriterException {
 
     @SuppressWarnings("checkstyle:lineLength")
-    /* A vertex represents a tuple of a position in the input, a mode and an a character encoding where position 0
+    /* A vertex represents a tuple of a position in the input, a mode and a character encoding where position 0
      * denotes the position left of the first character, 1 the position left of the second character and so on.
      * Likewise the end vertices are located after the last character at position stringToEncode.length().
      *
@@ -463,7 +473,7 @@ final class MinimalEncoder {
     // The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the
     // function getCompactedOrdinal(Mode)
     @SuppressWarnings("unchecked")
-    ArrayList<Edge>[][][] edges = new ArrayList[inputLength + 1][encoders.length][4];
+    List<Edge>[][][] edges = new ArrayList[inputLength + 1][encoders.length][4];
     addEdges(version, edges, 0, null);
 
     for (int i = 1; i <= inputLength; i++) {
@@ -471,7 +481,7 @@ final class MinimalEncoder {
         for (int k = 0; k < 4; k++) {
           Edge minimalEdge;
           if (edges[i][j][k] != null) {
-            ArrayList<Edge> localEdges = edges[i][j][k];
+            List<Edge> localEdges = edges[i][j][k];
             int minimalIndex = -1;
             int minimalSize = Integer.MAX_VALUE;
             for (int l = 0; l < localEdges.size(); l++) {
@@ -499,7 +509,7 @@ final class MinimalEncoder {
     for (int j = 0; j < encoders.length; j++) {
       for (int k = 0; k < 4; k++) {
         if (edges[inputLength][j][k] != null) {
-          ArrayList<Edge> localEdges = edges[inputLength][j][k];
+          List<Edge> localEdges = edges[inputLength][j][k];
           assert localEdges.size() == 1;
           Edge edge = localEdges.get(0);
           if (edge.cachedTotalSize < minimalSize) {

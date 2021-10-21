@@ -882,6 +882,29 @@ public final class EncoderTestCase extends Assert {
         true);
   }
 
+  @Test
+  public void testMinimalEncoder42() throws Exception {
+    // test halfwidth Katakana character (they are single byte encoded in Shift_JIS)
+    verifyMinimalEncoding("Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66", "ECI(Shift_JIS),BYTE(Katakana:......)", null
+        , false);
+  }
+
+  @Test
+  public void testMinimalEncoder43() throws Exception {
+    // The character \u30A2 encodes as double byte in Shift_JIS so KANJI is more compact in this case
+    verifyMinimalEncoding("Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2", "BYTE(Katakana:),KANJI(......)", null,
+        false);
+  }
+
+  @Test
+  public void testMinimalEncoder44() throws Exception {
+    // The character \u30A2 encodes as double byte in Shift_JIS but KANJI is not more compact in this case because
+    // KANJI is only more compact when it encodes pairs of characters. In the case of mixed text it can however be
+    // that Shift_JIS encoding is more compact as in this example
+    verifyMinimalEncoding("Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2", "ECI(Shift_JIS),BYTE(Katakana:.a.a.a" +
+        ".a.a.)", null, false);
+  }
+
   static void verifyMinimalEncoding(String input, String expectedResult, Charset priorityCharset, boolean isGS1) 
       throws Exception {
     MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, priorityCharset, isGS1,
