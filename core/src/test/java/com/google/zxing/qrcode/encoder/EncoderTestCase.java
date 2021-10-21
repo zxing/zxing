@@ -882,6 +882,27 @@ public final class EncoderTestCase extends Assert {
         true);
   }
 
+  @Test
+  public void testMinimalEncoder42() throws Exception {
+    // test halfwidth Katakana character (they are single byte encoded in Shift_JIS)
+    verifyMinimalEncoding("Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66", "ECI(Shift_JIS),BYTE(Katakana:......)", null
+        , false);
+  }
+
+  @Test
+  public void testMinimalEncoder43() throws Exception {
+    verifyMinimalEncoding("Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2", "BYTE(Katakana:),KANJI(......)", null,
+        false);
+  }
+
+  @Test
+  public void testMinimalEncoder44() throws Exception {
+    // KANJI efficiently encodes pairs of Japanese characters. Shift_JIS can be more compact on mixed text as in this
+    // example.
+    verifyMinimalEncoding("Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2", "ECI(Shift_JIS),BYTE(Katakana:.a.a.a" +
+        ".a.a.)", null, false);
+  }
+
   static void verifyMinimalEncoding(String input, String expectedResult, Charset priorityCharset, boolean isGS1) 
       throws Exception {
     MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, priorityCharset, isGS1,
