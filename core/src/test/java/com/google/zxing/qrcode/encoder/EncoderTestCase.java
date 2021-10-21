@@ -891,14 +891,16 @@ public final class EncoderTestCase extends Assert {
 
   @Test
   public void testMinimalEncoder43() throws Exception {
+    // The character \u30A2 encodes as double byte in Shift_JIS so KANJI is more compact in this case
     verifyMinimalEncoding("Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2", "BYTE(Katakana:),KANJI(......)", null,
         false);
   }
 
   @Test
   public void testMinimalEncoder44() throws Exception {
-    // KANJI efficiently encodes pairs of Japanese characters. Shift_JIS can be more compact on mixed text as in this
-    // example.
+    // The character \u30A2 encodes as double byte in Shift_JIS but KANJI is not more compact in this case because
+    // KANJI is only more compact when it encodes pairs of characters. In the case of mixed text it can however be
+    // that Shift_JIS encoding is more compact as in this example
     verifyMinimalEncoding("Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2", "ECI(Shift_JIS),BYTE(Katakana:.a.a.a" +
         ".a.a.)", null, false);
   }
