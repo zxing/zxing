@@ -126,8 +126,8 @@ final class MinimalEncoder {
    *
    * @param stringToEncode The string to encode
    * @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
-   *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority 
-   *   charset to encode any character in the input that can be encoded by it if the charset is among the 
+   *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
+   *   charset to encode any character in the input that can be encoded by it if the charset is among the
    *   supported charsets.
    * @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
    * @param ecLevel The error correction level.
@@ -169,8 +169,7 @@ final class MinimalEncoder {
     }
 
     if (neededEncoders.size() == 1 && !needUnicodeEncoder) {
-      encoders = new CharsetEncoder[1];
-      encoders[0] = neededEncoders.get(0);
+      encoders = new CharsetEncoder[] { neededEncoders.get(0) };
     } else {
       encoders = new CharsetEncoder[neededEncoders.size() + 2];
       int index = 0;
@@ -185,7 +184,7 @@ final class MinimalEncoder {
     int priorityEncoderIndexValue = -1;
     if (priorityCharset != null) {
       for (int i = 0; i < encoders.length; i++) {
-        if (priorityCharset.name().equals(encoders[i].charset().name())) {
+        if (encoders[i] != null && priorityCharset.name().equals(encoders[i].charset().name())) {
           priorityEncoderIndexValue = i;
           break;
         }
@@ -198,11 +197,11 @@ final class MinimalEncoder {
    * Encodes the string minimally
    *
    * @param stringToEncode The string to encode
-   * @param version The preferred {@link Version}. A minimal version is computed (see 
+   * @param version The preferred {@link Version}. A minimal version is computed (see
    *   {@link ResultList#getVersion method} when the value of the argument is null
    * @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
-   *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority 
-   *   charset to encode any character in the input that can be encoded by it if the charset is among the 
+   *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
+   *   charset to encode any character in the input that can be encoded by it if the charset is among the
    *   supported charsets.
    * @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
    * @param ecLevel The error correction level.
@@ -273,15 +272,6 @@ final class MinimalEncoder {
 
   static boolean isAlphanumeric(char c) {
     return Encoder.getAlphanumericCode(c) != -1;
-  }
-
-  /**
-   * Returns the maximum number of encodeable characters in the given mode for the given version. Example: in
-   * Version 1, 2^10 digits or 2^8 bytes can be encoded. In Version 3 it is 2^14 digits and 2^16 bytes
-   */
-  static int getMaximumNumberOfEncodeableCharacters(Version version, Mode mode) {
-    int count = mode.getCharacterCountBits(version);
-    return count == 0 ? 0 : 1 << count;
   }
 
   boolean canEncode(Mode mode, char c) {
@@ -383,7 +373,7 @@ final class MinimalEncoder {
      *
      * Example 1 encoding the string "ABCDE":
      * Note: This example assumes that alphanumeric encoding is only possible in multiples of two characters so that
-     * the example is both short and showing the principle. In reality this restriction does not exist. 
+     * the example is both short and showing the principle. In reality this restriction does not exist.
      *
      * Initial situation
      * (initial) -- BYTE(A) (20) --> (1_BYTE)
@@ -533,9 +523,10 @@ final class MinimalEncoder {
     private final int characterLength;
     private final Edge previous;
     private final int cachedTotalSize;
+
     private Edge(Mode mode, int fromPosition, int charsetEncoderIndex, int characterLength, Edge previous,
-        Version version) {
-      this.mode = mode; 
+                 Version version) {
+      this.mode = mode;
       this.fromPosition = fromPosition;
       this.charsetEncoderIndex = mode == Mode.BYTE || previous == null ? charsetEncoderIndex :
           previous.charsetEncoderIndex; // inherit the encoding if not of type BYTE
@@ -573,9 +564,10 @@ final class MinimalEncoder {
     }
   }
 
-  final class ResultList extends ArrayList<ResultList.ResultNode> {
+  final class ResultList {
 
-    final Version version;
+    private final List<ResultList.ResultNode> list = new ArrayList<>();
+    private final Version version;
 
     ResultList(Version version, Edge solution) {
       int length = 0;
@@ -595,12 +587,12 @@ final class MinimalEncoder {
         }
 
         if (previous == null || previous.mode != current.mode || needECI) {
-          add(0, new ResultNode(current.mode, current.fromPosition, current.charsetEncoderIndex, length));
+          list.add(0, new ResultNode(current.mode, current.fromPosition, current.charsetEncoderIndex, length));
           length = 0;
         }
 
         if (needECI) {
-          add(0, new ResultNode(Mode.ECI, current.fromPosition, current.charsetEncoderIndex, 0));
+          list.add(0, new ResultNode(Mode.ECI, current.fromPosition, current.charsetEncoderIndex, 0));
         }
         current = previous;
       }
@@ -608,16 +600,16 @@ final class MinimalEncoder {
       // prepend FNC1 if needed. If the bits contain an ECI then the FNC1 must be preceeded by an ECI.
       // If there is no ECI at the beginning then we put an ECI to the default charset (ISO-8859-1)
       if (isGS1) {
-        ResultNode first = get(0);
+        ResultNode first = list.get(0);
         if (first != null && first.mode != Mode.ECI && containsECI) {
           // prepend a default character set ECI
-          add(0, new ResultNode(Mode.ECI, 0, 0, 0));
+          list.add(0, new ResultNode(Mode.ECI, 0, 0, 0));
         }
-        first = get(0);
+        first = list.get(0);
         // prepend or insert a FNC1_FIRST_POSITION after the ECI (if any)
-        add(first.mode != Mode.ECI ? 0 : 1, new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
+        list.add(first.mode != Mode.ECI ? 0 : 1, new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0));
       }
- 
+
       // set version to smallest version into which the bits fit.
       int versionNumber = version.getVersionNumber();
       int lowerLimit;
@@ -660,7 +652,7 @@ final class MinimalEncoder {
 
     private int getSize(Version version) {
       int result = 0;
-      for (ResultNode resultNode : this) {
+      for (ResultNode resultNode : list) {
         result += resultNode.getSize(version);
       }
       return result;
@@ -670,7 +662,7 @@ final class MinimalEncoder {
      * appends the bits
      */
     void getBits(BitArray bits) throws WriterException {
-      for (ResultNode resultNode : this) {
+      for (ResultNode resultNode : list) {
         resultNode.getBits(bits);
       }
     }
@@ -682,7 +674,7 @@ final class MinimalEncoder {
     public String toString() {
       StringBuilder result = new StringBuilder();
       ResultNode previous = null;
-      for (ResultNode current : this) {
+      for (ResultNode current : list) {
         if (previous != null) {
           result.append(",");
         }
