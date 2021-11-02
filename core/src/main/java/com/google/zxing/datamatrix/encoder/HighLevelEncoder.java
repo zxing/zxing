@@ -296,45 +296,33 @@ public final class HighLevelEncoder {
         byte[] mins = new byte[6];
         findMinimums(charCounts, intCharCounts, Integer.MAX_VALUE, mins);
 
-        if (intCharCounts[ASCII_ENCODATION] + 1 <= intCharCounts[BASE256_ENCODATION]
-            && intCharCounts[ASCII_ENCODATION] + 1 <= intCharCounts[C40_ENCODATION]
-            && intCharCounts[ASCII_ENCODATION] + 1 <= intCharCounts[TEXT_ENCODATION]
-            && intCharCounts[ASCII_ENCODATION] + 1 <= intCharCounts[X12_ENCODATION]
-            && intCharCounts[ASCII_ENCODATION] + 1 <= intCharCounts[EDIFACT_ENCODATION]) {
+        if (intCharCounts[ASCII_ENCODATION] < min(intCharCounts[BASE256_ENCODATION]
+            , intCharCounts[C40_ENCODATION], intCharCounts[TEXT_ENCODATION], intCharCounts[X12_ENCODATION]
+            , intCharCounts[EDIFACT_ENCODATION])) {
           return ASCII_ENCODATION;
         }
-        if (intCharCounts[BASE256_ENCODATION] + 1 <= intCharCounts[ASCII_ENCODATION]
-            || (intCharCounts[BASE256_ENCODATION] + 1 < intCharCounts[C40_ENCODATION]
-                && intCharCounts[BASE256_ENCODATION] + 1 < intCharCounts[TEXT_ENCODATION]
-                && intCharCounts[BASE256_ENCODATION] + 1 < intCharCounts[X12_ENCODATION]
-                && intCharCounts[BASE256_ENCODATION] + 1 < intCharCounts[EDIFACT_ENCODATION])) {
+        if (intCharCounts[BASE256_ENCODATION] < intCharCounts[ASCII_ENCODATION]
+            || intCharCounts[BASE256_ENCODATION] + 1 < min(intCharCounts[C40_ENCODATION]
+            , intCharCounts[TEXT_ENCODATION], intCharCounts[X12_ENCODATION], intCharCounts[EDIFACT_ENCODATION])) {
           return BASE256_ENCODATION;
         }
-        if (intCharCounts[EDIFACT_ENCODATION] + 1 < intCharCounts[BASE256_ENCODATION]
-            && intCharCounts[EDIFACT_ENCODATION] + 1 < intCharCounts[C40_ENCODATION]
-            && intCharCounts[EDIFACT_ENCODATION] + 1 < intCharCounts[TEXT_ENCODATION]
-            && intCharCounts[EDIFACT_ENCODATION] + 1 < intCharCounts[X12_ENCODATION]
-            && intCharCounts[EDIFACT_ENCODATION] + 1 < intCharCounts[ASCII_ENCODATION]) {
+        if (intCharCounts[EDIFACT_ENCODATION] + 1 < min(intCharCounts[BASE256_ENCODATION]
+            , intCharCounts[C40_ENCODATION] , intCharCounts[TEXT_ENCODATION] , intCharCounts[X12_ENCODATION]
+            , intCharCounts[ASCII_ENCODATION])) {
           return EDIFACT_ENCODATION;
         }
-        if (intCharCounts[TEXT_ENCODATION] + 1 < intCharCounts[BASE256_ENCODATION]
-            && intCharCounts[TEXT_ENCODATION] + 1 < intCharCounts[C40_ENCODATION]
-            && intCharCounts[TEXT_ENCODATION] + 1 < intCharCounts[EDIFACT_ENCODATION]
-            && intCharCounts[TEXT_ENCODATION] + 1 < intCharCounts[X12_ENCODATION]
-            && intCharCounts[TEXT_ENCODATION] + 1 < intCharCounts[ASCII_ENCODATION]) {
+        if (intCharCounts[TEXT_ENCODATION] + 1 < min(intCharCounts[BASE256_ENCODATION]
+            , intCharCounts[C40_ENCODATION] , intCharCounts[EDIFACT_ENCODATION] , intCharCounts[X12_ENCODATION]
+            , intCharCounts[ASCII_ENCODATION])) {
           return TEXT_ENCODATION;
         }
-        if (intCharCounts[X12_ENCODATION] + 1 < intCharCounts[BASE256_ENCODATION]
-            && intCharCounts[X12_ENCODATION] + 1 < intCharCounts[C40_ENCODATION]
-            && intCharCounts[X12_ENCODATION] + 1 < intCharCounts[EDIFACT_ENCODATION]
-            && intCharCounts[X12_ENCODATION] + 1 < intCharCounts[TEXT_ENCODATION]
-            && intCharCounts[X12_ENCODATION] + 1 < intCharCounts[ASCII_ENCODATION]) {
+        if (intCharCounts[X12_ENCODATION] + 1 < min(intCharCounts[BASE256_ENCODATION]
+            , intCharCounts[C40_ENCODATION] , intCharCounts[EDIFACT_ENCODATION] , intCharCounts[TEXT_ENCODATION]
+            , intCharCounts[ASCII_ENCODATION])) {
           return X12_ENCODATION;
         }
-        if (intCharCounts[C40_ENCODATION] + 1 < intCharCounts[ASCII_ENCODATION]
-            && intCharCounts[C40_ENCODATION] + 1 < intCharCounts[BASE256_ENCODATION]
-            && intCharCounts[C40_ENCODATION] + 1 < intCharCounts[EDIFACT_ENCODATION]
-            && intCharCounts[C40_ENCODATION] + 1 < intCharCounts[TEXT_ENCODATION]) {
+        if (intCharCounts[C40_ENCODATION] + 1 < min(intCharCounts[ASCII_ENCODATION]
+            , intCharCounts[BASE256_ENCODATION] , intCharCounts[EDIFACT_ENCODATION] , intCharCounts[TEXT_ENCODATION])) {
           if (intCharCounts[C40_ENCODATION] < intCharCounts[X12_ENCODATION]) {
             return C40_ENCODATION;
           }
@@ -355,6 +343,12 @@ public final class HighLevelEncoder {
         }
       }
     }
+  }
+  private static int min(int f1, int f2, int f3, int f4, int f5) {
+    return Math.min(min(f1, f2, f3, f4),f5);
+  }
+  private static int min(int f1, int f2, int f3, int f4) {
+    return Math.min(f1, Math.min(f2, Math.min(f3, f4)));
   }
 
   private static int findMinimums(float[] charCounts, int[] intCharCounts, int min, byte[] mins) {
