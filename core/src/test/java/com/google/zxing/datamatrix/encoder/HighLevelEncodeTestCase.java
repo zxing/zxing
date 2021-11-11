@@ -160,7 +160,7 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("239 91 11 91 11 91 11 254 67 129", visualized);
 
     visualized = encodeHighLevel("aimaimaim{txt}\u0004");
-    assertEquals("239 91 11 91 11 91 11 16 218 236 107 181 69 254 129 237", visualized);
+    assertEquals("239 91 11 91 11 91 11 254 124 117 121 117 126 5 129 237", visualized);
   }
 
   @Test
@@ -236,10 +236,10 @@ public final class HighLevelEncodeTestCase extends Assert {
     assertEquals("33 153 235 36 129", visualized);
 
     visualized = encodeHighLevel("\u00ABäöüé\u00BB 234"); //Mixed Base256 + ASCII
-    assertEquals("231 51 108 59 226 126 1 104 99 153 53 129", visualized);
+    assertEquals("231 50 108 59 226 126 1 104 33 153 53 129", visualized);
 
     visualized = encodeHighLevel("\u00ABäöüé\u00BB 23£ 1234567890123456789");
-    assertEquals("231 55 108 59 226 126 1 104 99 10 161 167 185 142 164 186 208"
+    assertEquals("231 54 108 59 226 126 1 104 99 10 161 167 33 142 164 186 208"
                      + " 220 142 164 186 208 58 129 59 209 104 254 150 45", visualized);
 
     visualized = encodeHighLevel(createBinaryMessage(20));
@@ -307,19 +307,19 @@ public final class HighLevelEncodeTestCase extends Assert {
     //EDIFACT encoding correctly
 
     String visualized = encodeHighLevel("CREX-TAN:h");
-    assertEquals("240 13 33 88 181 64 78 124 59 105", visualized);
+    assertEquals("68 83 70 89 46 85 66 79 59 105", visualized);
 
     visualized = encodeHighLevel("CREX-TAN:hh");
-    assertEquals("240 13 33 88 181 64 78 124 59 105 105 129", visualized);
+    assertEquals("68 83 70 89 46 85 66 79 59 105 105 129", visualized);
 
     visualized = encodeHighLevel("CREX-TAN:hhh");
-    assertEquals("240 13 33 88 181 64 78 124 59 105 105 105", visualized);
+    assertEquals("68 83 70 89 46 85 66 79 59 105 105 105", visualized);
   }
 
   @Test
   public void testX12Unlatch() {
     String visualized = encodeHighLevel("*DTCP01");
-    assertEquals("238 9 10 104 141 254 50 129", visualized);
+    assertEquals("43 69 85 68 81 131 129 56", visualized);
   }
 
   @Test
@@ -334,7 +334,7 @@ public final class HighLevelEncodeTestCase extends Assert {
     //of an encoding problem of the character 0x0060 in Java source code.
 
     String visualized = encodeHighLevel("fiykmj*Rh2`,e6");
-    assertEquals("239 122 87 154 40 7 171 115 207 12 130 71 155 254 129 237", visualized);
+    assertEquals("103 106 122 108 110 107 43 83 105 51 97 45 102 55 129 237", visualized);
 
   }
 
@@ -350,7 +350,7 @@ public final class HighLevelEncodeTestCase extends Assert {
   public void testEncodingWithStartAsX12AndLatchToEDIFACTInTheMiddle() {
 
     String visualized = encodeHighLevel("*MEMANT-1F-MESTECH");
-    assertEquals("238 10 99 164 204 254 240 82 220 70 180 209 83 80 80 200", visualized);
+    assertEquals("240 168 209 77 4 229 45 196 107 77 21 53 5 12 135 192", visualized);
   }
 
   private static String encodeHighLevel(String msg) {
