@@ -306,10 +306,10 @@ final class MinimalEncoder {
 
   void addEdge(Edge[][][] edges, int position, Edge edge) {
     int vertexIndex = position + edge.characterLength;
-    if (edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] == null ||
-        edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)].cachedTotalSize > 
-        edge.cachedTotalSize) {
-      edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = edge;
+    Edge[] modeEdges = edges[vertexIndex][edge.charsetEncoderIndex];
+    int modeOrdinal = getCompactedOrdinal(edge.mode);
+    if (modeEdges[modeOrdinal] == null || modeEdges[modeOrdinal].cachedTotalSize > edge.cachedTotalSize) {
+      modeEdges[modeOrdinal] = edge;
     }
   }
 
