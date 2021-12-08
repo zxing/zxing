@@ -304,15 +304,16 @@ final class MinimalEncoder {
     }
   }
 
-  void addEdge(List<Edge>[][][] edges, int position, Edge edge) {
+  void addEdge(Edge[][][] edges, int position, Edge edge) {
     int vertexIndex = position + edge.characterLength;
-    if (edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] == null) {
-      edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = new ArrayList<>();
+    Edge[] modeEdges = edges[vertexIndex][edge.charsetEncoderIndex];
+    int modeOrdinal = getCompactedOrdinal(edge.mode);
+    if (modeEdges[modeOrdinal] == null || modeEdges[modeOrdinal].cachedTotalSize > edge.cachedTotalSize) {
+      modeEdges[modeOrdinal] = edge;
     }
-    edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)].add(edge);
   }
 
-  void addEdges(Version version, List<Edge>[][][] edges, int from, Edge previous) {
+  void addEdges(Version version, Edge[][][] edges, int from, Edge previous) {
     int start = 0;
     int end = encoders.length;
     if (priorityEncoderIndex >= 0 && encoders[priorityEncoderIndex].canEncode(stringToEncode.charAt(from))) {
@@ -463,31 +464,14 @@ final class MinimalEncoder {
     // The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the
     // function getCompactedOrdinal(Mode)
     @SuppressWarnings("unchecked")
-    List<Edge>[][][] edges = new ArrayList[inputLength + 1][encoders.length][4];
+    Edge[][][] edges = new Edge[inputLength + 1][encoders.length][4];
     addEdges(version, edges, 0, null);
 
     for (int i = 1; i <= inputLength; i++) {
       for (int j = 0; j < encoders.length; j++) {
         for (int k = 0; k < 4; k++) {
-          Edge minimalEdge;
-          if (edges[i][j][k] != null) {
-            List<Edge> localEdges = edges[i][j][k];
-            int minimalIndex = -1;
-            int minimalSize = Integer.MAX_VALUE;
-            for (int l = 0; l < localEdges.size(); l++) {
-              Edge edge = localEdges.get(l);
-              if (edge.cachedTotalSize < minimalSize) {
-                minimalIndex = l;
-                minimalSize = edge.cachedTotalSize;
-              }
-            }
-            assert minimalIndex != -1;
-            minimalEdge = localEdges.get(minimalIndex);
-            localEdges.clear();
-            localEdges.add(minimalEdge);
-            if (i < inputLength) {
-              addEdges(version, edges, i, minimalEdge);
-            }
+          if (edges[i][j][k] != null && i < inputLength) {
+            addEdges(version, edges, i, edges[i][j][k]);
           }
         }
       }
@@ -499,9 +483,7 @@ final class MinimalEncoder {
     for (int j = 0; j < encoders.length; j++) {
       for (int k = 0; k < 4; k++) {
         if (edges[inputLength][j][k] != null) {
-          List<Edge> localEdges = edges[inputLength][j][k];
-          assert localEdges.size() == 1;
-          Edge edge = localEdges.get(0);
+          Edge edge = edges[inputLength][j][k];
           if (edge.cachedTotalSize < minimalSize) {
             minimalSize = edge.cachedTotalSize;
             minimalJ = j;
@@ -513,7 +495,7 @@ final class MinimalEncoder {
     if (minimalJ < 0) {
       throw new WriterException("Internal error: failed to encode \"" + stringToEncode + "\"");
     }
-    return new ResultList(version, edges[inputLength][minimalJ][minimalK].get(0));
+    return new ResultList(version, edges[inputLength][minimalJ][minimalK]);
   }
 
   private final class Edge {
