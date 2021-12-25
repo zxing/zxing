@@ -587,30 +587,28 @@ final class DecodedBitStreamParser {
     int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
     return tempVariable >= 0 ? tempVariable : tempVariable + 256;
   }
-
   private static final class ECIStringBuilder {
-    private StringBuilder currentBytes;
-    private StringBuilder currentChars;
+    private final ArrayList<Byte> currentBytes;
+    private final StringBuilder currentChars;
     private Charset currentCharset = StandardCharsets.ISO_8859_1;
     private String result = null;
-    private boolean hadECI = false;
-
     private ECIStringBuilder(int initialCapacity) {
-      currentBytes = new StringBuilder(initialCapacity);
+      currentBytes = new ArrayList<Byte>(initialCapacity);
+      currentChars = new StringBuilder(initialCapacity);
     }
-
     private void append(char value) {
-      currentBytes.append(value);
+      assert value < 256;
+      currentBytes.add(Byte.valueOf((byte) (value & 0xff)));
     }
-
     private void append(String value) {
-      currentBytes.append(value);
+      for (int i = 0; i < value.length() ; i++) {
+        append(value.charAt(i));
+      }
     }
-
     private void append(int value) {
-      currentBytes.append(value);
+      assert value >= 0 && value <= 99;
+      append(String.valueOf(value));
     }
-
     private void appendECI(int value) throws FormatException {
       encodeCurrentBytesIfAny();
       CharacterSetECI characterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
@@ -619,34 +617,26 @@ final class DecodedBitStreamParser {
       }
       currentCharset = characterSetECI.getCharset();
     }
-
     private void encodeCurrentBytesIfAny() {
-      if (!hadECI) {
-        currentChars = currentBytes;
-        currentBytes = new StringBuilder();
-        hadECI = true;
-      } else if (currentBytes.length() > 0) {
-        byte[] bytes = new byte[currentBytes.length()];
+      if (currentBytes.size() > 0) {
+        byte[] bytes = new byte[currentBytes.size()];
         for (int i = 0; i < bytes.length; i++) {
-          bytes[i] = (byte) (currentBytes.charAt(i) & 0xff);
+          bytes[i] = currentBytes.get(i).byteValue();
         }
         currentChars.append(new String(bytes, currentCharset));
-        currentBytes.setLength(0);
+        currentBytes.clear();
       }
     }
-
     private void append(StringBuilder value) {
       encodeCurrentBytesIfAny();
       currentChars.append(value);
     }
-
     /**
      * returns the length of toString()
      */
     public int length() {
       return toString().length();
     }
-
     public String toString() {
       encodeCurrentBytesIfAny();
       result = result == null ? currentChars.toString() : result + currentChars.toString();
