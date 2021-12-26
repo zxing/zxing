@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.io.ByteArrayOutputStream;
 
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -587,28 +588,34 @@ final class DecodedBitStreamParser {
     int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
     return tempVariable >= 0 ? tempVariable : tempVariable + 256;
   }
+
   private static final class ECIStringBuilder {
-    private final ArrayList<Byte> currentBytes;
+    private final ByteArrayOutputStream currentBytes;
     private final StringBuilder currentChars;
     private Charset currentCharset = StandardCharsets.ISO_8859_1;
     private String result = null;
+
     private ECIStringBuilder(int initialCapacity) {
-      currentBytes = new ArrayList<Byte>(initialCapacity);
+      currentBytes = new ByteArrayOutputStream(initialCapacity);
       currentChars = new StringBuilder(initialCapacity);
     }
+
     private void append(char value) {
       assert value < 256;
-      currentBytes.add(Byte.valueOf((byte) (value & 0xff)));
+      currentBytes.write(value & 0xff);
     }
+
     private void append(String value) {
       for (int i = 0; i < value.length() ; i++) {
         append(value.charAt(i));
       }
     }
+
     private void append(int value) {
       assert value >= 0 && value <= 99;
       append(String.valueOf(value));
     }
+
     private void appendECI(int value) throws FormatException {
       encodeCurrentBytesIfAny();
       CharacterSetECI characterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
@@ -617,26 +624,27 @@ final class DecodedBitStreamParser {
       }
       currentCharset = characterSetECI.getCharset();
     }
+
     private void encodeCurrentBytesIfAny() {
       if (currentBytes.size() > 0) {
-        byte[] bytes = new byte[currentBytes.size()];
-        for (int i = 0; i < bytes.length; i++) {
-          bytes[i] = currentBytes.get(i).byteValue();
-        }
+        byte[] bytes = currentBytes.toByteArray();
         currentChars.append(new String(bytes, currentCharset));
-        currentBytes.clear();
+        currentBytes.reset();
       }
     }
+
     private void append(StringBuilder value) {
       encodeCurrentBytesIfAny();
       currentChars.append(value);
     }
+
     /**
      * returns the length of toString()
      */
     public int length() {
       return toString().length();
     }
+
     public String toString() {
       encodeCurrentBytesIfAny();
       result = result == null ? currentChars.toString() : result + currentChars.toString();
