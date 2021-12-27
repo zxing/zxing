@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.io.ByteArrayOutputStream;
 
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -590,30 +589,26 @@ final class DecodedBitStreamParser {
   }
 
   private static final class ECIStringBuilder {
-    private final ByteArrayOutputStream currentBytes;
-    private final StringBuilder currentChars;
+    private StringBuilder currentBytes;
+    private StringBuilder currentChars;
     private Charset currentCharset = StandardCharsets.ISO_8859_1;
     private String result = null;
+    private boolean hadECI = false;
 
     private ECIStringBuilder(int initialCapacity) {
-      currentBytes = new ByteArrayOutputStream(initialCapacity);
-      currentChars = new StringBuilder(initialCapacity);
+      currentBytes = new StringBuilder(initialCapacity);
     }
 
     private void append(char value) {
-      assert value < 256;
-      currentBytes.write(value & 0xff);
+      currentBytes.append(value);
     }
 
     private void append(String value) {
-      for (int i = 0; i < value.length() ; i++) {
-        append(value.charAt(i));
-      }
+      currentBytes.append(value);
     }
 
     private void append(int value) {
-      assert value >= 0 && value <= 99;
-      append(String.valueOf(value));
+      currentBytes.append(value);
     }
 
     private void appendECI(int value) throws FormatException {
@@ -626,10 +621,17 @@ final class DecodedBitStreamParser {
     }
 
     private void encodeCurrentBytesIfAny() {
-      if (currentBytes.size() > 0) {
-        byte[] bytes = currentBytes.toByteArray();
+      if (!hadECI) {
+        currentChars = currentBytes;
+        currentBytes = new StringBuilder();
+        hadECI = true;
+      } else if (currentBytes.length() > 0) {
+        byte[] bytes = new byte[currentBytes.length()];
+        for (int i = 0; i < bytes.length; i++) {
+          bytes[i] = (byte) (currentBytes.charAt(i) & 0xff);
+        }
         currentChars.append(new String(bytes, currentCharset));
-        currentBytes.reset();
+        currentBytes.setLength(0);
       }
     }
 
