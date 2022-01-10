@@ -166,13 +166,13 @@ public final class MinimalEncoder {
     }
   }
 
-/** @return the number of words in which the string starting at from can be encoded in c40 or text mode.
- *  The number of characters encoded is returned in characterLength.
- *  The number of characters encoded is also minimal in the sense that the algorithm stops as soon
- *  as a character encoding fills a C40 word competely (three C40 values). An exception is at the
- *  end of the string where two C40 values are allowed (according to the spec the third c40 value 
- *  is filled  with 0 (Shift 1) in this case).
- */
+  /** @return the number of words in which the string starting at from can be encoded in c40 or text mode.
+   *  The number of characters encoded is returned in characterLength.
+   *  The number of characters encoded is also minimal in the sense that the algorithm stops as soon
+   *  as a character encoding fills a C40 word competely (three C40 values). An exception is at the
+   *  end of the string where two C40 values are allowed (according to the spec the third c40 value 
+   *  is filled  with 0 (Shift 1) in this case).
+   */
   static int getNumberOfC40Words(Input input, int from, boolean c40,int[] characterLength) {
     int thirdsCount = 0;
     for (int i = from; i < input.length(); i++) {
@@ -457,7 +457,7 @@ public final class MinimalEncoder {
           addEdges(input, edges, i, edges[i][j]);
         }
       }
-//optimize memory by removing edges that have been passed.
+      //optimize memory by removing edges that have been passed.
       for (int j = 0; j < 6; j++) {
         edges[i - 1][j] = null;
       }
@@ -609,12 +609,12 @@ public final class MinimalEncoder {
       return  previous == null ? Mode.ASCII : previous.getEndMode();
     }
 
-/** Returns Mode.ASCII in case that:
- *  - Mode is EDIFACT and characterLength is less than 4 or the remaining characters can be encoded in at most 2 ASCII
- *  bytes.
- *  - Mode is C40, TEXT or X12 and the remaining characters can be encoded in at most 1 ASCII byte.
- *  Returns mode in all other cases.
- * */
+    /** Returns Mode.ASCII in case that:
+     *  - Mode is EDIFACT and characterLength is less than 4 or the remaining characters can be encoded in at most 2 ASCII
+     *  bytes.
+     *  - Mode is C40, TEXT or X12 and the remaining characters can be encoded in at most 1 ASCII byte.
+     *  Returns mode in all other cases.
+     * */
     Mode getEndMode() {
       if (mode == Mode.EDF) {
         if (characterLength < 4) {
@@ -645,9 +645,9 @@ public final class MinimalEncoder {
       return mode;
     }
 
-/** Peeks ahead and returns 1 if the postfix consists of exactly two digits, 2 if the postfix consists of exactly two
- * consecutive digits and a non extended character or of 4 digits. Returns 0 in any other case
- **/
+    /** Peeks ahead and returns 1 if the postfix consists of exactly two digits, 2 if the postfix consists of exactly two
+     * consecutive digits and a non extended character or of 4 digits. Returns 0 in any other case
+     **/
     int getLastASCII() {
       int length = input.length();
       int from = fromPosition + characterLength;
@@ -925,8 +925,8 @@ public final class MinimalEncoder {
       }
       return new byte[0];
     }
-//
-// Important: The function does not return the length bytes (one or two) in case of B256 encoding
+
+    // Important: The function does not return the length bytes (one or two) in case of B256 encoding
     byte[] getDataBytes() {
       byte[] result;
       switch (mode) {
@@ -1023,7 +1023,7 @@ public final class MinimalEncoder {
 
     static void applyRandomPattern(List<Byte> bytesAL,int startPosition, int length) {
       for (int i = 0; i < length; i++) {
-//See "B.1 253-state algorithm
+        //See "B.1 253-state algorithm
         int Pad_codeword_position = startPosition + i;
         int Pad_codeword_value = bytesAL.get(Pad_codeword_position) & 0xff;
         int pseudo_random_number = ((149 * (Pad_codeword_position + 1)) % 255) + 1;
@@ -1162,7 +1162,7 @@ public final class MinimalEncoder {
             addEdges(stringToEncode, encoderSet, edges, i, edges[i][j], fnc1);
           }
         }
-//optimize memory by removing edges that have been passed.
+        //optimize memory by removing edges that have been passed.
         for (int j = 0; j < encoderSet.length(); j++) {
           edges[i - 1][j] = null;
         }
