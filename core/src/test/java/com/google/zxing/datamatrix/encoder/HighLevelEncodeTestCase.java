@@ -19,6 +19,7 @@ package com.google.zxing.datamatrix.encoder;
 import junit.framework.ComparisonFailure;
 import org.junit.Assert;
 import org.junit.Test;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Tests for {@link HighLevelEncoder} and {@link MinimalEncoder}
@@ -494,6 +495,27 @@ public final class HighLevelEncodeTestCase extends Assert {
         "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF", sizes);
     assertEquals(114, sizes[0]);
     assertEquals(62, sizes[1]);
+  }
+
+  @Test
+  public void testECIs() {
+
+    String visualized = visualize(MinimalEncoder.encodeHighLevel("that particularly stands out to me is \u0625\u0650" +
+        "\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew " +
+        "\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)"));
+    assertEquals("239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113 15 254" +
+        " 116 33 241 25 231 186 14 212 64 253 151 252 159 33 41 241 27 231 83 171 53 209 35 25 134 6 42 33 35 239 184" +
+        " 31 193 234 7 252 205 101 127 241 209 34 24 5 22 23 221 148 179 239 128 140 92 187 106 204 198 59 19 25 114" +
+        " 248 118 36 254 231 106 196 19 239 101 27 107 69 189 112 236 156 252 16 174 125 24 10 125 116 42", visualized);
+
+    visualized = visualize(MinimalEncoder.encodeHighLevel("that particularly stands out to me is \u0625\u0650" +
+        "\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew " +
+        "\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)", StandardCharsets.UTF_8, -1 , SymbolShapeHint.FORCE_NONE));
+    assertEquals("241 27 239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113" +
+        " 15 254 116 33 231 202 33 131 77 154 119 225 163 238 206 28 249 93 36 150 151 53 108 246 145 228 217 71" +
+        " 199 42 33 35 239 184 31 193 234 7 252 205 101 127 241 209 34 24 5 22 23 221 148 179 239 128 140 92 187 106" +
+        " 204 198 59 19 25 114 248 118 36 254 231 43 133 212 175 38 220 44 6 125 49 172 93 189 209 111 61 217 203 62" +
+        " 116 42", visualized);
   }
 
   private static void encodeHighLevel(String msg, int[] sizes) {

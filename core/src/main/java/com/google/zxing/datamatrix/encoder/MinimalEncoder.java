@@ -17,13 +17,11 @@
 package com.google.zxing.datamatrix.encoder;
 
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.zxing.common.CharacterSetECI;
+import com.google.zxing.common.ECIEncoderSet;
 
 /**
  * Encoder that encodes minimally
@@ -70,6 +68,8 @@ public final class MinimalEncoder {
     EDF,
     B256
   }
+  static final char[] C40_SHIFT2_CHARS = {'!', '"', '#', '$', '%', '&', '\'', '(', ')', '*',  '+', ',', '-', '.', '/',
+                                          ':', ';', '<', '=', '>', '?',  '@', '[', '\\', ']', '^', '_' };
 
 
   private MinimalEncoder() {
@@ -77,7 +77,6 @@ public final class MinimalEncoder {
   }
 
   static boolean isExtendedASCII(char ch, int fnc1) {
-
     return ch != fnc1 && ch >= 128 && ch <= 255;
   }
 
@@ -86,10 +85,8 @@ public final class MinimalEncoder {
   }
 
   private static boolean isInC40Shift2Set(char ch, int fnc1) {
-    final char[] chars = {'!', '"', '#', '$', '%', '&', '\'', '(', ')', '*',  '+', ',', '-', '.',
-                          '/', ':', ';', '<', '=', '>', '?',  '@', '[', '\\', ']', '^', '_' };
-    for (int i = 0; i < chars.length; i++) {
-      if (chars[i] == ch) {
+    for (int i = 0; i < C40_SHIFT2_CHARS.length; i++) {
+      if (C40_SHIFT2_CHARS[i] == ch) {
         return true;
       }
     }
@@ -136,11 +133,10 @@ public final class MinimalEncoder {
    */
   public static String encodeHighLevel(String msg, Charset priorityCharset, int fnc1, SymbolShapeHint shape) {
     if (msg.startsWith(HighLevelEncoder.MACRO_05_HEADER) && msg.endsWith(HighLevelEncoder.MACRO_TRAILER)) {
-      //TODO: Add support for Macro 5 (236)
-      //@Sean: Is a similar syntax used to say that is it GS1 input? Perhaps we should use it?
+      // TODO: Add support for Macro 5 (236)
       msg = msg.substring(HighLevelEncoder.MACRO_05_HEADER.length(), msg.length() - 2);
     } else if (msg.startsWith(HighLevelEncoder.MACRO_06_HEADER) && msg.endsWith(HighLevelEncoder.MACRO_TRAILER)) {
-      //TODO: Add support for Macro 6 (237)
+      // TODO: Add support for Macro 6 (237)
       msg = msg.substring(HighLevelEncoder.MACRO_06_HEADER.length(), msg.length() - 2);
     }
     return new String(encode(msg, priorityCharset, fnc1, shape), StandardCharsets.ISO_8859_1);
@@ -159,8 +155,7 @@ public final class MinimalEncoder {
    * @return An array of bytes representing the codewords of a minimal encoding.
    */
   static byte[] encode(String input, Charset priorityCharset, int fnc1, SymbolShapeHint shape) {
-    Result resultList = encodeMinimally(new Input(input, priorityCharset, fnc1, shape));
-    return resultList.getBytes();
+    return encodeMinimally(new Input(input, priorityCharset, fnc1, shape)).getBytes();
   }
 
   static void addEdge(Edge[][] edges, Edge edge) {
@@ -171,7 +166,7 @@ public final class MinimalEncoder {
     }
   }
 
-/** returns the number of words in which the string starting at from can be encoded in c40 or text mode.
+/** @return the number of words in which the string starting at from can be encoded in c40 or text mode.
  *  The number of characters encoded is returned in characterLength.
  *  The number of characters encoded is also minimal in the sense that the algorithm stops as soon
  *  as a character encoding fills a C40 word competely (three C40 values). An exception is at the
@@ -208,6 +203,7 @@ public final class MinimalEncoder {
     characterLength[0] = 0;
     return 0;
   }
+
   static void addEdges(Input input, Edge[][] edges, int from, Edge previous) {
 
     if (input.isECI(from)) {
@@ -235,17 +231,18 @@ public final class MinimalEncoder {
         }
       }
   
-      if (input.haveNCharacters(from,3) && HighLevelEncoder.isNativeX12(input.charAt(from)) &&
-                                                 HighLevelEncoder.isNativeX12(input.charAt(from + 1)) &&
-                                                 HighLevelEncoder.isNativeX12(input.charAt(from + 2))) {
+      if (input.haveNCharacters(from,3) &&
+          HighLevelEncoder.isNativeX12(input.charAt(from)) &&
+          HighLevelEncoder.isNativeX12(input.charAt(from + 1)) &&
+          HighLevelEncoder.isNativeX12(input.charAt(from + 2))) {
         addEdge(edges, new Edge(input, Mode.X12, from, 3, previous));
       }
 
       addEdge(edges, new Edge(input, Mode.B256, from, 1, previous));
     }
 
-//We create 4 EDF edges,  with 1, 2 3 or 4 characters length. The fourth normally doesn't have a latch to ASCII unless
-//it is 2 characters away from the end of the input.
+    //We create 4 EDF edges,  with 1, 2 3 or 4 characters length. The fourth normally doesn't have a latch to ASCII
+    //unless it is 2 characters away from the end of the input.
     int i;
     for (i = 0; i < 3; i++) {
       int pos = from + i;
@@ -487,11 +484,11 @@ public final class MinimalEncoder {
   }
 
   private static final class Edge {
-    static final int[] allCodewordCapacities = {3, 5, 8, 10, 12, 16, 18, 22, 30, 32, 36, 44, 49, 62, 86, 114, 144, 174,
-                                                   204, 280, 368, 456, 576, 696, 816, 1050, 1304, 1558};
-    static final int[] squareCodewordCapacities = {3, 5, 8, 12, 18, 22, 30, 36, 44, 62, 86, 114, 144, 174, 204, 280,
-                                                   368, 456, 576, 696, 816, 1050, 1304, 1558};
-    static final int[] rectangularCodewordCapacities = {5, 10, 16, 33, 32, 49};
+    private static final int[] allCodewordCapacities = {3, 5, 8, 10, 12, 16, 18, 22, 30, 32, 36, 44, 49, 62, 86, 114,
+                                                        144, 174, 204, 280, 368, 456, 576, 696, 816, 1050, 1304, 1558};
+    private static final int[] squareCodewordCapacities = {3, 5, 8, 12, 18, 22, 30, 36, 44, 62, 86, 114, 144, 174, 204,
+                                                           280, 368, 456, 576, 696, 816, 1050, 1304, 1558};
+    private static final int[] rectangularCodewordCapacities = {5, 10, 16, 33, 32, 49};
     private final Input input;
     private final Mode mode; //the mode at the start of this edge.
     private final int fromPosition;
@@ -511,20 +508,20 @@ public final class MinimalEncoder {
 
       Mode previousMode = getPreviousMode();
 
-/*
- * Switching modes
- * ASCII -> C40: latch 230
- * ASCII -> TEXT: latch 239
- * ASCII -> X12: latch 238
- * ASCII -> EDF: latch 240
- * ASCII -> B256: latch 231
- * C40 -> ASCII: word(c1,c2,c3), 254
- * TEXT -> ASCII: word(c1,c2,c3), 254
- * X12 -> ASCII: word(c1,c2,c3), 254
- * EDIFACT -> ASCII: Unlatch character,0,0,0 or c1,Unlatch character,0,0 or c1,c2,Unlatch character,0 or 
- * c1,c2,c3,Unlatch character
- * B256 -> ASCII: without latch after n bytes
- */
+     /*
+      * Switching modes
+      * ASCII -> C40: latch 230
+      * ASCII -> TEXT: latch 239
+      * ASCII -> X12: latch 238
+      * ASCII -> EDF: latch 240
+      * ASCII -> B256: latch 231
+      * C40 -> ASCII: word(c1,c2,c3), 254
+      * TEXT -> ASCII: word(c1,c2,c3), 254
+      * X12 -> ASCII: word(c1,c2,c3), 254
+      * EDIFACT -> ASCII: Unlatch character,0,0,0 or c1,Unlatch character,0,0 or c1,c2,Unlatch character,0 or 
+      * c1,c2,c3,Unlatch character
+      * B256 -> ASCII: without latch after n bytes
+      */
       switch (mode) {
         case ASCII:
           size++;
@@ -816,7 +813,7 @@ public final class MinimalEncoder {
     }
 
     byte[] getC40Words(boolean c40, int fnc1) {
-      ArrayList<Byte> c40Values = new ArrayList();
+      List<Byte> c40Values = new ArrayList();
       for (int i = 0; i < characterLength; i++) {
         char ci = input.charAt(fromPosition + i);
         if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
@@ -970,9 +967,9 @@ public final class MinimalEncoder {
       this.input = solution.input;
       int length = 0;
       int size = 0;
-      ArrayList<Byte> bytesAL = new ArrayList();
-      ArrayList<Integer> randomizePostfixLength = new ArrayList();
-      ArrayList<Integer> randomizeLengths = new ArrayList();
+      List<Byte> bytesAL = new ArrayList();
+      List<Integer> randomizePostfixLength = new ArrayList();
+      List<Integer> randomizeLengths = new ArrayList();
       if ((solution.mode == Mode.C40 ||
            solution.mode == Mode.TEXT ||
            solution.mode == Mode.X12) &&
@@ -1016,13 +1013,15 @@ public final class MinimalEncoder {
         bytes[i] = bytesAL.get(i).byteValue();
       }
     }
-    static int prepend(byte[] bytes, ArrayList<Byte> into) {
+
+    static int prepend(byte[] bytes, List<Byte> into) {
       for (int i = bytes.length - 1; i >= 0; i--) {
         into.add(0, Byte.valueOf(bytes[i]));
       }
       return bytes.length;
     }
-    static void applyRandomPattern(ArrayList<Byte> bytesAL,int startPosition, int length) {
+
+    static void applyRandomPattern(List<Byte> bytesAL,int startPosition, int length) {
       for (int i = 0; i < length; i++) {
 //See "B.1 253-state algorithm
         int Pad_codeword_position = startPosition + i;
@@ -1038,13 +1037,15 @@ public final class MinimalEncoder {
     public byte[] getBytes() {
       return bytes;
     }
+
     /**
-     * returns the size in bytes
+     * @return the size in bytes
      */
     int getSize() {
       return bytes.length;
     }
   }
+
   private static final class Input {
 
     private static final int COST_PER_ECI = 3; //aproximated (latch to ASCII + 2 codewords)
@@ -1055,7 +1056,7 @@ public final class MinimalEncoder {
     private Input(String stringToEncode, Charset priorityCharset, int fnc1, SymbolShapeHint shape) {
       this.fnc1 = fnc1;
       this.shape = shape;
-      EncoderSet encoderSet = new EncoderSet(stringToEncode, priorityCharset, fnc1);
+      ECIEncoderSet encoderSet = new ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
       if (encoderSet.length() == 1) { //optimization for the case when all can be encoded without ECI in ISO-8859-1
         bytes = new int[stringToEncode.length()];
         for (int i = 0; i < bytes.length; i++) {
@@ -1063,8 +1064,7 @@ public final class MinimalEncoder {
           bytes[i] = c == fnc1 ? 1000 : (int) c;
         }
       } else {
-        ArrayList<Integer> debugInfoAL = new ArrayList();
-        bytes = encodeMinimally(stringToEncode, encoderSet, fnc1, debugInfoAL);
+        bytes = encodeMinimally(stringToEncode, encoderSet, fnc1);
       }
     }
 
@@ -1126,7 +1126,7 @@ public final class MinimalEncoder {
     }
 
     static void addEdges(String stringToEncode, 
-                         EncoderSet encoderSet, 
+                         ECIEncoderSet encoderSet, 
                          InputEdge[][] edges, 
                          int from, 
                          InputEdge previous, 
@@ -1149,7 +1149,7 @@ public final class MinimalEncoder {
       }
     }
 
-    static int[] encodeMinimally(String stringToEncode, EncoderSet encoderSet, int fnc1,ArrayList<Integer> debugInfo) {
+    static int[] encodeMinimally(String stringToEncode, ECIEncoderSet encoderSet, int fnc1) {
       int inputLength = stringToEncode.length();
   
       // Array that represents vertices. There is a vertex for every character and encoding.
@@ -1181,24 +1181,21 @@ public final class MinimalEncoder {
       if (minimalJ < 0) {
         throw new RuntimeException("Internal error: failed to encode \"" + stringToEncode + "\"");
       }
-      ArrayList<Integer> intsAL = new ArrayList();
+      List<Integer> intsAL = new ArrayList();
       InputEdge current = edges[inputLength][minimalJ];
       while (current != null) {
         if (current.isFNC1()) {
           intsAL.add(0, 1000);
-          debugInfo.add(0, 11);
         } else {
           byte[] bytes = encoderSet.encode(current.c,current.encoderIndex);
           int infoValue = bytes.length * 10 + bytes.length;
           for (int i = bytes.length - 1; i >= 0; i--) {
             intsAL.add(0, (int) (bytes[i] & 0xff));
-            debugInfo.add(0, infoValue--);
           }
         }
         int previousEncoderIndex = current.previous == null ? 0 : current.previous.encoderIndex;
         if (previousEncoderIndex != current.encoderIndex) {
           intsAL.add(0,256 + encoderSet.getECIValue(current.encoderIndex));
-          debugInfo.add(0, 0);
         }
         current = current.previous;
       }
@@ -1214,7 +1211,8 @@ public final class MinimalEncoder {
       private int encoderIndex; //the encoding of this edge
       private final InputEdge previous;
       private final int cachedTotalSize;
-      private InputEdge(char c, EncoderSet encoderSet, int encoderIndex, InputEdge previous, int fnc1) {
+
+      private InputEdge(char c, ECIEncoderSet encoderSet, int encoderIndex, InputEdge previous, int fnc1) {
         this.c = c == fnc1 ? 1000 : c;
         this.encoderIndex = encoderIndex;
         this.previous = previous;
@@ -1229,9 +1227,11 @@ public final class MinimalEncoder {
         }
         this.cachedTotalSize = size;
       }
+
       boolean isFNC1() {
         return c == 1000;
       }
+
       private int getFromPosition() {
         int cnt = 0;
         InputEdge current = previous;
@@ -1241,155 +1241,19 @@ public final class MinimalEncoder {
         }
         return cnt;
       }
-      private String getPreviousEncoding(EncoderSet encoderSet) {
+
+      private String getPreviousEncoding(ECIEncoderSet encoderSet) {
         return previous == null ? "ISO-8859-1" : previous.getEncoding(encoderSet);
       }
-      private String getEncoding(EncoderSet encoderSet) {
-        return encoderSet.charsetName(encoderIndex);
+
+      private String getEncoding(ECIEncoderSet encoderSet) {
+        return encoderSet.getCharsetName(encoderIndex);
       }
+
       boolean changesEncoding() {
         return previous == null && encoderIndex != 0 || previous != null && previous.encoderIndex != encoderIndex;
       }
       
-    }
-  }
-
-  private static final class EncoderSet {
-
-    // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-    private static final List<CharsetEncoder> ENCODERS = new ArrayList<>();
-    static {
-      final String[] names = { "IBM437",
-                               "ISO-8859-2",
-                               "ISO-8859-3",
-                               "ISO-8859-4",
-                               "ISO-8859-5",
-                               "ISO-8859-6",
-                               "ISO-8859-7",
-                               "ISO-8859-8",
-                               "ISO-8859-9",
-                               "ISO-8859-10",
-                               "ISO-8859-11",
-                               "ISO-8859-13",
-                               "ISO-8859-14",
-                               "ISO-8859-15",
-                               "ISO-8859-16",
-                               "windows-1250",
-                               "windows-1251",
-                               "windows-1252",
-                               "windows-1256",
-                               "Shift_JIS" };
-      for (String name : names) {
-        try {
-          ENCODERS.add(Charset.forName(name).newEncoder());
-        } catch (UnsupportedCharsetException e) {
-          // continue
-        }
-      }
-    }
-
-    private final CharsetEncoder[] encoders;
-    private final int priorityEncoderIndex;
-
-    EncoderSet(String stringToEncode, Charset priorityCharset, int fnc1) {
-      List<CharsetEncoder> neededEncoders = new ArrayList<>();
-
-      //we always need the ISO-8859-1 encoder. It is the default encoding
-      neededEncoders.add(StandardCharsets.ISO_8859_1.newEncoder());
-      boolean needUnicodeEncoder = priorityCharset != null && priorityCharset.name().startsWith("UTF");
-
-      //Walk over the input string and see if all characters can be encoded with the list of encoders 
-      for (int i = 0; i < stringToEncode.length(); i++) {
-        boolean canEncode = false;
-        for (CharsetEncoder encoder : neededEncoders) {
-          char c = stringToEncode.charAt(i);
-          if (c == fnc1 || encoder.canEncode(c)) {
-            canEncode = true;
-            break;
-          }
-        }
-
-        if (!canEncode) {
-          //for the character at position i we don't yet have an encoder in the list
-          for (CharsetEncoder encoder : ENCODERS) {
-            if (encoder.canEncode(stringToEncode.charAt(i))) {
-              //Good, we found an encoder that can encode the character. We add him to the list and continue scanning
-              //the input
-              neededEncoders.add(encoder);
-              canEncode = true;
-              break;
-            }
-          }
-        }
-
-        if (!canEncode) {
-          //The character is not encodeable by any of the single byte encoders so we remember that we will need a
-          //Unicode encoder.
-          needUnicodeEncoder = true;
-        }
-      }
-  
-      if (neededEncoders.size() == 1 && !needUnicodeEncoder) {
-        //the entire input can be encoded by the ISO-8859-1 encoder
-        encoders = new CharsetEncoder[] { neededEncoders.get(0) };
-      } else {
-        // we need more than one single byte encoder or we need a Unicode encoder.
-        // In this case we append a UTF-8 and UTF-16 encoder to the list
-        encoders = new CharsetEncoder[neededEncoders.size() + 2];
-        int index = 0;
-        for (CharsetEncoder encoder : neededEncoders) {
-          encoders[index++] = encoder;
-        }
-  
-        encoders[index] = StandardCharsets.UTF_8.newEncoder();
-        encoders[index + 1] = StandardCharsets.UTF_16BE.newEncoder();
-      }
-  
-      //Compute priorityEncoderIndex by looking up priorityCharset in encoders
-      int priorityEncoderIndexValue = -1;
-      if (priorityCharset != null) {
-        for (int i = 0; i < encoders.length; i++) {
-          if (encoders[i] != null && priorityCharset.name().equals(encoders[i].charset().name())) {
-            priorityEncoderIndexValue = i;
-            break;
-          }
-        }
-      }
-      priorityEncoderIndex = priorityEncoderIndexValue;
-      //invariants
-      assert encoders.length > 0;
-      assert encoders[0].charset().equals(StandardCharsets.ISO_8859_1);
-    }
-
-    private int length() {
-      return encoders.length;
-    }
-
-    private String charsetName(int index) {
-      assert index < length();
-      return encoders[index].charset().name();
-
-    }
-
-    private int getECIValue(int encoderIndex) {
-      return CharacterSetECI.getCharacterSetECI(encoders[encoderIndex].charset()).getValue();
-    }
-
-    private int getPriorityEncoderIndex() {
-      return priorityEncoderIndex;
-    }
-
-    private boolean canEncode(char c, int encoderIndex) {
-      assert encoderIndex < length();
-      CharsetEncoder encoder = encoders[encoderIndex];
-      return encoder.canEncode("" + c);
-    }
-
-    byte[] encode(char c, int encoderIndex) {
-      assert encoderIndex < length();
-      CharsetEncoder encoder = encoders[encoderIndex];
-      assert encoder.canEncode("" + c);
-      return ("" + c).getBytes(encoder.charset());
     }
   }
 }
