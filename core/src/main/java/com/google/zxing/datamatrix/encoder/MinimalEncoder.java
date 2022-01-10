@@ -149,7 +149,7 @@ public final class MinimalEncoder {
   /**
    * Encodes input minimally and returns an array of the codewords
    *
-   * @param stringToEncode The string to encode
+   * @param input The string to encode
    * @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
    *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
    *   charset to encode any character in the input that can be encoded by it if the charset is among the
@@ -973,10 +973,10 @@ public final class MinimalEncoder {
       ArrayList<Byte> bytesAL = new ArrayList();
       ArrayList<Integer> randomizePostfixLength = new ArrayList();
       ArrayList<Integer> randomizeLengths = new ArrayList();
-      if (solution != null && (solution.mode == Mode.C40 ||
-                               solution.mode == Mode.TEXT ||
-                               solution.mode == Mode.X12) &&
-                               solution.getEndMode() != Mode.ASCII) {
+      if ((solution.mode == Mode.C40 ||
+           solution.mode == Mode.TEXT ||
+           solution.mode == Mode.X12) &&
+           solution.getEndMode() != Mode.ASCII) {
         size += prepend(MinimalEncoder.Edge.getBytes(254),bytesAL);
       }
       Edge current = solution;

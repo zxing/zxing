@@ -89,11 +89,11 @@ public final class DataMatrixWriter implements Writer {
         Boolean.parseBoolean(hints.get(EncodeHintType.DATA_MATRIX_COMPACT).toString());
     if (hasCompactionHint) {
 
-      boolean hasGS1FormatHint = hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT) &&
+      boolean hasGS1FormatHint = hints.containsKey(EncodeHintType.GS1_FORMAT) &&
           Boolean.parseBoolean(hints.get(EncodeHintType.GS1_FORMAT).toString());
 
       Charset charset = null;
-      boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
+      boolean hasEncodingHint = hints.containsKey(EncodeHintType.CHARACTER_SET);
       if (hasEncodingHint) {
         charset = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
       }
