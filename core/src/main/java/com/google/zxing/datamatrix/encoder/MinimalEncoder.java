@@ -610,8 +610,8 @@ public final class MinimalEncoder {
     }
 
     /** Returns Mode.ASCII in case that:
-     *  - Mode is EDIFACT and characterLength is less than 4 or the remaining characters can be encoded in at most 2 ASCII
-     *  bytes.
+     *  - Mode is EDIFACT and characterLength is less than 4 or the remaining characters can be encoded in at most 2
+     *    ASCII bytes.
      *  - Mode is C40, TEXT or X12 and the remaining characters can be encoded in at most 1 ASCII byte.
      *  Returns mode in all other cases.
      * */
@@ -645,8 +645,9 @@ public final class MinimalEncoder {
       return mode;
     }
 
-    /** Peeks ahead and returns 1 if the postfix consists of exactly two digits, 2 if the postfix consists of exactly two
-     * consecutive digits and a non extended character or of 4 digits. Returns 0 in any other case
+    /** Peeks ahead and returns 1 if the postfix consists of exactly two digits, 2 if the postfix consists of exactly
+     *  two consecutive digits and a non extended character or of 4 digits. 
+     *  Returns 0 in any other case
      **/
     int getLastASCII() {
       int length = input.length();
