@@ -21,7 +21,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Tests for {@link HighLevelEncoder}.
+ * Tests for {@link HighLevelEncoder} and {@link MinimalEncoder}
  */
 public final class HighLevelEncodeTestCase extends Assert {
 
@@ -111,13 +111,17 @@ public final class HighLevelEncodeTestCase extends Assert {
     //with the 16x48 symbol (47 data codewords)
     useTestSymbols();
 
-    String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIM");
+    String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIM", false);
     assertEquals("230 91 11 91 11 91 11 91 11 91 11 91 11", visualized);
     //case "a": Unlatch is not required
+//alex: decoded=ASCII(Latch to C40),C40(AIM,AIM,AIM,AIM,AIM,AIM) size=13
+    //@Sean: Is this correct? Unlatch is required because 13 is smaller then the next size 16, no?
 
-    visualized = encodeHighLevel("AIMAIMAIMAIMAIMAI");
+    visualized = encodeHighLevel("AIMAIMAIMAIMAIMAI", false);
     assertEquals("230 91 11 91 11 91 11 91 11 91 11 90 241", visualized);
     //case "b": Add trailing shift 0 and Unlatch is not required
+//alex: decoded=ASCII(Latch to C40),C40(AIM,AIM,AIM,AIM,AIM,AI) size=13
+    //@Sean: Same here. Is this related to some bug and if yes, which?
 
     visualized = encodeHighLevel("AIMAIMAIMAIMAIMA");
     assertEquals("230 91 11 91 11 91 11 91 11 91 11 254 66", visualized);
@@ -379,9 +383,132 @@ public final class HighLevelEncodeTestCase extends Assert {
         "191 89 191 89 191 254 66 66", visualized);
 
   }
+  @Test
+  public void testSizes() {
+    int[] sizes = new int[2];
+    encodeHighLevel("A", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(1, sizes[1]);
+
+    encodeHighLevel("AB", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(2, sizes[1]);
+
+    encodeHighLevel("ABC", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(3, sizes[1]);
+
+    encodeHighLevel("ABCD", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(4, sizes[1]);
+
+    encodeHighLevel("ABCDE", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(5, sizes[1]);
+
+    encodeHighLevel("ABCDEF", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(5, sizes[1]);
+
+    encodeHighLevel("ABCDEFG", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("ABCDEFGH", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("ABCDEFGHI", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(8, sizes[1]);
+
+    encodeHighLevel("ABCDEFGHIJ", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(8, sizes[1]);
+
+    encodeHighLevel("a", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(1, sizes[1]);
+
+    encodeHighLevel("ab", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(2, sizes[1]);
+
+    encodeHighLevel("abc", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(3, sizes[1]);
+
+    encodeHighLevel("abcd", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(4, sizes[1]);
+
+    encodeHighLevel("abcdef", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(5, sizes[1]);
+
+    encodeHighLevel("abcdefg", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("abcdefgh", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(8, sizes[1]);
+
+    encodeHighLevel("+", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(1, sizes[1]);
+
+    encodeHighLevel("++", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(2, sizes[1]);
+
+    encodeHighLevel("+++", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(3, sizes[1]);
+
+    encodeHighLevel("++++", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(4, sizes[1]);
+
+    encodeHighLevel("+++++", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(5, sizes[1]);
+
+    encodeHighLevel("++++++", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(6, sizes[1]);
+
+    encodeHighLevel("+++++++", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("++++++++", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("+++++++++", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(8, sizes[1]);
+
+    encodeHighLevel("\u00F0\u00F0" +
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF", sizes);
+    assertEquals(114, sizes[0]);
+    assertEquals(62, sizes[1]);
+  }
+
+  private static void encodeHighLevel(String msg, int[] sizes) {
+    sizes[0] = HighLevelEncoder.encodeHighLevel(msg).length();
+    sizes[1] = MinimalEncoder.encodeHighLevel(msg).length();
+  }
 
   private static String encodeHighLevel(String msg) {
+    return encodeHighLevel(msg, true);
+  }
+
+  private static String encodeHighLevel(String msg, boolean compareSizeToMinimalEncoder) {
     CharSequence encoded = HighLevelEncoder.encodeHighLevel(msg);
+    CharSequence encoded2 = MinimalEncoder.encodeHighLevel(msg);
+    assert !compareSizeToMinimalEncoder || encoded2.length() <= encoded.length();
     //DecodeHighLevel.decode(encoded);
     return visualize(encoded);
   }
