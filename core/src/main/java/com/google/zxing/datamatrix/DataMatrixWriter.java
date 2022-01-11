@@ -24,11 +24,13 @@ import com.google.zxing.datamatrix.encoder.DefaultPlacement;
 import com.google.zxing.Dimension;
 import com.google.zxing.datamatrix.encoder.ErrorCorrection;
 import com.google.zxing.datamatrix.encoder.HighLevelEncoder;
+import com.google.zxing.datamatrix.encoder.MinimalEncoder;
 import com.google.zxing.datamatrix.encoder.SymbolInfo;
 import com.google.zxing.datamatrix.encoder.SymbolShapeHint;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 
 import java.util.Map;
+import java.nio.charset.Charset;
 
 /**
  * This object renders a Data Matrix code as a BitMatrix 2D array of greyscale values.
@@ -81,7 +83,26 @@ public final class DataMatrixWriter implements Writer {
 
 
     //1. step: Data encodation
-    String encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
+    String encoded;
+
+    boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.DATA_MATRIX_COMPACT) &&
+        Boolean.parseBoolean(hints.get(EncodeHintType.DATA_MATRIX_COMPACT).toString());
+    if (hasCompactionHint) {
+
+      boolean hasGS1FormatHint = hints.containsKey(EncodeHintType.GS1_FORMAT) &&
+          Boolean.parseBoolean(hints.get(EncodeHintType.GS1_FORMAT).toString());
+
+      Charset charset = null;
+      boolean hasEncodingHint = hints.containsKey(EncodeHintType.CHARACTER_SET);
+      if (hasEncodingHint) {
+        charset = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
+      }
+//@Sean: How do we encode GS1-FNC1? This will expect users to add the GS1_FORMAT hint and use the group separator for
+//encoding.
+      encoded = MinimalEncoder.encodeHighLevel(contents, charset, hasGS1FormatHint ? 0x1D : -1, shape);
+    } else {
+      encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
+    }
 
     SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.length(), shape, minSize, maxSize, true);
 
