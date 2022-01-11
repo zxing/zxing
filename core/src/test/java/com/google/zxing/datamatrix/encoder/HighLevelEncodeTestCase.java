@@ -115,14 +115,10 @@ public final class HighLevelEncodeTestCase extends Assert {
     String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIM", false);
     assertEquals("230 91 11 91 11 91 11 91 11 91 11 91 11", visualized);
     //case "a": Unlatch is not required
-//alex: decoded=ASCII(Latch to C40),C40(AIM,AIM,AIM,AIM,AIM,AIM) size=13
-    //@Sean: Is this correct? Unlatch is required because 13 is smaller then the next size 16, no?
 
     visualized = encodeHighLevel("AIMAIMAIMAIMAIMAI", false);
     assertEquals("230 91 11 91 11 91 11 91 11 91 11 90 241", visualized);
     //case "b": Add trailing shift 0 and Unlatch is not required
-//alex: decoded=ASCII(Latch to C40),C40(AIM,AIM,AIM,AIM,AIM,AI) size=13
-    //@Sean: Same here. Is this related to some bug and if yes, which?
 
     visualized = encodeHighLevel("AIMAIMAIMAIMAIMA");
     assertEquals("230 91 11 91 11 91 11 91 11 91 11 254 66", visualized);

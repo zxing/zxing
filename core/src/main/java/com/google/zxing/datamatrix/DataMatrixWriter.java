@@ -97,8 +97,6 @@ public final class DataMatrixWriter implements Writer {
       if (hasEncodingHint) {
         charset = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
       }
-//@Sean: How do we encode GS1-FNC1? This will expect users to add the GS1_FORMAT hint and use the group separator for
-//encoding.
       encoded = MinimalEncoder.encodeHighLevel(contents, charset, hasGS1FormatHint ? 0x1D : -1, shape);
     } else {
       encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);

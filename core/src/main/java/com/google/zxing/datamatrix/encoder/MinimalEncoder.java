@@ -127,19 +127,21 @@ public final class MinimalEncoder {
    *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
    *   charset to encode any character in the input that can be encoded by it if the charset is among the
    *   supported charsets.
-   * @param fnc1 fnc1 denotes the character in the input that represents the FNC1 character or -1 if this is not a GS1
+   * @param fnc1 denotes the character in the input that represents the FNC1 character or -1 if this is not a GS1
    *   bar code. If the value is not -1 then a FNC1 is also prepended.
+   * @param shape requested shape.
    * @return the encoded message (the char values range from 0 to 255)
    */
   public static String encodeHighLevel(String msg, Charset priorityCharset, int fnc1, SymbolShapeHint shape) {
+    int macroId = 0;
     if (msg.startsWith(HighLevelEncoder.MACRO_05_HEADER) && msg.endsWith(HighLevelEncoder.MACRO_TRAILER)) {
-      // TODO: Add support for Macro 5 (236)
+      macroId = 5;
       msg = msg.substring(HighLevelEncoder.MACRO_05_HEADER.length(), msg.length() - 2);
     } else if (msg.startsWith(HighLevelEncoder.MACRO_06_HEADER) && msg.endsWith(HighLevelEncoder.MACRO_TRAILER)) {
-      // TODO: Add support for Macro 6 (237)
+      macroId = 6;
       msg = msg.substring(HighLevelEncoder.MACRO_06_HEADER.length(), msg.length() - 2);
     }
-    return new String(encode(msg, priorityCharset, fnc1, shape), StandardCharsets.ISO_8859_1);
+    return new String(encode(msg, priorityCharset, fnc1, shape, macroId), StandardCharsets.ISO_8859_1);
   }
 
   /**
@@ -150,12 +152,14 @@ public final class MinimalEncoder {
    *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
    *   charset to encode any character in the input that can be encoded by it if the charset is among the
    *   supported charsets.
-   * @param fnc1 fnc1 denotes the character in the input that represents the FNC1 character or -1 if this is not a GS1
+   * @param fnc1 denotes the character in the input that represents the FNC1 character or -1 if this is not a GS1
    *   bar code. If the value is not -1 then a FNC1 is also prepended.
+   * @param shape requested shape.
+   * @param macroId Prepends the specified macro function in case that a value of 5 or 6 is specified.
    * @return An array of bytes representing the codewords of a minimal encoding.
    */
-  static byte[] encode(String input, Charset priorityCharset, int fnc1, SymbolShapeHint shape) {
-    return encodeMinimally(new Input(input, priorityCharset, fnc1, shape)).getBytes();
+  static byte[] encode(String input, Charset priorityCharset, int fnc1, SymbolShapeHint shape, int macroId) {
+    return encodeMinimally(new Input(input, priorityCharset, fnc1, shape, macroId)).getBytes();
   }
 
   static void addEdge(Edge[][] edges, Edge edge) {
@@ -1002,6 +1006,12 @@ public final class MinimalEncoder {
 
         current = current.previous;
       }
+      if (input.getMacroId() == 5) {
+        size += prepend(MinimalEncoder.Edge.getBytes(236),bytesAL);
+      } else if (input.getMacroId() == 6) {
+        size += prepend(MinimalEncoder.Edge.getBytes(237),bytesAL);
+      }
+   
       if (input.getFNC1Character() > 0) {
         size += prepend(MinimalEncoder.Edge.getBytes(232),bytesAL);
       }
@@ -1053,10 +1063,12 @@ public final class MinimalEncoder {
     private final int[] bytes;
     private final int fnc1;
     private final SymbolShapeHint shape;
+    private final int macroId;
 
-    private Input(String stringToEncode, Charset priorityCharset, int fnc1, SymbolShapeHint shape) {
+    private Input(String stringToEncode, Charset priorityCharset, int fnc1, SymbolShapeHint shape, int macroId) {
       this.fnc1 = fnc1;
       this.shape = shape;
+      this.macroId = macroId;
       ECIEncoderSet encoderSet = new ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
       if (encoderSet.length() == 1) { //optimization for the case when all can be encoded without ECI in ISO-8859-1
         bytes = new int[stringToEncode.length()];
@@ -1071,6 +1083,10 @@ public final class MinimalEncoder {
 
     private int getFNC1Character() {
       return fnc1;
+    }
+
+    private int getMacroId() {
+      return macroId;
     }
 
     private SymbolShapeHint getShapeHint() {
