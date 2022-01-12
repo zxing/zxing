@@ -19,9 +19,10 @@ package com.google.zxing.datamatrix.encoder;
 import junit.framework.ComparisonFailure;
 import org.junit.Assert;
 import org.junit.Test;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Tests for {@link HighLevelEncoder}.
+ * Tests for {@link HighLevelEncoder} and {@link MinimalEncoder}
  */
 public final class HighLevelEncodeTestCase extends Assert {
 
@@ -111,11 +112,11 @@ public final class HighLevelEncodeTestCase extends Assert {
     //with the 16x48 symbol (47 data codewords)
     useTestSymbols();
 
-    String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIM");
+    String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIM", false);
     assertEquals("230 91 11 91 11 91 11 91 11 91 11 91 11", visualized);
     //case "a": Unlatch is not required
 
-    visualized = encodeHighLevel("AIMAIMAIMAIMAIMAI");
+    visualized = encodeHighLevel("AIMAIMAIMAIMAIMAI", false);
     assertEquals("230 91 11 91 11 91 11 91 11 91 11 90 241", visualized);
     //case "b": Add trailing shift 0 and Unlatch is not required
 
@@ -379,9 +380,153 @@ public final class HighLevelEncodeTestCase extends Assert {
         "191 89 191 89 191 254 66 66", visualized);
 
   }
+  @Test
+  public void testSizes() {
+    int[] sizes = new int[2];
+    encodeHighLevel("A", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(1, sizes[1]);
+
+    encodeHighLevel("AB", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(2, sizes[1]);
+
+    encodeHighLevel("ABC", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(3, sizes[1]);
+
+    encodeHighLevel("ABCD", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(4, sizes[1]);
+
+    encodeHighLevel("ABCDE", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(5, sizes[1]);
+
+    encodeHighLevel("ABCDEF", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(5, sizes[1]);
+
+    encodeHighLevel("ABCDEFG", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("ABCDEFGH", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("ABCDEFGHI", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(8, sizes[1]);
+
+    encodeHighLevel("ABCDEFGHIJ", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(8, sizes[1]);
+
+    encodeHighLevel("a", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(1, sizes[1]);
+
+    encodeHighLevel("ab", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(2, sizes[1]);
+
+    encodeHighLevel("abc", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(3, sizes[1]);
+
+    encodeHighLevel("abcd", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(4, sizes[1]);
+
+    encodeHighLevel("abcdef", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(5, sizes[1]);
+
+    encodeHighLevel("abcdefg", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("abcdefgh", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(8, sizes[1]);
+
+    encodeHighLevel("+", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(1, sizes[1]);
+
+    encodeHighLevel("++", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(2, sizes[1]);
+
+    encodeHighLevel("+++", sizes);
+    assertEquals(3, sizes[0]);
+    assertEquals(3, sizes[1]);
+
+    encodeHighLevel("++++", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(4, sizes[1]);
+
+    encodeHighLevel("+++++", sizes);
+    assertEquals(5, sizes[0]);
+    assertEquals(5, sizes[1]);
+
+    encodeHighLevel("++++++", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(6, sizes[1]);
+
+    encodeHighLevel("+++++++", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("++++++++", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(7, sizes[1]);
+
+    encodeHighLevel("+++++++++", sizes);
+    assertEquals(8, sizes[0]);
+    assertEquals(8, sizes[1]);
+
+    encodeHighLevel("\u00F0\u00F0" +
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF", sizes);
+    assertEquals(114, sizes[0]);
+    assertEquals(62, sizes[1]);
+  }
+
+  @Test
+  public void testECIs() {
+
+    String visualized = visualize(MinimalEncoder.encodeHighLevel("that particularly stands out to me is \u0625\u0650" +
+        "\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew " +
+        "\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)"));
+    assertEquals("239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113 15 254" +
+        " 116 33 241 25 231 186 14 212 64 253 151 252 159 33 41 241 27 231 83 171 53 209 35 25 134 6 42 33 35 239 184" +
+        " 31 193 234 7 252 205 101 127 241 209 34 24 5 22 23 221 148 179 239 128 140 92 187 106 204 198 59 19 25 114" +
+        " 248 118 36 254 231 106 196 19 239 101 27 107 69 189 112 236 156 252 16 174 125 24 10 125 116 42", visualized);
+
+    visualized = visualize(MinimalEncoder.encodeHighLevel("that particularly stands out to me is \u0625\u0650" +
+        "\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew " +
+        "\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)", StandardCharsets.UTF_8, -1 , SymbolShapeHint.FORCE_NONE));
+    assertEquals("241 27 239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113" +
+        " 15 254 116 33 231 202 33 131 77 154 119 225 163 238 206 28 249 93 36 150 151 53 108 246 145 228 217 71" +
+        " 199 42 33 35 239 184 31 193 234 7 252 205 101 127 241 209 34 24 5 22 23 221 148 179 239 128 140 92 187 106" +
+        " 204 198 59 19 25 114 248 118 36 254 231 43 133 212 175 38 220 44 6 125 49 172 93 189 209 111 61 217 203 62" +
+        " 116 42", visualized);
+  }
+
+  private static void encodeHighLevel(String msg, int[] sizes) {
+    sizes[0] = HighLevelEncoder.encodeHighLevel(msg).length();
+    sizes[1] = MinimalEncoder.encodeHighLevel(msg).length();
+  }
 
   private static String encodeHighLevel(String msg) {
+    return encodeHighLevel(msg, true);
+  }
+
+  private static String encodeHighLevel(String msg, boolean compareSizeToMinimalEncoder) {
     CharSequence encoded = HighLevelEncoder.encodeHighLevel(msg);
+    CharSequence encoded2 = MinimalEncoder.encodeHighLevel(msg);
+    assert !compareSizeToMinimalEncoder || encoded2.length() <= encoded.length();
     //DecodeHighLevel.decode(encoded);
     return visualize(encoded);
   }

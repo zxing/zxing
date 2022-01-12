@@ -91,15 +91,15 @@ public final class HighLevelEncoder {
   /**
    * 05 Macro header
    */
-  private static final String MACRO_05_HEADER = "[)>\u001E05\u001D";
+  static final String MACRO_05_HEADER = "[)>\u001E05\u001D";
   /**
    * 06 Macro header
    */
-  private static final String MACRO_06_HEADER = "[)>\u001E06\u001D";
+  static final String MACRO_06_HEADER = "[)>\u001E06\u001D";
   /**
    * Macro trailer
    */
-  private static final String MACRO_TRAILER = "\u001E\u0004";
+  static final String MACRO_TRAILER = "\u001E\u0004";
 
   static final int ASCII_ENCODATION = 0;
   static final int C40_ENCODATION = 1;
@@ -406,15 +406,15 @@ public final class HighLevelEncoder {
     return ch >= 128 && ch <= 255;
   }
 
-  private static boolean isNativeC40(char ch) {
+  static boolean isNativeC40(char ch) {
     return (ch == ' ') || (ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z');
   }
 
-  private static boolean isNativeText(char ch) {
+  static boolean isNativeText(char ch) {
     return (ch == ' ') || (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z');
   }
 
-  private static boolean isNativeX12(char ch) {
+  static boolean isNativeX12(char ch) {
     return isX12TermSep(ch) || (ch == ' ') || (ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z');
   }
 
@@ -424,7 +424,7 @@ public final class HighLevelEncoder {
         || (ch == '>');
   }
 
-  private static boolean isNativeEDIFACT(char ch) {
+  static boolean isNativeEDIFACT(char ch) {
     return ch >= ' ' && ch <= '^';
   }
 
