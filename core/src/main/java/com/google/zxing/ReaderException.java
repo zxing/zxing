@@ -26,7 +26,7 @@ package com.google.zxing;
 public abstract class ReaderException extends Exception {
 
   // disable stack traces when not running inside test units
-  protected static final boolean isStackTrace =
+  protected static boolean isStackTrace =
       System.getProperty("surefire.test.class.path") != null;
   protected static final StackTraceElement[] NO_TRACE = new StackTraceElement[0];
 
@@ -42,6 +42,17 @@ public abstract class ReaderException extends Exception {
   @Override
   public final synchronized Throwable fillInStackTrace() {
     return null;
+  }
+
+  /**
+   * For testing only. Controls whether library exception classes include stack traces or not.
+   * Defaults to false, unless running in the project's unit testing harness.
+   *
+   * @param enabled if true, enables stack traces in library exception classes
+   * @since 3.5.0
+   */
+  public static void setStackTrace(boolean enabled) {
+    isStackTrace = enabled;
   }
 
 }
