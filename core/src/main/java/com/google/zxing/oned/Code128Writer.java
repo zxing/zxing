@@ -185,7 +185,8 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
             break;
           default:
             // Then handle normal characters otherwise
-            if (codeSet == CODE_CODE_A ||
+            if ((codeSet == CODE_CODE_A &&
+                 newCodeSet != CODE_SHIFT) ||
                 (codeSet == CODE_CODE_B &&
                  newCodeSet == CODE_SHIFT)) {
               patternIndex = contents.charAt(position) - ' ';
@@ -193,7 +194,8 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
                 // everything below a space character comes behind the underscore in the code patterns table
                 patternIndex += '`';
               }
-            } else if (codeSet == CODE_CODE_B ||
+            } else if ((codeSet == CODE_CODE_B &&
+                 newCodeSet != CODE_SHIFT) ||
                 (codeSet == CODE_CODE_A &&
                  newCodeSet == CODE_SHIFT)) {
               patternIndex = contents.charAt(position) - ' ';
