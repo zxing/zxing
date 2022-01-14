@@ -26,6 +26,7 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -149,9 +150,10 @@ public final class HtmlAssetTranslator {
 
     Path destFile = targetHtmlDir.resolve(sourceFile.getFileName());
 
-    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     Document document;
     try {
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       DocumentBuilder builder = factory.newDocumentBuilder();
       document = builder.parse(sourceFile.toFile());
     } catch (ParserConfigurationException pce) {
