@@ -163,12 +163,6 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
 
       //Get the pattern index
       int patternIndex;
-//@Sean: When validating the lines below and looking for regression risks, the validation can be reduced to
-//       the question "Is the behavior of the code identical to what it was before the change, if 
-//       newCodeSet != CODE_SHIFT".
-//       It can be reduced to that question because FastSelector.chooseCode() never returns 
-//       CODE_SHIFT as it was introduced in this PR.
-//       Looking at it that way, I only replaced a switch-case by a "if".
       if (newCodeSet == codeSet || newCodeSet == CODE_SHIFT) {
         // Encode the current character
         // First handle escapes
@@ -374,8 +368,8 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
    * Encodes minimally using Divide-And-Conquer with Memoization
    **/
   private static class MinimalSelector implements Selector {
-    enum Charset { A, B, C, NONE };
-    enum Latch { A, B, C, SHIFT, NONE };
+    private enum Charset { A, B, C, NONE };
+    private enum Latch { A, B, C, SHIFT, NONE };
 
     static final String A = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002" +
                             "\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011" +
@@ -421,7 +415,10 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
               break;
           }
           if (charset == Charset.C && value.charAt(i) != ESCAPE_FNC_1) {
-            solution[++i] = CODE_CODE_C;
+            assert i + 1 < solution.length; //the algorithm never leads to a single trailing digit in character set C
+            if (i + 1 < solution.length) { //Prevent false positive "array out of bounds" from LGTM
+              solution[++i] = CODE_CODE_C;
+            }
           }
         }
         memoizedCost = null;
