@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Arrays;
 
 /**
  * This object renders a CODE128 code as a {@link BitMatrix}.
@@ -39,6 +40,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   private static final int CODE_CODE_B = 100;
   private static final int CODE_CODE_C = 99;
   private static final int CODE_STOP = 106;
+  private static final int CODE_SHIFT = 98;
 
   // Dummy characters used to specify control characters in input
   private static final char ESCAPE_FNC_1 = '\u00f1';
@@ -146,18 +148,28 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     int codeSet = 0; // selected code (CODE_CODE_B or CODE_CODE_C)
     int position = 0; // position in contents
 
+    boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.CODE128_COMPACT) &&
+        Boolean.parseBoolean(hints.get(EncodeHintType.CODE128_COMPACT).toString());
+
+    Selector selector = hasCompactionHint ? new MinimalSelector() : new FastSelector();
     while (position < length) {
       //Select code to use
       int newCodeSet;
       if (forcedCodeSet == -1) {
-        newCodeSet = chooseCode(contents, position, codeSet);
+        newCodeSet = selector.chooseCode(contents, position, codeSet);
       } else {
         newCodeSet = forcedCodeSet;
       }
 
       //Get the pattern index
       int patternIndex;
-      if (newCodeSet == codeSet) {
+//@Sean: When validating the lines below and looking for regression risks, the validation can be reduced to
+//       the question "Is the behavior of the code identical to what it was before the change, if 
+//       newCodeSet != CODE_SHIFT".
+//       It can be reduced to that question because FastSelector.chooseCode() never returns 
+//       CODE_SHIFT as it was introduced in this PR.
+//       Looking at it that way, I only replaced a switch-case by a "if".
+      if (newCodeSet == codeSet || newCodeSet == CODE_SHIFT) {
         // Encode the current character
         // First handle escapes
         switch (contents.charAt(position)) {
@@ -179,26 +191,26 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
             break;
           default:
             // Then handle normal characters otherwise
-            switch (codeSet) {
-              case CODE_CODE_A:
-                patternIndex = contents.charAt(position) - ' ';
-                if (patternIndex < 0) {
-                  // everything below a space character comes behind the underscore in the code patterns table
-                  patternIndex += '`';
-                }
-                break;
-              case CODE_CODE_B:
-                patternIndex = contents.charAt(position) - ' ';
-                break;
-              default:
-                // CODE_CODE_C
-                if (position + 1 == length) {
-                  // this is the last character, but the encoding is C, which always encodes two characers
-                  throw new IllegalArgumentException("Bad number of characters for digit only encoding.");
-                }
-                patternIndex = Integer.parseInt(contents.substring(position, position + 2));
-                position++; // Also incremented below
-                break;
+            if (codeSet == CODE_CODE_A ||
+                (codeSet == CODE_CODE_B &&
+                 newCodeSet == CODE_SHIFT)) {
+              patternIndex = contents.charAt(position) - ' ';
+              if (patternIndex < 0) {
+                // everything below a space character comes behind the underscore in the code patterns table
+                patternIndex += '`';
+              }
+            } else if (codeSet == CODE_CODE_B ||
+                (codeSet == CODE_CODE_A &&
+                 newCodeSet == CODE_SHIFT)) {
+              patternIndex = contents.charAt(position) - ' ';
+            } else {
+              // CODE_CODE_C
+              if (position + 1 == length) {
+                // this is the last character, but the encoding is C, which always encodes two characers
+                throw new IllegalArgumentException("Bad number of characters for digit only encoding.");
+              }
+              patternIndex = Integer.parseInt(contents.substring(position, position + 2));
+              position++; // Also incremented below
             }
         }
         position++;
@@ -225,6 +237,14 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
         codeSet = newCodeSet;
       }
 
+      if (newCodeSet == CODE_SHIFT) {
+        patterns.add(Code128Reader.CODE_PATTERNS[CODE_SHIFT]);
+        // Compute checksum
+        checkSum += CODE_SHIFT * checkWeight;
+        if (position != 0) {
+          checkWeight++;
+        }
+      }
       // Get the pattern
       patterns.add(Code128Reader.CODE_PATTERNS[patternIndex]);
 
@@ -282,66 +302,239 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     return CType.TWO_DIGITS;
   }
 
-  private static int chooseCode(CharSequence value, int start, int oldCode) {
-    CType lookahead = findCType(value, start);
-    if (lookahead == CType.ONE_DIGIT) {
-      if (oldCode == CODE_CODE_A) {
+  interface Selector {
+    int chooseCode(CharSequence value, int start, int oldCode);
+  }
+
+  private static class FastSelector implements Selector {
+    public int chooseCode(CharSequence value, int start, int oldCode) {
+      CType lookahead = findCType(value, start);
+      if (lookahead == CType.ONE_DIGIT) {
+        if (oldCode == CODE_CODE_A) {
+          return CODE_CODE_A;
+        }
+        return CODE_CODE_B;
+      }
+      if (lookahead == CType.UNCODABLE) {
+        if (start < value.length()) {
+          char c = value.charAt(start);
+          if (c < ' ' || (oldCode == CODE_CODE_A && (c < '`' || (c >= ESCAPE_FNC_1 && c <= ESCAPE_FNC_4)))) {
+            // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
+            return CODE_CODE_A;
+          }
+        }
+        return CODE_CODE_B; // no choice
+      }
+      if (oldCode == CODE_CODE_A && lookahead == CType.FNC_1) {
         return CODE_CODE_A;
+      }
+      if (oldCode == CODE_CODE_C) { // can continue in code C
+        return CODE_CODE_C;
+      }
+      if (oldCode == CODE_CODE_B) {
+        if (lookahead == CType.FNC_1) {
+          return CODE_CODE_B; // can continue in code B
+        }
+        // Seen two consecutive digits, see what follows
+        lookahead = findCType(value, start + 2);
+        if (lookahead == CType.UNCODABLE || lookahead == CType.ONE_DIGIT) {
+          return CODE_CODE_B; // not worth switching now
+        }
+        if (lookahead == CType.FNC_1) { // two digits, then FNC_1...
+          lookahead = findCType(value, start + 3);
+          if (lookahead == CType.TWO_DIGITS) { // then two more digits, switch
+            return CODE_CODE_C;
+          } else {
+            return CODE_CODE_B; // otherwise not worth switching
+          }
+        }
+        // At this point, there are at least 4 consecutive digits.
+        // Look ahead to choose whether to switch now or on the next round.
+        int index = start + 4;
+        while ((lookahead = findCType(value, index)) == CType.TWO_DIGITS) {
+          index += 2;
+        }
+        if (lookahead == CType.ONE_DIGIT) { // odd number of digits, switch later
+          return CODE_CODE_B;
+        }
+        return CODE_CODE_C; // even number of digits, switch now
+      }
+      // Here oldCode == 0, which means we are choosing the initial code
+      if (lookahead == CType.FNC_1) { // ignore FNC_1
+        lookahead = findCType(value, start + 1);
+      }
+      if (lookahead == CType.TWO_DIGITS) { // at least two digits, start in code C
+        return CODE_CODE_C;
       }
       return CODE_CODE_B;
     }
-    if (lookahead == CType.UNCODABLE) {
-      if (start < value.length()) {
-        char c = value.charAt(start);
-        if (c < ' ' || (oldCode == CODE_CODE_A && (c < '`' || (c >= ESCAPE_FNC_1 && c <= ESCAPE_FNC_4)))) {
-          // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
-          return CODE_CODE_A;
-        }
-      }
-      return CODE_CODE_B; // no choice
-    }
-    if (oldCode == CODE_CODE_A && lookahead == CType.FNC_1) {
-      return CODE_CODE_A;
-    }
-    if (oldCode == CODE_CODE_C) { // can continue in code C
-      return CODE_CODE_C;
-    }
-    if (oldCode == CODE_CODE_B) {
-      if (lookahead == CType.FNC_1) {
-        return CODE_CODE_B; // can continue in code B
-      }
-      // Seen two consecutive digits, see what follows
-      lookahead = findCType(value, start + 2);
-      if (lookahead == CType.UNCODABLE || lookahead == CType.ONE_DIGIT) {
-        return CODE_CODE_B; // not worth switching now
-      }
-      if (lookahead == CType.FNC_1) { // two digits, then FNC_1...
-        lookahead = findCType(value, start + 3);
-        if (lookahead == CType.TWO_DIGITS) { // then two more digits, switch
-          return CODE_CODE_C;
-        } else {
-          return CODE_CODE_B; // otherwise not worth switching
-        }
-      }
-      // At this point, there are at least 4 consecutive digits.
-      // Look ahead to choose whether to switch now or on the next round.
-      int index = start + 4;
-      while ((lookahead = findCType(value, index)) == CType.TWO_DIGITS) {
-        index += 2;
-      }
-      if (lookahead == CType.ONE_DIGIT) { // odd number of digits, switch later
-        return CODE_CODE_B;
-      }
-      return CODE_CODE_C; // even number of digits, switch now
-    }
-    // Here oldCode == 0, which means we are choosing the initial code
-    if (lookahead == CType.FNC_1) { // ignore FNC_1
-      lookahead = findCType(value, start + 1);
-    }
-    if (lookahead == CType.TWO_DIGITS) { // at least two digits, start in code C
-      return CODE_CODE_C;
-    }
-    return CODE_CODE_B;
   }
 
+  /** 
+   * Encodes minimally using Divide-And-Conquer with Memoization
+   **/
+  private static class MinimalSelector implements Selector {
+    enum Charset { A, B, C, NONE };
+    enum Latch { A, B, C, SHIFT, NONE };
+
+    static final String A = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002" +
+                            "\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011" +
+                            "\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F" +
+                            "\u00FF";
+    static final String B = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqr" +
+                            "stuvwxyz{|}~\u007F\u00FF";
+
+    private int[][] memoizedCost;
+    private Latch[][] minPath;
+    private int[] solution;
+
+    public int chooseCode(CharSequence value, int start, int oldCode) {
+      if (solution == null) {
+        encode(value);
+        solution = new int[value.length()];
+        Charset charset = Charset.NONE;
+        for (int i = 0; i < solution.length; i++) {
+          Latch latch = minPath[charset.ordinal()][i];
+          switch (latch) {
+            case A:
+              charset = Charset.A;
+              solution[i] = CODE_CODE_A;
+              break;
+            case B:
+              charset = Charset.B;
+              solution[i] = CODE_CODE_B;
+              break;
+            case C:
+              charset = Charset.C;
+              solution[i] = CODE_CODE_C;
+              break;
+            case SHIFT:
+              solution[i] = CODE_SHIFT;
+              break;
+            case NONE:
+              for (int j = i - 1; j >= 0; j--) {
+                if (solution[j] != CODE_SHIFT) {
+                  solution[i] = solution[j];
+                  break;
+                }
+              }
+              break;
+          }
+          if (charset == Charset.C && value.charAt(i) != ESCAPE_FNC_1) {
+            solution[++i] = CODE_CODE_C;
+          }
+        }
+        memoizedCost = null;
+        minPath = null;
+      }
+      return solution[start];
+    }
+
+    private void encode(CharSequence contents) {
+      //this.contents = contents;
+      if (memoizedCost == null) {
+        memoizedCost = new int[4][contents.length()];
+        minPath = new Latch[4][contents.length()];
+      } else {
+        for (int i = 0; i < 4; i++) {
+          Arrays.fill(memoizedCost[i], 0);
+          Arrays.fill(minPath[i], null);
+        }
+      }
+      encode(contents, Charset.NONE, 0);
+    }
+
+    private static boolean isDigit(char c) {
+      return c >= '0' && c <= '9';
+    }
+
+    private boolean canEncode(CharSequence contents, Charset charset,int position) {
+      char c = contents.charAt(position);
+      switch (charset) {
+        case A: return c == ESCAPE_FNC_1 ||
+                       c == ESCAPE_FNC_2 ||
+                       c == ESCAPE_FNC_3 ||
+                       c == ESCAPE_FNC_4 ||
+                       A.indexOf(c) >= 0;
+        case B: return c == ESCAPE_FNC_1 ||
+                       c == ESCAPE_FNC_2 ||
+                       c == ESCAPE_FNC_3 ||
+                       c == ESCAPE_FNC_4 ||
+                       B.indexOf(c) >= 0;
+        case C: return c == ESCAPE_FNC_1 ||
+                       (position + 1 < contents.length() &&
+                        isDigit(c) &&
+                        isDigit(contents.charAt(position + 1)));
+        default: return false;
+      }
+    }
+
+    /**
+     * Encode the string starting at position position starting with the character set charset
+     **/
+    private int encode(CharSequence contents, Charset charset, int position) {
+      assert position < contents.length();
+      int mCost = memoizedCost[charset.ordinal()][position];
+      if (mCost > 0) {
+        return mCost;
+      }
+        
+      int minCost = Integer.MAX_VALUE;
+      Latch minLatch = Latch.NONE;
+      boolean atEnd = position + 1 >= contents.length();
+      
+      final Charset[] sets = new Charset[] { Charset.A,Charset.B };
+      for (int i = 0; i <= 1; i++) {
+        if (canEncode(contents, sets[i], position)) {
+          int cost =  1;
+          Latch latch = Latch.NONE;
+          if (charset != sets[i]) {
+            cost++;
+            latch = Latch.valueOf(sets[i].toString());
+          }
+          if (!atEnd) {
+            cost += encode(contents, sets[i], position + 1);
+          }
+          if (cost < minCost) {
+            minCost = cost;
+            minLatch = latch;
+          }
+          cost = 1;
+          if (charset == sets[(i + 1) % 2]) {
+            cost++;
+            latch = Latch.SHIFT;
+            if (!atEnd) {
+              cost += encode(contents, charset, position + 1);
+            }
+            if (cost < minCost) {
+              minCost = cost;
+              minLatch = latch;
+            }
+          }
+        }
+      }
+      if (canEncode(contents, Charset.C, position)) {
+        int cost = 1;
+        Latch latch = Latch.NONE;
+        if (charset != Charset.C) {
+          cost++;
+          latch = Latch.C;
+        }
+        int advance = contents.charAt(position) == ESCAPE_FNC_1 ? 1 : 2;
+        if (position + advance < contents.length()) {
+          cost += encode(contents, Charset.C, position + advance);
+        }
+        if (cost < minCost) {
+          minCost = cost;
+          minLatch = latch;
+        }
+      }
+      if (minCost == Integer.MAX_VALUE) {
+        throw new IllegalArgumentException("Bad character in input: ASCII value=" + (int) contents.charAt(position));
+      }
+      memoizedCost[charset.ordinal()][position] = minCost;
+      minPath[charset.ordinal()][position] = minLatch;
+      return minCost;
+    }
+  }
 }
