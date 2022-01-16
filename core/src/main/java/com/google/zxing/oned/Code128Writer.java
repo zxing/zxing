@@ -81,7 +81,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     return hasCompactionHint ? new MinimalEncoder().encode(contents) : encodeFast(contents, hints, forcedCodeSet);
   }
 
-  protected static int check(String contents, Map<EncodeHintType,?> hints) {
+  private static int check(String contents, Map<EncodeHintType,?> hints) {
     int length = contents.length();
     // Check length
     if (length < 1 || length > 80) {
@@ -152,7 +152,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     return forcedCodeSet;
   }
 
-  protected static boolean[] encodeFast(String contents, Map<EncodeHintType,?> hints, int forcedCodeSet) {
+  private static boolean[] encodeFast(String contents, Map<EncodeHintType,?> hints, int forcedCodeSet) {
     int length = contents.length();
 
     Collection<int[]> patterns = new ArrayList<>(); // temporary storage for patterns
