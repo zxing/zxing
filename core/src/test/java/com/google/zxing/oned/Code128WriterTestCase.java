@@ -25,7 +25,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.Writer;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 
@@ -61,42 +60,57 @@ public class Code128WriterTestCase extends Assert {
   }
 
   @Test
-  public void testEncodeWithFunc3() throws WriterException {
+  public void testEncodeWithFunc3() throws Exception {
     String toEncode = "\u00f3" + "123";
     String expected = QUIET_SPACE + START_CODE_B + FNC3 +
         // "1"            "2"             "3"            check digit 51
         "10011100110" + "11001110010" + "11001011100" + "11101000110" + STOP + QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, "123");
 
     String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, "123");
+
+    assertEquals(width, result.getWidth());
   }
 
   @Test
-  public void testEncodeWithFunc2() throws WriterException {
+  public void testEncodeWithFunc2() throws Exception {
     String toEncode = "\u00f2" + "123";
     String expected = QUIET_SPACE + START_CODE_B + FNC2 +
         // "1"            "2"             "3"             check digit 56
         "10011100110" + "11001110010" + "11001011100" + "11100010110" + STOP + QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, "123");
 
     String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, "123");
+
+    assertEquals(width, result.getWidth());
   }
 
   @Test
-  public void testEncodeWithFunc1() throws WriterException {
+  public void testEncodeWithFunc1() throws Exception {
     String toEncode = "\u00f1" + "123";
     String expected = QUIET_SPACE + START_CODE_C + FNC1 +
         // "12"                           "3"            check digit 92
         "10110011100" + SWITCH_CODE_B + "11001011100" + "10101111000" + STOP + QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, "123");
 
     String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, "123");
+
+    assertEquals(width, result.getWidth());
   }
 
   @Test
@@ -104,24 +118,88 @@ public class Code128WriterTestCase extends Assert {
     String toEncode = "\u00f1" + "10958" + "\u00f1" + "17160526";
     String expected = "1095817160526";
 
-    BitMatrix encResult = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
-    BitArray row = encResult.getRow(0, null);
-    Result rtResult = reader.decodeRow(0, row, null);
-    String actual = rtResult.getText();
-    assertEquals(expected, actual);
+    BitMatrix encResult = encode(toEncode, false, expected);
+
+    int width = encResult.getWidth();
+    encResult = encode(toEncode, true, expected);
+    //Compact encoding has one latch less and encodes as STARTA,FNC1,1,CODEC,09,58,FNC1,17,16,05,26
+    assertEquals(width, encResult.getWidth() + 11);
   }
 
   @Test
-  public void testEncodeWithFunc4() throws WriterException {
+  public void testLongCompact() throws Exception {
+    //test longest possible input
+    String toEncode = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    BitMatrix result = encode(toEncode, true, toEncode);
+  }
+
+  @Test
+  public void testShift() throws Exception {
+    //compare fast to compact
+    String toEncode = "a\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\n";
+    BitMatrix result = encode(toEncode, false, toEncode);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, toEncode);
+
+    //big difference since the fast algoritm doesn't make use of SHIFT
+    assertEquals(width, result.getWidth() + 253);
+  }
+
+  @Test
+  public void testDigitMixCompaction() throws Exception {
+    //compare fast to compact
+    String toEncode = "A1A12A123A1234A12345AA1AA12AA123AA1234AA1235";
+    BitMatrix result = encode(toEncode, false, toEncode);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, toEncode);
+
+    //very good, no difference
+    assertEquals(width, result.getWidth());
+  }
+
+  @Test
+  public void testCompaction1() throws Exception {
+    //compare fast to compact
+    String toEncode = "AAAAAAAAAAA12AAAAAAAAA";
+    BitMatrix result = encode(toEncode, false, toEncode);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, toEncode);
+
+    //very good, no difference
+    assertEquals(width, result.getWidth());
+  }
+
+  @Test
+  public void testCompaction2() throws Exception {
+    //compare fast to compact
+    String toEncode = "AAAAAAAAAAA1212aaaaaaaaa";
+    BitMatrix result = encode(toEncode, false, toEncode);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, toEncode);
+
+    //very good, no difference
+    assertEquals(width, result.getWidth());
+  }
+
+  @Test
+  public void testEncodeWithFunc4() throws Exception {
     String toEncode = "\u00f4" + "123";
     String expected = QUIET_SPACE + START_CODE_B + FNC4B +
         // "1"            "2"             "3"            check digit 59
         "10011100110" + "11001110010" + "11001011100" + "11100011010" + STOP + QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, null);
 
     String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, null);
+    assertEquals(width, result.getWidth());
   }
 
   @Test
@@ -131,11 +209,15 @@ public class Code128WriterTestCase extends Assert {
     String expected = QUIET_SPACE + START_CODE_A + LF + FNC1 + FNC4A +
         "10011100110" + LF + "10101111000" + STOP + QUIET_SPACE;
 
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+    BitMatrix result = encode(toEncode, false, null);
 
     String actual = BitMatrixTestCase.matrixToString(result);
 
     assertEquals(expected, actual);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, null);
+    assertEquals(width, result.getWidth());
   }
 
   @Test
@@ -148,6 +230,7 @@ public class Code128WriterTestCase extends Assert {
         SWITCH_CODE_A + "10100111100" + "11001110100" + STOP + QUIET_SPACE);
 
     // start with B switch to A and back to B
+    // the compact encoder encodes this shorter as STARTB,a,b,SHIFT,NUL,a,b
     testEncode("ab\0ab", QUIET_SPACE + START_CODE_B +
         //  "a"             "b"            Switch to A     "\0"           Switch to B
         "10010110000" + "10010000110" + SWITCH_CODE_A + "10100001100" + SWITCH_CODE_B +
@@ -156,15 +239,15 @@ public class Code128WriterTestCase extends Assert {
   }
 
   private void testEncode(String toEncode, String expected) throws Exception {
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
-
+    BitMatrix result = encode(toEncode, false, toEncode);
     String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(toEncode, expected, actual);
 
-    BitArray row = result.getRow(0, null);
-    Result rtResult = reader.decodeRow(0, row, null);
-    String actualRoundtripResultText = rtResult.getText();
-    assertEquals(toEncode, actualRoundtripResultText);
+
+    int width = result.getWidth();
+    result = encode(toEncode, true, toEncode);
+    assert result.getWidth() <= width;
+
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -247,5 +330,30 @@ public class Code128WriterTestCase extends Assert {
 
     String actual = BitMatrixTestCase.matrixToString(result);
     assertEquals(expected, actual);
+  }
+
+  private BitMatrix encode(String toEncode, boolean compact, String expectedLoopback) throws Exception {
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    if (compact) {
+      hints.put(EncodeHintType.CODE128_COMPACT, Boolean.TRUE);
+    }
+    BitMatrix encResult = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+    if (expectedLoopback != null) {
+      BitArray row = encResult.getRow(0, null);
+      Result rtResult = reader.decodeRow(0, row, null);
+      String actual = rtResult.getText();
+      assertEquals(expectedLoopback, actual);
+    }
+    if (compact) {
+      //check that what is encoded compactly yields the same on loopback as what was encoded fast.
+      BitArray row = encResult.getRow(0, null);
+      Result rtResult = reader.decodeRow(0, row, null);
+      String actual = rtResult.getText();
+      BitMatrix encResultFast = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+      row = encResultFast.getRow(0, null);
+      rtResult = reader.decodeRow(0, row, null);
+      assertEquals(rtResult.getText(), actual);
+    }
+    return encResult;
   }
 }

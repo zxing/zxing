@@ -145,4 +145,12 @@ public enum EncodeHintType {
    * Valid values are "A", "B", "C".
    */
   FORCE_CODE_SET,
+
+  /**
+   * Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false"
+   * This can yield slightly smaller bar codes. This option and {@link #FORCE_CODE_SET} are mutually
+   * exclusive options.
+   */
+  CODE128_COMPACT,
+
 }

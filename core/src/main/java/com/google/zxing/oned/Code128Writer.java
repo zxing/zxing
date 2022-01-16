@@ -72,6 +72,16 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
 
   @Override
   protected boolean[] encode(String contents, Map<EncodeHintType,?> hints) {
+
+    int forcedCodeSet = check(contents, hints);
+
+    boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.CODE128_COMPACT) &&
+        Boolean.parseBoolean(hints.get(EncodeHintType.CODE128_COMPACT).toString());
+
+    return hasCompactionHint ? new MinimalEncoder().encode(contents) : encodeFast(contents, hints, forcedCodeSet);
+  }
+
+  protected static int check(String contents, Map<EncodeHintType,?> hints) {
     int length = contents.length();
     // Check length
     if (length < 1 || length > 80) {
@@ -139,6 +149,11 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
           break;
       }
     }
+    return forcedCodeSet;
+  }
+
+  protected static boolean[] encodeFast(String contents, Map<EncodeHintType,?> hints, int forcedCodeSet) {
+    int length = contents.length();
 
     Collection<int[]> patterns = new ArrayList<>(); // temporary storage for patterns
     int checkSum = 0;
@@ -234,7 +249,10 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
         checkWeight++;
       }
     }
+    return produceResult(patterns, checkSum);
+  }
 
+  static boolean[] produceResult(Collection<int[]> patterns, int checkSum) {
     // Compute and append checksum
     checkSum %= 103;
     patterns.add(Code128Reader.CODE_PATTERNS[checkSum]);
@@ -344,4 +362,205 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     return CODE_CODE_B;
   }
 
+  /** 
+   * Encodes minimally using Divide-And-Conquer with Memoization
+   **/
+  private static class MinimalEncoder {
+    private enum Charset { A, B, C, NONE };
+    private enum Latch { A, B, C, SHIFT, NONE };
+
+    static final String A = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002" +
+                            "\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011" +
+                            "\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F" +
+                            "\u00FF";
+    static final String B = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqr" +
+                            "stuvwxyz{|}~\u007F\u00FF";
+
+    private static final int CODE_SHIFT = 98;
+
+    private int[][] memoizedCost;
+    private Latch[][] minPath;
+
+    private boolean[] encode(String contents) {
+      memoizedCost = new int[4][contents.length()];
+      minPath = new Latch[4][contents.length()];
+
+      encode(contents, Charset.NONE, 0);
+
+      Collection<int[]> patterns = new ArrayList<>();
+      int[] checkSum = new int[] {0};
+      int[] checkWeight = new int[] {1};
+      int length = contents.length();
+      Charset charset = Charset.NONE;
+      for (int i = 0; i < length; i++) {
+        Latch latch = minPath[charset.ordinal()][i];
+        switch (latch) {
+          case A:
+            charset = Charset.A;
+            addPattern(patterns, i == 0 ? CODE_START_A : CODE_CODE_A, checkSum, checkWeight, i);
+            break;
+          case B:
+            charset = Charset.B;
+            addPattern(patterns, i == 0 ? CODE_START_B : CODE_CODE_B, checkSum, checkWeight, i);
+            break;
+          case C:
+            charset = Charset.C;
+            addPattern(patterns, i == 0 ? CODE_START_C : CODE_CODE_C, checkSum, checkWeight, i);
+            break;
+          case SHIFT:
+            addPattern(patterns, CODE_SHIFT, checkSum, checkWeight, i);
+            break;
+        }
+        if (charset == Charset.C) {
+          if (contents.charAt(i) == ESCAPE_FNC_1) {
+            addPattern(patterns, CODE_FNC_1, checkSum, checkWeight, i);
+          } else {
+            addPattern(patterns, Integer.parseInt(contents.substring(i, i + 2)), checkSum, checkWeight, i);
+            assert i + 1 < length; //the algorithm never leads to a single trailing digit in character set C
+            if (i + 1 < length) {
+              i++;
+            }
+          }
+        } else { // charset A or B
+          int patternIndex;
+          switch (contents.charAt(i)) {
+            case ESCAPE_FNC_1:
+              patternIndex = CODE_FNC_1;
+              break;
+            case ESCAPE_FNC_2:
+              patternIndex = CODE_FNC_2;
+              break;
+            case ESCAPE_FNC_3:
+              patternIndex = CODE_FNC_3;
+              break;
+            case ESCAPE_FNC_4:
+              if ((charset == Charset.A && latch != Latch.SHIFT) ||
+                  (charset == Charset.B && latch == Latch.SHIFT)) {
+                patternIndex = CODE_FNC_4_A;
+              } else {
+                patternIndex = CODE_FNC_4_B;
+              }
+              break;
+            default:
+              patternIndex = contents.charAt(i) - ' ';
+          }
+          if ((charset == Charset.A && latch != Latch.SHIFT) ||
+              (charset == Charset.B && latch == Latch.SHIFT)) {
+            if (patternIndex < 0) {
+              patternIndex += '`';
+            }
+          }
+          addPattern(patterns, patternIndex, checkSum, checkWeight, i);
+        }
+      }
+      memoizedCost = null;
+      minPath = null;
+      return produceResult(patterns, checkSum[0]);
+    }
+
+    private static void addPattern(Collection<int[]> patterns,
+                                  int patternIndex,
+                                  int[] checkSum,
+                                  int[] checkWeight,
+                                  int position) {
+      patterns.add(Code128Reader.CODE_PATTERNS[patternIndex]);
+      if (position != 0) {
+        checkWeight[0]++;
+      }
+      checkSum[0] += patternIndex * checkWeight[0];
+    }
+
+    private static boolean isDigit(char c) {
+      return c >= '0' && c <= '9';
+    }
+
+    private boolean canEncode(CharSequence contents, Charset charset,int position) {
+      char c = contents.charAt(position);
+      switch (charset) {
+        case A: return c == ESCAPE_FNC_1 ||
+                       c == ESCAPE_FNC_2 ||
+                       c == ESCAPE_FNC_3 ||
+                       c == ESCAPE_FNC_4 ||
+                       A.indexOf(c) >= 0;
+        case B: return c == ESCAPE_FNC_1 ||
+                       c == ESCAPE_FNC_2 ||
+                       c == ESCAPE_FNC_3 ||
+                       c == ESCAPE_FNC_4 ||
+                       B.indexOf(c) >= 0;
+        case C: return c == ESCAPE_FNC_1 ||
+                       (position + 1 < contents.length() &&
+                        isDigit(c) &&
+                        isDigit(contents.charAt(position + 1)));
+        default: return false;
+      }
+    }
+
+    /**
+     * Encode the string starting at position position starting with the character set charset
+     **/
+    private int encode(CharSequence contents, Charset charset, int position) {
+      assert position < contents.length();
+      int mCost = memoizedCost[charset.ordinal()][position];
+      if (mCost > 0) {
+        return mCost;
+      }
+        
+      int minCost = Integer.MAX_VALUE;
+      Latch minLatch = Latch.NONE;
+      boolean atEnd = position + 1 >= contents.length();
+      
+      final Charset[] sets = new Charset[] { Charset.A,Charset.B };
+      for (int i = 0; i <= 1; i++) {
+        if (canEncode(contents, sets[i], position)) {
+          int cost =  1;
+          Latch latch = Latch.NONE;
+          if (charset != sets[i]) {
+            cost++;
+            latch = Latch.valueOf(sets[i].toString());
+          }
+          if (!atEnd) {
+            cost += encode(contents, sets[i], position + 1);
+          }
+          if (cost < minCost) {
+            minCost = cost;
+            minLatch = latch;
+          }
+          cost = 1;
+          if (charset == sets[(i + 1) % 2]) {
+            cost++;
+            latch = Latch.SHIFT;
+            if (!atEnd) {
+              cost += encode(contents, charset, position + 1);
+            }
+            if (cost < minCost) {
+              minCost = cost;
+              minLatch = latch;
+            }
+          }
+        }
+      }
+      if (canEncode(contents, Charset.C, position)) {
+        int cost = 1;
+        Latch latch = Latch.NONE;
+        if (charset != Charset.C) {
+          cost++;
+          latch = Latch.C;
+        }
+        int advance = contents.charAt(position) == ESCAPE_FNC_1 ? 1 : 2;
+        if (position + advance < contents.length()) {
+          cost += encode(contents, Charset.C, position + advance);
+        }
+        if (cost < minCost) {
+          minCost = cost;
+          minLatch = latch;
+        }
+      }
+      if (minCost == Integer.MAX_VALUE) {
+        throw new IllegalArgumentException("Bad character in input: ASCII value=" + (int) contents.charAt(position));
+      }
+      memoizedCost[charset.ordinal()][position] = minCost;
+      minPath[charset.ordinal()][position] = minLatch;
+      return minCost;
+    }
+  }
 }
