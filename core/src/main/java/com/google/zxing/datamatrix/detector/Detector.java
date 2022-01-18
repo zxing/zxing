@@ -301,7 +301,7 @@ public final class Detector {
   }
 
   private boolean isValid(ResultPoint p) {
-    return p.getX() >= 0 && p.getX() < image.getWidth() && p.getY() > 0 && p.getY() < image.getHeight();
+    return p.getX() >= 0 && p.getX() <= image.getWidth() - 1 && p.getY() > 0 && p.getY() <= image.getHeight() - 1;
   }
 
   private static BitMatrix sampleGrid(BitMatrix image,
