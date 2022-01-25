@@ -149,13 +149,13 @@ public enum EncodeHintType {
   FORCE_CODE_SET,
 
   /**
-   * Forces C40 encoding for data-matrix. This option and {@link #DATA_MATRIX_COMPACT} are mutually
-   * exclusive.
+   * Forces C40 encoding for data-matrix (type {@link Boolean}, or "true" or "false"). This option and 
+   * {@link #DATA_MATRIX_COMPACT} are mutually exclusive.
    */
   FORCE_C40,
 
   /**
-   * Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false"
+   * Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false")
    * This can yield slightly smaller bar codes. This option and {@link #FORCE_CODE_SET} are mutually
    * exclusive.
    */
