@@ -137,6 +137,23 @@ public final class HighLevelEncoder {
    *                {@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.
    * @param minSize the minimum symbol size constraint or null for no constraint
    * @param maxSize the maximum symbol size constraint or null for no constraint
+   * @return the encoded message (the char values range from 0 to 255)
+   */
+  public static String encodeHighLevel(String msg,
+                                       SymbolShapeHint shape,
+                                       Dimension minSize,
+                                       Dimension maxSize) {
+    return encodeHighLevel(msg, shape, minSize, maxSize, false);
+  }
+  /**
+   * Performs message encoding of a DataMatrix message using the algorithm described in annex P
+   * of ISO/IEC 16022:2000(E).
+   *
+   * @param msg     the message
+   * @param shape   requested shape. May be {@code SymbolShapeHint.FORCE_NONE},
+   *                {@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.
+   * @param minSize the minimum symbol size constraint or null for no constraint
+   * @param maxSize the maximum symbol size constraint or null for no constraint
    * @param forceC40 enforce C40 encoding
    * @return the encoded message (the char values range from 0 to 255)
    */
