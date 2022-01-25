@@ -1019,6 +1019,15 @@ public final class MinimalEncoder {
         applyRandomPattern(bytesAL,bytesAL.size() - randomizePostfixLength.get(i).intValue(), 
             randomizeLengths.get(i).intValue());
       }
+      //add padding
+      int capacity = solution.getMinSymbolSize(bytesAL.size());
+      if (bytesAL.size() < capacity) {
+        bytesAL.add((byte) 129);
+      }
+      while (bytesAL.size() < capacity) {
+        bytesAL.add((byte) randomize253State(bytesAL.size() + 1));
+      }
+
       bytes = new byte[bytesAL.size()];
       for (int i = 0; i < bytes.length; i++) {
         bytes[i] = bytesAL.get(i).byteValue();
@@ -1030,6 +1039,12 @@ public final class MinimalEncoder {
         into.add(0, Byte.valueOf(bytes[i]));
       }
       return bytes.length;
+    }
+
+    private static int randomize253State(int codewordPosition) {
+      int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
+      int tempVariable = 129 + pseudoRandom;
+      return tempVariable <= 254 ? tempVariable : tempVariable - 254;
     }
 
     static void applyRandomPattern(List<Byte> bytesAL,int startPosition, int length) {
