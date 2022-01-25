@@ -45,7 +45,8 @@ public enum EncodeHintType {
   DATA_MATRIX_SHAPE,
 
   /**
-   * Specifies whether to use compact mode for Data Matrix (type {@link Boolean}, or "true" or "false"
+   * Specifies whether to use compact mode for Data Matrix (type {@link Boolean}, or "true" or "false" 
+   * {@link String } value).
    * The compact encoding mode also supports the encoding of characters that are not in the ISO-8859-1
    * character set via ECIs.
    * Please note that in that case, the most compact character encoding is chosen for characters in
@@ -128,6 +129,7 @@ public enum EncodeHintType {
 
   /**
    * Specifies whether to use compact mode for QR code (type {@link Boolean}, or "true" or "false"
+   * {@link String } value).
    * Please note that when compaction is performed, the most compact character encoding is chosen
    * for characters in the input that are not in the ISO-8859-1 character set. Based on experience,
    * some scanners do not support encodings like cp-1256 (Arabic). In such cases the encoding can
@@ -149,13 +151,14 @@ public enum EncodeHintType {
   FORCE_CODE_SET,
 
   /**
-   * Forces C40 encoding for data-matrix (type {@link Boolean}, or "true" or "false"). This option and 
-   * {@link #DATA_MATRIX_COMPACT} are mutually exclusive.
+   * Forces C40 encoding for data-matrix (type {@link Boolean}, or "true" or "false") {@link String } value). This 
+   * option and {@link #DATA_MATRIX_COMPACT} are mutually exclusive.
    */
   FORCE_C40,
 
   /**
-   * Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false")
+   * Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false" 
+   * {@link String } value).
    * This can yield slightly smaller bar codes. This option and {@link #FORCE_CODE_SET} are mutually
    * exclusive.
    */
