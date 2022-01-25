@@ -99,7 +99,9 @@ public final class DataMatrixWriter implements Writer {
       }
       encoded = MinimalEncoder.encodeHighLevel(contents, charset, hasGS1FormatHint ? 0x1D : -1, shape);
     } else {
-      encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize);
+      boolean hasForceC40Hint = hints != null && hints.containsKey(EncodeHintType.FORCE_C40) &&
+          Boolean.parseBoolean(hints.get(EncodeHintType.FORCE_C40).toString());
+      encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, hasForceC40Hint);
     }
 
     SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.length(), shape, minSize, maxSize, true);

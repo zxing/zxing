@@ -55,6 +55,7 @@ public enum EncodeHintType {
    * Compact encoding also provides GS1-FNC1 support when {@link #GS1_FORMAT} is selected. In this case
    * group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords
    * for the purpose of delimiting AIs.
+   * This option and {@link #FORCE_C40} are mutually exclusive.
    */
   DATA_MATRIX_COMPACT,
 
@@ -143,13 +144,20 @@ public enum EncodeHintType {
   /**
    * Forces which encoding will be used. Currently only used for Code-128 code sets (Type {@link String}).
    * Valid values are "A", "B", "C".
+   * This option and {@link #CODE128_COMPACT} are mutually exclusive.
    */
   FORCE_CODE_SET,
 
   /**
+   * Forces C40 encoding for data-matrix. This option and {@link #DATA_MATRIX_COMPACT} are mutually
+   * exclusive.
+   */
+  FORCE_C40,
+
+  /**
    * Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false"
    * This can yield slightly smaller bar codes. This option and {@link #FORCE_CODE_SET} are mutually
-   * exclusive options.
+   * exclusive.
    */
   CODE128_COMPACT,
 
