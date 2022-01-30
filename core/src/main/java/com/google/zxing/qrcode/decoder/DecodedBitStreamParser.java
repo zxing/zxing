@@ -235,8 +235,6 @@ final class DecodedBitStreamParser {
       count--;
     }
     Charset encoding;
-    // @Sean: This is the version that is 100% backward compatible
-    /*
     if (hints != null && hints.containsKey(DecodeHintType.QR_ASSUME_SPEC_CONFORM_INPUT)) {
       if (currentCharacterSetECI == null) {
         encoding = StringUtils.ISO_8859_1;
@@ -245,17 +243,6 @@ final class DecodedBitStreamParser {
       }
     } else {
       encoding = StringUtils.SHIFT_JIS_CHARSET;
-    }
-    */
-    // @Sean: This treats it the same way as BYTE mode in the sense that an ECI has priority
-    if (currentCharacterSetECI == null) {
-      if (hints != null && hints.containsKey(DecodeHintType.QR_ASSUME_SPEC_CONFORM_INPUT)) {
-        encoding = StringUtils.ISO_8859_1;
-      } else {
-        encoding = StringUtils.SHIFT_JIS_CHARSET;
-      }
-    } else {
-      encoding = currentCharacterSetECI.getCharset();
     }
     result.append(new String(buffer, encoding));
   }
