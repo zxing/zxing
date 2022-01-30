@@ -104,6 +104,17 @@ public enum DecodeHintType {
    */
   ALSO_INVERTED(Void.class),
 
+  /**
+   * Specifies that the codes are expected to be in conformance with the specification
+   * ISO/IEC 18004 regading the interpretation of character encoding. Values encoded in BYTE mode
+   * or in KANJI mode are interpreted as ISO-8859-1 characters unless an ECI specified at a prior
+   * location in the input specified a different encoding. By default the encoding of BYTE encoded
+   * values is determinied by the {@link #CHARACTER_SET} hint or otherwise by a heuristic that
+   * examines the bytes. By default KANJI encoded values are interpreted as the bytes of Shift-JIS
+   * encoded characters.
+   */
+  QR_ASSUME_SPEC_CONFORM_INPUT(Void.class),
+
   // End of enumeration values.
   ;
 

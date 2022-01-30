@@ -128,7 +128,7 @@ final class DecodedBitStreamParser {
                 decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
                 break;
               case KANJI:
-                decodeKanjiSegment(bits, result, count);
+                decodeKanjiSegment(bits, result, count, currentCharacterSetECI, hints);
                 break;
               default:
                 throw FormatException.getFormatInstance();
@@ -206,7 +206,9 @@ final class DecodedBitStreamParser {
 
   private static void decodeKanjiSegment(BitSource bits,
                                          StringBuilder result,
-                                         int count) throws FormatException {
+                                         int count,
+                                         CharacterSetECI currentCharacterSetECI,
+                                         Map<DecodeHintType,?> hints) throws FormatException {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
       throw FormatException.getFormatInstance();
@@ -232,7 +234,30 @@ final class DecodedBitStreamParser {
       offset += 2;
       count--;
     }
-    result.append(new String(buffer, StringUtils.SHIFT_JIS_CHARSET));
+    Charset encoding;
+    // @Sean: This is the version that is 100% backward compatible
+    /*
+    if (hints != null && hints.containsKey(DecodeHintType.QR_ASSUME_SPEC_CONFORM_INPUT)) {
+      if (currentCharacterSetECI == null) {
+        encoding = StringUtils.ISO_8859_1;
+      } else {
+        encoding = currentCharacterSetECI.getCharset();
+      }
+    } else {
+      encoding = StringUtils.SHIFT_JIS_CHARSET;
+    }
+    */
+    // @Sean: This treats it the same way as BYTE mode in the sense that an ECI has priority
+    if (currentCharacterSetECI == null) {
+      if (hints != null && hints.containsKey(DecodeHintType.QR_ASSUME_SPEC_CONFORM_INPUT)) {
+        encoding = StringUtils.ISO_8859_1;
+      } else {
+        encoding = StringUtils.SHIFT_JIS_CHARSET;
+      }
+    } else {
+      encoding = currentCharacterSetECI.getCharset();
+    }
+    result.append(new String(buffer, encoding));
   }
 
   private static void decodeByteSegment(BitSource bits,
@@ -252,12 +277,11 @@ final class DecodedBitStreamParser {
     }
     Charset encoding;
     if (currentCharacterSetECI == null) {
-      // The spec isn't clear on this mode; see
-      // section 6.4.5: t does not say which encoding to assuming
-      // upon decoding. I have seen ISO-8859-1 used as well as
-      // Shift_JIS -- without anything like an ECI designator to
-      // give a hint.
-      encoding = StringUtils.guessCharset(readBytes, hints);
+      if (hints != null && hints.containsKey(DecodeHintType.QR_ASSUME_SPEC_CONFORM_INPUT)) {
+        encoding = StringUtils.ISO_8859_1;
+      } else {
+        encoding = StringUtils.guessCharset(readBytes, hints);
+      }
     } else {
       encoding = currentCharacterSetECI.getCharset();
     }

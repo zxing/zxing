@@ -29,13 +29,9 @@ import java.util.List;
 
 
 /**
- * Encoder that encodes minimally
+ * Encoder that encodes minimally using Dijkstra
  *
- * Algorithm:
- *
- * The eleventh commandment was "Thou Shalt Compute" or "Thou Shalt Not Compute" - I forget which (Alan Perilis).
- *
- * This implementation computes. As an alternative, the QR-Code specification suggests heuristics like this one:
+ * The QR-Code specification suggests alternative heuristics like this one:
  *
  * If initial input data is in the exclusive subset of the Alphanumeric character set AND if there are less than
  * [6,7,8] characters followed by data from the remainder of the 8-bit byte character set, THEN select the 8-
@@ -52,6 +48,13 @@ import java.util.List;
  * ECI(UTF-8), BYTE(\u0150\u015C) while prepending one or more times the same leading character as in
  * "\u0150\u0150\u015C", the most compact representation uses two ECIs so that the string is encoded as
  * ECI(ISO-8859-2), BYTE(\u0150\u0150), ECI(ISO-8859-3), BYTE(\u015C).
+ *
+ * KANJI encoding: Currently this implementation will choose KANJI mode only if the input contains characters that can
+ * be encoded in Shift-JIS as double byte values.
+ * In other words, KANJI mode is never chosen for input that is composed from ISO-8859-1 characters. This avoids
+ * problems with the zxing decoder who by default assumes that KANJI encoded values represent the bytes of Shift-JIS
+ * encoded characters {@link com.google.zxing.DecodeHintType#QR_ASSUME_SPEC_CONFORM_INPUT}. This implies that ecoding
+ * binary data with this encoder may not be as compact as it would be if it would make use of the KANJI mode.
  *
  * @author Alex Geller
  */
