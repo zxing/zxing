@@ -111,7 +111,7 @@ public enum DecodeHintType {
    * location in the input specified a different encoding. By default the encoding of BYTE encoded
    * values is determinied by the {@link #CHARACTER_SET} hint or otherwise by a heuristic that
    * examines the bytes. By default KANJI encoded values are interpreted as the bytes of Shift-JIS
-   * encoded characters (note that this is the case event if and ECI specifies a different
+   * encoded characters (note that this is the case even if an ECI specifies a different
    * encoding).
    */
   QR_ASSUME_SPEC_CONFORM_INPUT(Void.class),
