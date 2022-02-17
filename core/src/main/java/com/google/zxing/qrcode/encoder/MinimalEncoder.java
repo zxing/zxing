@@ -90,9 +90,7 @@ final class MinimalEncoder {
    * @param ecLevel The error correction level.
    * @see ResultList#getVersion
    */
-  MinimalEncoder(String stringToEncode, Charset priorityCharset, boolean isGS1,
-      ErrorCorrectionLevel ecLevel) throws WriterException {
-
+  MinimalEncoder(String stringToEncode, Charset priorityCharset, boolean isGS1, ErrorCorrectionLevel ecLevel) {
     this.stringToEncode = stringToEncode;
     this.isGS1 = isGS1;
     this.encoders = new ECIEncoderSet(stringToEncode, priorityCharset, -1);
@@ -123,12 +121,12 @@ final class MinimalEncoder {
 
   ResultList encode(Version version) throws WriterException {
     if (version == null) { // compute minimal encoding trying the three version sizes.
-      final Version[] versions = {getVersion(VersionSize.SMALL),
-                                  getVersion(VersionSize.MEDIUM),
-                                  getVersion(VersionSize.LARGE)};
-      ResultList[] results = {encodeSpecificVersion(versions[0]),
-                              encodeSpecificVersion(versions[1]),
-                              encodeSpecificVersion(versions[2])};
+      Version[] versions = { getVersion(VersionSize.SMALL),
+                             getVersion(VersionSize.MEDIUM),
+                             getVersion(VersionSize.LARGE) };
+      ResultList[] results = { encodeSpecificVersion(versions[0]),
+                               encodeSpecificVersion(versions[1]),
+                               encodeSpecificVersion(versions[2]) };
       int smallestSize = Integer.MAX_VALUE;
       int smallestResult = -1;
       for (int i = 0; i < 3; i++) {
@@ -370,7 +368,6 @@ final class MinimalEncoder {
 
     // The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the
     // function getCompactedOrdinal(Mode)
-    @SuppressWarnings("unchecked")
     Edge[][][] edges = new Edge[inputLength + 1][encoders.length()][4];
     addEdges(version, edges, 0, null);
 

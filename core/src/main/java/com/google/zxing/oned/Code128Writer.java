@@ -78,7 +78,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.CODE128_COMPACT) &&
         Boolean.parseBoolean(hints.get(EncodeHintType.CODE128_COMPACT).toString());
 
-    return hasCompactionHint ? new MinimalEncoder().encode(contents) : encodeFast(contents, hints, forcedCodeSet);
+    return hasCompactionHint ? new MinimalEncoder().encode(contents) : encodeFast(contents, forcedCodeSet);
   }
 
   private static int check(String contents, Map<EncodeHintType,?> hints) {
@@ -152,7 +152,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     return forcedCodeSet;
   }
 
-  private static boolean[] encodeFast(String contents, Map<EncodeHintType,?> hints, int forcedCodeSet) {
+  private static boolean[] encodeFast(String contents, int forcedCodeSet) {
     int length = contents.length();
 
     Collection<int[]> patterns = new ArrayList<>(); // temporary storage for patterns
@@ -365,9 +365,10 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   /** 
    * Encodes minimally using Divide-And-Conquer with Memoization
    **/
-  private static class MinimalEncoder {
-    private enum Charset { A, B, C, NONE };
-    private enum Latch { A, B, C, SHIFT, NONE };
+  private static final class MinimalEncoder {
+
+    private enum Charset { A, B, C, NONE }
+    private enum Latch { A, B, C, SHIFT, NONE }
 
     static final String A = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002" +
                             "\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011" +
@@ -509,7 +510,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
       Latch minLatch = Latch.NONE;
       boolean atEnd = position + 1 >= contents.length();
       
-      final Charset[] sets = new Charset[] { Charset.A,Charset.B };
+      Charset[] sets = new Charset[] { Charset.A, Charset.B };
       for (int i = 0; i <= 1; i++) {
         if (canEncode(contents, sets[i], position)) {
           int cost =  1;

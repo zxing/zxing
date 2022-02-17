@@ -538,8 +538,7 @@ public final class HighLevelEncodeTestCase extends Assert {
   private static String encodeHighLevel(String msg, boolean compareSizeToMinimalEncoder) {
     CharSequence encoded = HighLevelEncoder.encodeHighLevel(msg);
     CharSequence encoded2 = MinimalEncoder.encodeHighLevel(msg);
-    assert !compareSizeToMinimalEncoder || encoded2.length() <= encoded.length();
-    //DecodeHighLevel.decode(encoded);
+    assertTrue(!compareSizeToMinimalEncoder || encoded2.length() <= encoded.length());
     return visualize(encoded);
   }
 

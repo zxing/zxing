@@ -130,7 +130,7 @@ public class Code128WriterTestCase extends Assert {
   public void testLongCompact() throws Exception {
     //test longest possible input
     String toEncode = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    BitMatrix result = encode(toEncode, true, toEncode);
+    encode(toEncode, true, toEncode);
   }
 
   @Test
@@ -246,7 +246,7 @@ public class Code128WriterTestCase extends Assert {
 
     int width = result.getWidth();
     result = encode(toEncode, true, toEncode);
-    assert result.getWidth() <= width;
+    assertTrue(result.getWidth() <= width);
 
   }
 
@@ -257,7 +257,7 @@ public class Code128WriterTestCase extends Assert {
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "A");
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+    writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -267,7 +267,7 @@ public class Code128WriterTestCase extends Assert {
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "B");
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+    writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -277,7 +277,7 @@ public class Code128WriterTestCase extends Assert {
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "C");
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+    writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -287,7 +287,7 @@ public class Code128WriterTestCase extends Assert {
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "C");
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+    writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -297,7 +297,7 @@ public class Code128WriterTestCase extends Assert {
 
     Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.FORCE_CODE_SET, "C");
-    BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
+    writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, hints);
   }
 
   @Test

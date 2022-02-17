@@ -73,7 +73,6 @@ public final class MinimalEncoder {
 
 
   private MinimalEncoder() {
-    assert false;
   }
 
   static boolean isExtendedASCII(char ch, int fnc1) {
@@ -81,20 +80,16 @@ public final class MinimalEncoder {
   }
 
   private static boolean isInC40Shift1Set(char ch) {
-    return ch >= 0 && ch <= 31;
+    return ch <= 31;
   }
 
   private static boolean isInC40Shift2Set(char ch, int fnc1) {
-    for (int i = 0; i < C40_SHIFT2_CHARS.length; i++) {
-      if (C40_SHIFT2_CHARS[i] == ch) {
+    for (char c40Shift2Char : C40_SHIFT2_CHARS) {
+      if (c40Shift2Char == ch) {
         return true;
       }
     }
     return ch == fnc1;
-  }
-
-  private static boolean isInC40Shift3Set(char ch) {
-    return ch >= 96 && ch <= 127;
   }
 
   private static boolean isInTextShift1Set(char ch) {
@@ -103,10 +98,6 @@ public final class MinimalEncoder {
 
   private static boolean isInTextShift2Set(char ch, int fnc1) {
     return isInC40Shift2Set(ch, fnc1);
-  }
-
-  private static boolean isInTextShift3Set(char ch) {
-    return ch == 96 || (ch >= 'A' && ch <= 'Z') || (ch >= 123 && ch <= 127);
   }
 
   /**
@@ -227,11 +218,11 @@ public final class MinimalEncoder {
         addEdge(edges, new Edge(input, Mode.ASCII, from, 1, previous));
       }
   
-      final Mode[] modes = {Mode.C40, Mode.TEXT};
-      for (int m = 0; m < modes.length; m++) {
+      Mode[] modes = {Mode.C40, Mode.TEXT};
+      for (Mode mode : modes) {
         int[] characterLength = new int[1];
-        if (getNumberOfC40Words(input, from, modes[m] == Mode.C40,characterLength) > 0) {
-          addEdge(edges, new Edge(input, modes[m], from, characterLength[0], previous)); 
+        if (getNumberOfC40Words(input, from, mode == Mode.C40, characterLength) > 0) {
+          addEdge(edges, new Edge(input, mode, from, characterLength[0], previous));
         }
       }
   
@@ -451,7 +442,6 @@ public final class MinimalEncoder {
 
     // Array that represents vertices. There is a vertex for every character and mode.
     // The last dimension in the array below encodes the 6 modes ASCII, C40, TEXT, X12, EDF and B256
-    @SuppressWarnings("unchecked")
     Edge[][] edges = new Edge[inputLength + 1][6];
     addEdges(input, edges, 0, null);
 
@@ -535,10 +525,7 @@ public final class MinimalEncoder {
           if (previousMode == Mode.C40 ||
               previousMode == Mode.TEXT ||
               previousMode == Mode.X12) {
-            size++; //unatch 254 to ASCII
-          } else if (previousMode == Mode.EDF) {
-            assert false; // can't happen because we never add any other outgoing edges other than EDF edges to an EDF
-                          // vertex
+            size++; // unlatch 254 to ASCII
           }
           break;
         case B256:
@@ -554,9 +541,6 @@ public final class MinimalEncoder {
                      previousMode == Mode.TEXT ||
                      previousMode == Mode.X12) {
             size += 2; //unlatch to ASCII, latch to B256
-          } else if (previousMode == Mode.EDF) {
-            assert false; // can't happen because we never add any other outgoing edges other than EDF edges to an EDF
-                          // vertex
           }
           break;
         case C40:
@@ -575,9 +559,6 @@ public final class MinimalEncoder {
                                              previousMode == Mode.TEXT ||
                                              previousMode == Mode.X12)) {
             size += 2; //unlatch 254 to ASCII followed by latch to this mode
-          } else if (previousMode == Mode.EDF) {
-            assert false; // can't happen because we never add any other outgoing edges other than EDF edges to an EDF
-                          // vertex
           }
           break;
         case EDF:
@@ -594,7 +575,7 @@ public final class MinimalEncoder {
       cachedTotalSize = size;
     }
 
-/** does not count beyond 250*/
+    // does not count beyond 250
     int getB256Size() {
       int cnt = 0;
       Edge current = this;
@@ -699,23 +680,23 @@ public final class MinimalEncoder {
     int getMinSymbolSize(int minimum) {
       switch (input.getShapeHint()) {
         case FORCE_SQUARE:
-          for (int i = 0; i < squareCodewordCapacities.length; i++) {
-            if (squareCodewordCapacities[i] >= minimum) {
-              return squareCodewordCapacities[i];
+          for (int capacity : squareCodewordCapacities) {
+            if (capacity >= minimum) {
+              return capacity;
             }
           }
           break;
         case FORCE_RECTANGLE:
-          for (int i = 0; i < rectangularCodewordCapacities.length; i++) {
-            if (rectangularCodewordCapacities[i] >= minimum) {
-              return rectangularCodewordCapacities[i];
+          for (int capacity : rectangularCodewordCapacities) {
+            if (capacity >= minimum) {
+              return capacity;
             }
           }
           break;
       }
-      for (int i = 0; i < allCodewordCapacities.length; i++) {
-        if (allCodewordCapacities[i] >= minimum) {
-          return allCodewordCapacities[i];
+      for (int capacity : allCodewordCapacities) {
+        if (capacity >= minimum) {
+          return capacity;
         }
       }
       return allCodewordCapacities[allCodewordCapacities.length - 1];
@@ -728,10 +709,6 @@ public final class MinimalEncoder {
       return getMinSymbolSize(minimum) - minimum;
     }
 
-    int getSize() {
-      return previous == null ? cachedTotalSize : cachedTotalSize - previous.cachedTotalSize;
-    }
-
     static byte[] getBytes(int c) {
       byte[] result = new byte[1];
       result[0] = (byte) c;
@@ -742,15 +719,6 @@ public final class MinimalEncoder {
       byte[] result = new byte[2];
       result[0] = (byte) c1;
       result[1] = (byte) c2;
-      return result;
-    }
-
-    static byte[] getBytes(int c1, byte[] bytes) {
-      byte[] result = new byte[1 + bytes.length];
-      result[0] = (byte) c1;
-      for (int i = 0; i < bytes.length; i++) {
-        result[i + 1] = bytes[i];
-      }
       return result;
     }
 
@@ -793,18 +761,18 @@ public final class MinimalEncoder {
         return  27;
       }
       if (c40) {
-        return c >= 0 && c <= 31 ? c :
+        return c <= 31 ? c :
                c == 32 ? 3 :
-               c >= 33 && c <= 47 ? c - 33 :
-               c >= 48 && c <= 57 ? c - 44 :
-               c >= 58 && c <= 64 ? c - 43 :
-               c >= 65 && c <= 90 ? c - 51 :
-               c >= 91 && c <= 95 ? c - 69 :
-               c >= 96 && c <= 127 ? c - 96 : c;
+               c <= 47 ? c - 33 :
+               c <= 57 ? c - 44 :
+               c <= 64 ? c - 43 :
+               c <= 90 ? c - 51 :
+               c <= 95 ? c - 69 :
+               c <= 127 ? c - 96 : c;
       } else {
         return c == 0 ? 0 :
-               setIndex == 0 && c >= 1 && c <= 3 ? c - 1 : //is this a bug in the spec?
-               setIndex == 1 && c >= 1 && c <= 31 ? c :
+               setIndex == 0 && c <= 3 ? c - 1 : //is this a bug in the spec?
+               setIndex == 1 && c <= 31 ? c :
                c == 32 ? 3 :
                c >= 33 && c <= 47 ? c - 33 :
                c >= 48 && c <= 57 ? c - 44 :
@@ -818,44 +786,41 @@ public final class MinimalEncoder {
     }
 
     byte[] getC40Words(boolean c40, int fnc1) {
-      List<Byte> c40Values = new ArrayList();
+      List<Byte> c40Values = new ArrayList<>();
       for (int i = 0; i < characterLength; i++) {
         char ci = input.charAt(fromPosition + i);
         if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
-          c40Values.add(Byte.valueOf((byte) getC40Value(c40, 0, ci, fnc1)));
+          c40Values.add((byte) getC40Value(c40, 0, ci, fnc1));
         } else if (!isExtendedASCII(ci, fnc1)) {
           int shiftValue = getShiftValue(ci, c40, fnc1);
-          c40Values.add(Byte.valueOf((byte) shiftValue)); //Shift[123]
-          c40Values.add(Byte.valueOf((byte) getC40Value(c40, shiftValue, ci, fnc1)));
+          c40Values.add((byte) shiftValue); //Shift[123]
+          c40Values.add((byte) getC40Value(c40, shiftValue, ci, fnc1));
         } else {
           char asciiValue = (char) ((ci & 0xff) - 128);
-          assert asciiValue >= 0;
-          if (c40 && HighLevelEncoder.isNativeC40((char) asciiValue) ||
-              !c40 && HighLevelEncoder.isNativeText((char) asciiValue)) {
-            c40Values.add(Byte.valueOf((byte) 1)); //Shift 2
-            c40Values.add(Byte.valueOf((byte) 30)); //Upper Shift
-            c40Values.add(Byte.valueOf((byte) getC40Value(c40, 0, asciiValue, fnc1)));
+          if (c40 && HighLevelEncoder.isNativeC40(asciiValue) ||
+              !c40 && HighLevelEncoder.isNativeText(asciiValue)) {
+            c40Values.add((byte) 1); //Shift 2
+            c40Values.add((byte) 30); //Upper Shift
+            c40Values.add((byte) getC40Value(c40, 0, asciiValue, fnc1));
           } else {
-            c40Values.add(Byte.valueOf((byte) 1)); //Shift 2
-            c40Values.add(Byte.valueOf((byte) 30)); //Upper Shift
+            c40Values.add((byte) 1); //Shift 2
+            c40Values.add((byte) 30); //Upper Shift
             int shiftValue = getShiftValue(asciiValue, c40, fnc1);
-            c40Values.add(Byte.valueOf((byte) shiftValue)); // Shift[123]   
-            c40Values.add(Byte.valueOf((byte) getC40Value(c40, shiftValue, asciiValue, fnc1)));
+            c40Values.add((byte) shiftValue); // Shift[123]
+            c40Values.add((byte) getC40Value(c40, shiftValue, asciiValue, fnc1));
           }
         }
       }
 
       if ((c40Values.size() % 3) != 0) {
         assert (c40Values.size() - 2) % 3 == 0 && fromPosition + characterLength == input.length();
-        c40Values.add(Byte.valueOf((byte) 0)); // pad with 0 (Shift 1)
+        c40Values.add((byte) 0); // pad with 0 (Shift 1)
       }
 
       byte[] result = new byte[c40Values.size() / 3 * 2];
       int byteIndex = 0;
       for (int i = 0; i < c40Values.size(); i += 3) {
-        setC40Word(result,byteIndex,c40Values.get(i).byteValue() & 0xff,
-                                    c40Values.get(i + 1).byteValue() & 0xff,
-                                    c40Values.get(i + 2).byteValue() & 0xff);
+        setC40Word(result,byteIndex, c40Values.get(i) & 0xff, c40Values.get(i + 1) & 0xff, c40Values.get(i + 2) & 0xff);
         byteIndex += 2;
       }
       return result;
@@ -887,7 +852,6 @@ public final class MinimalEncoder {
     }
 
     byte[] getLatchBytes() {
-      byte[] result;
       switch (getPreviousMode()) {
         case ASCII:
         case B256: //after B256 ends (via length) we are back to ASCII
@@ -933,7 +897,6 @@ public final class MinimalEncoder {
 
     // Important: The function does not return the length bytes (one or two) in case of B256 encoding
     byte[] getDataBytes() {
-      byte[] result;
       switch (mode) {
         case ASCII:
           if (input.isECI(fromPosition)) {
@@ -965,16 +928,14 @@ public final class MinimalEncoder {
 
   private static final class Result {
 
-    private final Input input;
     private final byte[] bytes;
 
     Result(Edge solution) {
-      this.input = solution.input;
-      int length = 0;
+      Input input = solution.input;
       int size = 0;
-      List<Byte> bytesAL = new ArrayList();
-      List<Integer> randomizePostfixLength = new ArrayList();
-      List<Integer> randomizeLengths = new ArrayList();
+      List<Byte> bytesAL = new ArrayList<>();
+      List<Integer> randomizePostfixLength = new ArrayList<>();
+      List<Integer> randomizeLengths = new ArrayList<>();
       if ((solution.mode == Mode.C40 ||
            solution.mode == Mode.TEXT ||
            solution.mode == Mode.X12) &&
@@ -983,41 +944,38 @@ public final class MinimalEncoder {
       }
       Edge current = solution;
       while (current != null) {
-        length += current.characterLength;
         size += prepend(current.getDataBytes(),bytesAL);
 
         if (current.previous == null || current.getPreviousStartMode() != current.getMode()) {
           if (current.getMode() == Mode.B256) {
             if (size <= 249) {
-              bytesAL.add(0, Byte.valueOf((byte) size));
+              bytesAL.add(0, (byte) size);
               size++;
             } else {
-              bytesAL.add(0, Byte.valueOf((byte) (size % 250)));
-              bytesAL.add(0, Byte.valueOf((byte) (size / 250 + 249)));
+              bytesAL.add(0, (byte) (size % 250));
+              bytesAL.add(0, (byte) (size / 250 + 249));
               size += 2;
             }
-            randomizePostfixLength.add(Integer.valueOf(bytesAL.size()));
-            randomizeLengths.add(Integer.valueOf(size));
+            randomizePostfixLength.add(bytesAL.size());
+            randomizeLengths.add(size);
           }
-          size += prepend(current.getLatchBytes(), bytesAL);
-          length = 0;
+          prepend(current.getLatchBytes(), bytesAL);
           size = 0;
         }
 
         current = current.previous;
       }
       if (input.getMacroId() == 5) {
-        size += prepend(MinimalEncoder.Edge.getBytes(236),bytesAL);
+        size += prepend(MinimalEncoder.Edge.getBytes(236), bytesAL);
       } else if (input.getMacroId() == 6) {
-        size += prepend(MinimalEncoder.Edge.getBytes(237),bytesAL);
+        size += prepend(MinimalEncoder.Edge.getBytes(237), bytesAL);
       }
    
       if (input.getFNC1Character() > 0) {
-        size += prepend(MinimalEncoder.Edge.getBytes(232),bytesAL);
+        size += prepend(MinimalEncoder.Edge.getBytes(232), bytesAL);
       }
       for (int i = 0; i < randomizePostfixLength.size(); i++) {
-        applyRandomPattern(bytesAL,bytesAL.size() - randomizePostfixLength.get(i).intValue(), 
-            randomizeLengths.get(i).intValue());
+        applyRandomPattern(bytesAL,bytesAL.size() - randomizePostfixLength.get(i), randomizeLengths.get(i));
       }
       //add padding
       int capacity = solution.getMinSymbolSize(bytesAL.size());
@@ -1030,13 +988,13 @@ public final class MinimalEncoder {
 
       bytes = new byte[bytesAL.size()];
       for (int i = 0; i < bytes.length; i++) {
-        bytes[i] = bytesAL.get(i).byteValue();
+        bytes[i] = bytesAL.get(i);
       }
     }
 
     static int prepend(byte[] bytes, List<Byte> into) {
       for (int i = bytes.length - 1; i >= 0; i--) {
-        into.add(0, Byte.valueOf(bytes[i]));
+        into.add(0, bytes[i]);
       }
       return bytes.length;
     }
@@ -1054,9 +1012,7 @@ public final class MinimalEncoder {
         int Pad_codeword_value = bytesAL.get(Pad_codeword_position) & 0xff;
         int pseudo_random_number = ((149 * (Pad_codeword_position + 1)) % 255) + 1;
         int temp_variable = Pad_codeword_value + pseudo_random_number;
-        bytesAL.set(Pad_codeword_position, Byte.valueOf((byte) (temp_variable <= 255 ?
-                                                                temp_variable :
-                                                                temp_variable - 256)));
+        bytesAL.set(Pad_codeword_position, (byte) (temp_variable <= 255 ? temp_variable : temp_variable - 256));
       }
     }
 
@@ -1064,17 +1020,11 @@ public final class MinimalEncoder {
       return bytes;
     }
 
-    /**
-     * @return the size in bytes
-     */
-    int getSize() {
-      return bytes.length;
-    }
   }
 
   private static final class Input {
 
-    private static final int COST_PER_ECI = 3; //aproximated (latch to ASCII + 2 codewords)
+    private static final int COST_PER_ECI = 3; // approximated (latch to ASCII + 2 codewords)
     private final int[] bytes;
     private final int fnc1;
     private final SymbolShapeHint shape;
@@ -1106,14 +1056,6 @@ public final class MinimalEncoder {
 
     private SymbolShapeHint getShapeHint() {
       return shape;
-    }
-
-    String encode(int startPos, int length, Charset charset) {
-      byte[] bs = new byte[length];
-      for (int i = 0; i < length; i++) {
-        bs[i] = (byte) charAt(startPos + i);
-      }
-      return new String(bs, charset);
     }
 
     private int length() {
@@ -1213,16 +1155,15 @@ public final class MinimalEncoder {
       if (minimalJ < 0) {
         throw new RuntimeException("Internal error: failed to encode \"" + stringToEncode + "\"");
       }
-      List<Integer> intsAL = new ArrayList();
+      List<Integer> intsAL = new ArrayList<>();
       InputEdge current = edges[inputLength][minimalJ];
       while (current != null) {
         if (current.isFNC1()) {
           intsAL.add(0, 1000);
         } else {
           byte[] bytes = encoderSet.encode(current.c,current.encoderIndex);
-          int infoValue = bytes.length * 10 + bytes.length;
           for (int i = bytes.length - 1; i >= 0; i--) {
-            intsAL.add(0, (int) (bytes[i] & 0xff));
+            intsAL.add(0, (bytes[i] & 0xFF));
           }
         }
         int previousEncoderIndex = current.previous == null ? 0 : current.previous.encoderIndex;
@@ -1233,14 +1174,14 @@ public final class MinimalEncoder {
       }
       int[] ints = new int[intsAL.size()];
       for (int i = 0; i < ints.length; i++) {
-        ints[i] = intsAL.get(i).intValue();
+        ints[i] = intsAL.get(i);
       }
       return ints;
     }
 
     private static final class InputEdge {
       private final char c;
-      private int encoderIndex; //the encoding of this edge
+      private final int encoderIndex; //the encoding of this edge
       private final InputEdge previous;
       private final int cachedTotalSize;
 
@@ -1264,28 +1205,6 @@ public final class MinimalEncoder {
         return c == 1000;
       }
 
-      private int getFromPosition() {
-        int cnt = 0;
-        InputEdge current = previous;
-        while (current != null) {
-          cnt++;
-          current = current.previous;
-        }
-        return cnt;
-      }
-
-      private String getPreviousEncoding(ECIEncoderSet encoderSet) {
-        return previous == null ? "ISO-8859-1" : previous.getEncoding(encoderSet);
-      }
-
-      private String getEncoding(ECIEncoderSet encoderSet) {
-        return encoderSet.getCharsetName(encoderIndex);
-      }
-
-      boolean changesEncoding() {
-        return previous == null && encoderIndex != 0 || previous != null && previous.encoderIndex != encoderIndex;
-      }
-      
     }
   }
 }
