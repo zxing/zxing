@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>core</artifactId>
-  <version>3.4.2-SNAPSHOT</version>
+  <version>3.5.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -32,7 +32,7 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.4.2-SNAPSHOT</version>
+    <version>3.5.0-SNAPSHOT</version>
   </parent>
 
   <name>ZXing Core</name>
@@ -63,7 +63,7 @@
       <plugin>
         <groupId>biz.aQute.bnd</groupId>
         <artifactId>bnd-maven-plugin</artifactId>
-        <version>6.0.0</version>
+        <version>6.1.0</version>
         <executions>
           <execution>
             <goals>

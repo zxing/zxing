@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>android-core</artifactId>
-  <version>3.4.2-SNAPSHOT</version>
+  <version>3.5.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -43,7 +43,7 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.4.2-SNAPSHOT</version>
+    <version>3.5.0-SNAPSHOT</version>
   </parent>
 
   <name>ZXing Android Core</name>
