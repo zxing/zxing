@@ -16,6 +16,7 @@
 
 package com.google.zxing.maxicode.decoder;
 
+import com.google.zxing.FormatException;
 import com.google.zxing.common.DecoderResult;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -45,6 +46,19 @@ final class DecodedBitStreamParser {
   private static final char FS = '\u001C';
   private static final char GS = '\u001D';
   private static final char RS = '\u001E';
+  private static final byte[] COUNTRY_BYTES = { 53, 54, 43, 44, 45, 46, 47, 48, 37, 38 };
+  private static final byte[] SERVICE_CLASS_BYTES = { 55, 56, 57, 58, 59, 60, 49, 50, 51, 52 };
+  private static final byte[] POSTCODE_2_LENGTH_BYTES = { 39, 40, 41, 42, 31, 32 };
+  private static final byte[] POSTCODE_2_BYTES = { 33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
+      20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2 };
+  private static final byte[][] POSTCODE_3_BYTES = {
+      { 39, 40, 41, 42, 31, 32},
+      { 33, 34, 35, 36, 25, 26},
+      { 27, 28, 29, 30, 19, 20},
+      { 21, 22, 23, 24, 13, 14},
+      { 15, 16, 17, 18,  7,  8},
+      {  9, 10, 11, 12,  1,  2}
+  };
 
   @SuppressWarnings("checkstyle:lineLength")
   private static final String[] SETS = {
@@ -70,7 +84,7 @@ final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  static DecoderResult decode(byte[] bytes, int mode) {
+  static DecoderResult decode(byte[] bytes, int mode) throws FormatException {
     StringBuilder result = new StringBuilder(144);
     switch (mode) {
       case 2:
@@ -78,7 +92,11 @@ final class DecodedBitStreamParser {
         String postcode;
         if (mode == 2) {
           int pc = getPostCode2(bytes);
-          NumberFormat df = new DecimalFormat("0000000000".substring(0, getPostCode2Length(bytes)));
+          int ps2Length = getPostCode2Length(bytes);
+          if (ps2Length > 10) {
+            throw FormatException.getFormatInstance();
+          }
+          NumberFormat df = new DecimalFormat("0000000000".substring(0, ps2Length));
           postcode = df.format(pc);
         } else {
           postcode = getPostCode3(bytes);
@@ -109,9 +127,6 @@ final class DecodedBitStreamParser {
   }
 
   private static int getInt(byte[] bytes, byte[] x) {
-    if (x.length == 0) {
-      throw new IllegalArgumentException();
-    }
     int val = 0;
     for (int i = 0; i < x.length; i++) {
       val += getBit(x[i], bytes) << (x.length - i - 1);
@@ -120,33 +135,27 @@ final class DecodedBitStreamParser {
   }
 
   private static int getCountry(byte[] bytes) {
-    return getInt(bytes, new byte[] {53, 54, 43, 44, 45, 46, 47, 48, 37, 38});
+    return getInt(bytes, COUNTRY_BYTES);
   }
 
   private static int getServiceClass(byte[] bytes) {
-    return getInt(bytes, new byte[] {55, 56, 57, 58, 59, 60, 49, 50, 51, 52});
+    return getInt(bytes, SERVICE_CLASS_BYTES);
   }
 
   private static int getPostCode2Length(byte[] bytes) {
-    return getInt(bytes, new byte[] {39, 40, 41, 42, 31, 32});
+    return getInt(bytes, POSTCODE_2_LENGTH_BYTES);
   }
 
   private static int getPostCode2(byte[] bytes) {
-    return getInt(bytes, new byte[] {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
-        20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2});
+    return getInt(bytes, POSTCODE_2_BYTES);
   }
 
   private static String getPostCode3(byte[] bytes) {
-    return String.valueOf(
-       new char[] {
-         SETS[0].charAt(getInt(bytes, new byte[] {39, 40, 41, 42, 31, 32})),
-         SETS[0].charAt(getInt(bytes, new byte[] {33, 34, 35, 36, 25, 26})),
-         SETS[0].charAt(getInt(bytes, new byte[] {27, 28, 29, 30, 19, 20})),
-         SETS[0].charAt(getInt(bytes, new byte[] {21, 22, 23, 24, 13, 14})),
-         SETS[0].charAt(getInt(bytes, new byte[] {15, 16, 17, 18,  7,  8})),
-         SETS[0].charAt(getInt(bytes, new byte[] { 9, 10, 11, 12,  1,  2})),
-       }
-    );
+    StringBuilder sb = new StringBuilder(POSTCODE_3_BYTES.length);
+    for (byte[] p3bytes : POSTCODE_3_BYTES) {
+      sb.append(SETS[0].charAt(getInt(bytes, p3bytes)));
+    }
+    return sb.toString();
   }
 
   private static String getMessage(byte[] bytes, int start, int len) {
