@@ -24,6 +24,7 @@ import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.StringUtils;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -237,7 +238,7 @@ final class DecodedBitStreamParser {
     Charset encoding;
     if (hints != null && hints.containsKey(DecodeHintType.QR_ASSUME_SPEC_CONFORM_INPUT)) {
       if (currentCharacterSetECI == null) {
-        encoding = StringUtils.ISO_8859_1;
+        encoding = StandardCharsets.ISO_8859_1;
       } else {
         encoding = currentCharacterSetECI.getCharset();
       }
@@ -265,7 +266,7 @@ final class DecodedBitStreamParser {
     Charset encoding;
     if (currentCharacterSetECI == null) {
       if (hints != null && hints.containsKey(DecodeHintType.QR_ASSUME_SPEC_CONFORM_INPUT)) {
-        encoding = StringUtils.ISO_8859_1;
+        encoding = StandardCharsets.ISO_8859_1;
       } else {
         encoding = StringUtils.guessCharset(readBytes, hints);
       }

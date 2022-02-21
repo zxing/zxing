@@ -33,7 +33,6 @@ public final class StringUtils {
   private static final Charset PLATFORM_DEFAULT_ENCODING = Charset.defaultCharset();
   public static final Charset SHIFT_JIS_CHARSET = Charset.forName("SJIS");
   public static final Charset GB2312_CHARSET = Charset.forName("GB2312");
-  public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
   private static final Charset EUC_JP = Charset.forName("EUC_JP");
   private static final boolean ASSUME_SHIFT_JIS =
       SHIFT_JIS_CHARSET.equals(PLATFORM_DEFAULT_ENCODING) ||
