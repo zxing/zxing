@@ -104,11 +104,10 @@ final class DecodedBitStreamParser {
   static DecoderResult decode(int[] codewords, String ecLevel) throws FormatException {
     StringBuilder result = new StringBuilder(codewords.length * 2);
     Charset encoding = StandardCharsets.ISO_8859_1;
-    // Get compaction mode
-    int codeIndex = 1;
-    int code = codewords[codeIndex++];
+    int codeIndex = textCompaction(codewords, 1, result);
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
     while (codeIndex < codewords[0]) {
+      int code = codewords[codeIndex++];
       switch (code) {
         case TEXT_COMPACTION_MODE_LATCH:
           codeIndex = textCompaction(codewords, codeIndex, result);
@@ -154,12 +153,8 @@ final class DecodedBitStreamParser {
           codeIndex = textCompaction(codewords, codeIndex, result);
           break;
       }
-      if (codeIndex < codewords.length) {
-        code = codewords[codeIndex++];
-      } else {
-        throw FormatException.getFormatInstance();
-      }
     }
+//@Sean: I propose to remove this. Why should an empty barcode be an error? This makes an empty string test fail.
     if (result.length() == 0 && resultMetadata.getFileId() == null) {
       throw FormatException.getFormatInstance();
     }
