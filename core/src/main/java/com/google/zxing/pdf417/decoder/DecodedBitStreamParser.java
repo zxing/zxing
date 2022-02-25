@@ -154,7 +154,6 @@ final class DecodedBitStreamParser {
           break;
       }
     }
-//@Sean: I propose to remove this. Why should an empty barcode be an error? This makes an empty string test fail.
     if (result.length() == 0 && resultMetadata.getFileId() == null) {
       throw FormatException.getFormatInstance();
     }
