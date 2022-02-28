@@ -340,10 +340,12 @@ public class PDF417DecoderTestCase extends Assert {
     assertEquals(input, result.getText());
     return codewords.length;
   }
+
   private static int getEndIndex(int length, char[] chars) {
     double decimalLength = Math.log(chars.length) / Math.log(10);
     return (int) Math.ceil(Math.pow(10, decimalLength * length));
   }
+
   private static String generatePermutation(int index, int length, char[] chars) {
     int N = chars.length;
     String baseNNumber = Integer.toString(index, N);
@@ -356,6 +358,7 @@ public class PDF417DecoderTestCase extends Assert {
     }
     return prefix;
   }
+
   private static void performPermutationTest(char[] chars,int length,int expectedTotal) throws WriterException,
       FormatException {
     int endIndex = getEndIndex(length, chars);
