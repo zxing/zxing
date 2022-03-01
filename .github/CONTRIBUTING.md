@@ -30,7 +30,7 @@ are listed here.
 
 ### I get a compilation error.
 
-While you can check the build status at [Travis](https://travis-ci.org/zxing/zxing) to confirm, 
+While you can check the build status on Github to confirm, 
 the project correctly builds and passes tests at all times. 
 90% of the time it's due to using an old version of Java. Version 3.4+ require Java 8. 
 Use earlier versions with Java 7 and earlier.

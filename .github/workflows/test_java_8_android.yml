@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  ANDROID_HOME: $HOME/android-sdk-linux
+  ANDROID_HOME: /tmp/android-sdk-linux
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Android SDK
-      run: if [ ! -d $HOME/android-sdk-linux/platforms ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C $HOME; else ls -l $HOME/android-sdk-linux; fi
+      run: if [ ! -d /tmp/android-sdk-linux/platforms ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C /tmp; else ls -l /tmp/android-sdk-linux; fi
     - name: Set up JDK 8
       uses: actions/setup-java@v2
       with:
