@@ -184,51 +184,17 @@ public class PDF417DecoderTestCase extends Assert {
   @Test
   public void testUppercase() throws WriterException, FormatException {
     //encodeDecode("", 0);
-    encodeDecode("A", 3);
-    encodeDecode("AB", 4);
-    encodeDecode("ABC", 5);
-    encodeDecode("ABCD", 6);
-    encodeDecode("ABCDE", 4);
-    encodeDecode("ABCDEF", 4);
-    encodeDecode("ABCDEFG", 5);
-    encodeDecode("ABCDEFGH", 5);
+    performEncodeTest('A', new int[] { 3, 4, 5, 6, 4, 4, 5, 5});
   }
 
   @Test
   public void testNumeric() throws WriterException, FormatException {
-    encodeDecode("1", 2);
-    encodeDecode("12", 3);
-    encodeDecode("123", 3);
-    encodeDecode("1234", 4);
-    encodeDecode("12345", 4);
-    encodeDecode("123456", 5);
-    encodeDecode("1234567", 5);
-    encodeDecode("12345678", 6);
-    encodeDecode("123456789", 6);
-    encodeDecode("1234567890", 7);
-    encodeDecode("12345678901", 7);
-    encodeDecode("123456789012", 8);
-    encodeDecode("1234567890123", 7);
-    encodeDecode("12345678901234", 7);
-    encodeDecode("123456789012345", 8);
-    encodeDecode("1234567890123456", 8);
-    encodeDecode("12345678901234567", 8);
-    encodeDecode("123456789012345678", 9);
-    encodeDecode("1234567890123456789", 9);
-    encodeDecode("12345678901234567890", 9);
-    encodeDecode("123456789012345678901", 10);
-    encodeDecode("1234567890123456789012", 10);
+    performEncodeTest('1', new int[] { 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10});
   }
 
   @Test
   public void testByte() throws WriterException, FormatException {
-    encodeDecode("\u00c4", 3);
-    encodeDecode("\u00c4\u00c4", 4);
-    encodeDecode("\u00c4\u00c4\u00c4", 5);
-    encodeDecode("\u00c4\u00c4\u00c4\u00c4", 6);
-    encodeDecode("\u00c4\u00c4\u00c4\u00c4\u00c4", 7);
-    encodeDecode("\u00c4\u00c4\u00c4\u00c4\u00c4\u00c4", 7);
-    encodeDecode("\u00c4\u00c4\u00c4\u00c4\u00c4\u00c4\u00c4", 8);
+    performEncodeTest('\u00c4', new int[] { 3, 4, 5, 6, 7, 7, 8});
   }
 
   @Test
@@ -247,69 +213,62 @@ public class PDF417DecoderTestCase extends Assert {
 
   @Test
   public void testPunctuation() throws WriterException, FormatException {
-    encodeDecode(";", 3);
-    encodeDecode(";;", 4);
-    encodeDecode(";;;", 5);
-    encodeDecode(";;;;", 6);
-    encodeDecode(";;;;;", 6);
-    encodeDecode(";;;;;;", 7);
-    encodeDecode(";;;;;;;", 8);
-    encodeDecode(";;;;;;;;", 9);
+    performEncodeTest(';', new int[] { 3, 4, 5, 6, 6, 7, 8});
     encodeDecode(";;;;;;;;;;;;;;;;", 17);
   }
 
   @Test
   public void testUppercaseLowercaseMix2() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','a'},10,8972);
+    performPermutationTest(new char[] {'A', 'a'}, 10, 8972);
   }
 
   @Test
   public void testUppercaseNumericMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','1'},14,192510);
+    performPermutationTest(new char[] {'A', '1'}, 14, 192510);
   }
 
   @Test
   public void testUppercaseMixedMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','1',' ',';'},7,106060);
+    performPermutationTest(new char[] {'A', '1', ' ', ';'}, 7, 106060);
   }
 
   @Test
   public void testUppercasePunctuationMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A',';'},10,8967);
+    performPermutationTest(new char[] {'A', ';'}, 10, 8967);
   }
 
   @Test
   public void testUppercaseByteMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','\u00c4'},10,11222);
+    performPermutationTest(new char[] {'A', '\u00c4'}, 10, 11222);
   }
 
   @Test
   public void testLowercaseByteMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'a','\u00c4'},10,11233);
+    performPermutationTest(new char[] {'a', '\u00c4'}, 10, 11233);
   }
 
   public void testUppercaseLowercaseNumericMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','a','1'},7,15491);
+    performPermutationTest(new char[] {'A', 'a', '1'}, 7, 15491);
   }
 
   @Test
   public void testUppercaseLowercasePunctuationMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','a',';'},7,15491);
+    performPermutationTest(new char[] {'A', 'a', ';'}, 7, 15491);
   }
 
   @Test
   public void testUppercaseLowercaseByteMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','a','\u00c4'},7,17288);
+    performPermutationTest(new char[] {'A', 'a', '\u00c4'}, 7, 17288);
   }
 
   @Test
   public void testLowercasePunctuationByteMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'a',';','\u00c4'},7,17427);
+    performPermutationTest(new char[] {'a', ';', '\u00c4'}, 7, 17427);
   }
 
   @Test
   public void testUppercaseLowercaseNumericPunctuationMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','a','1',';'},7,120479);
+    performPermutationTest(new char[] {'A', 'a', '1', ';'}, 7, 120479);
   }
 
   @Test
@@ -321,10 +280,10 @@ public class PDF417DecoderTestCase extends Assert {
       random.nextBytes(bytes);
       total += encodeDecode(new String(bytes, StandardCharsets.ISO_8859_1));
     }
-    assertEquals(4190044,total); 
+    assertEquals(4190044, total); 
   }
 
-  private static void encodeDecode(String input,int expectedLength) throws WriterException, FormatException {
+  private static void encodeDecode(String input, int expectedLength) throws WriterException, FormatException {
     assertEquals(expectedLength, encodeDecode(input));
   }
 
@@ -359,14 +318,24 @@ public class PDF417DecoderTestCase extends Assert {
     return prefix;
   }
 
-  private static void performPermutationTest(char[] chars,int length,int expectedTotal) throws WriterException,
+  private static void performPermutationTest(char[] chars, int length, int expectedTotal) throws WriterException,
       FormatException {
     int endIndex = getEndIndex(length, chars);
     int total = 0;
     for (int i = 0; i < endIndex; i++) {
       total += encodeDecode(generatePermutation(i, length, chars));
     }
-    assertEquals(expectedTotal,total);
+    assertEquals(expectedTotal, total);
+  }
+
+  private static void performEncodeTest(char c, int[] expectedLengths) throws WriterException, FormatException {
+    for (int i = 0; i < expectedLengths.length; i++) {
+      StringBuilder sb = new StringBuilder();
+      for (int j = 0; j <= i; j++) {
+        sb.append(c);
+      }
+      encodeDecode(sb.toString(), expectedLengths[i]);
+    }
   }
 
 }
