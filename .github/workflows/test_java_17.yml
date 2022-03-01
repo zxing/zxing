@@ -1,4 +1,4 @@
-name: Test Java 14
+name: Test Java 17
 
 on:
   push:
@@ -13,10 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 14
+    - name: Set up JDK 17
       uses: actions/setup-java@v2
       with:
-        java-version: '14'
+        java-version: '17'
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
