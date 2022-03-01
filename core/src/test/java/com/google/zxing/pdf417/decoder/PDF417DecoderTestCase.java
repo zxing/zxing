@@ -260,7 +260,7 @@ public class PDF417DecoderTestCase extends Assert {
 
   @Test
   public void testUppercaseLowercaseMix2() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','a'},10,8960);
+    performPermutationTest(new char[] {'A','a'},10,8972);
   }
 
   @Test
@@ -275,17 +275,17 @@ public class PDF417DecoderTestCase extends Assert {
 
   @Test
   public void testUppercasePunctuationMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A',';'},10,8960);
+    performPermutationTest(new char[] {'A',';'},10,8967);
   }
 
   @Test
   public void testUppercaseByteMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'A','\u00c4'},10,11210);
+    performPermutationTest(new char[] {'A','\u00c4'},10,11222);
   }
 
   @Test
   public void testLowercaseByteMix() throws WriterException, FormatException {
-    performPermutationTest(new char[] {'a','\u00c4'},10,11221);
+    performPermutationTest(new char[] {'a','\u00c4'},10,11233);
   }
 
   public void testUppercaseLowercaseNumericMix() throws WriterException, FormatException {
@@ -342,7 +342,7 @@ public class PDF417DecoderTestCase extends Assert {
   }
 
   private static int getEndIndex(int length, char[] chars) {
-    double decimalLength = Math.log(chars.length) / Math.log(10);
+    double decimalLength = Math.log10(chars.length);
     return (int) Math.ceil(Math.pow(10, decimalLength * length));
   }
 
@@ -366,11 +366,6 @@ public class PDF417DecoderTestCase extends Assert {
     for (int i = 0; i < endIndex; i++) {
       total += encodeDecode(generatePermutation(i, length, chars));
     }
-    String s = "['" + chars[0] + "'";
-    for (int i = 1; i < chars.length; i++) {
-      s += ",'" + chars[i] + "'";
-    }
-    s += "]";
     assertEquals(expectedTotal,total);
   }
 
