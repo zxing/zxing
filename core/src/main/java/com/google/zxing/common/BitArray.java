@@ -25,12 +25,15 @@ import java.util.Arrays;
  */
 public final class BitArray implements Cloneable {
 
+  private static final int[] EMPTY_BITS = {};
+  private static final float LOAD_FACTOR = 0.75f;
+
   private int[] bits;
   private int size;
 
   public BitArray() {
     this.size = 0;
-    this.bits = new int[1];
+    this.bits = EMPTY_BITS;
   }
 
   public BitArray(int size) {
@@ -52,9 +55,9 @@ public final class BitArray implements Cloneable {
     return (size + 7) / 8;
   }
 
-  private void ensureCapacity(int size) {
-    if (size > bits.length * 32) {
-      int[] newBits = makeArray(size);
+  private void ensureCapacity(int newSize) {
+    if (newSize > bits.length * 32) {
+      int[] newBits = makeArray((int) Math.ceil(newSize / LOAD_FACTOR));
       System.arraycopy(bits, 0, newBits, 0, bits.length);
       this.bits = newBits;
     }
