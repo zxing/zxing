@@ -640,13 +640,14 @@ public final class PDF417 {
   /**
    * @param msg message to encode
    * @param errorCorrectionLevel PDF417 error correction level to use
+   * @param autoECI automatically insert ECIs if needed
    * @throws WriterException if the contents cannot be encoded in this format
    */
-  public void generateBarcodeLogic(String msg, int errorCorrectionLevel) throws WriterException {
+  public void generateBarcodeLogic(String msg, int errorCorrectionLevel, boolean autoECI) throws WriterException {
 
     //1. step: High-level encoding
     int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding);
+    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, autoECI);
     int sourceCodeWords = highLevel.length();
 
     int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords);

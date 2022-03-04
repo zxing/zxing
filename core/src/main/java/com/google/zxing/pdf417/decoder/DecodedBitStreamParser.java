@@ -104,7 +104,12 @@ final class DecodedBitStreamParser {
   static DecoderResult decode(int[] codewords, String ecLevel) throws FormatException {
     StringBuilder result = new StringBuilder(codewords.length * 2);
     Charset encoding = StandardCharsets.ISO_8859_1;
-    int codeIndex = textCompaction(codewords, 1, result);
+    int codeIndex = 1;
+    if (codewords[0] > 1 && codewords[codeIndex] == ECI_CHARSET) {
+      encoding = getECICharset(codewords[++codeIndex]);
+      codeIndex++;
+    }
+    codeIndex = textCompaction(codewords, codeIndex, result);
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
     while (codeIndex < codewords[0]) {
       int code = codewords[codeIndex++];
@@ -123,12 +128,7 @@ final class DecodedBitStreamParser {
           codeIndex = numericCompaction(codewords, codeIndex, result);
           break;
         case ECI_CHARSET:
-          CharacterSetECI charsetECI =
-              CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
-          if (charsetECI == null) {
-            throw FormatException.getFormatInstance();
-          }
-          encoding = charsetECI.getCharset();
+          encoding = getECICharset(codewords[codeIndex++]);
           break;
         case ECI_GENERAL_PURPOSE:
           // Can't do anything with generic ECI; skip its 2 characters
@@ -160,6 +160,15 @@ final class DecodedBitStreamParser {
     DecoderResult decoderResult = new DecoderResult(null, result.toString(), null, ecLevel);
     decoderResult.setOther(resultMetadata);
     return decoderResult;
+  }
+
+  private static Charset getECICharset(int eciValue) throws FormatException {
+    CharacterSetECI charsetECI =
+        CharacterSetECI.getCharacterSetECIByValue(eciValue);
+    if (charsetECI == null) {
+      throw FormatException.getFormatInstance();
+    }
+    return charsetECI.getCharset();
   }
 
   @SuppressWarnings("deprecation")

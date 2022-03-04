@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.zxing.common.ECIEncoderSet;
+import com.google.zxing.common.MinimalECIInput;
 
 /**
  * Encoder that encodes minimally
@@ -1022,32 +1022,15 @@ public final class MinimalEncoder {
 
   }
 
-  private static final class Input {
+  private static final class Input extends MinimalECIInput {
 
-    private static final int COST_PER_ECI = 3; // approximated (latch to ASCII + 2 codewords)
-    private final int[] bytes;
-    private final int fnc1;
     private final SymbolShapeHint shape;
     private final int macroId;
 
     private Input(String stringToEncode, Charset priorityCharset, int fnc1, SymbolShapeHint shape, int macroId) {
-      this.fnc1 = fnc1;
+      super(stringToEncode, priorityCharset, fnc1);
       this.shape = shape;
       this.macroId = macroId;
-      ECIEncoderSet encoderSet = new ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
-      if (encoderSet.length() == 1) { //optimization for the case when all can be encoded without ECI in ISO-8859-1
-        bytes = new int[stringToEncode.length()];
-        for (int i = 0; i < bytes.length; i++) {
-          char c = stringToEncode.charAt(i);
-          bytes[i] = c == fnc1 ? 1000 : (int) c;
-        }
-      } else {
-        bytes = encodeMinimally(stringToEncode, encoderSet, fnc1);
-      }
-    }
-
-    private int getFNC1Character() {
-      return fnc1;
     }
 
     private int getMacroId() {
@@ -1056,155 +1039,6 @@ public final class MinimalEncoder {
 
     private SymbolShapeHint getShapeHint() {
       return shape;
-    }
-
-    private int length() {
-      return bytes.length;
-    }
-
-    boolean haveNCharacters(int index, int n) {
-      if (index + n - 1 >= bytes.length) {
-        return false;
-      }
-      for (int i = 0; i < n; i++) {
-        if (isECI(index + i)) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    private char charAt(int index) {
-      assert !isECI(index);
-      return isFNC1(index) ? (char) fnc1 : (char) bytes[index];
-    }
-
-    private boolean isECI(int index) {
-      return bytes[index] > 255 && bytes[index] <= 999;
-    }
-
-    private boolean isFNC1(int index) {
-      return bytes[index] == 1000;
-    }
-
-    private int getECIValue(int index) {
-      assert isECI(index);
-      return bytes[index] - 256;
-    }
-
-    static void addEdge(InputEdge[][] edges, int to, InputEdge edge) {
-      if (edges[to][edge.encoderIndex] == null ||
-          edges[to][edge.encoderIndex].cachedTotalSize > edge.cachedTotalSize) {
-        edges[to][edge.encoderIndex] = edge;
-      }
-    }
-
-    static void addEdges(String stringToEncode, 
-                         ECIEncoderSet encoderSet, 
-                         InputEdge[][] edges, 
-                         int from, 
-                         InputEdge previous, 
-                         int fnc1) {
-
-      char ch = stringToEncode.charAt(from);
-
-      int start = 0;
-      int end = encoderSet.length();
-      if (encoderSet.getPriorityEncoderIndex() >= 0 && (ch == fnc1 || encoderSet.canEncode(ch,
-          encoderSet.getPriorityEncoderIndex()))) {
-        start = encoderSet.getPriorityEncoderIndex();
-        end = start + 1;
-      }
-  
-      for (int i = start; i < end; i++) {
-        if (ch == fnc1 || encoderSet.canEncode(ch,i)) {
-          addEdge(edges, from + 1, new InputEdge(ch, encoderSet, i, previous, fnc1));
-        }
-      }
-    }
-
-    static int[] encodeMinimally(String stringToEncode, ECIEncoderSet encoderSet, int fnc1) {
-      int inputLength = stringToEncode.length();
-  
-      // Array that represents vertices. There is a vertex for every character and encoding.
-      InputEdge[][] edges = new InputEdge[inputLength + 1][encoderSet.length()];
-      addEdges(stringToEncode, encoderSet, edges, 0, null, fnc1);
-  
-      for (int i = 1; i <= inputLength; i++) {
-        for (int j = 0; j < encoderSet.length(); j++) {
-          if (edges[i][j] != null && i < inputLength) {
-            addEdges(stringToEncode, encoderSet, edges, i, edges[i][j], fnc1);
-          }
-        }
-        //optimize memory by removing edges that have been passed.
-        for (int j = 0; j < encoderSet.length(); j++) {
-          edges[i - 1][j] = null;
-        }
-      }
-      int minimalJ = -1;
-      int minimalSize = Integer.MAX_VALUE;
-      for (int j = 0; j < encoderSet.length(); j++) {
-        if (edges[inputLength][j] != null) {
-          InputEdge edge = edges[inputLength][j];
-          if (edge.cachedTotalSize < minimalSize) {
-            minimalSize = edge.cachedTotalSize;
-            minimalJ = j;
-          }
-        }
-      }
-      if (minimalJ < 0) {
-        throw new RuntimeException("Internal error: failed to encode \"" + stringToEncode + "\"");
-      }
-      List<Integer> intsAL = new ArrayList<>();
-      InputEdge current = edges[inputLength][minimalJ];
-      while (current != null) {
-        if (current.isFNC1()) {
-          intsAL.add(0, 1000);
-        } else {
-          byte[] bytes = encoderSet.encode(current.c,current.encoderIndex);
-          for (int i = bytes.length - 1; i >= 0; i--) {
-            intsAL.add(0, (bytes[i] & 0xFF));
-          }
-        }
-        int previousEncoderIndex = current.previous == null ? 0 : current.previous.encoderIndex;
-        if (previousEncoderIndex != current.encoderIndex) {
-          intsAL.add(0,256 + encoderSet.getECIValue(current.encoderIndex));
-        }
-        current = current.previous;
-      }
-      int[] ints = new int[intsAL.size()];
-      for (int i = 0; i < ints.length; i++) {
-        ints[i] = intsAL.get(i);
-      }
-      return ints;
-    }
-
-    private static final class InputEdge {
-      private final char c;
-      private final int encoderIndex; //the encoding of this edge
-      private final InputEdge previous;
-      private final int cachedTotalSize;
-
-      private InputEdge(char c, ECIEncoderSet encoderSet, int encoderIndex, InputEdge previous, int fnc1) {
-        this.c = c == fnc1 ? 1000 : c;
-        this.encoderIndex = encoderIndex;
-        this.previous = previous;
-
-        int size = this.c == 1000 ? 1 : encoderSet.encode(c, encoderIndex).length;
-        int previousEncoderIndex = previous == null ? 0 : previous.encoderIndex;
-        if (previousEncoderIndex != encoderIndex) {
-          size += COST_PER_ECI;
-        }
-        if (previous != null) {
-          size += previous.cachedTotalSize;
-        }
-        this.cachedTotalSize = size;
-      }
-
-      boolean isFNC1() {
-        return c == 1000;
-      }
-
     }
   }
 }
