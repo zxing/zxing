@@ -640,6 +640,15 @@ public final class PDF417 {
   /**
    * @param msg message to encode
    * @param errorCorrectionLevel PDF417 error correction level to use
+   * @throws WriterException if the contents cannot be encoded in this format
+   */
+  public void generateBarcodeLogic(String msg, int errorCorrectionLevel) throws WriterException {
+    generateBarcodeLogic(msg, errorCorrectionLevel, false);
+  }
+
+  /**
+   * @param msg message to encode
+   * @param errorCorrectionLevel PDF417 error correction level to use
    * @param autoECI automatically insert ECIs if needed
    * @throws WriterException if the contents cannot be encoded in this format
    */
