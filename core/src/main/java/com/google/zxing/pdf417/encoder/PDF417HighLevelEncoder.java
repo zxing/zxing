@@ -275,7 +275,7 @@ final class PDF417HighLevelEncoder {
    * Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E),
    * chapter 4.4.2.
    *
-   * @param msg            the message
+   * @param input          the input
    * @param startpos       the start position within the message
    * @param count          the number of characters to encode
    * @param sb             receives the encoded codewords
@@ -608,7 +608,7 @@ final class PDF417HighLevelEncoder {
   /**
    * Determines the number of consecutive characters that are encodable using binary compaction.
    *
-   * @param msg      the message
+   * @param input    the input
    * @param startpos the start position within the message
    * @param encoding the charset used to convert the message to a byte array
    * @return the requested character count

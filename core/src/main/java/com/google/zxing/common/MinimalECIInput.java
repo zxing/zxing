@@ -131,7 +131,7 @@ public class MinimalECIInput implements ECIInput {
   *          if a value in the range {@code start}-{@code end} is an ECI (@see #isECI)
   */
   public CharSequence subSequence(int start, int end) {
-    if (start < 0 || start > end || end < 0 || end > length()) {
+    if (start < 0 || start > end || end > length()) {
       throw new IndexOutOfBoundsException("" + start);
     }
     StringBuilder result = new StringBuilder();
