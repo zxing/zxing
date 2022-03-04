@@ -83,7 +83,7 @@ public final class PDF417Writer implements Writer {
         Charset encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
         encoder.setEncoding(encoding);
       }
-      autoECI = hints != null && hints.containsKey(EncodeHintType.PDF417_AUTO_ECI) &&
+      autoECI = hints.containsKey(EncodeHintType.PDF417_AUTO_ECI) &&
           Boolean.parseBoolean(hints.get(EncodeHintType.PDF417_AUTO_ECI).toString());
     }
 
