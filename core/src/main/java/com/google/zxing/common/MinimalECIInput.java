@@ -102,7 +102,7 @@ public class MinimalECIInput implements ECIInput {
   */
   public char charAt(int index) {
     if (index < 0 || index >= length()) {
-      throw new IndexOutOfBoundsException(index);
+      throw new IndexOutOfBoundsException("" + index);
     }
     if (isECI(index)) {
       throw new IllegalArgumentException("value at " + index + " is not a character but an ECI");
@@ -131,11 +131,8 @@ public class MinimalECIInput implements ECIInput {
   *          if a value in the range {@code start}-{@code end} is an ECI (@see #isECI)
   */
   public CharSequence subSequence(int start, int end) {
-    if (start < 0 || start > end) {
-      throw new IndexOutOfBoundsException(start);
-    }
-    if (end < 0 || end > length()) {
-      throw new IndexOutOfBoundsException(start);
+    if (start < 0 || start > end || end < 0 || end > length()) {
+      throw new IndexOutOfBoundsException("" + start);
     }
     StringBuilder result = new StringBuilder();
     for (int i = start; i < end; i++) {
@@ -160,7 +157,7 @@ public class MinimalECIInput implements ECIInput {
   */
   public boolean isECI(int index) {
     if (index < 0 || index >= length()) {
-      throw new IndexOutOfBoundsException(index);
+      throw new IndexOutOfBoundsException("" + index);
     }
     return bytes[index] > 255 && bytes[index] <= 999;
   }
@@ -178,7 +175,7 @@ public class MinimalECIInput implements ECIInput {
   */
   public boolean isFNC1(int index) {
     if (index < 0 || index >= length()) {
-      throw new IndexOutOfBoundsException(index);
+      throw new IndexOutOfBoundsException("" + index);
     }
     return bytes[index] == 1000;
   }
@@ -203,7 +200,7 @@ public class MinimalECIInput implements ECIInput {
   */
   public int getECIValue(int index) {
     if (index < 0 || index >= length()) {
-      throw new IndexOutOfBoundsException(index);
+      throw new IndexOutOfBoundsException("" + index);
     }
     if (!isECI(index)) {
       throw new IllegalArgumentException("value at " + index + " is not an ECI but a character");
