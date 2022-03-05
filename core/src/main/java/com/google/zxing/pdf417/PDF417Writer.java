@@ -57,6 +57,7 @@ public final class PDF417Writer implements Writer {
     PDF417 encoder = new PDF417();
     int margin = WHITE_SPACE;
     int errorCorrectionLevel = DEFAULT_ERROR_CORRECTION_LEVEL;
+    boolean autoECI = false;
 
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
@@ -82,9 +83,11 @@ public final class PDF417Writer implements Writer {
         Charset encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
         encoder.setEncoding(encoding);
       }
+      autoECI = hints.containsKey(EncodeHintType.PDF417_AUTO_ECI) &&
+          Boolean.parseBoolean(hints.get(EncodeHintType.PDF417_AUTO_ECI).toString());
     }
 
-    return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin);
+    return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin, autoECI);
   }
 
   @Override
@@ -103,8 +106,9 @@ public final class PDF417Writer implements Writer {
                                                 int errorCorrectionLevel,
                                                 int width,
                                                 int height,
-                                                int margin) throws WriterException {
-    encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
+                                                int margin,
+                                                boolean autoECI) throws WriterException {
+    encoder.generateBarcodeLogic(contents, errorCorrectionLevel, autoECI);
 
     int aspectRatio = 4;
     byte[][] originalScale = encoder.getBarcodeMatrix().getScaledMatrix(1, aspectRatio);

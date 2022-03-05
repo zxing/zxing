@@ -104,6 +104,16 @@ public enum EncodeHintType {
   PDF417_DIMENSIONS,
 
   /**
+   * Specifies whether to automatically insert ECIs when encoding PDF417 (type {@link Boolean}, or "true" or "false"
+   * {@link String} value). 
+   * Please note that in that case, the most compact character encoding is chosen for characters in
+   * the input that are not in the ISO-8859-1 character set. Based on experience, some scanners do not
+   * support encodings like cp-1256 (Arabic). In such cases the encoding can be forced to UTF-8 by
+   * means of the {@link #CHARACTER_SET} encoding hint.
+   */
+  PDF417_AUTO_ECI,
+
+  /**
    * Specifies the required number of layers for an Aztec code.
    * A negative number (-1, -2, -3, -4) specifies a compact Aztec code.
    * 0 indicates to use the minimum number of layers (the default).

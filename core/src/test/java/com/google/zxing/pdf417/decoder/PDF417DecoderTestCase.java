@@ -25,6 +25,7 @@ import com.google.zxing.pdf417.encoder.PDF417HighLevelEncoderTestAdapter;
 
 import org.junit.Assert;
 import org.junit.Test;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -283,21 +284,76 @@ public class PDF417DecoderTestCase extends Assert {
     assertEquals(4190044, total); 
   }
 
+  @Test
+  public void testECIEnglishHiragana() throws Exception {
+    //multi ECI UTF-8, UTF-16 and ISO-8859-1
+    performECITest(new char[] {'a', '1', '\u3040'}, new float[] {20f, 1f, 10f}, 102583, 110914);
+  }
+
+  @Test
+  public void testECIEnglishKatakana() throws Exception {
+    //multi ECI UTF-8, UTF-16 and ISO-8859-1
+    performECITest(new char[] {'a', '1', '\u30a0'}, new float[] {20f, 1f, 10f}, 104691, 110914);
+  }
+
+  @Test
+  public void testECIEnglishHalfWidthKatakana() throws Exception {
+    //single ECI
+    performECITest(new char[] {'a', '1', '\uff80'}, new float[] {20f, 1f, 10f}, 80463, 110914);
+  }
+
+  @Test
+  public void testECIEnglishChinese() throws Exception {
+    //single ECI
+    performECITest(new char[] {'a', '1', '\u4e00'}, new float[] {20f, 1f, 10f}, 95643, 110914);
+  }
+
+  @Test
+  public void testECIGermanCyrillic() throws Exception {
+    //single ECI since the German Umlaut is in ISO-8859-1
+    performECITest(new char[] {'a', '1', '\u00c4', '\u042f'}, new float[] {20f, 1f, 1f, 10f}, 80529, 96007);
+  }
+
+  @Test
+  public void testECIEnglishCzechCyrillic1() throws Exception {
+    //multi ECI between ISO-8859-2 and ISO-8859-5
+    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 91482, 124525);
+  }
+
+  @Test
+  public void testECIEnglishCzechCyrillic2() throws Exception {
+    //multi ECI between ISO-8859-2 and ISO-8859-5
+    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {40f, 1f, 10f, 10f}, 79331, 88236);
+  }
+
+  @Test
+  public void testECIEnglishArabicCyrillic() throws Exception {
+    //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
+    performECITest(new char[] {'a', '1', '\u0620', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 111508, 124525);
+  }
+
   private static void encodeDecode(String input, int expectedLength) throws WriterException, FormatException {
     assertEquals(expectedLength, encodeDecode(input));
   }
 
   private static int encodeDecode(String input) throws WriterException, FormatException {
-    String s = PDF417HighLevelEncoderTestAdapter.encodeHighLevel(input, Compaction.AUTO, null);
-    int[] codewords = new int[s.length() + 1];
-    codewords[0] = codewords.length;
-    for (int i = 1; i < codewords.length; i++) {
-      codewords[i] = s.charAt(i - 1);
-    }
-    DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
+    return encodeDecode(input, null, false, true);
+  }
 
-    assertEquals(input, result.getText());
-    return codewords.length;
+  private static int encodeDecode(String input, Charset charset, boolean autoECI, boolean decode)
+      throws WriterException, FormatException {
+    String s = PDF417HighLevelEncoderTestAdapter.encodeHighLevel(input, Compaction.AUTO, charset, autoECI);
+    if (decode) {
+      int[] codewords = new int[s.length() + 1];
+      codewords[0] = codewords.length;
+      for (int i = 1; i < codewords.length; i++) {
+        codewords[i] = s.charAt(i - 1);
+      }
+      DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
+  
+      assertEquals(input, result.getText());
+    }
+    return s.length() + 1;
   }
 
   private static int getEndIndex(int length, char[] chars) {
@@ -338,4 +394,61 @@ public class PDF417DecoderTestCase extends Assert {
     }
   }
 
+  private static void performECITest(char[] chars,
+                               float[] weights,
+                               int expectedMinLength,
+                               int expectedUTFLength) throws WriterException, FormatException {
+    Random random = new Random(0);
+    int minLength = 0;
+    int utfLength = 0;
+    for (int i = 0; i < 1000; i++) {
+      String s = generateText(random, 100, chars, weights);
+      minLength += encodeDecode(s, null, true, false);
+      // TODO: Use this instead when the decoder supports multi ECI input
+      //minLength += encodeDecode(s, null, true, true);
+      utfLength += encodeDecode(s, StandardCharsets.UTF_8, false, true);
+    }
+    assertEquals(expectedMinLength, minLength);
+    assertEquals(expectedUTFLength, utfLength);
+  }
+
+  private static String generateText(Random random, int maxWidth, char[] chars, float[] weights) {
+    StringBuilder result = new StringBuilder();
+    final int maxWordWidth = 7;
+    float total = 0;
+    for (int i = 0; i < weights.length; i++) {
+      total += weights[i];
+    }
+    for (int i = 0; i < weights.length; i++) {
+      weights[i] /= total;
+    }
+    int cnt = 0;
+    do {
+      float maxValue = 0;
+      int maxIndex = 0;
+      for (int j = 0; j < weights.length; j++) {
+        float value = random.nextFloat() * weights[j];
+        if (value > maxValue) {
+          maxValue = value;
+          maxIndex = j;
+        }
+      }
+      final float wordLength = maxWordWidth * random.nextFloat();
+      if (wordLength > 0 && result.length() > 0) {
+        result.append(' ');
+      }
+      for (int j = 0; j < wordLength; j++) {
+        char c = chars[maxIndex];
+        if (j == 0 && c >= 'a' && c <= 'z' && random.nextBoolean()) {
+          c = (char) (c - 'a' + 'A');
+        }
+        result.append(c);
+      }
+      if (cnt % 2 != 0 && random.nextBoolean()) {
+        result.append('.');
+      }
+      cnt++;
+    } while (result.length() < maxWidth - maxWordWidth);
+    return result.toString();
+  }
 }
