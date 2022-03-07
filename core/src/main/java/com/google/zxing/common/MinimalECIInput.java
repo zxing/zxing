@@ -208,6 +208,7 @@ public class MinimalECIInput implements ECIInput {
     return bytes[index] - 256;
   }
 
+  @Override
   public String toString() {
     StringBuilder result = new StringBuilder();
     for (int i = 0; i < length(); i++) {

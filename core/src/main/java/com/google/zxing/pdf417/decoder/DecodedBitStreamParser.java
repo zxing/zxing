@@ -24,6 +24,7 @@ import com.google.zxing.pdf417.PDF417ResultMetadata;
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.io.UnsupportedEncodingException;
 
 /**
  * <p>This class contains the methods for decoding the PDF417 codewords.</p>
@@ -751,10 +752,10 @@ final class DecodedBitStreamParser {
   }
 
   private static final class ECIOutput {
-    boolean needFlush = false;
-    String encodingName = "ISO-8859-1";
+    private boolean needFlush = false;
+    private String encodingName = "ISO-8859-1";
     private ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    StringBuilder result;
+    private StringBuilder result;
 
     private ECIOutput() {
       result = new StringBuilder();
@@ -795,7 +796,7 @@ final class DecodedBitStreamParser {
         needFlush = false;
         try {
           result.append(bytes.toString(encodingName));
-        } catch (java.io.UnsupportedEncodingException uee) {
+        } catch (UnsupportedEncodingException uee) {
           // can't happen
           throw new IllegalStateException(uee);
         }
@@ -806,6 +807,7 @@ final class DecodedBitStreamParser {
       return !needFlush && result.length() == 0;
     }
 
+    @Override
     public String toString() {
       flush();
       return result.toString();
