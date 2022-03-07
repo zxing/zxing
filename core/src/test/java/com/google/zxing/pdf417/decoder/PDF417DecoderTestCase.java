@@ -287,49 +287,49 @@ public class PDF417DecoderTestCase extends Assert {
   @Test
   public void testECIEnglishHiragana() throws Exception {
     //multi ECI UTF-8, UTF-16 and ISO-8859-1
-    performECITest(new char[] {'a', '1', '\u3040'}, new float[] {20f, 1f, 10f}, 102583, 110914);
+    performECITest(new char[] {'a', '1', '\u3040'}, new float[] {20f, 1f, 10f}, 105825, 110914);
   }
 
   @Test
   public void testECIEnglishKatakana() throws Exception {
     //multi ECI UTF-8, UTF-16 and ISO-8859-1
-    performECITest(new char[] {'a', '1', '\u30a0'}, new float[] {20f, 1f, 10f}, 104691, 110914);
+    performECITest(new char[] {'a', '1', '\u30a0'}, new float[] {20f, 1f, 10f}, 109177, 110914);
   }
 
   @Test
   public void testECIEnglishHalfWidthKatakana() throws Exception {
     //single ECI
-    performECITest(new char[] {'a', '1', '\uff80'}, new float[] {20f, 1f, 10f}, 80463, 110914);
+    performECITest(new char[] {'a', '1', '\uff80'}, new float[] {20f, 1f, 10f}, 80617, 110914);
   }
 
   @Test
   public void testECIEnglishChinese() throws Exception {
     //single ECI
-    performECITest(new char[] {'a', '1', '\u4e00'}, new float[] {20f, 1f, 10f}, 95643, 110914);
+    performECITest(new char[] {'a', '1', '\u4e00'}, new float[] {20f, 1f, 10f}, 95797, 110914);
   }
 
   @Test
   public void testECIGermanCyrillic() throws Exception {
     //single ECI since the German Umlaut is in ISO-8859-1
-    performECITest(new char[] {'a', '1', '\u00c4', '\u042f'}, new float[] {20f, 1f, 1f, 10f}, 80529, 96007);
+    performECITest(new char[] {'a', '1', '\u00c4', '\u042f'}, new float[] {20f, 1f, 1f, 10f}, 80755, 96007);
   }
 
   @Test
   public void testECIEnglishCzechCyrillic1() throws Exception {
     //multi ECI between ISO-8859-2 and ISO-8859-5
-    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 91482, 124525);
+    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 102824, 124525);
   }
 
   @Test
   public void testECIEnglishCzechCyrillic2() throws Exception {
     //multi ECI between ISO-8859-2 and ISO-8859-5
-    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {40f, 1f, 10f, 10f}, 79331, 88236);
+    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {40f, 1f, 10f, 10f}, 81321, 88236);
   }
 
   @Test
   public void testECIEnglishArabicCyrillic() throws Exception {
     //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
-    performECITest(new char[] {'a', '1', '\u0620', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 111508, 124525);
+    performECITest(new char[] {'a', '1', '\u0620', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 118510, 124525);
   }
 
   private static void encodeDecode(String input, int expectedLength) throws WriterException, FormatException {
@@ -403,9 +403,7 @@ public class PDF417DecoderTestCase extends Assert {
     int utfLength = 0;
     for (int i = 0; i < 1000; i++) {
       String s = generateText(random, 100, chars, weights);
-      minLength += encodeDecode(s, null, true, false);
-      // TODO: Use this instead when the decoder supports multi ECI input
-      //minLength += encodeDecode(s, null, true, true);
+      minLength += encodeDecode(s, null, true, true);
       utfLength += encodeDecode(s, StandardCharsets.UTF_8, false, true);
     }
     assertEquals(expectedMinLength, minLength);
