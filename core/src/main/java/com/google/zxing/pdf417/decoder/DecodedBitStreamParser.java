@@ -547,103 +547,49 @@ final class DecodedBitStreamParser {
   private static int byteCompaction(int mode,
                                     int[] codewords,
                                     int codeIndex,
-                                    ECIOutput result) {
-    int count = 0;
-    long value = 0;
+                                    ECIOutput result) throws FormatException {
     boolean end = false;
-
-    switch (mode) {
-      case BYTE_COMPACTION_MODE_LATCH:
-        // Total number of Byte Compaction characters to be encoded
-        // is not a multiple of 6
-
-        int[] byteCompactedCodewords = new int[6];
-        int nextCode = codewords[codeIndex++];
-        while ((codeIndex < codewords[0]) && !end) {
-          byteCompactedCodewords[count++] = nextCode;
-          // Base 900
-          value = 900 * value + nextCode;
-          nextCode = codewords[codeIndex++];
-          // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
-          switch (nextCode) {
-            case TEXT_COMPACTION_MODE_LATCH:
-            case BYTE_COMPACTION_MODE_LATCH:
-            case NUMERIC_COMPACTION_MODE_LATCH:
-            case BYTE_COMPACTION_MODE_LATCH_6:
-            case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-            case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-            case MACRO_PDF417_TERMINATOR:
-            case ECI_CHARSET:
+    
+    while (codeIndex < codewords[0] && !end) {
+      //handle leading ECIs
+      while (codeIndex < codewords[0] && codewords[codeIndex] == ECI_CHARSET) {
+        result.appendECI(codewords[++codeIndex]);
+        codeIndex++;
+      }
+      
+      if (codeIndex >= codewords[0] || codewords[codeIndex] >= TEXT_COMPACTION_MODE_LATCH) {
+        end = true;
+      } else {
+        //decode one block of 5 codewords to 6 bytes
+        long value = 0;
+        int count = 0;
+        do {
+          value = 900 * value + codewords[codeIndex++];
+          count++;
+        } while (count < 5 && 
+                 codeIndex < codewords[0] &&
+                 codewords[codeIndex] < TEXT_COMPACTION_MODE_LATCH);
+        if (count == 5 && (mode == BYTE_COMPACTION_MODE_LATCH_6 ||
+                           codeIndex < codewords[0] &&
+                           codewords[codeIndex] < TEXT_COMPACTION_MODE_LATCH)) {
+          for (int i = 0; i < 6; i++) {
+            result.append((byte) (value >> (8 * (5 - i))));
+          }
+        } else {
+          codeIndex -= count;
+          while ((codeIndex < codewords[0]) && !end) {
+            int code = codewords[codeIndex++];
+            if (code < TEXT_COMPACTION_MODE_LATCH) {
+              result.append((byte) code);
+            } else if (code == ECI_CHARSET) {
+              result.appendECI(codewords[codeIndex++]);
+            } else {
               codeIndex--;
               end = true;
-              break;
-            default:
-              if ((count % 5 == 0) && (count > 0)) {
-                // Decode every 5 codewords
-                // Convert to Base 256
-                for (int j = 0; j < 6; ++j) {
-                  result.append((byte) (value >> (8 * (5 - j))));
-                }
-                value = 0;
-                count = 0;
-              }
-              break;
-          }
-        }
-
-        // if the end of all codewords is reached the last codeword needs to be added
-        if (codeIndex == codewords[0] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
-          byteCompactedCodewords[count++] = nextCode;
-        }
-
-        // If Byte Compaction mode is invoked with codeword 901,
-        // the last group of codewords is interpreted directly
-        // as one byte per codeword, without compaction.
-        for (int i = 0; i < count; i++) {
-          result.append((byte) byteCompactedCodewords[i]);
-        }
-
-        break;
-
-      case BYTE_COMPACTION_MODE_LATCH_6:
-        // Total number of Byte Compaction characters to be encoded
-        // is an integer multiple of 6
-        while (codeIndex < codewords[0] && !end) {
-          int code = codewords[codeIndex++];
-          if (code < TEXT_COMPACTION_MODE_LATCH) {
-            count++;
-            // Base 900
-            value = 900 * value + code;
-          } else {
-            switch (code) {
-              case TEXT_COMPACTION_MODE_LATCH:
-              case BYTE_COMPACTION_MODE_LATCH:
-              case NUMERIC_COMPACTION_MODE_LATCH:
-              case BYTE_COMPACTION_MODE_LATCH_6:
-              case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-              case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-              case MACRO_PDF417_TERMINATOR:
-              case ECI_CHARSET:
-                codeIndex--;
-                end = true;
-                break;
             }
           }
-          if ((count % 5 == 0) && (count > 0)) {
-            // Decode every 5 codewords
-            // Convert to Base 256
-            for (int j = 0; j < 6; ++j) {
-              result.append((byte) (value >> (8 * (5 - j))));
-            }
-            value = 0;
-            count = 0;
-          }
         }
-        break;
-      case ECI_CHARSET:
-        codeIndex--;
-        end = true;
-        break;
+      }
     }
     return codeIndex;
   }

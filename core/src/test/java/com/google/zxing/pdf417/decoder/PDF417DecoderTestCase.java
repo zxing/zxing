@@ -281,7 +281,7 @@ public class PDF417DecoderTestCase extends Assert {
       random.nextBytes(bytes);
       total += encodeDecode(new String(bytes, StandardCharsets.ISO_8859_1));
     }
-    assertEquals(4190044, total); 
+    assertEquals(4190044, total);
   }
 
   @Test
@@ -332,6 +332,19 @@ public class PDF417DecoderTestCase extends Assert {
     performECITest(new char[] {'a', '1', '\u0620', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 118510, 124525);
   }
 
+  @Test
+  public void testBinaryMultiECI() throws Exception {
+    //Test the cases described in 5.5.5.3 "ECI and Byte Compaction mode using latch 924 and 901"
+    performDecodeTest(new int[] {5, 927, 4, 913, 200}, "\u010c");
+    performDecodeTest(new int[] {9, 927, 4, 913, 200, 927, 7, 913, 207}, "\u010c\u042f");
+    performDecodeTest(new int[] {9, 927, 4, 901, 200, 927, 7, 901, 207}, "\u010c\u042f");
+    performDecodeTest(new int[] {8, 927, 4, 901, 200, 927, 7, 207}, "\u010c\u042f");
+    performDecodeTest(new int[] {14, 927, 4, 901, 200, 927, 7, 207, 927, 4, 200, 927, 7, 207},
+         "\u010c\u042f\u010c\u042f");
+    performDecodeTest(new int[] {16, 927, 4, 924, 336, 432, 197, 51, 300, 927, 7, 348, 231, 311, 858, 567},
+        "\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f");
+  }
+
   private static void encodeDecode(String input, int expectedLength) throws WriterException, FormatException {
     assertEquals(expectedLength, encodeDecode(input));
   }
@@ -349,9 +362,7 @@ public class PDF417DecoderTestCase extends Assert {
       for (int i = 1; i < codewords.length; i++) {
         codewords[i] = s.charAt(i - 1);
       }
-      DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
-  
-      assertEquals(input, result.getText());
+      performDecodeTest(codewords, input);
     }
     return s.length() + 1;
   }
@@ -392,6 +403,11 @@ public class PDF417DecoderTestCase extends Assert {
       }
       encodeDecode(sb.toString(), expectedLengths[i]);
     }
+  }
+
+  private static void performDecodeTest(int[] codewords, String expectedResult) throws FormatException {
+    DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
+    assertEquals(expectedResult, result.getText());
   }
 
   private static void performECITest(char[] chars,
