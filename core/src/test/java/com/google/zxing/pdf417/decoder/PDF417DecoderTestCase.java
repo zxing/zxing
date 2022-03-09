@@ -281,55 +281,68 @@ public class PDF417DecoderTestCase extends Assert {
       random.nextBytes(bytes);
       total += encodeDecode(new String(bytes, StandardCharsets.ISO_8859_1));
     }
-    assertEquals(4190044, total); 
+    assertEquals(4190044, total);
   }
 
   @Test
   public void testECIEnglishHiragana() throws Exception {
     //multi ECI UTF-8, UTF-16 and ISO-8859-1
-    performECITest(new char[] {'a', '1', '\u3040'}, new float[] {20f, 1f, 10f}, 102583, 110914);
+    performECITest(new char[] {'a', '1', '\u3040'}, new float[] {20f, 1f, 10f}, 105825, 110914);
   }
 
   @Test
   public void testECIEnglishKatakana() throws Exception {
     //multi ECI UTF-8, UTF-16 and ISO-8859-1
-    performECITest(new char[] {'a', '1', '\u30a0'}, new float[] {20f, 1f, 10f}, 104691, 110914);
+    performECITest(new char[] {'a', '1', '\u30a0'}, new float[] {20f, 1f, 10f}, 109177, 110914);
   }
 
   @Test
   public void testECIEnglishHalfWidthKatakana() throws Exception {
     //single ECI
-    performECITest(new char[] {'a', '1', '\uff80'}, new float[] {20f, 1f, 10f}, 80463, 110914);
+    performECITest(new char[] {'a', '1', '\uff80'}, new float[] {20f, 1f, 10f}, 80617, 110914);
   }
 
   @Test
   public void testECIEnglishChinese() throws Exception {
     //single ECI
-    performECITest(new char[] {'a', '1', '\u4e00'}, new float[] {20f, 1f, 10f}, 95643, 110914);
+    performECITest(new char[] {'a', '1', '\u4e00'}, new float[] {20f, 1f, 10f}, 95797, 110914);
   }
 
   @Test
   public void testECIGermanCyrillic() throws Exception {
     //single ECI since the German Umlaut is in ISO-8859-1
-    performECITest(new char[] {'a', '1', '\u00c4', '\u042f'}, new float[] {20f, 1f, 1f, 10f}, 80529, 96007);
+    performECITest(new char[] {'a', '1', '\u00c4', '\u042f'}, new float[] {20f, 1f, 1f, 10f}, 80755, 96007);
   }
 
   @Test
   public void testECIEnglishCzechCyrillic1() throws Exception {
     //multi ECI between ISO-8859-2 and ISO-8859-5
-    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 91482, 124525);
+    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 102824, 124525);
   }
 
   @Test
   public void testECIEnglishCzechCyrillic2() throws Exception {
     //multi ECI between ISO-8859-2 and ISO-8859-5
-    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {40f, 1f, 10f, 10f}, 79331, 88236);
+    performECITest(new char[] {'a', '1', '\u010c', '\u042f'}, new float[] {40f, 1f, 10f, 10f}, 81321, 88236);
   }
 
   @Test
   public void testECIEnglishArabicCyrillic() throws Exception {
     //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
-    performECITest(new char[] {'a', '1', '\u0620', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 111508, 124525);
+    performECITest(new char[] {'a', '1', '\u0620', '\u042f'}, new float[] {10f, 1f, 10f, 10f}, 118510, 124525);
+  }
+
+  @Test
+  public void testBinaryMultiECI() throws Exception {
+    //Test the cases described in 5.5.5.3 "ECI and Byte Compaction mode using latch 924 and 901"
+    performDecodeTest(new int[] {5, 927, 4, 913, 200}, "\u010c");
+    performDecodeTest(new int[] {9, 927, 4, 913, 200, 927, 7, 913, 207}, "\u010c\u042f");
+    performDecodeTest(new int[] {9, 927, 4, 901, 200, 927, 7, 901, 207}, "\u010c\u042f");
+    performDecodeTest(new int[] {8, 927, 4, 901, 200, 927, 7, 207}, "\u010c\u042f");
+    performDecodeTest(new int[] {14, 927, 4, 901, 200, 927, 7, 207, 927, 4, 200, 927, 7, 207},
+         "\u010c\u042f\u010c\u042f");
+    performDecodeTest(new int[] {16, 927, 4, 924, 336, 432, 197, 51, 300, 927, 7, 348, 231, 311, 858, 567},
+        "\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f");
   }
 
   private static void encodeDecode(String input, int expectedLength) throws WriterException, FormatException {
@@ -349,9 +362,7 @@ public class PDF417DecoderTestCase extends Assert {
       for (int i = 1; i < codewords.length; i++) {
         codewords[i] = s.charAt(i - 1);
       }
-      DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
-  
-      assertEquals(input, result.getText());
+      performDecodeTest(codewords, input);
     }
     return s.length() + 1;
   }
@@ -394,6 +405,11 @@ public class PDF417DecoderTestCase extends Assert {
     }
   }
 
+  private static void performDecodeTest(int[] codewords, String expectedResult) throws FormatException {
+    DecoderResult result = DecodedBitStreamParser.decode(codewords, "0");
+    assertEquals(expectedResult, result.getText());
+  }
+
   private static void performECITest(char[] chars,
                                float[] weights,
                                int expectedMinLength,
@@ -403,9 +419,7 @@ public class PDF417DecoderTestCase extends Assert {
     int utfLength = 0;
     for (int i = 0; i < 1000; i++) {
       String s = generateText(random, 100, chars, weights);
-      minLength += encodeDecode(s, null, true, false);
-      // TODO: Use this instead when the decoder supports multi ECI input
-      //minLength += encodeDecode(s, null, true, true);
+      minLength += encodeDecode(s, null, true, true);
       utfLength += encodeDecode(s, StandardCharsets.UTF_8, false, true);
     }
     assertEquals(expectedMinLength, minLength);
