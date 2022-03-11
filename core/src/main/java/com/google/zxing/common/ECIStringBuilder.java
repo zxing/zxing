@@ -26,7 +26,6 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Alex Geller
  */
-
 public final class ECIStringBuilder {
   private StringBuilder currentBytes;
   private StringBuilder result;
@@ -61,38 +60,35 @@ public final class ECIStringBuilder {
   }
 
   /**
-   * append the string repesentation of {@code value} (short for {@code append("" + value)})
+   * append the string repesentation of {@code value} (short for {@code append(String.valueOf(value))})
    */
   public void append(int value) {
-    append("" + value);
+    append(String.valueOf(value));
   }
 
   public void appendECI(int value) throws FormatException {
     encodeCurrentBytesIfAny();
     CharacterSetECI characterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
     if (characterSetECI == null) {
-      throw FormatException.getFormatInstance(new RuntimeException("Unsupported ECI value " + value));
+      throw FormatException.getFormatInstance();
     }
     currentCharset = characterSetECI.getCharset();
   }
 
   private void encodeCurrentBytesIfAny() {
-    if (currentCharset == StandardCharsets.ISO_8859_1) {
+    if (currentCharset.equals(StandardCharsets.ISO_8859_1)) {
       if (currentBytes.length() > 0) {
         if (result == null) {
           result = currentBytes;
           currentBytes = new StringBuilder();
         } else {
           result.append(currentBytes);
-          currentBytes.setLength(0);
+          currentBytes = new StringBuilder();
         }
       }
     } else if (currentBytes.length() > 0) {
-      byte[] bytes = new byte[currentBytes.length()];
-      for (int i = 0; i < bytes.length; i++) {
-        bytes[i] = (byte) (currentBytes.charAt(i) & 0xff);
-      }
-      currentBytes.setLength(0);
+      byte[] bytes = currentBytes.toString().getBytes(StandardCharsets.ISO_8859_1);
+      currentBytes = new StringBuilder();
       if (result == null) {
         result = new StringBuilder(new String(bytes, currentCharset));
       } else {
@@ -102,7 +98,7 @@ public final class ECIStringBuilder {
   }
 
   /**
-   * appends the characters from sb (unlike all other append methods of this class who append bytes)
+   * Appends the characters from {@code value} (unlike all other append methods of this class who append bytes)
    */
   public void appendCharacters(StringBuilder value) {
     encodeCurrentBytesIfAny();
