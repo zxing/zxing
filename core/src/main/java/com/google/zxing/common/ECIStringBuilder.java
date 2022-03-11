@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ZXing authors
+ * Copyright 2022 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Class that converts a sequence of ECIs and byte into a string to be used for decoding multi-eci content
+ * Class that converts a sequence of ECIs and bytes into a string
  *
  * @author Alex Geller
  */
@@ -39,6 +39,9 @@ public final class ECIStringBuilder {
     currentBytes = new StringBuilder(initialCapacity);
   }
 
+  /**
+   * appends {@code value} as a byte value
+   */
   public void append(char value) {
     currentBytes.append((char) (value & 0xff));
   }
@@ -47,11 +50,16 @@ public final class ECIStringBuilder {
     currentBytes.append((char) (value & 0xff));
   }
 
+  /**
+   * appends the characters in {@code value} as bytes values
+   */
   public void append(String value) {
     currentBytes.append(value);
   }
 
-  /* short for {@code append("" + value)}*/
+  /**
+   * short for {@code append("" + value)}
+   */
   public void append(int value) {
     append("" + value);
   }
@@ -99,7 +107,7 @@ public final class ECIStringBuilder {
   }
 
   /**
-   * returns the length of toString()
+   * short for {@code toString().length()} (if possible, use {@link #isEmpty()} instead)
    */
   public int length() {
     return toString().length();
