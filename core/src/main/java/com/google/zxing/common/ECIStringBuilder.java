@@ -46,6 +46,9 @@ public final class ECIStringBuilder {
     currentBytes.append((char) (value & 0xff));
   }
 
+  /**
+   * appends {@code value} as a byte value (not it's string representation)
+   */
   public void append(byte value) {
     currentBytes.append((char) (value & 0xff));
   }
@@ -58,7 +61,7 @@ public final class ECIStringBuilder {
   }
 
   /**
-   * short for {@code append("" + value)}
+   * append the string repesentation of {@code value} (short for {@code append("" + value)})
    */
   public void append(int value) {
     append("" + value);
