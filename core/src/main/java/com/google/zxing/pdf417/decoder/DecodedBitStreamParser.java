@@ -17,14 +17,12 @@
 package com.google.zxing.pdf417.decoder;
 
 import com.google.zxing.FormatException;
-import com.google.zxing.common.CharacterSetECI;
+import com.google.zxing.common.ECIStringBuilder;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.pdf417.PDF417ResultMetadata;
 
-import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.io.UnsupportedEncodingException;
 
 /**
  * <p>This class contains the methods for decoding the PDF417 codewords.</p>
@@ -100,7 +98,7 @@ final class DecodedBitStreamParser {
   }
 
   static DecoderResult decode(int[] codewords, String ecLevel) throws FormatException {
-    ECIOutput result = new ECIOutput(codewords.length * 2);
+    ECIStringBuilder result = new ECIStringBuilder(codewords.length * 2);
     int codeIndex = textCompaction(codewords, 1, result);
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
     while (codeIndex < codewords[0]) {
@@ -205,37 +203,37 @@ final class DecodedBitStreamParser {
           codeIndex++;
           switch (codewords[codeIndex]) {
             case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
-              ECIOutput fileName = new ECIOutput();
+              ECIStringBuilder fileName = new ECIStringBuilder();
               codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
               resultMetadata.setFileName(fileName.toString());
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
-              ECIOutput sender = new ECIOutput();
+              ECIStringBuilder sender = new ECIStringBuilder();
               codeIndex = textCompaction(codewords, codeIndex + 1, sender);
               resultMetadata.setSender(sender.toString());
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
-              ECIOutput addressee = new ECIOutput();
+              ECIStringBuilder addressee = new ECIStringBuilder();
               codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
               resultMetadata.setAddressee(addressee.toString());
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
-              ECIOutput segmentCount = new ECIOutput();
+              ECIStringBuilder segmentCount = new ECIStringBuilder();
               codeIndex = numericCompaction(codewords, codeIndex + 1, segmentCount);
               resultMetadata.setSegmentCount(Integer.parseInt(segmentCount.toString()));
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
-              ECIOutput timestamp = new ECIOutput();
+              ECIStringBuilder timestamp = new ECIStringBuilder();
               codeIndex = numericCompaction(codewords, codeIndex + 1, timestamp);
               resultMetadata.setTimestamp(Long.parseLong(timestamp.toString()));
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
-              ECIOutput checksum = new ECIOutput();
+              ECIStringBuilder checksum = new ECIStringBuilder();
               codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
               resultMetadata.setChecksum(Integer.parseInt(checksum.toString()));
               break;
             case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
-              ECIOutput fileSize = new ECIOutput();
+              ECIStringBuilder fileSize = new ECIStringBuilder();
               codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
               resultMetadata.setFileSize(Long.parseLong(fileSize.toString()));
               break;
@@ -276,7 +274,7 @@ final class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  private static int textCompaction(int[] codewords, int codeIndex, ECIOutput result) throws FormatException {
+  private static int textCompaction(int[] codewords, int codeIndex, ECIStringBuilder result) throws FormatException {
     // 2 character per codeword
     int[] textCompactionData = new int[(codewords[0] - codeIndex) * 2];
     // Used to hold the byte compaction value if there is a mode shift
@@ -353,7 +351,7 @@ final class DecodedBitStreamParser {
   private static Mode decodeTextCompaction(int[] textCompactionData,
                                            int[] byteCompactionData,
                                            int length,
-                                           ECIOutput result,
+                                           ECIStringBuilder result,
                                            Mode startMode) {
     // Beginning from an initial state
     // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
@@ -547,7 +545,7 @@ final class DecodedBitStreamParser {
   private static int byteCompaction(int mode,
                                     int[] codewords,
                                     int codeIndex,
-                                    ECIOutput result) throws FormatException {
+                                    ECIStringBuilder result) throws FormatException {
     boolean end = false;
     
     while (codeIndex < codewords[0] && !end) {
@@ -602,7 +600,7 @@ final class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  private static int numericCompaction(int[] codewords, int codeIndex, ECIOutput result) throws FormatException {
+  private static int numericCompaction(int[] codewords, int codeIndex, ECIStringBuilder result) throws FormatException {
     int count = 0;
     boolean end = false;
 
@@ -695,69 +693,6 @@ final class DecodedBitStreamParser {
       throw FormatException.getFormatInstance();
     }
     return resultString.substring(1);
-  }
-
-  private static final class ECIOutput {
-    private boolean needFlush = false;
-    private String encodingName = "ISO-8859-1";
-    private ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    private StringBuilder result;
-
-    private ECIOutput() {
-      result = new StringBuilder();
-    }
-
-    private ECIOutput(int size) {
-      result = new StringBuilder(size);
-    }
-
-    private void append(byte value) {
-      bytes.write(value);
-      needFlush = true;
-    }
-
-    private void append(char value) {
-      bytes.write(value & 0xff);
-      needFlush = true;
-    }
-
-    private void append(String s) {
-      for (int i = 0; i < s.length(); i++) {
-        append(s.charAt(i));
-      }
-    }
-
-    private void appendECI(int value) throws FormatException {
-      flush();
-      bytes = new ByteArrayOutputStream();
-      CharacterSetECI charsetECI = CharacterSetECI.getCharacterSetECIByValue(value);
-      if (charsetECI == null) {
-        throw FormatException.getFormatInstance();
-      }
-      encodingName = charsetECI.name();
-    }
-
-    private void flush() {
-      if (needFlush) {
-        needFlush = false;
-        try {
-          result.append(bytes.toString(encodingName));
-        } catch (UnsupportedEncodingException uee) {
-          // can't happen
-          throw new IllegalStateException(uee);
-        }
-      }
-    }
-
-    private boolean isEmpty() {
-      return !needFlush && result.length() == 0;
-    }
-
-    @Override
-    public String toString() {
-      flush();
-      return result.toString();
-    }
   }
 
 }
