@@ -39,28 +39,28 @@ public final class ECIStringBuilder {
   }
 
   /**
-   * appends {@code value} as a byte value
+   * Appends {@code value} as a byte value
    */
   public void append(char value) {
     currentBytes.append((char) (value & 0xff));
   }
 
   /**
-   * appends {@code value} as a byte value (not it's string representation)
+   * Appends {@code value} as a byte value (not its string representation)
    */
   public void append(byte value) {
     currentBytes.append((char) (value & 0xff));
   }
 
   /**
-   * appends the characters in {@code value} as bytes values
+   * Appends the characters in {@code value} as bytes values
    */
   public void append(String value) {
     currentBytes.append(value);
   }
 
   /**
-   * append the string repesentation of {@code value} (short for {@code append(String.valueOf(value))})
+   * Append the string repesentation of {@code value} (short for {@code append(String.valueOf(value))})
    */
   public void append(int value) {
     append(String.valueOf(value));
@@ -106,7 +106,7 @@ public final class ECIStringBuilder {
   }
 
   /**
-   * short for {@code toString().length()} (if possible, use {@link #isEmpty()} instead)
+   * Short for {@code toString().length()} (if possible, use {@link #isEmpty()} instead)
    */
   public int length() {
     return toString().length();
