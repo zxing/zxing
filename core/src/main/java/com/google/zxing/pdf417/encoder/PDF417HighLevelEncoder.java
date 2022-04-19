@@ -174,9 +174,9 @@ final class PDF417HighLevelEncoder {
     if (encoding == null && !autoECI) {
       for (int i = 0; i < msg.length(); i++) {
         if (msg.charAt(i) > 255) {
-          //will produce '?' for characters with a value greater than 255
-          msg = new String(msg.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1);
-          break;
+          throw new WriterException("Non-encodable character detected: " + msg.charAt(i) + " (Unicode: " +
+              (int) msg.charAt(i) +
+              "). Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET.");
         }
       }
     }
