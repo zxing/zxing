@@ -171,6 +171,15 @@ final class PDF417HighLevelEncoder {
   static String encodeHighLevel(String msg, Compaction compaction, Charset encoding, boolean autoECI) 
       throws WriterException {
 
+    if (encoding == null && !autoECI) {
+      for (int i = 0; i < msg.length(); i++) {
+        if (msg.charAt(i) > 255) {
+          //will produce '?' for characters with a value greater than 255
+          msg = new String(msg.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1);
+          break;
+        }
+      }
+    }
     //the codewords 0..928 are encoded as Unicode characters
     StringBuilder sb = new StringBuilder(msg.length());
 
