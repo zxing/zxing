@@ -48,7 +48,8 @@
               android:clearTaskOnLaunch="true"
               android:stateNotNeeded="true"
               android:theme="@style/CaptureTheme"
-              android:windowSoftInputMode="stateAlwaysHidden">
+              android:windowSoftInputMode="stateAlwaysHidden"
+              android:exported="false">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
@@ -90,7 +91,8 @@
               android:label="@string/preferences_name"
               android:stateNotNeeded="true"/>
     <activity android:name=".encode.EncodeActivity"
-              android:stateNotNeeded="true">
+              android:stateNotNeeded="true"
+              android:exported="false">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -111,7 +113,8 @@
     <activity android:name=".book.SearchBookContentsActivity"
               android:label="@string/sbc_name"
               android:stateNotNeeded="true"
-              android:screenOrientation="sensorLandscape">
+              android:screenOrientation="sensorLandscape"
+              android:exported="false">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.SEARCH_BOOK_CONTENTS"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -119,7 +122,8 @@
     </activity>
     <activity android:name=".share.ShareActivity"
               android:stateNotNeeded="true"
-              android:screenOrientation="user">
+              android:screenOrientation="user"
+              android:exported="false">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.SHARE"/>
         <category android:name="android.intent.category.DEFAULT"/>
