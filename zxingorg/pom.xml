@@ -73,7 +73,7 @@
   </parent>
 
   <properties>
-    <spring.version>5.3.16</spring.version>
+    <spring.version>5.3.19</spring.version>
   </properties>
 
   <build>
