@@ -77,7 +77,7 @@ public final class ECIStringBuilder {
   /**
    * Appends ECI value to output.
    *
-   * @param ECI value to append, as an int
+   * @param value ECI value to append, as an int
    */
   public void appendECI(int value) throws FormatException {
     encodeCurrentBytesIfAny();
