@@ -40,13 +40,17 @@ public final class ECIStringBuilder {
 
   /**
    * Appends {@code value} as a byte value
+   *
+   * @param value character whose lowest byte is to be appended
    */
   public void append(char value) {
     currentBytes.append((char) (value & 0xff));
   }
 
   /**
-   * Appends {@code value} as a byte value (not its string representation)
+   * Appends {@code value} as a byte value
+   *
+   * @param value byte to append
    */
   public void append(byte value) {
     currentBytes.append((char) (value & 0xff));
@@ -54,6 +58,8 @@ public final class ECIStringBuilder {
 
   /**
    * Appends the characters in {@code value} as bytes values
+   *
+   * @param value string to append
    */
   public void append(String value) {
     currentBytes.append(value);
@@ -61,11 +67,18 @@ public final class ECIStringBuilder {
 
   /**
    * Append the string repesentation of {@code value} (short for {@code append(String.valueOf(value))})
+   *
+   * @param value int to append as a string
    */
   public void append(int value) {
     append(String.valueOf(value));
   }
 
+  /**
+   * Appends ECI value to output.
+   *
+   * @param ECI value to append, as an int
+   */
   public void appendECI(int value) throws FormatException {
     encodeCurrentBytesIfAny();
     CharacterSetECI characterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
@@ -99,6 +112,8 @@ public final class ECIStringBuilder {
 
   /**
    * Appends the characters from {@code value} (unlike all other append methods of this class who append bytes)
+   *
+   * @param value characters to append
    */
   public void appendCharacters(StringBuilder value) {
     encodeCurrentBytesIfAny();
@@ -107,11 +122,16 @@ public final class ECIStringBuilder {
 
   /**
    * Short for {@code toString().length()} (if possible, use {@link #isEmpty()} instead)
+   *
+   * @return length of string representation in characters
    */
   public int length() {
     return toString().length();
   }
 
+  /**
+   * @return true iff nothing has been appended
+   */
   public boolean isEmpty() {
     return currentBytes.length() == 0 && (result == null || result.length() == 0);
   }
