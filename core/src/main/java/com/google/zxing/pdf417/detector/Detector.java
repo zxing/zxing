@@ -79,7 +79,7 @@ public final class Detector {
     //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
     BitMatrix originalMatrix = image.getBlackMatrix();
-    for(int rotation : ROTATIONS) {
+    for (int rotation : ROTATIONS) {
       BitMatrix bitMatrix = applyRotation(originalMatrix, rotation);
       List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
       if (!barcodeCoordinates.isEmpty()) {
@@ -98,11 +98,11 @@ public final class Detector {
   private static BitMatrix applyRotation(BitMatrix matrix, int rotation) {
     if (rotation % 360 == 0) {
       return matrix;
-    } else {
-      BitMatrix newMatrix = matrix.clone();
-      newMatrix.rotate(rotation);
-      return newMatrix;
     }
+
+    BitMatrix newMatrix = matrix.clone();
+    newMatrix.rotate(rotation);
+    return newMatrix;
   }
 
   /**
