@@ -57,6 +57,7 @@ public final class Detector {
   // ensure we don't miss it.
   private static final int ROW_STEP = 5;
   private static final int BARCODE_MIN_HEIGHT = 10;
+  private static final int[] ROTATIONS = {0, 180, 270, 90};
 
   private Detector() {
   }
@@ -77,20 +78,31 @@ public final class Detector {
     // different binarizers
     //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
-    BitMatrix bitMatrix = image.getBlackMatrix();
-
-    List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
-    // Try 180, 270, 90 degree rotations, in that order
-    for (int rotate = 0; barcodeCoordinates.isEmpty() && rotate < 3; rotate++) {
-      bitMatrix = bitMatrix.clone();
-      if (rotate != 1) {
-        bitMatrix.rotate180();
-      } else {
-        bitMatrix.rotate90();
+    BitMatrix originalMatrix = image.getBlackMatrix();
+    for (int rotation : ROTATIONS) {
+      BitMatrix bitMatrix = applyRotation(originalMatrix, rotation);
+      List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
+      if (!barcodeCoordinates.isEmpty()) {
+        return new PDF417DetectorResult(bitMatrix, barcodeCoordinates, rotation);
       }
-      barcodeCoordinates = detect(multiple, bitMatrix);
     }
-    return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
+    return new PDF417DetectorResult(originalMatrix, new ArrayList<>(), 0);
+  }
+
+  /**
+   * Applies a rotation to the supplied BitMatrix.
+   * @param matrix bit matrix to apply rotation to
+   * @param rotation the degrees of rotation to apply
+   * @return BitMatrix with applied rotation
+   */
+  private static BitMatrix applyRotation(BitMatrix matrix, int rotation) {
+    if (rotation % 360 == 0) {
+      return matrix;
+    }
+
+    BitMatrix newMatrix = matrix.clone();
+    newMatrix.rotate(rotation);
+    return newMatrix;
   }
 
   /**
