@@ -94,6 +94,7 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
       if (pdf417ResultMetadata != null) {
         result.putMetadata(ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
       }
+      result.putMetadata(ResultMetadataType.ORIENTATION, detectorResult.getRotation());
       result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]L" + decoderResult.getSymbologyModifier());
       results.add(result);
     }
