@@ -36,6 +36,10 @@ public final class PDF417DetectorResult {
     this.rotation = rotation;
   }
 
+  public PDF417DetectorResult(BitMatrix bits, List<ResultPoint[]> points) {
+    this(bits, points, 0);
+  }
+
   public BitMatrix getBits() {
     return bits;
   }
