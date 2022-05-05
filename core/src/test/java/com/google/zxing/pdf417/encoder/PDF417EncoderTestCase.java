@@ -16,6 +16,8 @@
 
 package com.google.zxing.pdf417.encoder;
 
+import com.google.zxing.WriterException;
+
 import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
@@ -67,4 +69,8 @@ public final class PDF417EncoderTestCase extends Assert {
     assertEquals("\u039f\u001A\u0385abcd", encoded);
   }
 
+  @Test(expected = WriterException.class)
+  public void testEncodeEmptyString() throws Exception {
+    PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false);
+  }
 }
