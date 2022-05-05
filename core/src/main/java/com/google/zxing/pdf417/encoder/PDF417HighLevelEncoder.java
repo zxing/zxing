@@ -171,6 +171,10 @@ final class PDF417HighLevelEncoder {
   static String encodeHighLevel(String msg, Compaction compaction, Charset encoding, boolean autoECI) 
       throws WriterException {
 
+    if (msg.isEmpty()) {
+      throw new WriterException("Empty message not allowed");
+    }
+
     if (encoding == null && !autoECI) {
       for (int i = 0; i < msg.length(); i++) {
         if (msg.charAt(i) > 255) {
