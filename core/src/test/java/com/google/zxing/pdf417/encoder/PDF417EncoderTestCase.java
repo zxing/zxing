@@ -69,12 +69,8 @@ public final class PDF417EncoderTestCase extends Assert {
     assertEquals("\u039f\u001A\u0385abcd", encoded);
   }
 
-  @Test
+  @Test(expected = WriterException.class)
   public void testEncodeEmptyString() throws Exception {
-    try {
-      PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false);
-      fail("Empty string should not be encodeable");
-    } catch (WriterException e) {
-    }
+    PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false);
   }
 }
