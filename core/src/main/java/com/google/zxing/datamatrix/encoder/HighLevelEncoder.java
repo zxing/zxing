@@ -253,29 +253,32 @@ public final class HighLevelEncoder {
     }
 
     int charsProcessed = 0;
+    byte[] mins = new byte[6];
+    int[] intCharCounts = new int[6];
     while (true) {
       //step K
       if ((startpos + charsProcessed) == msg.length()) {
-        int min = Integer.MAX_VALUE;
-        byte[] mins = new byte[6];
-        int[] intCharCounts = new int[6];
-        min = findMinimums(charCounts, intCharCounts, min, mins);
+        Arrays.fill(mins, (byte) 0);
+        Arrays.fill(intCharCounts, 0);
+        int min = findMinimums(charCounts, intCharCounts, Integer.MAX_VALUE, mins);
         int minCount = getMinimumCount(mins);
 
         if (intCharCounts[ASCII_ENCODATION] == min) {
           return ASCII_ENCODATION;
         }
-        if (minCount == 1 && mins[BASE256_ENCODATION] > 0) {
-          return BASE256_ENCODATION;
-        }
-        if (minCount == 1 && mins[EDIFACT_ENCODATION] > 0) {
-          return EDIFACT_ENCODATION;
-        }
-        if (minCount == 1 && mins[TEXT_ENCODATION] > 0) {
-          return TEXT_ENCODATION;
-        }
-        if (minCount == 1 && mins[X12_ENCODATION] > 0) {
-          return X12_ENCODATION;
+        if (minCount == 1) {
+          if (mins[BASE256_ENCODATION] > 0) {
+            return BASE256_ENCODATION;
+          }
+          if (mins[EDIFACT_ENCODATION] > 0) {
+            return EDIFACT_ENCODATION;
+          }
+          if (mins[TEXT_ENCODATION] > 0) {
+            return TEXT_ENCODATION;
+          }
+          if (mins[X12_ENCODATION] > 0) {
+            return X12_ENCODATION;
+          }
         }
         return C40_ENCODATION;
       }
@@ -339,8 +342,8 @@ public final class HighLevelEncoder {
 
       //step R
       if (charsProcessed >= 4) {
-        int[] intCharCounts = new int[6];
-        byte[] mins = new byte[6];
+        Arrays.fill(mins, (byte) 0);
+        Arrays.fill(intCharCounts, 0);
         findMinimums(charCounts, intCharCounts, Integer.MAX_VALUE, mins);
 
         if (intCharCounts[ASCII_ENCODATION] < min(intCharCounts[BASE256_ENCODATION],
@@ -401,17 +404,14 @@ public final class HighLevelEncoder {
   }
 
   private static int findMinimums(float[] charCounts, int[] intCharCounts, int min, byte[] mins) {
-    Arrays.fill(mins, (byte) 0);
     for (int i = 0; i < 6; i++) {
-      intCharCounts[i] = (int) Math.ceil(charCounts[i]);
-      int current = intCharCounts[i];
+      int current = (intCharCounts[i] = (int) Math.ceil(charCounts[i]));
       if (min > current) {
         min = current;
         Arrays.fill(mins, (byte) 0);
       }
       if (min == current) {
         mins[i]++;
-
       }
     }
     return min;
