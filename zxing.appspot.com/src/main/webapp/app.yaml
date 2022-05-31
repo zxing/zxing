@@ -1,0 +1,72 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /generator
+  static_files: Generator.html
+  upload: Generator.html
+
+- url: /generator/
+  static_files: Generator.html
+  upload: Generator.html
+
+- url: /scan
+  static_files: scan.html
+  upload: scan.html
+
+- url: /scan/
+  static_files: scan.html
+  upload: scan.html
+
+- url: /
+  static_files: index.html
+  upload: index.html
+
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+
+- url: /Generator.css
+  static_files: Generator.css
+  upload: Generator.css
+
+- url: /Generator.html
+  static_files: Generator.html
+  upload: Generator.html
+
+- url: /img/(.*)
+  static_files: img/\1
+  upload: img/(.*)
+
+- url: /index.html
+  static_files: index.html
+  upload: index.html
+
+- url: /required-field-bg.png
+  static_files: required-field-bg.png
+  upload: required-field-bg.png
+
+- url: /scan.css
+  static_files: scan.css
+  upload: scan.css
+
+- url: /scan.html
+  static_files: scan.html
+  upload: scan.html
+
+- url: /style.css
+  static_files: style.css
+  upload: style.css
+
+- url: /zxingicon.png
+  static_files: zxingicon.png
+  upload: zxingicon.png
+
+- url: /zxingiconsmall.png
+  static_files: zxingiconsmall.png
+  upload: zxingiconsmall.png
+
+- url: /generator/(.*)
+  static_files: generator/\1
+  upload: generator/(.*)

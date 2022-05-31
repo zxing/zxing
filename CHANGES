@@ -1,0 +1,401 @@
+0.1 (09 Nov 2007)
+- Initial release
+
+0.1.1 (11 Nov 2007)
+- Fixed bug decoding version 0 QR Codes
+- Now default zoom is 2.5x in Java ME client
+
+0.1.2 (28 Nov 2007)
+- Issue 11 fixed: Build problems on Windows
+- Can now build "ZXingReaderBasic" which does not require JSR-234
+- Issue 14 fixed: release .zip builds into one directory
+
+0.1.3 (7 Dec 2007)
+- Unit test for QR Code decoding
+- Added EAN-13 support
+- Now builds with class file format version 1.2 -- may solve some compatibility issues?
+- Fixed obfuscation step bug causing NoClassDefFoundError
+
+0.1.4 (13 Dec 2007)
+- Added Blackberry client build script -- does not yet work
+- Big change to handling of content of barcodes:
+  - com.google.zxing.client.result moved from core-ext to core
+  - Rewritten for J2ME
+  - core-ext removed
+  - J2ME client now uses this code for better parsing/handling of results
+
+0.2 (07 Jan 2008)
+  - Few small bug fixes in AlignmentPatternFinder, MultiFormatReader
+    (thank K. Kakima, Andreas)
+  - LCDUIImageMonochromeBitmapSource now public
+  - Notably improved decoding for Basic version -- Regular version still
+    your best bet if you can run it though
+
+0.2.1 (16 Jan 2008)
+  - Slight tweaks and enhancements to decode and runtime performance of UPCDecoder
+  - Added black-box test suites against a known set of images
+    (Thanks to Enrique G. S. for additional images)
+
+0.2.2 (22 Jan 2008)
+  - Now includes junit locally to build tests
+  - Fixed "MIDlet" name in MANIFEST.MF, which may solve some problems
+  - Friendlier error message when barcode can't be found
+
+0.3 (04 Feb 2008)
+  - Major refactoring of 1D barcode decoding
+  - Added support for UPC-E, EAN-8
+  - Also added Code 39, Code 128 support -- may need refinement
+  - Now any "game" key triggers photo capture
+  - Workaround implemented for Nokias that use "capture://image" in MMAPI
+  - UPC codes now trigger lookup to upcdatabase.com
+
+0.4 (15 Feb 2008)
+  - First release of Android client -- only guaranteed to work with "M3"
+    builds so far.
+  - Major reorganization of current test cases and data
+  - Worked around ProGuard issue with paths with spaces on Windows
+  - Phones that don't like FocusControl.AUTO_LOCK won't cause an error now
+  - Fixed ArrayIndexOutOfBoundsException in 1D barcode decoders
+  - Worked around "java.lang.Error 136" from Nokia N70 (?)
+  - Fixed bug in Shift_JIS detection and implemented basic UTF-8 detection
+    for nonstandard QR Codes that don't use ISO-8859-1
+
+0.4.5 (22 Feb 2008)
+  - Checked in first minimal working Blackberry client. Still quite crude.
+  - Fixed UTF-8 detection again
+  - Refactored Reed-Solomon to allow different GF(256) primitive polynomials,
+    in preparation for Data Matrix
+  - Slight improvement to 1D decoding accuracy, most noticeable in
+    improvements to Code 128 decoding
+  - Bug fix in Code39Reader -- typo in encoding of letter "I" and "0"
+  - Bug fix in 1D readers -- error in counting black/white pixel counts
+    in certain situations
+  - Now supports Extended Code 39
+  - Tiny bug fix to QRCodeReader for images that extend all the way
+    to top or left
+  - Android client now builds with ProGuard optimization
+
+0.5 (05 Mar 2008)
+  - Improvement in QR Code decoding accuracy on non-JSR-234 phones
+  - Supports "URLTO" data in barcodes.
+  - Restructured ParsedReaderResult parsing code to not use so many
+    exceptions, for more efficiency.
+  - "TRY_HARDER" decoding hint now supported. Will do more work in some cases
+    to find an image, such as scan for 1D barcodes at a right angle and
+    backwards. Only recommended for non-mobile applications.
+  - Result now indicates the format of the decoded barcode with a
+    BarcodeFormat instance
+  - More intelligent handling of POSSIBLE_FORMATS decoding hint
+  - Fixed sub-optimal handling of EAN-13 barcodes which encode a string
+    starting with "0". These are now returned as a full 13-digit string
+    from EAN13Reader, but will continue to be construed as 12-digit UPC-A
+    codes from the MultiFormatReader.
+  - A host of small bug fixes, including bug in Version 25 QR Code support
+  - A round of code cleanup and refactoring from IntelliJ inspections
+
+0.5.5 (12 Mar 2008)
+  - Revert change that rejected BufferedImage of type TYPE_CUSTOM in javase
+  - Now supports KDDI/AU / Softbank address book format
+  - Now can read Android "Intent" URIs (Android only)
+  - Modest improvements to efficiency of J2ME client: shorter autofocus,
+    better use of threads
+  - First checkin of Data Matrix decoder code. Not yet enabled in reader
+    applications.
+  - "Result" object now returns raw bytes decoded; maybe useful in some cases
+  - More unit tests for common code, EAN-8, UPC-E
+
+0.6 (28 Mar 2008)
+  - Updated android client to work on latest M5 SDK; M3-compatiable version
+    preserved in android-m3
+  - Added tel: URL support to clients
+  - Added geo: URL support; only enabled for Android client so far
+  - Added initial support for short NDEF messages, but not yet enabled
+  - Bug fix to corner-case of perspective transformation code
+  - Now attempts to configure camera's exposure controls if available
+  - Fixed rotation transform used in "try harder" mode; result did not
+    contain the whole image
+  - "Try harder" mode tries 2D formats first to avoid false positives
+    in detailed search for 1D codes, in some cases
+  - More aggressive inlining by ProGuard, notable performance boost
+  - Small Reed-Solomon optimizations for 0- and 1-error case
+  - Refactored GridSampler out into common package for use by Data Matrix
+  - GridSampler now smarter about bounds checking and point nudging;
+    should avoid some ArrayIndexOutOfBoundsException issues
+  - More unit tests
+
+0.7 (5 May 2008)
+  - Added support for MobileTag message formats
+  - Added source to zxing.org
+  - Significant work on Android clients, including UI overhaul and
+    continuous scan mode
+  - Bug fix: ResultPoints from 1D barcodes were wrong
+  - SKIP_N_BARCODES hint now gone, and associated logic has been transferred
+    to individual project users, as it is fairly app-specific at this point
+    and is beginning to complicate the core library. We can help other users
+    who need this functionality on a case-by-case basis.
+  - Bug fix in AddressBookAUParsedResult parsing
+  - Possible workaround for NoSuchMethodError on Nokias
+  - New shell of an iPhone client committed
+  - ... and other assorted small improvements and fixes
+
+0.8 (16 Jun 2008)
+  - FinderPatternFinder now isn't fooled by false-positive finder patterns
+    in some rare cases
+  - Added SMSTO: support, expanded mailto: support to include subject and body
+    params
+  - Now should properly unescape URLs in appropriate cases; better handling of
+    mailto: and tel: URIs (won't get modified by the library)
+  - Optimized 1D decoding to use integer math
+  - Small bug fix / improvement in BlackPointEstimator's estimates
+  - 1D decoding now applies a light sharpening filter
+  - Refactored and simplified MonochromeBitmapSource implementations
+  - Removed android-m3/ directory, no longer in active development. The current
+    Android client remains in android/ (M5 SDK)
+  - Restored ability to read upside-down 1D codes without try-harder mode
+  - Added a crude GUI-based decoder to javase/, for the interested
+  - core/ is now independent of MIDP; only requires CLDC 1.1
+  - Added optimized build of core library
+  - Unit tests now use local copies of images
+
+0.9 (11 July 2008)
+  - First draft of iPhone client committed
+  - core module now built in a way that makes it function as an OSGi bundle,
+    and also supports deployment in BugLabs's BUG platform.
+  - Added client for BUG platform courtesy of buglabs.net
+  - Big refactoring of com.google.zxing.client.result to separate idea of result
+    parser from result value objects
+  - Added basic vCard 2.1 support
+  - Added basic BIZCARD format support
+  - Added basic iCal format support
+  - Added new calendar event parsed result type
+  - Fewer false positives in 1D detectors, notably Code 39 and Code 128;
+    new unit tests for false positives
+  - Now parses and tries to act on ECI designators in QR Codes
+  - Merged "basic" and "regular" J2ME readers into one unified app that should
+    work on platforms with and without JSR-234 support
+  - Removed dependence on Ant 1.7 (1.6 needed now)
+  - Web application at zxing.org now shows raw bytes
+  - Far more black box tests
+  - Assorted small bug fixes
+
+1.0 (12 September 2008)
+  - All new RIM client from LifeMarks
+  - Initial Data Matrix detector included
+  - New and much improved Android 0.9-SDK compatible Android client
+  - Better 1D detection, especially UPC-E, due to loosened quite zone checks
+  - URIParsedResult now tries to warn about malicious URIs
+  - New parser for ISBNs
+  - New QR code blackbox images
+
+1.1 (22 October 2008)
+  - First public release of iPhone client called Barcodes
+  - Completely new multi-action Android client UI, released as Barcode Scanner v2.3
+  - Code 128 parsing fixes
+  - Dozens of new blackbox test images
+  - Many small core library parsing improvements and bug fixes
+  - Improved quiet zone enforcement which reduces false positives significantly
+  - Better calendar event and MECARD support
+  - Compatibility with the Android 1.0 SDK
+  - Added androidtest app for testing intents and capturing blackbox test images
+
+1.2 (23 December 2008)
+  - New Android benchmark application to time decoding performance
+  - Dramatic performance improvements for worst case images (up to 2x faster)
+  - Expanded blackbox unit tests with many new test images
+  - Many small decoding improvements and bug fixes
+  - New Share functionality in the Android client which encodes contacts, bookmarks, or the
+    clipboard contents as a QR Code for a friend to scan with their phone
+  - Locale-specific Android client which picks the right TLD when connecting to Google
+  - Support for Furigana in the Android client, and better parsing of Kanji in core
+  - Added the ability to import and export multiple phone numbers and emails for a single contact
+  - Native QR Encoding added to the ZXing library - no need to send request to ChartServer
+  - New ITF barcode format support from Kevin O'Sullivan at SITA
+  - New HTML help system for the Android client
+  - New web-based QR Code encoder at zxing.appspot.com based on GWT
+
+1.3 (11 March 2009)
+  - New C# port from Mohamad Fairol
+  - ITF format scanning now on by default
+  - Many new blackbox test images
+  - Better QR Code detection
+  - Better Android Intent handling
+  - Improved email parsing
+  - New Android Integration module to make life easier for third party ZXing users
+  - More robust URI parsing
+  - Many other small improvements and bug fixes
+
+1.4 (26 Oct 2009)
+  - Wider viewfinder in Android app to account for better close-range focus
+  - More Android app translations: Spanish, Italian, Russian, French
+  - Support for more devices, Cupcake, Donut
+  - Worked around two important, related callback issues in Donut/Cupcake that stopped scanning
+  - New custom search in Android app
+  - New framework for evaluating the black point of an image
+  - Many many small bug fixes, refactorings, small improvements, new versions of dependencies
+
+1.5 (5 March 2010)
+  - Android app:
+    - Shopper integration
+    - Tries to activate front light on some devices
+    - Xperia et al. support with new screen sizes
+    - Translations: Dutch, Swedish, Czech, Finnish
+    - "Thinking" visualization
+  - Updated C++ port, including new Data Matrix port
+  - Updated C# port
+  - Preliminary RSS-14 support
+  - Reconceived support for various image sources and thresholding
+  - Other small bug fixes and performance improvements
+
+1.6 (20 Sept 2010)
+  - Many, many updates to C++, Symbian, iPhone ports
+  - RSS 14, Expanded support
+  - Code 93 support
+  - Codabar support
+  - Data Matrix support reaches release quality
+  - UPC/EAN +5 extension support
+  - Android app:
+    - Share history support
+    - Bulk scan mode
+    - Wi-fi configuration support
+    - Format available in callback for web-based integration
+    - Updated or new translations for:
+      Hungarian, Danish, Chinese, Arabic, Dutch, Slovenian, Turkish
+    - UI beautification
+  - Added ability to detect multiple barcodes per image
+  - Many small bug fixes and enhancements
+
+1.7 (8 June 2011)
+  - Initial support for Aztec codes
+  - Added the ability to read rectangular DataMatrix codes
+  - Added new lengths for ITF
+  - Dozens of bug fixes to core decoding routines
+  - New C# port
+  - Android app:
+    - Tablet support
+    - Many translations added and updated
+    - Support for new Intent parameters
+    - Many bug fixes and small features
+  - Mostly rewritten iPhone port
+  - New ZXingWidget library to include scanning in any iOS app
+  - Made CommandLineRunner multithreaded and recursive
+
+2.0 (3 Feb 2012)
+
+  - core/ has been rewritten to work with Java 6
+  - core/ has new functionality:
+    - PDF 417 encoding (from Barcode4J)
+    - Codabar encoding
+    - partial Maxicode decoding support
+  - android/ and androidtest/ have been rewritten to work with Android 2.1+
+    - Uses new camera APIs
+    - Uses new contact APIs too
+    - (See separate Barcode Scanner release notes for version 4.0)
+  - zxing.appspot.com/ has been rewritten to work with GWT 2.4
+  - cpp/, objc/ and iphone/ have received many ports of fixes and other functionality from Java, and changes to work with more recent iOS
+  - bug/, rim/, and javame/ have been removed
+  - Many, many small bug fixes and optimizations, mostly to core/ and android/
+
+2.1 (22 Oct 2012)
+
+  - Many small fixes to handling of QR code data formats, like exotic URLs, and contact info
+  - Many small fixes to decoding and detection common barcode formats, like PDF417, Aztec. Small improvements
+    too like partial error correction for PDF417
+  - Many small updates to the Android app, Barcode Scanner, including rare bug fixes and translation updates.
+    The 2.1 release corresponds substantially to v4.3.1.
+  - Many ports of Java updates to C++ port
+
+2.2 (14 May 2013)
+
+  - Retire Symbian port
+  - Retire C# port
+  - Improved PDF417 decoding, including macro PDF417
+  - Added Aztec and Data Matrix encoders
+  - Added RSS Expanded decoder
+  - Java, C++ and iPhone build system updates, including migration to Maven for most Java modules
+  - Many small fixes and improvements
+  - Many small updates to the Android app, Barcode Scanner, including rare bug fixes and translation updates.
+    The 2.2 release corresponds substantially to v4.3.2.
+  - Update zxing.org web-based decoder for Amazon Elastic Beanstalk (and redeployed there)
+  - Many ports of Java updates to C++ and C# ports
+  - Standardize test system image processing and image format for reproducibility
+
+2.3.0 (1 Dec 2013)
+
+  - Added clone of Google Chart Server QR code encoder API to zxingorg/, at endpoint /chart
+  - Updated zxing.appspot.com generator to remove deprecated API usage, use latest GWT / App Engine
+  - Added skeleton Google Glass Mirror API app
+  - Improve and standardize Maven build, standardize directories and version naming
+  - Barcode Scanner Android up requires Android 4 and is updated to use Android 4+ APIs
+  - javase/ and zxingorg/ modules now use Java 7
+  - Many small fixes and improvements
+  - (Last release including cpp/ and iphone/ code)
+
+3.0.0 (3 March 2014)
+
+  - iphone/, cpp/, objc/, and glass-mirror/ are retired
+  - Java 7 now used for all Java-based modules
+  - Project moved to github.com/zxing/zxing
+  - Many small bug fixes and improvements
+
+3.0.1 (18 April 2014)
+
+  - Several small bug fixes
+
+3.1.0 (22 May 2014)
+
+  - Retire actionscript port
+  - Small bug fixes
+
+3.2.0 (15 Feb 2015)
+
+  - Several bug fixes, especially for Data Matrix and PDF417 parsing
+  - Retired jruby binding
+  - Barcode Scanner can now disable history
+
+3.2.1 (20 Aug 2015)
+
+  - Small bug fixes
+
+3.3.0 (16 Sep 2016)
+
+  - Minor core API additions like 'Result.getNumBits', raw bytes for Aztec
+  - Small changes for Java 9 compatibility
+  - BS 4.7.6 release with Android API 23 support
+  - TIFF support in online decoder
+  - Many small bug fixes, typo fixes and project build improvements
+
+3.3.1 (26 Oct 2017)
+
+  - Various fixes to Code 128, 39 encoding; DataMatrix decoding
+  - Improvements to speed and robustness of zxing.org decoder
+  - Java 9 support
+  - Various translation updates for Barcode Scanner
+  - Removed Google Glass, ZXing Test apps
+
+3.3.2 (31 Jan 2018)
+
+  - Add workaround for Gradle + Android build issues
+  - Minor DataMatrix bug fixes
+  - Improve WPA2 wi-fi configuration support in Barcode Scanner
+  - Various translation updates and minor improvements
+
+3.3.3 (30 May 2018)
+
+  - Minor fixes and improvements
+  - Java 9+ support
+
+3.4.0 (19 May 2019)
+
+  - Requires Java 8+
+  - core, javase modules declare a Java 9+ module
+  - HtmlAssetTranslator and StringsResourceTranslator legacy utilities are moved to a .client.j2se subpackage
+  - No more releases of the Barcode Scanner app
+  - Minor bug fixes to Code93Writer
+  - Minor improvements to QR code detection
+
+3.4.1 (30 Sep 2020)
+
+  - Wifi QR codes now recognize PH2:, not H:, for phase 2 method
+  - Minor bug fixes and improvements
+
+Note that further release notes will be published at https://github.com/zxing/zxing/releases

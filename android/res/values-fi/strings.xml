@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Ohjelmat</string>
+  <string name="bookmark_picker_name">Kirjanmerkit</string>
+  <string name="button_add_calendar">Lisää kalenteriin</string>
+  <string name="button_add_contact">Lisää yhteystieto</string>
+  <string name="button_book_search">Kirjahaku</string>
+  <string name="button_cancel">Peruuta</string>
+  <string name="button_custom_product_search">Mukautettu haku</string>
+  <string name="button_dial">Soita numeroon</string>
+  <string name="button_email">Lähetä sähköpostia</string>
+  <string name="button_get_directions">Hae ajo-ohjeet</string>
+  <string name="button_mms">Lähetä multimediaviesti</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Avaa selain</string>
+  <string name="button_product_search">Tuotehaku</string>
+  <string name="button_search_book_contents">Hae kirjan sisältö</string>
+  <string name="button_share_app">Ohjelma</string>
+  <string name="button_share_bookmark">Kirjanmerkki</string>
+  <string name="button_share_by_email">Jaa sähköpostilla</string>
+  <string name="button_share_by_sms">Jaa tekstiviestillä</string>
+  <string name="button_share_clipboard">Leikepöytä</string>
+  <string name="button_share_contact">Kontakti</string>
+  <string name="button_show_map">Näytä kartta</string>
+  <string name="button_sms">Lähetä tekstiviesti</string>
+  <string name="button_web_search">Haku netistä</string>
+  <string name="button_wifi">Yhdistä verkkoon</string>
+  <string name="contents_contact">Yhteystiedot</string>
+  <string name="contents_email">Sähköpostiosoite</string>
+  <string name="contents_location">Karttakoordinaatit</string>
+  <string name="contents_phone">Puhelinnumero</string>
+  <string name="contents_sms">Tekstiviestin osoite</string>
+  <string name="contents_text">Teksti</string>
+  <string name="history_clear_one_history_text">Tyhjennä</string>
+  <string name="history_clear_text">Tyhjennä historia</string>
+  <string name="history_email_title">Viivakoodien historia</string>
+  <string name="history_empty">Tyhjä</string>
+  <string name="history_empty_detail">Ei tallennettuja viivakoodeja</string>
+  <string name="history_send">Lähetä historia</string>
+  <string name="history_title">Historia</string>
+  <string name="menu_encode_mecard">Käytä MECARD:ia</string>
+  <string name="menu_encode_vcard">Käytä vCard:ia</string>
+  <string name="menu_help">Ohje</string>
+  <string name="menu_history">Historia</string>
+  <string name="menu_settings">Asetukset</string>
+  <string name="menu_share">Jaa</string>
+  <string name="msg_bulk_mode_scanned">Toistotila: viivakoodi luettu ja tallennetttu</string>
+  <string name="msg_camera_framework_bug">Valitettavasti Androidin kameran toimiinta häiriintyi. Joudut ehkä käynnistämään laitteen uudelleen.</string>
+  <string name="msg_default_format">Muoto</string>
+  <string name="msg_default_meta">Metatiedot</string>
+  <string name="msg_default_mms_subject">Hei</string>
+  <string name="msg_default_status">Aseta viivakoodi neliön sisälle skannataksesi sen.</string>
+  <string name="msg_default_time">Aika</string>
+  <string name="msg_default_type">Tyyppi</string>
+  <string name="msg_encode_contents_failed">Viivakoodia ei voitu muodostaa annetusta datasta.</string>
+  <string name="msg_error">Virhe</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Valitettavasti pyydettyä sovellusta ei voitu käynnistää. Viivakoodin sisältö voi olla virheellinen.</string>
+  <string name="msg_invalid_value">Virheellinen arvo</string>
+  <string name="msg_redirect">Uudelleenohjaus</string>
+  <string name="msg_sbc_book_not_searchable">Valitettavasti tämä kirja ei ole haettavissa.</string>
+  <string name="msg_sbc_failed">Valitettavasti haussa tapahtui virhe.</string>
+  <string name="msg_sbc_no_page_returned">Sivua ei löydy/ei vastausta</string>
+  <string name="msg_sbc_page">Sivu</string>
+  <string name="msg_sbc_results">Tulokset</string>
+  <string name="msg_sbc_searching_book">Haetaan kirjaa\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Kappaletta ei saatavilla</string>
+  <string name="msg_share_explanation">Voit jakaa dataa näyttämällä viivakoodin laitteesi näytöllä ja lukemalla sen toisella laitteella.</string>
+  <string name="msg_share_text">Tai kirjoita tekstiä ja lopeta Enterillä</string>
+  <string name="msg_sure">Oletko varma?</string>
+  <string name="msg_unmount_usb">SD-kortti ei ole käytettävissä.</string>
+  <string name="preferences_actions_title">Kun viivakoodi löytyy\u2026</string>
+  <string name="preferences_auto_focus_title">Käytä automaattista tarkennusta</string>
+  <string name="preferences_auto_open_web_title">Avaa Web-sivujen automaattisesti</string>
+  <string name="preferences_bulk_mode_summary">Skannaa ja tallenna viivakoodeja jatkuvasti</string>
+  <string name="preferences_bulk_mode_title">Jatkuva skannaus</string>
+  <string name="preferences_copy_to_clipboard_title">Kopioi leikepöydälle</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Seuraavat korvataan: %s = sisältö, %f = formaatti, %t = tyyppi</string>
+  <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">1D Tuote</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR-koodit</string>
+  <string name="preferences_device_bug_workarounds_title">Laitteen vikojen kiertäminen</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Ei viivakoodin näkymätilaa</string>
+  <string name="preferences_disable_continuous_focus_summary">Käytä vain vakiotarkennusta</string>
+  <string name="preferences_disable_continuous_focus_title">Ei jatkuvaa tarkennusta</string>
+  <string name="preferences_disable_exposure_title">Ei valotusta</string>
+  <string name="preferences_disable_metering_title">Ei mittausta</string>
+  <string name="preferences_front_light_auto">Automaattinen</string>
+  <string name="preferences_front_light_off">Pois</string>
+  <string name="preferences_front_light_on">Päällä</string>
+  <string name="preferences_front_light_summary">Parantaa joissain laitteissa hämärässä skannaamista, mutta voi aiheuttaa häikäisyongelmia. Ei toimi kaikissa puhelimissa.</string>
+  <string name="preferences_front_light_title">Käytä etuosan valoa</string>
+  <string name="preferences_general_title">Yleiset asetukset</string>
+  <string name="preferences_history_summary">Säilytä skannaa historia</string>
+  <string name="preferences_history_title">Lisää Historia</string>
+  <string name="preferences_invert_scan_summary">Etsi valkoisia viivakoodeja mustalla taustalla. Ei toimi kaikilla laitteilla.</string>
+  <string name="preferences_invert_scan_title">Käänteinen (negatiivin) skannaus</string>
+  <string name="preferences_name">Asetukset</string>
+  <string name="preferences_orientation_title">Ei automaattista kiertoa</string>
+  <string name="preferences_play_beep_title">Piippaus</string>
+  <string name="preferences_remember_duplicates_summary">Jos sama viivakoodi skannetaan useasti, tallenna jokainen skannauskerta historiaan</string>
+  <string name="preferences_remember_duplicates_title">Muista kaksoiskappaleet</string>
+  <string name="preferences_result_title">Tuloksien asetukset</string>
+  <string name="preferences_scanning_title">Kun skannataan viivakoodeja, dekoodaa\u2026</string>
+  <string name="preferences_search_country">Etsi maasta</string>
+  <string name="preferences_supplemental_summary">Yritä hakea lisätietoja viivakoodin sisällöstä</string>
+  <string name="preferences_supplemental_title">Hae lisää tietoa</string>
+  <string name="preferences_vibrate_title">Värinä</string>
+  <string name="result_address_book">Löydettiin yhteystietoja</string>
+  <string name="result_calendar">Löydettiin kalenteritapahtuma</string>
+  <string name="result_email_address">Löydettiin sähköpostiosoite</string>
+  <string name="result_geo">Löydettiin koordinaatteja</string>
+  <string name="result_isbn">Löydettiin kirja</string>
+  <string name="result_product">Löydettiin tuote</string>
+  <string name="result_sms">Löydettiin tekstiviestinumero</string>
+  <string name="result_tel">Löydettiin puhelinnumero</string>
+  <string name="result_text">Löydettiin teksti</string>
+  <string name="result_uri">Löydettin URL-osoite</string>
+  <string name="result_wifi">Löydettiin asetukset langattomalle yhteydelle</string>
+  <string name="sbc_name">Googlen kirjahaku</string>
+  <string name="wifi_changing_network">Pyydetään yhteyttä verkkoon\u2026</string>
+</resources>

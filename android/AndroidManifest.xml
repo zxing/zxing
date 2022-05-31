@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.google.zxing.client.android"
+          android:versionName="4.7.8"
+          android:versionCode="108"
+          android:installLocation="auto">
+
+  <uses-permission android:name="android.permission.CAMERA"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.FLASHLIGHT"/>
+  <uses-permission android:name="android.permission.READ_CONTACTS"/>
+  <!-- unavailable in API 23 -->
+  <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+  <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="22"/>
+
+  <uses-feature android:name="android.hardware.camera.any"/>
+  <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
+  <uses-feature android:name="android.hardware.screen.landscape"/>
+  <uses-feature android:name="android.hardware.wifi" android:required="false"/>
+
+  <application android:icon="@drawable/launcher_icon"
+               android:logo="@drawable/launcher_icon"
+               android:label="@string/app_name"
+               android:allowBackup="true">
+    <activity android:name=".CaptureActivity"
+              android:screenOrientation="sensorLandscape"
+              android:clearTaskOnLaunch="true"
+              android:stateNotNeeded="true"
+              android:theme="@style/CaptureTheme"
+              android:windowSoftInputMode="stateAlwaysHidden"
+              android:exported="false">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+      <intent-filter>
+        <action android:name="com.google.zxing.client.android.SCAN"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+      <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="http" android:host="zxing.appspot.com" android:path="/scan"/>
+      </intent-filter>
+      <!-- We also support a Google Product Search URL. -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="http" android:host="www.google.com" android:path="/m/products/scan"/>
+      </intent-filter>
+      <!-- And the UK version. -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="http" android:host="www.google.co.uk" android:path="/m/products/scan"/>
+      </intent-filter>
+      <!-- Support zxing://scan/?... like iPhone app -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="zxing" android:host="scan" android:path="/"/>
+      </intent-filter>
+    </activity>
+    <activity android:name=".PreferencesActivity"
+              android:label="@string/preferences_name"
+              android:stateNotNeeded="true"/>
+    <activity android:name=".encode.EncodeActivity"
+              android:stateNotNeeded="true"
+              android:exported="false">
+      <intent-filter>
+        <action android:name="com.google.zxing.client.android.ENCODE"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+      <!-- This allows us to handle the Share button in Contacts. -->
+      <intent-filter>
+        <action android:name="android.intent.action.SEND"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/x-vcard"/>
+      </intent-filter>
+      <!-- This allows us to handle sharing any plain text . -->
+      <intent-filter>
+        <action android:name="android.intent.action.SEND"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+      </intent-filter>
+    </activity>
+    <activity android:name=".book.SearchBookContentsActivity"
+              android:label="@string/sbc_name"
+              android:stateNotNeeded="true"
+              android:screenOrientation="sensorLandscape"
+              android:exported="false">
+      <intent-filter>
+        <action android:name="com.google.zxing.client.android.SEARCH_BOOK_CONTENTS"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
+    <activity android:name=".share.ShareActivity"
+              android:stateNotNeeded="true"
+              android:screenOrientation="user"
+              android:exported="false">
+      <intent-filter>
+        <action android:name="com.google.zxing.client.android.SHARE"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
+    <activity android:name=".history.HistoryActivity"
+              android:label="@string/history_title"
+              android:stateNotNeeded="true"/>
+    <activity android:name=".share.BookmarkPickerActivity"
+              android:label="@string/bookmark_picker_name"
+              android:stateNotNeeded="true"/>
+    <activity android:name=".share.AppPickerActivity"
+              android:label="@string/app_picker_name"
+              android:stateNotNeeded="true"/>
+    <activity android:name=".HelpActivity"
+              android:label="@string/menu_help"
+              android:screenOrientation="user"
+              android:stateNotNeeded="true"/>
+  </application>
+
+</manifest>

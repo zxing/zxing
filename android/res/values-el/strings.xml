@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Εφαρμογές</string>
+  <string name="bookmark_picker_name">Σελιδοδείκτες</string>
+  <string name="button_add_calendar">Προσθήκη στο ημερολόγιο</string>
+  <string name="button_add_contact">Προσθήκη στις επαφές</string>
+  <string name="button_book_search">Αναζήτηση βιβλίων</string>
+  <string name="button_cancel">Ακύρωση</string>
+  <string name="button_custom_product_search">Σύνθετη αναζήτηση</string>
+  <string name="button_dial">Κλήση αριθμού</string>
+  <string name="button_email">Αποστολή email</string>
+  <string name="button_get_directions">Λάβετε κατευθύνσεις</string>
+  <string name="button_mms">Αποστολή MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Άνοιγμα browser</string>
+  <string name="button_product_search">Αναζήτηση προϊόντων</string>
+  <string name="button_search_book_contents">Αναζήτηση περιεχομένων</string>
+  <string name="button_share_app">Εφαρμογή</string>
+  <string name="button_share_bookmark">Σελιδοδείκτης</string>
+  <string name="button_share_by_email">Μοιράσου με email</string>
+  <string name="button_share_by_sms">Μοιράσου με SMS</string>
+  <string name="button_share_clipboard">Πρόχειρο</string>
+  <string name="button_share_contact">Επαφή</string>
+  <string name="button_show_map">Δείξε χάρτη</string>
+  <string name="button_sms">Στείλε SMS</string>
+  <string name="button_web_search">Αναζήτηση ιστού</string>
+  <string name="button_wifi">Σύνδεση σε Δίκτυο</string>
+  <string name="contents_contact">Πληροφορίες επαφής</string>
+  <string name="contents_email">Διεύθυνση email</string>
+  <string name="contents_location">Γεωγραφικές συντεταγμένες</string>
+  <string name="contents_phone">Τηλέφωνο</string>
+  <string name="contents_sms">Διεύθνση SMS</string>
+  <string name="contents_text">Απλό κείμενο</string>
+  <string name="history_clear_one_history_text">Διαγραφή</string>
+  <string name="history_clear_text">Διαγραφή ιστορικού</string>
+  <string name="history_email_title">Ιστορικό Barcode Scanner</string>
+  <string name="history_empty">Κενό</string>
+  <string name="history_empty_detail">Δεν έχουν καταγραφεί σαρώσεις barcode</string>
+  <string name="history_send">Αποστολή ιστορικού</string>
+  <string name="history_title">Ιστορικό</string>
+  <string name="menu_encode_mecard">Χρησιμοποιήστε MECARD</string>
+  <string name="menu_encode_vcard">Χρησιμοποιήστε vCard</string>
+  <string name="menu_help">Βοήθεια</string>
+  <string name="menu_history">Ιστορικό</string>
+  <string name="menu_settings">Ρυθμίσεις</string>
+  <string name="menu_share">Κοινή χρήση</string>
+  <string name="msg_bulk_mode_scanned">Μαζική λειτουργία: barcode σκαναρίστηκε και αποθηκεύτηκε</string>
+  <string name="msg_camera_framework_bug">Συγνώμη, προέκυψε ένα πρόβλημα με την κάμερα. Ίσως χρειαστεί να επανεκιννήσετε τη συσκευή.</string>
+  <string name="msg_default_format">Διαμόρφωση</string>
+  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_mms_subject">Γεια</string>
+  <string name="msg_default_status">Τοποθετήστε ένα barcode μέσα στο πλαίσιο για να το σκανάρετε.</string>
+  <string name="msg_default_time">Ωρα</string>
+  <string name="msg_default_type">Τύπος</string>
+  <string name="msg_encode_contents_failed">Δεν γίνεται να παραχθεί barcode από αυτά τα δεδομένα.</string>
+  <string name="msg_error">Σφάλμα</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Συγνώμη, η ζητούμενη εφαρμογή δεν μπορεί να εκιννηθεί. Τα δεδομληνα του barcode ίσως δεν είναι έγκυρα.</string>
+  <string name="msg_invalid_value">Μη έγκυρη τιμή</string>
+  <string name="msg_redirect">Ανακατεύθυνση</string>
+  <string name="msg_sbc_book_not_searchable">Συγνώμη, αυτό το βιβλίο δεν βρέθηκε.</string>
+  <string name="msg_sbc_failed">Συγνώμη, η αναζήτηση παρουσίασε πρόβλημα.</string>
+  <string name="msg_sbc_no_page_returned">Δεν βρέθηκε σελίδα</string>
+  <string name="msg_sbc_page">Σελίδα</string>
+  <string name="msg_sbc_results">Αποτελέσματα</string>
+  <string name="msg_sbc_searching_book">Άναζήτηση βιβλίου\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Απόσπασμα μη διαθέσιμο</string>
+  <string name="msg_share_explanation">Μπορείς να μοιραστείς δεδομένα εμφανίζοντας ένα barcode στην οθόνη σου και σκανάροντάς το με ένα άλλο κινητό.</string>
+  <string name="msg_share_text">Ή πληκτολογήστε εδώ κείμενο και πατήστε Enter</string>
+  <string name="msg_sure">Είσαι σίγουρος;</string>
+  <string name="msg_unmount_usb">Συγνώμη, η κάρτα SD δεν είναι προσβάσιμη.</string>
+  <string name="preferences_actions_title">Όταν ένα barcode ανιχνεύεται\u2026</string>
+  <string name="preferences_auto_focus_title">Χρησιμοποιήστε την αυτόματη εστίαση</string>
+  <string name="preferences_auto_open_web_title">Ανοίξτε ιστοσελίδες αυτόματα</string>
+  <string name="preferences_bulk_mode_summary">Σκανάρετε και αποθηκεύστε συνεχόμενα πολλά barcodes</string>
+  <string name="preferences_bulk_mode_title">Λειτουργία μαζικού σκαναρίσματος</string>
+  <string name="preferences_copy_to_clipboard_title">Αντιγραφή στο πρόχειρο</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Αντικαταστάσεις: %s = περιεχόμενο, %f = μορφή, %t = τύπος</string>
+  <string name="preferences_custom_product_search_title">Σύνθετη αναζήτηση</string>
+  <string name="preferences_decode_1D_industrial_title">1D Βιομηχανικά</string>
+  <string name="preferences_decode_1D_product_title">1D Προϊόντος</string>
+  <string name="preferences_decode_Aztec_title">Αζτέκων</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR Codes</string>
+  <string name="preferences_device_bug_workarounds_title">Λύσεις Bug συσκευής</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Δεν λειτουργία σκηνής barcode</string>
+  <string name="preferences_disable_continuous_focus_summary">Χρησιμοποιείτε μόνο τυπική λειτουργία εστίασης</string>
+  <string name="preferences_disable_continuous_focus_title">Δεν συνεχής εστίαση</string>
+  <string name="preferences_disable_exposure_title">Δεν έκθεση</string>
+  <string name="preferences_disable_metering_title">Δεν μέτρησης</string>
+  <string name="preferences_front_light_auto">Αυτόματο</string>
+  <string name="preferences_front_light_off">Αδρανής</string>
+  <string name="preferences_front_light_on">Ενεργός</string>
+  <string name="preferences_front_light_summary">Βελτιώνει το σκανάρισμα με χαμηλο φωτισμό σε μερικά κινητά, ίσως όμως προκαλέσει λάμψη. Δουλεύει σε μερικά κινητά.</string>
+  <string name="preferences_front_light_title">Χρήση μπροστινού φακού</string>
+  <string name="preferences_general_title">Γενικές ρυθμίσεις</string>
+  <string name="preferences_history_summary">Αποθηκεύστε τις σαρώσεις σας στην Ιστορία</string>
+  <string name="preferences_history_title">Προσθήκη στην Ιστορία</string>
+  <string name="preferences_invert_scan_summary">Σάρωση για τη λευκή barcodes σε μαύρο φόντο. Δεν διατίθεται σε ορισμένες συσκευές.</string>
+  <string name="preferences_invert_scan_title">Αντιστροφή της σάρωσης</string>
+  <string name="preferences_name">Ρυθμίσεις</string>
+  <string name="preferences_orientation_title">Όχι αυτόματη περιστροφή</string>
+  <string name="preferences_play_beep_title">Μπιπ</string>
+  <string name="preferences_remember_duplicates_summary">Αποθήκευση πολλαπλών σκαναρισμάτων του ίδιου barcode στο ιστορικό</string>
+  <string name="preferences_remember_duplicates_title">Απομνημόνευση διπλότυπων</string>
+  <string name="preferences_result_title">Ρυθμίσεις αποτελεσμάτων</string>
+  <string name="preferences_scanning_title">Όταν σκανάρεις barcodes, ψάχνε για\u2026</string>
+  <string name="preferences_search_country">Χώρα Αναζήτησης</string>
+  <string name="preferences_supplemental_summary">Προσπάθησε να βρείς περισσότερες πληροφορίες για τα περιεχόμενα του barcode</string>
+  <string name="preferences_supplemental_title">Αναζήτηση για επιπλέον πληροφορίες</string>
+  <string name="preferences_vibrate_title">Δόνηση</string>
+  <string name="result_address_book">Βρέθηκαν πληροφορίες επαφής</string>
+  <string name="result_calendar">Βρέθηκε συμβάν ημερολογίου</string>
+  <string name="result_email_address">Βρέθηκε email</string>
+  <string name="result_geo">Βρέθηκαν γεωγραφικές συντεταγμένες</string>
+  <string name="result_isbn">Βρέθηκε βιβλίο</string>
+  <string name="result_product">Βρέθηκε προϊόν</string>
+  <string name="result_sms">Βρέθηκε διεύθυνση SMS</string>
+  <string name="result_tel">Βρέθηκε τηλέφωνο</string>
+  <string name="result_text">Βρέθηκε κείμενο</string>
+  <string name="result_uri">Βρέθηκε ηλ. διεύθυνση</string>
+  <string name="result_wifi">Βρέθηκαν ρυθμίσεις Wi-Fi</string>
+  <string name="sbc_name">Αναζήτηση βιβλίων Google</string>
+  <string name="wifi_changing_network">Αίτηση σύνδεσης με το δίκτυο\u2026</string>
+</resources>

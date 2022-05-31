@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools">
+
+  <SurfaceView android:id="@+id/preview_view"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"/>
+
+  <com.google.zxing.client.android.ViewfinderView
+      android:id="@+id/viewfinder_view"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"/>
+
+  <LinearLayout android:id="@+id/result_view"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/result_view"
+                android:visibility="gone"
+                android:baselineAligned="false">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/standard_padding">
+
+      <LinearLayout
+          android:orientation="vertical"
+          android:layout_width="wrap_content"
+          android:layout_height="fill_parent"
+          android:gravity="right|center_vertical">
+
+        <ImageView android:id="@+id/barcode_image_view"
+                   android:layout_width="160dip"
+                   android:layout_height="wrap_content"
+                   android:maxWidth="160dip"
+                   android:maxHeight="160dip"
+                   android:layout_marginBottom="@dimen/half_padding"
+                   android:adjustViewBounds="true"
+                   android:scaleType="centerInside"
+                   tools:ignore="ContentDescription"/>
+
+        <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/msg_default_format"
+                    android:textColor="@color/result_minor_text"
+                    android:textStyle="bold"
+                    android:paddingRight="@dimen/half_padding"/>
+
+          <TextView android:id="@+id/format_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_minor_text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/msg_default_type"
+                    android:textColor="@color/result_minor_text"
+                    android:textStyle="bold"
+                    android:paddingRight="@dimen/half_padding"/>
+
+          <TextView android:id="@+id/type_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_minor_text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/msg_default_time"
+                    android:textColor="@color/result_minor_text"
+                    android:textStyle="bold"
+                    android:paddingRight="@dimen/half_padding"/>
+
+          <TextView android:id="@+id/time_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_minor_text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView android:id="@+id/meta_text_view_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/msg_default_meta"
+                    android:textColor="@color/result_minor_text"
+                    android:textStyle="bold"
+                    android:paddingRight="@dimen/half_padding"/>
+
+          <TextView android:id="@+id/meta_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_minor_text"/>
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+      <ScrollView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+          <TextView android:id="@+id/contents_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_text"
+                    android:textColorLink="@color/result_text"
+                    android:textSize="22sp"
+                    android:paddingLeft="12dip"
+                    android:autoLink="web"
+                    android:textIsSelectable="true"/>
+
+          <TextView android:id="@+id/contents_supplement_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_text"
+                    android:textColorLink="@color/result_text"
+                    android:paddingLeft="12dip"
+                    android:autoLink="web"
+                    android:textIsSelectable="true"/>
+
+        </LinearLayout>
+
+      </ScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/result_button_view"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:gravity="center">
+
+      <Button style="@style/ResultButton"
+              android:visibility="gone"/>
+
+      <Button style="@style/ResultButton"
+              android:visibility="gone"/>
+
+      <Button style="@style/ResultButton"
+              android:visibility="gone"/>
+
+      <Button style="@style/ResultButton"
+              android:visibility="gone"/>
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <TextView android:id="@+id/status_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/transparent"
+            android:text="@string/msg_default_status"
+            android:textColor="@color/status_text"/>
+
+</merge>

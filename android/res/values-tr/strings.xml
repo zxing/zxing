@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barkod Tarayıcısı</string>
+  <string name="app_picker_name">Uygulamalar</string>
+  <string name="bookmark_picker_name">Yer imleri</string>
+  <string name="button_add_calendar">Takvime ekle</string>
+  <string name="button_add_contact">Kişi ekle</string>
+  <string name="button_book_search">Kitap Arama</string>
+  <string name="button_cancel">İptal</string>
+  <string name="button_custom_product_search">Özel arama</string>
+  <string name="button_dial">Numaraya çağrı</string>
+  <string name="button_email">Email gönder</string>
+  <string name="button_get_directions">Yön bilgisi al</string>
+  <string name="button_mms">MMS gönder</string>
+  <string name="button_ok">Tamam</string>
+  <string name="button_open_browser">Tarayıcıyı aç</string>
+  <string name="button_product_search">Ürün arama</string>
+  <string name="button_search_book_contents">İçerik arama</string>
+  <string name="button_share_app">Uygulama paylaş</string>
+  <string name="button_share_bookmark">Yer imi paylaş</string>
+  <string name="button_share_by_email">Email ile paylaş</string>
+  <string name="button_share_by_sms">SMS ile paylaş</string>
+  <string name="button_share_clipboard">Pano</string>
+  <string name="button_share_contact">Kişi</string>
+  <string name="button_show_map">Haritayı göster</string>
+  <string name="button_sms">SMS gönder</string>
+  <string name="button_web_search">Webde ara</string>
+  <string name="button_wifi">Ağa bağlan</string>
+  <string name="contents_contact">Kişi bilgisi</string>
+  <string name="contents_email">Email adresi</string>
+  <string name="contents_location">Coğrafi koordinatlar</string>
+  <string name="contents_phone">Telefon numarası</string>
+  <string name="contents_sms">SMS adresi</string>
+  <string name="contents_text">Düz metin</string>
+  <string name="history_clear_one_history_text">Temizle</string>
+  <string name="history_clear_text">Geçmişi temizle</string>
+  <string name="history_email_title">Barkod Tarayıcı geçmişi</string>
+  <string name="history_empty">Boş</string>
+  <string name="history_empty_detail">Yok barkod taramaları kaydedildi</string>
+  <string name="history_send">Geçmişi gönder</string>
+  <string name="history_title">Geçmiş</string>
+  <string name="menu_encode_mecard">MECARD kullanın</string>
+  <string name="menu_encode_vcard">VCard kullanın</string>
+  <string name="menu_help">Yardım</string>
+  <string name="menu_history">Geçmiş</string>
+  <string name="menu_settings">Ayarlar</string>
+  <string name="menu_share">Paylaş</string>
+  <string name="msg_bulk_mode_scanned">Toplu modu: taranan ve kaydedilen barkodlar</string>
+  <string name="msg_camera_framework_bug">Üzgünüz, Android kamera bir sorunla karşılaştı. Cihazı yeniden başlatmanız gerekebilir.</string>
+  <string name="msg_default_format">Biçim</string>
+  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_mms_subject">Merhaba</string>
+  <string name="msg_default_status">Barkodu taramak için vizördeki dikdörtgenin içerisine yerleştirin.</string>
+  <string name="msg_default_time">Süre</string>
+  <string name="msg_default_type">Tür</string>
+  <string name="msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
+  <string name="msg_error">Hata</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Üzgünüz, istenen uygulama başlatılamadı. Barkod içeriği geçersiz olabilir.</string>
+  <string name="msg_invalid_value">Geçersiz değer</string>
+  <string name="msg_redirect">Yönlendirme</string>
+  <string name="msg_sbc_book_not_searchable">Üzgünüz, bu kitapla ilgili arama yapılamıyor.</string>
+  <string name="msg_sbc_failed">Üzgünüz, arama esnasında bir sorun oluştu.</string>
+  <string name="msg_sbc_no_page_returned">Dönen sayfa yok</string>
+  <string name="msg_sbc_page">Sayfa</string>
+  <string name="msg_sbc_results">Sonuçlar</string>
+  <string name="msg_sbc_searching_book">Kitap aranıyor\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Parçacık yok</string>
+  <string name="msg_share_explanation">Ekranınızda görüntülediğiniz barkodu başka bir telefonla tarayarak veri paylaşabilirsiniz.</string>
+  <string name="msg_share_text">Veya yazın bazı metin</string>
+  <string name="msg_sure">Emin misin?</string>
+  <string name="msg_unmount_usb">Lütfen USB depolamayı devre dışı bırakın.</string>
+  <string name="preferences_actions_title">Bir barkod bulunduğu zaman\u2026</string>
+  <string name="preferences_auto_focus_title">Otomatik odaklama kullanın</string>
+  <string name="preferences_auto_open_web_title">Otomatik olarak web sayfaları açın</string>
+  <string name="preferences_bulk_mode_summary">Birden fazla barkodu toplu olarak taramak ve kaydetmek için</string>
+  <string name="preferences_bulk_mode_title">Toplu tarama modu</string>
+  <string name="preferences_copy_to_clipboard_title">Panoya kopyala</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Yerine Koyma: %s = içeriği, %f = biçim, %t = tip</string>
+  <string name="preferences_custom_product_search_title">Özel arama adresi</string>
+  <string name="preferences_decode_1D_industrial_title">1D Sanayi</string>
+  <string name="preferences_decode_1D_product_title">1D Ürün</string>
+  <string name="preferences_decode_Aztec_title">Aztek</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR barkodları</string>
+  <string name="preferences_device_bug_workarounds_title">Cihaz Hata Geçici Çözümler</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Hayır barkod sahne modu</string>
+  <string name="preferences_disable_continuous_focus_summary">Sadece standart odaklama modunu kullanın</string>
+  <string name="preferences_disable_continuous_focus_title">Hayır sürekli odak</string>
+  <string name="preferences_disable_exposure_title">Maruziyet</string>
+  <string name="preferences_disable_metering_title">Hiçbir ölçüm</string>
+  <string name="preferences_front_light_auto">Otomatik</string>
+  <string name="preferences_front_light_off">Atıl</string>
+  <string name="preferences_front_light_on">Aktif</string>
+  <string name="preferences_front_light_summary">Bazı telefonlarda düşük ışıkta taramayı iyileştirir, ancak parlamaya neden olabilir. Tüm telefonlarda sonuç vermez.</string>
+  <string name="preferences_front_light_title">Ön ışığı kullan</string>
+  <string name="preferences_general_title">Genel ayarlar</string>
+  <string name="preferences_history_summary">Tarih içinde taramaları saklayın</string>
+  <string name="preferences_history_title">Tarih ekle</string>
+  <string name="preferences_invert_scan_summary">Siyah zemin üzerine beyaz barkod tarama. Bazı cihazlar mevcut değildir.</string>
+  <string name="preferences_invert_scan_title">Tarama haricindekileri</string>
+  <string name="preferences_name">Ayarlar</string>
+  <string name="preferences_orientation_title">Otomatik rotasyon yok</string>
+  <string name="preferences_play_beep_title">Bip</string>
+  <string name="preferences_remember_duplicates_summary">Aynı barkoda ait farklı taramaları kayıtlarda depola</string>
+  <string name="preferences_remember_duplicates_title">Aynı barkodları hatırla</string>
+  <string name="preferences_result_title">Sonuç ayarları</string>
+  <string name="preferences_scanning_title">Barkodlar taraması \u2026</string>
+  <string name="preferences_search_country">Arama Ülke</string>
+  <string name="preferences_supplemental_summary">Barkod içeriği hakkında daha fazla bilgi almayı dene</string>
+  <string name="preferences_supplemental_title">Daha fazla bilgi </string>
+  <string name="preferences_vibrate_title">Titreşim </string>
+  <string name="result_address_book">Bulunan kişi bilgisi</string>
+  <string name="result_calendar">Bulunan takvim etkinliği</string>
+  <string name="result_email_address">Bulunan Email adresi</string>
+  <string name="result_geo">Bulunan coğrafi koordinatlar</string>
+  <string name="result_isbn">Bulunan kitap</string>
+  <string name="result_product">Bulunan ürün</string>
+  <string name="result_sms">Bulunan SMS adresi</string>
+  <string name="result_tel">Bulunan telefon numarası</string>
+  <string name="result_text">Bulunan düz metin</string>
+  <string name="result_uri">Bulunan URL</string>
+  <string name="result_wifi">Bulunan Wi-Fi konfigürasyonu</string>
+  <string name="sbc_name">Google Kitap Arama</string>
+  <string name="wifi_changing_network">Ağa bir bağlantı isteğinde\u2026</string>
+</resources>

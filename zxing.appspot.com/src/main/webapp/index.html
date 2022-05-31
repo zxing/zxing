@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Zebra Crossing</title>
+    <link rel="stylesheet" href="/style.css" type="text/css"/>
+  </head>
+
+  <body>
+    <div id="header">
+      <h1>Zebra Crossing <span>from the ZXing Project</span></h1>
+    </div>
+    
+    <table style="width:600px">
+      <tr>
+        <td style="vertical-align:top;padding:4px;margin:8px">
+          <img src="/zxingicon.png" width="128" height="128" alt="ZXing"/>
+        </td>
+        <td style="vertical-align:top;padding:4px;margin:8px">
+          <p>Welcome to the Zebra Crossing site at zxing.appspot.com.</p>
+          <p> This site features a <a href="/generator">QR Code Generator</a>, which
+          allows you to create a two-dimensional barcode that can be scanned
+          with a camera phone. These QR Codes can contain a URL, contact
+          information, a calendar event, and much more.</p>
+          <p>The <a href="https://github.com/zxing/zxing/">ZXing Project</a> exists
+          to provide an open source barcode scanner for a range of devices.</p>
+        </td>
+      </tr>
+    </table>
+    
+    <div id="footer">
+      <a href="https://github.com/zxing/zxing/">ZXing Project Home Page</a>
+    </div>
+  </body>
+</html>

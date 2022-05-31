@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Applicaties</string>
+  <string name="bookmark_picker_name">Bladwijzers</string>
+  <string name="button_add_calendar">Toevoegen aan agenda</string>
+  <string name="button_add_contact">Toevoegen aan contacten</string>
+  <string name="button_book_search">Boeken zoeken</string>
+  <string name="button_cancel">Annuleren</string>
+  <string name="button_custom_product_search">Aangepast zoeken</string>
+  <string name="button_dial">Nummer bellen</string>
+  <string name="button_email">E-mail versturen</string>
+  <string name="button_get_directions">Routebeschrijving opvragen</string>
+  <string name="button_mms">MMS verzenden</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Browser openen</string>
+  <string name="button_product_search">Producten zoeken</string>
+  <string name="button_search_book_contents">Boekinhoud zoeken</string>
+  <string name="button_share_app">Applicatie</string>
+  <string name="button_share_bookmark">Bladwijzer</string>
+  <string name="button_share_by_email">Delen via e-mail</string>
+  <string name="button_share_by_sms">Delen via sms</string>
+  <string name="button_share_clipboard">Klembord</string>
+  <string name="button_share_contact">Contact</string>
+  <string name="button_show_map">Kaart weergeven</string>
+  <string name="button_sms">Sms verzenden</string>
+  <string name="button_web_search">Zoeken op internet</string>
+  <string name="button_wifi">Verbinden met netwerk</string>
+  <string name="contents_contact">Contactinformatie</string>
+  <string name="contents_email">E-mailadres</string>
+  <string name="contents_location">Geografische coördinaten</string>
+  <string name="contents_phone">Telefoonnummer</string>
+  <string name="contents_sms">Sms-adres</string>
+  <string name="contents_text">Platte tekst</string>
+  <string name="history_clear_one_history_text">Wissen</string>
+  <string name="history_clear_text">Geschiedenis wissen</string>
+  <string name="history_email_title">Barcode Scanner-geschiedenis</string>
+  <string name="history_empty">Leeg</string>
+  <string name="history_empty_detail">Er zijn geen barcodes gescand</string>
+  <string name="history_send">Geschiedenis verzenden</string>
+  <string name="history_title">Geschiedenis</string>
+  <string name="menu_encode_mecard">MECARD gebruiken</string>
+  <string name="menu_encode_vcard">vCard gebruiken</string>
+  <string name="menu_help">Help</string>
+  <string name="menu_history">Geschiedenis</string>
+  <string name="menu_settings">Instellingen</string>
+  <string name="menu_share">Delen</string>
+  <string name="msg_bulk_mode_scanned">Bulkmodus: barcode gescand en opgeslagen</string>
+  <string name="msg_camera_framework_bug">Sorry, er is een probleem met de Android-camera. Probeer je telefoon opnieuw op te starten.</string>
+  <string name="msg_default_format">Formaat</string>
+  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_mms_subject">Hallo</string>
+  <string name="msg_default_status">Plaats een barcode binnen de rechthoek om deze te scannen.</string>
+  <string name="msg_default_time">Tijd</string>
+  <string name="msg_default_type">Type</string>
+  <string name="msg_encode_contents_failed">Kan geen barcode genereren op basis van de opgegeven gegevens.</string>
+  <string name="msg_error">Fout</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Sorry, de opgevraagde applicatie kan niet worden gestart. De barcode is mogelijk ongeldig.</string>
+  <string name="msg_invalid_value">Ongeldige waarde</string>
+  <string name="msg_redirect">Doorverwijzing</string>
+  <string name="msg_sbc_book_not_searchable">Sorry, dit boek kan niet worden doorzocht.</string>
+  <string name="msg_sbc_failed">Sorry, er is een fout opgetreden bij het zoeken.</string>
+  <string name="msg_sbc_no_page_returned">Geen pagina ontvangen</string>
+  <string name="msg_sbc_page">Pagina</string>
+  <string name="msg_sbc_results">Resultaten</string>
+  <string name="msg_sbc_searching_book">Boek doorzoeken\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Fragment niet beschikbaar</string>
+  <string name="msg_share_explanation">Je kunt gegevens delen door een barcode op je scherm te laten zien en deze met een andere telefoon te scannen.</string>
+  <string name="msg_share_text">Of typ wat tekst en druk op Enter</string>
+  <string name="msg_sure">Weet je het zeker?</string>
+  <string name="msg_unmount_usb">Sorry, de SD-kaart is niet toegankelijk.</string>
+  <string name="preferences_actions_title">Wanneer een barcode is gevonden\u2026</string>
+  <string name="preferences_auto_focus_title">Automatisch scherpstellen</string>
+  <string name="preferences_auto_open_web_title">Webpagina\'s automatisch openen</string>
+  <string name="preferences_bulk_mode_summary">Continu barcodes scannen en opslaan</string>
+  <string name="preferences_bulk_mode_title">Bulkmodus</string>
+  <string name="preferences_copy_to_clipboard_title">Kopiëren naar klembord</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Variabelen: %s = inhoud, %f = formaat, %t = type</string>
+  <string name="preferences_custom_product_search_title">Aangepaste zoek-URL</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">1D Product</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Datamatrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR-codes</string>
+  <string name="preferences_device_bug_workarounds_title">Tijdelijke oplossingen voor apparaatbugs</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Geen barcodescènemodus</string>
+  <string name="preferences_disable_continuous_focus_summary">Alleen standaardscherpstelfunctie gebruiken</string>
+  <string name="preferences_disable_continuous_focus_title">Niet continu scherpstellen</string>
+  <string name="preferences_disable_exposure_title">Geen blootstelling</string>
+  <string name="preferences_disable_metering_title">Geen metingen</string>
+  <string name="preferences_front_light_auto">Automatisch</string>
+  <string name="preferences_front_light_off">Uit</string>
+  <string name="preferences_front_light_on">Aan</string>
+  <string name="preferences_front_light_summary">Verbetert het scannen bij weinig licht op sommige telefoons, maar kan schittering veroorzaken. Werkt niet op alle telefoons.</string>
+  <string name="preferences_front_light_title">Flitser gebruiken</string>
+  <string name="preferences_general_title">Algemene instellingen</string>
+  <string name="preferences_history_summary">Scans opslaan in de geschiedenis</string>
+  <string name="preferences_history_title">Toevoegen aan geschiedenis</string>
+  <string name="preferences_invert_scan_summary">Scan witte barcodes op een zwarte achtergrond. Niet beschikbaar op sommige apparaten.</string>
+  <string name="preferences_invert_scan_title">Negatief scannen</string>
+  <string name="preferences_name">Instellingen</string>
+  <string name="preferences_orientation_title">Niet automatisch draaien</string>
+  <string name="preferences_play_beep_title">Piepen</string>
+  <string name="preferences_remember_duplicates_summary">Meerdere scans van dezelfde barcode opslaan in de geschiedenis</string>
+  <string name="preferences_remember_duplicates_title">Duplicaten onthouden</string>
+  <string name="preferences_result_title">Instellingen voor resultaten</string>
+  <string name="preferences_scanning_title">Bij het scannen van barcodes, decodeer\u2026</string>
+  <string name="preferences_search_country">Zoeken op land</string>
+  <string name="preferences_supplemental_summary">Meer informatie over de inhoud van de barcode proberen op te halen</string>
+  <string name="preferences_supplemental_title">Meer informatie ophalen</string>
+  <string name="preferences_vibrate_title">Trillen</string>
+  <string name="result_address_book">Contactinformatie gevonden</string>
+  <string name="result_calendar">Agendagebeurtenis gevonden</string>
+  <string name="result_email_address">E-mailadres gevonden</string>
+  <string name="result_geo">Geografische coördinaten gevonden</string>
+  <string name="result_isbn">Boek gevonden</string>
+  <string name="result_product">Product gevonden</string>
+  <string name="result_sms">Sms-adres gevonden</string>
+  <string name="result_tel">Telefoonnummer gevonden</string>
+  <string name="result_text">Platte tekst gevonden</string>
+  <string name="result_uri">URL gevonden</string>
+  <string name="result_wifi">WLAN-configuratie gevonden</string>
+  <string name="sbc_name">Zoeken op Google Boeken</string>
+  <string name="wifi_changing_network">Verbinding met netwerk opvragen\u2026</string>
+</resources>

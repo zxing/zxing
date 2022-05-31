@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">ماسح الرمز الشريطي</string>
+  <string name="app_picker_name">تطبيقات</string>
+  <string name="bookmark_picker_name">إشارات مرجعية</string>
+  <string name="button_add_calendar">إضافة إلى التقويم</string>
+  <string name="button_add_contact">إضافة جهة اتصال</string>
+  <string name="button_book_search">بحث في الكتب</string>
+  <string name="button_cancel">إلغاء</string>
+  <string name="button_custom_product_search">بحث مخصص</string>
+  <string name="button_dial">طلب رقم</string>
+  <string name="button_email">إرسال بريد</string>
+  <string name="button_get_directions">معرفة الاتجاهات</string>
+  <string name="button_mms">إرسال MMS</string>
+  <string name="button_ok">موافق</string>
+  <string name="button_open_browser">فتح المتصفح</string>
+  <string name="button_product_search">بحث عن منتجات</string>
+  <string name="button_search_book_contents">بحث في المحتويات</string>
+  <string name="button_share_app">التطبيق</string>
+  <string name="button_share_bookmark">إشارة مرجعية</string>
+  <string name="button_share_by_email">مشاركة عبر البريد</string>
+  <string name="button_share_by_sms">مشاركة عبر SMS</string>
+  <string name="button_share_clipboard">حافظة</string>
+  <string name="button_share_contact">جهة اتصال</string>
+  <string name="button_show_map">عرض الخريطة</string>
+  <string name="button_sms">إرسال SMS</string>
+  <string name="button_web_search">بحث في الويب</string>
+  <string name="button_wifi">الاتصال بشبك</string>
+  <string name="contents_contact">معلومات جهة اتصال</string>
+  <string name="contents_email">عنوان البريد</string>
+  <string name="contents_location">إحداثيات جغرافية</string>
+  <string name="contents_phone">رقم الهاتف</string>
+  <string name="contents_sms">عنوان SMS</string>
+  <string name="contents_text">نص عادي</string>
+  <string name="history_clear_one_history_text">حذف</string>
+  <string name="history_clear_text">مسح السجل</string>
+  <string name="history_email_title">سجل ماسح الرموز الشريطية</string>
+  <string name="history_empty">فارغ</string>
+  <string name="history_empty_detail">لم تسجل حتى الآن بمسح الباركود</string>
+  <string name="history_send">إرسال السجل</string>
+  <string name="history_title">سجل</string>
+  <string name="menu_encode_mecard">استخدام MECARD</string>
+  <string name="menu_encode_vcard">استخدام vCard</string>
+  <string name="menu_help">تعليمات</string>
+  <string name="menu_history">سجل</string>
+  <string name="menu_settings">إعدادات</string>
+  <string name="menu_share">مشاركة</string>
+  <string name="msg_bulk_mode_scanned">معظم الدراسي : الباركود الممسوحة ضوئيا وحفظها</string>
+  <string name="msg_camera_framework_bug">عفوا، حدثت مشكلة في كاميرا جهاز Android. قد تحتاج إلى إعادة تشغيل الجهاز.</string>
+  <string name="msg_default_format">التنسيق</string>
+  <string name="msg_default_meta">البيانات الوصفية</string>
+  <string name="msg_default_mms_subject">أهلا</string>
+  <string name="msg_default_status">قم بوضع الرمز الشريطي داخل حدود صورة الكاميرا ليتم مسحه.</string>
+  <string name="msg_default_time">الوقت</string>
+  <string name="msg_default_type">النوع</string>
+  <string name="msg_encode_contents_failed">تعذر ترميز رمز شريطي من البيانات المتوفرة.</string>
+  <string name="msg_error">خطأ</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">عفوا، تعذر تشغيل التطبيق المطلوب. قد تكون محتويات الرمز الشريطي غير صحيحة.</string>
+  <string name="msg_invalid_value">قيمة غير صالحة</string>
+  <string name="msg_redirect">إعادة توجيه</string>
+  <string name="msg_sbc_book_not_searchable">عفوا، لا يمكن البحث في هذا الكتاب.</string>
+  <string name="msg_sbc_failed">عفوا، حدثت مشكلة في عملية البحث.</string>
+  <string name="msg_sbc_no_page_returned">لم يتم إرجاع أية صفحة</string>
+  <string name="msg_sbc_page">الصفحة</string>
+  <string name="msg_sbc_results">النتائج</string>
+  <string name="msg_sbc_searching_book">البحث في الكتاب</string>
+  <string name="msg_sbc_snippet_unavailable">الأجزاء غير متاحة</string>
+  <string name="msg_share_explanation">يمكنك مشاركة البيانات عن طريق عرض رمز شريطي على الشاشة ومسحه من خلال هاتف آخر.</string>
+  <string name="msg_share_text">أو اكتب بعض النص</string>
+  <string name="msg_sure">هل أنت متأكد؟</string>
+  <string name="msg_unmount_usb">رجاء إيقاف التخزين على USB للمتابعة.</string>
+  <string name="preferences_actions_title">عند العثور على رمز شريطي</string>
+  <string name="preferences_auto_focus_title">استخدام التركيز التلقائي</string>
+  <string name="preferences_auto_open_web_title">فتح صفحات الويب تلقائيا</string>
+  <string name="preferences_bulk_mode_summary">المسح الضوئي وحفظها بشكل مستمر العديد من الرموز الشريطية</string>
+  <string name="preferences_bulk_mode_title">جل وضع المسح الضوئي</string>
+  <string name="preferences_copy_to_clipboard_title">نسخ إلى الحافظة</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">التبديلات : s٪ = المحتويات ،  f٪ = الشكل ، اكتب t٪ =</string>
+  <string name="preferences_custom_product_search_title">عنوان بحث مخصص</string>
+  <string name="preferences_decode_1D_industrial_title">1D الصناعية</string>
+  <string name="preferences_decode_1D_product_title">1D المنتج</string>
+  <string name="preferences_decode_Aztec_title">ازتك</string>
+  <string name="preferences_decode_Data_Matrix_title">فك رموز البيانات ماتريكس</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">فك رموز QR</string>
+  <string name="preferences_device_bug_workarounds_title">الحلول جهاز علة</string>
+  <string name="preferences_disable_barcode_scene_mode_title">لا توجد طريقة الباركود المشهد</string>
+  <string name="preferences_disable_continuous_focus_summary">استخدام وضع معيار التركيز فقط</string>
+  <string name="preferences_disable_continuous_focus_title">لا التركيز المستمر</string>
+  <string name="preferences_disable_exposure_title">لا تعرض</string>
+  <string name="preferences_disable_metering_title">لا القياس</string>
+  <string name="preferences_front_light_auto">أوتوماتيكي</string>
+  <string name="preferences_front_light_off">غير فعال</string>
+  <string name="preferences_front_light_on">نشط</string>
+  <string name="preferences_front_light_summary">تقوم بتحسين عملية المسح في إضاءة ضعيفة في بعض الهواتف، ولكن يمكن أن يتسبب في حدوث سطوع</string>
+  <string name="preferences_front_light_title">استخدم إضاءة أمامية</string>
+  <string name="preferences_general_title">إعدادات عامة</string>
+  <string name="preferences_history_summary">تخزين عمليات الفحص الخاص بك في التاريخ</string>
+  <string name="preferences_history_title">أضف إلى التاريخ</string>
+  <string name="preferences_invert_scan_summary">مسح الباركود لأبيض على خلفية سوداء. لا تتوفر على بعض الأجهزة.</string>
+  <string name="preferences_invert_scan_title">عكس المسح الضوئي</string>
+  <string name="preferences_name">إعدادات</string>
+  <string name="preferences_orientation_title">أي التناوب التلقائي</string>
+  <string name="preferences_play_beep_title">صوت تنبيه</string>
+  <string name="preferences_remember_duplicates_summary">بفحص مخزن متعددة من نفس الباركود في التاريخ</string>
+  <string name="preferences_remember_duplicates_title">تذكر التكرارات</string>
+  <string name="preferences_result_title">إعدادات النتائج</string>
+  <string name="preferences_scanning_title">عندما لمسح الباركود</string>
+  <string name="preferences_search_country">ابحث عن بلد</string>
+  <string name="preferences_supplemental_summary">محاولة لاسترداد مزيد من المعلومات حول محتويات الباركود</string>
+  <string name="preferences_supplemental_title">استرداد مزيد من المعلومات</string>
+  <string name="preferences_vibrate_title">اهتزاز</string>
+  <string name="result_address_book">تم العثور على معلومات جهة الاتصال</string>
+  <string name="result_calendar">تم العثور على حدث التقويم</string>
+  <string name="result_email_address">تم العثور على عنوان البريد</string>
+  <string name="result_geo">تم العثور على الإحداثيات الجغرافية</string>
+  <string name="result_isbn">تم العثور على الكتاب</string>
+  <string name="result_product">تم العثور على المنتج</string>
+  <string name="result_sms">تم العثور على عنوان SMS</string>
+  <string name="result_tel">تم العثور على رقم الهاتف</string>
+  <string name="result_text">تم العثور على نص عادي</string>
+  <string name="result_uri">تم العثور على العنوان</string>
+  <string name="result_wifi">العثور على التكوين اللاسلك</string>
+  <string name="sbc_name">البحث في Google Book</string>
+  <string name="wifi_changing_network">طلب الاتصال بالشبكة\u2026</string>
+</resources>

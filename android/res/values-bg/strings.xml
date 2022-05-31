@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Баркод Скенер</string>
+  <string name="app_picker_name">Приложения</string>
+  <string name="bookmark_picker_name">Отметки</string>
+  <string name="button_add_calendar">Добави в календар</string>
+  <string name="button_add_contact">Добави контакт</string>
+  <string name="button_book_search">Търси Книга</string>
+  <string name="button_cancel">Отказ</string>
+  <string name="button_custom_product_search">Потребителско търсене</string>
+  <string name="button_dial">Набери телефон</string>
+  <string name="button_email">Изпрати поща</string>
+  <string name="button_get_directions">Навигация</string>
+  <string name="button_mms">Изпрати MMS</string>
+  <string name="button_ok">ОК</string>
+  <string name="button_open_browser">Отвори браузър</string>
+  <string name="button_product_search">Търсене на продукт</string>
+  <string name="button_search_book_contents">Търси в книга</string>
+  <string name="button_share_app">Приложение</string>
+  <string name="button_share_bookmark">Отметка</string>
+  <string name="button_share_by_email">Сподели по поща</string>
+  <string name="button_share_by_sms">Сподели чрез SMS</string>
+  <string name="button_share_clipboard">Клипборд</string>
+  <string name="button_share_contact">Контакт</string>
+  <string name="button_show_map">Покажи карта</string>
+  <string name="button_sms">Изпрати SMS</string>
+  <string name="button_web_search">Интернет търсене</string>
+  <string name="button_wifi">Свържи се в мрежата</string>
+  <string name="contents_contact">Информация за контакт</string>
+  <string name="contents_email">Електронна поща</string>
+  <string name="contents_location">Географски координати</string>
+  <string name="contents_phone">Телефон</string>
+  <string name="contents_sms">SMS адрес</string>
+  <string name="contents_text">Чист текст</string>
+  <string name="history_clear_one_history_text">Изчисти</string>
+  <string name="history_clear_text">Изчисти историята</string>
+  <string name="history_email_title">История на Баркод Скенера</string>
+  <string name="history_empty">Празно</string>
+  <string name="history_empty_detail">Няма сканирани и записани бар-кодове все още</string>
+  <string name="history_send">Изпрати историята</string>
+  <string name="history_title">История</string>
+  <string name="menu_encode_mecard">Използвай MECARD формат</string>
+  <string name="menu_encode_vcard">Използвай vCard формат</string>
+  <string name="menu_help">Помощ</string>
+  <string name="menu_history">История</string>
+  <string name="menu_settings">Настройки</string>
+  <string name="menu_share">Сподели</string>
+  <string name="msg_bulk_mode_scanned">Масов режим: баркодът е сканиран и записан</string>
+  <string name="msg_camera_framework_bug">Съжаляваме, срещнахме проблем с камерата. Може да се наложи да рестартирате устройството си.</string>
+  <string name="msg_default_format">Формат</string>
+  <string name="msg_default_meta">Допълнение</string>
+  <string name="msg_default_mms_subject">Здравейте</string>
+  <string name="msg_default_status">Сложете баркода вътре в правоъгълника за да го сканирате.</string>
+  <string name="msg_default_time">Време</string>
+  <string name="msg_default_type">Тип</string>
+  <string name="msg_encode_contents_failed">Неуспешно кодиране на подадените данни.</string>
+  <string name="msg_error">Грешка</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Съжаляваме, но нужното приложение не успя да се стартира. Възможно е баркода или съдържанието му да са невалидни.</string>
+  <string name="msg_invalid_value">Невалидна стойност</string>
+  <string name="msg_redirect">Пренасочване</string>
+  <string name="msg_sbc_book_not_searchable">Съжаляваме, тази книга не може да се претърсва.</string>
+  <string name="msg_sbc_failed">Съжаляваме, срещнахме проблем при търсенето.</string>
+  <string name="msg_sbc_no_page_returned">Няма страница</string>
+  <string name="msg_sbc_page">Страница</string>
+  <string name="msg_sbc_results">Резултати</string>
+  <string name="msg_sbc_searching_book">Търсене на книга\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Изрезката не е достъпна</string>
+  <string name="msg_share_explanation">Можете да споделяте информация като покажете баркод на екрана, и го сканирате от друг телефон.</string>
+  <string name="msg_share_text">Или въведете някакъв текст</string>
+  <string name="msg_sure">Сигурни ли сте?</string>
+  <string name="msg_unmount_usb">Съжаляваме, но SD картата не е достъпна.</string>
+  <string name="preferences_actions_title">При прочитане на баркод\u2026</string>
+  <string name="preferences_auto_focus_title">Използване на автоматично фокусиране</string>
+  <string name="preferences_auto_open_web_title">Отворете уеб страници автоматично</string>
+  <string name="preferences_bulk_mode_summary">Сканирай и запомняй множество баркодове без прекъсване</string>
+  <string name="preferences_bulk_mode_title">Масово сканиране</string>
+  <string name="preferences_copy_to_clipboard_title">Копиране в клипборда</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Използвайте: %s за съдържанието,%f за форматa, %t за типа</string>
+  <string name="preferences_custom_product_search_title">Потребителски адрес за търсене</string>
+  <string name="preferences_decode_1D_industrial_title">1D Индустриална</string>
+  <string name="preferences_decode_1D_product_title">1D продукта</string>
+  <string name="preferences_decode_Aztec_title">Ацтеките</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR Баркодове</string>
+  <string name="preferences_device_bug_workarounds_title">Заобикаляне на проблеми</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Никакъв режим баркод сцена</string>
+  <string name="preferences_disable_continuous_focus_summary">Използване само на стандартен режим за фокусиране</string>
+  <string name="preferences_disable_continuous_focus_title">Без непрекъснат фокус</string>
+  <string name="preferences_disable_exposure_title">Никоя експозиция</string>
+  <string name="preferences_disable_metering_title">Не измерване</string>
+  <string name="preferences_front_light_auto">Автоматичен</string>
+  <string name="preferences_front_light_off">Неактивен</string>
+  <string name="preferences_front_light_on">Активен</string>
+  <string name="preferences_front_light_summary">Подобрява четенето при лошо осветление, но предизвиква отблясъци. Само за някои модели.</string>
+  <string name="preferences_front_light_title">Използвай фенерче</string>
+  <string name="preferences_general_title">Общи настройки</string>
+  <string name="preferences_history_summary">Съхранявайте сканирания в историята</string>
+  <string name="preferences_history_title">Добави към История</string>
+  <string name="preferences_invert_scan_summary">Сканиране за бели баркодове на черен фон. Не е на разположение на някои устройства.</string>
+  <string name="preferences_invert_scan_title">Обръщане на сканиране</string>
+  <string name="preferences_name">Настройки</string>
+  <string name="preferences_orientation_title">Без автоматично завъртане</string>
+  <string name="preferences_play_beep_title">Издаване на звук</string>
+  <string name="preferences_remember_duplicates_summary">Записвай множество сканирания на един и същи баркод в историята</string>
+  <string name="preferences_remember_duplicates_title">Запомняне на повторенията</string>
+  <string name="preferences_result_title">Настройки за резултата</string>
+  <string name="preferences_scanning_title">При сканиране да се декодират\u2026</string>
+  <string name="preferences_search_country">Държава при търсене</string>
+  <string name="preferences_supplemental_summary">Опитай да получиш повече информация за баркода</string>
+  <string name="preferences_supplemental_title">Търсене на разширения</string>
+  <string name="preferences_vibrate_title">Вибрация</string>
+  <string name="result_address_book">Намерих информация за контакт</string>
+  <string name="result_calendar">Намерих календарно събитие</string>
+  <string name="result_email_address">Намерих адрес на електронна поща</string>
+  <string name="result_geo">Намерих географски координати</string>
+  <string name="result_isbn">Намерих книга</string>
+  <string name="result_product">Намерих продукт</string>
+  <string name="result_sms">Намерих адрес за SMS</string>
+  <string name="result_tel">Намерих телефонен номер</string>
+  <string name="result_text">Намерих чист текст</string>
+  <string name="result_uri">Намерих Интернет Адрес</string>
+  <string name="result_wifi">Намерих настройки за безжична мрежа</string>
+  <string name="sbc_name">Гугъл търсене на книга</string>
+  <string name="wifi_changing_network">Запитване свързване към мрежата\u2026</string>
+</resources>

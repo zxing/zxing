@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Aplikasi</string>
+  <string name="bookmark_picker_name">Bookmarks</string>
+  <string name="button_add_calendar">Tambah ke kalendar</string>
+  <string name="button_add_contact">Tambah kontak</string>
+  <string name="button_book_search">Cari Buku</string>
+  <string name="button_cancel">Batal</string>
+  <string name="button_custom_product_search">Pencarian kustom</string>
+  <string name="button_dial">Menghubungi nomor</string>
+  <string name="button_email">Kirim email</string>
+  <string name="button_get_directions">Dapatkan petunjuk arah</string>
+  <string name="button_mms">Kirim MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Buka browser</string>
+  <string name="button_product_search">Cari Produk</string>
+  <string name="button_search_book_contents">Cari isi</string>
+  <string name="button_share_app">Aplikasi</string>
+  <string name="button_share_bookmark">Bookmark</string>
+  <string name="button_share_by_email">Bagikan melalui email</string>
+  <string name="button_share_by_sms">Bagikan melalui SMS</string>
+  <string name="button_share_clipboard">Clipboard</string>
+  <string name="button_share_contact">Kontak</string>
+  <string name="button_show_map">Lihat peta</string>
+  <string name="button_sms">Kirim SMS</string>
+  <string name="button_web_search">Pencarian web</string>
+  <string name="button_wifi">Hubungkan ke Jaringan</string>
+  <string name="contents_contact">Informasi kontak</string>
+  <string name="contents_email">Alamat email</string>
+  <string name="contents_location">Koordinat geografis</string>
+  <string name="contents_phone">Nomor telepon</string>
+  <string name="contents_sms">Alamat SMS</string>
+  <string name="contents_text">Teks biasa</string>
+  <string name="history_clear_one_history_text">Hapus</string>
+  <string name="history_clear_text">Hapus riwayat</string>
+  <string name="history_email_title">Riwayat Barcode Scanner</string>
+  <string name="history_empty">Kosong</string>
+  <string name="history_empty_detail">Tidak ada pemindaian barcode yang pernah dicatat</string>
+  <string name="history_send">Kirim riwayat</string>
+  <string name="history_title">Riwayat</string>
+  <string name="menu_encode_mecard">Gunakan MECARD</string>
+  <string name="menu_encode_vcard">Gunakan vCard</string>
+  <string name="menu_help">Bantuan</string>
+  <string name="menu_history">Riwayat</string>
+  <string name="menu_settings">Pengaturan</string>
+  <string name="menu_share">Bagikan</string>
+  <string name="msg_bulk_mode_scanned">Bulk mode: barcode sudah dipindai dan disimpan</string>
+  <string name="msg_camera_framework_bug">Maaf, kamera mengalami masalah. Anda mungkin perlu me-restart perangkat.</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_mms_subject">Hai</string>
+  <string name="msg_default_status">Letakkan barcode di dalam kotak jendela untuk memindai.</string>
+  <string name="msg_default_time">Waktu</string>
+  <string name="msg_default_type">Tipe</string>
+  <string name="msg_encode_contents_failed">Tidak dapat meng-encode barcode dari data yang diberikan.</string>
+  <string name="msg_error">Kesalahan</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Maaf, aplikasi yang diminta tidak dapat dijalankan. Mungkin ada kesalahan isi barcode.</string>
+  <string name="msg_invalid_value">Nilai tidak valid</string>
+  <string name="msg_redirect">Pengalihan</string>
+  <string name="msg_sbc_book_not_searchable">Maaf, buku ini tidak dapat dicari.</string>
+  <string name="msg_sbc_failed">Maaf, pencarian mengalami masalah.</string>
+  <string name="msg_sbc_no_page_returned">Tidak ada halaman kembali</string>
+  <string name="msg_sbc_page">Halaman</string>
+  <string name="msg_sbc_results">Hasil</string>
+  <string name="msg_sbc_searching_book">Mencari buku\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Snippet tidak tersedia</string>
+  <string name="msg_share_explanation">Anda dapat berbagi data dengan menampilkan barcode di layar Anda dan dapat dipindai oleh phone lain.</string>
+  <string name="msg_share_text">Atau masukkan beberapa kata dan tekan Enter</string>
+  <string name="msg_sure">Apakah Anda yakin?</string>
+  <string name="msg_unmount_usb">Maaf, SD card tidak dapat diakses.</string>
+  <string name="preferences_actions_title">Ketika barcode sudah ditemukan\u2026</string>
+  <string name="preferences_auto_focus_title">Menggunakan fokus otomatis</string>
+  <string name="preferences_auto_open_web_title">Membuka halaman web secara otomatis</string>
+  <string name="preferences_bulk_mode_summary">Pindai dan simpan beberapa barcode terus-menerus</string>
+  <string name="preferences_bulk_mode_title">Mode pemindaian bulk</string>
+  <string name="preferences_copy_to_clipboard_title">Salin ke clipboard</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Substitusi: %s = isi, %f = format, %t = jenis</string>
+  <string name="preferences_custom_product_search_title">Pencarian URL kustom</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industri</string>
+  <string name="preferences_decode_1D_product_title">1D Produk</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matriks</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR Codes</string>
+  <string name="preferences_device_bug_workarounds_title">Device Bug Workarounds</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Tidak ada modus tempat kejadian barcode</string>
+  <string name="preferences_disable_continuous_focus_summary">Hanya gunakan mode fokus standar</string>
+  <string name="preferences_disable_continuous_focus_title">Jangan gunakan fokus terus menerus</string>
+  <string name="preferences_disable_exposure_title">Tanpa eksposur</string>
+  <string name="preferences_disable_metering_title">Tanpa pengukuran</string>
+  <string name="preferences_front_light_auto">Otomatis</string>
+  <string name="preferences_front_light_off">Non-aktif</string>
+  <string name="preferences_front_light_on">Aktif</string>
+  <string name="preferences_front_light_summary">Meningkatkan pemindaian dalam cahaya rendah pada beberapa ponsel, namun dapat menyebabkan silau. Tidak dapat bekerja pada semua ponsel.</string>
+  <string name="preferences_front_light_title">Gunakan lampu depan</string>
+  <string name="preferences_general_title">Pengaturan umum</string>
+  <string name="preferences_history_summary">Simpan hasil pemindaian Anda dalam riwayat</string>
+  <string name="preferences_history_title">Tambahkan ke riwayat</string>
+  <string name="preferences_invert_scan_summary">Memindai barcode putih pada latar belakang hitam. Tidak tersedia pada beberapa perangkat.</string>
+  <string name="preferences_invert_scan_title">Membalikkan pemindaian</string>
+  <string name="preferences_name">Pengaturan</string>
+  <string name="preferences_orientation_title">Jangan rotasi otomatis</string>
+  <string name="preferences_play_beep_title">Bunyi</string>
+  <string name="preferences_remember_duplicates_summary">Simpan beberapa pindaian dari barcode yang sama di dalam Riwayat</string>
+  <string name="preferences_remember_duplicates_title">Ingat duplikasi</string>
+  <string name="preferences_result_title">Hasil pengaturan</string>
+  <string name="preferences_scanning_title">Ketika memindai barcode, decode\u2026</string>
+  <string name="preferences_search_country">Pilih negara</string>
+  <string name="preferences_supplemental_summary">Mencoba mendapatkan beberapa informasi mengenai isi barcode</string>
+  <string name="preferences_supplemental_title">Ambil informasi lebih lanjut</string>
+  <string name="preferences_vibrate_title">Bergetar</string>
+  <string name="result_address_book">Informasi kontak ditemukan</string>
+  <string name="result_calendar">Kalendar acara ditemukan</string>
+  <string name="result_email_address">Alamat email ditemukan</string>
+  <string name="result_geo">Koordinat geografis ditemukan</string>
+  <string name="result_isbn">Buku ditemukan</string>
+  <string name="result_product">Produk ditemukan</string>
+  <string name="result_sms">Alamat SMS ditemukan</string>
+  <string name="result_tel">Nomor telepon ditemukan</string>
+  <string name="result_text">Teks ditemukan</string>
+  <string name="result_uri">URL ditemukan</string>
+  <string name="result_wifi">Konfigurasi WLAN ditemukan</string>
+  <string name="sbc_name">Pencarian Google Book</string>
+  <string name="wifi_changing_network">Meminta koneksi ke jaringan\u2026</string>
+</resources>

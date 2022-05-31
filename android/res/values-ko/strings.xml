@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">바코드 스캐너</string>
+  <string name="app_picker_name">어플리케이션</string>
+  <string name="bookmark_picker_name">즐겨찾기</string>
+  <string name="button_add_calendar">일정에 추가하기</string>
+  <string name="button_add_contact">연락처에 추가하기</string>
+  <string name="button_book_search">도서 검색</string>
+  <string name="button_cancel">취소</string>
+  <string name="button_custom_product_search">사용자 지정 검색</string>
+  <string name="button_dial">전화 걸기</string>
+  <string name="button_email">이메일 보내기</string>
+  <string name="button_get_directions">길 찾기</string>
+  <string name="button_mms">문자 보내기</string>
+  <string name="button_ok">확인</string>
+  <string name="button_open_browser">웹브라우저로 열기</string>
+  <string name="button_product_search">제품 검색</string>
+  <string name="button_search_book_contents">도서 내용 검색</string>
+  <string name="button_share_app">어플리케이션</string>
+  <string name="button_share_bookmark">즐겨찾기</string>
+  <string name="button_share_by_email">이메일로 공유</string>
+  <string name="button_share_by_sms">문자로 공유</string>
+  <string name="button_share_clipboard">클립보드</string>
+  <string name="button_share_contact">연락처</string>
+  <string name="button_show_map">지도 보기</string>
+  <string name="button_sms">문자 보내기</string>
+  <string name="button_web_search">웹 검색</string>
+  <string name="button_wifi">네트워크 연결</string>
+  <string name="contents_contact">연락처 정보</string>
+  <string name="contents_email">이메일 주소</string>
+  <string name="contents_location">GPS 좌표</string>
+  <string name="contents_phone">전화번호</string>
+  <string name="contents_sms">전화번호</string>
+  <string name="contents_text">문장</string>
+  <string name="history_clear_one_history_text">삭제</string>
+  <string name="history_clear_text">기록 삭제</string>
+  <string name="history_email_title">바코드 스캐너 기록</string>
+  <string name="history_empty">비었습니다</string>
+  <string name="history_empty_detail">아무 바코드 스캔이 기록되지 않았습니다</string>
+  <string name="history_send">기록 보내기</string>
+  <string name="history_title">기록</string>
+  <string name="menu_encode_mecard">MECARD 사용</string>
+  <string name="menu_encode_vcard">vCard 사용</string>
+  <string name="menu_help">도움말</string>
+  <string name="menu_history">기록</string>
+  <string name="menu_settings">설정</string>
+  <string name="menu_share">공유</string>
+  <string name="msg_bulk_mode_scanned">일괄 스캔 모드: 다수의 바코드를 읽고 저장합니다.</string>
+  <string name="msg_camera_framework_bug">죄송합니다. 기기의 카메라에 오류가 생겼습니다. 기기를 재시작 해야할 수 있습니다.</string>
+  <string name="msg_default_format">포맷</string>
+  <string name="msg_default_meta">메타데이터</string>
+  <string name="msg_default_mms_subject">안녕하세요</string>
+  <string name="msg_default_status">사각형 영역 안에 바코드를 위치해주세요.</string>
+  <string name="msg_default_time">시간</string>
+  <string name="msg_default_type">종류</string>
+  <string name="msg_encode_contents_failed">바코드를 만들지 못하였습니다.</string>
+  <string name="msg_error">오류</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">죄송합니다. 어플리케이션이 실행되지 않습니다. 바코드 내용이 잘못되었을 수도 있습니다.</string>
+  <string name="msg_invalid_value">값이 잘못되었습니다</string>
+  <string name="msg_redirect">리디렉션</string>
+  <string name="msg_sbc_book_not_searchable">죄송합니다. 이 책은 검색이 불가능 합니다.</string>
+  <string name="msg_sbc_failed">죄송합니다. 검색 도중 문제가 발생했습니다.</string>
+  <string name="msg_sbc_no_page_returned">페이지가 없습니다.</string>
+  <string name="msg_sbc_page">페이지</string>
+  <string name="msg_sbc_results">결과</string>
+  <string name="msg_sbc_searching_book">책 검색 중\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">내용을 미리 볼 수 없습니다.</string>
+  <string name="msg_share_explanation">데이터를 공유하기 위한 바코드를 생성할 수 있습니다.</string>
+  <string name="msg_share_text">단순한 문자열도 바코드로 변환할 수 있습니다</string>
+  <string name="msg_sure">계속하시겠습니까?</string>
+  <string name="msg_unmount_usb">죄송합니다. SD카드를 사용할 수 없습니다.</string>
+  <string name="preferences_actions_title">바코드를 스캔했을 때\u2026</string>
+  <string name="preferences_auto_focus_title">자동 초점 사용하기</string>
+  <string name="preferences_auto_open_web_title">자동으로 웹 페이지를 엽니다.</string>
+  <string name="preferences_bulk_mode_summary">다수의 바코드를 스캔하고 저장합니다.</string>
+  <string name="preferences_bulk_mode_title">일괄 스캔 모드</string>
+  <string name="preferences_copy_to_clipboard_title">클립보드에 복사하기</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">표시자: %s = 내용, %f = 포맷, %t = 유형</string>
+  <string name="preferences_custom_product_search_title">사용자 지정 검색 주소</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+  <string name="preferences_decode_1D_product_title">1D Product</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR 코드</string>
+  <string name="preferences_device_bug_workarounds_title">장치 버그 해결</string>
+  <string name="preferences_disable_barcode_scene_mode_title">바코드 씬 모드 끄기</string>
+  <string name="preferences_disable_continuous_focus_summary">표준 초점 모드만 사용합니다.</string>
+  <string name="preferences_disable_continuous_focus_title">연속 초점 사용하지 않기</string>
+  <string name="preferences_disable_exposure_title">노출 조절하지 않기</string>
+  <string name="preferences_disable_metering_title">측광 조절하지 않기</string>
+  <string name="preferences_front_light_auto">자동</string>
+  <string name="preferences_front_light_off">항상 끄기</string>
+  <string name="preferences_front_light_on">항상 켜기</string>
+  <string name="preferences_front_light_summary">특정 기기에서는 어두운 환경에서 스캔 기능을 향상 시키지만 너무 밝을 수도 있습니다. 모든 기기에서 작동되지 않습니다.</string>
+  <string name="preferences_front_light_title">플래시 사용하기</string>
+  <string name="preferences_general_title">일반 설정</string>
+  <string name="preferences_history_summary">스캔 결과를 기록으로 저장합니다.</string>
+  <string name="preferences_history_title">기록 저장</string>
+  <string name="preferences_invert_scan_summary">검정 바탕의 바코드를 스캔합니다. 일부 장치에서 사용할 수 없습니다.</string>
+  <string name="preferences_invert_scan_title">스캔 반전</string>
+  <string name="preferences_name">설정</string>
+  <string name="preferences_orientation_title">자동 회전을 사용하지 않습니다.</string>
+  <string name="preferences_play_beep_title">전자음</string>
+  <string name="preferences_remember_duplicates_summary">동일한 바코드에 대한 스캔 결과도 기록에 저장합니다.</string>
+  <string name="preferences_remember_duplicates_title">중복된 바코드 저장</string>
+  <string name="preferences_result_title">결과 설정</string>
+  <string name="preferences_scanning_title">바코드 스캐닝 시\u2026</string>
+  <string name="preferences_search_country">국가별 검색</string>
+  <string name="preferences_supplemental_summary">바코드 내용에 대한 상세 정보를 검색하여 가져옵니다</string>
+  <string name="preferences_supplemental_title">바코드 상세 정보</string>
+  <string name="preferences_vibrate_title">진동</string>
+  <string name="result_address_book">연락처 정보를 찾았습니다</string>
+  <string name="result_calendar">일정 이벤트를 찾았습니다</string>
+  <string name="result_email_address">이메일 주소를 찾았습니다</string>
+  <string name="result_geo">GPS 좌표를 찾았습니다</string>
+  <string name="result_isbn">책을 찾았습니다</string>
+  <string name="result_product">제품을 찾았습니다</string>
+  <string name="result_sms">전화번호를 찾았습니다</string>
+  <string name="result_tel">전화번호를 찾았습니다</string>
+  <string name="result_text">문장을 찾았습니다</string>
+  <string name="result_uri">인터넷 주소를 찾았습니다</string>
+  <string name="result_wifi">WiFi 설정을 찾았습니다</string>
+  <string name="sbc_name">구글 책 검색</string>
+  <string name="wifi_changing_network">네트워크에 연결 요청 중\u2026</string>
+</resources>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Aplikacije</string>
+  <string name="bookmark_picker_name">Zaznamki</string>
+  <string name="button_add_calendar">Dodaj v koledar</string>
+  <string name="button_add_contact">Dodaj kontakt</string>
+  <string name="button_book_search">Išči knjigo</string>
+  <string name="button_cancel">Prekliči</string>
+  <string name="button_custom_product_search">Iskanje po meri</string>
+  <string name="button_dial">Pokliči številko</string>
+  <string name="button_email">Pošlji e-mail</string>
+  <string name="button_get_directions">Dobi smer</string>
+  <string name="button_mms">Pošlji MMS</string>
+  <string name="button_ok">V redu</string>
+  <string name="button_open_browser">Odpri brskalnik</string>
+  <string name="button_product_search">Iskanje po izdelkih</string>
+  <string name="button_search_book_contents">Išči vsebino</string>
+  <string name="button_share_app">Aplikacija</string>
+  <string name="button_share_bookmark">Zaznamek</string>
+  <string name="button_share_by_email">Deli preko e-maila</string>
+  <string name="button_share_by_sms">Deli preko SMS</string>
+  <string name="button_share_clipboard">Odložišče</string>
+  <string name="button_share_contact">Kontakt</string>
+  <string name="button_show_map">Pokaži zemljevid</string>
+  <string name="button_sms">Pošlji SMS</string>
+  <string name="button_web_search">Spletno iskanje</string>
+  <string name="button_wifi">Poveži se na omrežje</string>
+  <string name="contents_contact">Informacije o kontaktu</string>
+  <string name="contents_email">E-naslov</string>
+  <string name="contents_location">Geografske koordinate</string>
+  <string name="contents_phone">Telefonska številka</string>
+  <string name="contents_sms">SMS naslov</string>
+  <string name="contents_text">Tekst</string>
+  <string name="history_clear_one_history_text">Pobriši</string>
+  <string name="history_clear_text">Pobriši zgodovino</string>
+  <string name="history_email_title">Barcode Scanner zgodovina</string>
+  <string name="history_empty">Prazne</string>
+  <string name="history_empty_detail">Ni zapisov o skeniranih črtnih kodah</string>
+  <string name="history_send">Pošlji zgodovino</string>
+  <string name="history_title">Zgodovina</string>
+  <string name="menu_encode_mecard">Uporaba MECARD</string>
+  <string name="menu_encode_vcard">Uporaba vCard</string>
+  <string name="menu_help">Pomoč</string>
+  <string name="menu_history">Zgodovina</string>
+  <string name="menu_settings">Nastavitve</string>
+  <string name="menu_share">Deli</string>
+  <string name="msg_bulk_mode_scanned">Slikanje na debelo: črtna koda prebrana in shranjena</string>
+  <string name="msg_camera_framework_bug">Oprostite, Android kamera je naletela na težave. Mogoče boste morali ponovno zagnati napravo.</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metapodatki</string>
+  <string name="msg_default_mms_subject">Živjo</string>
+  <string name="msg_default_status">Za branje postavite črtno kodo znotraj iskala.</string>
+  <string name="msg_default_time">Čas</string>
+  <string name="msg_default_type">Tip</string>
+  <string name="msg_encode_contents_failed">Ni bilo mogoče narediti črtne kode iz podanih podatkov</string>
+  <string name="msg_error">Napaka</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Oprostite, zahtevana aplikacija se ne more zagnati. Lahko da gre za napačno vsebino črtne kode.</string>
+  <string name="msg_invalid_value">Neveljavna vrednost</string>
+  <string name="msg_redirect">Preusmeritev</string>
+  <string name="msg_sbc_book_not_searchable">Oprostite, po tej knjigi se ne da iskati.</string>
+  <string name="msg_sbc_failed">Oprostite, iskanje je naletelo na napako.</string>
+  <string name="msg_sbc_no_page_returned">Brez vrnjene strani.</string>
+  <string name="msg_sbc_page">Stran</string>
+  <string name="msg_sbc_results">Rezultati</string>
+  <string name="msg_sbc_searching_book">Iščem knjigo\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Košček ni na voljo</string>
+  <string name="msg_share_explanation">Lahko delite podatke s prikazom črtne kode na vašem zaslonu in branju le-te z drugim mobilnim telefonom.</string>
+  <string name="msg_share_text">Ali vnesite nekaj besedila</string>
+  <string name="msg_sure">Ali ste prepričani?</string>
+  <string name="msg_unmount_usb">Oprostite, do SD kartice ni možno dostopati</string>
+  <string name="preferences_actions_title">Ko je črtna koda najdena\u2026</string>
+  <string name="preferences_auto_focus_title">Uporabite samodejno fokus</string>
+  <string name="preferences_auto_open_web_title">Samodejno odpiranje spletnih strani</string>
+  <string name="preferences_bulk_mode_summary">Beri in shrani več črtnih kod zaporedoma</string>
+  <string name="preferences_bulk_mode_title">Branje črtnih kod na debelo</string>
+  <string name="preferences_copy_to_clipboard_title">Kopiraj v beležnico</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Zamenjave: %s = vsebin, %f = format, %t = vrsta</string>
+  <string name="preferences_custom_product_search_title">URL za iskanje po meri</string>
+  <string name="preferences_decode_1D_industrial_title">1D industrial</string>
+  <string name="preferences_decode_1D_product_title">1D izdelka</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR kode</string>
+  <string name="preferences_device_bug_workarounds_title">Naprava Bug Rešitve</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Ni scenskega načina za črtne kode</string>
+  <string name="preferences_disable_continuous_focus_summary">Uporabi samo standardni način fokusiranja</string>
+  <string name="preferences_disable_continuous_focus_title">Onemogoči stalni fokus</string>
+  <string name="preferences_disable_exposure_title">Brez izpostavljenosti</string>
+  <string name="preferences_disable_metering_title">Brez merjenja</string>
+  <string name="preferences_front_light_auto">Samodejno</string>
+  <string name="preferences_front_light_off">Neaktivno</string>
+  <string name="preferences_front_light_on">Aktivna</string>
+  <string name="preferences_front_light_summary">Izboljša branje pri slabi svetlobi na nekaterih telefonih, a lahko povzroči blesk. Ne deluje na vseh telefonih.</string>
+  <string name="preferences_front_light_title">Uporabite sprednjo luč</string>
+  <string name="preferences_general_title">Splošne nastavitve</string>
+  <string name="preferences_history_summary">Shranjevanje skeniranih dokumentov v zgodovini</string>
+  <string name="preferences_history_title">Dodaj v zgodovino</string>
+  <string name="preferences_invert_scan_summary">Scan za beli črtne kode na črni podlagi. Ni na voljo na nekaterih napravah.</string>
+  <string name="preferences_invert_scan_title">Obrni skeniranje</string>
+  <string name="preferences_name">Nastavitve</string>
+  <string name="preferences_orientation_title">Brez avtomatske rotacije</string>
+  <string name="preferences_play_beep_title">Pisk</string>
+  <string name="preferences_remember_duplicates_summary">Shranjevanje večkratnega skeniranja iste črtne kode v zgodovini</string>
+  <string name="preferences_remember_duplicates_title">Zapomni si dvojnike</string>
+  <string name="preferences_result_title">Nastavitve rezultatov branja</string>
+  <string name="preferences_scanning_title">Ko berete črtne kode, preberi\u2026</string>
+  <string name="preferences_search_country">Išči po državi</string>
+  <string name="preferences_supplemental_summary">Poskusite pridobiti več informacij o vsebini črtne kode</string>
+  <string name="preferences_supplemental_title">Naloži več informacij</string>
+  <string name="preferences_vibrate_title">Vibriraj</string>
+  <string name="result_address_book">Najdene informacije o kontaktu</string>
+  <string name="result_calendar">Najden koledarski dogodek</string>
+  <string name="result_email_address">Najden e-naslov</string>
+  <string name="result_geo">Najdene geografske koordinate</string>
+  <string name="result_isbn">Najdena knjiga</string>
+  <string name="result_product">Najden produkt</string>
+  <string name="result_sms">Najden SMS naslov</string>
+  <string name="result_tel">Najdena telefonska številka</string>
+  <string name="result_text">Najden tekst</string>
+  <string name="result_uri">Najden URL</string>
+  <string name="result_wifi">Najdene WLAN nastavitve</string>
+  <string name="sbc_name">Iskanje z Google Book Search</string>
+  <string name="wifi_changing_network">Priključevanje na omrežje\u2026</string>
+</resources>

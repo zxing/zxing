@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Applicazioni</string>
+  <string name="bookmark_picker_name">Segnalibri</string>
+  <string name="button_add_calendar">Aggiungi al calendario</string>
+  <string name="button_add_contact">Aggiungi ai contatti</string>
+  <string name="button_book_search">Cerca libro</string>
+  <string name="button_cancel">Annulla</string>
+  <string name="button_custom_product_search">Ricerca personalizzata</string>
+  <string name="button_dial">Componi numero</string>
+  <string name="button_email">Invia email</string>
+  <string name="button_get_directions">Ottieni indirizzi</string>
+  <string name="button_mms">Invia MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Apri browser</string>
+  <string name="button_product_search">Cerca prodotto</string>
+  <string name="button_search_book_contents">Cerca contenuti</string>
+  <string name="button_share_app">Applicazione</string>
+  <string name="button_share_bookmark">Segnalibro</string>
+  <string name="button_share_by_email">Condividi tramite email</string>
+  <string name="button_share_by_sms">Condividi tramite SMS</string>
+  <string name="button_share_clipboard">Appunti</string>
+  <string name="button_share_contact">Contatti</string>
+  <string name="button_show_map">Mostra mappa</string>
+  <string name="button_sms">Invia SMS</string>
+  <string name="button_web_search">Ricerca web</string>
+  <string name="button_wifi">Connessione a rete</string>
+  <string name="contents_contact">Info contatto</string>
+  <string name="contents_email">Indirizzo email</string>
+  <string name="contents_location">Coordinate geografiche</string>
+  <string name="contents_phone">Numero di telefono</string>
+  <string name="contents_sms">Numero SMS</string>
+  <string name="contents_text">Testo puro</string>
+  <string name="history_clear_one_history_text">Cancella</string>
+  <string name="history_clear_text">Cancella cronologia</string>
+  <string name="history_email_title">Cronologia scansioni codici a barre</string>
+  <string name="history_empty">Vuoto</string>
+  <string name="history_empty_detail">Nessuna scansione di codici a barre è stata registrata</string>
+  <string name="history_send">Invia cronologia</string>
+  <string name="history_title">Cronologia</string>
+  <string name="menu_encode_mecard">Usa MECARD</string>
+  <string name="menu_encode_vcard">Usa vCard</string>
+  <string name="menu_help">Aiuto</string>
+  <string name="menu_history">Cronologia</string>
+  <string name="menu_settings">Impostazioni</string>
+  <string name="menu_share">Condividi</string>
+  <string name="msg_bulk_mode_scanned">Modalità di gruppo: codici a barre scansionati e salvati</string>
+  <string name="msg_camera_framework_bug">Spiacenti, la fotocamera Android ha riscontrato un problema. Potrebbe essere necessario riavviare il dispositivo.</string>
+  <string name="msg_default_format">Formato</string>
+  <string name="msg_default_meta">Metadati</string>
+  <string name="msg_default_mms_subject">Ciao</string>
+  <string name="msg_default_status">Posiziona un codice a barre dentro il mirino rettangolare per la scansione.</string>
+  <string name="msg_default_time">Tempo</string>
+  <string name="msg_default_type">Tipo</string>
+  <string name="msg_encode_contents_failed">Impossibile codificare un codice a barre dai dati forniti.</string>
+  <string name="msg_error">Errore</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Spiacenti, l\'applicazione richiesta non può essere avviata. Il contenuto del codice a barre può essere non valido.</string>
+  <string name="msg_invalid_value">Valore non valido</string>
+  <string name="msg_redirect">Inoltra</string>
+  <string name="msg_sbc_book_not_searchable">Spiacenti, questo libro non è ricercabile.</string>
+  <string name="msg_sbc_failed">Spiacenti, la ricerca ha avuto un problema.</string>
+  <string name="msg_sbc_no_page_returned">Nessuna pagina restituita</string>
+  <string name="msg_sbc_page">Pagina</string>
+  <string name="msg_sbc_results">Risultati</string>
+  <string name="msg_sbc_searching_book">Ricerca libro\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Ritaglio non disponibile</string>
+  <string name="msg_share_explanation">Puoi condividere i dati mostrando un codice a barre sullo schermo e facendo la scansione con un altro telefono.</string>
+  <string name="msg_share_text">O digitare un testo</string>
+  <string name="msg_sure">Sei sicuro?</string>
+  <string name="msg_unmount_usb">Spiacenti, la scheda SD non è accessibile.</string>
+  <string name="preferences_actions_title">Quando viene trovato un codice a barre\u2026</string>
+  <string name="preferences_auto_focus_title">Utilizzare messa a fuoco automatica</string>
+  <string name="preferences_auto_open_web_title">Aprire le pagine web automaticamente</string>
+  <string name="preferences_bulk_mode_summary">Scansiona e salva diversi codici a barre in sequenza</string>
+  <string name="preferences_bulk_mode_title">Modalità scansione di gruppo</string>
+  <string name="preferences_copy_to_clipboard_title">Copia negli appunti</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Sostituzioni: %s = contenuti, %f = formato, %t = tipo</string>
+  <string name="preferences_custom_product_search_title">URL ricerca personalizzata</string>
+  <string name="preferences_decode_1D_industrial_title">1D industriali</string>
+  <string name="preferences_decode_1D_product_title">1D prodotto</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">Codici QR</string>
+  <string name="preferences_device_bug_workarounds_title">Soluzioni alternative dispositivo Bug</string>
+  <string name="preferences_disable_barcode_scene_mode_title">No modalità scena codice a barre</string>
+  <string name="preferences_disable_continuous_focus_summary">Utilizzare solo modalità standard messa a fuoco</string>
+  <string name="preferences_disable_continuous_focus_title">No messa a fuoco continua</string>
+  <string name="preferences_disable_exposure_title">Nessuna esposizione</string>
+  <string name="preferences_disable_metering_title">Nessuna misurazione</string>
+  <string name="preferences_front_light_auto">Automatico</string>
+  <string name="preferences_front_light_off">Inattivo</string>
+  <string name="preferences_front_light_on">Attivo</string>
+  <string name="preferences_front_light_summary">Migliora la scansione con poca luminosità su alcuni telefoni, ma può provocare abbagliamento. Non funziona su tutti i telefoni.</string>
+  <string name="preferences_front_light_title">Usa luce frontale</string>
+  <string name="preferences_general_title">Impostazioni generali</string>
+  <string name="preferences_history_summary">Mantieni le tue scansioni nella Cronologia</string>
+  <string name="preferences_history_title">Aggiungi alla Cronologia</string>
+  <string name="preferences_invert_scan_summary">Scansione dei codici a barre bianche su sfondo nero. Non disponibile su alcuni dispositivi.</string>
+  <string name="preferences_invert_scan_title">Invertire la scansione</string>
+  <string name="preferences_name">Impostazioni</string>
+  <string name="preferences_orientation_title">Nessuna rotazione automatica</string>
+  <string name="preferences_play_beep_title">Suona</string>
+  <string name="preferences_remember_duplicates_summary">Mantieni scansioni multiple del codice a barre nella stessa Cronologia</string>
+  <string name="preferences_remember_duplicates_title">Ricorda duplicati</string>
+  <string name="preferences_result_title">Impostazioni risultato</string>
+  <string name="preferences_scanning_title">Durante la scansione di codici a barre, decodifica\u2026</string>
+  <string name="preferences_search_country">Cerca paese</string>
+  <string name="preferences_supplemental_summary">Prova a cercare ulteriori informazioni sul contenuto del codice a barre</string>
+  <string name="preferences_supplemental_title">Recupera altre informazioni</string>
+  <string name="preferences_vibrate_title">Vibra</string>
+  <string name="result_address_book">Info contatto trovata</string>
+  <string name="result_calendar">Evento calendario trovato</string>
+  <string name="result_email_address">Indirizzo email trovato</string>
+  <string name="result_geo">Coordinate geografiche trovate</string>
+  <string name="result_isbn">Libro trovato</string>
+  <string name="result_product">Prodotto trovato</string>
+  <string name="result_sms">Numero SMS trovato</string>
+  <string name="result_tel">Numero di telefono trovato</string>
+  <string name="result_text">Testo puro trovato</string>
+  <string name="result_uri">URL trovato</string>
+  <string name="result_wifi">Configurazione WLAN trovata</string>
+  <string name="sbc_name">Ricerca Google Book</string>
+  <string name="wifi_changing_network">Richiesta di connessione alla rete\u2026</string>
+</resources>

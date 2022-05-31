@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Aplicații</string>
+  <string name="bookmark_picker_name">Nume însemnare</string>
+  <string name="button_add_calendar">Adaugă în calendar</string>
+  <string name="button_add_contact">Adaugă contact</string>
+  <string name="button_book_search">Caută carte</string>
+  <string name="button_cancel">Renunță</string>
+  <string name="button_custom_product_search">Căutare personalizată</string>
+  <string name="button_dial">Telefonează la numărul</string>
+  <string name="button_email">Trimite e-mail</string>
+  <string name="button_get_directions">Descarcă indicații</string>
+  <string name="button_mms">Trimite MMS</string>
+  <string name="button_ok">Acceptă</string>
+  <string name="button_open_browser">Deschide navigator</string>
+  <string name="button_product_search">Caută produs</string>
+  <string name="button_search_book_contents">Caută conținut</string>
+  <string name="button_share_app">Aplicație</string>
+  <string name="button_share_bookmark">Semn de carte</string>
+  <string name="button_share_by_email">Distribuie prin e-mail</string>
+  <string name="button_share_by_sms">Distribuie prin SMS</string>
+  <string name="button_share_clipboard">Clipboard</string>
+  <string name="button_share_contact">Contact</string>
+  <string name="button_show_map">Arată harta</string>
+  <string name="button_sms">Trimite SMS</string>
+  <string name="button_web_search">Caută pe web</string>
+  <string name="button_wifi">Conectează la rețea</string>
+  <string name="contents_contact">Informații de contact</string>
+  <string name="contents_email">Adresă de e-mail</string>
+  <string name="contents_location">Coordonate geografice</string>
+  <string name="contents_phone">Telefon</string>
+  <string name="contents_sms">Număr de SMS</string>
+  <string name="contents_text">Text</string>
+  <string name="history_clear_one_history_text">Șterge</string>
+  <string name="history_clear_text">Șterge istoricul</string>
+  <string name="history_email_title">Istoric Barcode Scanner</string>
+  <string name="history_empty">Nicio înregistare</string>
+  <string name="history_empty_detail">Nicio scanare de coduri de bară nu a fost înregistrată</string>
+  <string name="history_send">Trimite istoric</string>
+  <string name="history_title">Istoric</string>
+  <string name="menu_encode_mecard">Folosește MECARD</string>
+  <string name="menu_encode_vcard">Folosește vCard</string>
+  <string name="menu_help">Ajutor</string>
+  <string name="menu_history">Istoric</string>
+  <string name="menu_settings">Configurări</string>
+  <string name="menu_share">Distribuie</string>
+  <string name="msg_bulk_mode_scanned">Scanare continuă: cod de bare scanat și salvat</string>
+  <string name="msg_camera_framework_bug">Probleme cu camera foto. Repornește dispozitivul.</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metadate</string>
+  <string name="msg_default_mms_subject">Servus</string>
+  <string name="msg_default_status">Plasează codul de bare în interiorul vizorului pentru a-l scana</string>
+  <string name="msg_default_time">Ora</string>
+  <string name="msg_default_type">Tip</string>
+  <string name="msg_encode_contents_failed">Codificare eșuată a codului de bare, din datele furnizate</string>
+  <string name="msg_error">Eroare</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Aplicația solicitată nu a putut fi lansată. Codul de bare poate fi incorect.</string>
+  <string name="msg_invalid_value">Valoare nevalidă</string>
+  <string name="msg_redirect">Redirecționare</string>
+  <string name="msg_sbc_book_not_searchable">Cartea nu poate fi căutată</string>
+  <string name="msg_sbc_failed">Căutarea a întâmpinat probleme</string>
+  <string name="msg_sbc_no_page_returned">Nicio pagină găsită</string>
+  <string name="msg_sbc_page">Pagina</string>
+  <string name="msg_sbc_results">Rezultate</string>
+  <string name="msg_sbc_searching_book">Caută cartea\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Fragment indisponibil</string>
+  <string name="msg_share_explanation">Poți distribui datele afișând codul pe ecran și scanându-l cu alt aparat</string>
+  <string name="msg_share_text">Sau introdu textul și tastează Enter</string>
+  <string name="msg_sure">Confirmă</string>
+  <string name="msg_unmount_usb">Card SD inaccesibil</string>
+  <string name="preferences_actions_title">Când un cod de bare este găsit\u2026</string>
+  <string name="preferences_auto_focus_title">Folosește focalizare automată</string>
+  <string name="preferences_auto_open_web_title">Deschide automat paginile web</string>
+  <string name="preferences_bulk_mode_summary">Scanează continuu și salvează codurile de bară</string>
+  <string name="preferences_bulk_mode_title">Scanare continuă</string>
+  <string name="preferences_copy_to_clipboard_title">Copiază în clipboard</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Înlocuiri: %s = conținut, %f = format, %t = tip</string>
+  <string name="preferences_custom_product_search_title">Căutare URL personalizată</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industriale</string>
+  <string name="preferences_decode_1D_product_title">1D Produs</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417</string>
+  <string name="preferences_decode_QR_title">Coduri QR</string>
+  <string name="preferences_device_bug_workarounds_title">Rezolvări rapide ale defectelor la aparat</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Nicio imagine afișată în mod vedere</string>
+  <string name="preferences_disable_continuous_focus_summary">Folosește focalizarea standard</string>
+  <string name="preferences_disable_continuous_focus_title">Dezactivează focalizarea continuă</string>
+  <string name="preferences_disable_exposure_title">Nicio expunere</string>
+  <string name="preferences_disable_metering_title">Nicio contorizare</string>
+  <string name="preferences_front_light_auto">Iluminare automată</string>
+  <string name="preferences_front_light_off">Oprește</string>
+  <string name="preferences_front_light_on">Pornește</string>
+  <string name="preferences_front_light_summary">Îmbunătățește scanarea în lumină redusă, dar poate cauza strălucire excesivă. Nu funcționează la toate aparatele.</string>
+  <string name="preferences_front_light_title">Folosește lumina frontală</string>
+  <string name="preferences_general_title">Configurări generale</string>
+  <string name="preferences_history_summary">Păstrați scanate în istorie</string>
+  <string name="preferences_history_title">Adauga la Istorie</string>
+  <string name="preferences_invert_scan_summary">Scanează coduri de bară albe pe fundal negru. Indisponibil pe unele aparate.</string>
+  <string name="preferences_invert_scan_title">Scanare în negativ</string>
+  <string name="preferences_name">Configurări</string>
+  <string name="preferences_orientation_title">Fără rotire automată</string>
+  <string name="preferences_play_beep_title">Sună</string>
+  <string name="preferences_remember_duplicates_summary">Înregistrează în Istoric, scanări multiple ale aceluiași cod de bare</string>
+  <string name="preferences_remember_duplicates_title">Reține scanările duplicat</string>
+  <string name="preferences_result_title">Configurări rezultate</string>
+  <string name="preferences_scanning_title">Când scanează coduri de bară, decodifică\u2026</string>
+  <string name="preferences_search_country">Caută țara</string>
+  <string name="preferences_supplemental_summary">Încearcă preluarea mai multor informații din conținutul codurilor de bară</string>
+  <string name="preferences_supplemental_title">Preia mai multe informații</string>
+  <string name="preferences_vibrate_title">Vibrează</string>
+  <string name="result_address_book">Găsit informații de contact</string>
+  <string name="result_calendar">Găsit eveniment în calendar</string>
+  <string name="result_email_address">Găsit adresa de e-mail</string>
+  <string name="result_geo">Găsit coordonatele geografice</string>
+  <string name="result_isbn">Găsit cartea</string>
+  <string name="result_product">Găsit produs</string>
+  <string name="result_sms">Găsit număr de SMS</string>
+  <string name="result_tel">Găsit număr de telefon</string>
+  <string name="result_text">Găsit text</string>
+  <string name="result_uri">Găsit URL</string>
+  <string name="result_wifi">Găsit configurarea WLAN</string>
+  <string name="sbc_name">Căutare Google Cărți</string>
+  <string name="wifi_changing_network">Solicită conexiune la rețea\u2026</string>
+</resources>

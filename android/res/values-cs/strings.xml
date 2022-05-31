@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Aplikace</string>
+  <string name="bookmark_picker_name">Záložky</string>
+  <string name="button_add_calendar">Přidat do kalendáře</string>
+  <string name="button_add_contact">Přidat kontakt</string>
+  <string name="button_book_search">Hledat knihu</string>
+  <string name="button_cancel">Zrušit</string>
+  <string name="button_custom_product_search">Vlastní vyhledávání</string>
+  <string name="button_dial">Číselník</string>
+  <string name="button_email">Poslat emailem</string>
+  <string name="button_get_directions">Získat nastavení</string>
+  <string name="button_mms">Zaslat přes MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Otevřít prohlížeč</string>
+  <string name="button_product_search">Vyhledat produkt</string>
+  <string name="button_search_book_contents">Hledat obsah knihy</string>
+  <string name="button_share_app">Aplikace</string>
+  <string name="button_share_bookmark">Záložky</string>
+  <string name="button_share_by_email">Sdílet pomocí emailu</string>
+  <string name="button_share_by_sms">Sdílet pomocí SMS</string>
+  <string name="button_share_clipboard">Schránka</string>
+  <string name="button_share_contact">Kontakty</string>
+  <string name="button_show_map">Ukázat na mapě</string>
+  <string name="button_sms">Poslat SMS</string>
+  <string name="button_web_search">Hledat na webu</string>
+  <string name="button_wifi">Připojení k síti</string>
+  <string name="contents_contact">Kontakty, informace</string>
+  <string name="contents_email">Emailová adresa</string>
+  <string name="contents_location">Zeměpisné údaje</string>
+  <string name="contents_phone">Telefonní číslo</string>
+  <string name="contents_sms">SMS číslo</string>
+  <string name="contents_text">Ostatní</string>
+  <string name="history_clear_one_history_text">Vyčistit</string>
+  <string name="history_clear_text">Vyčistit historii</string>
+  <string name="history_email_title">Barcode Scanner historie</string>
+  <string name="history_empty">Prázdný</string>
+  <string name="history_empty_detail">Žádný čárové kódy nebyly ještě zaznamenány</string>
+  <string name="history_send">Zaslat historii</string>
+  <string name="history_title">Historie</string>
+  <string name="menu_encode_mecard">Použij MECARD</string>
+  <string name="menu_encode_vcard">Použij vCard</string>
+  <string name="menu_help">Pomoc!</string>
+  <string name="menu_history">Historie</string>
+  <string name="menu_settings">Nastavení</string>
+  <string name="menu_share">Sdílet</string>
+  <string name="msg_bulk_mode_scanned">Dávkový režim: čárové kódy naskenované a uložené</string>
+  <string name="msg_camera_framework_bug">Omlouváme se, zjistili jsem problém s fotoaparátem. Možná bude nutné restartovat zařízení.</string>
+  <string name="msg_default_format">Formát</string>
+  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_mms_subject">Ahoj</string>
+  <string name="msg_default_status">Zaměřte čtvercem na čárový kód</string>
+  <string name="msg_default_time">Čas</string>
+  <string name="msg_default_type">Typ</string>
+  <string name="msg_encode_contents_failed">Z poskytnutých údajů se nepodařilo rozkódovat čárový kód.</string>
+  <string name="msg_error">Chyba</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Litujeme, požadovanou aplikaci nelze spustit. Čárový kód není funkční.</string>
+  <string name="msg_invalid_value">Neplatná hodnota</string>
+  <string name="msg_redirect">Přesměrování</string>
+  <string name="msg_sbc_book_not_searchable">Omlouváme se, tuto knihu nelze nalézt.</string>
+  <string name="msg_sbc_failed">Omlouváme se, objevil se problém.</string>
+  <string name="msg_sbc_no_page_returned">Stránka nenalezena.</string>
+  <string name="msg_sbc_page">Stránka</string>
+  <string name="msg_sbc_results">Výsledky</string>
+  <string name="msg_sbc_searching_book">Hledání knihy\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Snippet není k dispozici</string>
+  <string name="msg_share_explanation">Můžete sdílet čárový kód na vaší obrazovce a načíst jej jiným telefonem.</string>
+  <string name="msg_share_text">Nebo zadejte nějaký text a zmáčkněte Enter</string>
+  <string name="msg_sure">Jste si jisti?</string>
+  <string name="msg_unmount_usb">Omlouváme se, karta SD není přístupná.</string>
+  <string name="preferences_actions_title">Byl nalezen čárový kód.\u2026</string>
+  <string name="preferences_auto_focus_title">Automatické zaostření</string>
+  <string name="preferences_auto_open_web_title">Otevřete webové stránky automaticky</string>
+  <string name="preferences_bulk_mode_summary">Skenování více čárových kódú bez přerušení, vhodné na dávkové zpracování velkého množství čárových kódú</string>
+  <string name="preferences_bulk_mode_title">Dávkový režim skenování</string>
+  <string name="preferences_copy_to_clipboard_title">Kopírovat do schránky.</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Použijte: %s = obsah, %f = formát, %t = typ</string>
+  <string name="preferences_custom_product_search_title">Vlastní vyhledávání URL</string>
+  <string name="preferences_decode_1D_industrial_title">1D průmyslové</string>
+  <string name="preferences_decode_1D_product_title">1D produktu</string>
+  <string name="preferences_decode_Aztec_title">Aztécký</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR kódy</string>
+  <string name="preferences_device_bug_workarounds_title">Možná zástupná řešení chyb zařízení</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Nevybrán žádný režim snímání čárovného kódu</string>
+  <string name="preferences_disable_continuous_focus_summary">Používejte pouze standardní zaostřování</string>
+  <string name="preferences_disable_continuous_focus_title">Soustavné ostření</string>
+  <string name="preferences_disable_exposure_title">Vypnuta expozice</string>
+  <string name="preferences_disable_metering_title">Vypnuto měření</string>
+  <string name="preferences_front_light_auto">Automatický</string>
+  <string name="preferences_front_light_off">Neaktivní</string>
+  <string name="preferences_front_light_on">Aktivní</string>
+  <string name="preferences_front_light_summary">Zlepšuje skenování při slabém osvětlení na některých telefonech, ale může způsobit oslnění. Nefunguje na všech telefonech.</string>
+  <string name="preferences_front_light_title">Použít světlo</string>
+  <string name="preferences_general_title">Hlavní nastavení</string>
+  <string name="preferences_history_summary">Uložte si skeny v historii</string>
+  <string name="preferences_history_title">Přidat do dějin</string>
+  <string name="preferences_invert_scan_summary">Skenování čárových kódů - bílé na černém pozadí. Není k dispozici v některých zařízeních.</string>
+  <string name="preferences_invert_scan_title">Obrátit skenování</string>
+  <string name="preferences_name">Nastavení</string>
+  <string name="preferences_orientation_title">Vypnout automatické otáčení</string>
+  <string name="preferences_play_beep_title">Zvuky</string>
+  <string name="preferences_remember_duplicates_summary">Duplicity čárových kódú v historii ukládat samostatně, nebo jako jeden čárový kód</string>
+  <string name="preferences_remember_duplicates_title">Zapomatovat všechny duplicity</string>
+  <string name="preferences_result_title">Výsledek nastavení</string>
+  <string name="preferences_scanning_title">Během skenování čárových kódů, dekódovat\u2026</string>
+  <string name="preferences_search_country">Hledání země</string>
+  <string name="preferences_supplemental_summary">Získat více informací o obsahu čárového kódu</string>
+  <string name="preferences_supplemental_title">Získat více informací</string>
+  <string name="preferences_vibrate_title">Vibrace</string>
+  <string name="result_address_book">Kontakt nalezen</string>
+  <string name="result_calendar">Kalendář nalezen</string>
+  <string name="result_email_address">Email nalezen</string>
+  <string name="result_geo">Nalezeny zeměpisné informace</string>
+  <string name="result_isbn">Nalezena Kniha</string>
+  <string name="result_product">Nalezen produkt</string>
+  <string name="result_sms">Nalezena SMS adresa</string>
+  <string name="result_tel">Nalezeno telefoní číslo</string>
+  <string name="result_text">Nalezen nějaký text</string>
+  <string name="result_uri">Nalezeno URL</string>
+  <string name="result_wifi">Nalezeno bezdrátová konfigurace</string>
+  <string name="sbc_name">Google Book Search</string>
+  <string name="wifi_changing_network">Vyžaduje připojení k síti\u2026</string>
+</resources>

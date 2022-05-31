@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1">
+<jsp:directive.page import="
+  com.google.zxing.Result,
+  com.google.zxing.client.result.ResultParser,
+  com.google.zxing.client.result.ParsedResult,
+  com.google.zxing.web.OutputUtils,
+  com.google.common.xml.XmlEscapers"/>
+<jsp:directive.page contentType="text/html" session="false"/>
+<jsp:scriptlet>
+  response.setHeader("Cache-Control", "no-cache");
+  response.setHeader("X-Robots-Tag", "none");
+</jsp:scriptlet>
+<jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="robots" content="none"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Decode Succeeded</title>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <style type="text/css">
+      td { vertical-align: top; padding: 0.1in; background-color: #EEEEEE; font-family: monospace; }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+    <div id="header"><h1><img src="zxing-icon.png" id="icon" alt=""/> Decode Succeeded</h1></div>
+    <jsp:scriptlet>
+      @SuppressWarnings("unchecked")
+      Iterable&lt;Result&gt; results = (Iterable&lt;Result&gt;) request.getAttribute("results");
+      for (Result result : results) {
+        ParsedResult parsedResult = ResultParser.parseResult(result);
+
+        String text = result.getText();
+        if (text == null) {
+          text = "(Not applicable)";
+        } else {
+          text = XmlEscapers.xmlContentEscaper().escape(text);
+        }
+
+        byte[] rawBytes = result.getRawBytes();
+        String rawBytesString;
+        if (rawBytes == null) {
+          rawBytesString = "(Not applicable)";
+        } else {
+          rawBytesString = OutputUtils.arrayToString(rawBytes);
+        }
+
+        String displayResult = parsedResult.getDisplayResult();
+        if (displayResult == null) {
+          displayResult = "(Not applicable)";
+        } else {
+          displayResult = XmlEscapers.xmlContentEscaper().escape(displayResult);
+        }
+    </jsp:scriptlet>
+    <table id="result">
+      <tr>
+        <td>Raw text</td>
+        <td><pre><jsp:expression>text</jsp:expression></pre></td>
+      </tr>
+      <tr>
+        <td>Raw bytes</td>
+        <td><pre><jsp:expression>rawBytesString</jsp:expression></pre></td>
+      </tr>
+      <tr>
+        <td>Barcode format</td>
+        <td><jsp:expression>result.getBarcodeFormat()</jsp:expression></td>
+      </tr>
+      <tr>
+        <td>Parsed Result Type</td>
+        <td><jsp:expression>parsedResult.getType()</jsp:expression></td>
+      </tr>
+      <tr>
+        <td>Parsed Result</td>
+        <td><pre><jsp:expression>displayResult</jsp:expression></pre></td>
+      </tr>
+    </table>
+    <jsp:scriptlet>
+      }
+    </jsp:scriptlet>
+    </div>
+  </body>
+</html>
+</jsp:root>

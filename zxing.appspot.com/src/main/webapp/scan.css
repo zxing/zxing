@@ -1,0 +1,24 @@
+body{
+	background: #404040 url("img/bg.png");
+	text-align:center;
+	color:#FFF;
+	font-size: 20px;
+	font-family: 'Droid Sans',sans-serif;
+}
+a img{
+	border:0;
+}
+a{
+	color:#0080FF;
+	text-decoration:none;
+	outline:0;
+}
+small{
+	font-size:75%;
+}
+#logo{
+	height:128px;
+}
+#installed,#error{
+	display:none;
+}

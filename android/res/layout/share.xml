@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+
+<!-- ScrollView wrapper is to accommodate small screens. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+  <!-- Must wrap the rest in one layout -->
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:padding="@dimen/standard_padding">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/msg_share_explanation"
+        android:paddingBottom="@dimen/standard_padding"
+        android:textIsSelectable="false"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:src="@drawable/share_via_barcode"
+        android:paddingBottom="@dimen/standard_padding"
+        tools:ignore="ContentDescription"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/standard_padding">
+
+      <Button android:id="@+id/share_app_button"
+              style="@style/ShareButton"
+              android:layout_weight="1"
+              android:text="@string/button_share_app"/>
+
+      <Button android:id="@+id/share_bookmark_button"
+              style="@style/ShareButton"
+              android:layout_weight="1"
+              android:text="@string/button_share_bookmark"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/standard_padding">
+
+      <Button android:id="@+id/share_contact_button"
+              style="@style/ShareButton"
+              android:layout_weight="1"
+              android:text="@string/button_share_contact"/>
+
+      <Button android:id="@+id/share_clipboard_button"
+              style="@style/ShareButton"
+              android:layout_weight="1"
+              android:text="@string/button_share_clipboard"/>
+
+    </LinearLayout>
+
+    <EditText android:id="@+id/share_text_view"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:hint="@string/msg_share_text"
+              android:singleLine="true"
+              android:selectAllOnFocus="true"/>
+
+  </LinearLayout>
+
+</ScrollView>

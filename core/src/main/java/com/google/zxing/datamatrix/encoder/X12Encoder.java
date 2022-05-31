@@ -1,0 +1,93 @@
+/*
+ * Copyright 2006-2007 Jeremias Maerki.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.zxing.datamatrix.encoder;
+
+final class X12Encoder extends C40Encoder {
+
+  @Override
+  public int getEncodingMode() {
+    return HighLevelEncoder.X12_ENCODATION;
+  }
+
+  @Override
+  public void encode(EncoderContext context) {
+    //step C
+    StringBuilder buffer = new StringBuilder();
+    while (context.hasMoreCharacters()) {
+      char c = context.getCurrentChar();
+      context.pos++;
+
+      encodeChar(c, buffer);
+
+      int count = buffer.length();
+      if ((count % 3) == 0) {
+        writeNextTriplet(context, buffer);
+
+        int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
+        if (newMode != getEncodingMode()) {
+          // Return to ASCII encodation, which will actually handle latch to new mode
+          context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+          break;
+        }
+      }
+    }
+    handleEOD(context, buffer);
+  }
+
+  @Override
+  int encodeChar(char c, StringBuilder sb) {
+    switch (c) {
+      case '\r':
+        sb.append('\0');
+        break;
+      case '*':
+        sb.append('\1');
+        break;
+      case '>':
+        sb.append('\2');
+        break;
+      case ' ':
+        sb.append('\3');
+        break;
+      default:
+        if (c >= '0' && c <= '9') {
+          sb.append((char) (c - 48 + 4));
+        } else if (c >= 'A' && c <= 'Z') {
+          sb.append((char) (c - 65 + 14));
+        } else {
+          HighLevelEncoder.illegalCharacter(c);
+        }
+        break;
+    }
+    return 1;
+  }
+
+  @Override
+  void handleEOD(EncoderContext context, StringBuilder buffer) {
+    context.updateSymbolInfo();
+    int available = context.getSymbolInfo().getDataCapacity() - context.getCodewordCount();
+    int count = buffer.length();
+    context.pos -= count;
+    if (context.getRemainingCharacters() > 1 || available > 1 ||
+        context.getRemainingCharacters() != available) {
+      context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
+    }
+    if (context.getNewEncoding() < 0) {
+      context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+    }
+  }
+}

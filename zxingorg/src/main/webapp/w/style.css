@@ -1,0 +1,11 @@
+body {background-color:white;margin:0;padding:10px 0 0 0;text-align:center}
+body,th,td,p{font-family:Arial,sans-serif}
+div#main{width:800px;text-align:left;border:0;padding:0;margin:0 auto}
+td{vertical-align:top}
+table#upload td{padding:12px;height:30px;background-color:#dde3e9}
+table#result{width:100%}
+table#result td{background-color:#dde3e9}
+table#result pre{margin:0}
+#header{background-color:#dde3e9;border-bottom:1px solid #dde3e9}
+#header h1{font-size:24px;padding:12px;margin:0}
+img#icon {vertical-align:middle;height:32px;width:32px}
