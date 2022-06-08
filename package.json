@@ -1,0 +1,10 @@
+{
+"name": "zxing-customBranch",
+"description": "forked",
+"version": "0.0.1",
+"author": "xx <xx@xx.com >",
+"dependencies": {
+"ThinServ" : "git://github.com/rrahhal1/zxing/tree/customBranch"
+},
+"engines": { "node": ">= 0.8.0" }
+}
