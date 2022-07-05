@@ -97,7 +97,12 @@ public final class MultiFinderPatternFinder extends FinderPatternFinder {
    * @throws NotFoundException if 3 such finder patterns do not exist
    */
   private FinderPattern[][] selectMultipleBestPatterns() throws NotFoundException {
-    List<FinderPattern> possibleCenters = getPossibleCenters();
+    List<FinderPattern> possibleCenters = new ArrayList<>();
+    for (FinderPattern fp : getPossibleCenters()) {
+      if (fp.getCount() >= 2) {
+        possibleCenters.add(fp);
+      }
+    }
     int size = possibleCenters.size();
 
     if (size < 3) {
