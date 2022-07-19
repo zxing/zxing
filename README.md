@@ -77,7 +77,7 @@ library implemented in Java, with ports to other languages.
 | [Barcode4J](http://barcode4j.sourceforge.net/) | Generator library in Java
 | [BoofCV](https://boofcv.org) | Generator and reader library in Java
 | [ZBar](http://zbar.sourceforge.net/)           | Reader library in C99
-| [OkapiBarcode](https://github.com/woo-j/OkapiBarcode)  | |
+| [OkapiBarcode](https://github.com/woo-j/OkapiBarcode)  | Generator library in Java |
 
 ## Links
 
