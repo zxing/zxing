@@ -62,7 +62,7 @@ final class DecodedBitStreamParser {
 
   @SuppressWarnings("checkstyle:lineLength")
   private static final String[] SETS = {
-    "\nABCDEFGHIJKLMNOPQRSTUVWXYZ" + ECI + FS + GS + RS + NS + ' ' + PAD +
+    "\rABCDEFGHIJKLMNOPQRSTUVWXYZ" + ECI + FS + GS + RS + NS + ' ' + PAD +
         "\"#$%&'()*+,-./0123456789:" + SHIFTB + SHIFTC + SHIFTD + SHIFTE + LATCHB,
     "`abcdefghijklmnopqrstuvwxyz" + ECI + FS + GS + RS + NS + '{' + PAD +
         "}~\u007F;<=>?[\\]^_ ,./:@!|" + PAD + TWOSHIFTA + THREESHIFTA + PAD +
