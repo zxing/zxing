@@ -391,7 +391,7 @@ public final class DecodeServlet extends HttpServlet {
         savedException = re;
       }
 
-      if (results.isEmpty()) {
+      if (results.isEmpty() && !Thread.currentThread().isInterrupted()) {
         try {
           // Look for pure barcode
           Result theResult = reader.decode(bitmap, HINTS_PURE);
@@ -403,7 +403,7 @@ public final class DecodeServlet extends HttpServlet {
         }
       }
 
-      if (results.isEmpty()) {
+      if (results.isEmpty() && !Thread.currentThread().isInterrupted()) {
         try {
           // Look for normal barcode in photo
           Result theResult = reader.decode(bitmap, HINTS);
@@ -415,7 +415,7 @@ public final class DecodeServlet extends HttpServlet {
         }
       }
 
-      if (results.isEmpty()) {
+      if (results.isEmpty() && !Thread.currentThread().isInterrupted()) {
         try {
           // Try again with other binarizer
           BinaryBitmap hybridBitmap = new BinaryBitmap(new HybridBinarizer(source));
