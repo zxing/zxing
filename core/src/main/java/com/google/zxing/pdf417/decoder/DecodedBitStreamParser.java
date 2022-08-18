@@ -257,8 +257,10 @@ final class DecodedBitStreamParser {
         // do not include terminator
         optionalFieldsLength--;
       }
-      resultMetadata.setOptionalData(
-          Arrays.copyOfRange(codewords, optionalFieldsStart, optionalFieldsStart + optionalFieldsLength));
+      if (optionalFieldsLength > 0) {
+        resultMetadata.setOptionalData(Arrays.copyOfRange(codewords,
+            optionalFieldsStart, optionalFieldsStart + optionalFieldsLength));
+      }
     }
 
     return codeIndex;
@@ -547,14 +549,14 @@ final class DecodedBitStreamParser {
                                     int codeIndex,
                                     ECIStringBuilder result) throws FormatException {
     boolean end = false;
-    
+
     while (codeIndex < codewords[0] && !end) {
       //handle leading ECIs
       while (codeIndex < codewords[0] && codewords[codeIndex] == ECI_CHARSET) {
         result.appendECI(codewords[++codeIndex]);
         codeIndex++;
       }
-      
+
       if (codeIndex >= codewords[0] || codewords[codeIndex] >= TEXT_COMPACTION_MODE_LATCH) {
         end = true;
       } else {
@@ -564,7 +566,7 @@ final class DecodedBitStreamParser {
         do {
           value = 900 * value + codewords[codeIndex++];
           count++;
-        } while (count < 5 && 
+        } while (count < 5 &&
                  codeIndex < codewords[0] &&
                  codewords[codeIndex] < TEXT_COMPACTION_MODE_LATCH);
         if (count == 5 && (mode == BYTE_COMPACTION_MODE_LATCH_6 ||
