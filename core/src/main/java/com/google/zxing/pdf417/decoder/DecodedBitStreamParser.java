@@ -321,6 +321,9 @@ final class DecodedBitStreamParser {
           case ECI_CHARSET:
             subMode = decodeTextCompaction(textCompactionData, byteCompactionData, index, result, subMode);
             result.appendECI(codewords[codeIndex++]);
+            if (codeIndex > codewords[0]) {
+              throw FormatException.getFormatInstance();
+            }
             textCompactionData = new int[(codewords[0] - codeIndex) * 2];
             byteCompactionData = new int[(codewords[0] - codeIndex) * 2];
             index = 0;
