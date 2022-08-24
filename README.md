@@ -57,7 +57,7 @@ library implemented in Java, with ports to other languages.
 | [SCodes](https://github.com/scytheStudio/SCodes)                                          | Qt & Qml wrapper
 | [QZXing](https://github.com/ftylitak/qzxing)                                              | port to Qt framework
 | [glassechidna/zxing-cpp](https://github.com/glassechidna/zxing-cpp)                       | port to C++ (forked from the [deprecated official C++ port](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/cpp))
-| [nu-book/zxing-cpp](https://github.com/nu-book/zxing-cpp)                                 | latest/active port to C++, includes Android, Python, WASM and WinRT wrappers
+| [zxing-cpp/zxing-cpp](https://github.com/zxing-cpp/zxing-cpp)                             | latest/active port to C++, includes Android, iOS, Python, WASM and WinRT wrappers
 | [zxing_cpp.rb](https://github.com/glassechidna/zxing_cpp.rb)                              | bindings for Ruby (not just JRuby), powered by [zxing-cpp](https://github.com/glassechidna/zxing-cpp)
 | [jsqrcode](https://github.com/LazarSoft/jsqrcode)                                         | port to JavaScript
 | [python-zxing](https://github.com/oostendo/python-zxing)                                  | bindings for Python
