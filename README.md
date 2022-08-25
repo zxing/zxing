@@ -68,6 +68,7 @@ library implemented in Java, with ports to other languages.
 | [php-zxing](https://github.com/dsiddharth2/php-zxing)                                     | PHP wrapper to Zxing Java library
 | [zxing-js/library](https://github.com/zxing-js/library)                                   | TypeScript port of ZXing library
 | [pyzxing](https://github.com/ChenjieXu/pyzxing)                                           | Python wrapper to ZXing library
+| [zxing-dart](https://github.com/shirne/zxing-dart)                                        | Port to dart
 
 
 ### Other related third-party open source projects
