@@ -18,6 +18,7 @@ package com.google.zxing.common;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Map;
 
 import com.google.zxing.DecodeHintType;
@@ -32,7 +33,17 @@ public final class StringUtils {
 
   private static final Charset PLATFORM_DEFAULT_ENCODING = Charset.defaultCharset();
   public static final Charset SHIFT_JIS_CHARSET = Charset.forName("SJIS");
-  public static final Charset GB2312_CHARSET = Charset.forName("GB2312");
+  public static final Charset GB2312_CHARSET;
+  static {
+    Charset gb2312Charset;
+    try {
+      gb2312Charset = Charset.forName("GB2312");
+    } catch (UnsupportedCharsetException ucee) {
+      // Can happen on some embedded JREs?
+      gb2312Charset = null;
+    }
+    GB2312_CHARSET = gb2312Charset;
+  }
   private static final Charset EUC_JP = Charset.forName("EUC_JP");
   private static final boolean ASSUME_SHIFT_JIS =
       SHIFT_JIS_CHARSET.equals(PLATFORM_DEFAULT_ENCODING) ||

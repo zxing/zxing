@@ -175,6 +175,10 @@ final class DecodedBitStreamParser {
   private static void decodeHanziSegment(BitSource bits,
                                          StringBuilder result,
                                          int count) throws FormatException {
+    if (StringUtils.GB2312_CHARSET == null) {
+      // Not supported without charset support
+      throw FormatException.getFormatInstance();
+    }
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
       throw FormatException.getFormatInstance();
