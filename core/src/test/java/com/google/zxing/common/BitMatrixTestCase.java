@@ -235,7 +235,6 @@ public final class BitMatrixTestCase extends Assert {
     fullMatrix.setRegion(0, 0, 3, 3);
     BitMatrix centerMatrix = new BitMatrix(3, 3);
     centerMatrix.setRegion(1, 1, 1, 1);
-    BitMatrix emptyMatrix24 = new BitMatrix(2, 4);
 
     boolean[][] matrix = new boolean[3][3];
     assertEquals(emptyMatrix, BitMatrix.parse(matrix));

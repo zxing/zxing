@@ -244,11 +244,11 @@ public final class PDF417ScanningDecoder {
         throw NotFoundException.getNotFoundInstance();
       }
       barcodeMatrix01.setValue(calculatedNumberOfCodewords);
-    } else if (numberOfCodewords[0] != calculatedNumberOfCodewords) {
-      if (calculatedNumberOfCodewords >= 1 && calculatedNumberOfCodewords <= PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
-        // The calculated one is more reliable as it is derived from the row indicator columns
-        barcodeMatrix01.setValue(calculatedNumberOfCodewords);
-      }
+    } else if (numberOfCodewords[0] != calculatedNumberOfCodewords &&
+        calculatedNumberOfCodewords >= 1 &&
+        calculatedNumberOfCodewords <= PDF417Common.MAX_CODEWORDS_IN_BARCODE) {
+      // The calculated one is more reliable as it is derived from the row indicator columns
+      barcodeMatrix01.setValue(calculatedNumberOfCodewords);
     }
   }
 

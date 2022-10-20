@@ -362,7 +362,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     return CODE_CODE_B;
   }
 
-  /** 
+  /**
    * Encodes minimally using Divide-And-Conquer with Memoization
    **/
   private static final class MinimalEncoder {
@@ -435,8 +435,8 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
               patternIndex = CODE_FNC_3;
               break;
             case ESCAPE_FNC_4:
-              if ((charset == Charset.A && latch != Latch.SHIFT) ||
-                  (charset == Charset.B && latch == Latch.SHIFT)) {
+              if (charset == Charset.A && latch != Latch.SHIFT ||
+                  charset == Charset.B && latch == Latch.SHIFT) {
                 patternIndex = CODE_FNC_4_A;
               } else {
                 patternIndex = CODE_FNC_4_B;
@@ -445,11 +445,10 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
             default:
               patternIndex = contents.charAt(i) - ' ';
           }
-          if ((charset == Charset.A && latch != Latch.SHIFT) ||
-              (charset == Charset.B && latch == Latch.SHIFT)) {
-            if (patternIndex < 0) {
-              patternIndex += '`';
-            }
+          if ((charset == Charset.A && latch != Latch.SHIFT ||
+               charset == Charset.B && latch == Latch.SHIFT) &&
+               patternIndex < 0) {
+            patternIndex += '`';
           }
           addPattern(patterns, patternIndex, checkSum, checkWeight, i);
         }
@@ -505,11 +504,11 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
       if (mCost > 0) {
         return mCost;
       }
-        
+
       int minCost = Integer.MAX_VALUE;
       Latch minLatch = Latch.NONE;
       boolean atEnd = position + 1 >= contents.length();
-      
+
       Charset[] sets = new Charset[] { Charset.A, Charset.B };
       for (int i = 0; i <= 1; i++) {
         if (canEncode(contents, sets[i], position)) {

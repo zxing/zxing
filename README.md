@@ -70,7 +70,6 @@ library implemented in Java, with ports to other languages.
 | [pyzxing](https://github.com/ChenjieXu/pyzxing)                                           | Python wrapper to ZXing library
 | [zxing-dart](https://github.com/shirne/zxing-dart)                                        | Port to dart
 
-
 ### Other related third-party open source projects
 
 | Module                                         | Description
@@ -82,10 +81,10 @@ library implemented in Java, with ports to other languages.
 
 ## Links
 
-* [Online Decoder](https://zxing.org/w/decode.jspx)
-* [QR Code Generator](https://zxing.appspot.com/generator)
-* [Javadoc](https://zxing.github.io/zxing/apidocs/)
-* [Documentation Site](https://zxing.github.io/zxing/)
+  * [Online Decoder](https://zxing.org/w/decode.jspx)
+  * [QR Code Generator](https://zxing.appspot.com/generator)
+  * [Javadoc](https://zxing.github.io/zxing/apidocs/)
+  * [Documentation Site](https://zxing.github.io/zxing/)
 
 ## Contacting
 
@@ -94,9 +93,8 @@ on StackOverflow](https://stackoverflow.com/questions/tagged/zxing).
 
 ## Etcetera
 
-[![Coverity Status](https://scan.coverity.com/projects/1924/badge.svg)](https://scan.coverity.com/projects/1924)
-[![codecov.io](https://codecov.io/github/zxing/zxing/coverage.svg?branch=master)](https://codecov.io/github/zxing/zxing?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7270e4b57c50483699448bf32721ab10)](https://www.codacy.com/app/srowen/zxing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing/zxing&amp;utm_campaign=Badge_Grade)
+[![codecov](https://codecov.io/gh/zxing/zxing/branch/master/graph/badge.svg?token=6RrJHvUMDl)](https://codecov.io/gh/zxing/zxing)
+[![Codacy](https://app.codacy.com/project/badge/Grade/5d1186edeb714f0187e3eb18cc6aeef1)](https://www.codacy.com/gh/zxing/zxing/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing/zxing&amp;utm_campaign=Badge_Grade)
 
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
 

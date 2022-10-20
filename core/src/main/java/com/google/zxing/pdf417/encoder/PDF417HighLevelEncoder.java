@@ -168,7 +168,7 @@ final class PDF417HighLevelEncoder {
    *   then charsets will be chosen so that the byte representation is minimal.
    * @return the encoded message (the char values range from 0 to 928)
    */
-  static String encodeHighLevel(String msg, Compaction compaction, Charset encoding, boolean autoECI) 
+  static String encodeHighLevel(String msg, Compaction compaction, Charset encoding, boolean autoECI)
       throws WriterException {
 
     if (msg.isEmpty()) {
@@ -370,12 +370,12 @@ final class PDF417HighLevelEncoder {
                 tmp.append((char) 27); //ll
                 continue;
               } else {
-                if (startpos + idx + 1 < count) {
-                  if (!input.isECI(startpos + idx + 1) && isPunctuation(input.charAt(startpos + idx + 1))) {
-                    submode = SUBMODE_PUNCTUATION;
-                    tmp.append((char) 25); //pl
-                    continue;
-                  }
+                if (startpos + idx + 1 < count &&
+                    !input.isECI(startpos + idx + 1) &&
+                    isPunctuation(input.charAt(startpos + idx + 1))) {
+                  submode = SUBMODE_PUNCTUATION;
+                  tmp.append((char) 25); //pl
+                  continue;
                 }
                 tmp.append((char) 29); //ps
                 tmp.append((char) PUNCTUATION[ch]);
@@ -441,7 +441,7 @@ final class PDF417HighLevelEncoder {
       while (localEnd < end && !input.isECI(localEnd)) {
         localEnd++;
       }
-      
+
       final int localCount = localEnd - localStart;
       if (localCount <= 0) {
         //done

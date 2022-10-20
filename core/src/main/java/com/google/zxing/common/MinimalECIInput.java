@@ -188,7 +188,7 @@ public class MinimalECIInput implements ECIInput {
   *
   * @param   index the index of the {@code int} value to be returned
   *
-  * @return  the specified {@code int} ECI value. 
+  * @return  the specified {@code int} ECI value.
   *          The ECI specified the encoding of all bytes with a higher index until the
   *          next ECI or until the end of the input if no other ECI follows.
   *
@@ -236,11 +236,11 @@ public class MinimalECIInput implements ECIInput {
     }
   }
 
-  static void addEdges(String stringToEncode, 
-                       ECIEncoderSet encoderSet, 
-                       InputEdge[][] edges, 
-                       int from, 
-                       InputEdge previous, 
+  static void addEdges(String stringToEncode,
+                       ECIEncoderSet encoderSet,
+                       InputEdge[][] edges,
+                       int from,
+                       InputEdge previous,
                        int fnc1) {
 
     char ch = stringToEncode.charAt(from);
@@ -290,7 +290,7 @@ public class MinimalECIInput implements ECIInput {
       }
     }
     if (minimalJ < 0) {
-      throw new RuntimeException("Internal error: failed to encode \"" + stringToEncode + "\"");
+      throw new IllegalStateException("Failed to encode \"" + stringToEncode + "\"");
     }
     List<Integer> intsAL = new ArrayList<>();
     InputEdge current = edges[inputLength][minimalJ];

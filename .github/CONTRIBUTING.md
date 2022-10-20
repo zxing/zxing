@@ -19,8 +19,8 @@ Feature requests are not accepted.
 
 ### Bug Reports
 
-Bug reports must have enough detail to understand and reproduce the problem. 
-Bug reports without an associated pull request will generally be closed. 
+Bug reports must have enough detail to understand and reproduce the problem.
+Bug reports without an associated pull request will generally be closed.
 However, bug reports with a pull request are likely to be merged promptly.
 
 ## FAQ
@@ -28,14 +28,14 @@ However, bug reports with a pull request are likely to be merged promptly.
 Please search previous issues for an answer before opening a pull request. A few common ones
 are listed here.
 
-### I get a compilation error.
+### I get a compilation error
 
-While you can check the build status on Github to confirm, 
-the project correctly builds and passes tests at all times. 
-90% of the time it's due to using an old version of Java. Version 3.4+ require Java 8. 
+While you can check the build status on Github to confirm,
+the project correctly builds and passes tests at all times.
+90% of the time it's due to using an old version of Java. Version 3.4+ require Java 8.
 Use earlier versions with Java 7 and earlier.
 
-### This barcode doesn't decode.
+### This barcode doesn't decode
 
 Not all images will decode. All else equal, more is better, but this is not accepted as a bug
 report. A pull request that makes changes to make the barcode decode without decreasing the net
