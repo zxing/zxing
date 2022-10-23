@@ -38,6 +38,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.text.JTextComponent;
 
@@ -69,16 +70,26 @@ public final class GUIRunner extends JFrame {
   }
 
   public static void main(String[] args) throws MalformedURLException {
-    GUIRunner runner = new GUIRunner();
-    runner.setVisible(true);
-    runner.chooseImage();
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        GUIRunner runner = new GUIRunner();
+        runner.setVisible(true);
+        runner.chooseImage();
+      }
+    });
+
   }
 
-  private void chooseImage() throws MalformedURLException {
+  private void chooseImage() {
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.showOpenDialog(this);
     Path file = fileChooser.getSelectedFile().toPath();
-    Icon imageIcon = new ImageIcon(file.toUri().toURL());
+    Icon imageIcon;
+    try {
+      imageIcon = new ImageIcon(file.toUri().toURL());
+    } catch (MalformedURLException muee) {
+      throw new IllegalArgumentException(muee);
+    }
     setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight() + 100);
     imageLabel.setIcon(imageIcon);
     String decodeText = getDecodeText(file);
