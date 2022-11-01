@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -619,6 +620,12 @@ public class FinderPatternFinder {
     if (startSize < 3) {
       // Couldn't find enough finder patterns
       throw NotFoundException.getNotFoundInstance();
+    }
+
+    for (Iterator<FinderPattern> it = possibleCenters.iterator(); it.hasNext();) {
+      if (it.next().getCount() < CENTER_QUORUM) {
+        it.remove();
+      }
     }
 
     possibleCenters.sort(moduleComparator);
