@@ -123,7 +123,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return handler;
   }
 
-  CameraManager getCameraManager() {
+  public CameraManager getCameraManager() {
     return cameraManager;
   }
 
