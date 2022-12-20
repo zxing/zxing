@@ -25,45 +25,54 @@ import com.google.zxing.common.BitMatrix;
  */
 final class BoundingBox {
 
-  private BitMatrix image;
-  private ResultPoint topLeft;
-  private ResultPoint bottomLeft;
-  private ResultPoint topRight;
-  private ResultPoint bottomRight;
-  private int minX;
-  private int maxX;
-  private int minY;
-  private int maxY;
+  private final BitMatrix image;
+  private final ResultPoint topLeft;
+  private final ResultPoint bottomLeft;
+  private final ResultPoint topRight;
+  private final ResultPoint bottomRight;
+  private final int minX;
+  private final int maxX;
+  private final int minY;
+  private final int maxY;
 
   BoundingBox(BitMatrix image,
               ResultPoint topLeft,
               ResultPoint bottomLeft,
               ResultPoint topRight,
               ResultPoint bottomRight) throws NotFoundException {
-    if ((topLeft == null && topRight == null) ||
-        (bottomLeft == null && bottomRight == null) ||
-        (topLeft != null && bottomLeft == null) ||
-        (topRight != null && bottomRight == null)) {
+    boolean leftUnspecified = topLeft == null || bottomLeft == null;
+    boolean rightUnspecified = topRight == null || bottomRight == null;
+    if (leftUnspecified && rightUnspecified) {
       throw NotFoundException.getNotFoundInstance();
     }
-    init(image, topLeft, bottomLeft, topRight, bottomRight);
-  }
-
-  BoundingBox(BoundingBox boundingBox) {
-    init(boundingBox.image, boundingBox.topLeft, boundingBox.bottomLeft, boundingBox.topRight, boundingBox.bottomRight);
-  }
-
-  private void init(BitMatrix image,
-                    ResultPoint topLeft,
-                    ResultPoint bottomLeft,
-                    ResultPoint topRight,
-                    ResultPoint bottomRight) {
+    if (leftUnspecified) {
+      topLeft = new ResultPoint(0, topRight.getY());
+      bottomLeft = new ResultPoint(0, bottomRight.getY());
+    } else if (rightUnspecified) {
+      topRight = new ResultPoint(image.getWidth() - 1, topLeft.getY());
+      bottomRight = new ResultPoint(image.getWidth() - 1, bottomLeft.getY());
+    }
     this.image = image;
     this.topLeft = topLeft;
     this.bottomLeft = bottomLeft;
     this.topRight = topRight;
     this.bottomRight = bottomRight;
-    calculateMinMaxValues();
+    this.minX = (int) Math.min(topLeft.getX(), bottomLeft.getX());
+    this.maxX = (int) Math.max(topRight.getX(), bottomRight.getX());
+    this.minY = (int) Math.min(topLeft.getY(), topRight.getY());
+    this.maxY = (int) Math.max(bottomLeft.getY(), bottomRight.getY());
+  }
+
+  BoundingBox(BoundingBox boundingBox) {
+    this.image = boundingBox.image;
+    this.topLeft = boundingBox.topLeft;
+    this.bottomLeft = boundingBox.bottomLeft;
+    this.topRight = boundingBox.topRight;
+    this.bottomRight = boundingBox.bottomRight;
+    this.minX = boundingBox.minX;
+    this.maxX = boundingBox.maxX;
+    this.minY = boundingBox.minY;
+    this.maxY = boundingBox.maxY;
   }
 
   static BoundingBox merge(BoundingBox leftBox, BoundingBox rightBox) throws NotFoundException {
@@ -110,36 +119,8 @@ final class BoundingBox {
       }
     }
 
-    calculateMinMaxValues();
     return new BoundingBox(image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
   }
-
-  private void calculateMinMaxValues() {
-    if (topLeft == null) {
-      topLeft = new ResultPoint(0, topRight.getY());
-      bottomLeft = new ResultPoint(0, bottomRight.getY());
-    } else if (topRight == null) {
-      topRight = new ResultPoint(image.getWidth() - 1, topLeft.getY());
-      bottomRight = new ResultPoint(image.getWidth() - 1, bottomLeft.getY());
-    }
-
-    minX = (int) Math.min(topLeft.getX(), bottomLeft.getX());
-    maxX = (int) Math.max(topRight.getX(), bottomRight.getX());
-    minY = (int) Math.min(topLeft.getY(), topRight.getY());
-    maxY = (int) Math.max(bottomLeft.getY(), bottomRight.getY());
-  }
-
-  /*
-  void setTopRight(ResultPoint topRight) {
-    this.topRight = topRight;
-    calculateMinMaxValues();
-  }
-
-  void setBottomRight(ResultPoint bottomRight) {
-    this.bottomRight = bottomRight;
-    calculateMinMaxValues();
-  }
-   */
 
   int getMinX() {
     return minX;

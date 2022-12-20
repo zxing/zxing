@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Applikasjoner</string>
+  <string name="bookmark_picker_name">Bokmerker</string>
+  <string name="button_add_calendar">Legg til i kalender</string>
+  <string name="button_add_contact">Legg til kontakt</string>
+  <string name="button_book_search">Boksøk</string>
+  <string name="button_cancel">Avbryt</string>
+  <string name="button_custom_product_search">Egendefinert søk</string>
+  <string name="button_dial">Ring nummer</string>
+  <string name="button_email">Send E-post</string>
+  <string name="button_get_directions">Få veibeskrivelse</string>
+  <string name="button_mms">Send MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Åpne nettleser</string>
+  <string name="button_product_search">Produktsøk</string>
+  <string name="button_search_book_contents">Søk i innhold</string>
+  <string name="button_share_app">Applikasjon</string>
+  <string name="button_share_bookmark">Bokmerke</string>
+  <string name="button_share_by_email">Del via E-post</string>
+  <string name="button_share_by_sms">Del via SMS</string>
+  <string name="button_share_clipboard">Utklippstavle</string>
+  <string name="button_share_contact">Kontakt</string>
+  <string name="button_show_map">Vis kart</string>
+  <string name="button_sms">Send SMS</string>
+  <string name="button_web_search">Nettsøk</string>
+  <string name="button_wifi">Koble til nettverk</string>
+  <string name="contents_contact">Kontaktinfo</string>
+  <string name="contents_email">E-postadresse</string>
+  <string name="contents_location">Geografiske koordinater</string>
+  <string name="contents_phone">Telefonnummer</string>
+  <string name="contents_sms">SMS-adresse</string>
+  <string name="contents_text">Ren tekst</string>
+  <string name="history_clear_text">Slett logg</string>
+  <string name="history_clear_one_history_text">Slett</string>
+  <string name="history_email_title">Logg fra strekkodeskanner</string>
+  <string name="history_empty">Tom</string>
+  <string name="history_empty_detail">Ingen strekkodeskanninger er logget</string>
+  <string name="history_send">Send logg</string>
+  <string name="history_title">Logg</string>
+  <string name="menu_encode_mecard">Bruk MECARD</string>
+  <string name="menu_encode_vcard">Bruk vCard</string>
+  <string name="menu_help">Hjelp</string>
+  <string name="menu_history">Logg</string>
+  <string name="menu_settings">Innstillinger</string>
+  <string name="menu_share">Del</string>
+  <string name="msg_bulk_mode_scanned">Flerskannmodus: strekkode skannet og lagret</string>
+  <string name="msg_camera_framework_bug">Beklager, Android-kameraet fikk et problem. Det kan hende du må starte enheten på nytt.</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_mms_subject">Hei</string>
+  <string name="msg_default_status">Plasser en strekkode inni oppdagerrektangelen for å skanne den.</string>
+  <string name="msg_default_time">Tid</string>
+  <string name="msg_default_type">Type</string>
+  <string name="msg_encode_contents_failed">Kunne ikke lage strekkode av de oppgitte dataene.</string>
+  <string name="msg_error">Feil</string>
+  <string name="msg_google_books">Google</string>
+  <string name="msg_google_product">Google</string>
+  <string name="msg_intent_failed">Beklager. Den valgte applikasjonen kunne ikke startes. Innholdet i strekkoden kan være ugyldig.</string>
+  <string name="msg_invalid_value">Ugyldig verdi</string>
+  <string name="msg_redirect">Omdiriger </string>
+  <string name="msg_sbc_book_not_searchable">Beklager. Denne boken er ikke søkbar.</string>
+  <string name="msg_sbc_failed">Beklager. Søket opplevde et problem.</string>
+  <string name="msg_sbc_no_page_returned">Ingen treff på sider</string>
+  <string name="msg_sbc_page">Side</string>
+  <string name="msg_sbc_results">Resultater</string>
+  <string name="msg_sbc_searching_book">Søker i bok\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Utdrag utilgjengelig</string>
+  <string name="msg_share_explanation">Du kan dele informasjon ved å vise en strekkode på skjermen, og skanne den med en annen telefon</string>
+  <string name="msg_share_text">Eller skriv noe og trykk Enter</string>
+  <string name="msg_sure">Er du sikker?</string>
+  <string name="msg_unmount_usb">Beklager. SD-kortet er ikke tilgjengelig.</string>
+  <string name="preferences_actions_title">Når en strekkode er funnet\u2026</string>
+  <string name="preferences_auto_focus_title">Bruk autofokus</string>
+  <string name="preferences_auto_open_web_title">Åpne nettsider automatisk</string>
+  <string name="preferences_bulk_mode_summary">Skann og lagre mange strekkoder automatisk</string>
+  <string name="preferences_bulk_mode_title">Flerskannmodus</string>
+  <string name="preferences_copy_to_clipboard_title">Kopier til utklippstavle</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Substitutter: %s = innhold, %f = format, %t = type</string>
+  <string name="preferences_custom_product_search_title">Egendefinert søke-URL</string>
+  <string name="preferences_decode_1D_industrial_title">1D Industrell</string>
+  <string name="preferences_decode_1D_product_title">1D Produkt</string>
+  <string name="preferences_decode_Aztec_title">Aztec</string>
+  <string name="preferences_decode_Data_Matrix_title">Datamatrise</string>
+  <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="preferences_decode_QR_title">QR-koder</string>
+  <string name="preferences_device_bug_workarounds_title">Løsninger på enhetsfeil</string>
+  <string name="preferences_disable_barcode_scene_mode_title">Ingen strekkode-scenemodus</string>
+  <string name="preferences_disable_continuous_focus_summary">Bruk kun vanlig fokus-modus</string>
+  <string name="preferences_disable_continuous_focus_title">Ikke bruk vedvarende fokus</string>
+  <string name="preferences_disable_exposure_title">Ingen eksponering</string>
+  <string name="preferences_disable_metering_title">Ingen lysmåling</string>
+  <string name="preferences_front_light_title">Bruk frontlyset</string>
+  <string name="preferences_front_light_auto">Automatisk</string>
+  <string name="preferences_front_light_off">Av</string>
+  <string name="preferences_front_light_on">På</string>
+  <string name="preferences_front_light_summary">Bedrer skanning i dårlig lys på noen telefoner, men kan gi gjenskinn. Utilgjengelig på noen enheter.</string>
+  <string name="preferences_general_title">Generelle innstillinger</string>
+  <string name="preferences_history_title">Legg til i loggen</string>
+  <string name="preferences_invert_scan_title">Skann negativt</string>
+  <string name="preferences_invert_scan_summary">Skanner etter hvite strekkoder på svart bakgrunn. Utilgjengelig på noen enheter.</string>
+  <string name="preferences_name">Innstillinger</string>
+  <string name="preferences_play_beep_title">Pip</string>
+  <string name="preferences_remember_duplicates_summary">Lagre flere skanninger av samme strekkode i loggen.</string>
+  <string name="preferences_remember_duplicates_title">Husk duplikater</string>
+  <string name="preferences_orientation_title">Ingen automatisk rotasjon.</string>
+  <string name="preferences_result_title">Resultatinnstillinger</string>
+  <string name="preferences_scanning_title">Mens strekkoder skannes, les\u2026</string>
+  <string name="preferences_search_country">Søk etter land</string>
+  <string name="preferences_supplemental_summary">Prøv å hente mer informasjon om strekkodens innhold</string>
+  <string name="preferences_supplemental_title">Hent mer informasjon</string>
+  <string name="preferences_vibrate_title">Vibrer</string>
+  <string name="result_address_book">Fant kontaktinfo</string>
+  <string name="result_calendar">Fant kalenderhendelse</string>
+  <string name="result_email_address">Fant E-postadresse</string>
+  <string name="result_geo">Fant geografiske koordinater</string>
+  <string name="result_isbn">Fant bok</string>
+  <string name="result_product">Fant produkt</string>
+  <string name="result_sms">Fant SMS-nummer</string>
+  <string name="result_tel">Fant telefonnummer</string>
+  <string name="result_text">Fant ren tekst</string>
+  <string name="result_uri">Found nettadresse</string>
+  <string name="result_wifi">Fant WLAN-oppsett</string>
+  <string name="sbc_name">Google Bøker-søk</string>
+  <string name="wifi_changing_network">Ber om tilkobling til nettverk\u2026</string>
+</resources>

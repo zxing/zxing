@@ -48,7 +48,7 @@ public interface Reader {
    * hints, each possibly associated to some data, which may help the implementation decode.
    *
    * @param image image of barcode to decode
-   * @param hints passed as a {@link java.util.Map} from {@link DecodeHintType}
+   * @param hints passed as a {@link Map} from {@link DecodeHintType}
    * to arbitrary data. The
    * meaning of the data depends upon the hint type. The implementation may or may not do
    * anything with these hints.

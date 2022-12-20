@@ -22,6 +22,9 @@ import com.google.zxing.Result;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests {@link VINParsedResult}.
+ */
 public final class VINParsedResultTestCase extends Assert {
 
   @Test

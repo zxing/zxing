@@ -43,6 +43,9 @@ import com.google.gwt.user.client.ui.Widget;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main generator for the encoder web interface.
+ */
 public final class Generator implements EntryPoint {
 
   private final List<GeneratorSource> generators = new ArrayList<>();
@@ -65,10 +68,9 @@ public final class Generator implements EntryPoint {
 
     setupLeftPanel();
     topPanel.getElement().setId("leftpanel");
-    Widget leftPanel = topPanel;
 
     HorizontalPanel mainPanel = new HorizontalPanel();
-    mainPanel.add(leftPanel);
+    mainPanel.add(topPanel);
 
     SimplePanel div2 = new SimplePanel();
     div2.add(result);
@@ -119,10 +121,10 @@ public final class Generator implements EntryPoint {
 
   void setupLeftPanel() {
     topPanel.setHTML(2, 0,
-        "<span id=\"errorMessageID\" class=\""+StylesDefs.ERROR_MESSAGE+"\"></span>");
+        "<span id=\"errorMessageID\" class=\"" + StylesDefs.ERROR_MESSAGE + "\"></span>");
 
     // fills up the list of generators
-    for(GeneratorSource generator: generators) {
+    for (GeneratorSource generator: generators) {
       genList.addItem(generator.getName());
       setGridStyle(generator.getWidget());
     }
@@ -196,13 +198,11 @@ public final class Generator implements EntryPoint {
   }
 
   private static String getUrl(int sizeX, int sizeY, String ecLevel, String encoding, String content) {
-    StringBuilder result = new StringBuilder(100);
-    result.append("https://zxing.org/w/chart?cht=qr");
-    result.append("&chs=").append(sizeX).append('x').append(sizeY);
-    result.append("&chld=").append(ecLevel);
-    result.append("&choe=").append(encoding);
-    result.append("&chl=").append(URL.encodeQueryString(content));
-    return result.toString();
+    return "https://zxing.org/w/chart?cht=qr" +
+        "&chs=" + sizeX + 'x' + sizeY +
+        "&chld=" + ecLevel +
+        "&choe=" + encoding +
+        "&chl=" + URL.encodeQueryString(content);
   }
 
   private void generate() {

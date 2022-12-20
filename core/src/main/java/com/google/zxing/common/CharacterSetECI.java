@@ -18,6 +18,8 @@ package com.google.zxing.common;
 
 import com.google.zxing.FormatException;
 
+import java.nio.charset.Charset;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,14 +38,14 @@ public enum CharacterSetECI {
   ISO8859_3(5, "ISO-8859-3"),
   ISO8859_4(6, "ISO-8859-4"),
   ISO8859_5(7, "ISO-8859-5"),
-  ISO8859_6(8, "ISO-8859-6"),
+  // ISO8859_6(8, "ISO-8859-6"),
   ISO8859_7(9, "ISO-8859-7"),
-  ISO8859_8(10, "ISO-8859-8"),
+  // ISO8859_8(10, "ISO-8859-8"),
   ISO8859_9(11, "ISO-8859-9"),
-  ISO8859_10(12, "ISO-8859-10"),
-  ISO8859_11(13, "ISO-8859-11"),
+  // ISO8859_10(12, "ISO-8859-10"),
+  // ISO8859_11(13, "ISO-8859-11"),
   ISO8859_13(15, "ISO-8859-13"),
-  ISO8859_14(16, "ISO-8859-14"),
+  // ISO8859_14(16, "ISO-8859-14"),
   ISO8859_15(17, "ISO-8859-15"),
   ISO8859_16(18, "ISO-8859-16"),
   SJIS(20, "Shift_JIS"),
@@ -78,7 +80,7 @@ public enum CharacterSetECI {
   CharacterSetECI(int value) {
     this(new int[] {value});
   }
-  
+
   CharacterSetECI(int value, String... otherEncodingNames) {
     this.values = new int[] {value};
     this.otherEncodingNames = otherEncodingNames;
@@ -91,6 +93,19 @@ public enum CharacterSetECI {
 
   public int getValue() {
     return values[0];
+  }
+
+  public Charset getCharset() {
+    return Charset.forName(name());
+  }
+
+  /**
+   * @param charset Java character set object
+   * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
+   *   but unsupported
+   */
+  public static CharacterSetECI getCharacterSetECI(Charset charset) {
+    return NAME_TO_ECI.get(charset.name());
   }
 
   /**

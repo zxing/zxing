@@ -88,7 +88,7 @@
   <string name="msg_unmount_usb">Leider kann nicht auf die SD-Karte zugegriffen werden.</string>
   <string name="preferences_actions_title">Wenn ein Barcode erkannt wurde\u2026</string>
   <string name="preferences_auto_focus_title">Autofokus verwenden</string>
-  <string name="preferences_auto_open_web_title">Öffnen Sie Webseiten automatisch</string>
+  <string name="preferences_auto_open_web_title">Webseiten automatisch öffnen</string>
   <string name="preferences_bulk_mode_summary">Scannt und speichert mehrere Barcodes nacheinander</string>
   <string name="preferences_bulk_mode_title">Massenscan</string>
   <string name="preferences_copy_to_clipboard_title">In die Zwischenablage kopieren</string>

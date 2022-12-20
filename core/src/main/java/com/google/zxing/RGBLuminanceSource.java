@@ -41,25 +41,20 @@ public final class RGBLuminanceSource extends LuminanceSource {
 
     // In order to measure pure decoding speed, we convert the entire image to a greyscale array
     // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-    luminances = new byte[width * height];
-    for (int y = 0; y < height; y++) {
-      int offset = y * width;
-      for (int x = 0; x < width; x++) {
-        int pixel = pixels[offset + x];
-        int r = (pixel >> 16) & 0xff;
-        int g = (pixel >> 8) & 0xff;
-        int b = pixel & 0xff;
-        if (r == g && g == b) {
-          // Image is already greyscale, so pick any channel.
-          luminances[offset + x] = (byte) r;
-        } else {
-          // Calculate luminance cheaply, favoring green.
-          luminances[offset + x] = (byte) ((r + 2 * g + b) / 4);
-        }
-      }
+    //
+    // Total number of pixels suffices, can ignore shape
+    int size = width * height;
+    luminances = new byte[size];
+    for (int offset = 0; offset < size; offset++) {
+      int pixel = pixels[offset];
+      int r = (pixel >> 16) & 0xff; // red
+      int g2 = (pixel >> 7) & 0x1fe; // 2 * green
+      int b = pixel & 0xff; // blue
+      // Calculate green-favouring average cheaply
+      luminances[offset] = (byte) ((r + g2 + b) / 4);
     }
   }
-  
+
   private RGBLuminanceSource(byte[] pixels,
                              int dataWidth,
                              int dataHeight,
@@ -114,15 +109,14 @@ public final class RGBLuminanceSource extends LuminanceSource {
     }
 
     // Otherwise copy one cropped row at a time.
-    byte[] rgb = luminances;
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      System.arraycopy(rgb, inputOffset, matrix, outputOffset, width);
+      System.arraycopy(luminances, inputOffset, matrix, outputOffset, width);
       inputOffset += dataWidth;
     }
     return matrix;
   }
-  
+
   @Override
   public boolean isCropSupported() {
     return true;

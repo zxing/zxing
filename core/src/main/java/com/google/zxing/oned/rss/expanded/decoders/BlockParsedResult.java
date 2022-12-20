@@ -35,8 +35,8 @@ final class BlockParsedResult {
   private final DecodedInformation decodedInformation;
   private final boolean finished;
 
-  BlockParsedResult(boolean finished) {
-    this(null, finished);
+  BlockParsedResult() {
+    this(null, false);
   }
 
   BlockParsedResult(DecodedInformation information, boolean finished) {

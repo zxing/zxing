@@ -36,10 +36,12 @@ import java.util.Map;
  */
 public final class MultiFormatOneDReader extends OneDReader {
 
+  private static final OneDReader[] EMPTY_ONED_ARRAY = new OneDReader[0];
+
   private final OneDReader[] readers;
 
   public MultiFormatOneDReader(Map<DecodeHintType,?> hints) {
-    @SuppressWarnings("unchecked")    
+    @SuppressWarnings("unchecked")
     Collection<BarcodeFormat> possibleFormats = hints == null ? null :
         (Collection<BarcodeFormat>) hints.get(DecodeHintType.POSSIBLE_FORMATS);
     boolean useCode39CheckDigit = hints != null &&
@@ -62,15 +64,15 @@ public final class MultiFormatOneDReader extends OneDReader {
         readers.add(new Code128Reader());
       }
       if (possibleFormats.contains(BarcodeFormat.ITF)) {
-         readers.add(new ITFReader());
+        readers.add(new ITFReader());
       }
       if (possibleFormats.contains(BarcodeFormat.CODABAR)) {
-         readers.add(new CodaBarReader());
+        readers.add(new CodaBarReader());
       }
       if (possibleFormats.contains(BarcodeFormat.RSS_14)) {
-         readers.add(new RSS14Reader());
+        readers.add(new RSS14Reader());
       }
-      if (possibleFormats.contains(BarcodeFormat.RSS_EXPANDED)){
+      if (possibleFormats.contains(BarcodeFormat.RSS_EXPANDED)) {
         readers.add(new RSSExpandedReader());
       }
     }
@@ -84,7 +86,7 @@ public final class MultiFormatOneDReader extends OneDReader {
       readers.add(new RSS14Reader());
       readers.add(new RSSExpandedReader());
     }
-    this.readers = readers.toArray(new OneDReader[readers.size()]);
+    this.readers = readers.toArray(EMPTY_ONED_ARRAY);
   }
 
   @Override

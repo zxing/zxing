@@ -20,7 +20,8 @@ import com.google.zxing.Result;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -125,6 +126,7 @@ public final class VCardResultParser extends ResultParser {
       List<String> metadata = null;
       boolean quotedPrintable = false;
       String quotedPrintableCharset = null;
+      String valueType = null;
       if (metadataString != null) {
         for (String metadatum : SEMICOLON.split(metadataString)) {
           if (metadata == null) {
@@ -139,6 +141,8 @@ public final class VCardResultParser extends ResultParser {
               quotedPrintable = true;
             } else if ("CHARSET".equalsIgnoreCase(key)) {
               quotedPrintableCharset = value;
+            } else if ("VALUE".equalsIgnoreCase(key)) {
+              valueType = value;
             }
           }
         }
@@ -146,14 +150,14 @@ public final class VCardResultParser extends ResultParser {
 
       int matchStart = i; // Found the start of a match here
 
-      while ((i = rawText.indexOf((int) '\n', i)) >= 0) { // Really, end in \r\n
+      while ((i = rawText.indexOf('\n', i)) >= 0) { // Really, end in \r\n
         if (i < rawText.length() - 1 &&           // But if followed by tab or space,
-            (rawText.charAt(i+1) == ' ' ||        // this is only a continuation
-             rawText.charAt(i+1) == '\t')) {
+            (rawText.charAt(i + 1) == ' ' ||        // this is only a continuation
+             rawText.charAt(i + 1) == '\t')) {
           i += 2; // Skip \n and continutation whitespace
         } else if (quotedPrintable &&             // If preceded by = in quoted printable
-                   ((i >= 1 && rawText.charAt(i-1) == '=') || // this is a continuation
-                    (i >= 2 && rawText.charAt(i-2) == '='))) {
+                   ((i >= 1 && rawText.charAt(i - 1) == '=') || // this is a continuation
+                    (i >= 2 && rawText.charAt(i - 2) == '='))) {
           i++; // Skip \n
         } else {
           break;
@@ -168,7 +172,7 @@ public final class VCardResultParser extends ResultParser {
         if (matches == null) {
           matches = new ArrayList<>(1); // lazy init
         }
-        if (i >= 1 && rawText.charAt(i-1) == '\r') {
+        if (i >= 1 && rawText.charAt(i - 1) == '\r') {
           i--; // Back up over \r, which really should be there
         }
         String element = rawText.substring(matchStart, i);
@@ -187,6 +191,16 @@ public final class VCardResultParser extends ResultParser {
           element = CR_LF_SPACE_TAB.matcher(element).replaceAll("");
           element = NEWLINE_ESCAPE.matcher(element).replaceAll("\n");
           element = VCARD_ESCAPES.matcher(element).replaceAll("$1");
+        }
+        // Only handle VALUE=uri specially
+        if ("uri".equals(valueType)) {
+          // Don't actually support dereferencing URIs, but use scheme-specific part not URI
+          // as value, to support tel: and mailto:
+          try {
+            element = URI.create(element).getSchemeSpecificPart();
+          } catch (IllegalArgumentException iae) {
+            // ignore
+          }
         }
         if (metadata == null) {
           List<String> match = new ArrayList<>(1);
@@ -218,9 +232,9 @@ public final class VCardResultParser extends ResultParser {
           break;
         case '=':
           if (i < length - 2) {
-            char nextChar = value.charAt(i+1);
+            char nextChar = value.charAt(i + 1);
             if (nextChar != '\r' && nextChar != '\n') {
-              char nextNextChar = value.charAt(i+2);
+              char nextNextChar = value.charAt(i + 2);
               int firstDigit = parseHexDigit(nextChar);
               int secondDigit = parseHexDigit(nextNextChar);
               if (firstDigit >= 0 && secondDigit >= 0) {
@@ -246,12 +260,12 @@ public final class VCardResultParser extends ResultParser {
       byte[] fragmentBytes = fragmentBuffer.toByteArray();
       String fragment;
       if (charset == null) {
-        fragment = new String(fragmentBytes, Charset.forName("UTF-8"));
+        fragment = new String(fragmentBytes, StandardCharsets.UTF_8);
       } else {
         try {
           fragment = new String(fragmentBytes, charset);
         } catch (UnsupportedEncodingException e) {
-          fragment = new String(fragmentBytes, Charset.forName("UTF-8"));
+          fragment = new String(fragmentBytes, StandardCharsets.UTF_8);
         }
       }
       fragmentBuffer.reset();
@@ -282,7 +296,7 @@ public final class VCardResultParser extends ResultParser {
         result.add(value);
       }
     }
-    return result.toArray(new String[lists.size()]);
+    return result.toArray(EMPTY_STR_ARRAY);
   }
   
   private static String[] toTypes(Collection<List<String>> lists) {
@@ -291,23 +305,26 @@ public final class VCardResultParser extends ResultParser {
     }
     List<String> result = new ArrayList<>(lists.size());
     for (List<String> list : lists) {
-      String type = null;
-      for (int i = 1; i < list.size(); i++) {
-        String metadatum = list.get(i);
-        int equals = metadatum.indexOf('=');
-        if (equals < 0) {
-          // take the whole thing as a usable label
-          type = metadatum;
-          break;
+      String value = list.get(0);
+      if (value != null && !value.isEmpty()) {
+        String type = null;
+        for (int i = 1; i < list.size(); i++) {
+          String metadatum = list.get(i);
+          int equals = metadatum.indexOf('=');
+          if (equals < 0) {
+            // take the whole thing as a usable label
+            type = metadatum;
+            break;
+          }
+          if ("TYPE".equalsIgnoreCase(metadatum.substring(0, equals))) {
+            type = metadatum.substring(equals + 1);
+            break;
+          }
         }
-        if ("TYPE".equalsIgnoreCase(metadatum.substring(0, equals))) {
-          type = metadatum.substring(equals + 1);
-          break;
-        }
+        result.add(type);
       }
-      result.add(type);
     }
-    return result.toArray(new String[lists.size()]);
+    return result.toArray(EMPTY_STR_ARRAY);
   }
 
   private static boolean isLikeVCardDate(CharSequence value) {

@@ -116,7 +116,7 @@
   <PreferenceCategory android:title="@string/preferences_device_bug_workarounds_title">
     <CheckBoxPreference
         android:key="preferences_disable_continuous_focus"
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:title="@string/preferences_disable_continuous_focus_title"
         android:summary="@string/preferences_disable_continuous_focus_summary"/>
     <CheckBoxPreference

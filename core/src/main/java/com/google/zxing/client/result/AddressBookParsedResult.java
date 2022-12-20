@@ -17,6 +17,9 @@
 package com.google.zxing.client.result;
 
 /**
+ * Represents a parsed result that encodes contact information, like that in an address book
+ * entry.
+ *
  * @author Sean Owen
  */
 public final class AddressBookParsedResult extends ParsedResult {
@@ -80,6 +83,15 @@ public final class AddressBookParsedResult extends ParsedResult {
                                  String[] urls,
                                  String[] geo) {
     super(ParsedResultType.ADDRESSBOOK);
+    if (phoneNumbers != null && phoneTypes != null && phoneNumbers.length != phoneTypes.length) {
+      throw new IllegalArgumentException("Phone numbers and types lengths differ");
+    }
+    if (emails != null && emailTypes != null && emails.length != emailTypes.length) {
+      throw new IllegalArgumentException("Emails and types lengths differ");
+    }
+    if (addresses != null && addressTypes != null && addresses.length != addressTypes.length) {
+      throw new IllegalArgumentException("Addresses and types lengths differ");
+    }
     this.names = names;
     this.nicknames = nicknames;
     this.pronunciation = pronunciation;

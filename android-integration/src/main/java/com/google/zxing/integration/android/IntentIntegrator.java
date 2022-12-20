@@ -40,7 +40,7 @@ import android.util.Log;
  * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the
  * project's source code.</p>
  *
- * <h2>Initiating a barcode scan</h2>
+ * <h1>Initiating a barcode scan</h1>
  *
  * <p>To integrate, create an instance of {@code IntentIntegrator} and call {@link #initiateScan()} and wait
  * for the result in your app.</p>
@@ -75,7 +75,7 @@ import android.util.Log;
  * user was prompted to download the application. This lets the calling app potentially manage the dialog.
  * In particular, ideally, the app dismisses the dialog if it's still active in its {@link Activity#onPause()}
  * method.</p>
- * 
+ *
  * <p>You can use {@link #setTitle(String)} to customize the title of this download prompt dialog (or, use
  * {@link #setTitleByID(int)} to set the title by string resource ID.) Likewise, the prompt message, and
  * yes/no button labels can be changed.</p>
@@ -83,21 +83,21 @@ import android.util.Log;
  * <p>Finally, you can use {@link #addExtra(String, Object)} to add more parameters to the Intent used
  * to invoke the scanner. This can be used to set additional options not directly exposed by this
  * simplified API.</p>
- * 
+ *
  * <p>By default, this will only allow applications that are known to respond to this intent correctly
  * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(List)}.
  * For example, set to {@link #TARGET_BARCODE_SCANNER_ONLY} to only target the Barcode Scanner app itself.</p>
  *
- * <h2>Sharing text via barcode</h2>
+ * <h1>Sharing text via barcode</h1>
  *
  * <p>To share text, encoded as a QR Code on-screen, similarly, see {@link #shareText(CharSequence)}.</p>
  *
  * <p>Some code, particularly download integration, was contributed from the Anobiit application.</p>
  *
- * <h2>Enabling experimental barcode formats</h2>
+ * <h1>Enabling experimental barcode formats</h1>
  *
  * <p>Some formats are not enabled by default even when scanning with {@link #ALL_CODE_TYPES}, such as
- * PDF417. Use {@link #initiateScan(java.util.Collection)} with
+ * PDF417. Use {@link #initiateScan(Collection)} with
  * a collection containing the names of formats to scan for explicitly, like "PDF_417", to use such
  * formats.</p>
  *
@@ -130,15 +130,20 @@ public class IntentIntegrator {
   public static final Collection<String> DATA_MATRIX_TYPES = Collections.singleton("DATA_MATRIX");
 
   public static final Collection<String> ALL_CODE_TYPES = null;
-  
+
   public static final List<String> TARGET_BARCODE_SCANNER_ONLY = Collections.singletonList(BS_PACKAGE);
   public static final List<String> TARGET_ALL_KNOWN = list(
           BSPLUS_PACKAGE,             // Barcode Scanner+
           BSPLUS_PACKAGE + ".simple", // Barcode Scanner+ Simple
-          BS_PACKAGE                  // Barcode Scanner          
+          BS_PACKAGE                  // Barcode Scanner
           // What else supports this intent?
       );
-  
+
+  // Should be FLAG_ACTIVITY_NEW_DOCUMENT in API 21+.
+  // Defined once here because the current value is deprecated, so generates just one warning
+  @SuppressWarnings("deprecation")
+  private static final int FLAG_NEW_DOC = Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
+
   private final Activity activity;
   private final Fragment fragment;
 
@@ -147,7 +152,7 @@ public class IntentIntegrator {
   private String buttonYes;
   private String buttonNo;
   private List<String> targetApplications;
-  private final Map<String,Object> moreExtras = new HashMap<String,Object>(3);
+  private final Map<String,Object> moreExtras = new HashMap<>(3);
 
   /**
    * @param activity {@link Activity} invoking the integration
@@ -176,11 +181,11 @@ public class IntentIntegrator {
     buttonNo = DEFAULT_NO;
     targetApplications = TARGET_ALL_KNOWN;
   }
-  
+
   public String getTitle() {
     return title;
   }
-  
+
   public void setTitle(String title) {
     this.title = title;
   }
@@ -224,18 +229,18 @@ public class IntentIntegrator {
   public void setButtonNoByID(int buttonNoID) {
     buttonNo = activity.getString(buttonNoID);
   }
-  
+
   public Collection<String> getTargetApplications() {
     return targetApplications;
   }
-  
+
   public final void setTargetApplications(List<String> targetApplications) {
     if (targetApplications.isEmpty()) {
       throw new IllegalArgumentException("No target applications");
     }
     this.targetApplications = targetApplications;
   }
-  
+
   public void setSingleTargetApplication(String targetApplication) {
     this.targetApplications = Collections.singletonList(targetApplication);
   }
@@ -257,7 +262,7 @@ public class IntentIntegrator {
   public final AlertDialog initiateScan() {
     return initiateScan(ALL_CODE_TYPES, -1);
   }
-  
+
   /**
    * Initiates a scan for all known barcode types with the specified camera.
    *
@@ -281,10 +286,10 @@ public class IntentIntegrator {
   public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats) {
     return initiateScan(desiredBarcodeFormats, -1);
   }
-  
+
   /**
-   * Initiates a scan, using the specified camera, only for a certain set of barcode types, given as strings corresponding
-   * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
+   * Initiates a scan, using the specified camera, only for a certain set of barcode types, given as strings
+   * corresponding to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
    * like {@link #PRODUCT_CODE_TYPES} for example.
    *
    * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
@@ -320,7 +325,7 @@ public class IntentIntegrator {
     }
     intentScan.setPackage(targetAppPackage);
     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intentScan.addFlags(FLAG_NEW_DOC);
     attachMoreExtras(intentScan);
     startActivityForResult(intentScan, REQUEST_CODE);
     return null;
@@ -332,8 +337,8 @@ public class IntentIntegrator {
    *
    * @param intent Intent to start.
    * @param code Request code for the activity
-   * @see android.app.Activity#startActivityForResult(Intent, int)
-   * @see android.app.Fragment#startActivityForResult(Intent, int)
+   * @see Activity#startActivityForResult(Intent, int)
+   * @see Fragment#startActivityForResult(Intent, int)
    */
   protected void startActivityForResult(Intent intent, int code) {
     if (fragment == null) {
@@ -342,7 +347,7 @@ public class IntentIntegrator {
       fragment.startActivityForResult(intent, code);
     }
   }
-  
+
   private String findTargetAppPackage(Intent intent) {
     PackageManager pm = activity.getPackageManager();
     List<ResolveInfo> availableApps = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
@@ -355,7 +360,7 @@ public class IntentIntegrator {
     }
     return null;
   }
-  
+
   private static boolean contains(Iterable<ResolveInfo> availableApps, String targetApp) {
     for (ResolveInfo availableApp : availableApps) {
       String packageName = availableApp.activityInfo.packageName;
@@ -466,7 +471,7 @@ public class IntentIntegrator {
     }
     intent.setPackage(targetAppPackage);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.addFlags(FLAG_NEW_DOC);
     attachMoreExtras(intent);
     if (fragment == null) {
       activity.startActivity(intent);
@@ -475,7 +480,7 @@ public class IntentIntegrator {
     }
     return null;
   }
-  
+
   private static List<String> list(String... values) {
     return Collections.unmodifiableList(Arrays.asList(values));
   }

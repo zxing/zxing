@@ -51,8 +51,8 @@ final class UPCEANExtension5Support {
         new Result(resultString,
                    null,
                    new ResultPoint[] {
-                       new ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0f, (float) rowNumber),
-                       new ResultPoint((float) end, (float) rowNumber),
+                       new ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0f, rowNumber),
+                       new ResultPoint(end, rowNumber),
                    },
                    BarcodeFormat.UPC_EAN_EXTENSION);
     if (extensionData != null) {
@@ -61,7 +61,7 @@ final class UPCEANExtension5Support {
     return extensionResult;
   }
 
-  int decodeMiddle(BitArray row, int[] startRange, StringBuilder resultString) throws NotFoundException {
+  private int decodeMiddle(BitArray row, int[] startRange, StringBuilder resultString) throws NotFoundException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
@@ -96,7 +96,7 @@ final class UPCEANExtension5Support {
     if (extensionChecksum(resultString.toString()) != checkDigit) {
       throw NotFoundException.getNotFoundInstance();
     }
-    
+
     return rowOffset;
   }
 
@@ -104,11 +104,11 @@ final class UPCEANExtension5Support {
     int length = s.length();
     int sum = 0;
     for (int i = length - 2; i >= 0; i -= 2) {
-      sum += (int) s.charAt(i) - (int) '0';
+      sum += s.charAt(i) - '0';
     }
     sum *= 3;
     for (int i = length - 1; i >= 0; i -= 2) {
-      sum += (int) s.charAt(i) - (int) '0';
+      sum += s.charAt(i) - '0';
     }
     sum *= 3;
     return sum % 10;
@@ -153,16 +153,15 @@ final class UPCEANExtension5Support {
         break;
       case '9':
         // Reference: http://www.jollytech.com
-        if ("90000".equals(raw)) {
-          // No suggested retail price
-          return null;
-        }
-        if ("99991".equals(raw)) {
-          // Complementary
-          return "0.00";
-        }
-        if ("99990".equals(raw)) {
-          return "Used";
+        switch (raw) {
+          case "90000":
+            // No suggested retail price
+            return null;
+          case "99991":
+            // Complementary
+            return "0.00";
+          case "99990":
+            return "Used";
         }
         // Otherwise... unknown currency?
         currency = "";

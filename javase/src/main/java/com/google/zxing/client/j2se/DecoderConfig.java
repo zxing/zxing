@@ -34,8 +34,8 @@ final class DecoderConfig {
       description = "Use the TRY_HARDER hint, default is normal mode")
   boolean tryHarder;
 
-  @Parameter(names="--pure_barcode",
-      description="Input image is a pure monochrome barcode image, not a photo")
+  @Parameter(names = "--pure_barcode",
+      description = "Input image is a pure monochrome barcode image, not a photo")
   boolean pureBarcode;
 
   @Parameter(names = "--products_only",
@@ -57,6 +57,10 @@ final class DecoderConfig {
   @Parameter(names = "--brief",
       description = "Only output one line per file, omitting the contents")
   boolean brief;
+
+  @Parameter(names = "--raw",
+      description = "Output raw bitstream, before decoding symbols")
+  boolean outputRaw;
 
   @Parameter(names = "--recursive",
       description = "Descend into subdirectories")
@@ -84,8 +88,7 @@ final class DecoderConfig {
   Map<DecodeHintType,?> buildHints() {
     List<BarcodeFormat> finalPossibleFormats = possibleFormats;
     if (finalPossibleFormats == null || finalPossibleFormats.isEmpty()) {
-      finalPossibleFormats = new ArrayList<>();
-      finalPossibleFormats.addAll(Arrays.asList(
+      finalPossibleFormats = new ArrayList<>(Arrays.asList(
           BarcodeFormat.UPC_A,
           BarcodeFormat.UPC_E,
           BarcodeFormat.EAN_13,

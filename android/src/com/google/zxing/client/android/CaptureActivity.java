@@ -67,7 +67,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 
@@ -88,7 +87,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
 
-  public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
+  private static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 
   private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
       EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
@@ -362,7 +361,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.addFlags(Intents.FLAG_NEW_DOC);
     switch (item.getItemId()) {
       case R.id.menu_share:
         intent.setClassName(this, ShareActivity.class.getName());
@@ -431,7 +430,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+    // do nothing
   }
 
   /**
@@ -472,6 +471,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           Toast.makeText(getApplicationContext(),
                          getResources().getString(R.string.msg_bulk_mode_scanned) + " (" + rawResult.getText() + ')',
                          Toast.LENGTH_SHORT).show();
+          maybeSetClipboard(resultHandler);
           // Wait a moment or else it will scan the same barcode continuously about 3 times
           restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
         } else {
@@ -527,11 +527,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   // Put up our own UI for how to handle the decoded contents.
   private void handleDecodeInternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
 
-    CharSequence displayContents = resultHandler.getDisplayContents();
-
-    if (copyToClipboard && !resultHandler.areContentsSecure()) {
-      ClipboardInterface.setText(displayContents, this);
-    }
+    maybeSetClipboard(resultHandler);
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -560,7 +556,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
     TextView timeTextView = (TextView) findViewById(R.id.time_text_view);
-    timeTextView.setText(formatter.format(new Date(rawResult.getTimestamp())));
+    timeTextView.setText(formatter.format(rawResult.getTimestamp()));
 
 
     TextView metaTextView = (TextView) findViewById(R.id.meta_text_view);
@@ -583,6 +579,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
     }
 
+    CharSequence displayContents = resultHandler.getDisplayContents();
     TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
     contentsTextView.setText(displayContents);
     int scaledSize = Math.max(22, 32 - displayContents.length() / 4);
@@ -638,65 +635,69 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       statusView.setText(getString(resultHandler.getDisplayTitle()) + " : " + rawResultString);
     }
 
-    if (copyToClipboard && !resultHandler.areContentsSecure()) {
-      CharSequence text = resultHandler.getDisplayContents();
-      ClipboardInterface.setText(text, this);
-    }
+    maybeSetClipboard(resultHandler);
 
-    if (source == IntentSource.NATIVE_APP_INTENT) {
-      
-      // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
-      // the deprecated intent is retired.
-      Intent intent = new Intent(getIntent().getAction());
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
-      intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
-      byte[] rawBytes = rawResult.getRawBytes();
-      if (rawBytes != null && rawBytes.length > 0) {
-        intent.putExtra(Intents.Scan.RESULT_BYTES, rawBytes);
-      }
-      Map<ResultMetadataType,?> metadata = rawResult.getResultMetadata();
-      if (metadata != null) {
-        if (metadata.containsKey(ResultMetadataType.UPC_EAN_EXTENSION)) {
-          intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
-                          metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
+    switch (source) {
+      case NATIVE_APP_INTENT:
+        // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
+        // the deprecated intent is retired.
+        Intent intent = new Intent(getIntent().getAction());
+        intent.addFlags(Intents.FLAG_NEW_DOC);
+        intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
+        intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
+        byte[] rawBytes = rawResult.getRawBytes();
+        if (rawBytes != null && rawBytes.length > 0) {
+          intent.putExtra(Intents.Scan.RESULT_BYTES, rawBytes);
         }
-        Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
-        if (orientation != null) {
-          intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());
-        }
-        String ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
-        if (ecLevel != null) {
-          intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
-        }
-        @SuppressWarnings("unchecked")
-        Iterable<byte[]> byteSegments = (Iterable<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
-        if (byteSegments != null) {
-          int i = 0;
-          for (byte[] byteSegment : byteSegments) {
-            intent.putExtra(Intents.Scan.RESULT_BYTE_SEGMENTS_PREFIX + i, byteSegment);
-            i++;
+        Map<ResultMetadataType, ?> metadata = rawResult.getResultMetadata();
+        if (metadata != null) {
+          if (metadata.containsKey(ResultMetadataType.UPC_EAN_EXTENSION)) {
+            intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
+                metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
+          }
+          Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
+          if (orientation != null) {
+            intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());
+          }
+          String ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
+          if (ecLevel != null) {
+            intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
+          }
+          @SuppressWarnings("unchecked")
+          Iterable<byte[]> byteSegments = (Iterable<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
+          if (byteSegments != null) {
+            int i = 0;
+            for (byte[] byteSegment : byteSegments) {
+              intent.putExtra(Intents.Scan.RESULT_BYTE_SEGMENTS_PREFIX + i, byteSegment);
+              i++;
+            }
           }
         }
-      }
-      sendReplyMessage(R.id.return_scan_result, intent, resultDurationMS);
-      
-    } else if (source == IntentSource.PRODUCT_SEARCH_LINK) {
-      
-      // Reformulate the URL which triggered us into a query, so that the request goes to the same
-      // TLD as the scan URL.
-      int end = sourceUrl.lastIndexOf("/scan");
-      String replyURL = sourceUrl.substring(0, end) + "?q=" + resultHandler.getDisplayContents() + "&source=zxing";      
-      sendReplyMessage(R.id.launch_product_query, replyURL, resultDurationMS);
-      
-    } else if (source == IntentSource.ZXING_LINK) {
+        sendReplyMessage(R.id.return_scan_result, intent, resultDurationMS);
+        break;
 
-      if (scanFromWebPageManager != null && scanFromWebPageManager.isScanFromWebPage()) {
-        String replyURL = scanFromWebPageManager.buildReplyURL(rawResult, resultHandler);
-        scanFromWebPageManager = null;
-        sendReplyMessage(R.id.launch_product_query, replyURL, resultDurationMS);
-      }
-      
+      case PRODUCT_SEARCH_LINK:
+        // Reformulate the URL which triggered us into a query, so that the request goes to the same
+        // TLD as the scan URL.
+        int end = sourceUrl.lastIndexOf("/scan");
+        String productReplyURL = sourceUrl.substring(0, end) + "?q=" + 
+            resultHandler.getDisplayContents() + "&source=zxing";
+        sendReplyMessage(R.id.launch_product_query, productReplyURL, resultDurationMS);
+        break;
+        
+      case ZXING_LINK:
+        if (scanFromWebPageManager != null && scanFromWebPageManager.isScanFromWebPage()) {
+          String linkReplyURL = scanFromWebPageManager.buildReplyURL(rawResult, resultHandler);
+          scanFromWebPageManager = null;
+          sendReplyMessage(R.id.launch_product_query, linkReplyURL, resultDurationMS);
+        }
+        break;
+    }
+  }
+
+  private void maybeSetClipboard(ResultHandler resultHandler) {
+    if (copyToClipboard && !resultHandler.areContentsSecure()) {
+      ClipboardInterface.setText(resultHandler.getDisplayContents(), this);
     }
   }
   

@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * A Generator for Wifi networks.
- * 
+ *
  * @author Vikram Aggarwal
  * @author Sean Owen
  */
@@ -49,7 +49,7 @@ public final class WifiGenerator implements GeneratorSource {
       w.addKeyPressHandler(keyListener);
     }
   }
-  
+
   @Override
   public String getName() {
     return "Wifi network";
@@ -96,7 +96,7 @@ public final class WifiGenerator implements GeneratorSource {
     }
     return input.replaceAll("([\\\\:;])", "\\\\$1");
   }
-  
+
   private String getSsidField() throws GeneratorException {
     String input = ssid.getText();
     if (input.isEmpty()) {
@@ -105,11 +105,11 @@ public final class WifiGenerator implements GeneratorSource {
     String parsed = parseTextField("SSID", ssid);
     return quoteHex(parsed); // Android needs hex-like SSIDs quoted or will be read as hex
   }
-  
+
   private String getPasswordField() throws GeneratorException {
-  return parseTextField("Password", password);
+    return parseTextField("Password", password);
   }
-  
+
   private String getNetworkTypeField() {
     return networkType.getValue(networkType.getSelectedIndex());
   }
@@ -118,7 +118,7 @@ public final class WifiGenerator implements GeneratorSource {
     Boolean value = hidden.getValue();
     return value != null && value;
   }
-  
+
   @Override
   public Grid getWidget() {
     if (table != null) {
@@ -126,7 +126,7 @@ public final class WifiGenerator implements GeneratorSource {
       return table;
     }
     table = new Grid(4, 2);
-    
+
     table.setText(0, 0, "SSID");
     table.setWidget(0, 1, ssid);
     table.setText(1, 0, "Password");

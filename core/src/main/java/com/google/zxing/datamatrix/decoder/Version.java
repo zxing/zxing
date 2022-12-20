@@ -48,7 +48,7 @@ public final class Version {
     this.dataRegionSizeRows = dataRegionSizeRows;
     this.dataRegionSizeColumns = dataRegionSizeColumns;
     this.ecBlocks = ecBlocks;
-    
+
     // Calculate the total number of codewords
     int total = 0;
     int ecCodewords = ecBlocks.getECCodewords();
@@ -66,23 +66,23 @@ public final class Version {
   public int getSymbolSizeRows() {
     return symbolSizeRows;
   }
-  
+
   public int getSymbolSizeColumns() {
     return symbolSizeColumns;
   }
-  
+
   public int getDataRegionSizeRows() {
     return dataRegionSizeRows;
   }
-  
+
   public int getDataRegionSizeColumns() {
     return dataRegionSizeColumns;
   }
-  
+
   public int getTotalCodewords() {
     return totalCodewords;
   }
-  
+
   ECBlocks getECBlocks() {
     return ecBlocks;
   }
@@ -105,7 +105,7 @@ public final class Version {
         return version;
       }
     }
-    
+
     throw FormatException.getFormatInstance();
   }
 
@@ -139,7 +139,7 @@ public final class Version {
   }
 
   /**
-   * <p>Encapsualtes the parameters for one error-correction block in one symbol version.
+   * <p>Encapsulates the parameters for one error-correction block in one symbol version.
    * This includes the number of data codewords, and the number of times a block with these
    * parameters is used consecutively in the Data Matrix code version's format.</p>
    */
@@ -230,7 +230,46 @@ public final class Version {
         new Version(29, 16, 36, 14, 16,
             new ECBlocks(24, new ECB(1, 32))),
         new Version(30, 16, 48, 14, 22,
-            new ECBlocks(28, new ECB(1, 49)))
+            new ECBlocks(28, new ECB(1, 49))),
+
+        // extended forms as specified in
+        // ISO 21471:2020 (DMRE) 5.5.1 Table 7
+        new Version(31, 8, 48, 6, 22,
+            new ECBlocks(15, new ECB(1, 18))),
+        new Version(32, 8, 64, 6, 14,
+            new ECBlocks(18, new ECB(1, 24))),
+        new Version(33, 8, 80, 6, 18,
+            new ECBlocks(22, new ECB(1, 32))),
+        new Version(34, 8, 96, 6, 22,
+            new ECBlocks(28, new ECB(1, 38))),
+        new Version(35, 8, 120, 6, 18,
+            new ECBlocks(32, new ECB(1, 49))),
+        new Version(36, 8, 144, 6, 22,
+            new ECBlocks(36, new ECB(1, 63))),
+        new Version(37, 12, 64, 10, 14,
+            new ECBlocks(27, new ECB(1, 43))),
+        new Version(38, 12, 88, 10, 20,
+            new ECBlocks(36, new ECB(1, 64))),
+        new Version(39, 16, 64, 14, 14,
+            new ECBlocks(36, new ECB(1, 62))),
+        new Version(40, 20, 36, 18, 16,
+            new ECBlocks(28, new ECB(1, 44))),
+        new Version(41, 20, 44, 18, 20,
+            new ECBlocks(34, new ECB(1, 56))),
+        new Version(42, 20, 64, 18, 14,
+            new ECBlocks(42, new ECB(1, 84))),
+        new Version(43, 22, 48, 20, 22,
+            new ECBlocks(38, new ECB(1, 72))),
+        new Version(44, 24, 48, 22, 22,
+            new ECBlocks(41, new ECB(1, 80))),
+        new Version(45, 24, 64, 22, 14,
+            new ECBlocks(46, new ECB(1, 108))),
+        new Version(46, 26, 40, 24, 18,
+            new ECBlocks(38, new ECB(1, 70))),
+        new Version(47, 26, 48, 24, 22,
+            new ECBlocks(42, new ECB(1, 90))),
+        new Version(48, 26, 64, 24, 14,
+            new ECBlocks(50, new ECB(1, 118)))
     };
   }
 

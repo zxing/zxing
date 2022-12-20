@@ -17,8 +17,13 @@
 package com.google.zxing.oned.rss;
 
 import com.google.zxing.NotFoundException;
+import com.google.zxing.common.detector.MathUtils;
 import com.google.zxing.oned.OneDReader;
 
+/**
+ * Superclass of {@link OneDReader} implementations that read barcodes in the RSS family
+ * of formats.
+ */
 public abstract class AbstractRSSReader extends OneDReader {
 
   private static final float MAX_AVG_VARIANCE = 0.2f;
@@ -34,7 +39,7 @@ public abstract class AbstractRSSReader extends OneDReader {
   private final int[] oddCounts;
   private final int[] evenCounts;
 
-  protected AbstractRSSReader(){
+  protected AbstractRSSReader() {
     decodeFinderCounters = new int[4];
     dataCharacterCounters = new int[8];
     oddRoundingErrors = new float[4];
@@ -78,12 +83,14 @@ public abstract class AbstractRSSReader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
+  /**
+   * @param array values to sum
+   * @return sum of values
+   * @deprecated call {@link MathUtils#sum(int[])}
+   */
+  @Deprecated
   protected static int count(int[] array) {
-    int count = 0;
-    for (int a : array) {
-      count += a;
-    }
-    return count;
+    return MathUtils.sum(array);
   }
 
   protected static void increment(int[] array, float[] errors) {
@@ -113,7 +120,7 @@ public abstract class AbstractRSSReader extends OneDReader {
   protected static boolean isFinderPattern(int[] counters) {
     int firstTwoSum = counters[0] + counters[1];
     int sum = firstTwoSum + counters[2] + counters[3];
-    float ratio = (float) firstTwoSum / (float) sum;
+    float ratio = firstTwoSum / (float) sum;
     if (ratio >= MIN_FINDER_PATTERN_RATIO && ratio <= MAX_FINDER_PATTERN_RATIO) {
       // passes ratio test in spec, but see if the counts are unreasonable
       int minCounter = Integer.MAX_VALUE;

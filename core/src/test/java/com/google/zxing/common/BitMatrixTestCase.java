@@ -19,6 +19,8 @@ package com.google.zxing.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
@@ -54,6 +56,34 @@ public final class BitMatrixTestCase extends Assert {
         assertEquals(y >= 1 && y <= 3 && x >= 1 && x <= 3, matrix.get(x, y));
       }
     }
+  }
+
+  @Test
+  public void testEnclosing() {
+    BitMatrix matrix = new BitMatrix(5);
+    assertNull(matrix.getEnclosingRectangle());
+    matrix.setRegion(1, 1, 1, 1);
+    assertArrayEquals(new int[] { 1, 1, 1, 1 }, matrix.getEnclosingRectangle());
+    matrix.setRegion(1, 1, 3, 2);
+    assertArrayEquals(new int[] { 1, 1, 3, 2 }, matrix.getEnclosingRectangle());
+    matrix.setRegion(0, 0, 5, 5);
+    assertArrayEquals(new int[] { 0, 0, 5, 5 }, matrix.getEnclosingRectangle());
+  }
+
+  @Test
+  public void testOnBit() {
+    BitMatrix matrix = new BitMatrix(5);
+    assertNull(matrix.getTopLeftOnBit());
+    assertNull(matrix.getBottomRightOnBit());
+    matrix.setRegion(1, 1, 1, 1);
+    assertArrayEquals(new int[] { 1, 1 }, matrix.getTopLeftOnBit());
+    assertArrayEquals(new int[] { 1, 1 }, matrix.getBottomRightOnBit());
+    matrix.setRegion(1, 1, 3, 2);
+    assertArrayEquals(new int[] { 1, 1 }, matrix.getTopLeftOnBit());
+    assertArrayEquals(new int[] { 3, 2 }, matrix.getBottomRightOnBit());
+    matrix.setRegion(0, 0, 5, 5);
+    assertArrayEquals(new int[] { 0, 0 }, matrix.getTopLeftOnBit());
+    assertArrayEquals(new int[] { 4, 4 }, matrix.getBottomRightOnBit());
   }
 
   @Test
@@ -130,6 +160,22 @@ public final class BitMatrixTestCase extends Assert {
   }
 
   @Test
+  public void testRotate90Simple() {
+    BitMatrix matrix = new BitMatrix(3, 3);
+    matrix.set(0, 0);
+    matrix.set(0, 1);
+    matrix.set(1, 2);
+    matrix.set(2, 1);
+
+    matrix.rotate90();
+
+    assertTrue(matrix.get(0, 2));
+    assertTrue(matrix.get(1, 2));
+    assertTrue(matrix.get(2, 1));
+    assertTrue(matrix.get(1, 0));
+  }
+
+  @Test
   public void testRotate180Simple() {
     BitMatrix matrix = new BitMatrix(3, 3);
     matrix.set(0, 0);
@@ -183,6 +229,25 @@ public final class BitMatrixTestCase extends Assert {
   }
 
   @Test
+  public void testParseBoolean() {
+    BitMatrix emptyMatrix = new BitMatrix(3, 3);
+    BitMatrix fullMatrix = new BitMatrix(3, 3);
+    fullMatrix.setRegion(0, 0, 3, 3);
+    BitMatrix centerMatrix = new BitMatrix(3, 3);
+    centerMatrix.setRegion(1, 1, 1, 1);
+    BitMatrix emptyMatrix24 = new BitMatrix(2, 4);
+
+    boolean[][] matrix = new boolean[3][3];
+    assertEquals(emptyMatrix, BitMatrix.parse(matrix));
+    matrix[1][1] = true;
+    assertEquals(centerMatrix, BitMatrix.parse(matrix));
+    for (boolean[] arr : matrix) {
+      Arrays.fill(arr, true);
+    }
+    assertEquals(fullMatrix, BitMatrix.parse(matrix));
+  }
+
+  @Test
   public void testUnset() {
     BitMatrix emptyMatrix = new BitMatrix(3, 3);
     BitMatrix matrix = emptyMatrix.clone();
@@ -224,16 +289,25 @@ public final class BitMatrixTestCase extends Assert {
     try {
       emptyMatrix.clone().xor(badMatrix);
       fail();
-    } catch(IllegalArgumentException ex) {
+    } catch (IllegalArgumentException ex) {
       // good
     }
 
     try {
       badMatrix.clone().xor(emptyMatrix);
       fail();
-    } catch(IllegalArgumentException ex) {
+    } catch (IllegalArgumentException ex) {
       // good
     }
+  }
+
+  public static String matrixToString(BitMatrix result) {
+    assertEquals(1, result.getHeight());
+    StringBuilder builder = new StringBuilder(result.getWidth());
+    for (int i = 0; i < result.getWidth(); i++) {
+      builder.append(result.get(i, 0) ? '1' : '0');
+    }
+    return builder.toString();
   }
 
   private static void testXOR(BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix) {

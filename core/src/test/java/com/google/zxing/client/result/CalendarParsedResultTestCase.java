@@ -34,7 +34,7 @@ import java.util.TimeZone;
  */
 public final class CalendarParsedResultTestCase extends Assert {
 
-  private static final double EPSILON = 0.0000000001;
+  private static final double EPSILON = 1.0E-10;
 
   private static DateFormat makeGMTFormat() {
     DateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'", Locale.ENGLISH);
@@ -146,7 +146,7 @@ public final class CalendarParsedResultTestCase extends Assert {
         "GEO:-12.345\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR", null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertSame(ParsedResultType.URI, result.getType());
+    assertSame(ParsedResultType.TEXT, result.getType());
   }
 
   @Test
@@ -231,8 +231,8 @@ public final class CalendarParsedResultTestCase extends Assert {
     assertEquals(summary, calResult.getSummary());
     assertEquals(location, calResult.getLocation());
     DateFormat dateFormat = makeGMTFormat();
-    assertEquals(startString, dateFormat.format(calResult.getStart()));
-    assertEquals(endString, calResult.getEnd() == null ? null : dateFormat.format(calResult.getEnd()));
+    assertEquals(startString, dateFormat.format(calResult.getStartTimestamp()));
+    assertEquals(endString, calResult.getEndTimestamp() < 0L ? null : dateFormat.format(calResult.getEndTimestamp()));
     assertEquals(organizer, calResult.getOrganizer());
     assertArrayEquals(attendees, calResult.getAttendees());
     assertEqualOrNaN(latitude, calResult.getLatitude());

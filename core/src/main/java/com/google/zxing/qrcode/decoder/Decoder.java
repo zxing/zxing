@@ -57,16 +57,7 @@ public final class Decoder {
    */
   public DecoderResult decode(boolean[][] image, Map<DecodeHintType,?> hints)
       throws ChecksumException, FormatException {
-    int dimension = image.length;
-    BitMatrix bits = new BitMatrix(dimension);
-    for (int i = 0; i < dimension; i++) {
-      for (int j = 0; j < dimension; j++) {
-        if (image[i][j]) {
-          bits.set(j, i);
-        }
-      }
-    }
-    return decode(bits, hints);
+    return decode(BitMatrix.parse(image), hints);
   }
 
   public DecoderResult decode(BitMatrix bits) throws ChecksumException, FormatException {
@@ -132,11 +123,7 @@ public final class Decoder {
       if (fe != null) {
         throw fe;
       }
-      if (ce != null) {
-        throw ce;
-      }
-      throw e;
-
+      throw ce; // If fe is null, this can't be
     }
   }
 
@@ -187,9 +174,8 @@ public final class Decoder {
     for (int i = 0; i < numCodewords; i++) {
       codewordsInts[i] = codewordBytes[i] & 0xFF;
     }
-    int numECCodewords = codewordBytes.length - numDataCodewords;
     try {
-      rsDecoder.decode(codewordsInts, numECCodewords);
+      rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
     } catch (ReedSolomonException ignored) {
       throw ChecksumException.getChecksumInstance();
     }

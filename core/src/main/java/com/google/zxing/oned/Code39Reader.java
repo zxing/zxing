@@ -22,6 +22,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
@@ -29,16 +30,14 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
+ * <p>Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.</p>
  *
  * @author Sean Owen
  * @see Code93Reader
  */
 public final class Code39Reader extends OneDReader {
 
-  static final String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
-  // Note this lacks '*' compared to ALPHABET_STRING
-  private static final String CHECK_DIGIT_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
+  static final String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
 
   /**
    * These represent the encodings of characters, as patterns of wide and narrow bars.
@@ -49,11 +48,11 @@ public final class Code39Reader extends OneDReader {
       0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
       0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
       0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
-      0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x094, // U-*
-      0x0A8, 0x0A2, 0x08A, 0x02A // $-%
+      0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x0A8, // U-$
+      0x0A2, 0x08A, 0x02A // /-%
   };
 
-  static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
+  static final int ASTERISK_ENCODING = 0x094;
 
   private final boolean usingCheckDigit;
   private final boolean extendedMode;
@@ -106,7 +105,7 @@ public final class Code39Reader extends OneDReader {
     result.setLength(0);
 
     int[] start = findAsteriskPattern(row, theCounters);
-    // Read off white space    
+    // Read off white space
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
 
@@ -145,9 +144,9 @@ public final class Code39Reader extends OneDReader {
       int max = result.length() - 1;
       int total = 0;
       for (int i = 0; i < max; i++) {
-        total += CHECK_DIGIT_STRING.indexOf(decodeRowResult.charAt(i));
+        total += ALPHABET_STRING.indexOf(decodeRowResult.charAt(i));
       }
-      if (result.charAt(max) != CHECK_DIGIT_STRING.charAt(total % 43)) {
+      if (result.charAt(max) != ALPHABET_STRING.charAt(total % 43)) {
         throw ChecksumException.getChecksumInstance();
       }
       result.setLength(max);
@@ -165,16 +164,18 @@ public final class Code39Reader extends OneDReader {
       resultString = result.toString();
     }
 
-    float left = (float) (start[1] + start[0]) / 2.0f;
+    float left = (start[1] + start[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
-    return new Result(
+
+    Result resultObject = new Result(
         resultString,
         null,
         new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
+            new ResultPoint(left, rowNumber),
+            new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_39);
-
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]A0");
+    return resultObject;
   }
 
   private static int[] findAsteriskPattern(BitArray row, int[] counters) throws NotFoundException {
@@ -187,7 +188,7 @@ public final class Code39Reader extends OneDReader {
     int patternLength = counters.length;
 
     for (int i = rowOffset; i < width; i++) {
-      if (row.get(i) ^ isWhite) {
+      if (row.get(i) != isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
@@ -197,9 +198,9 @@ public final class Code39Reader extends OneDReader {
             return new int[]{patternStart, i};
           }
           patternStart += counters[0] + counters[1];
-          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
-          counters[patternLength - 2] = 0;
-          counters[patternLength - 1] = 0;
+          System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
+          counters[counterPosition - 1] = 0;
+          counters[counterPosition] = 0;
           counterPosition--;
         } else {
           counterPosition++;
@@ -262,6 +263,9 @@ public final class Code39Reader extends OneDReader {
         return ALPHABET_STRING.charAt(i);
       }
     }
+    if (pattern == ASTERISK_ENCODING) {
+      return '*';
+    }
     throw NotFoundException.getNotFoundInstance();
   }
 
@@ -294,8 +298,20 @@ public final class Code39Reader extends OneDReader {
             // %A to %E map to control codes ESC to US
             if (next >= 'A' && next <= 'E') {
               decodedChar = (char) (next - 38);
-            } else if (next >= 'F' && next <= 'W') {
+            } else if (next >= 'F' && next <= 'J') {
               decodedChar = (char) (next - 11);
+            } else if (next >= 'K' && next <= 'O') {
+              decodedChar = (char) (next + 16);
+            } else if (next >= 'P' && next <= 'T') {
+              decodedChar = (char) (next + 43);
+            } else if (next == 'U') {
+              decodedChar = (char) 0;
+            } else if (next == 'V') {
+              decodedChar = '@';
+            } else if (next == 'W') {
+              decodedChar = '`';
+            } else if (next == 'X' || next == 'Y' || next == 'Z') {
+              decodedChar = (char) 127;
             } else {
               throw FormatException.getFormatInstance();
             }

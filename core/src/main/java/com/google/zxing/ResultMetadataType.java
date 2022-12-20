@@ -64,7 +64,7 @@ public enum ResultMetadataType {
    * For some products, indicates the suggested retail price in the barcode as a
    * formatted {@link String}.
    */
-  SUGGESTED_PRICE ,
+  SUGGESTED_PRICE,
 
   /**
    * For some products, the possible country of manufacture as a {@link String} denoting the
@@ -93,5 +93,11 @@ public enum ResultMetadataType {
    * parity is given with it.
    */
   STRUCTURED_APPEND_PARITY,
-  
+
+  /**
+   * Barcode Symbology Identifier.
+   * Note: According to the GS1 specification the identifier may have to replace a leading FNC1/GS character
+   * when prepending to the barcode content.
+   */
+  SYMBOLOGY_IDENTIFIER,
 }

@@ -1,0 +1,31 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ZXing
+Source: https://github.com/zxing/zxing.git
+
+Files: *
+Copyright: 2007-2020, ZXing authors
+License: Apache-2.0
+
+Files:
+ core/src/main/java/com/google/zxing/datamatrix/encoder/*
+ core/src/test/java/com/google/zxing/datamatrix/encoder/*
+Copyright: 2006-2007, Jeremias Märki
+License: Apache-2.0
+
+Files: docs/js/*
+Copyright: 2005-2014, jQuery Foundation, Inc. and other contributors
+License: MIT
+
+Files: docs/css/apache-maven-fluido-*
+Copyright: 2013, Twitter Inc
+License: Apache-2.0
+
+Files:
+ docs/images/application-certificate.png
+ docs/images/drive-harddisk.png
+ docs/images/icon_info_sml.gif
+ docs/images/internet-web-browser.png
+ docs/images/update.gif
+Copyright: 2003, 2004, Jakub Steiner
+License: CC-BY-SA-2.5 or public-domain
+

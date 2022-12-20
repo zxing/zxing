@@ -105,7 +105,7 @@ public final class LocaleManager {
   private static final Map<String,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD = GOOGLE_COUNTRY_TLD;
 
   private static final Collection<String> TRANSLATED_HELP_ASSET_LANGUAGES =
-      Arrays.asList("de", "en", "es", "fr", "it", "ja", "ko", "nl", "pt", "ru", "uk", "zh-rCN", "zh-rTW", "zh-rHK");
+      Arrays.asList("de", "en", "es", "fa", "fr", "it", "ja", "ko", "nl", "pt", "ru", "uk", "zh-rCN", "zh");
 
   private LocaleManager() {}
 
@@ -158,15 +158,14 @@ public final class LocaleManager {
     if (locale == null) {
       return DEFAULT_LANGUAGE;
     }
-    String language = locale.getLanguage();
     // Special case Chinese
-    if (Locale.SIMPLIFIED_CHINESE.getLanguage().equals(language)) {
-      return language + "-r" + getSystemCountry();
+    if (Locale.SIMPLIFIED_CHINESE.equals(locale)) {
+      return "zh-rCN";
     }
-    return language;
+    return locale.getLanguage();
   }
 
-  public static String getTranslatedAssetLanguage() {
+  static String getTranslatedAssetLanguage() {
     String language = getSystemLanguage();
     return TRANSLATED_HELP_ASSET_LANGUAGES.contains(language) ? language : DEFAULT_LANGUAGE;
   }
@@ -176,7 +175,7 @@ public final class LocaleManager {
     return tld == null ? DEFAULT_TLD : tld;
   }
 
-  public static String getCountry(Context context) {
+  private static String getCountry(Context context) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     String countryOverride = prefs.getString(PreferencesActivity.KEY_SEARCH_COUNTRY, "-");
     if (countryOverride != null && !countryOverride.isEmpty() && !"-".equals(countryOverride)) {

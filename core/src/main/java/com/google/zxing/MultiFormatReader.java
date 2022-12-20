@@ -37,6 +37,8 @@ import java.util.Map;
  */
 public final class MultiFormatReader implements Reader {
 
+  private static final Reader[] EMPTY_READER_ARRAY = new Reader[0];
+
   private Map<DecodeHintType,?> hints;
   private Reader[] readers;
 
@@ -127,10 +129,10 @@ public final class MultiFormatReader implements Reader {
         readers.add(new AztecReader());
       }
       if (formats.contains(BarcodeFormat.PDF_417)) {
-         readers.add(new PDF417Reader());
+        readers.add(new PDF417Reader());
       }
       if (formats.contains(BarcodeFormat.MAXICODE)) {
-         readers.add(new MaxiCodeReader());
+        readers.add(new MaxiCodeReader());
       }
       // At end in "try harder" mode
       if (addOneDReader && tryHarder) {
@@ -152,7 +154,7 @@ public final class MultiFormatReader implements Reader {
         readers.add(new MultiFormatOneDReader(hints));
       }
     }
-    this.readers = readers.toArray(new Reader[readers.size()]);
+    this.readers = readers.toArray(EMPTY_READER_ARRAY);
   }
 
   @Override
@@ -167,10 +169,27 @@ public final class MultiFormatReader implements Reader {
   private Result decodeInternal(BinaryBitmap image) throws NotFoundException {
     if (readers != null) {
       for (Reader reader : readers) {
+        if (Thread.currentThread().isInterrupted()) {
+          throw NotFoundException.getNotFoundInstance();
+        }
         try {
           return reader.decode(image, hints);
         } catch (ReaderException re) {
           // continue
+        }
+      }
+      if (hints != null && hints.containsKey(DecodeHintType.ALSO_INVERTED)) {
+        // Calling all readers again with inverted image
+        image.getBlackMatrix().flip();
+        for (Reader reader : readers) {
+          if (Thread.currentThread().isInterrupted()) {
+            throw NotFoundException.getNotFoundInstance();
+          }
+          try {
+            return reader.decode(image, hints);
+          } catch (ReaderException re) {
+            // continue
+          }
         }
       }
     }

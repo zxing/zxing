@@ -85,7 +85,7 @@
   <string name="msg_share_explanation">Вы можете поделиться данными, отобразив на экране своего телефона штрих-код, который можно считать другим телефоном.</string>
   <string name="msg_share_text">Или введите текст</string>
   <string name="msg_sure">Вы уверены?</string>
-  <string name="msg_unmount_usb">К сожалению, SD-карта не доступна.</string>
+  <string name="msg_unmount_usb">К сожалению, SD-карта недоступна.</string>
   <string name="preferences_actions_title">Когда штрих-код найден\u2026</string>
   <string name="preferences_auto_focus_title">Использовать автофокус</string>
   <string name="preferences_auto_open_web_title">Открывать веб-страницы автоматически</string>

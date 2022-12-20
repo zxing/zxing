@@ -16,18 +16,15 @@
 
 package com.google.zxing.client.android.camera;
 
-import android.annotation.TargetApi;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -37,7 +34,7 @@ import java.util.regex.Pattern;
  *
  * @author Sean Owen
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+@SuppressWarnings("deprecation") // camera APIs
 public final class CameraConfigurationUtils {
 
   private static final String TAG = "CameraConfiguration";
@@ -171,7 +168,7 @@ public final class CameraConfigurationUtils {
   public static void setFocusArea(Camera.Parameters parameters) {
     if (parameters.getMaxNumFocusAreas() > 0) {
       Log.i(TAG, "Old focus areas: " + toString(parameters.getFocusAreas()));
-      List<Camera.Area> middleArea = buildMiddleArea(AREA_PER_1000);
+      List<Camera.Area> middleArea = buildMiddleArea();
       Log.i(TAG, "Setting focus area to : " + toString(middleArea));
       parameters.setFocusAreas(middleArea);
     } else {
@@ -182,7 +179,7 @@ public final class CameraConfigurationUtils {
   public static void setMetering(Camera.Parameters parameters) {
     if (parameters.getMaxNumMeteringAreas() > 0) {
       Log.i(TAG, "Old metering areas: " + parameters.getMeteringAreas());
-      List<Camera.Area> middleArea = buildMiddleArea(AREA_PER_1000);
+      List<Camera.Area> middleArea = buildMiddleArea();
       Log.i(TAG, "Setting metering area to : " + toString(middleArea));
       parameters.setMeteringAreas(middleArea);
     } else {
@@ -190,9 +187,9 @@ public final class CameraConfigurationUtils {
     }
   }
 
-  private static List<Camera.Area> buildMiddleArea(int areaPer1000) {
+  private static List<Camera.Area> buildMiddleArea() {
     return Collections.singletonList(
-        new Camera.Area(new Rect(-areaPer1000, -areaPer1000, areaPer1000, areaPer1000), 1));
+        new Camera.Area(new Rect(-AREA_PER_1000, -AREA_PER_1000, AREA_PER_1000, AREA_PER_1000), 1));
   }
 
   public static void setVideoStabilization(Camera.Parameters parameters) {
@@ -285,52 +282,33 @@ public final class CameraConfigurationUtils {
       return new Point(defaultSize.width, defaultSize.height);
     }
 
-    // Sort by size, descending
-    List<Camera.Size> supportedPreviewSizes = new ArrayList<>(rawSupportedSizes);
-    Collections.sort(supportedPreviewSizes, new Comparator<Camera.Size>() {
-      @Override
-      public int compare(Camera.Size a, Camera.Size b) {
-        int aPixels = a.height * a.width;
-        int bPixels = b.height * b.width;
-        if (bPixels < aPixels) {
-          return -1;
-        }
-        if (bPixels > aPixels) {
-          return 1;
-        }
-        return 0;
-      }
-    });
-
     if (Log.isLoggable(TAG, Log.INFO)) {
       StringBuilder previewSizesString = new StringBuilder();
-      for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
-        previewSizesString.append(supportedPreviewSize.width).append('x')
-            .append(supportedPreviewSize.height).append(' ');
+      for (Camera.Size size : rawSupportedSizes) {
+        previewSizesString.append(size.width).append('x').append(size.height).append(' ');
       }
       Log.i(TAG, "Supported preview sizes: " + previewSizesString);
     }
 
-    double screenAspectRatio = (double) screenResolution.x / (double) screenResolution.y;
+    double screenAspectRatio = screenResolution.x / (double) screenResolution.y;
 
-    // Remove sizes that are unsuitable
-    Iterator<Camera.Size> it = supportedPreviewSizes.iterator();
-    while (it.hasNext()) {
-      Camera.Size supportedPreviewSize = it.next();
-      int realWidth = supportedPreviewSize.width;
-      int realHeight = supportedPreviewSize.height;
-      if (realWidth * realHeight < MIN_PREVIEW_PIXELS) {
-        it.remove();
+    // Find a suitable size, with max resolution
+    int maxResolution = 0;
+    Camera.Size maxResPreviewSize = null;
+    for (Camera.Size size : rawSupportedSizes) {
+      int realWidth = size.width;
+      int realHeight = size.height;
+      int resolution = realWidth * realHeight;
+      if (resolution < MIN_PREVIEW_PIXELS) {
         continue;
       }
 
       boolean isCandidatePortrait = realWidth < realHeight;
       int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
       int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
-      double aspectRatio = (double) maybeFlippedWidth / (double) maybeFlippedHeight;
+      double aspectRatio = maybeFlippedWidth / (double) maybeFlippedHeight;
       double distortion = Math.abs(aspectRatio - screenAspectRatio);
       if (distortion > MAX_ASPECT_DISTORTION) {
-        it.remove();
         continue;
       }
 
@@ -339,14 +317,19 @@ public final class CameraConfigurationUtils {
         Log.i(TAG, "Found preview size exactly matching screen size: " + exactPoint);
         return exactPoint;
       }
+
+      // Resolution is suitable; record the one with max resolution
+      if (resolution > maxResolution) {
+        maxResolution = resolution;
+        maxResPreviewSize = size;
+      }
     }
 
     // If no exact match, use largest preview size. This was not a great idea on older devices because
     // of the additional computation needed. We're likely to get here on newer Android 4+ devices, where
     // the CPU is much more powerful.
-    if (!supportedPreviewSizes.isEmpty()) {
-      Camera.Size largestPreview = supportedPreviewSizes.get(0);
-      Point largestSize = new Point(largestPreview.width, largestPreview.height);
+    if (maxResPreviewSize != null) {
+      Point largestSize = new Point(maxResPreviewSize.width, maxResPreviewSize.height);
       Log.i(TAG, "Using largest suitable preview size: " + largestSize);
       return largestSize;
     }
@@ -412,26 +395,25 @@ public final class CameraConfigurationUtils {
 
   public static String collectStats(CharSequence flattenedParams) {
     StringBuilder result = new StringBuilder(1000);
-
-    result.append("BOARD=").append(Build.BOARD).append('\n');
-    result.append("BRAND=").append(Build.BRAND).append('\n');
-    result.append("CPU_ABI=").append(Build.CPU_ABI).append('\n');
-    result.append("DEVICE=").append(Build.DEVICE).append('\n');
-    result.append("DISPLAY=").append(Build.DISPLAY).append('\n');
-    result.append("FINGERPRINT=").append(Build.FINGERPRINT).append('\n');
-    result.append("HOST=").append(Build.HOST).append('\n');
-    result.append("ID=").append(Build.ID).append('\n');
-    result.append("MANUFACTURER=").append(Build.MANUFACTURER).append('\n');
-    result.append("MODEL=").append(Build.MODEL).append('\n');
-    result.append("PRODUCT=").append(Build.PRODUCT).append('\n');
-    result.append("TAGS=").append(Build.TAGS).append('\n');
-    result.append("TIME=").append(Build.TIME).append('\n');
-    result.append("TYPE=").append(Build.TYPE).append('\n');
-    result.append("USER=").append(Build.USER).append('\n');
-    result.append("VERSION.CODENAME=").append(Build.VERSION.CODENAME).append('\n');
-    result.append("VERSION.INCREMENTAL=").append(Build.VERSION.INCREMENTAL).append('\n');
-    result.append("VERSION.RELEASE=").append(Build.VERSION.RELEASE).append('\n');
-    result.append("VERSION.SDK_INT=").append(Build.VERSION.SDK_INT).append('\n');
+    appendStat(result, "BOARD", Build.BOARD);
+    appendStat(result, "BRAND", Build.BRAND);
+    appendStat(result, "CPU_ABI", Build.CPU_ABI);
+    appendStat(result, "DEVICE", Build.DEVICE);
+    appendStat(result, "DISPLAY", Build.DISPLAY);
+    appendStat(result, "FINGERPRINT", Build.FINGERPRINT);
+    appendStat(result, "HOST", Build.HOST);
+    appendStat(result, "ID", Build.ID);
+    appendStat(result, "MANUFACTURER", Build.MANUFACTURER);
+    appendStat(result, "MODEL", Build.MODEL);
+    appendStat(result, "PRODUCT", Build.PRODUCT);
+    appendStat(result, "TAGS", Build.TAGS);
+    appendStat(result, "TIME", Build.TIME);
+    appendStat(result, "TYPE", Build.TYPE);
+    appendStat(result, "USER", Build.USER);
+    appendStat(result, "VERSION.CODENAME", Build.VERSION.CODENAME);
+    appendStat(result, "VERSION.INCREMENTAL", Build.VERSION.INCREMENTAL);
+    appendStat(result, "VERSION.RELEASE", Build.VERSION.RELEASE);
+    appendStat(result, "VERSION.SDK_INT", Build.VERSION.SDK_INT);
 
     if (flattenedParams != null) {
       String[] params = SEMICOLON.split(flattenedParams);
@@ -442,6 +424,10 @@ public final class CameraConfigurationUtils {
     }
 
     return result.toString();
+  }
+
+  private static void appendStat(StringBuilder builder, String stat, Object value) {
+    builder.append(stat).append('=').append(value).append('\n');
   }
 
 }

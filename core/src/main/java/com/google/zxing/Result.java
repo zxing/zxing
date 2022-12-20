@@ -28,6 +28,7 @@ public final class Result {
 
   private final String text;
   private final byte[] rawBytes;
+  private final int numBits;
   private ResultPoint[] resultPoints;
   private final BarcodeFormat format;
   private Map<ResultMetadataType,Object> resultMetadata;
@@ -45,8 +46,19 @@ public final class Result {
                 ResultPoint[] resultPoints,
                 BarcodeFormat format,
                 long timestamp) {
+    this(text, rawBytes, rawBytes == null ? 0 : 8 * rawBytes.length,
+         resultPoints, format, timestamp);
+  }
+
+  public Result(String text,
+                byte[] rawBytes,
+                int numBits,
+                ResultPoint[] resultPoints,
+                BarcodeFormat format,
+                long timestamp) {
     this.text = text;
     this.rawBytes = rawBytes;
+    this.numBits = numBits;
     this.resultPoints = resultPoints;
     this.format = format;
     this.resultMetadata = null;
@@ -65,6 +77,14 @@ public final class Result {
    */
   public byte[] getRawBytes() {
     return rawBytes;
+  }
+
+  /**
+   * @return how many bits of {@link #getRawBytes()} are valid; typically 8 times its length
+   * @since 3.3.0
+   */
+  public int getNumBits() {
+    return numBits;
   }
 
   /**

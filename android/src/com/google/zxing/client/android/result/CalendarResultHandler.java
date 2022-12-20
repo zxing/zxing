@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * Handles calendar entries encoded in QR Codes.
@@ -72,9 +71,9 @@ public final class CalendarResultHandler extends ResultHandler {
       }
 
       addCalendarEvent(calendarResult.getSummary(),
-                       calendarResult.getStart(),
+                       calendarResult.getStartTimestamp(),
                        calendarResult.isStartAllDay(),
-                       calendarResult.getEnd(),
+                       calendarResult.getEndTimestamp(),
                        calendarResult.getLocation(),
                        description,
                        calendarResult.getAttendees());
@@ -88,37 +87,33 @@ public final class CalendarResultHandler extends ResultHandler {
    * @param summary A description of the event
    * @param start   The start time
    * @param allDay  if true, event is considered to be all day starting from start time
-   * @param end     The end time (optional)
+   * @param end     The end time (optional; can be < 0 if not specified)
    * @param location a text description of the event location
    * @param description a text description of the event itself
    * @param attendees attendees to invite
    */
   private void addCalendarEvent(String summary,
-                                Date start,
+                                long start,
                                 boolean allDay,
-                                Date end,
+                                long end,
                                 String location,
                                 String description,
                                 String[] attendees) {
     Intent intent = new Intent(Intent.ACTION_INSERT);
     intent.setType("vnd.android.cursor.item/event");
-    long startMilliseconds = start.getTime();
-    intent.putExtra("beginTime", startMilliseconds);
+    intent.putExtra("beginTime", start);
     if (allDay) {
       intent.putExtra("allDay", true);
     }
-    long endMilliseconds;
-    if (end == null) {
+    if (end < 0L) {
       if (allDay) {
         // + 1 day
-        endMilliseconds = startMilliseconds + 24 * 60 * 60 * 1000;
+        end = start + 24 * 60 * 60 * 1000;
       } else {
-        endMilliseconds = startMilliseconds;
+        end = start;
       }
-    } else {
-      endMilliseconds = end.getTime();
     }
-    intent.putExtra("endTime", endMilliseconds);
+    intent.putExtra("endTime", end);
     intent.putExtra("title", summary);
     intent.putExtra("eventLocation", location);
     intent.putExtra("description", description);
@@ -147,17 +142,17 @@ public final class CalendarResultHandler extends ResultHandler {
 
     ParsedResult.maybeAppend(calResult.getSummary(), result);
 
-    Date start = calResult.getStart();
+    long start = calResult.getStartTimestamp();
     ParsedResult.maybeAppend(format(calResult.isStartAllDay(), start), result);
 
-    Date end = calResult.getEnd();
-    if (end != null) {
-      if (calResult.isEndAllDay() && !start.equals(end)) {
+    long end = calResult.getEndTimestamp();
+    if (end >= 0L) {
+      if (calResult.isEndAllDay() && start != end) {
         // Show only year/month/day
         // if it's all-day and this is the end date, it's exclusive, so show the user
         // that it ends on the day before to make more intuitive sense.
         // But don't do it if the event already (incorrectly?) specifies the same start/end
-        end = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+        end -= 24 * 60 * 60 * 1000;
       }
       ParsedResult.maybeAppend(format(calResult.isEndAllDay(), end), result);
     }
@@ -169,8 +164,8 @@ public final class CalendarResultHandler extends ResultHandler {
     return result.toString();
   }
 
-  private static String format(boolean allDay, Date date) {
-    if (date == null) {
+  private static String format(boolean allDay, long date) {
+    if (date < 0L) {
       return null;
     }
     DateFormat format = allDay

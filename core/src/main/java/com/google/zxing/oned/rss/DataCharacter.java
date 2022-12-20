@@ -16,6 +16,9 @@
 
 package com.google.zxing.oned.rss;
 
+/**
+ * Encapsulates a since character value in an RSS barcode, including its checksum information.
+ */
 public class DataCharacter {
 
   private final int value;
@@ -38,10 +41,10 @@ public class DataCharacter {
   public final String toString() {
     return value + "(" + checksumPortion + ')';
   }
-  
+
   @Override
   public final boolean equals(Object o) {
-    if(!(o instanceof DataCharacter)) {
+    if (!(o instanceof DataCharacter)) {
       return false;
     }
     DataCharacter that = (DataCharacter) o;

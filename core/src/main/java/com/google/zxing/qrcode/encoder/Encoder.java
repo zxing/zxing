@@ -19,6 +19,7 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
@@ -26,7 +27,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -47,7 +49,7 @@ public final class Encoder {
       25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
   };
 
-  static final String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
+  static final Charset DEFAULT_BYTE_MODE_ENCODING = StandardCharsets.ISO_8859_1;
 
   private Encoder() {
   }
@@ -76,59 +78,83 @@ public final class Encoder {
                               ErrorCorrectionLevel ecLevel,
                               Map<EncodeHintType,?> hints) throws WriterException {
 
+    Version version;
+    BitArray headerAndDataBits;
+    Mode mode;
+
+    boolean hasGS1FormatHint = hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT) &&
+        Boolean.parseBoolean(hints.get(EncodeHintType.GS1_FORMAT).toString());
+    boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.QR_COMPACT) &&
+        Boolean.parseBoolean(hints.get(EncodeHintType.QR_COMPACT).toString());
+
     // Determine what character encoding has been specified by the caller, if any
-    String encoding = DEFAULT_BYTE_MODE_ENCODING;
-    if (hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET)) {
-      encoding = hints.get(EncodeHintType.CHARACTER_SET).toString();
+    Charset encoding = DEFAULT_BYTE_MODE_ENCODING;
+    boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
+    if (hasEncodingHint) {
+      encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
     }
 
-    // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
-    // multiple modes / segments even if that were more efficient. Twould be nice.
-    Mode mode = chooseMode(content, encoding);
+    if (hasCompactionHint) {
+      mode = Mode.BYTE;
 
-    // This will store the header information, like mode and
-    // length, as well as "header" segments like an ECI segment.
-    BitArray headerBits = new BitArray();
+      Charset priorityEncoding = encoding.equals(DEFAULT_BYTE_MODE_ENCODING) ? null : encoding;
+      MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, priorityEncoding, hasGS1FormatHint, ecLevel);
 
-    // Append ECI segment if applicable
-    if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.equals(encoding)) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
-      if (eci != null) {
-        appendECI(eci, headerBits);
+      headerAndDataBits = new BitArray();
+      rn.getBits(headerAndDataBits);
+      version = rn.getVersion();
+
+    } else {
+    
+      // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
+      // multiple modes / segments even if that were more efficient.
+      mode = chooseMode(content, encoding);
+  
+      // This will store the header information, like mode and
+      // length, as well as "header" segments like an ECI segment.
+      BitArray headerBits = new BitArray();
+  
+      // Append ECI segment if applicable
+      if (mode == Mode.BYTE && hasEncodingHint) {
+        CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
+        if (eci != null) {
+          appendECI(eci, headerBits);
+        }
       }
+  
+      // Append the FNC1 mode header for GS1 formatted data if applicable
+      if (hasGS1FormatHint) {
+        // GS1 formatted codes are prefixed with a FNC1 in first position mode header
+        appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
+      }
+    
+      // (With ECI in place,) Write the mode marker
+      appendModeInfo(mode, headerBits);
+  
+      // Collect data within the main segment, separately, to count its size if needed. Don't add it to
+      // main payload yet.
+      BitArray dataBits = new BitArray();
+      appendBytes(content, mode, dataBits, encoding);
+  
+      if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
+        int versionNumber = Integer.parseInt(hints.get(EncodeHintType.QR_VERSION).toString());
+        version = Version.getVersionForNumber(versionNumber);
+        int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
+        if (!willFit(bitsNeeded, version, ecLevel)) {
+          throw new WriterException("Data too big for requested version");
+        }
+      } else {
+        version = recommendVersion(ecLevel, mode, headerBits, dataBits);
+      }
+    
+      headerAndDataBits = new BitArray();
+      headerAndDataBits.appendBitArray(headerBits);
+      // Find "length" of main segment and write it
+      int numLetters = mode == Mode.BYTE ? dataBits.getSizeInBytes() : content.length();
+      appendLengthInfo(numLetters, version, mode, headerAndDataBits);
+      // Put data together into the overall payload
+      headerAndDataBits.appendBitArray(dataBits);
     }
-
-    // (With ECI in place,) Write the mode marker
-    appendModeInfo(mode, headerBits);
-
-    // Collect data within the main segment, separately, to count its size if needed. Don't add it to
-    // main payload yet.
-    BitArray dataBits = new BitArray();
-    appendBytes(content, mode, dataBits, encoding);
-
-    // Hard part: need to know version to know how many bits length takes. But need to know how many
-    // bits it takes to know version. First we take a guess at version by assuming version will be
-    // the minimum, 1:
-
-    int provisionalBitsNeeded = headerBits.getSize()
-        + mode.getCharacterCountBits(Version.getVersionForNumber(1))
-        + dataBits.getSize();
-    Version provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
-
-    // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
-
-    int bitsNeeded = headerBits.getSize()
-        + mode.getCharacterCountBits(provisionalVersion)
-        + dataBits.getSize();
-    Version version = chooseVersion(bitsNeeded, ecLevel);
-
-    BitArray headerAndDataBits = new BitArray();
-    headerAndDataBits.appendBitArray(headerBits);
-    // Find "length" of main segment and write it
-    int numLetters = mode == Mode.BYTE ? dataBits.getSizeInBytes() : content.length();
-    appendLengthInfo(numLetters, version, mode, headerAndDataBits);
-    // Put data together into the overall payload
-    headerAndDataBits.appendBitArray(dataBits);
 
     Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
     int numDataBytes = version.getTotalCodewords() - ecBlocks.getTotalECCodewords();
@@ -151,7 +177,17 @@ public final class Encoder {
     //  Choose the mask pattern and set to "qrCode".
     int dimension = version.getDimensionForVersion();
     ByteMatrix matrix = new ByteMatrix(dimension, dimension);
-    int maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+
+    // Enable manual selection of the pattern to be used via hint
+    int maskPattern = -1;
+    if (hints != null && hints.containsKey(EncodeHintType.QR_MASK_PATTERN)) {
+      int hintMaskPattern = Integer.parseInt(hints.get(EncodeHintType.QR_MASK_PATTERN).toString());
+      maskPattern = QRCode.isValidMaskPattern(hintMaskPattern) ? hintMaskPattern : -1;
+    }
+
+    if (maskPattern == -1) {
+      maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+    }
     qrCode.setMaskPattern(maskPattern);
 
     // Build the matrix and set it to "qrCode".
@@ -159,6 +195,33 @@ public final class Encoder {
     qrCode.setMatrix(matrix);
 
     return qrCode;
+  }
+
+  /**
+   * Decides the smallest version of QR code that will contain all of the provided data.
+   *
+   * @throws WriterException if the data cannot fit in any version
+   */
+  private static Version recommendVersion(ErrorCorrectionLevel ecLevel,
+                                          Mode mode,
+                                          BitArray headerBits,
+                                          BitArray dataBits) throws WriterException {
+    // Hard part: need to know version to know how many bits length takes. But need to know how many
+    // bits it takes to know version. First we take a guess at version by assuming version will be
+    // the minimum, 1:
+    int provisionalBitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, Version.getVersionForNumber(1));
+    Version provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
+
+    // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
+    int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, provisionalVersion);
+    return chooseVersion(bitsNeeded, ecLevel);
+  }
+
+  private static int calculateBitsNeeded(Mode mode,
+                                         BitArray headerBits,
+                                         BitArray dataBits,
+                                         Version version) {
+    return headerBits.getSize() + mode.getCharacterCountBits(version) + dataBits.getSize();
   }
 
   /**
@@ -180,8 +243,8 @@ public final class Encoder {
    * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
-  private static Mode chooseMode(String content, String encoding) {
-    if ("Shift_JIS".equals(encoding) && isOnlyDoubleByteKanji(content)) {
+  private static Mode chooseMode(String content, Charset encoding) {
+    if (StringUtils.SHIFT_JIS_CHARSET.equals(encoding) && isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
       return Mode.KANJI;
     }
@@ -206,13 +269,8 @@ public final class Encoder {
     return Mode.BYTE;
   }
 
-  private static boolean isOnlyDoubleByteKanji(String content) {
-    byte[] bytes;
-    try {
-      bytes = content.getBytes("Shift_JIS");
-    } catch (UnsupportedEncodingException ignored) {
-      return false;
-    }
+  static boolean isOnlyDoubleByteKanji(String content) {
+    byte[] bytes = content.getBytes(StringUtils.SHIFT_JIS_CHARSET);
     int length = bytes.length;
     if (length % 2 != 0) {
       return false;
@@ -246,22 +304,30 @@ public final class Encoder {
   }
 
   private static Version chooseVersion(int numInputBits, ErrorCorrectionLevel ecLevel) throws WriterException {
-    // In the following comments, we use numbers of Version 7-H.
     for (int versionNum = 1; versionNum <= 40; versionNum++) {
       Version version = Version.getVersionForNumber(versionNum);
-      // numBytes = 196
-      int numBytes = version.getTotalCodewords();
-      // getNumECBytes = 130
-      Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
-      int numEcBytes = ecBlocks.getTotalECCodewords();
-      // getNumDataBytes = 196 - 130 = 66
-      int numDataBytes = numBytes - numEcBytes;
-      int totalInputBytes = (numInputBits + 7) / 8;
-      if (numDataBytes >= totalInputBytes) {
+      if (willFit(numInputBits, version, ecLevel)) {
         return version;
       }
     }
     throw new WriterException("Data too big");
+  }
+
+  /**
+   * @return true if the number of input bits will fit in a code with the specified version and
+   * error correction level.
+   */
+  static boolean willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
+    // In the following comments, we use numbers of Version 7-H.
+    // numBytes = 196
+    int numBytes = version.getTotalCodewords();
+    // getNumECBytes = 130
+    Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
+    int numEcBytes = ecBlocks.getTotalECCodewords();
+    // getNumDataBytes = 196 - 130 = 66
+    int numDataBytes = numBytes - numEcBytes;
+    int totalInputBytes = (numInputBits + 7) / 8;
+    return numDataBytes >= totalInputBytes;
   }
 
   /**
@@ -273,12 +339,13 @@ public final class Encoder {
       throw new WriterException("data bits cannot fit in the QR Code" + bits.getSize() + " > " +
           capacity);
     }
+    // Append Mode.TERMINATE if there is enough space (value is 0000)
     for (int i = 0; i < 4 && bits.getSize() < capacity; ++i) {
       bits.appendBit(false);
     }
     // Append termination bits. See 8.4.8 of JISX0510:2004 (p.24) for details.
     // If the last byte isn't 8-bit aligned, we'll add padding bits.
-    int numBitsInLastByte = bits.getSize() & 0x07;    
+    int numBitsInLastByte = bits.getSize() & 0x07;
     if (numBitsInLastByte > 0) {
       for (int i = numBitsInLastByte; i < 8; i++) {
         bits.appendBit(false);
@@ -383,7 +450,7 @@ public final class Encoder {
 
       int size = numDataBytesInBlock[0];
       byte[] dataBytes = new byte[size];
-      bits.toBytes(8*dataBytesOffset, dataBytes, 0, size);
+      bits.toBytes(8 * dataBytesOffset, dataBytes, 0, size);
       byte[] ecBytes = generateECBytes(dataBytes, numEcBytesInBlock[0]);
       blocks.add(new BlockPair(dataBytes, ecBytes));
 
@@ -463,7 +530,7 @@ public final class Encoder {
   static void appendBytes(String content,
                           Mode mode,
                           BitArray bits,
-                          String encoding) throws WriterException {
+                          Charset encoding) throws WriterException {
     switch (mode) {
       case NUMERIC:
         appendNumericBytes(content, bits);
@@ -530,28 +597,20 @@ public final class Encoder {
     }
   }
 
-  static void append8BitBytes(String content, BitArray bits, String encoding)
-      throws WriterException {
-    byte[] bytes;
-    try {
-      bytes = content.getBytes(encoding);
-    } catch (UnsupportedEncodingException uee) {
-      throw new WriterException(uee);
-    }
+  static void append8BitBytes(String content, BitArray bits, Charset encoding) {
+    byte[] bytes = content.getBytes(encoding);
     for (byte b : bytes) {
       bits.appendBits(b, 8);
     }
   }
 
   static void appendKanjiBytes(String content, BitArray bits) throws WriterException {
-    byte[] bytes;
-    try {
-      bytes = content.getBytes("Shift_JIS");
-    } catch (UnsupportedEncodingException uee) {
-      throw new WriterException(uee);
+    byte[] bytes = content.getBytes(StringUtils.SHIFT_JIS_CHARSET);
+    if (bytes.length % 2 != 0) {
+      throw new WriterException("Kanji byte size not even");
     }
-    int length = bytes.length;
-    for (int i = 0; i < length; i += 2) {
+    int maxI = bytes.length - 1; // bytes.length must be even
+    for (int i = 0; i < maxI; i += 2) {
       int byte1 = bytes[i] & 0xFF;
       int byte2 = bytes[i + 1] & 0xFF;
       int code = (byte1 << 8) | byte2;

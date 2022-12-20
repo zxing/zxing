@@ -34,7 +34,7 @@ final class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
   private final Context activity;
 
   HistoryItemAdapter(Context activity) {
-    super(activity, R.layout.history_list_item, new ArrayList<HistoryItem>());
+    super(activity, R.layout.history_list_item, new ArrayList<>());
     this.activity = activity;
   }
 

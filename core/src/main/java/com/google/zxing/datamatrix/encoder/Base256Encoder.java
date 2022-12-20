@@ -35,7 +35,8 @@ final class Base256Encoder implements Encoder {
 
       int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
       if (newMode != getEncodingMode()) {
-        context.signalEncoderChange(newMode);
+        // Return to ASCII encodation, which will actually handle latch to new mode
+        context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
         break;
       }
     }
@@ -47,7 +48,7 @@ final class Base256Encoder implements Encoder {
     if (context.hasMoreCharacters() || mustPad) {
       if (dataCount <= 249) {
         buffer.setCharAt(0, (char) dataCount);
-      } else if (dataCount > 249 && dataCount <= 1555) {
+      } else if (dataCount <= 1555) {
         buffer.setCharAt(0, (char) ((dataCount / 250) + 249));
         buffer.insert(1, (char) (dataCount % 250));
       } else {
@@ -60,7 +61,7 @@ final class Base256Encoder implements Encoder {
           buffer.charAt(i), context.getCodewordCount() + 1));
     }
   }
-  
+
   private static char randomize255State(char ch, int codewordPosition) {
     int pseudoRandom = ((149 * codewordPosition) % 255) + 1;
     int tempVariable = ch + pseudoRandom;

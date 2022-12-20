@@ -52,7 +52,7 @@ final class DataBlock {
     int totalBlocks = 0;
     Version.ECB[] ecBlockArray = ecBlocks.getECBlocks();
     for (Version.ECB ecBlock : ecBlockArray) {
-       totalBlocks += ecBlock.getCount();
+      totalBlocks += ecBlock.getCount();
     }
 
     // Now establish DataBlocks of the appropriate size and number of data codewords
@@ -82,14 +82,14 @@ final class DataBlock {
         result[j].codewords[i] = rawCodewords[rawCodewordsOffset++];
       }
     }
-    
+
     // Fill out the last data block in the longer ones
     boolean specialVersion = version.getVersionNumber() == 24;
     int numLongerBlocks = specialVersion ? 8 : numResultBlocks;
     for (int j = 0; j < numLongerBlocks; j++) {
       result[j].codewords[longerBlocksNumDataCodewords - 1] = rawCodewords[rawCodewordsOffset++];
     }
-    
+
     // Now add in error correction blocks
     int max = result[0].codewords.length;
     for (int i = longerBlocksNumDataCodewords; i < max; i++) {

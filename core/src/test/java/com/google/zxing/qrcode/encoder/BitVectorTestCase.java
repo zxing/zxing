@@ -26,9 +26,9 @@ import org.junit.Test;
  */
 public final class BitVectorTestCase extends Assert {
 
-  private static long getUnsignedInt(BitArray v, int index) {
+  private static long getUnsignedInt(BitArray v) {
     long result = 0L;
-    for (int i = 0, offset = index * 8; i < 32; i++) {
+    for (int i = 0, offset = 0; i < 32; i++) {
       if (v.get(offset + i)) {
         result |= 1L << (31 - i);
       }
@@ -43,43 +43,43 @@ public final class BitVectorTestCase extends Assert {
     // 1
     v.appendBit(true);
     assertEquals(1, v.getSize());
-    assertEquals(0x80000000L, getUnsignedInt(v, 0));
+    assertEquals(0x80000000L, getUnsignedInt(v));
     // 10
     v.appendBit(false);
     assertEquals(2, v.getSize());
-    assertEquals(0x80000000L, getUnsignedInt(v, 0));
+    assertEquals(0x80000000L, getUnsignedInt(v));
     // 101
     v.appendBit(true);
     assertEquals(3, v.getSize());
-    assertEquals(0xa0000000L, getUnsignedInt(v, 0));
+    assertEquals(0xa0000000L, getUnsignedInt(v));
     // 1010
     v.appendBit(false);
     assertEquals(4, v.getSize());
-    assertEquals(0xa0000000L, getUnsignedInt(v, 0));
+    assertEquals(0xa0000000L, getUnsignedInt(v));
     // 10101
     v.appendBit(true);
     assertEquals(5, v.getSize());
-    assertEquals(0xa8000000L, getUnsignedInt(v, 0));
+    assertEquals(0xa8000000L, getUnsignedInt(v));
     // 101010
     v.appendBit(false);
     assertEquals(6, v.getSize());
-    assertEquals(0xa8000000L, getUnsignedInt(v, 0));
+    assertEquals(0xa8000000L, getUnsignedInt(v));
     // 1010101
     v.appendBit(true);
     assertEquals(7, v.getSize());
-    assertEquals(0xaa000000L, getUnsignedInt(v, 0));
+    assertEquals(0xaa000000L, getUnsignedInt(v));
     // 10101010
     v.appendBit(false);
     assertEquals(8, v.getSize());
-    assertEquals(0xaa000000L, getUnsignedInt(v, 0));
+    assertEquals(0xaa000000L, getUnsignedInt(v));
     // 10101010 1
     v.appendBit(true);
     assertEquals(9, v.getSize());
-    assertEquals(0xaa800000L, getUnsignedInt(v, 0));
+    assertEquals(0xaa800000L, getUnsignedInt(v));
     // 10101010 10
     v.appendBit(false);
     assertEquals(10, v.getSize());
-    assertEquals(0xaa800000L, getUnsignedInt(v, 0));
+    assertEquals(0xaa800000L, getUnsignedInt(v));
   }
 
   @Test
@@ -87,15 +87,15 @@ public final class BitVectorTestCase extends Assert {
     BitArray v = new BitArray();
     v.appendBits(0x1, 1);
     assertEquals(1, v.getSize());
-    assertEquals(0x80000000L, getUnsignedInt(v, 0));
+    assertEquals(0x80000000L, getUnsignedInt(v));
     v = new BitArray();
     v.appendBits(0xff, 8);
     assertEquals(8, v.getSize());
-    assertEquals(0xff000000L, getUnsignedInt(v, 0));
+    assertEquals(0xff000000L, getUnsignedInt(v));
     v = new BitArray();
     v.appendBits(0xff7, 12);
     assertEquals(12, v.getSize());
-    assertEquals(0xff700000L, getUnsignedInt(v, 0));
+    assertEquals(0xff700000L, getUnsignedInt(v));
   }
 
   @Test
@@ -132,7 +132,7 @@ public final class BitVectorTestCase extends Assert {
     BitArray v2 = new BitArray();
     v2.appendBits(0xaaaa5555, 32);
     v1.xor(v2);
-    assertEquals(0xffffffffL, getUnsignedInt(v1, 0));
+    assertEquals(0xffffffffL, getUnsignedInt(v1));
   }
 
   @Test
@@ -142,7 +142,7 @@ public final class BitVectorTestCase extends Assert {
     BitArray v2 = new BitArray();
     v2.appendBits(0x55, 7);  // 101 0101
     v1.xor(v2);
-    assertEquals(0xfe000000L, getUnsignedInt(v1, 0));  // 1111 1110
+    assertEquals(0xfe000000L, getUnsignedInt(v1));  // 1111 1110
   }
 
   @Test

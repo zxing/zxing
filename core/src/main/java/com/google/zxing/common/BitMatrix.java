@@ -35,16 +35,26 @@ import java.util.Arrays;
  */
 public final class BitMatrix implements Cloneable {
 
-  private final int width;
-  private final int height;
-  private final int rowSize;
-  private final int[] bits;
+  private int width;
+  private int height;
+  private int rowSize;
+  private int[] bits;
 
-  // A helper to construct a square matrix.
+  /**
+   * Creates an empty square {@code BitMatrix}.
+   *
+   * @param dimension height and width
+   */
   public BitMatrix(int dimension) {
     this(dimension, dimension);
   }
 
+  /**
+   * Creates an empty {@code BitMatrix}.
+   *
+   * @param width bit matrix width
+   * @param height bit matrix height
+   */
   public BitMatrix(int width, int height) {
     if (width < 1 || height < 1) {
       throw new IllegalArgumentException("Both dimensions must be greater than 0");
@@ -60,6 +70,27 @@ public final class BitMatrix implements Cloneable {
     this.height = height;
     this.rowSize = rowSize;
     this.bits = bits;
+  }
+
+  /**
+   * Interprets a 2D array of booleans as a {@code BitMatrix}, where "true" means an "on" bit.
+   *
+   * @param image bits of the image, as a row-major 2D array. Elements are arrays representing rows
+   * @return {@code BitMatrix} representation of image
+   */
+  public static BitMatrix parse(boolean[][] image) {
+    int height = image.length;
+    int width = image[0].length;
+    BitMatrix bits = new BitMatrix(width, height);
+    for (int i = 0; i < height; i++) {
+      boolean[] imageI = image[i];
+      for (int j = 0; j < width; j++) {
+        if (imageI[j]) {
+          bits.set(j, i);
+        }
+      }
+    }
+    return bits;
   }
 
   public static BitMatrix parse(String stringRepresentation, String setString, String unsetString) {
@@ -86,11 +117,11 @@ public final class BitMatrix implements Cloneable {
           nRows++;
         }
         pos++;
-      }  else if (stringRepresentation.substring(pos, pos + setString.length()).equals(setString)) {
+      }  else if (stringRepresentation.startsWith(setString, pos)) {
         pos += setString.length();
         bits[bitsPos] = true;
         bitsPos++;
-      } else if (stringRepresentation.substring(pos, pos + unsetString.length()).equals(unsetString)) {
+      } else if (stringRepresentation.startsWith(unsetString, pos)) {
         pos += unsetString.length();
         bits[bitsPos] = false;
         bitsPos++;
@@ -102,7 +133,7 @@ public final class BitMatrix implements Cloneable {
 
     // no EOL at end?
     if (bitsPos > rowStartPos) {
-      if(rowLength == -1) {
+      if (rowLength == -1) {
         rowLength = bitsPos - rowStartPos;
       } else if (bitsPos - rowStartPos != rowLength) {
         throw new IllegalArgumentException("row lengths do not match");
@@ -159,17 +190,26 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * <p>Flips every bit in the matrix.</p>
+   */
+  public void flip() {
+    int max = bits.length;
+    for (int i = 0; i < max; i++) {
+      bits[i] = ~bits[i];
+    }
+  }
+
+  /**
    * Exclusive-or (XOR): Flip the bit in this {@code BitMatrix} if the corresponding
    * mask bit is set.
    *
    * @param mask XOR mask
    */
   public void xor(BitMatrix mask) {
-    if (width != mask.getWidth() || height != mask.getHeight()
-        || rowSize != mask.getRowSize()) {
+    if (width != mask.width || height != mask.height || rowSize != mask.rowSize) {
       throw new IllegalArgumentException("input matrix dimensions do not match");
     }
-    BitArray rowArray = new BitArray(width / 32 + 1);
+    BitArray rowArray = new BitArray(width);
     for (int y = 0; y < height; y++) {
       int offset = y * rowSize;
       int[] row = mask.getRow(y, rowArray).getBitArray();
@@ -247,21 +287,68 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * Modifies this {@code BitMatrix} to represent the same but rotated the given degrees (0, 90, 180, 270)
+   *
+   * @param degrees number of degrees to rotate through counter-clockwise (0, 90, 180, 270)
+   */
+  public void rotate(int degrees) {
+    switch (degrees % 360) {
+      case 0:
+        return;
+      case 90:
+        rotate90();
+        return;
+      case 180:
+        rotate180();
+        return;
+      case 270:
+        rotate90();
+        rotate180();
+        return;
+    }
+    throw new IllegalArgumentException("degrees must be a multiple of 0, 90, 180, or 270");
+  }
+
+  /**
    * Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
    */
   public void rotate180() {
-    int width = getWidth();
-    int height = getHeight();
     BitArray topRow = new BitArray(width);
     BitArray bottomRow = new BitArray(width);
-    for (int i = 0; i < (height+1) / 2; i++) {
+    int maxHeight = (height + 1) / 2;
+    for (int i = 0; i < maxHeight; i++) {
       topRow = getRow(i, topRow);
-      bottomRow = getRow(height - 1 - i, bottomRow);
+      int bottomRowIndex = height - 1 - i;
+      bottomRow = getRow(bottomRowIndex, bottomRow);
       topRow.reverse();
       bottomRow.reverse();
       setRow(i, bottomRow);
-      setRow(height - 1 - i, topRow);
+      setRow(bottomRowIndex, topRow);
     }
+  }
+
+  /**
+   * Modifies this {@code BitMatrix} to represent the same but rotated 90 degrees counterclockwise
+   */
+  public void rotate90() {
+    int newWidth = height;
+    int newHeight = width;
+    int newRowSize = (newWidth + 31) / 32;
+    int[] newBits = new int[newRowSize * newHeight];
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        int offset = y * rowSize + (x / 32);
+        if (((bits[offset] >>> (x & 0x1f)) & 1) != 0) {
+          int newOffset = (newHeight - 1 - x) * newRowSize + (y / 32);
+          newBits[newOffset] |= 1 << (y & 0x1f);
+        }
+      }
+    }
+    width = newWidth;
+    height = newHeight;
+    rowSize = newRowSize;
+    bits = newBits;
   }
 
   /**
@@ -307,14 +394,11 @@ public final class BitMatrix implements Cloneable {
       }
     }
 
-    int width = right - left;
-    int height = bottom - top;
-
-    if (width < 0 || height < 0) {
+    if (right < left || bottom < top) {
       return null;
     }
 
-    return new int[] {left, top, width, height};
+    return new int[] {left, top, right - left + 1, bottom - top + 1};
   }
 
   /**
@@ -335,7 +419,7 @@ public final class BitMatrix implements Cloneable {
 
     int theBits = bits[bitsOffset];
     int bit = 0;
-    while ((theBits << (31-bit)) == 0) {
+    while ((theBits << (31 - bit)) == 0) {
       bit++;
     }
     x += bit;
@@ -401,7 +485,7 @@ public final class BitMatrix implements Cloneable {
     hash = 31 * hash + width;
     hash = 31 * hash + height;
     hash = 31 * hash + rowSize;
-     hash = 31 * hash + Arrays.hashCode(bits);
+    hash = 31 * hash + Arrays.hashCode(bits);
     return hash;
   }
 
@@ -419,7 +503,7 @@ public final class BitMatrix implements Cloneable {
    * @return string representation of entire matrix utilizing given strings
    */
   public String toString(String setString, String unsetString) {
-    return toString(setString, unsetString, "\n");
+    return buildToString(setString, unsetString, "\n");
   }
 
   /**
@@ -431,6 +515,10 @@ public final class BitMatrix implements Cloneable {
    */
   @Deprecated
   public String toString(String setString, String unsetString, String lineSeparator) {
+    return buildToString(setString, unsetString, lineSeparator);
+  }
+
+  private String buildToString(String setString, String unsetString, String lineSeparator) {
     StringBuilder result = new StringBuilder(height * (width + 1));
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {

@@ -58,13 +58,7 @@ public class ResultPoint {
 
   @Override
   public final String toString() {
-    StringBuilder result = new StringBuilder(25);
-    result.append('(');
-    result.append(x);
-    result.append(',');
-    result.append(y);
-    result.append(')');
-    return result.toString();
+    return "(" + x + ',' + y + ')';
   }
 
   /**
@@ -113,7 +107,6 @@ public class ResultPoint {
     patterns[2] = pointC;
   }
 
-
   /**
    * @param pattern1 first pattern
    * @param pattern2 second pattern
@@ -133,6 +126,5 @@ public class ResultPoint {
     float bY = pointB.y;
     return ((pointC.x - bX) * (pointA.y - bY)) - ((pointC.y - bY) * (pointA.x - bX));
   }
-
 
 }

@@ -1,6 +1,14 @@
 <img align="right" src="https://raw.github.com/wiki/zxing/zxing/zxing-logo.png"/>
 
-##Get Started Developing
+## Project in Maintenance Mode Only
+
+The project is in maintenance mode, meaning, changes are driven by contributed patches.
+Only bug fixes and minor enhancements will be considered. The Barcode Scanner app can
+no longer be published, so it's unlikely any changes will be accepted for it.
+There is otherwise no active development or roadmap for this project. It is "DIY".
+
+## Get Started Developing
+
 To get started, please visit: https://github.com/zxing/zxing/wiki/Getting-Started-Developing
 
 ZXing ("zebra crossing") is an open-source, multi-format 1D/2D barcode image processing
@@ -8,15 +16,15 @@ library implemented in Java, with ports to other languages.
 
 ## Supported Formats
 
-| 1D product | 1D industrial | 2D
-| ---------- | ------------- | --------------
-| UPC-A      | Code 39       | QR Code
-| UPC-E      | Code 93       | Data Matrix
-| EAN-8      | Code 128      | Aztec (beta)
-| EAN-13     | Codabar       | PDF 417 (beta)
-|            | ITF           |
-|            | RSS-14        |
-|            | RSS-Expanded  |
+| 1D product            | 1D industrial | 2D             |
+|:----------------------|:--------------|:---------------|
+| UPC-A                 | Code 39       | QR Code        |
+| UPC-E                 | Code 93       | Data Matrix    |
+| EAN-8                 | Code 128      | Aztec          |
+| EAN-13                | Codabar       | PDF 417        |
+| UPC/EAN Extension 2/5 | ITF           | MaxiCode       |
+|                       |               | RSS-14         |
+|                       |               | RSS-Expanded   |
 
 ## Components
 
@@ -26,11 +34,9 @@ library implemented in Java, with ports to other languages.
 | ------------------- | -----------
 | core                | The core image decoding library, and test code
 | javase              | JavaSE-specific client code
-| android             | Android client Barcode Scanner [![Barcode Scanner](http://www.android.com/images/brand/android_app_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
-| androidtest         | Android test app, ZXing Test
+| android             | Android client Barcode Scanner [<img height='62' width='161' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
 | android-integration | Supports integration with Barcode Scanner via `Intent`
-| android-core        | Android-related code shared among `android`, `androidtest`, `glass`
-| glass               | Simple Google Glass application
+| android-core        | Android-related code shared among `android`, other Android apps
 | zxingorg            | The source behind `zxing.org`
 | zxing.appspot.com   | The source behind web-based barcode generator at `zxing.appspot.com`
 
@@ -46,41 +52,52 @@ library implemented in Java, with ports to other languages.
 
 ### ZXing-based third-party open source projects
 
-| Module                                                          | Description
-| --------------------------------------------------------------- | -----------
-| [QZXing](https://sourceforge.net/projects/qzxing)               | port to Qt framework
-| [zxing-cpp](https://github.com/glassechidna/zxing-cpp)          | port to C++ (forked from the [deprecated official C++ port](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/cpp))
-| [zxing_cpp.rb](https://github.com/glassechidna/zxing_cpp.rb)    | bindings for Ruby (not just JRuby), powered by [zxing-cpp](https://github.com/glassechidna/zxing-cpp)
-| [python-zxing](https://github.com/oostendo/python-zxing)        | bindings for Python
-| [ZXing .NET](http://zxingnet.codeplex.com/)                     | port to .NET and C#, and related Windows platform
+| Module                                                                                    | Description
+| ----------------------------------------------------------------------------------------- | -----------
+| [SCodes](https://github.com/scytheStudio/SCodes)                                          | Qt & Qml wrapper
+| [QZXing](https://github.com/ftylitak/qzxing)                                              | port to Qt framework
+| [glassechidna/zxing-cpp](https://github.com/glassechidna/zxing-cpp)                       | port to C++ (forked from the [deprecated official C++ port](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/cpp))
+| [zxing-cpp/zxing-cpp](https://github.com/zxing-cpp/zxing-cpp)                             | latest/active port to C++, includes Android, iOS, Python, WASM and WinRT wrappers
+| [zxing_cpp.rb](https://github.com/glassechidna/zxing_cpp.rb)                              | bindings for Ruby (not just JRuby), powered by [zxing-cpp](https://github.com/glassechidna/zxing-cpp)
+| [jsqrcode](https://github.com/LazarSoft/jsqrcode)                                         | port to JavaScript
+| [python-zxing](https://github.com/oostendo/python-zxing)                                  | bindings for Python
+| [ZXing .NET](https://github.com/micjahn/ZXing.Net)                                        | port to .NET and C#, and related Windows platform
+| [php-qrcode-detector-decoder](https://github.com/khanamiryan/php-qrcode-detector-decoder) | port to PHP
+| [ZXing Delphi](https://github.com/Spelt/ZXing.Delphi)                                     | Port to native Delphi object pascal, targeted at Firemonkey compatible devices (IOS/Android/Win/OSX) and VCL.
+| [ZXingObjC](https://github.com/TheLevelUp/ZXingObjC)                                      | Port to Objective-C
+| [php-zxing](https://github.com/dsiddharth2/php-zxing)                                     | PHP wrapper to Zxing Java library
+| [zxing-js/library](https://github.com/zxing-js/library)                                   | TypeScript port of ZXing library
+| [pyzxing](https://github.com/ChenjieXu/pyzxing)                                           | Python wrapper to ZXing library
+| [zxing-dart](https://github.com/shirne/zxing-dart)                                        | Port to dart
+
 
 ### Other related third-party open source projects
 
 | Module                                         | Description
 | ---------------------------------------------- | -----------
 | [Barcode4J](http://barcode4j.sourceforge.net/) | Generator library in Java
+| [BoofCV](https://boofcv.org) | Generator and reader library in Java
 | [ZBar](http://zbar.sourceforge.net/)           | Reader library in C99
-| [OkapiBarcode](https://github.com/woo-j/OkapiBarcode)  | 
+| [OkapiBarcode](https://github.com/woo-j/OkapiBarcode)  | Generator library in Java |
 
 ## Links
 
-* [Online Decoder](http://zxing.org/w/decode.jspx)
-* [QR Code Generator](http://zxing.appspot.com/generator)
-* [Javadoc](http://zxing.github.io/zxing/apidocs/)
-* [Documentation Site](http://zxing.github.io/zxing/)
-* [Google+](https://plus.google.com/u/0/b/105889184633382354358/105889184633382354358/posts)
+* [Online Decoder](https://zxing.org/w/decode.jspx)
+* [QR Code Generator](https://zxing.appspot.com/generator)
+* [Javadoc](https://zxing.github.io/zxing/apidocs/)
+* [Documentation Site](https://zxing.github.io/zxing/)
 
 ## Contacting
 
 Post to the [discussion forum](https://groups.google.com/group/zxing) or tag a question with [`zxing`
-on StackOverflow](http://stackoverflow.com/questions/tagged/zxing).
+on StackOverflow](https://stackoverflow.com/questions/tagged/zxing).
 
 ## Etcetera
 
-[![Build Status](https://travis-ci.org/zxing/zxing.png?branch=master)](https://travis-ci.org/zxing/zxing)
 [![Coverity Status](https://scan.coverity.com/projects/1924/badge.svg)](https://scan.coverity.com/projects/1924)
 [![codecov.io](https://codecov.io/github/zxing/zxing/coverage.svg?branch=master)](https://codecov.io/github/zxing/zxing?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7270e4b57c50483699448bf32721ab10)](https://www.codacy.com/app/srowen/zxing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing/zxing&amp;utm_campaign=Badge_Grade)
 
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
 
-Optimized with [![JProfiler](http://www.ej-technologies.com/images/banners/jprofiler_small.png)](http://www.ej-technologies.com/products/jprofiler/overview.html)
+Optimized with [![JProfiler](https://www.ej-technologies.com/images/banners/jprofiler_small.png)](https://www.ej-technologies.com/products/jprofiler/overview.html)

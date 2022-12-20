@@ -43,12 +43,12 @@ public final class FieldParserTest extends Assert {
   }
 
   @Test
-  public void testParseField() throws Exception{
+  public void testParseField() throws Exception {
     checkFields("(15)991231(3103)001750(10)12A");
   }
 
   @Test
-  public void testParseField2() throws Exception{
+  public void testParseField2() throws Exception {
     checkFields("(15)991231(15)991231(3103)001750(10)12A");
   }
 }

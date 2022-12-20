@@ -26,7 +26,9 @@ import com.google.zxing.common.BitMatrix;
  * black. It returns the four corners of the region, as best it can determine.</p>
  *
  * @author Sean Owen
+ * @deprecated without replacement since 3.3.0
  */
+@Deprecated
 public final class MonochromeRectangleDetector {
 
   private static final int MAX_MODULES = 32;
@@ -94,7 +96,7 @@ public final class MonochromeRectangleDetector {
    * @param bottom maximum value of y
    * @param maxWhiteRun maximum run of white pixels that can still be considered to be within
    *  the barcode
-   * @return a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
+   * @return a {@link ResultPoint} encapsulating the corner that was found
    * @throws NotFoundException if such a point cannot be found
    */
   private ResultPoint findCornerFromCenter(int centerX,

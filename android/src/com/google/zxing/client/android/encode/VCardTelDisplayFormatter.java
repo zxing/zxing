@@ -16,8 +16,6 @@
 
 package com.google.zxing.client.android.encode;
 
-import android.telephony.PhoneNumberUtils;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +38,7 @@ final class VCardTelDisplayFormatter implements Formatter {
 
   @Override
   public CharSequence format(CharSequence value, int index) {
-    value = PhoneNumberUtils.formatNumber(value.toString());
+    value = ContactEncoder.formatPhone(value.toString());
     Map<String,Set<String>> metadata =
         metadataForIndex == null || metadataForIndex.size() <= index ? null : metadataForIndex.get(index);
     value = formatMetadata(value, metadata);

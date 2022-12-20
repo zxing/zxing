@@ -22,6 +22,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
@@ -52,7 +53,7 @@ public final class Code93Reader extends OneDReader {
       0x12E, 0x1D4, 0x1D2, 0x1CA, 0x16E, 0x176, 0x1AE, // - - %
       0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
   };
-  private static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
+  static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
   private final StringBuilder decodeRowResult;
   private final int[] counters;
@@ -67,7 +68,7 @@ public final class Code93Reader extends OneDReader {
       throws NotFoundException, ChecksumException, FormatException {
 
     int[] start = findAsteriskPattern(row);
-    // Read off white space    
+    // Read off white space
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
 
@@ -116,16 +117,18 @@ public final class Code93Reader extends OneDReader {
 
     String resultString = decodeExtended(result);
 
-    float left = (float) (start[1] + start[0]) / 2.0f;
+    float left = (start[1] + start[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
-    return new Result(
+
+    Result resultObject = new Result(
         resultString,
         null,
         new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
+            new ResultPoint(left, rowNumber),
+            new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_93);
-
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]G0");
+    return resultObject;
   }
 
   private int[] findAsteriskPattern(BitArray row) throws NotFoundException {
@@ -140,7 +143,7 @@ public final class Code93Reader extends OneDReader {
 
     int counterPosition = 0;
     for (int i = rowOffset; i < width; i++) {
-      if (row.get(i) ^ isWhite) {
+      if (row.get(i) != isWhite) {
         theCounters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
@@ -148,9 +151,9 @@ public final class Code93Reader extends OneDReader {
             return new int[]{patternStart, i};
           }
           patternStart += theCounters[0] + theCounters[1];
-          System.arraycopy(theCounters, 2, theCounters, 0, patternLength - 2);
-          theCounters[patternLength - 2] = 0;
-          theCounters[patternLength - 1] = 0;
+          System.arraycopy(theCounters, 2, theCounters, 0, counterPosition - 1);
+          theCounters[counterPosition - 1] = 0;
+          theCounters[counterPosition] = 0;
           counterPosition--;
         } else {
           counterPosition++;
@@ -163,12 +166,12 @@ public final class Code93Reader extends OneDReader {
   }
 
   private static int toPattern(int[] counters) {
-    int max = counters.length;
     int sum = 0;
     for (int counter : counters) {
       sum += counter;
     }
     int pattern = 0;
+    int max = counters.length;
     for (int i = 0; i < max; i++) {
       int scaled = Math.round(counters[i] * 9.0f / sum);
       if (scaled < 1 || scaled > 4) {
@@ -232,11 +235,20 @@ public final class Code93Reader extends OneDReader {
             } else if (next >= 'K' && next <= 'O') {
               // %K to %O map to [ \ ] ^ _
               decodedChar = (char) (next + 16);
-            } else if (next >= 'P' && next <= 'S') {
-              // %P to %S map to { | } ~
+            } else if (next >= 'P' && next <= 'T') {
+              // %P to %T map to { | } ~ DEL
               decodedChar = (char) (next + 43);
-            } else if (next >= 'T' && next <= 'Z') {
-              // %T to %Z all map to DEL (127)
+            } else if (next == 'U') {
+              // %U map to NUL
+              decodedChar = '\0';
+            } else if (next == 'V') {
+              // %V map to @
+              decodedChar = '@';
+            } else if (next == 'W') {
+              // %W map to `
+              decodedChar = '`';
+            } else if (next >= 'X' && next <= 'Z') {
+              // %X to %Z all map to DEL (127)
               decodedChar = 127;
             } else {
               throw FormatException.getFormatInstance();

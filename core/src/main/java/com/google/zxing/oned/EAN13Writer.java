@@ -17,12 +17,11 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
 import com.google.zxing.FormatException;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * This object renders an EAN13 code as a {@link BitMatrix}.
@@ -38,42 +37,50 @@ public final class EAN13Writer extends UPCEANWriter {
       3; // end guard
 
   @Override
-  public BitMatrix encode(String contents,
-                          BarcodeFormat format,
-                          int width,
-                          int height,
-                          Map<EncodeHintType,?> hints) throws WriterException {
-    if (format != BarcodeFormat.EAN_13) {
-      throw new IllegalArgumentException("Can only encode EAN_13, but got " + format);
-    }
-
-    return super.encode(contents, format, width, height, hints);
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return Collections.singleton(BarcodeFormat.EAN_13);
   }
 
   @Override
   public boolean[] encode(String contents) {
-    if (contents.length() != 13) {
-      throw new IllegalArgumentException(
-          "Requested contents should be 13 digits long, but got " + contents.length());
-    }
-    try {
-      if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
-        throw new IllegalArgumentException("Contents do not pass checksum");
-      }
-    } catch (FormatException ignored) {
-      throw new IllegalArgumentException("Illegal contents");
+    int length = contents.length();
+    switch (length) {
+      case 12:
+        // No check digit present, calculate it and add it
+        int check;
+        try {
+          check = UPCEANReader.getStandardUPCEANChecksum(contents);
+        } catch (FormatException fe) {
+          throw new IllegalArgumentException(fe);
+        }
+        contents += check;
+        break;
+      case 13:
+        try {
+          if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
+            throw new IllegalArgumentException("Contents do not pass checksum");
+          }
+        } catch (FormatException ignored) {
+          throw new IllegalArgumentException("Illegal contents");
+        }
+        break;
+      default:
+        throw new IllegalArgumentException(
+            "Requested contents should be 12 or 13 digits long, but got " + length);
     }
 
-    int firstDigit = Integer.parseInt(contents.substring(0, 1));
+    checkNumeric(contents);
+
+    int firstDigit = Character.digit(contents.charAt(0), 10);
     int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
     boolean[] result = new boolean[CODE_WIDTH];
     int pos = 0;
 
     pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
 
-    // See {@link #EAN13Reader} for a description of how the first digit & left bars are encoded
+    // See EAN13Reader for a description of how the first digit & left bars are encoded
     for (int i = 1; i <= 6; i++) {
-      int digit = Integer.parseInt(contents.substring(i, i + 1));
+      int digit = Character.digit(contents.charAt(i), 10);
       if ((parities >> (6 - i) & 1) == 1) {
         digit += 10;
       }
@@ -83,7 +90,7 @@ public final class EAN13Writer extends UPCEANWriter {
     pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false);
 
     for (int i = 7; i <= 12; i++) {
-      int digit = Integer.parseInt(contents.substring(i, i + 1));
+      int digit = Character.digit(contents.charAt(i), 10);
       pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true);
     }
     appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);

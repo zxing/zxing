@@ -41,7 +41,7 @@ public abstract class GridSampler {
    * ought to be appropriate for the entire platform, and all uses of this library
    * in the whole lifetime of the JVM. For instance, an Android activity can swap in
    * an implementation that takes advantage of native platform libraries.
-   * 
+   *
    * @param newGridSampler The platform-specific object to install.
    */
   public static void setGridSampler(GridSampler newGridSampler) {
@@ -95,7 +95,7 @@ public abstract class GridSampler {
                                        float p2FromX, float p2FromY,
                                        float p3FromX, float p3FromY,
                                        float p4FromX, float p4FromY) throws NotFoundException;
-  
+
   public abstract BitMatrix sampleGrid(BitMatrix image,
                                        int dimensionX,
                                        int dimensionY,
@@ -122,7 +122,8 @@ public abstract class GridSampler {
     int height = image.getHeight();
     // Check and nudge points from start until we see some that are OK:
     boolean nudged = true;
-    for (int offset = 0; offset < points.length && nudged; offset += 2) {
+    int maxOffset = points.length - 1; // points.length must be even
+    for (int offset = 0; offset < maxOffset && nudged; offset += 2) {
       int x = (int) points[offset];
       int y = (int) points[offset + 1];
       if (x < -1 || x > width || y < -1 || y > height) {

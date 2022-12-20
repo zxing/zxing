@@ -22,7 +22,6 @@ import com.google.zxing.client.result.ParsedResult;
 
 import android.app.Activity;
 import android.graphics.Typeface;
-import android.telephony.PhoneNumberUtils;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
@@ -30,7 +29,6 @@ import android.text.style.StyleSpan;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -83,17 +81,14 @@ public final class AddressBookResultHandler extends ResultHandler {
     super(activity, result);
     AddressBookParsedResult addressResult = (AddressBookParsedResult) result;
     String[] addresses = addressResult.getAddresses();
-    boolean hasAddress = addresses != null && addresses.length > 0 && addresses[0] != null && !addresses[0].isEmpty();
     String[] phoneNumbers = addressResult.getPhoneNumbers();
-    boolean hasPhoneNumber = phoneNumbers != null && phoneNumbers.length > 0;
     String[] emails = addressResult.getEmails();
-    boolean hasEmailAddress = emails != null && emails.length > 0;
 
     fields = new boolean[MAX_BUTTON_COUNT];
     fields[0] = true; // Add contact is always available
-    fields[1] = hasAddress;
-    fields[2] = hasPhoneNumber;
-    fields[3] = hasEmailAddress;
+    fields[1] = addresses != null && addresses.length > 0 && addresses[0] != null && !addresses[0].isEmpty();
+    fields[2] = phoneNumbers != null && phoneNumbers.length > 0;
+    fields[3] = emails != null && emails.length > 0;
 
     buttonCount = 0;
     for (int x = 0; x < MAX_BUTTON_COUNT; x++) {
@@ -154,15 +149,15 @@ public final class AddressBookResultHandler extends ResultHandler {
     }
   }
 
-  private static Date parseDate(String s) {
+  private static long parseDate(String s) {
     for (DateFormat currentFormat : DATE_FORMATS) {
       try {
-        return currentFormat.parse(s);
+        return currentFormat.parse(s).getTime();
       } catch (ParseException e) {
         // continue
       }
     }
-    return null;
+    return -1L;
   }
 
   // Overriden so we can hyphenate phone numbers, format birthdays, and bold the name.
@@ -187,7 +182,7 @@ public final class AddressBookResultHandler extends ResultHandler {
     if (numbers != null) {
       for (String number : numbers) {
         if (number != null) {
-          ParsedResult.maybeAppend(PhoneNumberUtils.formatNumber(number), contents);
+          ParsedResult.maybeAppend(formatPhone(number), contents);
         }
       }
     }
@@ -196,9 +191,9 @@ public final class AddressBookResultHandler extends ResultHandler {
 
     String birthday = result.getBirthday();
     if (birthday != null && !birthday.isEmpty()) {
-      Date date = parseDate(birthday);
-      if (date != null) {
-        ParsedResult.maybeAppend(DateFormat.getDateInstance(DateFormat.MEDIUM).format(date.getTime()), contents);
+      long date = parseDate(birthday);
+      if (date >= 0L) {
+        ParsedResult.maybeAppend(DateFormat.getDateInstance(DateFormat.MEDIUM).format(date), contents);
       }
     }
     ParsedResult.maybeAppend(result.getNote(), contents);

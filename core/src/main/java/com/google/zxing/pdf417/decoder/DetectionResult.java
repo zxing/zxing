@@ -62,8 +62,8 @@ final class DetectionResult {
   // we should be able to estimate the row height and use it as a hint for the row number
   // we should also fill the rows top to bottom and bottom to top
   /**
-   * @return number of codewords which don't have a valid row number. Note that the count is not accurate as codewords 
-   * will be counted several times. It just serves as an indicator to see when we can stop adjusting row numbers 
+   * @return number of codewords which don't have a valid row number. Note that the count is not accurate as codewords
+   * will be counted several times. It just serves as an indicator to see when we can stop adjusting row numbers
    */
   private int adjustRowNumbers() {
     int unadjustedCount = adjustRowNumbersByRow();
@@ -130,7 +130,9 @@ final class DetectionResult {
       }
       int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
       int invalidRowCounts = 0;
-      for (int barcodeColumn = barcodeColumnCount + 1; barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn--) {
+      for (int barcodeColumn = barcodeColumnCount + 1;
+           barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP;
+           barcodeColumn--) {
         Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
@@ -155,7 +157,9 @@ final class DetectionResult {
       }
       int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
       int invalidRowCounts = 0;
-      for (int barcodeColumn = 1; barcodeColumn < barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn++) {
+      for (int barcodeColumn = 1;
+           barcodeColumn < barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP;
+           barcodeColumn++) {
         Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
@@ -249,7 +253,7 @@ final class DetectionResult {
     return barcodeMetadata.getErrorCorrectionLevel();
   }
 
-  public void setBoundingBox(BoundingBox boundingBox) {
+  void setBoundingBox(BoundingBox boundingBox) {
     this.boundingBox = boundingBox;
   }
 
@@ -271,26 +275,25 @@ final class DetectionResult {
     if (rowIndicatorColumn == null) {
       rowIndicatorColumn = detectionResultColumns[barcodeColumnCount + 1];
     }
-    Formatter formatter = new Formatter();
-    for (int codewordsRow = 0; codewordsRow < rowIndicatorColumn.getCodewords().length; codewordsRow++) {
-      formatter.format("CW %3d:", codewordsRow);
-      for (int barcodeColumn = 0; barcodeColumn < barcodeColumnCount + 2; barcodeColumn++) {
-        if (detectionResultColumns[barcodeColumn] == null) {
-          formatter.format("    |   ");
-          continue;
+    try (Formatter formatter = new Formatter()) {
+      for (int codewordsRow = 0; codewordsRow < rowIndicatorColumn.getCodewords().length; codewordsRow++) {
+        formatter.format("CW %3d:", codewordsRow);
+        for (int barcodeColumn = 0; barcodeColumn < barcodeColumnCount + 2; barcodeColumn++) {
+          if (detectionResultColumns[barcodeColumn] == null) {
+            formatter.format("    |   ");
+            continue;
+          }
+          Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
+          if (codeword == null) {
+            formatter.format("    |   ");
+            continue;
+          }
+          formatter.format(" %3d|%3d", codeword.getRowNumber(), codeword.getValue());
         }
-        Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
-        if (codeword == null) {
-          formatter.format("    |   ");
-          continue;
-        }
-        formatter.format(" %3d|%3d", codeword.getRowNumber(), codeword.getValue());
+        formatter.format("%n");
       }
-      formatter.format("%n");
+      return formatter.toString();
     }
-    String result = formatter.toString();
-    formatter.close();
-    return result;
   }
 
 }

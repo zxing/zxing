@@ -62,17 +62,22 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
   private final Reader barcodeReader;
   private final BarcodeFormat expectedFormat;
   private final List<TestResult> testResults;
+  private final EnumMap<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
 
-  protected AbstractBlackBoxTestCase(String testBasePathSuffix,
-                                     Reader barcodeReader,
-                                     BarcodeFormat expectedFormat) {
+  public static Path buildTestBase(String testBasePathSuffix) {
     // A little workaround to prevent aggravation in my IDE
     Path testBase = Paths.get(testBasePathSuffix);
     if (!Files.exists(testBase)) {
       // try starting with 'core' since the test base is often given as the project root
       testBase = Paths.get("core").resolve(testBasePathSuffix);
     }
-    this.testBase = testBase;
+    return testBase;
+  }
+
+  protected AbstractBlackBoxTestCase(String testBasePathSuffix,
+                                     Reader barcodeReader,
+                                     BarcodeFormat expectedFormat) {
+    this.testBase = buildTestBase(testBasePathSuffix);
     this.barcodeReader = barcodeReader;
     this.expectedFormat = expectedFormat;
     testResults = new ArrayList<>();
@@ -86,6 +91,10 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
 
   protected final void addTest(int mustPassCount, int tryHarderCount, float rotation) {
     addTest(mustPassCount, tryHarderCount, 0, 0, rotation);
+  }
+
+  protected void addHint(DecodeHintType hint) {
+    hints.put(hint, Boolean.TRUE);
   }
 
   /**
@@ -121,14 +130,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     return barcodeReader;
   }
 
-  // This workaround is used because AbstractNegativeBlackBoxTestCase overrides this method but does
-  // not return SummaryResults.
   @Test
   public void testBlackBox() throws IOException {
-    testBlackBoxCountingResults(true);
-  }
-
-  public final SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     List<Path> imageFiles = getImageFiles();
@@ -137,7 +140,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     int[] passedCounts = new int[testCount];
     int[] misreadCounts = new int[testCount];
     int[] tryHarderCounts = new int[testCount];
-    int[] tryHaderMisreadCounts = new int[testCount];
+    int[] tryHarderMisreadCounts = new int[testCount];
 
     for (Path testImage : imageFiles) {
       log.info(String.format("Starting %s", testImage));
@@ -182,7 +185,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
           if (decode(bitmap, rotation, expectedText, expectedMetadata, true)) {
             tryHarderCounts[x]++;
           } else {
-            tryHaderMisreadCounts[x]++;
+            tryHarderMisreadCounts[x]++;
           }
         } catch (ReaderException ignored) {
           log.fine(String.format("could not read at rotation %f w/TH", rotation));
@@ -208,10 +211,10 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
                              tryHarderCounts[x], imageFiles.size(), testResult.getTryHarderCount()));
       failed = imageFiles.size() - tryHarderCounts[x];
       log.info(String.format(" %d failed due to misreads, %d not detected",
-                             tryHaderMisreadCounts[x], failed - tryHaderMisreadCounts[x]));
+                             tryHarderMisreadCounts[x], failed - tryHarderMisreadCounts[x]));
       totalFound += passedCounts[x] + tryHarderCounts[x];
       totalMustPass += testResult.getMustPassCount() + testResult.getTryHarderCount();
-      totalMisread += misreadCounts[x] + tryHaderMisreadCounts[x];
+      totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
       totalMaxMisread += testResult.getMaxMisreads() + testResult.getMaxTryHarderMisreads();
     }
 
@@ -231,22 +234,19 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     }
 
     // Then run through again and assert if any failed
-    if (assertOnFailure) {
-      for (int x = 0; x < testCount; x++) {
-        TestResult testResult = testResults.get(x);
-        String label = "Rotation " + testResult.getRotation() + " degrees: Too many images failed";
-        assertTrue(label,
-                   passedCounts[x] >= testResult.getMustPassCount());
-        assertTrue("Try harder, " + label,
-                   tryHarderCounts[x] >= testResult.getTryHarderCount());
-        label = "Rotation " + testResult.getRotation() + " degrees: Too many images misread";
-        assertTrue(label,
-                   misreadCounts[x] <= testResult.getMaxMisreads());
-        assertTrue("Try harder, " + label,
-                   tryHaderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
-      }
+    for (int x = 0; x < testCount; x++) {
+      TestResult testResult = testResults.get(x);
+      String label = "Rotation " + testResult.getRotation() + " degrees: Too many images failed";
+      assertTrue(label,
+                 passedCounts[x] >= testResult.getMustPassCount());
+      assertTrue("Try harder, " + label,
+                 tryHarderCounts[x] >= testResult.getTryHarderCount());
+      label = "Rotation " + testResult.getRotation() + " degrees: Too many images misread";
+      assertTrue(label,
+                 misreadCounts[x] <= testResult.getMaxMisreads());
+      assertTrue("Try harder, " + label,
+                 tryHarderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
     }
-    return new SummaryResults(totalFound, totalMustPass, totalTests);
   }
 
   private boolean decode(BinaryBitmap source,
@@ -257,12 +257,25 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
 
     String suffix = String.format(" (%srotation: %d)", tryHarder ? "try harder, " : "", (int) rotation);
 
-    Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
+    Map<DecodeHintType,Object> hints = this.hints.clone();
     if (tryHarder) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }
 
-    Result result = barcodeReader.decode(source, hints);
+    // Try in 'pure' mode mostly to exercise PURE_BARCODE code paths for exceptions;
+    // not expected to pass, generally
+    Result result = null;
+    try {
+      Map<DecodeHintType,Object> pureHints = new EnumMap<>(hints);
+      pureHints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
+      result = barcodeReader.decode(source, pureHints);
+    } catch (ReaderException re) {
+      // continue
+    }
+
+    if (result == null) {
+      result = barcodeReader.decode(source, hints);
+    }
 
     if (expectedFormat != result.getBarcodeFormat()) {
       log.info(String.format("Format mismatch: expected '%s' but got '%s'%s",
@@ -306,7 +319,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       return original;
     }
 
-    switch(original.getType()) {
+    switch (original.getType()) {
       case BufferedImage.TYPE_BYTE_INDEXED:
       case BufferedImage.TYPE_BYTE_BINARY:
         BufferedImage argb = new BufferedImage(original.getWidth(),

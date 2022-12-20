@@ -29,24 +29,95 @@ import com.google.zxing.common.BitMatrix;
  *
  * @author Sean Owen
  */
-abstract class DataMask {
+enum DataMask {
+
+  // See ISO 18004:2006 6.8.1
 
   /**
-   * See ISO 18004:2006 6.8.1
+   * 000: mask bits for which (x + y) mod 2 == 0
    */
-  private static final DataMask[] DATA_MASKS = {
-      new DataMask000(),
-      new DataMask001(),
-      new DataMask010(),
-      new DataMask011(),
-      new DataMask100(),
-      new DataMask101(),
-      new DataMask110(),
-      new DataMask111(),
+  DATA_MASK_000() {
+    @Override
+    boolean isMasked(int i, int j) {
+      return ((i + j) & 0x01) == 0;
+    }
+  },
+
+  /**
+   * 001: mask bits for which x mod 2 == 0
+   */
+  DATA_MASK_001() {
+    @Override
+    boolean isMasked(int i, int j) {
+      return (i & 0x01) == 0;
+    }
+  },
+
+  /**
+   * 010: mask bits for which y mod 3 == 0
+   */
+  DATA_MASK_010() {
+    @Override
+    boolean isMasked(int i, int j) {
+      return j % 3 == 0;
+    }
+  },
+
+  /**
+   * 011: mask bits for which (x + y) mod 3 == 0
+   */
+  DATA_MASK_011() {
+    @Override
+    boolean isMasked(int i, int j) {
+      return (i + j) % 3 == 0;
+    }
+  },
+
+  /**
+   * 100: mask bits for which (x/2 + y/3) mod 2 == 0
+   */
+  DATA_MASK_100() {
+    @Override
+    boolean isMasked(int i, int j) {
+      return (((i / 2) + (j / 3)) & 0x01) == 0;
+    }
+  },
+
+  /**
+   * 101: mask bits for which xy mod 2 + xy mod 3 == 0
+   * equivalently, such that xy mod 6 == 0
+   */
+  DATA_MASK_101() {
+    @Override
+    boolean isMasked(int i, int j) {
+      return (i * j) % 6 == 0;
+    }
+  },
+
+  /**
+   * 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0
+   * equivalently, such that xy mod 6 < 3
+   */
+  DATA_MASK_110() {
+    @Override
+    boolean isMasked(int i, int j) {
+      return ((i * j) % 6) < 3;
+    }
+  },
+
+  /**
+   * 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0
+   * equivalently, such that (x + y + xy mod 3) mod 2 == 0
+   */
+  DATA_MASK_111() {
+    @Override
+    boolean isMasked(int i, int j) {
+      return ((i + j + ((i * j) % 3)) & 0x01) == 0;
+    }
   };
 
-  private DataMask() {
-  }
+  // End of enum constants.
+
 
   /**
    * <p>Implementations of this method reverse the data masking process applied to a QR Code and
@@ -67,97 +138,4 @@ abstract class DataMask {
 
   abstract boolean isMasked(int i, int j);
 
-  /**
-   * @param reference a value between 0 and 7 indicating one of the eight possible
-   * data mask patterns a QR Code may use
-   * @return DataMask encapsulating the data mask pattern
-   */
-  static DataMask forReference(int reference) {
-    if (reference < 0 || reference > 7) {
-      throw new IllegalArgumentException();
-    }
-    return DATA_MASKS[reference];
-  }
-
-  /**
-   * 000: mask bits for which (x + y) mod 2 == 0
-   */
-  private static final class DataMask000 extends DataMask {
-    @Override
-    boolean isMasked(int i, int j) {
-      return ((i + j) & 0x01) == 0;
-    }
-  }
-
-  /**
-   * 001: mask bits for which x mod 2 == 0
-   */
-  private static final class DataMask001 extends DataMask {
-    @Override
-    boolean isMasked(int i, int j) {
-      return (i & 0x01) == 0;
-    }
-  }
-
-  /**
-   * 010: mask bits for which y mod 3 == 0
-   */
-  private static final class DataMask010 extends DataMask {
-    @Override
-    boolean isMasked(int i, int j) {
-      return j % 3 == 0;
-    }
-  }
-
-  /**
-   * 011: mask bits for which (x + y) mod 3 == 0
-   */
-  private static final class DataMask011 extends DataMask {
-    @Override
-    boolean isMasked(int i, int j) {
-      return (i + j) % 3 == 0;
-    }
-  }
-
-  /**
-   * 100: mask bits for which (x/2 + y/3) mod 2 == 0
-   */
-  private static final class DataMask100 extends DataMask {
-    @Override
-    boolean isMasked(int i, int j) {
-      return (((i / 2) + (j /3)) & 0x01) == 0;
-    }
-  }
-
-  /**
-   * 101: mask bits for which xy mod 2 + xy mod 3 == 0
-   */
-  private static final class DataMask101 extends DataMask {
-    @Override
-    boolean isMasked(int i, int j) {
-      int temp = i * j;
-      return (temp & 0x01) + (temp % 3) == 0;
-    }
-  }
-
-  /**
-   * 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0
-   */
-  private static final class DataMask110 extends DataMask {
-    @Override
-    boolean isMasked(int i, int j) {
-      int temp = i * j;
-      return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;
-    }
-  }
-
-  /**
-   * 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0
-   */
-  private static final class DataMask111 extends DataMask {
-    @Override
-    boolean isMasked(int i, int j) {
-      return ((((i + j) & 0x01) + ((i * j) % 3)) & 0x01) == 0;
-    }
-  }
 }

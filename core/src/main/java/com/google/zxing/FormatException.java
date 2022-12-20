@@ -40,7 +40,7 @@ public final class FormatException extends ReaderException {
   public static FormatException getFormatInstance() {
     return isStackTrace ? new FormatException() : INSTANCE;
   }
-  
+
   public static FormatException getFormatInstance(Throwable cause) {
     return isStackTrace ? new FormatException(cause) : INSTANCE;
   }

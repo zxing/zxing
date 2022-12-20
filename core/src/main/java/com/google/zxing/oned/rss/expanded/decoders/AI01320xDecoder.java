@@ -48,7 +48,7 @@ final class AI01320xDecoder extends AI013x0xDecoder {
 
   @Override
   protected int checkWeight(int weight) {
-    if(weight < 10000) {
+    if (weight < 10000) {
       return weight;
     }
     return weight - 10000;

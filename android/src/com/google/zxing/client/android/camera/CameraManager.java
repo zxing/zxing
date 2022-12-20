@@ -36,6 +36,7 @@ import java.io.IOException;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
+@SuppressWarnings("deprecation") // camera APIs
 public final class CameraManager {
 
   private static final String TAG = CameraManager.class.getSimpleName();
@@ -67,7 +68,7 @@ public final class CameraManager {
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
   }
-  
+
   /**
    * Opens the camera driver and initializes the hardware parameters.
    *
@@ -172,18 +173,16 @@ public final class CameraManager {
    */
   public synchronized void setTorch(boolean newSetting) {
     OpenCamera theCamera = camera;
-    if (theCamera != null) {
-      if (newSetting != configManager.getTorchState(theCamera.getCamera())) {
-        boolean wasAutoFocusManager = autoFocusManager != null;
-        if (wasAutoFocusManager) {
-          autoFocusManager.stop();
-          autoFocusManager = null;
-        }
-        configManager.setTorch(theCamera.getCamera(), newSetting);
-        if (wasAutoFocusManager) {
-          autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
-          autoFocusManager.start();
-        }
+    if (theCamera != null && newSetting != configManager.getTorchState(theCamera.getCamera())) {
+      boolean wasAutoFocusManager = autoFocusManager != null;
+      if (wasAutoFocusManager) {
+        autoFocusManager.stop();
+        autoFocusManager = null;
+      }
+      configManager.setTorch(theCamera.getCamera(), newSetting);
+      if (wasAutoFocusManager) {
+        autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
+        autoFocusManager.start();
       }
     }
   }
@@ -228,20 +227,16 @@ public final class CameraManager {
       int leftOffset = (screenResolution.x - width) / 2;
       int topOffset = (screenResolution.y - height) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
-      Log.d(TAG, "Calculated framing rect: " + framingRect);
     }
     return framingRect;
   }
-  
+
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
     int dim = 5 * resolution / 8; // Target 5/8 of each dimension
     if (dim < hardMin) {
       return hardMin;
     }
-    if (dim > hardMax) {
-      return hardMax;
-    }
-    return dim;
+    return Math.min(dim, hardMax);
   }
 
   /**
@@ -272,7 +267,7 @@ public final class CameraManager {
     return framingRectInPreview;
   }
 
-  
+
   /**
    * Allows third party apps to specify the camera ID, rather than determine
    * it automatically based on available cameras and their orientation.
@@ -282,7 +277,7 @@ public final class CameraManager {
   public synchronized void setManualCameraId(int cameraId) {
     requestedCameraId = cameraId;
   }
-  
+
   /**
    * Allows third party apps to specify the scanning rectangle dimensions, rather than determine
    * them automatically based on screen resolution.

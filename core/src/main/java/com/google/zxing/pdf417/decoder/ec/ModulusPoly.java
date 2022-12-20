@@ -18,7 +18,6 @@ package com.google.zxing.pdf417.decoder.ec;
 
 /**
  * @author Sean Owen
- * @see com.google.zxing.common.reedsolomon.GenericGFPoly
  */
 final class ModulusPoly {
 
@@ -85,7 +84,6 @@ final class ModulusPoly {
       // Just return the x^0 coefficient
       return getCoefficient(0);
     }
-    int size = coefficients.length;
     if (a == 1) {
       // Just the sum of the coefficients
       int result = 0;
@@ -95,6 +93,7 @@ final class ModulusPoly {
       return result;
     }
     int result = coefficients[0];
+    int size = coefficients.length;
     for (int i = 1; i < size; i++) {
       result = field.add(field.multiply(a, result), coefficients[i]);
     }
@@ -199,32 +198,6 @@ final class ModulusPoly {
       product[i] = field.multiply(coefficients[i], coefficient);
     }
     return new ModulusPoly(field, product);
-  }
-
-  ModulusPoly[] divide(ModulusPoly other) {
-    if (!field.equals(other.field)) {
-      throw new IllegalArgumentException("ModulusPolys do not have same ModulusGF field");
-    }
-    if (other.isZero()) {
-      throw new IllegalArgumentException("Divide by 0");
-    }
-
-    ModulusPoly quotient = field.getZero();
-    ModulusPoly remainder = this;
-
-    int denominatorLeadingTerm = other.getCoefficient(other.getDegree());
-    int inverseDenominatorLeadingTerm = field.inverse(denominatorLeadingTerm);
-
-    while (remainder.getDegree() >= other.getDegree() && !remainder.isZero()) {
-      int degreeDifference = remainder.getDegree() - other.getDegree();
-      int scale = field.multiply(remainder.getCoefficient(remainder.getDegree()), inverseDenominatorLeadingTerm);
-      ModulusPoly term = other.multiplyByMonomial(degreeDifference, scale);
-      ModulusPoly iterationQuotient = field.buildMonomial(degreeDifference, scale);
-      quotient = quotient.add(iterationQuotient);
-      remainder = remainder.subtract(term);
-    }
-
-    return new ModulusPoly[] { quotient, remainder };
   }
 
   @Override

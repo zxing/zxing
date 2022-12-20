@@ -48,16 +48,7 @@ public final class Decoder {
    * @throws ChecksumException if error correction fails
    */
   public DecoderResult decode(boolean[][] image) throws FormatException, ChecksumException {
-    int dimension = image.length;
-    BitMatrix bits = new BitMatrix(dimension);
-    for (int i = 0; i < dimension; i++) {
-      for (int j = 0; j < dimension; j++) {
-        if (image[i][j]) {
-          bits.set(j, i);
-        }
-      }
-    }
-    return decode(bits);
+    return decode(BitMatrix.parse(image));
   }
 
   /**
@@ -80,8 +71,6 @@ public final class Decoder {
     // Separate into data blocks
     DataBlock[] dataBlocks = DataBlock.getDataBlocks(codewords, version);
 
-    int dataBlocksCount = dataBlocks.length;
-
     // Count total number of data bytes
     int totalBytes = 0;
     for (DataBlock db : dataBlocks) {
@@ -89,6 +78,7 @@ public final class Decoder {
     }
     byte[] resultBytes = new byte[totalBytes];
 
+    int dataBlocksCount = dataBlocks.length;
     // Error-correct and copy data blocks together into a stream of bytes
     for (int j = 0; j < dataBlocksCount; j++) {
       DataBlock dataBlock = dataBlocks[j];
@@ -120,9 +110,8 @@ public final class Decoder {
     for (int i = 0; i < numCodewords; i++) {
       codewordsInts[i] = codewordBytes[i] & 0xFF;
     }
-    int numECCodewords = codewordBytes.length - numDataCodewords;
     try {
-      rsDecoder.decode(codewordsInts, numECCodewords);
+      rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
     } catch (ReedSolomonException ignored) {
       throw ChecksumException.getChecksumInstance();
     }

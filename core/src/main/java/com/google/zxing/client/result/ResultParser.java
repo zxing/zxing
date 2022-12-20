@@ -67,6 +67,8 @@ public abstract class ResultParser {
   private static final Pattern EQUALS = Pattern.compile("=");
   private static final String BYTE_ORDER_MARK = "\ufeff";
 
+  static final String[] EMPTY_STR_ARRAY = new String[0];
+
   /**
    * Attempts to parse the raw {@link Result}'s contents as a particular type
    * of information (email, URL, etc.) and return a {@link ParsedResult} encapsulating
@@ -236,7 +238,7 @@ public abstract class ResultParser {
     if (matches == null || matches.isEmpty()) {
       return null;
     }
-    return matches.toArray(new String[matches.size()]);
+    return matches.toArray(EMPTY_STR_ARRAY);
   }
 
   private static int countPrecedingBackslashes(CharSequence s, int pos) {
