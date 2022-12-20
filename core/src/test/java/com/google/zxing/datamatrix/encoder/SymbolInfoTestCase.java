@@ -75,6 +75,7 @@ public final class SymbolInfoTestCase extends Assert {
     Dimension fixedSize = new Dimension(26, 26);
     info = SymbolInfo.lookup(35,
                              SymbolShapeHint.FORCE_NONE, fixedSize, fixedSize, false);
+    assertNotNull(info);
     assertEquals(26, info.getSymbolWidth());
     assertEquals(26, info.getSymbolHeight());
 
@@ -87,16 +88,19 @@ public final class SymbolInfoTestCase extends Assert {
 
     info = SymbolInfo.lookup(35,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false);
+    assertNotNull(info);
     assertEquals(26, info.getSymbolWidth());
     assertEquals(26, info.getSymbolHeight());
 
     info = SymbolInfo.lookup(40,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false);
+    assertNotNull(info);
     assertEquals(26, info.getSymbolWidth());
     assertEquals(26, info.getSymbolHeight());
 
     info = SymbolInfo.lookup(45,
                              SymbolShapeHint.FORCE_NONE, minSize, maxSize, false);
+    assertNotNull(info);
     assertEquals(32, info.getSymbolWidth());
     assertEquals(32, info.getSymbolHeight());
 

@@ -34,13 +34,13 @@ import com.google.zxing.common.BitArray;
  */
 abstract class AI01decoder extends AbstractExpandedDecoder {
 
-  protected static final int GTIN_SIZE = 40;
+  static final int GTIN_SIZE = 40;
 
   AI01decoder(BitArray information) {
     super(information);
   }
 
-  protected final void encodeCompressedGtin(StringBuilder buf, int currentPos) {
+  final void encodeCompressedGtin(StringBuilder buf, int currentPos) {
     buf.append("(01)");
     int initialPosition = buf.length();
     buf.append('9');
@@ -48,8 +48,8 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
     encodeCompressedGtinWithoutAI(buf, currentPos, initialPosition);
   }
 
-  protected final void encodeCompressedGtinWithoutAI(StringBuilder buf, int currentPos, int initialBufferPosition) {
-    for(int i = 0; i < 4; ++i){
+  final void encodeCompressedGtinWithoutAI(StringBuilder buf, int currentPos, int initialBufferPosition) {
+    for (int i = 0; i < 4; ++i) {
       int currentBlock = this.getGeneralDecoder().extractNumericValueFromBitArray(currentPos + 10 * i, 10);
       if (currentBlock / 100 == 0) {
         buf.append('0');
@@ -60,10 +60,10 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
       buf.append(currentBlock);
     }
 
-      appendCheckDigit(buf, initialBufferPosition);
+    appendCheckDigit(buf, initialBufferPosition);
   }
 
-  private static void appendCheckDigit(StringBuilder buf, int currentPos){
+  private static void appendCheckDigit(StringBuilder buf, int currentPos) {
     int checkDigit = 0;
     for (int i = 0; i < 13; i++) {
       int digit = buf.charAt(i + currentPos) - '0';

@@ -39,7 +39,8 @@ public final class CommandLineEncoder {
 
   public static void main(String[] args) throws Exception {
     EncoderConfig config = new EncoderConfig();
-    JCommander jCommander = new JCommander(config, args);
+    JCommander jCommander = new JCommander(config);
+    jCommander.parse(args);
     jCommander.setProgramName(CommandLineEncoder.class.getSimpleName());
     if (config.help) {
       jCommander.usage();

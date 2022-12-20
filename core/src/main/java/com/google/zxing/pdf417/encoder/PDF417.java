@@ -643,10 +643,20 @@ public final class PDF417 {
    * @throws WriterException if the contents cannot be encoded in this format
    */
   public void generateBarcodeLogic(String msg, int errorCorrectionLevel) throws WriterException {
+    generateBarcodeLogic(msg, errorCorrectionLevel, false);
+  }
+
+  /**
+   * @param msg message to encode
+   * @param errorCorrectionLevel PDF417 error correction level to use
+   * @param autoECI automatically insert ECIs if needed
+   * @throws WriterException if the contents cannot be encoded in this format
+   */
+  public void generateBarcodeLogic(String msg, int errorCorrectionLevel, boolean autoECI) throws WriterException {
 
     //1. step: High-level encoding
     int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding);
+    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, autoECI);
     int sourceCodeWords = highLevel.length();
 
     int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords);
@@ -659,7 +669,7 @@ public final class PDF417 {
     //2. step: construct data codewords
     if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) { // +1 for symbol length CW
       throw new WriterException(
-          "Encoded message contains to many code words, message to big (" + msg.length() + " bytes)");
+          "Encoded message contains too many code words, message too big (" + msg.length() + " bytes)");
     }
     int n = sourceCodeWords + pad + 1;
     StringBuilder sb = new StringBuilder(n);
@@ -672,11 +682,10 @@ public final class PDF417 {
 
     //3. step: Error correction
     String ec = PDF417ErrorCorrection.generateErrorCorrection(dataCodewords, errorCorrectionLevel);
-    String fullCodewords = dataCodewords + ec;
 
     //4. step: low-level encoding
     barcodeMatrix = new BarcodeMatrix(rows, cols);
-    encodeLowLevel(fullCodewords, cols, rows, errorCorrectionLevel, barcodeMatrix);
+    encodeLowLevel(dataCodewords + ec, cols, rows, errorCorrectionLevel, barcodeMatrix);
   }
 
   /**
@@ -703,7 +712,7 @@ public final class PDF417 {
         continue;
       }
 
-      float newRatio = ((17 * cols + 69) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
+      float newRatio = ((float) (17 * cols + 69) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
 
       // ignore if previous ratio is closer to preferred ratio
       if (dimension != null && Math.abs(newRatio - PREFERRED_RATIO) > Math.abs(ratio - PREFERRED_RATIO)) {
@@ -714,13 +723,13 @@ public final class PDF417 {
       dimension = new int[] {cols, rows};
     }
 
-     // Handle case when min values were larger than necessary
-     if (dimension == null) {
-       int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, minCols);
-       if (rows < minRows) {
-         dimension = new int[]{minCols, minRows};
-       }
-     }
+    // Handle case when min values were larger than necessary
+    if (dimension == null) {
+      int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, minCols);
+      if (rows < minRows) {
+        dimension = new int[]{minCols, minRows};
+      }
+    }
 
     if (dimension == null) {
       throw new WriterException("Unable to fit message in columns");

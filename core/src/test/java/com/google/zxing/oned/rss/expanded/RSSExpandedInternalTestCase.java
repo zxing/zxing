@@ -28,9 +28,7 @@ package com.google.zxing.oned.rss.expanded;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +37,7 @@ import javax.imageio.ImageIO;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.NotFoundException;
+import com.google.zxing.common.AbstractBlackBoxTestCase;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.oned.rss.DataCharacter;
@@ -80,11 +79,11 @@ public final class RSSExpandedInternalTestCase extends Assert {
     assertNotNull(finderPattern);
     assertEquals(1, finderPattern.getValue());
 
-    try{
+    try {
       rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
       //   the previous was the last pair
       fail(NotFoundException.class.getName() + " expected");
-    }catch(NotFoundException nfe){
+    } catch (NotFoundException nfe) {
       // ok
     }
   }
@@ -117,8 +116,8 @@ public final class RSSExpandedInternalTestCase extends Assert {
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.getHeight() / 2, null);
 
-    int[] startEnd = {145, 243};//image pixels where the A1 pattern starts (at 124) and ends (at 214)
-    int value = 0;// A
+    int[] startEnd = {145, 243}; //image pixels where the A1 pattern starts (at 124) and ends (at 214)
+    int value = 0; // A
     FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.getHeight() / 2);
     //{1, 8, 4, 1, 1};
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
@@ -133,7 +132,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.getHeight() / 2, null);
 
-    int[] startEnd = {145, 243};//image pixels where the A1 pattern starts (at 124) and ends (at 214)
+    int[] startEnd = {145, 243}; //image pixels where the A1 pattern starts (at 124) and ends (at 214)
     int value = 0; // A
     FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.getHeight() / 2);
     //{1, 8, 4, 1, 1};
@@ -145,12 +144,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
   }
 
   private static BufferedImage readImage(String fileName) throws IOException {
-    Path path = Paths.get("src/test/resources/blackbox/rssexpanded-1/").resolve(fileName);
-    if (!Files.exists(path)) {
-      // Support running from project root too
-      path = Paths.get("core").resolve(path);
-    }
-
+    Path path = AbstractBlackBoxTestCase.buildTestBase("src/test/resources/blackbox/rssexpanded-1/").resolve(fileName);
     return ImageIO.read(path.toFile());
   }
 

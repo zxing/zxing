@@ -16,6 +16,11 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.BarcodeFormat;
+
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * This class renders CodaBar as {@code boolean[]}.
  *
@@ -27,6 +32,11 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
   private static final char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
   private static final char[] CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = {'/', ':', '+', '.'};
   private static final char DEFAULT_GUARD = START_END_CHARS[0];
+
+  @Override
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return Collections.singleton(BarcodeFormat.CODABAR);
+  }
 
   @Override
   public boolean[] encode(String contents) {

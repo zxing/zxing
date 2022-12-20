@@ -99,6 +99,7 @@ public class QRCodeReader implements Reader {
       result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_PARITY,
                          decoderResult.getStructuredAppendParity());
     }
+    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]Q" + decoderResult.getSymbologyModifier());
     return result;
   }
 
@@ -112,8 +113,6 @@ public class QRCodeReader implements Reader {
    * which contains only an unrotated, unskewed, image of a code, with some white border
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
-   *
-   * @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
    */
   private static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
 
@@ -129,7 +128,7 @@ public class QRCodeReader implements Reader {
     int bottom = rightBottomBlack[1];
     int left = leftTopBlack[0];
     int right = rightBottomBlack[0];
-    
+
     // Sanity check!
     if (left >= right || top >= bottom) {
       throw NotFoundException.getNotFoundInstance();
@@ -139,6 +138,10 @@ public class QRCodeReader implements Reader {
       // Special case, where bottom-right module wasn't black so we found something else in the last row
       // Assume it's a square, so use height as the width
       right = left + (bottom - top);
+      if (right >= image.getWidth()) {
+        // Abort if that would not make sense -- off image
+        throw NotFoundException.getNotFoundInstance();
+      }
     }
 
     int matrixWidth = Math.round((right - left + 1) / moduleSize);
@@ -157,7 +160,7 @@ public class QRCodeReader implements Reader {
     int nudge = (int) (moduleSize / 2.0f);
     top += nudge;
     left += nudge;
-    
+
     // But careful that this does not sample off the edge
     // "right" is the farthest-right valid pixel location -- right+1 is not necessarily
     // This is positive by how much the inner x loop below would be too large

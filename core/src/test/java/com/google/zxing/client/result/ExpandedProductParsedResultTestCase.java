@@ -41,7 +41,7 @@ import java.util.Map;
 public final class ExpandedProductParsedResultTestCase extends Assert {
 
   @Test
-  public void test_RSSExpanded() {
+  public void testRSSExpanded() {
     Map<String,String> uncommonAIs = new HashMap<>();
     uncommonAIs.put("123", "544654");
     Result result =

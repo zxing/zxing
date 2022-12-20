@@ -17,8 +17,8 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,12 +28,21 @@ import org.junit.Test;
 public final class EAN8WriterTestCase extends Assert {
 
   @Test
-  public void testEncode() throws WriterException {
-    CharSequence testStr = "0001010001011010111101111010110111010101001110111001010001001011100101000";
+  public void testEncode() {
+    String testStr = "0000001010001011010111101111010110111010101001110111001010001001011100101000000";
     BitMatrix result = new EAN8Writer().encode("96385074", BarcodeFormat.EAN_8, testStr.length(), 0);
-    for (int i = 0; i < testStr.length(); i++) {
-      assertEquals("Element " + i, testStr.charAt(i) == '1', result.get(i, 0));
-    }
+    assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
 
+  @Test
+  public void testAddChecksumAndEncode() {
+    String testStr = "0000001010001011010111101111010110111010101001110111001010001001011100101000000";
+    BitMatrix result = new EAN8Writer().encode("9638507", BarcodeFormat.EAN_8, testStr.length(), 0);
+    assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testEncodeIllegalCharacters() {
+    new EAN8Writer().encode("96385abc", BarcodeFormat.EAN_8, 0, 0);
+  }
 }

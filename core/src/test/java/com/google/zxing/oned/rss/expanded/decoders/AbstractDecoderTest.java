@@ -36,39 +36,39 @@ import org.junit.Assert;
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
-public abstract class AbstractDecoderTest extends Assert {
+abstract class AbstractDecoderTest extends Assert {
 
-  protected static final String numeric_10                     = "..X..XX";
-  protected static final String numeric_12                     = "..X.X.X";
-  protected static final String numeric_1FNC1                  = "..XXX.X";
-  //protected static final String numeric_FNC11                  = "XXX.XXX";
+  static final String numeric10                     = "..X..XX";
+  static final String numeric12                     = "..X.X.X";
+  static final String numeric1FNC1                  = "..XXX.X";
+  // static final String numericFNC11                  = "XXX.XXX";
 
-  protected static final String numeric2alpha                  = "....";
+  static final String numeric2alpha                  = "....";
 
-  protected static final String alpha_A                        = "X.....";
-  protected static final String alpha_FNC1                      = ".XXXX";
-  protected static final String alpha2numeric                  = "...";
-  protected static final String alpha2isoiec646                = "..X..";
+  static final String alphaA                        = "X.....";
+  static final String alphaFNC1                      = ".XXXX";
+  static final String alpha2numeric                  = "...";
+  static final String alpha2isoiec646                = "..X..";
 
-  protected static final String i646_B                         = "X.....X";
-  protected static final String i646_C                         = "X....X.";
-  protected static final String i646_FNC1                      = ".XXXX";
-  protected static final String isoiec646_2alpha               = "..X..";
+  static final String i646B                         = "X.....X";
+  static final String i646C                         = "X....X.";
+  static final String i646FNC1                      = ".XXXX";
+  static final String isoiec6462alpha               = "..X..";
 
-  protected static final String compressedGtin_900123456798908 = ".........X..XXX.X.X.X...XX.XXXXX.XXXX.X.";
-  protected static final String compressedGtin_900000000000008 = "........................................";
+  static final String compressedGtin900123456798908 = ".........X..XXX.X.X.X...XX.XXXXX.XXXX.X.";
+  static final String compressedGtin900000000000008 = "........................................";
 
-  protected static final String compressed15bitWeight_1750     = "....XX.XX.X.XX.";
-  protected static final String compressed15bitWeight_11750    = ".X.XX.XXXX..XX.";
-  protected static final String compressed15bitWeight_0        = "...............";
+  static final String compressed15bitWeight1750     = "....XX.XX.X.XX.";
+  static final String compressed15bitWeight11750    = ".X.XX.XXXX..XX.";
+  static final String compressed15bitWeight0        = "...............";
 
-  protected static final String compressed20bitWeight_1750     = ".........XX.XX.X.XX.";
+  static final String compressed20bitWeight1750     = ".........XX.XX.X.XX.";
 
-  protected static final String compressedDate_March_12th_2010 = "....XXXX.X..XX..";
-  protected static final String compressedDate_End             = "X..X.XX.........";
+  static final String compressedDateMarch12th2010 = "....XXXX.X..XX..";
+  static final String compressedDateEnd             = "X..X.XX.........";
 
-  protected static void assertCorrectBinaryString(CharSequence binaryString,
-                                                  String expectedNumber) throws NotFoundException, FormatException {
+  static void assertCorrectBinaryString(CharSequence binaryString,
+                                        String expectedNumber) throws NotFoundException, FormatException {
     BitArray binary = BinaryUtil.buildBitArrayFromStringWithoutSpaces(binaryString);
     AbstractExpandedDecoder decoder = AbstractExpandedDecoder.createDecoder(binary);
     String result = decoder.parseInformation();

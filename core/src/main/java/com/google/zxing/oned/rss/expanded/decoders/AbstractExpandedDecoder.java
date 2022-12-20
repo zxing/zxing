@@ -39,7 +39,7 @@ public abstract class AbstractExpandedDecoder {
   private final BitArray information;
   private final GeneralAppIdDecoder generalDecoder;
 
-  AbstractExpandedDecoder(BitArray information){
+  AbstractExpandedDecoder(BitArray information) {
     this.information = information;
     this.generalDecoder = new GeneralAppIdDecoder(information);
   }
@@ -54,7 +54,7 @@ public abstract class AbstractExpandedDecoder {
 
   public abstract String parseInformation() throws NotFoundException, FormatException;
 
-  public static AbstractExpandedDecoder createDecoder(BitArray information){
+  public static AbstractExpandedDecoder createDecoder(BitArray information) {
     if (information.get(1)) {
       return new AI01AndOtherAIs(information);
     }
@@ -64,19 +64,19 @@ public abstract class AbstractExpandedDecoder {
 
     int fourBitEncodationMethod = GeneralAppIdDecoder.extractNumericValueFromBitArray(information, 1, 4);
 
-    switch(fourBitEncodationMethod){
+    switch (fourBitEncodationMethod) {
       case 4: return new AI013103decoder(information);
       case 5: return new AI01320xDecoder(information);
     }
 
     int fiveBitEncodationMethod = GeneralAppIdDecoder.extractNumericValueFromBitArray(information, 1, 5);
-    switch(fiveBitEncodationMethod){
+    switch (fiveBitEncodationMethod) {
       case 12: return new AI01392xDecoder(information);
       case 13: return new AI01393xDecoder(information);
     }
 
     int sevenBitEncodationMethod = GeneralAppIdDecoder.extractNumericValueFromBitArray(information, 1, 7);
-    switch(sevenBitEncodationMethod){
+    switch (sevenBitEncodationMethod) {
       case 56: return new AI013x0x1xDecoder(information, "310", "11");
       case 57: return new AI013x0x1xDecoder(information, "320", "11");
       case 58: return new AI013x0x1xDecoder(information, "310", "13");

@@ -99,7 +99,6 @@ final class GenericGFPoly {
       // Just return the x^0 coefficient
       return getCoefficient(0);
     }
-    int size = coefficients.length;
     if (a == 1) {
       // Just the sum of the coefficients
       int result = 0;
@@ -109,6 +108,7 @@ final class GenericGFPoly {
       return result;
     }
     int result = coefficients[0];
+    int size = coefficients.length;
     for (int i = 1; i < size; i++) {
       result = GenericGF.addOrSubtract(field.multiply(a, result), coefficients[i]);
     }
@@ -225,12 +225,19 @@ final class GenericGFPoly {
 
   @Override
   public String toString() {
+    if (isZero()) {
+      return "0";
+    }
     StringBuilder result = new StringBuilder(8 * getDegree());
     for (int degree = getDegree(); degree >= 0; degree--) {
       int coefficient = getCoefficient(degree);
       if (coefficient != 0) {
         if (coefficient < 0) {
-          result.append(" - ");
+          if (degree == getDegree()) {
+            result.append("-");
+          } else {
+            result.append(" - ");
+          }
           coefficient = -coefficient;
         } else {
           if (result.length() > 0) {

@@ -44,8 +44,8 @@ public final class AddressBookAUResultParser extends ResultParser {
     String name = matchSinglePrefixedField("NAME1:", rawText, '\r', true);
     String pronunciation = matchSinglePrefixedField("NAME2:", rawText, '\r', true);
 
-    String[] phoneNumbers = matchMultipleValuePrefix("TEL", 3, rawText, true);
-    String[] emails = matchMultipleValuePrefix("MAIL", 3, rawText, true);
+    String[] phoneNumbers = matchMultipleValuePrefix("TEL", rawText);
+    String[] emails = matchMultipleValuePrefix("MAIL", rawText);
     String note = matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
     String address = matchSinglePrefixedField("ADD:", rawText, '\r', true);
     String[] addresses = address == null ? null : new String[] {address};
@@ -67,25 +67,23 @@ public final class AddressBookAUResultParser extends ResultParser {
                                        null);
   }
 
-  private static String[] matchMultipleValuePrefix(String prefix,
-                                                   int max,
-                                                   String rawText,
-                                                   boolean trim) {
+  private static String[] matchMultipleValuePrefix(String prefix, String rawText) {
     List<String> values = null;
-    for (int i = 1; i <= max; i++) {
-      String value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r', trim);
+    // For now, always 3, and always trim
+    for (int i = 1; i <= 3; i++) {
+      String value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r', true);
       if (value == null) {
         break;
       }
       if (values == null) {
-        values = new ArrayList<>(max); // lazy init
+        values = new ArrayList<>(3); // lazy init
       }
       values.add(value);
     }
     if (values == null) {
       return null;
     }
-    return values.toArray(new String[values.size()]);
+    return values.toArray(EMPTY_STR_ARRAY);
   }
 
 }

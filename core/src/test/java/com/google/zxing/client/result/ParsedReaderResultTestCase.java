@@ -22,6 +22,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -43,7 +45,7 @@ public final class ParsedReaderResultTestCase extends Assert {
   public void testTextType() {
     doTestResult("", "", ParsedResultType.TEXT);
     doTestResult("foo", "foo", ParsedResultType.TEXT);
-    doTestResult("Hi.", "Hi.", ParsedResultType.TEXT);    
+    doTestResult("Hi.", "Hi.", ParsedResultType.TEXT);
     doTestResult("This is a test", "This is a test", ParsedResultType.TEXT);
     doTestResult("This is a test\nwith newlines", "This is a test\nwith newlines",
         ParsedResultType.TEXT);
@@ -212,27 +214,31 @@ public final class ParsedReaderResultTestCase extends Assert {
     // UTC times
     doTestResult("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
         "DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR",
-        "foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM",
+        "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" + formatTime(2008, 5, 5, 23, 45, 55),
         ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
-        "DTEND:20080505T234555Z\r\nEND:VEVENT", "foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM",
+        "DTEND:20080505T234555Z\r\nEND:VEVENT", "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" +
+        formatTime(2008, 5, 5, 23, 45, 55),
         ParsedResultType.CALENDAR);
     // Local times
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n" +
-        "DTEND:20080505T234555\r\nEND:VEVENT", "foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM",
+        "DTEND:20080505T234555\r\nEND:VEVENT", "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" +
+        formatTime(2008, 5, 5, 23, 45, 55),
         ParsedResultType.CALENDAR);
     // Date only (all day event)
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n" +
-        "DTEND:20080505\r\nEND:VEVENT", "foo\nMay 4, 2008\nMay 5, 2008", ParsedResultType.CALENDAR);
+        "DTEND:20080505\r\nEND:VEVENT", "foo\n" + formatDate(2008, 5, 4) + "\n" +
+        formatDate(2008, 5, 5),
+        ParsedResultType.CALENDAR);
     // Start time only
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT",
-        "foo\nMay 4, 2008 12:34:56 PM", ParsedResultType.CALENDAR);
+        "foo\n" + formatTime(2008, 5, 4, 12, 34, 56), ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT",
-        "foo\nMay 4, 2008 12:34:56 PM", ParsedResultType.CALENDAR);
+        "foo\n" + formatTime(2008, 5, 4, 12, 34, 56), ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
-        "foo\nMay 4, 2008", ParsedResultType.CALENDAR);
+        "foo\n" + formatDate(2008, 5, 4), ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT",
-        "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.URI);
+        "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
     // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR
     // Make sure illegal entries without newlines don't crash
     doTestResult(
@@ -241,13 +247,27 @@ public final class ParsedReaderResultTestCase extends Assert {
         ParsedResultType.URI);
   }
 
+  private static String formatDate(int year, int month, int day) {
+    Calendar cal = Calendar.getInstance();
+    cal.clear();
+    cal.set(year, month - 1, day);
+    return DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US).format(cal.getTime());
+  }
+
+  private static String formatTime(int year, int month, int day, int hour, int min, int sec) {
+    Calendar cal = Calendar.getInstance();
+    cal.clear();
+    cal.set(year, month - 1, day, hour, min, sec);
+    return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.US).format(cal.getTime());
+  }
+
   @Test
   public void testSMS() {
     doTestResult("sms:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("SMS:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("sms:+15551212;via=999333", "+15551212", ParsedResultType.SMS);
     doTestResult("sms:+15551212?subject=foo&body=bar", "+15551212\nfoo\nbar", ParsedResultType.SMS);
-    doTestResult("sms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);    
+    doTestResult("sms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);
   }
 
   @Test
@@ -272,7 +292,7 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("MMS:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("mms:+15551212;via=999333", "+15551212", ParsedResultType.SMS);
     doTestResult("mms:+15551212?subject=foo&body=bar", "+15551212\nfoo\nbar", ParsedResultType.SMS);
-    doTestResult("mms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);        
+    doTestResult("mms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);
   }
 
   @Test
@@ -287,42 +307,6 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("mmsto:212-555-1212:Here's a longer message. Should be fine.",
         "212-555-1212\nHere's a longer message. Should be fine.", ParsedResultType.SMS);
   }
-
-  /*
-  @Test
-  public void testNDEFText() {
-    doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,
-                             (byte)0x02,(byte)0x65,(byte)0x6E,(byte)0x68,
-                             (byte)0x69},
-                 ParsedResultType.TEXT);
-  }
-
-  @Test
-  public void testNDEFURI() {
-    doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,
-                             (byte)0x01,(byte)0x6E,(byte)0x66,(byte)0x63,
-                             (byte)0x2E,(byte)0x63,(byte)0x6F,(byte)0x6D},
-                 ParsedResultType.URI);
-  }
-
-  @Test
-  public void testNDEFSmartPoster() {
-    doTestResult(new byte[] {(byte)0xD1,(byte)0x02,(byte)0x2F,(byte)0x53,
-                             (byte)0x70,(byte)0x91,(byte)0x01,(byte)0x0E,
-                             (byte)0x55,(byte)0x01,(byte)0x6E,(byte)0x66,
-                             (byte)0x63,(byte)0x2D,(byte)0x66,(byte)0x6F,
-                             (byte)0x72,(byte)0x75,(byte)0x6D,(byte)0x2E,
-                             (byte)0x6F,(byte)0x72,(byte)0x67,(byte)0x11,
-                             (byte)0x03,(byte)0x01,(byte)0x61,(byte)0x63,
-                             (byte)0x74,(byte)0x00,(byte)0x51,(byte)0x01,
-                             (byte)0x12,(byte)0x54,(byte)0x05,(byte)0x65,
-                             (byte)0x6E,(byte)0x2D,(byte)0x55,(byte)0x53,
-                             (byte)0x48,(byte)0x65,(byte)0x6C,(byte)0x6C,
-                             (byte)0x6F,(byte)0x2C,(byte)0x20,(byte)0x77,
-                             (byte)0x6F,(byte)0x72,(byte)0x6C,(byte)0x64},
-                 ParsedResultType.NDEF_SMART_POSTER);
-  }
-   */
 
   private static void doTestResult(String contents,
                                    String goldenResult,

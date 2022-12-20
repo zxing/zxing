@@ -103,7 +103,7 @@ final class DecodeHintManager {
       String name = query.substring(pos, equ);
       name = name.replace('+', ' '); // Preemptively decode +
       name = Uri.decode(name);
-      String text = query.substring(equ+1, amp);
+      String text = query.substring(equ + 1, amp);
       text = text.replace('+', ' '); // Preemptively decode +
       text = Uri.decode(text);
       if (!map.containsKey(name)) {
@@ -181,7 +181,7 @@ final class DecodeHintManager {
           try {
             array[i] = Integer.parseInt(values[i]);
           } catch (NumberFormatException ignored) {
-            Log.w(TAG, "Skipping array of integers hint " + hintType + " due to invalid numeric value: '" + values[i] + '\'');
+            Log.w(TAG, "Skipping array of integers hint " + hintType + " due to invalid numeric value");
             array = null;
             break;
           }
@@ -194,7 +194,6 @@ final class DecodeHintManager {
       Log.w(TAG, "Unsupported hint type '" + hintType + "' of type " + hintType.getValueType());
     }
 
-    Log.i(TAG, "Hints from the URI: " + hints);
     return hints;
   }
 
@@ -223,13 +222,12 @@ final class DecodeHintManager {
           if (hintType.getValueType().isInstance(hintData)) {
             hints.put(hintType, hintData);
           } else {
-            Log.w(TAG, "Ignoring hint " + hintType + " because it is not assignable from " + hintData);
+            Log.w(TAG, "Ignoring hint " + hintType + " because it is not a " + hintType.getValueType());
           }
         }
       }
     }
 
-    Log.i(TAG, "Hints from the Intent: " + hints);
     return hints;
   }
 

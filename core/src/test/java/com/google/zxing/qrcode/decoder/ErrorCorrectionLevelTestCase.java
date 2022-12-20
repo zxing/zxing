@@ -30,13 +30,11 @@ public final class ErrorCorrectionLevelTestCase extends Assert {
     assertSame(ErrorCorrectionLevel.L, ErrorCorrectionLevel.forBits(1));
     assertSame(ErrorCorrectionLevel.H, ErrorCorrectionLevel.forBits(2));
     assertSame(ErrorCorrectionLevel.Q, ErrorCorrectionLevel.forBits(3));
-    try {
-      ErrorCorrectionLevel.forBits(4);
-      fail("Should have thrown an exception");
-    } catch (IllegalArgumentException iae) {
-      // good
-    }
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testBadECLevel() {
+    ErrorCorrectionLevel.forBits(4);
+  }
 
 }

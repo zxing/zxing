@@ -17,8 +17,8 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,7 +29,7 @@ import org.junit.Test;
 public final class CodaBarWriterTestCase extends Assert {
 
   @Test
-  public void testEncode() throws WriterException {
+  public void testEncode() {
     doTest("B515-3/B",
            "00000" +
            "1001001011" + "0110101001" + "0101011001" + "0110101001" + "0101001101" +
@@ -38,7 +38,7 @@ public final class CodaBarWriterTestCase extends Assert {
   }
 
   @Test
-  public void testEncode2() throws WriterException {
+  public void testEncode2() {
     doTest("T123T",
            "00000" +
            "1011001001" + "0101011001" + "0101001011" + "0110010101" + "01011001001" +
@@ -46,20 +46,16 @@ public final class CodaBarWriterTestCase extends Assert {
   }
 
   @Test
-  public void testAltStartEnd() throws WriterException {
+  public void testAltStartEnd() {
     assertEquals(encode("T123456789-$T"), encode("A123456789-$A"));
   }
 
-  private static void doTest(String input, CharSequence expected) throws WriterException {
+  private static void doTest(String input, CharSequence expected) {
     BitMatrix result = encode(input);
-    StringBuilder actual = new StringBuilder(result.getWidth());
-    for (int i = 0; i < result.getWidth(); i++) {
-      actual.append(result.get(i, 0) ? '1' : '0');
-    }
-    assertEquals(expected, actual.toString());
+    assertEquals(expected, BitMatrixTestCase.matrixToString(result));
   }
 
-  private static BitMatrix encode(String input) throws WriterException {
+  private static BitMatrix encode(String input) {
     return new CodaBarWriter().encode(input, BarcodeFormat.CODABAR, 0, 0);
   }
 

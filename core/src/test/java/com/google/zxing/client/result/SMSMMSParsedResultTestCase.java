@@ -30,39 +30,37 @@ public final class SMSMMSParsedResultTestCase extends Assert {
 
   @Test
   public void testSMS() {
-    doTest("sms:+15551212", "+15551212", null, null, null);
-    doTest("sms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null);
-    doTest("sms:+15551212;via=999333", "+15551212", null, null, "999333");
+    doTest("sms:+15551212", "+15551212", null, null, null, "sms:+15551212");
+    doTest("sms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null,
+           "sms:+15551212?body=bar&subject=foo");
+    doTest("sms:+15551212;via=999333", "+15551212", null, null, "999333",
+           "sms:+15551212;via=999333");
   }
 
   @Test
   public void testMMS() {
-    doTest("mms:+15551212", "+15551212", null, null, null);
-    doTest("mms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null);
-    doTest("mms:+15551212;via=999333", "+15551212", null, null, "999333");
+    doTest("mms:+15551212", "+15551212", null, null, null, "sms:+15551212");
+    doTest("mms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null,
+           "sms:+15551212?body=bar&subject=foo");
+    doTest("mms:+15551212;via=999333", "+15551212", null, null, "999333",
+           "sms:+15551212;via=999333");
   }
 
   private static void doTest(String contents,
                              String number,
                              String subject,
                              String body,
-                             String via) {
-    doTest(contents, new String[] {number}, subject, body, new String[] {via});
-  }
-
-  private static void doTest(String contents,
-                             String[] numbers,
-                             String subject,
-                             String body,
-                             String[] vias) {
+                             String via,
+                             String parsedURI) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertSame(ParsedResultType.SMS, result.getType());
     SMSParsedResult smsResult = (SMSParsedResult) result;
-    assertArrayEquals(numbers, smsResult.getNumbers());
+    assertArrayEquals(new String[] { number }, smsResult.getNumbers());
     assertEquals(subject, smsResult.getSubject());
     assertEquals(body, smsResult.getBody());
-    assertArrayEquals(vias, smsResult.getVias());
+    assertArrayEquals(new String[] { via }, smsResult.getVias());
+    assertEquals(parsedURI, smsResult.getSMSURI());
   }
 
 }

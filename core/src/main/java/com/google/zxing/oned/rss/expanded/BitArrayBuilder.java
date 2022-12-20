@@ -52,27 +52,27 @@ final class BitArrayBuilder {
 
     ExpandedPair firstPair = pairs.get(0);
     int firstValue = firstPair.getRightChar().getValue();
-    for(int i = 11; i >= 0; --i){
+    for (int i = 11; i >= 0; --i) {
       if ((firstValue & (1 << i)) != 0) {
         binary.set(accPos);
       }
       accPos++;
     }
 
-    for(int i = 1; i < pairs.size(); ++i){
+    for (int i = 1; i < pairs.size(); ++i) {
       ExpandedPair currentPair = pairs.get(i);
 
       int leftValue = currentPair.getLeftChar().getValue();
-      for(int j = 11; j >= 0; --j){
+      for (int j = 11; j >= 0; --j) {
         if ((leftValue & (1 << j)) != 0) {
           binary.set(accPos);
         }
         accPos++;
       }
 
-      if(currentPair.getRightChar() != null){
+      if (currentPair.getRightChar() != null) {
         int rightValue = currentPair.getRightChar().getValue();
-        for(int j = 11; j >= 0; --j){
+        for (int j = 11; j >= 0; --j) {
           if ((rightValue & (1 << j)) != 0) {
             binary.set(accPos);
           }

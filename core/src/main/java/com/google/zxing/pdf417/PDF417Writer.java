@@ -37,12 +37,12 @@ public final class PDF417Writer implements Writer {
   /**
    * default white space (margin) around the code
    */
-  static final int WHITE_SPACE = 30;
+  private static final int WHITE_SPACE = 30;
 
   /**
    * default error correction level
    */
-  static final int DEFAULT_ERROR_CORRECTION_LEVEL = 2;
+  private static final int DEFAULT_ERROR_CORRECTION_LEVEL = 2;
 
   @Override
   public BitMatrix encode(String contents,
@@ -57,10 +57,11 @@ public final class PDF417Writer implements Writer {
     PDF417 encoder = new PDF417();
     int margin = WHITE_SPACE;
     int errorCorrectionLevel = DEFAULT_ERROR_CORRECTION_LEVEL;
+    boolean autoECI = false;
 
     if (hints != null) {
       if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
-        encoder.setCompact(Boolean.valueOf(hints.get(EncodeHintType.PDF417_COMPACT).toString()));
+        encoder.setCompact(Boolean.parseBoolean(hints.get(EncodeHintType.PDF417_COMPACT).toString()));
       }
       if (hints.containsKey(EncodeHintType.PDF417_COMPACTION)) {
         encoder.setCompaction(Compaction.valueOf(hints.get(EncodeHintType.PDF417_COMPACTION).toString()));
@@ -82,9 +83,11 @@ public final class PDF417Writer implements Writer {
         Charset encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
         encoder.setEncoding(encoding);
       }
+      autoECI = hints.containsKey(EncodeHintType.PDF417_AUTO_ECI) &&
+          Boolean.parseBoolean(hints.get(EncodeHintType.PDF417_AUTO_ECI).toString());
     }
 
-    return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin);
+    return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin, autoECI);
   }
 
   @Override
@@ -103,26 +106,21 @@ public final class PDF417Writer implements Writer {
                                                 int errorCorrectionLevel,
                                                 int width,
                                                 int height,
-                                                int margin) throws WriterException {
-    encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
+                                                int margin,
+                                                boolean autoECI) throws WriterException {
+    encoder.generateBarcodeLogic(contents, errorCorrectionLevel, autoECI);
 
     int aspectRatio = 4;
     byte[][] originalScale = encoder.getBarcodeMatrix().getScaledMatrix(1, aspectRatio);
     boolean rotated = false;
-    if ((height > width) ^ (originalScale[0].length < originalScale.length)) {
+    if ((height > width) != (originalScale[0].length < originalScale.length)) {
       originalScale = rotateArray(originalScale);
       rotated = true;
     }
 
     int scaleX = width / originalScale[0].length;
     int scaleY = height / originalScale.length;
-
-    int scale;
-    if (scaleX < scaleY) {
-      scale = scaleX;
-    } else {
-      scale = scaleY;
-    }
+    int scale = Math.min(scaleX, scaleY);
 
     if (scale > 1) {
       byte[][] scaledMatrix =
@@ -130,9 +128,9 @@ public final class PDF417Writer implements Writer {
       if (rotated) {
         scaledMatrix = rotateArray(scaledMatrix);
       }
-      return bitMatrixFrombitArray(scaledMatrix, margin);
+      return bitMatrixFromBitArray(scaledMatrix, margin);
     }
-    return bitMatrixFrombitArray(originalScale, margin);
+    return bitMatrixFromBitArray(originalScale, margin);
   }
 
   /**
@@ -142,14 +140,15 @@ public final class PDF417Writer implements Writer {
    * @param margin border around the barcode
    * @return BitMatrix of the input
    */
-  private static BitMatrix bitMatrixFrombitArray(byte[][] input, int margin) {
-    // Creates the bitmatrix with extra space for whitespace
+  private static BitMatrix bitMatrixFromBitArray(byte[][] input, int margin) {
+    // Creates the bit matrix with extra space for whitespace
     BitMatrix output = new BitMatrix(input[0].length + 2 * margin, input.length + 2 * margin);
     output.clear();
     for (int y = 0, yOutput = output.getHeight() - margin - 1; y < input.length; y++, yOutput--) {
+      byte[] inputY = input[y];
       for (int x = 0; x < input[0].length; x++) {
-        // Zero is white in the bytematrix
-        if (input[y][x] == 1) {
+        // Zero is white in the byte matrix
+        if (inputY[x] == 1) {
           output.set(x + margin, yOutput);
         }
       }

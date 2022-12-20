@@ -18,6 +18,8 @@ package com.google.zxing.pdf417;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.google.zxing.common.detector.MathUtils;
+
 /**
  * @author SITA Lab (kevin.osullivan@sita.aero)
  * @author Guenther Grau
@@ -40,12 +42,14 @@ public final class PDF417Common {
   private PDF417Common() {
   }
 
+  /**
+   * @param moduleBitCount values to sum
+   * @return sum of values
+   * @deprecated call {@link MathUtils#sum(int[])}
+   */
+  @Deprecated
   public static int getBitCountSum(int[] moduleBitCount) {
-    int bitCountSum = 0;
-    for (int count : moduleBitCount) {
-      bitCountSum += count;
-    }
-    return bitCountSum;
+    return MathUtils.sum(moduleBitCount);
   }
 
   public static int[] toIntArray(Collection<Integer> list) {

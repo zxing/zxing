@@ -43,7 +43,7 @@ public final class ModulusGF {
       expTable[i] = x;
       x = (x * generator) % modulus;
     }
-    for (int i = 0; i < modulus-1; i++) {
+    for (int i = 0; i < modulus - 1; i++) {
       logTable[expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
@@ -108,5 +108,5 @@ public final class ModulusGF {
   int getSize() {
     return modulus;
   }
-  
+
 }

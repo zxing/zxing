@@ -21,6 +21,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Generates Aztec 2D barcodes.
  *
@@ -42,18 +45,58 @@ public final class Encoder {
   }
 
   /**
-   * Encodes the given binary content as an Aztec symbol
-   * 
+   * Encodes the given string content as an Aztec symbol (without ECI code)
+   *
+   * @param data input data string; must be encodable as ISO/IEC 8859-1 (Latin-1)
+   * @return Aztec symbol matrix with metadata
+   */
+  public static AztecCode encode(String data) {
+    return encode(data.getBytes(StandardCharsets.ISO_8859_1));
+  }
+
+  /**
+   * Encodes the given string content as an Aztec symbol (without ECI code)
+   *
+   * @param data input data string; must be encodable as ISO/IEC 8859-1 (Latin-1)
+   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+   *                      a minimum of 23% + 3 words is recommended)
+   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+   * @return Aztec symbol matrix with metadata
+   */
+  public static AztecCode encode(String data, int minECCPercent, int userSpecifiedLayers) {
+    return encode(data.getBytes(StandardCharsets.ISO_8859_1), minECCPercent, userSpecifiedLayers, null);
+  }
+
+  /**
+   * Encodes the given string content as an Aztec symbol
+   *
+   * @param data input data string
+   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+   *                      a minimum of 23% + 3 words is recommended)
+   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+   * @param charset character set in which to encode string using ECI; if null, no ECI code
+   *                will be inserted, and the string must be encodable as ISO/IEC 8859-1
+   *                (Latin-1), the default encoding of the symbol.
+   * @return Aztec symbol matrix with metadata
+   */
+  public static AztecCode encode(String data, int minECCPercent, int userSpecifiedLayers, Charset charset) {
+    byte[] bytes = data.getBytes(null != charset ? charset : StandardCharsets.ISO_8859_1);
+    return encode(bytes, minECCPercent, userSpecifiedLayers, charset);
+  }
+
+  /**
+   * Encodes the given binary content as an Aztec symbol (without ECI code)
+   *
    * @param data input data string
    * @return Aztec symbol matrix with metadata
    */
   public static AztecCode encode(byte[] data) {
-    return encode(data, DEFAULT_EC_PERCENT, DEFAULT_AZTEC_LAYERS);
+    return encode(data, DEFAULT_EC_PERCENT, DEFAULT_AZTEC_LAYERS, null);
   }
-  
+
   /**
-   * Encodes the given binary content as an Aztec symbol
-   * 
+   * Encodes the given binary content as an Aztec symbol (without ECI code)
+   *
    * @param data input data string
    * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
    *                      a minimum of 23% + 3 words is recommended)
@@ -61,9 +104,24 @@ public final class Encoder {
    * @return Aztec symbol matrix with metadata
    */
   public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers) {
+    return encode(data, minECCPercent, userSpecifiedLayers, null);
+  }
+
+  /**
+   * Encodes the given binary content as an Aztec symbol
+   *
+   * @param data input data string
+   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+   *                      a minimum of 23% + 3 words is recommended)
+   * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
+   * @param charset character set to mark using ECI; if null, no ECI code will be inserted, and the
+   *                default encoding of ISO/IEC 8859-1 will be assuming by readers.
+   * @return Aztec symbol matrix with metadata
+   */
+  public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers, Charset charset) {
     // High-level encode
-    BitArray bits = new HighLevelEncoder(data).encode();
-    
+    BitArray bits = new HighLevelEncoder(data, charset).encode();
+
     // stuff bits and choose symbol size
     int eccBits = bits.getSize() * minECCPercent / 100 + 11;
     int totalSizeBits = bits.getSize() + eccBits;
@@ -108,7 +166,7 @@ public final class Encoder {
         }
         // [Re]stuff the bits if this is the first opportunity, or if the
         // wordSize has changed
-        if (wordSize != WORD_SIZE[layers]) {
+        if (stuffedBits == null || wordSize != WORD_SIZE[layers]) {
           wordSize = WORD_SIZE[layers];
           stuffedBits = stuffBits(bits, wordSize);
         }
@@ -123,7 +181,7 @@ public final class Encoder {
       }
     }
     BitArray messageBits = generateCheckWords(stuffedBits, totalBitsInLayer, wordSize);
-    
+
     // generate mode message
     int messageSizeInWords = stuffedBits.getSize() / wordSize;
     BitArray modeMessage = generateModeMessage(compact, layers, messageSizeInWords);
@@ -149,7 +207,7 @@ public final class Encoder {
       }
     }
     BitMatrix matrix = new BitMatrix(matrixSize);
-    
+
     // draw data bits
     for (int i = 0, rowOffset = 0; i < layers; i++) {
       int rowSize = (layers - i) * 4 + (compact ? 9 : 12);
@@ -175,7 +233,7 @@ public final class Encoder {
 
     // draw mode message
     drawModeMessage(matrix, compact, matrixSize, modeMessage);
-    
+
     // draw alignment marks
     if (compact) {
       drawBullsEye(matrix, matrixSize / 2, 5);
@@ -190,7 +248,7 @@ public final class Encoder {
         }
       }
     }
-    
+
     AztecCode aztec = new AztecCode();
     aztec.setCompact(compact);
     aztec.setSize(matrixSize);
@@ -199,7 +257,7 @@ public final class Encoder {
     aztec.setMatrix(matrix);
     return aztec;
   }
-  
+
   private static void drawBullsEye(BitMatrix matrix, int center, int size) {
     for (int i = 0; i < size; i += 2) {
       for (int j = center - i; j <= center + i; j++) {
@@ -216,7 +274,7 @@ public final class Encoder {
     matrix.set(center + size, center - size + 1);
     matrix.set(center + size, center + size - 1);
   }
-  
+
   static BitArray generateModeMessage(boolean compact, int layers, int messageSizeInWords) {
     BitArray modeMessage = new BitArray();
     if (compact) {
@@ -230,7 +288,7 @@ public final class Encoder {
     }
     return modeMessage;
   }
-  
+
   private static void drawModeMessage(BitMatrix matrix, boolean compact, int matrixSize, BitArray modeMessage) {
     int center = matrixSize / 2;
     if (compact) {
@@ -267,7 +325,7 @@ public final class Encoder {
       }
     }
   }
-  
+
   private static BitArray generateCheckWords(BitArray bitArray, int totalBits, int wordSize) {
     // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
     int messageSizeInWords = bitArray.getSize() / wordSize;
@@ -283,7 +341,7 @@ public final class Encoder {
     }
     return messageBits;
   }
-  
+
   private static int[] bitsToWords(BitArray stuffedBits, int wordSize, int totalWords) {
     int[] message = new int[totalWords];
     int i;
@@ -297,7 +355,7 @@ public final class Encoder {
     }
     return message;
   }
-  
+
   private static GenericGF getGF(int wordSize) {
     switch (wordSize) {
       case 4:

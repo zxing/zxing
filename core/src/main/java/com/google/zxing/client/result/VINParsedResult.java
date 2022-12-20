@@ -17,7 +17,9 @@
 
 package com.google.zxing.client.result;
 
-
+/**
+ * Represents a parsed result that encodes a Vehicle Identification Number (VIN).
+ */
 public final class VINParsedResult extends ParsedResult {
 
   private final String vin;

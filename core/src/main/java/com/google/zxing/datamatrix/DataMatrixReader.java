@@ -83,6 +83,7 @@ public final class DataMatrixReader implements Reader {
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
+    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]d" + decoderResult.getSymbologyModifier());
     return result;
   }
 
@@ -96,8 +97,6 @@ public final class DataMatrixReader implements Reader {
    * which contains only an unrotated, unskewed, image of a code, with some white border
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
-   *
-   * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
    */
   private static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
 

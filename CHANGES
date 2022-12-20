@@ -303,7 +303,7 @@
   - Many small updates to the Android app, Barcode Scanner, including rare bug fixes and translation updates.
     The 2.1 release corresponds substantially to v4.3.1.
   - Many ports of Java updates to C++ port
-  
+
 2.2 (14 May 2013)
 
   - Retire Symbian port
@@ -355,3 +355,47 @@
 3.2.1 (20 Aug 2015)
 
   - Small bug fixes
+
+3.3.0 (16 Sep 2016)
+
+  - Minor core API additions like 'Result.getNumBits', raw bytes for Aztec
+  - Small changes for Java 9 compatibility
+  - BS 4.7.6 release with Android API 23 support
+  - TIFF support in online decoder
+  - Many small bug fixes, typo fixes and project build improvements
+
+3.3.1 (26 Oct 2017)
+
+  - Various fixes to Code 128, 39 encoding; DataMatrix decoding
+  - Improvements to speed and robustness of zxing.org decoder
+  - Java 9 support
+  - Various translation updates for Barcode Scanner
+  - Removed Google Glass, ZXing Test apps
+
+3.3.2 (31 Jan 2018)
+
+  - Add workaround for Gradle + Android build issues
+  - Minor DataMatrix bug fixes
+  - Improve WPA2 wi-fi configuration support in Barcode Scanner
+  - Various translation updates and minor improvements
+
+3.3.3 (30 May 2018)
+
+  - Minor fixes and improvements
+  - Java 9+ support
+
+3.4.0 (19 May 2019)
+
+  - Requires Java 8+
+  - core, javase modules declare a Java 9+ module
+  - HtmlAssetTranslator and StringsResourceTranslator legacy utilities are moved to a .client.j2se subpackage
+  - No more releases of the Barcode Scanner app
+  - Minor bug fixes to Code93Writer
+  - Minor improvements to QR code detection
+
+3.4.1 (30 Sep 2020)
+
+  - Wifi QR codes now recognize PH2:, not H:, for phase 2 method
+  - Minor bug fixes and improvements
+
+Note that further release notes will be published at https://github.com/zxing/zxing/releases

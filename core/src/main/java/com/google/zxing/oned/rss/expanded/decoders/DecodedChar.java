@@ -41,11 +41,11 @@ final class DecodedChar extends DecodedObject {
     this.value = value;
   }
 
-  char getValue(){
+  char getValue() {
     return this.value;
   }
 
-  boolean isFNC1(){
+  boolean isFNC1() {
     return this.value == FNC1;
   }
 

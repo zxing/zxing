@@ -44,15 +44,9 @@ public final class FinderPattern extends ResultPoint {
     return estimatedModuleSize;
   }
 
-  int getCount() {
+  public int getCount() {
     return count;
   }
-
-  /*
-  void incrementCount() {
-    this.count++;
-  }
-   */
 
   /**
    * <p>Determines if this finder pattern "about equals" a finder pattern at the stated

@@ -40,10 +40,10 @@ import java.util.List;
  */
 final class LoadPackagesAsyncTask extends AsyncTask<Object,Object,List<AppInfo>> {
 
-  private static final String[] PKG_PREFIX_WHITELIST = {
+  private static final String[] PKG_PREFIX_SAFELIST = {
       "com.google.android.apps.",
   };
-  private static final String[] PKG_PREFIX_BLACKLIST = {
+  private static final String[] PKG_PREFIX_BLOCKLIST = {
       "com.android.",
       "android",
       "com.google.android.",
@@ -65,7 +65,7 @@ final class LoadPackagesAsyncTask extends AsyncTask<Object,Object,List<AppInfo>>
       String packageName = appInfo.packageName;
       if (!isHidden(packageName)) {
         CharSequence label = appInfo.loadLabel(packageManager);
-        Drawable icon = appInfo.loadIcon(packageManager);        
+        Drawable icon = appInfo.loadIcon(packageManager);
         if (label != null) {
           labelsPackages.add(new AppInfo(packageName, label.toString(), icon));
         }
@@ -79,12 +79,12 @@ final class LoadPackagesAsyncTask extends AsyncTask<Object,Object,List<AppInfo>>
     if (packageName == null) {
       return true;
     }
-    for (String prefix : PKG_PREFIX_WHITELIST) {
+    for (String prefix : PKG_PREFIX_SAFELIST) {
       if (packageName.startsWith(prefix)) {
         return false;
       }
     }
-    for (String prefix : PKG_PREFIX_BLACKLIST) {
+    for (String prefix : PKG_PREFIX_BLOCKLIST) {
       if (packageName.startsWith(prefix)) {
         return true;
       }
@@ -93,10 +93,10 @@ final class LoadPackagesAsyncTask extends AsyncTask<Object,Object,List<AppInfo>>
   }
 
   @Override
-  protected void onPostExecute(final List<AppInfo> results) {    
-    ListAdapter listAdapter = new ArrayAdapter<AppInfo>(activity, 
-                                                        R.layout.app_picker_list_item, 
-                                                        R.id.app_picker_list_item_label, 
+  protected void onPostExecute(final List<AppInfo> results) {
+    ListAdapter listAdapter = new ArrayAdapter<AppInfo>(activity,
+                                                        R.layout.app_picker_list_item,
+                                                        R.id.app_picker_list_item_label,
                                                         results) {
       @Override
       public View getView(int position, View convertView, ViewGroup parent) {

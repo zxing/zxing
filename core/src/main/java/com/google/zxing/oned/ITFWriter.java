@@ -17,15 +17,14 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * This object renders a ITF code as a {@link BitMatrix}.
- * 
+ *
  * @author erik.barbara@gmail.com (Erik Barbara)
  */
 public final class ITFWriter extends OneDimensionalCodeWriter {
@@ -33,17 +32,27 @@ public final class ITFWriter extends OneDimensionalCodeWriter {
   private static final int[] START_PATTERN = {1, 1, 1, 1};
   private static final int[] END_PATTERN = {3, 1, 1};
 
-  @Override
-  public BitMatrix encode(String contents,
-                          BarcodeFormat format,
-                          int width,
-                          int height,
-                          Map<EncodeHintType,?> hints) throws WriterException {
-    if (format != BarcodeFormat.ITF) {
-      throw new IllegalArgumentException("Can only encode ITF, but got " + format);
-    }
+  private static final int W = 3; // Pixel width of a 3x wide line
+  private static final int N = 1; // Pixed width of a narrow line
 
-    return super.encode(contents, format, width, height, hints);
+  // See ITFReader.PATTERNS
+
+  private static final int[][] PATTERNS = {
+      {N, N, W, W, N}, // 0
+      {W, N, N, N, W}, // 1
+      {N, W, N, N, W}, // 2
+      {W, W, N, N, N}, // 3
+      {N, N, W, N, W}, // 4
+      {W, N, W, N, N}, // 5
+      {N, W, W, N, N}, // 6
+      {N, N, N, W, W}, // 7
+      {W, N, N, W, N}, // 8
+      {N, W, N, W, N}  // 9
+  };
+
+  @Override
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return Collections.singleton(BarcodeFormat.ITF);
   }
 
   @Override
@@ -56,15 +65,18 @@ public final class ITFWriter extends OneDimensionalCodeWriter {
       throw new IllegalArgumentException(
           "Requested contents should be less than 80 digits long, but got " + length);
     }
+
+    checkNumeric(contents);
+
     boolean[] result = new boolean[9 + 9 * length];
     int pos = appendPattern(result, 0, START_PATTERN, true);
     for (int i = 0; i < length; i += 2) {
       int one = Character.digit(contents.charAt(i), 10);
-      int two = Character.digit(contents.charAt(i+1), 10);
-      int[] encoding = new int[18];
+      int two = Character.digit(contents.charAt(i + 1), 10);
+      int[] encoding = new int[10];
       for (int j = 0; j < 5; j++) {
-        encoding[2 * j] = ITFReader.PATTERNS[one][j];
-        encoding[2 * j + 1] = ITFReader.PATTERNS[two][j];
+        encoding[2 * j] = PATTERNS[one][j];
+        encoding[2 * j + 1] = PATTERNS[two][j];
       }
       pos += appendPattern(result, pos, encoding, true);
     }

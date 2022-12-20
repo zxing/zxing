@@ -1,4 +1,5 @@
+dependency-reduced-pom.xml
 target
-private
 .idea
 *.iml
+.DS_Store

@@ -19,39 +19,11 @@
 
   <groupId>com.google.zxing</groupId>
   <artifactId>zxing-parent</artifactId>
-  <version>3.2.2-SNAPSHOT</version>
+  <version>3.5.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${slf4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-jdk14</artifactId>
-        <version>${slf4j.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>jcl-over-slf4j</artifactId>
-        <version>${slf4j.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>19.0</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.android</groupId>
-        <artifactId>android</artifactId>
-        <version>4.1.1.4</version>
-        <scope>provided</scope>
-      </dependency>
       <dependency>
         <groupId>com.google.zxing</groupId>
         <artifactId>core</artifactId>
@@ -75,7 +47,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.12</version>
+        <version>4.13.2</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
@@ -84,20 +56,20 @@
   <modules>
     <module>core</module>
     <module>javase</module>
-    <module>android-core</module>
-    <module>android-integration</module>
-    <module>zxing.appspot.com</module>
+    <!-- android modules are activated by a profile below -->
     <module>zxingorg</module>
+    <!-- appspot app activated by a profile below -->
   </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java.version>1.7</java.version>
-    <maven.version.min>3.2.1</maven.version.min>
-    <slf4j.version>1.7.18</slf4j.version>
+    <java.version>1.8</java.version>
+    <android.home>${env.ANDROID_HOME}</android.home>
+    <proguard.plugin.version>2.6.0</proguard.plugin.version>
     <!-- This can't reference project.version as some subprojects version differently -->
-    <zxing.version>3.2.2-SNAPSHOT</zxing.version>
+    <zxing.version>3.5.1-SNAPSHOT</zxing.version>
+    <android.platform>22</android.platform>
   </properties>
 
   <build>
@@ -129,11 +101,11 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
+        <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
       </plugin>
     </plugins>
     <pluginManagement>
@@ -141,18 +113,17 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.4.1</version>
+          <version>3.1.0</version>
           <executions>
             <execution>
               <id>enforce</id>
               <configuration>
                 <rules>
                   <requireModuleConvergence />
-                  <requirePluginVersions />
                   <requireUpperBoundDeps />
                   <dependencyConvergence />
                   <requireMavenVersion>
-                    <version>${maven.version.min}</version>
+                    <version>3.3.9</version>
                   </requireMavenVersion>
                   <requireJavaVersion>
                     <version>${java.version}</version>
@@ -168,20 +139,20 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.5.1</version>
+          <version>3.10.1</version>
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>
             <compilerArgs>
               <arg>-Xlint:all</arg>
-              <arg>-Werror</arg>
+              <arg>-Xlint:-serial</arg>
             </compilerArgs>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.2.1</version>
           <executions>
             <execution>
               <id>attach-sources</id>
@@ -194,9 +165,14 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.10.3</version>
+          <version>3.4.0</version>
           <configuration>
-            <javadocVersion>${java.version}</javadocVersion>
+            <source>${java.version}</source>
+            <quiet>true</quiet>
+            <notimestamp>true</notimestamp>
+            <encoding>${project.build.sourceEncoding}</encoding>
+            <docencoding>${project.reporting.outputEncoding}</docencoding>
+            <doclint>all</doclint>
           </configuration>
           <executions>
             <execution>
@@ -210,16 +186,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.2.0</version>
           <configuration>
             <filesets>
               <fileset>
                 <directory>.</directory>
                 <includes>
-                  <include>**/bin/**</include>
-                  <include>**/gen/**</include>
-                  <include>**/libs/*</include>
-                  <include>**/out/**</include>
                   <include>**/classes/**</include>
                   <include>**/gwt-unitCache/**</include>
                   <include>**/webapp/generator/**</include>
@@ -232,30 +204,27 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-          <configuration>
-            <createChecksum>true</createChecksum>
-          </configuration>
+          <version>3.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>2.7</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>2.6</version>
+          <version>3.2.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.6</version>
+          <version>3.4.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jarsigner-plugin</artifactId>
-          <version>1.4</version>
+          <version>3.0.0</version>
           <executions>
             <execution>
               <id>signing</id>
@@ -282,14 +251,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.5.3</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.scm</groupId>
-              <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.9.4</version>
-            </dependency>
-          </dependencies>
+          <version>3.0.0-M6</version>
           <configuration>
             <mavenExecutorId>forked-path</mavenExecutorId>
             <tagNameFormat>zxing-@{project.version}</tagNameFormat>
@@ -300,22 +262,27 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>1.9.4</version>
+          <version>2.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
+          <version>3.0.0-M2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>2.8.1</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>1.6</version>
+          <version>3.0.1</version>
           <executions>
             <execution>
               <id>sign-artifacts</id>
@@ -327,13 +294,12 @@
           </executions>
           <configuration>
             <keyname>Sean Owen (ZXing) &lt;srowen@gmail.com&gt;</keyname>
-            <executable>gpg2</executable>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.19.1</version>
+          <version>3.0.0-M7</version>
           <configuration>
             <forkCount>0.5C</forkCount>
             <systemPropertyVariables>
@@ -343,18 +309,13 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.10</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>2.6</version>
+          <version>3.3.2</version>
         </plugin>
         <plugin>
           <groupId>com.simpligility.maven.plugins</groupId>
           <artifactId>android-maven-plugin</artifactId>
-          <version>4.4.1</version>
+          <version>4.6.0</version>
           <extensions>true</extensions>
           <executions>
             <execution>
@@ -367,8 +328,15 @@
           </executions>
           <configuration>
             <sdk>
-              <platform>22</platform>
+              <path>${android.home}</path>
+              <platform>${android.platform}</platform>
             </sdk>
+            <artifactSet>
+              <excludes>
+                <!-- Make sure Android SDK jar isn't included -->
+                <exclude>com.google.android:android</exclude>
+              </excludes>
+            </artifactSet>
             <proguard>
               <skip>true</skip>
             </proguard>
@@ -386,47 +354,52 @@
             <nativeLibrariesDirectory>libs</nativeLibrariesDirectory>
             <disableConflictingDependenciesWarning>true</disableConflictingDependenciesWarning>
           </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>net.sf.proguard</groupId>
-              <artifactId>proguard-base</artifactId>
-              <version>5.2.1</version>
-            </dependency>
-          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>com.github.wvengen</groupId>
+          <artifactId>proguard-maven-plugin</artifactId>
+          <version>${proguard.plugin.version}</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>proguard</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <addMavenDescriptor>true</addMavenDescriptor>
+            <obfuscate>false</obfuscate>
+            <options>
+              <option>-target ${java.version}</option>
+              <option>-dontshrink</option>
+              <option>-keep class * { !private *; }</option>
+              <option>-verbose</option>
+              <option>-optimizationpasses 3</option>
+            </options>
+            <libs>
+              <lib>${java.home}/lib/rt.jar</lib>
+            </libs>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.5</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.8</version>
+          <version>4.0.0-M2</version>
+          <inherited>false</inherited>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>1.10</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>findbugs-maven-plugin</artifactId>
-          <version>3.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jxr-plugin</artifactId>
-          <version>2.5</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>2.17</version>
+          <version>3.1.2</version>
           <configuration>
             <configLocation>src/checkstyle/checkstyle.xml</configLocation>
-            <!-- Android generated files -->
-            <excludes>**/R.java,**/BuildConfig.java</excludes>
+            <includeTestSourceDirectory>true</includeTestSourceDirectory>
           </configuration>
           <executions>
             <execution>
@@ -437,13 +410,23 @@
               </goals>
             </execution>
           </executions>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>9.3</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
-          <version>0.11</version>
+          <version>0.14</version>
           <configuration>
+            <consoleOutput>true</consoleOutput>
+            <ignoreErrors>true</ignoreErrors>
             <excludes>
+              <exclude>.reuse/*</exclude>
               <exclude>**/.*</exclude>
               <exclude>**/.settings/**</exclude>
               <exclude>**/*.iml</exclude>
@@ -456,12 +439,14 @@
               <exclude>**/*.properties</exclude>
               <exclude>**/*.cfg</exclude>
               <exclude>**/*.config</exclude>
+              <exclude>**/*.yml</exclude>
               <exclude>**/*.yaml</exclude>
               <exclude>**/gen/**</exclude>
               <exclude>**/resources/**</exclude>
               <exclude>**/symbolMaps/**</exclude>
               <exclude>**/target/**</exclude>
               <exclude>**/dependency-reduced-pom.xml</exclude>
+              <exclude>docs/</exclude>
               <exclude>private/**</exclude>
               <exclude>CHANGES</exclude>
               <excludeSubProjects>false</excludeSubProjects>
@@ -475,25 +460,11 @@
               </goals>
             </execution>
           </executions>
-          <!-- workaround for Xerces warnings -->
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.doxia</groupId>
-              <artifactId>doxia-core</artifactId>
-              <version>1.6</version>
-              <exclusions>
-                <exclusion>
-                  <groupId>xerces</groupId>
-                  <artifactId>xercesImpl</artifactId>
-                </exclusion>
-              </exclusions>
-            </dependency>
-          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>clirr-maven-plugin</artifactId>
-          <version>2.7</version>
+          <version>2.8</version>
           <executions>
             <execution>
               <id>check-api</id>
@@ -503,11 +474,14 @@
               </goals>
             </execution>
           </executions>
+          <configuration>
+            <ignoredDifferencesFile>${project.parent.basedir}/src/clirr/ignored-differences.xml</ignoredDifferencesFile>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.7.6.201602180812</version>
+          <version>0.8.8</version>
           <executions>
             <execution>
               <goals>
@@ -532,25 +506,26 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
+        <inherited>false</inherited>
         <reportSets>
           <reportSet>
             <reports>
-              <!-- <report>cim</report> -->
+              <!-- <report>ci-management</report> -->
               <!-- <report>dependencies</report> -->
-              <report>dependency-convergence</report>
+              <!-- <report>dependency-convergence</report> -->
               <report>dependency-info</report>
               <report>dependency-management</report>
-              <report>distribution-management</report>
+              <!-- <report>distribution-management</report> -->
               <report>index</report>
-              <report>issue-tracking</report>
-              <report>license</report>
-              <report>mailing-list</report>
+              <report>issue-management</report>
+              <report>licenses</report>
+              <report>mailing-lists</report>
               <!-- <report>modules</report> -->
               <!-- <report>plugin-management</report> -->
               <!-- <report>plugins</report> -->
               <!-- <report>project-team</report> -->
               <report>scm</report>
-              <report>summary</report>
+              <!-- <report>summary</report> -->
             </reports>
           </reportSet>
         </reportSets>
@@ -558,37 +533,71 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <inherited>false</inherited>
         <reportSets>
           <reportSet>
             <id>aggregate</id>
+            <inherited>false</inherited>
             <reports>
               <report>aggregate</report>
-              <report>test-aggregate</report>
             </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <configuration>
-          <threshold>Normal</threshold>
-          <effort>Max</effort>
-          <xmlOutput>true</xmlOutput>
-          <xmlOutputDirectory>target/site</xmlOutputDirectory>
-          <excludeFilterFile>src/findbugs/excludes.xml</excludeFilterFile>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <id>aggregate</id>
-            <reports>
-              <report>aggregate</report>
-              <report>test-aggregate</report>
-            </reports>
+            <configuration>
+              <excludePackageNames>com.google.zxing.client.android*,com.google.zxing.client.glass*,com.google.zxing.web.generator*</excludePackageNames>
+              <groups>
+                <group>
+                  <title>Common support code</title>
+                  <packages>com.google.zxing:com.google.zxing.common*:com.google.zxing.client.result*</packages>
+                </group>
+                <group>
+                  <title>One-dimensional barcode (UPC, EAN, etc) support</title>
+                  <packages>com.google.zxing.oned</packages>
+                </group>
+                <group>
+                  <title>QR Code support</title>
+                  <packages>com.google.zxing.qrcode*</packages>
+                </group>
+                <group>
+                  <title>Data Matrix support</title>
+                  <packages>com.google.zxing.datamatrix*</packages>
+                </group>
+                <group>
+                  <title>PDF417 barcode support</title>
+                  <packages>com.google.zxing.pdf417*</packages>
+                </group>
+                <group>
+                  <title>Aztec barcode support</title>
+                  <packages>com.google.zxing.aztec*</packages>
+                </group>
+                <group>
+                  <title>MaxiCode support</title>
+                  <packages>com.google.zxing.maxicode*</packages>
+                </group>
+                <group>
+                  <title>RSS barcode support</title>
+                  <packages>com.google.zxing.oned.rss*</packages>
+                </group>
+                <group>
+                  <title>Multiple barcode scanning support</title>
+                  <packages>com.google.zxing.multi*</packages>
+                </group>
+                <group>
+                  <title>Web-based decoder app</title>
+                  <packages>com.google.zxing.web</packages>
+                </group>
+                <group>
+                  <title>Web-based App Engine encoder app</title>
+                  <packages>com.google.zxing.web.generator*</packages>
+                </group>
+                <group>
+                  <title>JavaSE utilities and support</title>
+                  <packages>com.google.zxing.client.j2se*</packages>
+                </group>
+                <group>
+                  <title>Android Intent integration</title>
+                  <packages>com.google.zxing.integration.android*</packages>
+                </group>
+              </groups>
+            </configuration>
           </reportSet>
         </reportSets>
       </plugin>
@@ -598,17 +607,18 @@
 
   <name>ZXing</name>
   <description>Parent Maven project for ZXing modules</description>
-  <url>http://github.com/zxing/zxing</url>
+  <url>https://github.com/zxing/zxing</url>
   <inceptionYear>2007</inceptionYear>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
   <developers>
     <developer>
+      <id>zxing-authors</id>
       <name>ZXing Authors</name>
     </developer>
   </developers>
@@ -624,19 +634,15 @@
     </mailingList>
     <mailingList>
       <name>StackOverflow tag</name>
-      <archive>http://stackoverflow.com/questions/tagged/zxing</archive>
+      <archive>https://stackoverflow.com/questions/tagged/zxing</archive>
     </mailingList>
   </mailingLists>
   <scm>
     <connection>scm:git:https://github.com/zxing/zxing.git</connection>
     <developerConnection>scm:git:https://github.com/zxing/zxing.git</developerConnection>
-    <url>scm:git:https://github.com/zxing/zxing.git</url>
+    <url>https://github.com/zxing/zxing</url>
     <tag>HEAD</tag>
   </scm>
-
-  <prerequisites>
-    <maven>${maven.version.min}</maven>
-  </prerequisites>
 
   <distributionManagement>
     <repository>
@@ -652,9 +658,24 @@
     <site>
       <id>zxing.website</id>
       <name>ZXing documentation</name>
-      <url>http://zxing.github.io/zxing/</url>
+      <url>file:docs/</url>
     </site>
   </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>google-maven-central</id>
+      <name>GCS Maven Central mirror</name>
+      <url>https://maven-central.storage-download.googleapis.com/maven2/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>google-maven-central</id>
+      <name>GCS Maven Central mirror</name>
+      <url>https://maven-central.storage-download.googleapis.com/maven2/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <profiles>
     <profile>
@@ -663,12 +684,25 @@
         <property>
           <name>env.ANDROID_HOME</name>
         </property>
+        <jdk>[,9)</jdk> <!-- Android won't necessarily work with JDK 9 -->
       </activation>
       <modules>
+        <module>android-core</module>
+        <module>android-integration</module>
         <module>android</module>
-        <module>androidtest</module>
-        <module>glass</module>
       </modules>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>${android.platform}</version>
+            <scope>system</scope>
+            <!-- ANDROID_HOME must be absolute, but redundant leading / may help Gradle Spring Boot plugin -->
+            <systemPath>/${android.home}/platforms/android-${android.platform}/android.jar</systemPath>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
     </profile>
     <profile>
       <id>release</id>
@@ -697,6 +731,11 @@
                 <skip>false</skip>
                 <config>proguard.cfg</config>
               </proguard>
+              <!-- repeat Android jar as library jar, as plugin ignores scope system deps -->
+              <proguardOptions>
+                <option>-libraryjars</option>
+                <option>${android.home}/platforms/android-${android.platform}/android.jar</option>
+              </proguardOptions>
               <sign>
                 <debug>false</debug>
               </sign>
@@ -719,19 +758,32 @@
       </build>
     </profile>
     <profile>
-      <id>travis</id>
+      <id>appspot</id>
+      <activation>
+        <jdk>[,9)</jdk> <!-- Appspot won't work with JDK 9 -->
+      </activation>
+      <modules>
+         <module>zxing.appspot.com</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>javadoc-9</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
       <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <!-- Limit memory for unit tests in Travis -->
-              <argLine>-Xmx512m</argLine>
-              <forkCount>1</forkCount>
-            </configuration>
-          </plugin>
-        </plugins>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration combine.children="append">
+                <!-- Choose HTML5 output over deprecated HTML 4.01 -->
+                <additionalOptions>-html5</additionalOptions>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
       </build>
     </profile>
   </profiles>

@@ -16,6 +16,9 @@
 
 package com.google.zxing.common;
 
+/**
+ * Encapsulates the result of one test over a batch of black-box images.
+ */
 public final class TestResult {
 
   private final int mustPassCount;

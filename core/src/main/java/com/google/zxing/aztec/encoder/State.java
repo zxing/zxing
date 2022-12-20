@@ -16,8 +16,10 @@
 
 package com.google.zxing.aztec.encoder;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.nio.charset.StandardCharsets;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.zxing.common.BitArray;
 
@@ -26,7 +28,7 @@ import com.google.zxing.common.BitArray;
  * Note that a state is immutable.
  */
 final class State {
-  
+
   static final State INITIAL_STATE = new State(Token.EMPTY, HighLevelEncoder.MODE_UPPER, 0, 0);
 
   // The current mode of the encoding (or the mode to which we'll return if
@@ -40,40 +42,54 @@ final class State {
   private final int binaryShiftByteCount;
   // The total number of bits generated (including Binary Shift).
   private final int bitCount;
+  private final int binaryShiftCost;
 
   private State(Token token, int mode, int binaryBytes, int bitCount) {
     this.token = token;
     this.mode = mode;
     this.binaryShiftByteCount = binaryBytes;
     this.bitCount = bitCount;
-    // Make sure we match the token
-    //int binaryShiftBitCount = (binaryShiftByteCount * 8) +
-    //    (binaryShiftByteCount == 0 ? 0 :
-    //     binaryShiftByteCount <= 31 ? 10 :
-    //     binaryShiftByteCount <= 62 ? 20 : 21);
-    //assert this.bitCount == token.getTotalBitCount() + binaryShiftBitCount;
+    this.binaryShiftCost = calculateBinaryShiftCost(binaryBytes);
   }
-  
+
   int getMode() {
     return mode;
   }
-  
+
   Token getToken() {
     return token;
   }
-  
+
   int getBinaryShiftByteCount() {
     return binaryShiftByteCount;
   }
-  
+
   int getBitCount() {
     return bitCount;
+  }
+
+  State appendFLGn(int eci) {
+    State result = shiftAndAppend(HighLevelEncoder.MODE_PUNCT, 0); // 0: FLG(n)
+    Token token = result.token;
+    int bitsAdded = 3;
+    if (eci < 0) {
+      token = token.add(0, 3); // 0: FNC1
+    } else if (eci > 999999) {
+      throw new IllegalArgumentException("ECI code must be between 0 and 999999");
+    } else {
+      byte[] eciDigits = Integer.toString(eci).getBytes(StandardCharsets.ISO_8859_1);
+      token = token.add(eciDigits.length, 3); // 1-6: number of ECI digits
+      for (byte eciDigit : eciDigits) {
+        token = token.add(eciDigit - '0' + 2, 4);
+      }
+      bitsAdded += eciDigits.length * 4;
+    }
+    return new State(token, mode, 0, bitCount + bitsAdded);
   }
 
   // Create a new state representing this state with a latch to a (not
   // necessary different) mode, and then a code.
   State latchAndAppend(int mode, int value) {
-    //assert binaryShiftByteCount == 0;
     int bitCount = this.bitCount;
     Token token = this.token;
     if (mode != this.mode) {
@@ -89,7 +105,6 @@ final class State {
   // Create a new state representing this state, with a temporary shift
   // to a different mode to output a single value.
   State shiftAndAppend(int mode, int value) {
-    //assert binaryShiftByteCount == 0 && this.mode != mode;
     Token token = this.token;
     int thisModeBitCount = this.mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
     // Shifts exist only to UPPER and PUNCT, both with tokens size 5.
@@ -104,16 +119,15 @@ final class State {
     Token token = this.token;
     int mode = this.mode;
     int bitCount = this.bitCount;
-    if (this.mode == HighLevelEncoder.MODE_PUNCT || this.mode == HighLevelEncoder.MODE_DIGIT)  {
-      //assert binaryShiftByteCount == 0;
+    if (this.mode == HighLevelEncoder.MODE_PUNCT || this.mode == HighLevelEncoder.MODE_DIGIT) {
       int latch = HighLevelEncoder.LATCH_TABLE[mode][HighLevelEncoder.MODE_UPPER];
       token = token.add(latch & 0xFFFF, latch >> 16);
       bitCount += latch >> 16;
       mode = HighLevelEncoder.MODE_UPPER;
     }
     int deltaBitCount =
-      (binaryShiftByteCount == 0 || binaryShiftByteCount == 31) ? 18 :
-      (binaryShiftByteCount == 62) ? 9 : 8;
+        (binaryShiftByteCount == 0 || binaryShiftByteCount == 31) ? 18 :
+        (binaryShiftByteCount == 62) ? 9 : 8;
     State result = new State(token, mode, binaryShiftByteCount + 1, bitCount + deltaBitCount);
     if (result.binaryShiftByteCount == 2047 + 31) {
       // The string is as long as it's allowed to be.  We should end it.
@@ -130,40 +144,52 @@ final class State {
     }
     Token token = this.token;
     token = token.addBinaryShift(index - binaryShiftByteCount, binaryShiftByteCount);
-    //assert token.getTotalBitCount() == this.bitCount;
     return new State(token, mode, 0, this.bitCount);
   }
 
   // Returns true if "this" state is better (or equal) to be in than "that"
   // state under all possible circumstances.
   boolean isBetterThanOrEqualTo(State other) {
-    int mySize = this.bitCount + (HighLevelEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
-    if (other.binaryShiftByteCount > 0 &&
-        (this.binaryShiftByteCount == 0 || this.binaryShiftByteCount > other.binaryShiftByteCount)) {
-      mySize += 10;     // Cost of entering Binary Shift mode.
+    int newModeBitCount = this.bitCount + (HighLevelEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
+    if (this.binaryShiftByteCount < other.binaryShiftByteCount) {
+      // add additional B/S encoding cost of other, if any
+      newModeBitCount += other.binaryShiftCost - this.binaryShiftCost;
+    } else if (this.binaryShiftByteCount > other.binaryShiftByteCount && other.binaryShiftByteCount > 0) {
+      // maximum possible additional cost (we end up exceeding the 31 byte boundary and other state can stay beneath it)
+      newModeBitCount += 10;
     }
-    return mySize <= other.bitCount;
+    return newModeBitCount <= other.bitCount;
   }
 
   BitArray toBitArray(byte[] text) {
-    // Reverse the tokens, so that they are in the order that they should
-    // be output
-    Deque<Token> symbols = new LinkedList<>();
+    List<Token> symbols = new ArrayList<>();
     for (Token token = endBinaryShift(text.length).token; token != null; token = token.getPrevious()) {
-      symbols.addFirst(token);
+      symbols.add(token);
     }
     BitArray bitArray = new BitArray();
-    // Add each token to the result.
-    for (Token symbol : symbols) {
-      symbol.appendTo(bitArray, text);
+    // Add each token to the result in forward order
+    for (int i = symbols.size() - 1; i >= 0; i--) {
+      symbols.get(i).appendTo(bitArray, text);
     }
-    //assert bitArray.getSize() == this.bitCount;
     return bitArray;
   }
 
   @Override
   public String toString() {
     return String.format("%s bits=%d bytes=%d", HighLevelEncoder.MODE_NAMES[mode], bitCount, binaryShiftByteCount);
+  }
+
+  private static int calculateBinaryShiftCost(int binaryShiftByteCount) {
+    if (binaryShiftByteCount > 62) {
+      return 21; // B/S with extended length
+    }
+    if (binaryShiftByteCount > 31) {
+      return 20; // two B/S
+    }
+    if (binaryShiftByteCount > 0) {
+      return 10; // one B/S
+    }
+    return 0;
   }
 
 }

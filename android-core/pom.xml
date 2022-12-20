@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>android-core</artifactId>
-  <version>3.2.2-SNAPSHOT</version>
+  <version>3.5.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -28,10 +28,22 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <configLocation>../src/checkstyle/checkstyle.xml</configLocation>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.2.2-SNAPSHOT</version>
+    <version>3.5.1-SNAPSHOT</version>
   </parent>
 
   <name>ZXing Android Core</name>

@@ -24,7 +24,7 @@ import org.junit.Test;
  */
 public final class PerspectiveTransformTestCase extends Assert {
 
-  private static final float EPSILON = 0.0001f;
+  private static final float EPSILON = 1.0E-4f;
 
   @Test
   public void testSquareToQuadrilateral() {

@@ -106,7 +106,6 @@ public abstract class OneDReader implements Reader {
     int height = image.getHeight();
     BitArray row = new BitArray(width);
 
-    int middle = height >> 1;
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     int rowStep = Math.max(1, height >> (tryHarder ? 8 : 5));
     int maxLines;
@@ -116,6 +115,7 @@ public abstract class OneDReader implements Reader {
       maxLines = 15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
     }
 
+    int middle = height / 2;
     for (int x = 0; x < maxLines; x++) {
 
       // Scanning from the middle out. Determine which row we're looking at next:
@@ -200,11 +200,10 @@ public abstract class OneDReader implements Reader {
     int counterPosition = 0;
     int i = start;
     while (i < end) {
-      if (row.get(i) ^ isWhite) { // that is, exactly one is true
+      if (row.get(i) != isWhite) {
         counters[counterPosition]++;
       } else {
-        counterPosition++;
-        if (counterPosition == numCounters) {
+        if (++counterPosition == numCounters) {
           break;
         } else {
           counters[counterPosition] = 1;

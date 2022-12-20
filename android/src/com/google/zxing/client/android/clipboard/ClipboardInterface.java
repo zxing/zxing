@@ -21,6 +21,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * Abstraction over the {@link ClipboardManager} API that manages copying and pasting.
+ */
 public final class ClipboardInterface {
   
   private static final String TAG = ClipboardInterface.class.getSimpleName();
@@ -38,7 +41,7 @@ public final class ClipboardInterface {
     if (text != null) {
       try {
         getManager(context).setPrimaryClip(ClipData.newPlainText(null, text));
-      } catch (NullPointerException | IllegalStateException e) {
+      } catch (NullPointerException | IllegalStateException | SecurityException e) {
         // Have seen this in the wild, bizarrely
         Log.w(TAG, "Clipboard bug", e);
       }

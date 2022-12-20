@@ -86,13 +86,8 @@ final class BeepManager implements MediaPlayer.OnErrorListener, Closeable {
 
   private MediaPlayer buildMediaPlayer(Context activity) {
     MediaPlayer mediaPlayer = new MediaPlayer();
-    try {
-      AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.beep);
-      try {
-        mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-      } finally {
-        file.close();
-      }
+    try (AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.beep)) {
+      mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
       mediaPlayer.setOnErrorListener(this);
       mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
       mediaPlayer.setLooping(false);

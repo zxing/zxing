@@ -57,15 +57,15 @@ final class CurrentParsingState {
     position += delta;
   }
 
-  boolean isAlpha(){
+  boolean isAlpha() {
     return this.encoding == State.ALPHA;
   }
 
-  boolean isNumeric(){
+  boolean isNumeric() {
     return this.encoding == State.NUMERIC;
   }
 
-  boolean isIsoIec646(){
+  boolean isIsoIec646() {
     return this.encoding == State.ISO_IEC_646;
   }
 

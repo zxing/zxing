@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>core</artifactId>
-  <version>3.2.2-SNAPSHOT</version>
+  <version>3.5.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -32,60 +32,60 @@
   <parent>
     <groupId>com.google.zxing</groupId>
     <artifactId>zxing-parent</artifactId>
-    <version>3.2.2-SNAPSHOT</version>
+    <version>3.5.1-SNAPSHOT</version>
   </parent>
+
+  <name>ZXing Core</name>
+  <description>Core barcode encoding/decoding library</description>
+
+  <profiles>
+    <profile>
+      <id>proguard-library</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.wvengen</groupId>
+            <artifactId>proguard-maven-plugin</artifactId>
+            <version>${proguard.plugin.version}</version>
+            <configuration>
+              <options combine.children="append">
+                <option>-optimizations !code/simplification/cast,!code/allocation/variable,!field/*,!class/*,!method/*</option>
+              </options>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-maven-plugin</artifactId>
+        <version>6.3.1</version>
         <executions>
           <execution>
-            <id>copy-android</id>
-            <phase>package</phase>
             <goals>
-              <goal>copy</goal>
+              <goal>bnd-process</goal>
             </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.google.zxing</groupId>
-                  <artifactId>core</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>                   
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>../android/libs</outputDirectory>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-androidtest</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.google.zxing</groupId>
-                  <artifactId>core</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>                   
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>../androidtest/libs</outputDirectory>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+            <manifestEntries>
+              <Automatic-Module-Name>com.google.zxing</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
     </plugins>
   </build>
 
-  <name>ZXing Core</name>
-  <description>Core barcode encoding/decoding library</description>
-  
 </project>
 

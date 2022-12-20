@@ -19,10 +19,11 @@ package com.google.zxing.oned;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
@@ -30,10 +31,29 @@ import java.util.Map;
  * @author dsbnatut@gmail.com (Kazuki Nishiura)
  */
 public abstract class OneDimensionalCodeWriter implements Writer {
+  private static final Pattern NUMERIC = Pattern.compile("[0-9]+");
+
+  /**
+   * Encode the contents to boolean array expression of one-dimensional barcode.
+   * Start code and end code should be included in result, and side margins should not be included.
+   *
+   * @param contents barcode contents to encode
+   * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
+   */
+  public abstract boolean[] encode(String contents);
+
+  /**
+   * Can be overwritten if the encode requires to read the hints map. Otherwise it defaults to {@code encode}.
+   * @param contents barcode contents to encode
+   * @param hints encoding hints
+   * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
+   */
+  protected boolean[] encode(String contents, Map<EncodeHintType,?> hints) {
+    return encode(contents);
+  }
 
   @Override
-  public final BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
-      throws WriterException {
+  public final BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
     return encode(contents, format, width, height, null);
   }
 
@@ -49,7 +69,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
                           BarcodeFormat format,
                           int width,
                           int height,
-                          Map<EncodeHintType,?> hints) throws WriterException {
+                          Map<EncodeHintType,?> hints) {
     if (contents.isEmpty()) {
       throw new IllegalArgumentException("Found empty contents");
     }
@@ -58,14 +78,23 @@ public abstract class OneDimensionalCodeWriter implements Writer {
       throw new IllegalArgumentException("Negative size is not allowed. Input: "
                                              + width + 'x' + height);
     }
+    Collection<BarcodeFormat> supportedFormats = getSupportedWriteFormats();
+    if (supportedFormats != null && !supportedFormats.contains(format)) {
+      throw new IllegalArgumentException("Can only encode " + supportedFormats +
+        ", but got " + format);
+    }
 
     int sidesMargin = getDefaultMargin();
     if (hints != null && hints.containsKey(EncodeHintType.MARGIN)) {
       sidesMargin = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
     }
 
-    boolean[] code = encode(contents);
+    boolean[] code = encode(contents, hints);
     return renderResult(code, width, height, sidesMargin);
+  }
+
+  protected Collection<BarcodeFormat> getSupportedWriteFormats() {
+    return null;
   }
 
   /**
@@ -90,6 +119,15 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     return output;
   }
 
+  /**
+   * @param contents string to check for numeric characters
+   * @throws IllegalArgumentException if input contains characters other than digits 0-9.
+   */
+  protected static void checkNumeric(String contents) {
+    if (!NUMERIC.matcher(contents).matches()) {
+      throw new IllegalArgumentException("Input should only contain digits 0-9");
+    }
+  }
 
   /**
    * @param target encode black/white pattern into this array
@@ -116,14 +154,5 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     // This seems like a decent idea for a default for all formats.
     return 10;
   }
-
-  /**
-   * Encode the contents to boolean array expression of one-dimensional barcode.
-   * Start code and end code should be included in result, and side margins should not be included.
-   *
-   * @param contents barcode contents to encode
-   * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
-   */
-  public abstract boolean[] encode(String contents);
 }
 

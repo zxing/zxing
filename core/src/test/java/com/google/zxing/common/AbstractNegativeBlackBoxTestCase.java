@@ -45,6 +45,8 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
 
   private static final Logger log = Logger.getLogger(AbstractNegativeBlackBoxTestCase.class.getSimpleName());
 
+  private final List<TestResult> testResults;
+
   private static final class TestResult {
     private final int falsePositivesAllowed;
     private final float rotation;
@@ -54,16 +56,14 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
       this.rotation = rotation;
     }
 
-    public int getFalsePositivesAllowed() {
+    int getFalsePositivesAllowed() {
       return falsePositivesAllowed;
     }
 
-    public float getRotation() {
+    float getRotation() {
       return rotation;
     }
   }
-
-  private final List<TestResult> testResults;
 
   // Use the multiformat reader to evaluate all decoders in the system.
   protected AbstractNegativeBlackBoxTestCase(String testBasePathSuffix) {
@@ -126,7 +126,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
    *
    * @param image The image to test
    * @param rotationInDegrees The amount of rotation to apply
-   * @return true if nothing found, false if a non-existant barcode was detected
+   * @return true if nothing found, false if a non-existent barcode was detected
    */
   private boolean checkForFalsePositives(BufferedImage image, float rotationInDegrees) {
     BufferedImage rotatedImage = rotateImage(image, rotationInDegrees);

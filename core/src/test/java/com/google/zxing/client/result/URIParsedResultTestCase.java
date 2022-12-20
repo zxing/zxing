@@ -35,6 +35,7 @@ public final class URIParsedResultTestCase extends Assert {
     doTest("MEBKM:URL:google.com;TITLE:Google;", "http://google.com", "Google");
   }
 
+  @SuppressWarnings("checkstyle:lineLength")
   @Test
   public void testURI() {
     doTest("google.com", "http://google.com", null);
@@ -61,6 +62,7 @@ public final class URIParsedResultTestCase extends Assert {
     doTestNotUri("http://google.com?q=foo bar");
     doTestNotUri("12756.501");
     doTestNotUri("google.50");
+    doTestNotUri("foo.bar.bing.baz.foo.bar.bing.baz");
   }
 
   @Test
@@ -93,6 +95,12 @@ public final class URIParsedResultTestCase extends Assert {
   }
 
   @Test
+  public void testMaliciousUnicode() {
+    doTestIsPossiblyMalicious("https://google.com\u2215.evil.com/stuff", true);
+    doTestIsPossiblyMalicious("\u202ehttps://dylankatz.com/moc.elgoog.www//:sptth", true);
+  }
+
+  @Test
   public void testExotic() {
     doTest("bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y", "bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y", null);
     doTest("BTCTX:-TC4TO3$ZYZTC5NC83/SYOV+YGUGK:$BSF0P8/STNTKTKS.V84+JSA$LB+EHCG+8A725.2AZ-NAVX3VBV5K4MH7UL2.2M:" +
@@ -115,7 +123,7 @@ public final class URIParsedResultTestCase extends Assert {
     assertEquals(uri, uriResult.getURI());
     assertEquals(title, uriResult.getTitle());
   }
-  
+
   private static void doTestNotUri(String text) {
     Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
@@ -123,9 +131,10 @@ public final class URIParsedResultTestCase extends Assert {
     assertEquals(text, result.getDisplayResult());
   }
 
-  private static void doTestIsPossiblyMalicious(String uri, boolean expected) {
-    URIParsedResult result = new URIParsedResult(uri, null);
-    assertEquals(expected, result.isPossiblyMaliciousURI());
+  private static void doTestIsPossiblyMalicious(String uri, boolean malicious) {
+    Result fakeResult = new Result(uri, null, null, BarcodeFormat.QR_CODE);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
+    assertSame(malicious ? ParsedResultType.TEXT : ParsedResultType.URI, result.getType());
   }
 
 }

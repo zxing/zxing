@@ -19,15 +19,17 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.util.EnumMap;
 import java.util.Map;
+import java.nio.charset.Charset;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -65,7 +67,7 @@ public final class EncoderTestCase extends Assert {
   }
 
   @Test
-  public void testChooseMode() throws WriterException {
+  public void testChooseMode() {
     // Numeric mode.
     assertSame(Mode.NUMERIC, Encoder.chooseMode("0"));
     assertSame(Mode.NUMERIC, Encoder.chooseMode("0123456789"));
@@ -83,48 +85,62 @@ public final class EncoderTestCase extends Assert {
 
     // AIUE in Hiragana in Shift_JIS
     assertSame(Mode.BYTE,
-               Encoder.chooseMode(shiftJISString(new byte[]{0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, (byte) 0xa6})));
+               Encoder.chooseMode(shiftJISString(bytes(0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6))));
 
     // Nihon in Kanji in Shift_JIS.
-    assertSame(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[]{0x9, 0xf, 0x9, 0x7b})));
+    assertSame(Mode.BYTE, Encoder.chooseMode(shiftJISString(bytes(0x9, 0xf, 0x9, 0x7b))));
 
     // Sou-Utsu-Byou in Kanji in Shift_JIS.
-    assertSame(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[]{0xe, 0x4, 0x9, 0x5, 0x9, 0x61})));
+    assertSame(Mode.BYTE, Encoder.chooseMode(shiftJISString(bytes(0xe, 0x4, 0x9, 0x5, 0x9, 0x61))));
   }
 
   @Test
   public void testEncode() throws WriterException {
     QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H);
-    String expected =
-      "<<\n" +
-          " mode: ALPHANUMERIC\n" +
-          " ecLevel: H\n" +
-          " version: 1\n" +
-          " maskPattern: 4\n" +
-          " matrix:\n" +
-          " 1 1 1 1 1 1 1 0 0 1 0 1 0 0 1 1 1 1 1 1 1\n" +
-          " 1 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 0 0 0 0 1\n" +
-          " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 1 1 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 0 1 0 0 1 0 1 0 1 1 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 0 1 0 1 0 0 1 0 1 1 1 0 1\n" +
-          " 1 0 0 0 0 0 1 0 1 0 0 1 1 0 1 0 0 0 0 0 1\n" +
-          " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
-          " 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0\n" +
-          " 0 0 0 0 1 1 1 1 0 1 1 0 1 0 1 1 0 0 0 1 0\n" +
-          " 0 0 0 0 1 1 0 1 1 1 0 0 1 1 1 1 0 1 1 0 1\n" +
-          " 1 0 0 0 0 1 1 0 0 1 0 1 0 0 0 1 1 1 0 1 1\n" +
-          " 1 0 0 1 1 1 0 0 1 1 1 1 0 0 0 0 1 0 0 0 0\n" +
-          " 0 1 1 1 1 1 1 0 1 0 1 0 1 1 1 0 0 1 1 0 0\n" +
-          " 0 0 0 0 0 0 0 0 1 1 0 0 0 1 1 0 0 0 1 0 1\n" +
-          " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 0 0 0 1 1 0 0\n" +
-          " 1 0 0 0 0 0 1 0 1 1 0 1 0 0 0 1 0 1 1 1 1\n" +
-          " 1 0 1 1 1 0 1 0 1 0 0 1 0 0 0 1 1 0 0 1 1\n" +
-          " 1 0 1 1 1 0 1 0 0 0 1 1 0 1 0 0 0 0 1 1 1\n" +
-          " 1 0 1 1 1 0 1 0 0 1 0 1 0 0 0 1 1 0 0 0 0\n" +
-          " 1 0 0 0 0 0 1 0 0 1 0 0 1 0 0 1 1 0 0 0 1\n" +
-          " 1 1 1 1 1 1 1 0 0 0 1 0 0 1 0 0 0 0 1 1 1\n" +
-          ">>\n";
+    String expected = "<<\n" +
+        " mode: ALPHANUMERIC\n" +
+        " ecLevel: H\n" +
+        " version: 1\n" +
+        " maskPattern: 0\n" +
+        " matrix:\n" +
+        " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+        " 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0\n" +
+        " 0 0 1 0 1 1 1 0 1 1 0 0 1 1 0 0 0 1 0 0 1\n" +
+        " 1 0 1 1 1 0 0 1 0 0 0 1 0 1 0 0 0 0 0 0 0\n" +
+        " 0 0 1 1 0 0 1 0 1 0 0 0 1 0 1 0 1 0 1 1 0\n" +
+        " 1 1 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 0\n" +
+        " 0 0 1 1 0 1 1 1 1 0 0 0 1 0 1 0 1 1 1 1 0\n" +
+        " 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 0 0\n" +
+        " 1 1 1 1 1 1 1 0 0 0 1 0 1 0 1 1 0 0 0 0 1\n" +
+        " 1 0 0 0 0 0 1 0 1 1 1 1 0 1 0 1 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 0 1 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 0 1 1 1 1 0 1 0 1 0\n" +
+        " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1\n" +
+        " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 1\n" +
+        ">>\n";
     assertEquals(expected, qrCode.toString());
+  }
+
+  @Test
+  public void testEncodeWithVersion() throws WriterException {
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.QR_VERSION, 7);
+    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
+    assertTrue(qrCode.toString().contains(" version: 7\n"));
+  }
+
+  @Test(expected = WriterException.class)
+  public void testEncodeWithVersionTooSmall() throws WriterException {
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.QR_VERSION, 3);
+    Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints);
   }
 
   @Test
@@ -132,35 +148,34 @@ public final class EncoderTestCase extends Assert {
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.CHARACTER_SET, "UTF8");
     QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
-    String expected =
-      "<<\n" +
-          " mode: BYTE\n" +
-          " ecLevel: H\n" +
-          " version: 1\n" +
-          " maskPattern: 6\n" +
-          " matrix:\n" +
-          " 1 1 1 1 1 1 1 0 0 0 1 1 0 0 1 1 1 1 1 1 1\n" +
-          " 1 0 0 0 0 0 1 0 0 0 1 1 0 0 1 0 0 0 0 0 1\n" +
-          " 1 0 1 1 1 0 1 0 1 0 0 1 1 0 1 0 1 1 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 1 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 0 1 1 0 0 0 1 0 1 1 1 0 1\n" +
-          " 1 0 0 0 0 0 1 0 0 0 0 1 0 0 1 0 0 0 0 0 1\n" +
-          " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
-          " 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0\n" +
-          " 0 0 0 1 1 0 1 1 0 0 0 0 1 0 0 0 0 1 1 0 0\n" +
-          " 0 0 0 0 0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1\n" +
-          " 1 1 0 0 0 1 1 1 0 0 0 1 1 0 0 1 0 1 0 1 1\n" +
-          " 0 0 0 0 1 1 0 0 1 0 0 0 0 0 1 0 1 1 0 0 0\n" +
-          " 0 1 1 0 0 1 1 0 0 1 1 1 0 1 1 1 1 1 1 1 1\n" +
-          " 0 0 0 0 0 0 0 0 1 1 1 0 1 1 1 1 1 1 1 1 1\n" +
-          " 1 1 1 1 1 1 1 0 1 0 1 0 0 0 1 0 0 0 0 0 0\n" +
-          " 1 0 0 0 0 0 1 0 0 1 0 0 0 1 0 0 0 1 1 0 0\n" +
-          " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 0 0 1 0 0\n" +
-          " 1 0 1 1 1 0 1 0 1 1 1 1 0 1 0 0 1 0 1 1 0\n" +
-          " 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 0 0 1 0 1 1\n" +
-          " 1 0 0 0 0 0 1 0 0 0 0 0 0 1 1 0 1 1 0 0 0\n" +
-          " 1 1 1 1 1 1 1 0 0 0 0 1 0 1 0 0 1 0 1 0 0\n" +
-          ">>\n";
+    String expected = "<<\n" +
+        " mode: BYTE\n" +
+        " ecLevel: H\n" +
+        " version: 1\n" +
+        " maskPattern: 3\n" +
+        " matrix:\n" +
+        " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 0 1 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+        " 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0\n" +
+        " 0 0 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 0 0 0 0\n" +
+        " 0 0 1 1 1 0 0 0 0 0 1 1 0 0 0 1 0 1 1 1 0\n" +
+        " 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 1 1 1\n" +
+        " 1 1 0 0 1 0 0 1 1 0 0 1 1 1 1 0 1 0 1 1 0\n" +
+        " 0 0 0 0 1 0 1 1 1 1 0 0 0 0 0 1 0 0 1 0 0\n" +
+        " 0 0 0 0 0 0 0 0 1 1 1 1 0 0 1 1 1 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 1 0 0 1 0 0\n" +
+        " 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1 1 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 0 0 0 0 1 1 0 0 0 0 0\n" +
+        " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 0 1 1 0 0 0\n" +
+        " 1 0 1 1 1 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 0\n" +
+        " 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 1 0 1 1 0\n" +
+        " 1 1 1 1 1 1 1 0 0 1 0 1 1 1 0 1 1 0 0 0 0\n" +
+        ">>\n";
     assertEquals(expected, qrCode.toString());
   }
 
@@ -170,35 +185,34 @@ public final class EncoderTestCase extends Assert {
     hints.put(EncodeHintType.CHARACTER_SET, "Shift_JIS");
     // Nihon in Kanji
     QRCode qrCode = Encoder.encode("\u65e5\u672c", ErrorCorrectionLevel.M, hints);
-    String expected =
-      "<<\n" +
-          " mode: KANJI\n" +
-          " ecLevel: M\n" +
-          " version: 1\n" +
-          " maskPattern: 0\n" +
-          " matrix:\n" +
-          " 1 1 1 1 1 1 1 0 0 1 0 1 0 0 1 1 1 1 1 1 1\n" +
-          " 1 0 0 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 0 0 1\n" +
-          " 1 0 1 1 1 0 1 0 0 1 1 1 1 0 1 0 1 1 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 0 0 0 0 1 0 1 0 1 1 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 1 1 1 1 1 0 1 0 1 1 1 0 1\n" +
-          " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n" +
-          " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
-          " 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0\n" +
-          " 1 0 1 0 1 0 1 0 0 0 1 0 1 0 0 0 1 0 0 1 0\n" +
-          " 1 1 0 1 0 0 0 1 0 1 1 1 0 1 0 1 0 1 0 0 0\n" +
-          " 0 1 0 0 0 0 1 1 1 1 1 1 0 1 1 1 0 1 0 1 0\n" +
-          " 1 1 1 0 0 1 0 1 0 0 0 1 1 1 0 1 1 0 1 0 0\n" +
-          " 0 1 1 0 0 1 1 0 1 1 0 1 0 1 1 1 0 1 0 0 1\n" +
-          " 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 0 0 0 1 0 1\n" +
-          " 1 1 1 1 1 1 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1\n" +
-          " 1 0 0 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 1 1\n" +
-          " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 0 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 0 0 0 1 0 1 0 1 0 1 0 1 0\n" +
-          " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 1 0 0 1 0 1\n" +
-          " 1 0 0 0 0 0 1 0 0 0 0 1 1 1 0 1 1 1 0 1 0\n" +
-          " 1 1 1 1 1 1 1 0 1 1 0 1 0 1 1 1 0 0 1 0 0\n" +
-          ">>\n";
+    String expected = "<<\n" +
+        " mode: KANJI\n" +
+        " ecLevel: M\n" +
+        " version: 1\n" +
+        " maskPattern: 4\n" +
+        " matrix:\n" +
+        " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 0 1 0 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 1 0 1 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 0 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+        " 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0\n" +
+        " 1 0 0 0 1 0 1 1 1 0 0 0 1 1 1 1 1 1 0 0 1\n" +
+        " 0 1 1 0 0 1 0 1 1 0 1 0 1 1 1 0 0 0 1 0 1\n" +
+        " 1 1 1 1 0 1 1 1 0 0 1 0 1 1 0 0 0 0 1 1 1\n" +
+        " 1 0 1 0 1 1 0 0 0 0 1 1 1 0 0 1 0 0 1 1 0\n" +
+        " 0 0 1 0 1 1 1 1 1 1 1 1 0 0 1 1 1 1 0 1 1\n" +
+        " 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 1 0 1 0 0 0\n" +
+        " 1 1 1 1 1 1 1 0 1 1 0 1 0 0 1 1 1 1 1 1 0\n" +
+        " 1 0 0 0 0 0 1 0 0 0 0 0 0 1 1 0 1 0 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 0 1 1 1 0 0 0 1 1 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 0 0 1 1 1 0 0 0 1 1 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 0 1 1 0 0 0 1 0 0 0\n" +
+        " 1 0 0 0 0 0 1 0 0 0 1 1 1 0 0 1 0 1 0 0 0\n" +
+        " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 0 1 1 0\n" +
+        ">>\n";
     assertEquals(expected, qrCode.toString());
   }
 
@@ -207,35 +221,103 @@ public final class EncoderTestCase extends Assert {
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.CHARACTER_SET, "Shift_JIS");
     QRCode qrCode = Encoder.encode("0123", ErrorCorrectionLevel.M, hints);
-    String expected =
-      "<<\n" +
-          " mode: NUMERIC\n" +
-          " ecLevel: M\n" +
-          " version: 1\n" +
-          " maskPattern: 2\n" +
-          " matrix:\n" +
-          " 1 1 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 1 1\n" +
-          " 1 0 0 0 0 0 1 0 0 1 0 0 1 0 1 0 0 0 0 0 1\n" +
-          " 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 0 1 1 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1\n" +
-          " 1 0 1 1 1 0 1 0 1 1 0 1 1 0 1 0 1 1 1 0 1\n" +
-          " 1 0 0 0 0 0 1 0 1 1 0 0 1 0 1 0 0 0 0 0 1\n" +
-          " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
-          " 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0\n" +
-          " 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 0\n" +
-          " 1 1 0 0 0 1 0 0 1 0 1 0 1 0 0 1 0 0 1 0 0\n" +
-          " 0 1 1 0 1 1 1 1 0 1 1 1 0 1 0 0 1 1 0 1 1\n" +
-          " 1 0 1 1 0 1 0 1 0 0 1 0 0 0 0 1 1 0 1 0 0\n" +
-          " 0 0 1 0 0 1 1 1 0 0 0 1 0 1 0 0 1 0 1 0 0\n" +
-          " 0 0 0 0 0 0 0 0 1 1 0 1 1 1 1 0 0 1 0 0 0\n" +
-          " 1 1 1 1 1 1 1 0 0 0 1 0 1 0 1 1 0 0 0 0 0\n" +
-          " 1 0 0 0 0 0 1 0 1 1 0 1 1 1 1 0 0 1 0 1 0\n" +
-          " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 0 1 0 0 1 0 0\n" +
-          " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 1 0 0 1 0 0\n" +
-          " 1 0 1 1 1 0 1 0 1 1 0 1 0 1 0 0 1 1 1 0 0\n" +
-          " 1 0 0 0 0 0 1 0 0 0 1 0 0 0 0 1 1 0 1 1 0\n" +
-          " 1 1 1 1 1 1 1 0 1 1 0 1 0 1 0 0 1 1 1 0 0\n" +
-          ">>\n";
+    String expected = "<<\n" +
+        " mode: NUMERIC\n" +
+        " ecLevel: M\n" +
+        " version: 1\n" +
+        " maskPattern: 0\n" +
+        " matrix:\n" +
+        " 1 1 1 1 1 1 1 0 0 0 0 0 1 0 1 1 1 1 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 1 1 0 1 0 0 1 0 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 0 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 0 1 0 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 0 1 0 0 1 0 0 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+        " 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0\n" +
+        " 1 0 1 0 1 0 1 0 0 0 0 0 1 0 0 0 1 0 0 1 0\n" +
+        " 0 0 0 0 0 0 0 1 1 0 1 1 0 1 0 1 0 1 0 1 0\n" +
+        " 0 1 0 1 0 1 1 1 1 0 0 1 0 1 1 1 0 1 0 1 0\n" +
+        " 0 1 1 1 0 0 0 0 0 0 1 1 1 1 0 1 1 1 0 1 0\n" +
+        " 0 0 0 1 1 1 1 1 1 1 1 1 0 1 1 1 0 0 1 0 1\n" +
+        " 0 0 0 0 0 0 0 0 1 1 0 0 0 0 1 0 0 0 1 1 0\n" +
+        " 1 1 1 1 1 1 1 0 0 1 0 0 1 0 0 0 1 0 0 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 1 0 0\n" +
+        " 1 0 1 1 1 0 1 0 1 1 0 0 1 0 1 0 1 0 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 1 0 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 0 1 1 1 1 0 1 1 1 0 0 0\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 1 0 1 1 1 0 1 1 0 1\n" +
+        ">>\n";
+    assertEquals(expected, qrCode.toString());
+  }
+
+  @Test
+  public void testEncodeGS1WithStringTypeHint() throws WriterException {
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.GS1_FORMAT, "true");
+    QRCode qrCode = Encoder.encode("100001%11171218", ErrorCorrectionLevel.H, hints);
+    verifyGS1EncodedData(qrCode);
+  }
+
+  @Test
+  public void testEncodeGS1WithBooleanTypeHint() throws WriterException {
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.GS1_FORMAT, true);
+    QRCode qrCode = Encoder.encode("100001%11171218", ErrorCorrectionLevel.H, hints);
+    verifyGS1EncodedData(qrCode);
+  }
+
+  @Test
+  public void testDoesNotEncodeGS1WhenBooleanTypeHintExplicitlyFalse() throws WriterException {
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.GS1_FORMAT, false);
+    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
+    verifyNotGS1EncodedData(qrCode);
+  }
+
+  @Test
+  public void testDoesNotEncodeGS1WhenStringTypeHintExplicitlyFalse() throws WriterException {
+    Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.GS1_FORMAT, "false");
+    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints);
+    verifyNotGS1EncodedData(qrCode);
+  }
+
+  @Test
+  public void testGS1ModeHeaderWithECI() throws WriterException {
+    Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.CHARACTER_SET, "UTF8");
+    hints.put(EncodeHintType.GS1_FORMAT, true);
+    QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
+    String expected = "<<\n" +
+        " mode: BYTE\n" +
+        " ecLevel: H\n" +
+        " version: 1\n" +
+        " maskPattern: 6\n" +
+        " matrix:\n" +
+        " 1 1 1 1 1 1 1 0 0 0 1 1 0 0 1 1 1 1 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 1 0 0 0 1 0 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 1 0 1 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 0 1 1 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 0 0 1 0 1 0 0 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+        " 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0\n" +
+        " 0 0 0 1 1 0 1 1 0 1 0 0 0 0 0 0 0 1 1 0 0\n" +
+        " 0 1 0 1 1 0 0 1 0 1 1 1 1 1 1 0 1 1 1 0 1\n" +
+        " 0 1 1 1 1 0 1 0 0 1 0 1 0 1 1 1 0 0 1 0 1\n" +
+        " 1 1 1 1 1 0 0 1 0 0 0 1 1 0 0 1 0 0 1 0 0\n" +
+        " 1 0 0 1 0 0 1 1 0 1 1 0 1 0 1 0 0 1 0 0 1\n" +
+        " 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 1 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 0 0\n" +
+        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 1 1 1 0 0\n" +
+        " 1 0 1 1 1 0 1 0 1 1 0 1 1 0 0 0 1 1 0 0 0\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 1 1 1 1 0 0 0 1 1 0\n" +
+        " 1 0 1 1 1 0 1 0 0 0 1 0 0 1 0 0 1 0 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 1 1 0 0\n" +
+        " 1 1 1 1 1 1 1 0 0 1 0 1 0 0 1 0 0 0 0 0 0\n" +
+        ">>\n";
     assertEquals(expected, qrCode.toString());
   }
 
@@ -302,7 +384,8 @@ public final class EncoderTestCase extends Assert {
     // Should use appendKanjiBytes.
     // 0x93, 0x5f
     bits = new BitArray();
-    Encoder.appendBytes(shiftJISString(new byte[] {(byte)0x93,0x5f}), Mode.KANJI, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+    Encoder.appendBytes(shiftJISString(bytes(0x93, 0x5f)), Mode.KANJI, bits,
+        Encoder.DEFAULT_BYTE_MODE_ENCODING);
     assertEquals(" .XX.XX.. XXXXX", bits.toString());
   }
 
@@ -374,19 +457,19 @@ public final class EncoderTestCase extends Assert {
 
   @Test
   public void testInterleaveWithECBytes() throws WriterException {
-    byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
+    byte[] dataBytes = bytes(32, 65, 205, 69, 41, 220, 46, 128, 236);
     BitArray in = new BitArray();
     for (byte dataByte: dataBytes) {
       in.appendBits(dataByte, 8);
     }
     BitArray out = Encoder.interleaveWithECBytes(in, 26, 9, 1);
-    byte[] expected = {
+    byte[] expected = bytes(
         // Data bytes.
-        32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236,
+        32, 65, 205, 69, 41, 220, 46, 128, 236,
         // Error correction bytes.
-        42, (byte)159, 74, (byte)221, (byte)244, (byte)169, (byte)239, (byte)150, (byte)138, 70,
-        (byte)237, 85, (byte)224, 96, 74, (byte)219, 61,
-    };
+        42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
+        237, 85, 224, 96, 74, 219, 61
+    );
     assertEquals(expected.length, out.getSizeInBytes());
     byte[] outArray = new byte[expected.length];
     out.toBytes(0, outArray, 0, expected.length);
@@ -395,43 +478,51 @@ public final class EncoderTestCase extends Assert {
       assertEquals(expected[x], outArray[x]);
     }
     // Numbers are from http://www.swetake.com/qr/qr8.html
-    dataBytes = new byte[] {
-        67, 70, 22, 38, 54, 70, 86, 102, 118, (byte)134, (byte)150, (byte)166, (byte)182,
-        (byte)198, (byte)214, (byte)230, (byte)247, 7, 23, 39, 55, 71, 87, 103, 119, (byte)135,
-        (byte)151, (byte)166, 22, 38, 54, 70, 86, 102, 118, (byte)134, (byte)150, (byte)166,
-        (byte)182, (byte)198, (byte)214, (byte)230, (byte)247, 7, 23, 39, 55, 71, 87, 103, 119,
-        (byte)135, (byte)151, (byte)160, (byte)236, 17, (byte)236, 17, (byte)236, 17, (byte)236,
+    dataBytes = bytes(
+        67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182,
+        198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135,
+        151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
+        182, 198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119,
+        135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
         17
-    };
+    );
     in = new BitArray();
     for (byte dataByte: dataBytes) {
       in.appendBits(dataByte, 8);
     }
 
     out = Encoder.interleaveWithECBytes(in, 134, 62, 4);
-    expected = new byte[] {
+    expected = bytes(
         // Data bytes.
-        67, (byte)230, 54, 55, 70, (byte)247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
-        118, 119, 70, 55, (byte)134, (byte)135, 86, 71, (byte)150, (byte)151, 102, 87, (byte)166,
-        (byte)160, 118, 103, (byte)182, (byte)236, (byte)134, 119, (byte)198, 17, (byte)150,
-        (byte)135, (byte)214, (byte)236, (byte)166, (byte)151, (byte)230, 17, (byte)182,
-        (byte)166, (byte)247, (byte)236, (byte)198, 22, 7, 17, (byte)214, 38, 23, (byte)236, 39,
+        67, 230, 54, 55, 70, 247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
+        118, 119, 70, 55, 134, 135, 86, 71, 150, 151, 102, 87, 166,
+        160, 118, 103, 182, 236, 134, 119, 198, 17, 150,
+        135, 214, 236, 166, 151, 230, 17, 182,
+        166, 247, 236, 198, 22, 7, 17, 214, 38, 23, 236, 39,
         17,
         // Error correction bytes.
-        (byte)175, (byte)155, (byte)245, (byte)236, 80, (byte)146, 56, 74, (byte)155, (byte)165,
-        (byte)133, (byte)142, 64, (byte)183, (byte)132, 13, (byte)178, 54, (byte)132, 108, 45,
-        113, 53, 50, (byte)214, 98, (byte)193, (byte)152, (byte)233, (byte)147, 50, 71, 65,
-        (byte)190, 82, 51, (byte)209, (byte)199, (byte)171, 54, 12, 112, 57, 113, (byte)155, 117,
-        (byte)211, (byte)164, 117, 30, (byte)158, (byte)225, 31, (byte)190, (byte)242, 38,
-        (byte)140, 61, (byte)179, (byte)154, (byte)214, (byte)138, (byte)147, 87, 27, 96, 77, 47,
-        (byte)187, 49, (byte)156, (byte)214,
-    };
+        175, 155, 245, 236, 80, 146, 56, 74, 155, 165,
+        133, 142, 64, 183, 132, 13, 178, 54, 132, 108, 45,
+        113, 53, 50, 214, 98, 193, 152, 233, 147, 50, 71, 65,
+        190, 82, 51, 209, 199, 171, 54, 12, 112, 57, 113, 155, 117,
+        211, 164, 117, 30, 158, 225, 31, 190, 242, 38,
+        140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
+        187, 49, 156, 214
+    );
     assertEquals(expected.length, out.getSizeInBytes());
     outArray = new byte[expected.length];
     out.toBytes(0, outArray, 0, expected.length);
     for (int x = 0; x < expected.length; x++) {
       assertEquals(expected[x], outArray[x]);
     }
+  }
+
+  private static byte[] bytes(int... ints) {
+    byte[] bytes = new byte[ints.length];
+    for (int i = 0; i < ints.length; i++) {
+      bytes[i] = (byte) ints[i];
+    }
+    return bytes;
   }
 
   @Test
@@ -485,7 +576,7 @@ public final class EncoderTestCase extends Assert {
   }
 
   @Test
-  public void testAppend8BitBytes() throws WriterException {
+  public void testAppend8BitBytes() {
     // 0x61, 0x62, 0x63
     BitArray bits = new BitArray();
     Encoder.append8BitBytes("abc", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
@@ -500,17 +591,17 @@ public final class EncoderTestCase extends Assert {
   @Test
   public void testAppendKanjiBytes() throws WriterException {
     BitArray bits = new BitArray();
-      Encoder.appendKanjiBytes(shiftJISString(new byte[] {(byte)0x93,0x5f}), bits);
-      assertEquals(" .XX.XX.. XXXXX", bits.toString());
-      Encoder.appendKanjiBytes(shiftJISString(new byte[] {(byte)0xe4,(byte)0xaa}), bits);
-      assertEquals(" .XX.XX.. XXXXXXX. X.X.X.X. X.", bits.toString());
+    Encoder.appendKanjiBytes(shiftJISString(bytes(0x93, 0x5f)), bits);
+    assertEquals(" .XX.XX.. XXXXX", bits.toString());
+    Encoder.appendKanjiBytes(shiftJISString(bytes(0xe4, 0xaa)), bits);
+    assertEquals(" .XX.XX.. XXXXXXX. X.X.X.X. X.", bits.toString());
   }
 
   // Numbers are from http://www.swetake.com/qr/qr3.html and
   // http://www.swetake.com/qr/qr9.html
   @Test
   public void testGenerateECBytes() {
-    byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
+    byte[] dataBytes = bytes(32, 65, 205, 69, 41, 220, 46, 128, 236);
     byte[] ecBytes = Encoder.generateECBytes(dataBytes, 17);
     int[] expected = {
         42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
@@ -519,8 +610,7 @@ public final class EncoderTestCase extends Assert {
     for (int x = 0; x < expected.length; x++) {
       assertEquals(expected[x], ecBytes[x] & 0xFF);
     }
-    dataBytes = new byte[] {67, 70, 22, 38, 54, 70, 86, 102, 118,
-        (byte)134, (byte)150, (byte)166, (byte)182, (byte)198, (byte)214};
+    dataBytes = bytes(67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,  182, 198, 214);
     ecBytes = Encoder.generateECBytes(dataBytes, 18);
     expected = new int[] {
         175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
@@ -530,7 +620,7 @@ public final class EncoderTestCase extends Assert {
       assertEquals(expected[x], ecBytes[x] & 0xFF);
     }
     // High-order zero coefficient case.
-    dataBytes = new byte[] {32, 49, (byte)205, 69, 42, 20, 0, (byte)236, 17};
+    dataBytes = bytes(32, 49, 205, 69, 42, 20, 0, 236, 17);
     ecBytes = Encoder.generateECBytes(dataBytes, 17);
     expected = new int[] {
         0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
@@ -578,12 +668,320 @@ public final class EncoderTestCase extends Assert {
     Encoder.encode(builder.toString(), ErrorCorrectionLevel.L);
   }
 
-  private static String shiftJISString(byte[] bytes) throws WriterException {
-    try {
-      return new String(bytes, "Shift_JIS");
-    } catch (UnsupportedEncodingException uee) {
-      throw new WriterException(uee.toString());
-    }
+  @Test
+  public void testMinimalEncoder1() throws Exception {
+    verifyMinimalEncoding("A", "ALPHANUMERIC(A)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder2() throws Exception {
+    verifyMinimalEncoding("AB", "ALPHANUMERIC(AB)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder3() throws Exception {
+    verifyMinimalEncoding("ABC", "ALPHANUMERIC(ABC)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder4() throws Exception {
+    verifyMinimalEncoding("ABCD", "ALPHANUMERIC(ABCD)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder5() throws Exception {
+    verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(ABCDE)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder6() throws Exception {
+    verifyMinimalEncoding("ABCDEF", "ALPHANUMERIC(ABCDEF)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder7() throws Exception {
+    verifyMinimalEncoding("ABCDEFG", "ALPHANUMERIC(ABCDEFG)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder8() throws Exception {
+    verifyMinimalEncoding("1", "NUMERIC(1)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder9() throws Exception {
+    verifyMinimalEncoding("12", "NUMERIC(12)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder10() throws Exception {
+    verifyMinimalEncoding("123", "NUMERIC(123)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder11() throws Exception {
+    verifyMinimalEncoding("1234", "NUMERIC(1234)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder12() throws Exception {
+    verifyMinimalEncoding("12345", "NUMERIC(12345)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder13() throws Exception {
+    verifyMinimalEncoding("123456", "NUMERIC(123456)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder14() throws Exception {
+    verifyMinimalEncoding("123A", "ALPHANUMERIC(123A)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder15() throws Exception {
+    verifyMinimalEncoding("A1", "ALPHANUMERIC(A1)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder16() throws Exception {
+    verifyMinimalEncoding("A12", "ALPHANUMERIC(A12)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder17() throws Exception {
+    verifyMinimalEncoding("A123", "ALPHANUMERIC(A123)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder18() throws Exception {
+    verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1234)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder19() throws Exception {
+    verifyMinimalEncoding("A12345", "ALPHANUMERIC(A12345)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder20() throws Exception {
+    verifyMinimalEncoding("A123456", "ALPHANUMERIC(A123456)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder21() throws Exception {
+    verifyMinimalEncoding("A1234567", "ALPHANUMERIC(A1234567)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder22() throws Exception {
+    verifyMinimalEncoding("A12345678", "BYTE(A),NUMERIC(12345678)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder23() throws Exception {
+    verifyMinimalEncoding("A123456789", "BYTE(A),NUMERIC(123456789)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder24() throws Exception {
+    verifyMinimalEncoding("A1234567890", "ALPHANUMERIC(A1),NUMERIC(234567890)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder25() throws Exception {
+    verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB1)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder26() throws Exception {
+    verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB12)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder27() throws Exception {
+    verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB123)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder28() throws Exception {
+    verifyMinimalEncoding("AB1234", "ALPHANUMERIC(AB1234)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder29() throws Exception {
+    verifyMinimalEncoding("ABC1", "ALPHANUMERIC(ABC1)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder30() throws Exception {
+    verifyMinimalEncoding("ABC12", "ALPHANUMERIC(ABC12)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder31() throws Exception {
+    verifyMinimalEncoding("ABC1234", "ALPHANUMERIC(ABC1234)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder32() throws Exception {
+    verifyMinimalEncoding("http://foo.com", "BYTE(http://foo.com)" +
+        "", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder33() throws Exception {
+    verifyMinimalEncoding("HTTP://FOO.COM", "ALPHANUMERIC(HTTP://FOO.COM" +
+        ")", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder34() throws Exception {
+    verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781", 
+        "NUMERIC(1001114670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder35() throws Exception {
+    verifyMinimalEncoding("\u0150", "ECI(ISO-8859-2),BYTE(.)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder36() throws Exception {
+    verifyMinimalEncoding("\u015C", "ECI(ISO-8859-3),BYTE(.)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder37() throws Exception {
+    verifyMinimalEncoding("\u0150\u015C", "ECI(UTF-8),BYTE(..)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder38() throws Exception {
+    verifyMinimalEncoding("\u0150\u0150\u015C\u015C", "ECI(ISO-8859-2),BYTE(." +
+        ".),ECI(ISO-8859-3),BYTE(..)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder39() throws Exception {
+    verifyMinimalEncoding("abcdef\u0150ghij", "ECI(ISO-8859-2),BYTE(abcde" +
+        "f.ghij)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder40() throws Exception {
+    verifyMinimalEncoding("2938928329832983\u01502938928329832983\u015C2938928329832983", 
+        "NUMERIC(2938928329832983),ECI(ISO-8859-2),BYTE(.),NUMERIC(2938928329832983),ECI(ISO-8" +
+        "859-3),BYTE(.),NUMERIC(2938928329832983)", null, false);
+  }
+
+  @Test
+  public void testMinimalEncoder41() throws Exception {
+    verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781", "FNC1_FIRST_POSITION(),NUMERIC(100111" +
+        "4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)", null, 
+        true);
+  }
+
+  @Test
+  public void testMinimalEncoder42() throws Exception {
+    // test halfwidth Katakana character (they are single byte encoded in Shift_JIS)
+    verifyMinimalEncoding("Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66", "ECI(Shift_JIS),BYTE(Katakana:......)", null
+        , false);
+  }
+
+  @Test
+  public void testMinimalEncoder43() throws Exception {
+    // The character \u30A2 encodes as double byte in Shift_JIS so KANJI is more compact in this case
+    verifyMinimalEncoding("Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2", "BYTE(Katakana:),KANJI(......)", null,
+        false);
+  }
+
+  @Test
+  public void testMinimalEncoder44() throws Exception {
+    // The character \u30A2 encodes as double byte in Shift_JIS but KANJI is not more compact in this case because
+    // KANJI is only more compact when it encodes pairs of characters. In the case of mixed text it can however be
+    // that Shift_JIS encoding is more compact as in this example
+    verifyMinimalEncoding("Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2", "ECI(Shift_JIS),BYTE(Katakana:.a.a.a" +
+        ".a.a.)", null, false);
+  }
+
+  static void verifyMinimalEncoding(String input, String expectedResult, Charset priorityCharset, boolean isGS1) 
+      throws Exception {
+    MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, priorityCharset, isGS1,
+        ErrorCorrectionLevel.L);
+    assertEquals(result.toString(), expectedResult);
+  }
+
+  private static void verifyGS1EncodedData(QRCode qrCode) {
+    String expected = "<<\n" +
+        " mode: ALPHANUMERIC\n" +
+        " ecLevel: H\n" +
+        " version: 2\n" +
+        " maskPattern: 2\n" +
+        " matrix:\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 1 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 1 0 0 0 0 1 1 0 1 0 1 0 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 0 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 1 1 1 1 1 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 0 0 1 0 0 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+        " 0 0 0 0 0 0 0 0 1 1 1 0 0 0 1 1 1 0 0 0 0 0 0 0 0\n" +
+        " 0 0 1 1 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 1 0 0 1 1 1\n" +
+        " 0 0 0 1 1 1 0 1 0 0 1 0 0 1 0 0 1 1 1 0 0 1 0 0 1\n" +
+        " 1 0 1 1 0 0 1 0 1 1 0 0 0 0 1 0 1 1 1 0 0 1 0 0 1\n" +
+        " 0 0 1 1 0 1 0 1 1 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 1\n" +
+        " 0 0 1 0 0 0 1 0 0 0 1 1 0 1 0 0 0 1 0 1 1 1 0 1 0\n" +
+        " 1 1 1 0 1 1 0 1 0 0 0 0 0 0 0 1 1 0 1 1 0 1 0 0 0\n" +
+        " 1 0 1 0 1 0 1 1 0 1 0 1 0 1 1 0 0 0 0 0 1 1 0 0 1\n" +
+        " 1 0 0 1 0 1 0 1 0 0 0 1 1 1 1 0 1 0 1 0 0 1 0 0 1\n" +
+        " 1 0 1 0 0 1 1 1 0 1 1 0 0 1 0 0 1 1 1 1 1 1 0 0 0\n" +
+        " 0 0 0 0 0 0 0 0 1 0 0 1 0 1 1 0 1 0 0 0 1 0 0 1 0\n" +
+        " 1 1 1 1 1 1 1 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 1 1 1 1 0 1 1 0 0 0 1 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 0 0 1 1 1 1 1 1 1 1 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0\n" +
+        " 1 0 1 1 1 0 1 0 1 0 0 0 1 1 0 1 0 0 1 1 1 0 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 0 1 0 1 1 1 0 1 0 0 1 1 1 1 1\n" +
+        " 1 1 1 1 1 1 1 0 0 1 1 0 0 1 1 0 1 0 0 0 0 1 0 1 1\n" +
+        ">>\n";
+    assertEquals(expected, qrCode.toString());
+  }
+
+  private static void verifyNotGS1EncodedData(QRCode qrCode) {
+    String expected = "<<\n" +
+        " mode: ALPHANUMERIC\n" +
+        " ecLevel: H\n" +
+        " version: 1\n" +
+        " maskPattern: 0\n" +
+        " matrix:\n" +
+        " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 0 1 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 1\n" +
+        " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+        " 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0\n" +
+        " 0 0 1 0 1 1 1 0 1 1 0 0 1 1 0 0 0 1 0 0 1\n" +
+        " 1 0 1 1 1 0 0 1 0 0 0 1 0 1 0 0 0 0 0 0 0\n" +
+        " 0 0 1 1 0 0 1 0 1 0 0 0 1 0 1 0 1 0 1 1 0\n" +
+        " 1 1 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 0\n" +
+        " 0 0 1 1 0 1 1 1 1 0 0 0 1 0 1 0 1 1 1 1 0\n" +
+        " 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 0 1 0 0 0\n" +
+        " 1 1 1 1 1 1 1 0 0 0 1 0 1 0 1 1 0 0 0 0 1\n" +
+        " 1 0 0 0 0 0 1 0 1 1 1 1 0 1 0 1 1 1 1 0 1\n" +
+        " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 0 1 0 0 0 0 1\n" +
+        " 1 0 1 1 1 0 1 0 0 1 1 0 1 1 1 1 0 1 0 1 0\n" +
+        " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 1 1 0 1\n" +
+        " 1 0 0 0 0 0 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1\n" +
+        " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 1\n" +
+        ">>\n";
+    assertEquals(expected, qrCode.toString());
+  }
+
+  private static String shiftJISString(byte[] bytes) {
+    return new String(bytes, StringUtils.SHIFT_JIS_CHARSET);
   }
 
 }

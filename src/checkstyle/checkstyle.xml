@@ -59,8 +59,6 @@
 
   <module name="TreeWalker">
 
-    <property name="cacheFile" value="${checkstyle.cache.file}"/>
-
     <!-- required for SuppressWarningsFilter (and other Suppress* rules not used here) -->
     <!-- see http://checkstyle.sourceforge.net/config_annotation.html#SuppressWarningsHolder -->
     <module name="SuppressWarningsHolder"/>
@@ -72,11 +70,9 @@
       <property name="scope" value="protected"/>
     </module>
     -->
-    <!--
     <module name="JavadocType">
       <property name="scope" value="protected"/>
     </module>
-     -->
     <!--<module name="JavadocVariable"/>-->
     <module name="JavadocStyle">
       <property name="checkFirstSentence" value="false"/>
@@ -90,6 +86,7 @@
     <!-- <module name="LocalVariableName"/> -->
     <module name="MemberName"/>
     <module name="MethodName"/>
+    <module name="NonEmptyAtclauseDescription"/>
     <module name="PackageName"/>
     <!-- <module name="ParameterName"/> -->
     <module name="StaticVariableName"/>
@@ -99,6 +96,7 @@
     <!-- Checks for imports                              -->
     <!-- See http://checkstyle.sf.net/config_import.html -->
     <module name="AvoidStarImport"/>
+    <module name="AvoidStaticImport"/>
     <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
@@ -106,11 +104,6 @@
 
     <!-- Checks for Size Violations.                    -->
     <!-- See http://checkstyle.sf.net/config_sizes.html -->
-    <!--
-    <module name="LineLength">
-      <property name="max" value="120"/>
-    </module>
-     -->
     <!-- <module name="MethodLength"/> -->
     <!-- <module name="ParameterNumber"/> -->
 
@@ -119,13 +112,16 @@
     <!-- See http://checkstyle.sf.net/config_whitespace.html -->
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>
-    <!-- <module name="NoWhitespaceAfter"/> -->
-    <!-- <module name="NoWhitespaceBefore"/> -->
     <!-- <module name="OperatorWrap"/> -->
     <module name="ParenPad"/>
     <module name="TypecastParenPad"/>
-    <!-- <module name="WhitespaceAfter"/> -->
-    <!-- <module name="WhitespaceAround"/> -->
+    <module name="WhitespaceAfter">
+      <property name="tokens" value="TYPECAST, SEMI"/>
+    </module>
+    <module name="WhitespaceAround">
+      <property name="allowEmptyConstructors" value="true"/>
+    </module>
+    <!-- <module name="UnnecessaryParentheses"/> -->
 
 
     <!-- Modifier Checks                                    -->
@@ -149,14 +145,22 @@
     <!-- See http://checkstyle.sf.net/config_coding.html -->
     <!--<module name="AvoidInlineConditionals"/>-->
     <module name="EmptyStatement"/>
+    <module name="EqualsAvoidNull"/>
     <module name="EqualsHashCode"/>
     <!--<module name="HiddenField"/>-->
     <module name="IllegalInstantiation"/>
+    <!-- <module name="IllegalType"/> -->
     <!-- <module name="InnerAssignment"/> -->
     <!-- <module name="MagicNumber"/> -->
     <!-- <module name="MissingSwitchDefault"/> -->
+    <module name="MissingDeprecated"/>
+    <module name="MissingOverride"/>
+    <module name="OneStatementPerLine"/>
+    <module name="MultipleVariableDeclarations"/>
+    <module name="DefaultComesLast"/>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
+    <module name="StringLiteralEquality"/>
 
     <!-- Checks for class design                         -->
     <!-- See http://checkstyle.sf.net/config_design.html -->
@@ -164,6 +168,8 @@
     <module name="FinalClass"/>
     <module name="HideUtilityClassConstructor"/>
     <module name="InterfaceIsType"/>
+    <module name="OneTopLevelClass"/>
+    <module name="SuperFinalize"/>
     <!-- <module name="VisibilityModifier"/> -->
 
 
@@ -174,6 +180,13 @@
     <!-- <module name="TodoComment"/> -->
     <module name="UpperEll"/>
 
+    <module name="Indentation">
+      <property name="basicOffset" value="2" />
+      <property name="braceAdjustment" value="0" />
+      <property name="caseIndent" value="2" />
+      <property name="arrayInitIndent" value="2"/>
+    </module>
+
   </module>
 
   <!-- Support @SuppressWarnings (added in Checkstyle 5.7) -->
@@ -183,5 +196,9 @@
   <!-- Checks properties file for a duplicated properties. -->
   <!-- See http://checkstyle.sourceforge.net/config_misc.html#UniqueProperties -->
   <module name="UniqueProperties"/>
+
+  <module name="LineLength">
+    <property name="max" value="120"/>
+  </module>
 
 </module>

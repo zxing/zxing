@@ -27,8 +27,8 @@ public final class ITFBlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public ITFBlackBox1TestCase() {
     super("src/test/resources/blackbox/itf-1", new MultiFormatReader(), BarcodeFormat.ITF);
-    addTest(9, 13, 0.0f);
-    addTest(12, 13, 180.0f);
+    addTest(14, 14, 0.0f);
+    addTest(14, 14, 180.0f);
   }
 
 }

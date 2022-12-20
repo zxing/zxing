@@ -50,12 +50,12 @@ final class EANManufacturerOrgSupport {
     }
     return null;
   }
-  
+
   private void add(int[] range, String id) {
     ranges.add(range);
     countryIdentifiers.add(id);
   }
-  
+
   private synchronized void initIfNeeded() {
     if (!ranges.isEmpty()) {
       return;
@@ -86,15 +86,15 @@ final class EANManufacturerOrgSupport {
     add(new int[] {486},     "GE");
     add(new int[] {487},     "KZ");
     add(new int[] {489},     "HK");
-    add(new int[] {490,499}, "JP");    
-    add(new int[] {500,509}, "GB");    
+    add(new int[] {490,499}, "JP");
+    add(new int[] {500,509}, "GB");
     add(new int[] {520},     "GR");
     add(new int[] {528},     "LB");
     add(new int[] {529},     "CY");
     add(new int[] {531},     "MK");
     add(new int[] {535},     "MT");
     add(new int[] {539},     "IE");
-    add(new int[] {540,549}, "BE/LU");    
+    add(new int[] {540,549}, "BE/LU");
     add(new int[] {560},     "PT");
     add(new int[] {569},     "IS");
     add(new int[] {570,579}, "DK");
@@ -102,13 +102,13 @@ final class EANManufacturerOrgSupport {
     add(new int[] {594},     "RO");
     add(new int[] {599},     "HU");
     add(new int[] {600,601}, "ZA");
-    add(new int[] {603},     "GH");    
+    add(new int[] {603},     "GH");
     add(new int[] {608},     "BH");
     add(new int[] {609},     "MU");
     add(new int[] {611},     "MA");
     add(new int[] {613},     "DZ");
     add(new int[] {616},     "KE");
-    add(new int[] {618},     "CI");    
+    add(new int[] {618},     "CI");
     add(new int[] {619},     "TN");
     add(new int[] {621},     "SY");
     add(new int[] {622},     "EG");
@@ -141,7 +141,7 @@ final class EANManufacturerOrgSupport {
     add(new int[] {779},     "AR");
     add(new int[] {780},     "CL");
     add(new int[] {784},     "PY");
-    add(new int[] {785},     "PE");  
+    add(new int[] {785},     "PE");
     add(new int[] {786},     "EC");
     add(new int[] {789,790}, "BR");
     add(new int[] {800,839}, "IT");
@@ -150,7 +150,7 @@ final class EANManufacturerOrgSupport {
     add(new int[] {858},     "SK");
     add(new int[] {859},     "CZ");
     add(new int[] {860},     "YU");
-    add(new int[] {865},     "MN");    
+    add(new int[] {865},     "MN");
     add(new int[] {867},     "KP");
     add(new int[] {868,869}, "TR");
     add(new int[] {870,879}, "NL");
@@ -159,7 +159,7 @@ final class EANManufacturerOrgSupport {
     add(new int[] {888},     "SG");
     add(new int[] {890},     "IN");
     add(new int[] {893},     "VN");
-    add(new int[] {896},     "PK");    
+    add(new int[] {896},     "PK");
     add(new int[] {899},     "ID");
     add(new int[] {900,919}, "AT");
     add(new int[] {930,939}, "AU");

@@ -93,8 +93,13 @@ final class DecodeWorker implements Callable<Integer> {
       inputFileName = inputPath.getFileName().toString();
     } else {
       outDir = Paths.get(".").toRealPath();
-      String[] pathElements = input.getPath().split("/");
-      inputFileName = pathElements[pathElements.length - 1];
+      String path = input.getPath();
+      if (path == null) {
+        inputFileName = "input";
+      } else {
+        String[] pathElements = path.split("/");
+        inputFileName = pathElements[pathElements.length - 1];
+      }
     }
 
     // Replace/add extension
@@ -151,8 +156,7 @@ final class DecodeWorker implements Callable<Integer> {
       System.out.println(uri + ": Success");
     } else {
       StringWriter output = new StringWriter();
-      for (int resultIndex = 0; resultIndex < results.length; resultIndex++) {
-        Result result = results[resultIndex];
+      for (Result result : results) {
         ParsedResult parsedResult = ResultParser.parseResult(result);
         output.write(uri +
             " (format: " + result.getBarcodeFormat() +
@@ -161,19 +165,34 @@ final class DecodeWorker implements Callable<Integer> {
             result.getText() + "\n" +
             "Parsed result:\n" +
             parsedResult.getDisplayResult() + "\n");
-        output.write("Found " + result.getResultPoints().length + " result points.\n");
-        for (int pointIndex = 0; pointIndex < result.getResultPoints().length; pointIndex++) {
-          ResultPoint rp = result.getResultPoints()[pointIndex];
-          output.write("  Point " + pointIndex + ": (" + rp.getX() + ',' + rp.getY() + ')');
-          if (pointIndex != result.getResultPoints().length - 1) {
-            output.write('\n');
+
+        if (config.outputRaw) {
+          StringBuilder rawData = new StringBuilder();
+
+          for (byte b : result.getRawBytes()) {
+            rawData.append(String.format("%02X", b & 0xff));
+            rawData.append(" ");
+          }
+          rawData.setLength(rawData.length() - 1);  // chop off final space
+
+          output.write("Raw bits:\n" + rawData + "\n");
+        }
+
+        ResultPoint[] resultPoints = result.getResultPoints();
+        int numResultPoints = resultPoints.length;
+        output.write("Found " + numResultPoints + " result points.\n");
+        for (int pointIndex = 0; pointIndex < numResultPoints; pointIndex++) {
+          ResultPoint rp = resultPoints[pointIndex];
+          if (rp != null) {
+            output.write("  Point " + pointIndex + ": (" + rp.getX() + ',' + rp.getY() + ')');
+            if (pointIndex != numResultPoints - 1) {
+              output.write('\n');
+            }
           }
         }
-        if (resultIndex != results.length - 1) {
-          output.write('\n');
-        }
+        output.write('\n');
       }
-      System.out.println(output.toString());
+      System.out.println(output);
     }
 
     return results;

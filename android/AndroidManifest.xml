@@ -16,8 +16,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="4.7.5"
-          android:versionCode="105"
+          android:versionName="4.7.8"
+          android:versionCode="108"
           android:installLocation="auto">
 
   <uses-permission android:name="android.permission.CAMERA"/>
@@ -31,26 +31,13 @@
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
-  <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="22"/>
+  <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="22"/>
 
-  <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
-  <uses-feature android:name="android.hardware.camera" android:required="false"/>
-  <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
-  <!-- TODO replace above two with next line after Android 4.2 -->
-  <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+  <uses-feature android:name="android.hardware.camera.any"/>
   <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
   <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
   <uses-feature android:name="android.hardware.screen.landscape"/>
   <uses-feature android:name="android.hardware.wifi" android:required="false"/>
-  <!-- This excludes Google TV, which is unfortunately included by virtue of not requiring a camera -->
-  <uses-feature android:name="android.hardware.touchscreen"/>
-  <!-- TODO make this not required again after android.hardware.camera.any is available -->
-
-  <supports-screens android:xlargeScreens="true"
-                    android:largeScreens="true"
-                    android:normalScreens="true"
-                    android:smallScreens="true"
-                    android:anyDensity="true"/>
 
   <application android:icon="@drawable/launcher_icon"
                android:logo="@drawable/launcher_icon"
@@ -61,7 +48,8 @@
               android:clearTaskOnLaunch="true"
               android:stateNotNeeded="true"
               android:theme="@style/CaptureTheme"
-              android:windowSoftInputMode="stateAlwaysHidden">
+              android:windowSoftInputMode="stateAlwaysHidden"
+              android:exported="false">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
@@ -103,7 +91,8 @@
               android:label="@string/preferences_name"
               android:stateNotNeeded="true"/>
     <activity android:name=".encode.EncodeActivity"
-              android:stateNotNeeded="true">
+              android:stateNotNeeded="true"
+              android:exported="false">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -124,7 +113,8 @@
     <activity android:name=".book.SearchBookContentsActivity"
               android:label="@string/sbc_name"
               android:stateNotNeeded="true"
-              android:screenOrientation="sensorLandscape">
+              android:screenOrientation="sensorLandscape"
+              android:exported="false">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.SEARCH_BOOK_CONTENTS"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -132,7 +122,8 @@
     </activity>
     <activity android:name=".share.ShareActivity"
               android:stateNotNeeded="true"
-              android:screenOrientation="user">
+              android:screenOrientation="user"
+              android:exported="false">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.SHARE"/>
         <category android:name="android.intent.category.DEFAULT"/>

@@ -113,14 +113,9 @@ public final class ErrorCorrection {
       sb.setLength(sb.capacity());
       int[] dataSizes = new int[blockCount];
       int[] errorSizes = new int[blockCount];
-      int[] startPos = new int[blockCount];
       for (int i = 0; i < blockCount; i++) {
         dataSizes[i] = symbolInfo.getDataLengthForInterleavedBlock(i + 1);
         errorSizes[i] = symbolInfo.getErrorLengthForInterleavedBlock(i + 1);
-        startPos[i] = 0;
-        if (i > 0) {
-          startPos[i] = startPos[i - 1] + dataSizes[i];
-        }
       }
       for (int block = 0; block < blockCount; block++) {
         StringBuilder temp = new StringBuilder(dataSizes[block]);
@@ -139,10 +134,6 @@ public final class ErrorCorrection {
   }
 
   private static String createECCBlock(CharSequence codewords, int numECWords) {
-    return createECCBlock(codewords, 0, codewords.length(), numECWords);
-  }
-
-  private static String createECCBlock(CharSequence codewords, int start, int len, int numECWords) {
     int table = -1;
     for (int i = 0; i < FACTOR_SETS.length; i++) {
       if (FACTOR_SETS[i] == numECWords) {
@@ -159,7 +150,7 @@ public final class ErrorCorrection {
     for (int i = 0; i < numECWords; i++) {
       ecc[i] = 0;
     }
-    for (int i = start; i < start + len; i++) {
+    for (int i = 0; i < codewords.length(); i++) {
       int m = ecc[numECWords - 1] ^ codewords.charAt(i);
       for (int k = numECWords - 1; k > 0; k--) {
         if (m != 0 && poly[k] != 0) {

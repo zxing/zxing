@@ -38,6 +38,9 @@ public final class QRCode {
     maskPattern = -1;
   }
 
+  /**
+   * @return the mode. Not relevant if {@link com.google.zxing.EncodeHintType#QR_COMPACT} is selected.
+   */
   public Mode getMode() {
     return mode;
   }

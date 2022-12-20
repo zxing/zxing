@@ -158,7 +158,7 @@ final class AlignmentPatternFinder {
    * figures the location of the center of this black/white/black run.
    */
   private static float centerFromEnd(int[] stateCount, int end) {
-    return (float) (end - stateCount[2]) - stateCount[1] / 2.0f;
+    return (end - stateCount[2]) - stateCount[1] / 2.0f;
   }
 
   /**
@@ -257,7 +257,7 @@ final class AlignmentPatternFinder {
     float centerJ = centerFromEnd(stateCount, j);
     float centerI = crossCheckVertical(i, (int) centerJ, 2 * stateCount[1], stateCountTotal);
     if (!Float.isNaN(centerI)) {
-      float estimatedModuleSize = (float) (stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
+      float estimatedModuleSize = (stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
       for (AlignmentPattern center : possibleCenters) {
         // Look for about the same center and module size:
         if (center.aboutEquals(estimatedModuleSize, centerI, centerJ)) {

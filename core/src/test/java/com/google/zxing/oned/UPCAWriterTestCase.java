@@ -17,9 +17,9 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import com.google.zxing.common.BitMatrixTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,21 +29,19 @@ import org.junit.Test;
 public final class UPCAWriterTestCase extends Assert {
 
   @Test
-  public void testEncode() throws WriterException {
-    CharSequence testStr = "00010101000110110111011000100010110101111011110101010111001011101001001110110011011011001011100101000";
+  public void testEncode() {
+    String testStr =
+        "00001010100011011011101100010001011010111101111010101011100101110100100111011001101101100101110010100000";
     BitMatrix result = new UPCAWriter().encode("485963095124", BarcodeFormat.UPC_A, testStr.length(), 0);
-    for (int i = 0; i < testStr.length(); i++) {
-      assertEquals("Element " + i,  testStr.charAt(i) == '1', result.get(i, 0));
-    }
+    assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
 
   @Test
-  public void testAddChecksumAndEncode() throws WriterException {
-    CharSequence testStr = "00010100110010010011011110101000110110001010111101010100010010010001110100111001011001101101100101000";
+  public void testAddChecksumAndEncode() {
+    String testStr =
+        "00001010011001001001101111010100011011000101011110101010001001001000111010011100101100110110110010100000";
     BitMatrix result = new UPCAWriter().encode("12345678901", BarcodeFormat.UPC_A, testStr.length(), 0);
-    for (int i = 0; i < testStr.length(); i++) {
-      assertEquals("Element " + i,  testStr.charAt(i) == '1', result.get(i, 0));
-    }
+    assertEquals(testStr, BitMatrixTestCase.matrixToString(result));
   }
 
 }

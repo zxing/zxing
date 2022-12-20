@@ -18,6 +18,9 @@ package com.google.zxing.oned.rss;
 
 import com.google.zxing.ResultPoint;
 
+/**
+ * Encapsulates an RSS barcode finder pattern, including its start/end position and row.
+ */
 public final class FinderPattern {
 
   private final int value;
@@ -28,8 +31,8 @@ public final class FinderPattern {
     this.value = value;
     this.startEnd = startEnd;
     this.resultPoints = new ResultPoint[] {
-        new ResultPoint((float) start, (float) rowNumber),
-        new ResultPoint((float) end, (float) rowNumber),
+        new ResultPoint(start, rowNumber),
+        new ResultPoint(end, rowNumber),
     };
   }
 
@@ -47,7 +50,7 @@ public final class FinderPattern {
 
   @Override
   public boolean equals(Object o) {
-    if(!(o instanceof FinderPattern)) {
+    if (!(o instanceof FinderPattern)) {
       return false;
     }
     FinderPattern that = (FinderPattern) o;

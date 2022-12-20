@@ -34,7 +34,7 @@ public final class NotFoundException extends ReaderException {
   }
 
   public static NotFoundException getNotFoundInstance() {
-    return INSTANCE;
+    return isStackTrace ? new NotFoundException() : INSTANCE;
   }
 
 }
