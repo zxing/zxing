@@ -119,9 +119,6 @@
               <id>enforce</id>
               <configuration>
                 <rules>
-                  <reactorModuleConvergence>
-                    <ignoreModuleDependencies>true</ignoreModuleDependencies>
-                  </reactorModuleConvergence>
                   <requireUpperBoundDeps />
                   <dependencyConvergence />
                   <requireMavenVersion>
