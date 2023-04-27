@@ -25,7 +25,7 @@ import org.springframework.mock.web.MockServletConfig;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Tests {@link DecodeServlet}.

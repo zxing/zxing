@@ -16,14 +16,14 @@
 
 package com.google.zxing.web;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 /**
  * A {@link Handler} that redirects log messages to the servlet container log.
- * 
+ *
  * @author Sean Owen
  */
 final class ServletContextLogHandler extends Handler {

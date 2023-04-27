@@ -23,7 +23,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Tests {@link ChartServlet}.
