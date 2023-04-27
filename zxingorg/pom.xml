@@ -31,9 +31,9 @@
       <artifactId>javase</artifactId>
     </dependency>
     <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-web-api</artifactId>
-      <version>8.0.1</version>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-web-api</artifactId>
+      <version>10.0.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -58,12 +58,6 @@
       <version>${spring.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>4.0.1</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <parent>
@@ -73,7 +67,7 @@
   </parent>
 
   <properties>
-    <spring.version>5.3.24</spring.version>
+    <spring.version>6.0.8</spring.version>
   </properties>
 
   <build>

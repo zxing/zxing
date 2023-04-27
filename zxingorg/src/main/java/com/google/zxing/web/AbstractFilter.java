@@ -18,10 +18,10 @@ package com.google.zxing.web;
 
 import com.google.common.net.HttpHeaders;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Provides no-op default implementations for convenience of subclasses.
@@ -37,7 +37,7 @@ abstract class AbstractFilter implements Filter {
   public final void destroy() {
     // do nothing
   }
-  
+
   static void redirect(ServletResponse servletResponse, String location) {
     HttpServletResponse response = (HttpServletResponse) servletResponse;
     response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);

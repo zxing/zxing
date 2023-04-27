@@ -16,8 +16,8 @@
 
 package com.google.zxing.web;
 
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.annotation.WebInitParam;
 
 /**
  * Protect the /decode endpoint from too many requests.
