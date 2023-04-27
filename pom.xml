@@ -119,7 +119,9 @@
               <id>enforce</id>
               <configuration>
                 <rules>
-                  <reactorModuleConvergence />
+                  <reactorModuleConvergence>
+                    <ignoreModuleDependencies>true</ignoreModuleDependencies>
+                  </reactorModuleConvergence>
                   <requireUpperBoundDeps />
                   <dependencyConvergence />
                   <requireMavenVersion>
@@ -760,7 +762,7 @@
     <profile>
       <id>zxingorg</id>
       <activation>
-        <jdk>[11,)</jdk> <!-- Requires Java1 1+ for Java EE 10+ -->
+        <jdk>[17,)</jdk> <!-- Requires Java 17+ for Java EE 10+ -->
       </activation>
       <modules>
         <module>zxingorg</module>
