@@ -19,7 +19,7 @@ package com.google.zxing.common;
 import com.google.zxing.FormatException;
 
 import java.nio.charset.Charset;
-
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +68,7 @@ public enum CharacterSetECI {
   private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
   static {
     String removeProp = System.getProperty("zxing.remove.eci.charsets", "");
-    List<String> remove = List.of(removeProp.split(","));
+    List<String> remove = Arrays.asList(removeProp.split(","));
     for (CharacterSetECI eci : values()) {
       if (Charset.isSupported(eci.name()) && !remove.contains(eci.name())) {
         for (int value : eci.values) {
