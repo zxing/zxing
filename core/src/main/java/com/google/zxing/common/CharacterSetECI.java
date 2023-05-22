@@ -38,14 +38,14 @@ public enum CharacterSetECI {
   ISO8859_3(5, "ISO-8859-3"),
   ISO8859_4(6, "ISO-8859-4"),
   ISO8859_5(7, "ISO-8859-5"),
-  // ISO8859_6(8, "ISO-8859-6"),
+  ISO8859_6(8, "ISO-8859-6"),
   ISO8859_7(9, "ISO-8859-7"),
-  // ISO8859_8(10, "ISO-8859-8"),
+  ISO8859_8(10, "ISO-8859-8"),
   ISO8859_9(11, "ISO-8859-9"),
-  // ISO8859_10(12, "ISO-8859-10"),
-  // ISO8859_11(13, "ISO-8859-11"),
+  ISO8859_10(12, "ISO-8859-10"),
+  ISO8859_11(13, "ISO-8859-11"),
   ISO8859_13(15, "ISO-8859-13"),
-  // ISO8859_14(16, "ISO-8859-14"),
+  ISO8859_14(16, "ISO-8859-14"),
   ISO8859_15(17, "ISO-8859-15"),
   ISO8859_16(18, "ISO-8859-16"),
   SJIS(20, "Shift_JIS"),
@@ -60,16 +60,19 @@ public enum CharacterSetECI {
   GB18030(29, "GB2312", "EUC_CN", "GBK"),
   EUC_KR(30, "EUC-KR");
 
+  // only character sets supported by the current JVM are registered here
   private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<>();
   private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
   static {
     for (CharacterSetECI eci : values()) {
-      for (int value : eci.values) {
-        VALUE_TO_ECI.put(value, eci);
-      }
-      NAME_TO_ECI.put(eci.name(), eci);
-      for (String name : eci.otherEncodingNames) {
-        NAME_TO_ECI.put(name, eci);
+      if (Charset.isSupported(eci.name())) {
+        for (int value : eci.values) {
+          VALUE_TO_ECI.put(value, eci);
+        }
+        NAME_TO_ECI.put(eci.name(), eci);
+        for (String name : eci.otherEncodingNames) {
+          NAME_TO_ECI.put(name, eci);
+        }
       }
     }
   }
