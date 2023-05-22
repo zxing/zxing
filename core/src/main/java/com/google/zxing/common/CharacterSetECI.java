@@ -19,9 +19,8 @@ package com.google.zxing.common;
 import com.google.zxing.FormatException;
 
 import java.nio.charset.Charset;
-import java.util.Arrays;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,15 +61,11 @@ public enum CharacterSetECI {
   EUC_KR(30, "EUC-KR");
 
   // only character sets supported by the current JVM are registered here
-  // some JVMs, for example, do not support character sets ISO-8859-6/8/10/11/14
-  // restricted JVMs can be simulated with the "zxing.remove.eci.charsets" property
   private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<>();
   private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
   static {
-    String removeProp = System.getProperty("zxing.remove.eci.charsets", "");
-    List<String> remove = Arrays.asList(removeProp.split(","));
     for (CharacterSetECI eci : values()) {
-      if (Charset.isSupported(eci.name()) && !remove.contains(eci.name())) {
+      if (Charset.isSupported(eci.name())) {
         for (int value : eci.values) {
           VALUE_TO_ECI.put(value, eci);
         }
