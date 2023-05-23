@@ -69,6 +69,14 @@ public enum DecodeHintType {
   ASSUME_CODE_39_CHECK_DIGIT(Void.class),
 
   /**
+   * Assume PDF417 barcode is a Compact PDF417 barcode, with a narrow stop pattern and no right row
+   * indicator column. Most Compact PDF417 barcodes will decode correctly without this hint, but this
+   * hint can improve accuracy and performance if the barcode is known to be a compact variant.
+   * Doesn't matter what it maps to; use {@link Boolean#TRUE}.
+   */
+  ASSUME_COMPACT_PDF_417(Void.class),
+
+  /**
    * Assume the barcode is being processed as a GS1 barcode, and modify behavior as needed.
    * For example this affects FNC1 handling for Code 128 (aka GS1-128). Doesn't matter what it maps to;
    * use {@link Boolean#TRUE}.
@@ -87,7 +95,6 @@ public enum DecodeHintType {
    * is found. Maps to a {@link ResultPointCallback}.
    */
   NEED_RESULT_POINT_CALLBACK(ResultPointCallback.class),
-
 
   /**
    * Allowed extension lengths for EAN or UPC barcodes. Other formats will ignore this.

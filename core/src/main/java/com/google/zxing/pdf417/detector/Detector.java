@@ -81,7 +81,8 @@ public final class Detector {
     BitMatrix originalMatrix = image.getBlackMatrix();
     for (int rotation : ROTATIONS) {
       BitMatrix bitMatrix = applyRotation(originalMatrix, rotation);
-      List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
+      boolean compact = hints != null && hints.get(DecodeHintType.ASSUME_COMPACT_PDF_417) != null;
+      List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix, compact);
       if (!barcodeCoordinates.isEmpty()) {
         return new PDF417DetectorResult(bitMatrix, barcodeCoordinates, rotation);
       }
@@ -110,15 +111,16 @@ public final class Detector {
    * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
    * be found and returned
    * @param bitMatrix bit matrix to detect barcodes in
+   * @param compact whether or not the image can be assumed to contain only Compact PDF417 codes
    * @return List of ResultPoint arrays containing the coordinates of found barcodes
    */
-  private static List<ResultPoint[]> detect(boolean multiple, BitMatrix bitMatrix) {
+  private static List<ResultPoint[]> detect(boolean multiple, BitMatrix bitMatrix, boolean compact) {
     List<ResultPoint[]> barcodeCoordinates = new ArrayList<>();
     int row = 0;
     int column = 0;
     boolean foundBarcodeInRow = false;
     while (row < bitMatrix.getHeight()) {
-      ResultPoint[] vertices = findVertices(bitMatrix, row, column);
+      ResultPoint[] vertices = findVertices(bitMatrix, row, column, compact);
 
       if (vertices[0] == null && vertices[3] == null) {
         if (!foundBarcodeInRow) {
@@ -162,7 +164,8 @@ public final class Detector {
    * Locate the vertices and the codewords area of a black blob using the Start
    * and Stop patterns as locators.
    *
-   * @param matrix the scanned barcode image.
+   * @param matrix the scanned barcode image
+   * @param compact whether or not the image can be assumed to contain only Compact PDF417 codes
    * @return an array containing the vertices:
    *           vertices[0] x, y top left barcode
    *           vertices[1] x, y bottom left barcode
@@ -173,7 +176,7 @@ public final class Detector {
    *           vertices[6] x, y top right codeword area
    *           vertices[7] x, y bottom right codeword area
    */
-  private static ResultPoint[] findVertices(BitMatrix matrix, int startRow, int startColumn) {
+  private static ResultPoint[] findVertices(BitMatrix matrix, int startRow, int startColumn, boolean compact) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
 
@@ -181,12 +184,15 @@ public final class Detector {
     copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, START_PATTERN),
         INDEXES_START_PATTERN);
 
-    if (result[4] != null) {
-      startColumn = (int) result[4].getX();
-      startRow = (int) result[4].getY();
+    if (!compact) {
+      if (result[4] != null) {
+        startColumn = (int) result[4].getX();
+        startRow = (int) result[4].getY();
+      }
+      copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, STOP_PATTERN),
+          INDEXES_STOP_PATTERN);
     }
-    copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, STOP_PATTERN),
-        INDEXES_STOP_PATTERN);
+
     return result;
   }
 
