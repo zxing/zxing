@@ -40,7 +40,7 @@ public final class Detector {
   private static final int[] INDEXES_START_PATTERN = {0, 4, 1, 5};
   private static final int[] INDEXES_STOP_PATTERN = {6, 2, 7, 3};
   private static final float MAX_AVG_VARIANCE = 0.42f;
-  private static final float MAX_INDIVIDUAL_VARIANCE = 0.8f;
+  private static final float MAX_INDIVIDUAL_VARIANCE = 0.7f;
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
