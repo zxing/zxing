@@ -40,7 +40,8 @@ public final class Detector {
   private static final int[] INDEXES_START_PATTERN = {0, 4, 1, 5};
   private static final int[] INDEXES_STOP_PATTERN = {6, 2, 7, 3};
   private static final float MAX_AVG_VARIANCE = 0.42f;
-  private static final float MAX_INDIVIDUAL_VARIANCE = 0.7f;
+  private static final float MAX_INDIVIDUAL_VARIANCE = 0.8f;
+  private static final float MAX_STOP_PATTERN_HEIGHT_VARIANCE = 0.5f;
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
@@ -178,14 +179,20 @@ public final class Detector {
     int width = matrix.getWidth();
 
     ResultPoint[] result = new ResultPoint[8];
-    copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, START_PATTERN),
+    int minHeight = BARCODE_MIN_HEIGHT;
+    copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, minHeight, START_PATTERN),
         INDEXES_START_PATTERN);
 
     if (result[4] != null) {
       startColumn = (int) result[4].getX();
       startRow = (int) result[4].getY();
+      if (result[5] != null) {
+        int endRow = (int) result[5].getY();
+        int startPatternHeight = endRow - startRow;
+        minHeight = (int) Math.max(startPatternHeight * MAX_STOP_PATTERN_HEIGHT_VARIANCE, BARCODE_MIN_HEIGHT);
+      }
     }
-    copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, STOP_PATTERN),
+    copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, minHeight, STOP_PATTERN),
         INDEXES_STOP_PATTERN);
     return result;
   }
@@ -201,6 +208,7 @@ public final class Detector {
                                                    int width,
                                                    int startRow,
                                                    int startColumn,
+                                                   int minHeight,
                                                    int[] pattern) {
     ResultPoint[] result = new ResultPoint[4];
     boolean found = false;
@@ -251,7 +259,7 @@ public final class Detector {
       result[2] = new ResultPoint(previousRowLoc[0], stopRow);
       result[3] = new ResultPoint(previousRowLoc[1], stopRow);
     }
-    if (stopRow - startRow < BARCODE_MIN_HEIGHT) {
+    if (stopRow - startRow < minHeight) {
       Arrays.fill(result, null);
     }
     return result;
