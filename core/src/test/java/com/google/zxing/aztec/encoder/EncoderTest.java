@@ -493,7 +493,7 @@ public final class EncoderTest extends Assert {
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
     BitMatrix matrix = aztec.getMatrix();
     AztecDetectorResult r =
-        new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+        new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers(), 0);
     DecoderResult res = new Decoder().decode(r);
     assertEquals(data, res.getText());
     // Check error correction by introducing a few minor errors
@@ -502,7 +502,7 @@ public final class EncoderTest extends Assert {
     matrix.flip(random.nextInt(matrix.getWidth()), matrix.getHeight() - 2 + random.nextInt(2));
     matrix.flip(random.nextInt(2), random.nextInt(matrix.getHeight()));
     matrix.flip(matrix.getWidth() - 2 + random.nextInt(2), random.nextInt(matrix.getHeight()));
-    r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers(), 0);
     res = new Decoder().decode(r);
     assertEquals(data, res.getText());
   }
@@ -527,7 +527,7 @@ public final class EncoderTest extends Assert {
     BitMatrix matrix2 = aztec.getMatrix();
     assertEquals(matrix, matrix2);
     AztecDetectorResult r =
-        new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+        new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers(), 0);
     DecoderResult res = new Decoder().decode(r);
     assertEquals(data, res.getText());
     // Check error correction by introducing up to eccPercent/2 errors
@@ -543,7 +543,7 @@ public final class EncoderTest extends Assert {
                 : matrix.getHeight() - 1 - random.nextInt(aztec.getLayers() * 2);
       matrix.flip(x, y);
     }
-    r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers(), 0);
     res = new Decoder().decode(r);
     assertEquals(data, res.getText());
   }

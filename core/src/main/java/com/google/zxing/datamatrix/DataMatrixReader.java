@@ -83,6 +83,7 @@ public final class DataMatrixReader implements Reader {
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
+    result.putMetadata(ResultMetadataType.ERRORS_CORRECTED, decoderResult.getErrorsCorrected());
     result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]d" + decoderResult.getSymbologyModifier());
     return result;
   }

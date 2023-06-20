@@ -99,6 +99,7 @@ public class QRCodeReader implements Reader {
       result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_PARITY,
                          decoderResult.getStructuredAppendParity());
     }
+    result.putMetadata(ResultMetadataType.ERRORS_CORRECTED, decoderResult.getErrorsCorrected());
     result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]Q" + decoderResult.getSymbologyModifier());
     return result;
   }

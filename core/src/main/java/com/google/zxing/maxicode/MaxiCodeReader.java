@@ -64,7 +64,7 @@ public final class MaxiCodeReader implements Reader {
     BitMatrix bits = extractPureBits(image.getBlackMatrix());
     DecoderResult decoderResult = decoder.decode(bits, hints);
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.MAXICODE);
-
+    result.putMetadata(ResultMetadataType.ERRORS_CORRECTED, decoderResult.getErrorsCorrected());
     String ecLevel = decoderResult.getECLevel();
     if (ecLevel != null) {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
