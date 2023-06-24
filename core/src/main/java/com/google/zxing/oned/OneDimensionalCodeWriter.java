@@ -48,7 +48,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
    * @param hints encoding hints
    * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)
    */
-  protected boolean[] encode(String contents, Map<EncodeHintType,?> hints) {
+  public boolean[] encode(String contents, Map<EncodeHintType,?> hints) {
     return encode(contents);
   }
 

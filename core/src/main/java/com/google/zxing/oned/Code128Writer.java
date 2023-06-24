@@ -71,7 +71,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   }
 
   @Override
-  protected boolean[] encode(String contents, Map<EncodeHintType,?> hints) {
+  public boolean[] encode(String contents, Map<EncodeHintType,?> hints) {
 
     int forcedCodeSet = check(contents, hints);
 
