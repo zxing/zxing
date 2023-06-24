@@ -137,7 +137,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
           break;
         case CODE_CODE_B:
           // allows no ascii below 32 (terminal symbols)
-          if (c <= 32) {
+          if (c < 32) {
             throw new IllegalArgumentException("Bad character in input for forced code set B: ASCII value=" + (int) c);
           }
           break;
