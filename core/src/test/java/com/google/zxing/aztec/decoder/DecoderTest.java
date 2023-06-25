@@ -90,7 +90,7 @@ public final class DecoderTest extends Assert {
         "X X     X X X     X X X X     X X X     X X   \n" +
         "    X X X     X X X       X X X     X X X X   \n",
         "X ", "  ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 30, 2, 0);
+    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 30, 2);
     DecoderResult result = new Decoder().decode(r);
     assertEquals("88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", result.getText());
     assertArrayEquals(
@@ -124,7 +124,7 @@ public final class DecoderTest extends Assert {
         "  X   X   X   X X X X X     X X   X   \n" +
         "X     X       X X   X X X       X     \n",
         "X ", "  ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 15, 1, 0);
+    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 15, 1);
     DecoderResult result = new Decoder().decode(r);
     assertEquals("Français", result.getText());
   }
@@ -160,7 +160,7 @@ public final class DecoderTest extends Assert {
         + "X X X X . . . X . . X X X . X X . . X . . . . X X X . \n"
         + "X X . X . X . . . X . X . . . . X X . X . . X X . . . \n",
         "X ", ". ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4, 0);
+    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
     new Decoder().decode(r);
   }
 
@@ -195,7 +195,7 @@ public final class DecoderTest extends Assert {
         + ". X X X X . . X . . X X X . X X . . X . . . . X X X . \n"
         + "X X . . . X X . . X . X . . . . X X . X . . X . X . X \n",
         "X ", ". ");
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4, 0);
+    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
     new Decoder().decode(r);
   }
 

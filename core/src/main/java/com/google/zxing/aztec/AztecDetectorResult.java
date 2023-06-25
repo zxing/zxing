@@ -37,6 +37,14 @@ public final class AztecDetectorResult extends DetectorResult {
                              ResultPoint[] points,
                              boolean compact,
                              int nbDatablocks,
+                             int nbLayers) {
+    this(bits, points, compact, nbDatablocks, nbLayers, 0);
+  }
+
+  public AztecDetectorResult(BitMatrix bits,
+                             ResultPoint[] points,
+                             boolean compact,
+                             int nbDatablocks,
                              int nbLayers,
                              int errorsCorrected) {
     super(bits, points);
