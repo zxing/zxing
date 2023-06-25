@@ -87,6 +87,7 @@ public final class Decoder {
     DecoderResult decoderResult =
         new DecoderResult(rawBytes, result, null, String.format("%d%%", correctedBits.ecLevel));
     decoderResult.setNumBits(correctedBits.correctBits.length);
+    decoderResult.setErrorsCorrected(correctedBits.errorsCorrected);
     return decoderResult;
   }
 
@@ -264,10 +265,12 @@ public final class Decoder {
 
   static final class CorrectedBitsResult {
     private final boolean[] correctBits;
+    private final int errorsCorrected;
     private final int ecLevel;
 
-    CorrectedBitsResult(boolean[] correctBits, int ecLevel) {
+    CorrectedBitsResult(boolean[] correctBits, int errorsCorrected, int ecLevel) {
       this.correctBits = correctBits;
+      this.errorsCorrected = errorsCorrected;
       this.ecLevel = ecLevel;
     }
   }
@@ -308,9 +311,10 @@ public final class Decoder {
       dataWords[i] = readCode(rawbits, offset, codewordSize);
     }
 
+    int errorsCorrected = 0;
     try {
       ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(gf);
-      rsDecoder.decode(dataWords, numCodewords - numDataCodewords);
+      errorsCorrected = rsDecoder.decodeWithECCount(dataWords, numCodewords - numDataCodewords);
     } catch (ReedSolomonException ex) {
       throw FormatException.getFormatInstance(ex);
     }
@@ -343,7 +347,8 @@ public final class Decoder {
       }
     }
 
-    return new CorrectedBitsResult(correctedBits, 100 * (numCodewords - numDataCodewords) / numCodewords);
+    int ecLevel = 100 * (numCodewords - numDataCodewords) / numCodewords;
+    return new CorrectedBitsResult(correctedBits, errorsCorrected, ecLevel);
   }
 
   /**

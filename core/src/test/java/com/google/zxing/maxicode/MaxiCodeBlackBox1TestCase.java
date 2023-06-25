@@ -32,7 +32,7 @@ public final class MaxiCodeBlackBox1TestCase extends AbstractBlackBoxTestCase {
   public MaxiCodeBlackBox1TestCase() {
     super("src/test/resources/blackbox/maxicode-1", new MultiFormatReader(), BarcodeFormat.MAXICODE);
     addHint(DecodeHintType.PURE_BARCODE);
-    addTest(7, 7, 0.0f);
+    addTest(8, 8, 0.0f);
   }
 
 }

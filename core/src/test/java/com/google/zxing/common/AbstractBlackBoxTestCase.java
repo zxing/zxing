@@ -165,6 +165,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         try (BufferedReader reader = Files.newBufferedReader(expectedMetadataFile, StandardCharsets.UTF_8)) {
           expectedMetadata.load(reader);
         }
+        correctInteger(expectedMetadata, ResultMetadataType.ERRORS_CORRECTED);
+        correctInteger(expectedMetadata, ResultMetadataType.ERASURES_CORRECTED);
       }
 
       for (int x = 0; x < testCount; x++) {
@@ -246,6 +248,15 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
                  misreadCounts[x] <= testResult.getMaxMisreads());
       assertTrue("Try harder, " + label,
                  tryHarderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
+    }
+  }
+
+  private static void correctInteger(Properties metadata, ResultMetadataType key) {
+    String skey = key.toString();
+    if (metadata.containsKey(skey)) {
+      String sval = metadata.getProperty(skey);
+      Integer ival = Integer.parseInt(sval);
+      metadata.put(skey, ival);
     }
   }
 

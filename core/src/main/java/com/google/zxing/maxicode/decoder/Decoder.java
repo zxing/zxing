@@ -54,20 +54,20 @@ public final class Decoder {
     BitMatrixParser parser = new BitMatrixParser(bits);
     byte[] codewords = parser.readCodewords();
 
-    correctErrors(codewords, 0, 10, 10, ALL);
+    int errorsCorrected = correctErrors(codewords, 0, 10, 10, ALL);
     int mode = codewords[0] & 0x0F;
     byte[] datawords;
     switch (mode) {
       case 2:
       case 3:
       case 4:
-        correctErrors(codewords, 20, 84, 40, EVEN);
-        correctErrors(codewords, 20, 84, 40, ODD);
+        errorsCorrected += correctErrors(codewords, 20, 84, 40, EVEN);
+        errorsCorrected += correctErrors(codewords, 20, 84, 40, ODD);
         datawords = new byte[94];
         break;
       case 5:
-        correctErrors(codewords, 20, 68, 56, EVEN);
-        correctErrors(codewords, 20, 68, 56, ODD);
+        errorsCorrected += correctErrors(codewords, 20, 68, 56, EVEN);
+        errorsCorrected += correctErrors(codewords, 20, 68, 56, ODD);
         datawords = new byte[78];
         break;
       default:
@@ -77,10 +77,12 @@ public final class Decoder {
     System.arraycopy(codewords, 0, datawords, 0, 10);
     System.arraycopy(codewords, 20, datawords, 10, datawords.length - 10);
 
-    return DecodedBitStreamParser.decode(datawords, mode);
+    DecoderResult result = DecodedBitStreamParser.decode(datawords, mode);
+    result.setErrorsCorrected(errorsCorrected);
+    return result;
   }
 
-  private void correctErrors(byte[] codewordBytes,
+  private int correctErrors(byte[] codewordBytes,
                              int start,
                              int dataCodewords,
                              int ecCodewords,
@@ -97,8 +99,9 @@ public final class Decoder {
         codewordsInts[i / divisor] = codewordBytes[i + start] & 0xFF;
       }
     }
+    int errorsCorrected = 0;
     try {
-      rsDecoder.decode(codewordsInts, ecCodewords / divisor);
+      errorsCorrected = rsDecoder.decodeWithECCount(codewordsInts, ecCodewords / divisor);
     } catch (ReedSolomonException ignored) {
       throw ChecksumException.getChecksumInstance();
     }
@@ -109,6 +112,7 @@ public final class Decoder {
         codewordBytes[i + start] = (byte) codewordsInts[i / divisor];
       }
     }
+    return errorsCorrected;
   }
 
 }
