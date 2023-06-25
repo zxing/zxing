@@ -314,7 +314,7 @@ public final class Decoder {
     int errorsCorrected = 0;
     try {
       ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(gf);
-      errorsCorrected = rsDecoder.decode(dataWords, numCodewords - numDataCodewords);
+      errorsCorrected = rsDecoder.decodeWithECCount(dataWords, numCodewords - numDataCodewords);
     } catch (ReedSolomonException ex) {
       throw FormatException.getFormatInstance(ex);
     }

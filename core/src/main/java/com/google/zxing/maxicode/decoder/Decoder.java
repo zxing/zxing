@@ -101,7 +101,7 @@ public final class Decoder {
     }
     int errorsCorrected = 0;
     try {
-      errorsCorrected = rsDecoder.decode(codewordsInts, ecCodewords / divisor);
+      errorsCorrected = rsDecoder.decodeWithECCount(codewordsInts, ecCodewords / divisor);
     } catch (ReedSolomonException ignored) {
       throw ChecksumException.getChecksumInstance();
     }
