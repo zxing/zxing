@@ -17,7 +17,9 @@
 package com.google.zxing.client.j2se;
 
 import com.google.zxing.common.BitMatrix;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -25,12 +27,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 /**
  * Tests {@link MatrixToImageWriter}.
  */
 public final class MatrixToImageWriterTestCase extends Assert {
-  
+
   @Test
   public void testBlackAndWhite() throws Exception {
     doTest(new MatrixToImageConfig());
@@ -45,20 +48,22 @@ public final class MatrixToImageWriterTestCase extends Assert {
   public void testAlpha() throws Exception {
     doTest(new MatrixToImageConfig(0x7F102030, 0x7F405060));
   }
-  
+
   private static void doTest(MatrixToImageConfig config) throws IOException {
     doTestFormat("tiff", config);
     doTestFormat("png", config);
   }
 
   private static void doTestFormat(String format, MatrixToImageConfig config) throws IOException {
+    Assume.assumeThat(Arrays.asList(ImageIO.getWriterFormatNames()), CoreMatchers.hasItem(format));
+
     int width = 2;
     int height = 3;
     BitMatrix matrix = new BitMatrix(width, height);
     matrix.set(0, 0);
     matrix.set(0, 1);
     matrix.set(1, 2);
-    
+
     BufferedImage newImage;
     Path tempFile = Files.createTempFile(null, "." + format);
     try {
@@ -76,11 +81,11 @@ public final class MatrixToImageWriterTestCase extends Assert {
         int expected = matrix.get(x, y) ? config.getPixelOnColor() : config.getPixelOffColor();
         int actual = newImage.getRGB(x, y);
         assertEquals(
-            "At " + x + "," + y + " expected " + Integer.toHexString(expected) + 
+            "At " + x + "," + y + " expected " + Integer.toHexString(expected) +
             " but got " + Integer.toHexString(actual),
             expected, actual);
       }
     }
   }
-  
+
 }
