@@ -98,7 +98,7 @@ public final class MaxiCodeReader implements Reader {
     // Now just read off the bits
     BitMatrix bits = new BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);
     for (int y = 0; y < MATRIX_HEIGHT; y++) {
-      int iy = Math.min(top + (y * height + height / 2) / MATRIX_HEIGHT, height - 1);
+      int iy = top + Math.min((y * height + height / 2) / MATRIX_HEIGHT, height - 1);
       for (int x = 0; x < MATRIX_WIDTH; x++) {
         // srowen: I don't quite understand why the formula below is necessary, but it
         // can walk off the image if left + width = the right boundary. So cap it.
