@@ -39,7 +39,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>32.1.1-android</version>
+      <version>32.1.2-android</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
