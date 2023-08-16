@@ -102,6 +102,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     }
 
     // Check content
+    int length = contents.length();
     for (int i = 0; i < length; i++) {
       char c = contents.charAt(i);
       // check for non ascii characters that are not special GS1 characters
