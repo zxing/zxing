@@ -249,6 +249,9 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   static boolean[] produceResult(Collection<int[]> patterns, int checkSum) {
     // Compute and append checksum
     checkSum %= 103;
+    if (checkSum < 0) {
+      throw new IllegalArgumentException("Unable to compute a valid input checksum");
+    }
     patterns.add(Code128Reader.CODE_PATTERNS[checkSum]);
 
     // Append stop code
