@@ -82,13 +82,6 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
   }
 
   private static int check(String contents, Map<EncodeHintType,?> hints) {
-    int length = contents.length();
-    // Check length
-    if (length < 1 || length > 80) {
-      throw new IllegalArgumentException(
-          "Contents length should be between 1 and 80 characters, but got " + length);
-    }
-
     // Check for forced code set hint.
     int forcedCodeSet = -1;
     if (hints != null && hints.containsKey(EncodeHintType.FORCE_CODE_SET)) {
@@ -109,6 +102,7 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     }
 
     // Check content
+    int length = contents.length();
     for (int i = 0; i < length; i++) {
       char c = contents.charAt(i);
       // check for non ascii characters that are not special GS1 characters
