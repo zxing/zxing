@@ -59,6 +59,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   private static final int[] EVEN_TOTAL_SUBSET = {4, 20, 52, 104, 204};
   private static final int[] GSUM = {0, 348, 1388, 2948, 3988};
 
+  /** Finder pattern element widths, from section 7.2.7 of ISO/IEC 24724:2006. */
   private static final int[][] FINDER_PATTERNS = {
     {1,8,4,1}, // A
     {3,6,4,1}, // B
@@ -68,6 +69,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     {2,2,9,1}  // F
   };
 
+  /** The element weights used in the checksum calculation, from section 7.2.6 of ISO/IEC 24724:2006. */
   private static final int[][] WEIGHTS = {
     {  1,   3,   9,  27,  81,  32,  96,  77},
     { 20,  60, 180, 118, 143,   7,  21,  63},
@@ -101,6 +103,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   private static final int FINDER_PAT_E = 4;
   private static final int FINDER_PAT_F = 5;
 
+  /** The possible finder pattern sequences, from section 7.2.7 of ISO/IEC 24724:2006. */
   @SuppressWarnings("checkstyle:lineLength")
   private static final int[][] FINDER_PATTERN_SEQUENCES = {
     { FINDER_PAT_A, FINDER_PAT_A },
@@ -243,9 +246,9 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  // Whether the pairs form a valid find pattern sequence,
-  // either complete or a prefix
+  // Whether the pairs form a valid finder pattern sequence, either complete or a prefix
   private static boolean isValidSequence(List<ExpandedPair> pairs) {
+
     for (int[] sequence : FINDER_PATTERN_SEQUENCES) {
       if (pairs.size() <= sequence.length) {
         boolean stop = true;
@@ -259,9 +262,44 @@ public final class RSSExpandedReader extends AbstractRSSReader {
           return true;
         }
       }
-
     }
 
+    return false;
+  }
+
+  // Whether the pairs, plus another pair of the specified type, would together
+  // form a valid finder pattern sequence, either complete or partial
+  private static boolean mayFollow(List<ExpandedPair> pairs, int value) {
+
+    if (pairs.isEmpty()) {
+      return true;
+    }
+
+    for (int[] sequence : FINDER_PATTERN_SEQUENCES) {
+      if (pairs.size() + 1 <= sequence.length) {
+        // the proposed sequence (i.e. pairs + value) would fit in this allowed sequence
+        for (int i = pairs.size(); i < sequence.length; i++) {
+          if (sequence[i] == value) {
+            // we found our value in this allowed sequence, check to see if the elements preceding it match our existing
+            // pairs; note our existing pairs may not be a full sequence (e.g. if processing a row in a stacked symbol)
+            boolean matched = true;
+            for (int j = 0; j < pairs.size(); j++) {
+              int allowed = sequence[i - j - 1];
+              int actual = pairs.get(pairs.size() - j - 1).getFinderPattern().getValue();
+              if (allowed != actual) {
+                matched = false;
+                break;
+              }
+            }
+            if (matched) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    // the proposed finder pattern sequence is illegal
     return false;
   }
 
@@ -423,7 +461,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     int forcedOffset = -1;
     do {
       this.findNextPair(row, previousPairs, forcedOffset);
-      pattern = parseFoundFinderPattern(row, rowNumber, isOddPattern);
+      pattern = parseFoundFinderPattern(row, rowNumber, isOddPattern, previousPairs);
       if (pattern == null) {
         forcedOffset = getNextSecondBar(row, this.startEnd[0]);
       } else {
@@ -528,7 +566,10 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     }
   }
 
-  private FinderPattern parseFoundFinderPattern(BitArray row, int rowNumber, boolean oddPattern) {
+  private FinderPattern parseFoundFinderPattern(BitArray row,
+                                                int rowNumber,
+                                                boolean oddPattern,
+                                                List<ExpandedPair> previousPairs) {
     // Actually we found elements 2-5.
     int firstCounter;
     int start;
@@ -568,6 +609,12 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     } catch (NotFoundException ignored) {
       return null;
     }
+
+    // Check that the pattern type that we *think* we found can exist as part of a valid sequence of finder patterns.
+    if (!mayFollow(previousPairs, value)) {
+      return null;
+    }
+
     return new FinderPattern(value, new int[] {start, end}, start, end, rowNumber);
   }
 

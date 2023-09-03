@@ -37,7 +37,7 @@ public final class RSSExpandedBlackBox1TestCase extends AbstractBlackBoxTestCase
 
   public RSSExpandedBlackBox1TestCase() {
     super("src/test/resources/blackbox/rssexpanded-1", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED);
-    addTest(32, 32, 0.0f);
-    addTest(32, 32, 180.0f);
+    addTest(33, 33, 0.0f);
+    addTest(33, 33, 180.0f);
   }
 }
