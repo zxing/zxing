@@ -168,14 +168,17 @@ final class DecodeWorker implements Callable<Integer> {
 
         if (config.outputRaw) {
           StringBuilder rawData = new StringBuilder();
+          byte[] rawBytes = result.getRawBytes();
 
-          for (byte b : result.getRawBytes()) {
-            rawData.append(String.format("%02X", b & 0xff));
-            rawData.append(" ");
+          if (rawBytes != null) {
+            for (byte b : rawBytes) {
+              rawData.append(String.format("%02X", b & 0xff));
+              rawData.append(" ");
+            }
+            rawData.setLength(rawData.length() - 1);  // chop off final space
+
+            output.write("Raw bits:\n" + rawData + "\n");            
           }
-          rawData.setLength(rawData.length() - 1);  // chop off final space
-
-          output.write("Raw bits:\n" + rawData + "\n");
         }
 
         ResultPoint[] resultPoints = result.getResultPoints();
