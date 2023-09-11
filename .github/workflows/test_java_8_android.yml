@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Android SDK
       run: if [ ! -d /tmp/android-sdk-linux/platforms ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C /tmp; else ls -l /tmp/android-sdk-linux; fi
     - name: Set up JDK 8
