@@ -87,6 +87,13 @@ library implemented in Java, with ports to other languages.
   * [Javadoc](https://zxing.github.io/zxing/apidocs/)
   * [Documentation Site](https://zxing.github.io/zxing/)
 
+## Recommended Test Environment
+
+If you want to run the tests of this project, it is recommended to have a machine or virtual machine with the following specifications to avoid intermittent test failures (i.e., flaky tests).
+
+* Minumum of 2CPUs.
+* Minimum of 2Gb of RAM.
+
 ## Contacting
 
 Post to the [discussion forum](https://groups.google.com/group/zxing) or tag a question with [`zxing`
