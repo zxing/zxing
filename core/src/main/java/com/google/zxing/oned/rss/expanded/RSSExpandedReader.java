@@ -167,8 +167,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       }
     }
 
-    // TODO: verify sequence of finder patterns as in checkPairSequence()
-    if (checkChecksum()) {
+    if (checkChecksum() && isValidSequence(this.pairs, true)) {
       return this.pairs;
     }
 
@@ -229,7 +228,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       }
       this.pairs.addAll(row.getPairs());
 
-      if (isValidSequence(this.pairs)) {
+      if (isValidSequence(this.pairs, false)) {
         if (checkChecksum()) {
           return this.pairs;
         }
@@ -249,9 +248,10 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   }
 
   // Whether the pairs form a valid finder pattern sequence, either complete or a prefix
-  private static boolean isValidSequence(List<ExpandedPair> pairs) {
+  private static boolean isValidSequence(List<ExpandedPair> pairs, boolean complete) {
 
     for (int[] sequence : FINDER_PATTERN_SEQUENCES) {
+      boolean sizeOk = (complete ? pairs.size() == sequence.length : pairs.size() <= sequence.length);
       if (pairs.size() <= sequence.length) {
         boolean stop = true;
         for (int j = 0; j < pairs.size(); j++) {

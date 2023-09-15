@@ -35,12 +35,11 @@ import com.google.zxing.common.AbstractBlackBoxTestCase;
  * stacked RSS barcodes.
  */
 public final class RSSExpandedStackedBlackBox1TestCase extends AbstractBlackBoxTestCase {
-    
+
   public RSSExpandedStackedBlackBox1TestCase() {
     super("src/test/resources/blackbox/rssexpandedstacked-1", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED);
-    addTest(59, 64, 0.0f);
-    addTest(59, 64, 180.0f);
+    addTest(60, 65, 0.0f);
+    addTest(60, 65, 180.0f);
   }
 
 }
-    
