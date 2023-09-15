@@ -120,6 +120,10 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
   private static final int MAX_PAIRS = 11;
 
+  private static final float FINDER_PATTERN_MODULES = 15f;
+  private static final float DATA_CHARACTER_MODULES = 17f;
+  private static final float MAX_FINDER_PATTERN_DISTANCE_VARIANCE = 0.1f;
+
   private final List<ExpandedPair> pairs = new ArrayList<>(MAX_PAIRS);
   private final List<ExpandedRow> rows = new ArrayList<>();
   private final int [] startEnd = new int[2];
@@ -129,9 +133,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   public Result decodeRow(int rowNumber,
                           BitArray row,
                           Map<DecodeHintType,?> hints) throws NotFoundException, FormatException {
-    // Rows can start with even pattern in case in prev rows there where odd number of patters.
-    // So lets try twice
-    this.pairs.clear();
+    // Rows can start with even pattern if previous rows had an odd number of patterns, so we try twice.
     this.startFromEven = false;
     try {
       return constructResult(decodeRow2pairs(rowNumber, row));
@@ -139,7 +141,6 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       // OK
     }
 
-    this.pairs.clear();
     this.startFromEven = true;
     return constructResult(decodeRow2pairs(rowNumber, row));
   }
@@ -152,6 +153,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
   // Not private for testing
   List<ExpandedPair> decodeRow2pairs(int rowNumber, BitArray row) throws NotFoundException {
+    this.pairs.clear();
     boolean done = false;
     while (!done) {
       try {
@@ -456,6 +458,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     }
 
     FinderPattern pattern;
+    DataCharacter leftChar = null;
 
     boolean keepFinding = true;
     int forcedOffset = -1;
@@ -463,16 +466,19 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       this.findNextPair(row, previousPairs, forcedOffset);
       pattern = parseFoundFinderPattern(row, rowNumber, isOddPattern, previousPairs);
       if (pattern == null) {
-        forcedOffset = getNextSecondBar(row, this.startEnd[0]);
+        forcedOffset = getNextSecondBar(row, this.startEnd[0]); // probable false positive, keep looking
       } else {
-        keepFinding = false;
+        try {
+          leftChar  = this.decodeDataCharacter(row, pattern, isOddPattern, true);
+          keepFinding = false;
+        } catch (NotFoundException ignored) {
+          forcedOffset = getNextSecondBar(row, this.startEnd[0]); // probable false positive, keep looking
+        }
       }
     } while (keepFinding);
 
     // When stacked symbol is split over multiple rows, there's no way to guess if this pair can be last or not.
     // boolean mayBeLast = checkPairSequence(previousPairs, pattern);
-
-    DataCharacter leftChar  = this.decodeDataCharacter(row, pattern, isOddPattern, true);
 
     if (!previousPairs.isEmpty() && previousPairs.get(previousPairs.size() - 1).mustBeLast()) {
       throw NotFoundException.getNotFoundInstance();
@@ -613,6 +619,21 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     // Check that the pattern type that we *think* we found can exist as part of a valid sequence of finder patterns.
     if (!mayFollow(previousPairs, value)) {
       return null;
+    }
+
+    // Check that the finder pattern that we *think* we found is not too far from where we would expect to find it,
+    // given that finder patterns are 15 modules wide and the data characters between them are 17 modules wide.
+    if (!previousPairs.isEmpty()) {
+      ExpandedPair prev = previousPairs.get(previousPairs.size() - 1);
+      int prevStart = prev.getFinderPattern().getStartEnd()[0];
+      int prevEnd = prev.getFinderPattern().getStartEnd()[1];
+      int prevWidth = prevEnd - prevStart;
+      float charWidth = (prevWidth / FINDER_PATTERN_MODULES) * DATA_CHARACTER_MODULES;
+      float minX = prevEnd + (2 * charWidth * (1 - MAX_FINDER_PATTERN_DISTANCE_VARIANCE));
+      float maxX = prevEnd + (2 * charWidth * (1 + MAX_FINDER_PATTERN_DISTANCE_VARIANCE));
+      if (start < minX || start > maxX) {
+        return null;
+      }
     }
 
     return new FinderPattern(value, new int[] {start, end}, start, end, rowNumber);
