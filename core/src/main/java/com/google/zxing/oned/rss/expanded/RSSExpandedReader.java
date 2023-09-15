@@ -252,7 +252,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
     for (int[] sequence : FINDER_PATTERN_SEQUENCES) {
       boolean sizeOk = (complete ? pairs.size() == sequence.length : pairs.size() <= sequence.length);
-      if (pairs.size() <= sequence.length) {
+      if (sizeOk) {
         boolean stop = true;
         for (int j = 0; j < pairs.size(); j++) {
           if (pairs.get(j).getFinderPattern().getValue() != sequence[j]) {
