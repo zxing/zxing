@@ -384,7 +384,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>4.0.0-M9</version>
+          <version>4.0.0-M10</version>
           <inherited>false</inherited>
         </plugin>
         <plugin>
