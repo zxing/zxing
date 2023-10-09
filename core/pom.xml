@@ -63,7 +63,7 @@
       <plugin>
         <groupId>biz.aQute.bnd</groupId>
         <artifactId>bnd-maven-plugin</artifactId>
-        <version>6.4.0</version>
+        <version>7.0.0</version>
         <executions>
           <execution>
             <goals>
