@@ -52,7 +52,7 @@ public final class VINResultParser extends ResultParser {
           rawText.substring(9, 17),
           countryCode(wmi),
           rawText.substring(3, 8),
-          modelYear(rawText.charAt(9)),
+          getModelYear(rawText.charAt(9)),
           rawText.charAt(10),
           rawText.substring(11));
     } catch (IllegalArgumentException iae) {
@@ -112,31 +112,6 @@ public final class VINResultParser extends ResultParser {
     throw new IllegalArgumentException();
   }
   
-  private static int modelYear(char c) {
-    if (c >= 'E' && c <= 'H') {
-      return (c - 'E') + 1984;
-    }
-    if (c >= 'J' && c <= 'N') {
-      return (c - 'J') + 1988;
-    }
-    if (c == 'P') {
-      return 1993;
-    }
-    if (c >= 'R' && c <= 'T') {
-      return (c - 'R') + 1994;
-    }
-    if (c >= 'V' && c <= 'Y') {
-      return (c - 'V') + 1997;
-    }
-    if (c >= '1' && c <= '9') {
-      return (c - '1') + 2001;
-    }
-    if (c >= 'A' && c <= 'D') {
-      return (c - 'A') + 2010;
-    }
-    throw new IllegalArgumentException();
-  }
-
   private static String countryCode(CharSequence wmi) {
     char c1 = wmi.charAt(0);
     char c2 = wmi.charAt(1);
@@ -204,6 +179,91 @@ public final class VINResultParser extends ResultParser {
         break;
     }
     return null;
+  }
+  
+  private static int getModelYear(char c) {
+    ModelYearFactory factory = new ModelYearFactory();
+    return factory.getModelYear(c);
+  }
+  
+  private static abstract class ModelYear {
+    public abstract int getModelYear();
+  }
+  
+  private static class ModelYear1984 extends ModelYear {
+    @Override
+    public int getModelYear() {
+      return 1984;
+    }
+  }
+  
+  private static class ModelYear1988 extends ModelYear {
+    @Override
+    public int getModelYear() {
+      return 1988;
+    }
+  }
+  
+  private static class ModelYear1993 extends ModelYear {
+    @Override
+    public int getModelYear() {
+      return 1993;
+    }
+  }
+  
+  private static class ModelYear1994 extends ModelYear {
+    @Override
+    public int getModelYear() {
+      return 1994;
+    }
+  }
+  
+  private static class ModelYear1997 extends ModelYear {
+    @Override
+    public int getModelYear() {
+      return 1997;
+    }
+  }
+  
+  private static class ModelYear2001 extends ModelYear {
+    @Override
+    public int getModelYear() {
+      return 2001;
+    }
+  }
+  
+  private static class ModelYear2010 extends ModelYear {
+    @Override
+    public int getModelYear() {
+      return 2010;
+    }
+  }
+  
+  private static class ModelYearFactory {
+    public int getModelYear(char c) {
+      if (c >= 'E' && c <= 'H') {
+        return (c - 'E') + new ModelYear1984().getModelYear();
+      }
+      if (c >= 'J' && c <= 'N') {
+        return (c - 'J') + new ModelYear1988().getModelYear();
+      }
+      if (c == 'P') {
+        return new ModelYear1993().getModelYear();
+      }
+      if (c >= 'R' && c <= 'T') {
+        return (c - 'R') + new ModelYear1994().getModelYear();
+      }
+      if (c >= 'V' && c <= 'Y') {
+        return (c - 'V') + new ModelYear1997().getModelYear();
+      }
+      if (c >= '1' && c <= '9') {
+        return (c - '1') + new ModelYear2001().getModelYear();
+      }
+      if (c >= 'A' && c <= 'D') {
+        return (c - 'A') + new ModelYear2010().getModelYear();
+      }
+      throw new IllegalArgumentException();
+    }
   }
 
 }
