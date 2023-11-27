@@ -23,7 +23,6 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
@@ -48,55 +47,88 @@ import javax.swing.text.JTextComponent;
  *
  * @author Sean Owen
  */
+
 public final class GUIRunner extends JFrame {
 
-  private final JLabel imageLabel;
-  private final JTextComponent textArea;
+  private final GUIManager guiManager;
+  private final Decoder decoder;
 
   private GUIRunner() {
-    imageLabel = new JLabel();
-    textArea = new JTextArea();
-    textArea.setEditable(false);
-    textArea.setMaximumSize(new Dimension(400, 200));
-    Container panel = new JPanel();
-    panel.setLayout(new FlowLayout());
-    panel.add(imageLabel);
-    panel.add(textArea);
+    guiManager = new GUIManager();
+    decoder = new Decoder();
     setTitle("ZXing");
     setSize(400, 400);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    setContentPane(panel);
+    setContentPane(guiManager.getPanel());
     setLocationRelativeTo(null);
   }
 
   public static void main(String[] args) throws MalformedURLException {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        GUIRunner runner = new GUIRunner();
-        runner.setVisible(true);
-        runner.chooseImage();
-      }
+    SwingUtilities.invokeLater(() -> {
+      GUIRunner runner = new GUIRunner();
+      runner.setVisible(true);
+      runner.chooseImage();
     });
-
   }
 
   private void chooseImage() {
+    Path file = guiManager.showOpenDialog();
+    Icon imageIcon = guiManager.createImageIcon(file);
+    setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight() + 100);
+    guiManager.setImageIcon(imageIcon);
+    String decodeText = decoder.getDecodeText(file);
+    guiManager.setDecodeText(decodeText);
+  }
+
+}
+
+class GUIManager {
+
+  private final JLabel imageLabel;
+  private final JTextComponent textArea;
+  private final JPanel panel;
+
+  public GUIManager() {
+    imageLabel = new JLabel();
+    textArea = new JTextArea();
+    textArea.setEditable(false);
+    textArea.setMaximumSize(new Dimension(400, 200));
+    panel = new JPanel();
+    panel.setLayout(new FlowLayout());
+    panel.add(imageLabel);
+    panel.add(textArea);
+  }
+
+  public JPanel getPanel() {
+    return panel;
+  }
+
+  public Path showOpenDialog() {
     JFileChooser fileChooser = new JFileChooser();
-    fileChooser.showOpenDialog(this);
-    Path file = fileChooser.getSelectedFile().toPath();
-    Icon imageIcon;
+    fileChooser.showOpenDialog(null);
+    return fileChooser.getSelectedFile().toPath();
+  }
+
+  public Icon createImageIcon(Path file) {
     try {
-      imageIcon = new ImageIcon(file.toUri().toURL());
+      return new ImageIcon(file.toUri().toURL());
     } catch (MalformedURLException muee) {
       throw new IllegalArgumentException(muee);
     }
-    setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight() + 100);
-    imageLabel.setIcon(imageIcon);
-    String decodeText = getDecodeText(file);
-    textArea.setText(decodeText);
   }
 
-  private static String getDecodeText(Path file) {
+  public void setImageIcon(Icon imageIcon) {
+    imageLabel.setIcon(imageIcon);
+  }
+
+  public void setDecodeText(String decodeText) {
+    textArea.setText(decodeText);
+  }
+}
+
+class Decoder {
+
+  public String getDecodeText(Path file) {
     BufferedImage image;
     try {
       image = ImageReader.readImage(file.toUri());
@@ -113,5 +145,4 @@ public final class GUIRunner extends JFrame {
     }
     return String.valueOf(result.getText());
   }
-
 }
