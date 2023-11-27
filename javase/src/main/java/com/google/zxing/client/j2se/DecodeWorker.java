@@ -157,7 +157,7 @@ final class DecodeWorker implements Callable<Integer> {
     } else {
       StringWriter output = new StringWriter();
       for (Result result : results) {
-        ParsedResult parsedResult = ResultParser.parseResult(result);
+        ParsedResult parsedResult = ResultParser.parseBarcodeResult(result);
         output.write(uri +
             " (format: " + result.getBarcodeFormat() +
             ", type: " + parsedResult.getType() + "):\n" +

@@ -20,10 +20,6 @@ import com.google.zxing.Result;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -38,29 +34,6 @@ import java.util.regex.Pattern;
  * @author Sean Owen
  */
 public abstract class ResultParser {
-
-  private static final ResultParser[] PARSERS = {
-      new BookmarkDoCoMoResultParser(),
-      new AddressBookDoCoMoResultParser(),
-      new EmailDoCoMoResultParser(),
-      new AddressBookAUResultParser(),
-      new VCardResultParser(),
-      new BizcardResultParser(),
-      new VEventResultParser(),
-      new EmailAddressResultParser(),
-      new SMTPResultParser(),
-      new TelResultParser(),
-      new SMSMMSResultParser(),
-      new SMSTOMMSTOResultParser(),
-      new GeoResultParser(),
-      new WifiResultParser(),
-      new URLTOResultParser(),
-      new URIResultParser(),
-      new ISBNResultParser(),
-      new ProductResultParser(),
-      new ExpandedProductResultParser(),
-      new VINResultParser(),
-  };
 
   private static final Pattern DIGITS = Pattern.compile("\\d+");
   private static final Pattern AMPERSAND = Pattern.compile("&");
@@ -88,7 +61,30 @@ public abstract class ResultParser {
   }
 
   public static ParsedResult parseBarcodeResult(Result barcodeResult) {
-    for (ResultParser parser : PARSERS) {
+    ResultParser[] parsers = {
+        new BookmarkDoCoMoResultParser(),
+        new AddressBookDoCoMoResultParser(),
+        new EmailDoCoMoResultParser(),
+        new AddressBookAUResultParser(),
+        new VCardResultParser(),
+        new BizcardResultParser(),
+        new VEventResultParser(),
+        new EmailAddressResultParser(),
+        new SMTPResultParser(),
+        new TelResultParser(),
+        new SMSMMSResultParser(),
+        new SMSTOMMSTOResultParser(),
+        new GeoResultParser(),
+        new WifiResultParser(),
+        new URLTOResultParser(),
+        new URIResultParser(),
+        new ISBNResultParser(),
+        new ProductResultParser(),
+        new ExpandedProductResultParser(),
+        new VINResultParser(),
+    };
+
+    for (ResultParser parser : parsers) {
       ParsedResult result = parser.parse(barcodeResult);
       if (result != null) {
         return result;
@@ -160,7 +156,7 @@ public abstract class ResultParser {
     boolean isDigitsMatch = DIGITS.matcher(value).matches();
     return isDigitsMatch;
   }
-
+  
   protected static boolean isSubstringOfDigits(CharSequence value, int offset, int length) {
     if (value == null || length <= 0) {
       return false;
@@ -169,26 +165,27 @@ public abstract class ResultParser {
     return value.length() >= max && DIGITS.matcher(value.subSequence(offset, max)).matches();
   }
 
-  static Map<String,String> parseNameValuePairs(String uri) {
+  static String[] parseNameValuePairs(String uri) {
     int paramStart = uri.indexOf('?');
     if (paramStart < 0) {
       return null;
     }
-    Map<String,String> result = new HashMap<>(3);
+    String[] result = new String[3];
     for (String keyValue : AMPERSAND.split(uri.substring(paramStart + 1))) {
       appendKeyValue(keyValue, result);
     }
     return result;
   }
 
-  private static void appendKeyValue(CharSequence keyValue, Map<String,String> result) {
+  private static void appendKeyValue(CharSequence keyValue, String[] result) {
     String[] keyValueTokens = EQUALS.split(keyValue, 2);
     if (keyValueTokens.length == 2) {
       String key = keyValueTokens[0];
       String value = keyValueTokens[1];
       try {
         value = urlDecode(value);
-        result.put(key, value);
+        result[0] = key;
+        result[1] = value;
       } catch (IllegalArgumentException iae) {
         // continue; invalid data such as an escape like %0t
       }
@@ -204,7 +201,7 @@ public abstract class ResultParser {
   }
 
   static String[] matchPrefixedField(String prefix, String rawText, char endChar, boolean trim) {
-    List<String> matches = null;
+    StringBuilder matches = null;
     int i = 0;
     int max = rawText.length();
     while (i < max) {
@@ -227,24 +224,27 @@ public abstract class ResultParser {
         } else {
           // found a match
           if (matches == null) {
-            matches = new ArrayList<>(3); // lazy init
+            matches = new StringBuilder(3); // lazy init
           }
           String element = unescapeBackslash(rawText.substring(start, i));
           if (trim) {
             element = element.trim();
           }
           if (!element.isEmpty()) {
-            matches.add(element);
+            if (matches.length() > 0) {
+              matches.append('\n');
+            }
+            matches.append(element);
           }
           i++;
           more = false;
         }
       }
     }
-    if (matches == null || matches.isEmpty()) {
+    if (matches == null || matches.length() == 0) {
       return null;
     }
-    return matches.toArray(EMPTY_STR_ARRAY);
+    return matches.toString().split("\n");
   }
 
   private static int countPrecedingBackslashes(CharSequence s, int pos) {
