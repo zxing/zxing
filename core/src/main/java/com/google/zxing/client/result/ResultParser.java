@@ -152,7 +152,11 @@ public abstract class ResultParser {
   }
 
   protected static boolean isStringOfDigits(CharSequence value, int length) {
-    return value != null && length > 0 && length == value.length() && DIGITS.matcher(value).matches();
+    return value != null && length > 0 && length == value.length() && isDigits(value);
+  }
+
+  private static boolean isDigits(CharSequence value) {
+    return DIGITS.matcher(value).matches();
   }
 
   protected static boolean isSubstringOfDigits(CharSequence value, int offset, int length) {
