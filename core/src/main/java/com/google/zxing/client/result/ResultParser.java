@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
  * a String -- as some type of structured data. This might be a subclass which represents
- * a URL, or an e-mail address. {@link #parseResult(Result)} will turn a raw
+ * a URL, or an e-mail address. {@link #parseBarcodeResult(Result)} will turn a raw
  * decoded string into the most appropriate type of structured representation.</p>
  *
  * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
@@ -74,27 +74,27 @@ public abstract class ResultParser {
    * of information (email, URL, etc.) and return a {@link ParsedResult} encapsulating
    * the result of parsing.
    *
-   * @param theResult the raw {@link Result} to parse
+   * @param barcodeResult the raw {@link Result} to parse
    * @return {@link ParsedResult} encapsulating the parsing result
    */
-  public abstract ParsedResult parse(Result theResult);
+  public abstract ParsedResult parse(Result barcodeResult);
 
-  protected static String getMassagedText(Result result) {
-    String text = result.getText();
+  protected static String getMassagedText(Result barcodeResult) {
+    String text = barcodeResult.getText();
     if (text.startsWith(BYTE_ORDER_MARK)) {
       text = text.substring(1);
     }
     return text;
   }
 
-  public static ParsedResult parseResult(Result theResult) {
+  public static ParsedResult parseBarcodeResult(Result barcodeResult) {
     for (ResultParser parser : PARSERS) {
-      ParsedResult result = parser.parse(theResult);
+      ParsedResult result = parser.parse(barcodeResult);
       if (result != null) {
         return result;
       }
     }
-    return new TextParsedResult(theResult.getText(), null);
+    return new TextParsedResult(barcodeResult.getText(), null);
   }
 
   protected static void maybeAppend(String value, StringBuilder result) {
