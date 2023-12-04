@@ -19,7 +19,7 @@ jobs:
     - name: Set up Android SDK
       run: if [ ! -d /tmp/android-sdk-linux/platforms ]; then curl -s https://storage.googleapis.com/zxing-build/android-sdk-linux.tar.bz2 | bunzip2 | tar xf - -C /tmp; else ls -l /tmp/android-sdk-linux; fi
     - name: Set up JDK 8
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '8'
         distribution: 'temurin'
