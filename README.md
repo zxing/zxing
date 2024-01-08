@@ -95,7 +95,6 @@ on StackOverflow](https://stackoverflow.com/questions/tagged/zxing).
 ## Etcetera
 
 [![codecov](https://codecov.io/gh/zxing/zxing/branch/master/graph/badge.svg?token=6RrJHvUMDl)](https://codecov.io/gh/zxing/zxing)
-[![Codacy](https://app.codacy.com/project/badge/Grade/5d1186edeb714f0187e3eb18cc6aeef1)](https://www.codacy.com/gh/zxing/zxing/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zxing/zxing&amp;utm_campaign=Badge_Grade)
 
 QR code is trademarked by Denso Wave, inc. Thanks to Haase & Martin OHG for contributing the logo.
 
