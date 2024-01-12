@@ -54,10 +54,20 @@ public final class StringUtils {
     }
     GB2312_CHARSET = gb2312Charset;
   }
-  private static final Charset EUC_JP = Charset.forName("EUC_JP");
+  private static final Charset EUC_JP;
+  static {
+    Charset eucJpCharset;
+    try {
+      eucJpCharset = Charset.forName("EUC_JP");
+    } catch (UnsupportedCharsetException ucee) {
+      // Can happen on JREs without lib/charsets.jar
+      eucJpCharset = null;
+    }
+    EUC_JP = eucJpCharset;
+  }
   private static final boolean ASSUME_SHIFT_JIS =
       (SHIFT_JIS_CHARSET != null && SHIFT_JIS_CHARSET.equals(PLATFORM_DEFAULT_ENCODING)) ||
-      EUC_JP.equals(PLATFORM_DEFAULT_ENCODING);
+      (EUC_JP != null && EUC_JP.equals(PLATFORM_DEFAULT_ENCODING));
 
   // Retained for ABI compatibility with earlier versions
   public static final String SHIFT_JIS = "SJIS";
