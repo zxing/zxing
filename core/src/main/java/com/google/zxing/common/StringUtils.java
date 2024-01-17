@@ -32,7 +32,17 @@ import com.google.zxing.DecodeHintType;
 public final class StringUtils {
 
   private static final Charset PLATFORM_DEFAULT_ENCODING = Charset.defaultCharset();
-  public static final Charset SHIFT_JIS_CHARSET = Charset.forName("SJIS");
+  public static final Charset SHIFT_JIS_CHARSET;
+  static {
+    Charset sjisCharset;
+    try {
+      sjisCharset = Charset.forName("SJIS");
+    } catch (UnsupportedCharsetException ucee) {
+      // Can happen on JREs without lib/charsets.jar
+      sjisCharset = null;
+    }
+    SHIFT_JIS_CHARSET = sjisCharset;
+  }
   public static final Charset GB2312_CHARSET;
   static {
     Charset gb2312Charset;
@@ -44,10 +54,20 @@ public final class StringUtils {
     }
     GB2312_CHARSET = gb2312Charset;
   }
-  private static final Charset EUC_JP = Charset.forName("EUC_JP");
+  private static final Charset EUC_JP;
+  static {
+    Charset eucJpCharset;
+    try {
+      eucJpCharset = Charset.forName("EUC_JP");
+    } catch (UnsupportedCharsetException ucee) {
+      // Can happen on JREs without lib/charsets.jar
+      eucJpCharset = null;
+    }
+    EUC_JP = eucJpCharset;
+  }
   private static final boolean ASSUME_SHIFT_JIS =
-      SHIFT_JIS_CHARSET.equals(PLATFORM_DEFAULT_ENCODING) ||
-      EUC_JP.equals(PLATFORM_DEFAULT_ENCODING);
+      (SHIFT_JIS_CHARSET != null && SHIFT_JIS_CHARSET.equals(PLATFORM_DEFAULT_ENCODING)) ||
+      (EUC_JP != null && EUC_JP.equals(PLATFORM_DEFAULT_ENCODING));
 
   // Retained for ABI compatibility with earlier versions
   public static final String SHIFT_JIS = "SJIS";
@@ -101,7 +121,7 @@ public final class StringUtils {
     // which should be by far the most common encodings.
     int length = bytes.length;
     boolean canBeISO88591 = true;
-    boolean canBeShiftJIS = true;
+    boolean canBeShiftJIS = SHIFT_JIS_CHARSET != null;
     boolean canBeUTF8 = true;
     int utf8BytesLeft = 0;
     int utf2BytesChars = 0;

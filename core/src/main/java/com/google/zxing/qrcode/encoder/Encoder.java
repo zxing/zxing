@@ -29,6 +29,7 @@ import com.google.zxing.qrcode.decoder.Version;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -91,7 +92,11 @@ public final class Encoder {
     Charset encoding = DEFAULT_BYTE_MODE_ENCODING;
     boolean hasEncodingHint = hints != null && hints.containsKey(EncodeHintType.CHARACTER_SET);
     if (hasEncodingHint) {
-      encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
+      try {
+        encoding = Charset.forName(hints.get(EncodeHintType.CHARACTER_SET).toString());
+      } catch (UnsupportedCharsetException ignore) {
+        //ignore the encodingHint and use the DEFAULT_BYTE_MODE_ENCODING
+      }
     }
 
     if (hasCompactionHint) {
@@ -105,15 +110,15 @@ public final class Encoder {
       version = rn.getVersion();
 
     } else {
-    
+
       // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
       // multiple modes / segments even if that were more efficient.
       mode = chooseMode(content, encoding);
-  
+
       // This will store the header information, like mode and
       // length, as well as "header" segments like an ECI segment.
       BitArray headerBits = new BitArray();
-  
+
       // Append ECI segment if applicable
       if (mode == Mode.BYTE && hasEncodingHint) {
         CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
@@ -121,21 +126,21 @@ public final class Encoder {
           appendECI(eci, headerBits);
         }
       }
-  
+
       // Append the FNC1 mode header for GS1 formatted data if applicable
       if (hasGS1FormatHint) {
         // GS1 formatted codes are prefixed with a FNC1 in first position mode header
         appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
       }
-    
+
       // (With ECI in place,) Write the mode marker
       appendModeInfo(mode, headerBits);
-  
+
       // Collect data within the main segment, separately, to count its size if needed. Don't add it to
       // main payload yet.
       BitArray dataBits = new BitArray();
       appendBytes(content, mode, dataBits, encoding);
-  
+
       if (hints != null && hints.containsKey(EncodeHintType.QR_VERSION)) {
         int versionNumber = Integer.parseInt(hints.get(EncodeHintType.QR_VERSION).toString());
         version = Version.getVersionForNumber(versionNumber);
@@ -146,7 +151,7 @@ public final class Encoder {
       } else {
         version = recommendVersion(ecLevel, mode, headerBits, dataBits);
       }
-    
+
       headerAndDataBits = new BitArray();
       headerAndDataBits.appendBitArray(headerBits);
       // Find "length" of main segment and write it
@@ -244,7 +249,9 @@ public final class Encoder {
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
   private static Mode chooseMode(String content, Charset encoding) {
-    if (StringUtils.SHIFT_JIS_CHARSET.equals(encoding) && isOnlyDoubleByteKanji(content)) {
+    if (StringUtils.SHIFT_JIS_CHARSET != null &&
+        StringUtils.SHIFT_JIS_CHARSET.equals(encoding) &&
+        isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
       return Mode.KANJI;
     }
@@ -605,6 +612,10 @@ public final class Encoder {
   }
 
   static void appendKanjiBytes(String content, BitArray bits) throws WriterException {
+    if (StringUtils.SHIFT_JIS_CHARSET == null) {
+      // Not supported without charset support
+      throw new WriterException("SJIS Charset not supported on this platform");
+    }
     byte[] bytes = content.getBytes(StringUtils.SHIFT_JIS_CHARSET);
     if (bytes.length % 2 != 0) {
       throw new WriterException("Kanji byte size not even");
