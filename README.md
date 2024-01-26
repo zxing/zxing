@@ -69,15 +69,15 @@ library implemented in Java, with ports to other languages.
 | [zxing-js/library](https://github.com/zxing-js/library)                                   | TypeScript port of ZXing library
 | [pyzxing](https://github.com/ChenjieXu/pyzxing)                                           | Python wrapper to ZXing library
 | [zxing-dart](https://github.com/shirne/zxing-dart)                                        | Port to dart
-| [rxing](https://github.com/rxing-core/rxing)                                                | Port to rust
+| [rxing](https://github.com/rxing-core/rxing)                                              | Port to rust
 
 ### Other related third-party open source projects
 
-| Module                                         | Description
-| ---------------------------------------------- | -----------
-| [Barcode4J](http://barcode4j.sourceforge.net/) | Generator library in Java
-| [BoofCV](https://boofcv.org) | Generator and reader library in Java
-| [ZBar](http://zbar.sourceforge.net/)           | Reader library in C99
+| Module                                                 | Description
+| ----------------------------------------------         | -----------
+| [Barcode4J](http://barcode4j.sourceforge.net/)         | Generator library in Java
+| [BoofCV](https://boofcv.org)                           | Generator and reader library in Java
+| [ZBar](http://zbar.sourceforge.net/)                   | Reader library in C99
 | [OkapiBarcode](https://github.com/woo-j/OkapiBarcode)  | Generator library in Java |
 
 ## Links
