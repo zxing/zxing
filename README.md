@@ -87,11 +87,6 @@ library implemented in Java, with ports to other languages.
   * [Javadoc](https://zxing.github.io/zxing/apidocs/)
   * [Documentation Site](https://zxing.github.io/zxing/)
 
-## Contacting
-
-Post to the [discussion forum](https://groups.google.com/group/zxing) or tag a question with [`zxing`
-on StackOverflow](https://stackoverflow.com/questions/tagged/zxing).
-
 ## Etcetera
 
 [![codecov](https://codecov.io/gh/zxing/zxing/branch/master/graph/badge.svg?token=6RrJHvUMDl)](https://codecov.io/gh/zxing/zxing)
