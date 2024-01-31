@@ -30,4 +30,3 @@ com.google.zxing.qrcode
 com.google.zxing.qrcode.decoder
 com.google.zxing.qrcode.detector
 com.google.zxing.qrcode.encoder
-com.google.zxing.web
