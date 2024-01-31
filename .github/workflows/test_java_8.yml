@@ -1,4 +1,4 @@
-name: Test Java 8, Android
+name: Test Java 8
 
 on:
   push:
@@ -20,4 +20,4 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     - name: Build with Maven
-      run: mvn -nsu -B -Pjacoco install
+      run: mvn -P\!build-android -nsu -B -Pjacoco install
