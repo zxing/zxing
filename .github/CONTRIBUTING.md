@@ -8,11 +8,6 @@ There is otherwise no development or roadmap for this project.
 Only proposed changes in the form of a pull request are likely to be acted on, but,
 these will be acted on promptly.
 
-### Questions
-
-Questions should be asked on the mailing list:
-https://groups.google.com/forum/#!forum/zxing
-
 ### Feature Requests
 
 Feature requests are not accepted.
@@ -27,6 +22,11 @@ However, bug reports with a pull request are likely to be merged promptly.
 
 Please search previous issues for an answer before opening a pull request. A few common ones
 are listed here.
+
+### This doesn't work on later Androids
+
+The Barcode Scanner app cannot be updated or published further, and will not be updated.
+It does not work on Android 14+ and will not.
 
 ### I get a compilation error
 
