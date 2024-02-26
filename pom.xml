@@ -66,7 +66,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <android.home>${env.ANDROID_HOME}</android.home>
-    <proguard.plugin.version>2.6.0</proguard.plugin.version>
+    <proguard.plugin.version>2.6.1</proguard.plugin.version>
     <!-- This can't reference project.version as some subprojects version differently -->
     <zxing.version>3.5.4-SNAPSHOT</zxing.version>
     <android.platform>22</android.platform>
