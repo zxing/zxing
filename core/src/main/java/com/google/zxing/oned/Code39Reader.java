@@ -193,8 +193,13 @@ public final class Code39Reader extends OneDReader {
       } else {
         if (counterPosition == patternLength - 1) {
           // Look for whitespace before start pattern, >= 50% of width of start pattern
-          if (toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
-              row.isRange(Math.max(0, patternStart - ((i - patternStart) / 2)), patternStart, false)) {
+          int patternEncoding = toNarrowWidePattern(counters);
+          boolean isAsteriskPattern = patternEncoding == ASTERISK_ENCODING;
+
+          int rangeStart = Math.max(0, patternStart - ((i - patternStart) / 2));
+          boolean isAsteriskRange = row.isRange(rangeStart, patternStart, false);
+
+          if (isAsteriskPattern && isAsteriskRange) {
             return new int[]{patternStart, i};
           }
           patternStart += counters[0] + counters[1];
