@@ -146,120 +146,61 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   protected void onResume() {
     super.onResume();
+    initializeManagers();
+    setupViews();
+    handlePreferences();
+    resetStatusView();
+    updateManagerPreferences();
+    handleIntent(getIntent());
+    setupCamera();
+  }
 
-    // historyManager must be initialized here to update the history preference
+  private void initializeManagers() {
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
-
-    // CameraManager must be initialized here, not in onCreate(). This is necessary because we don't
-    // want to open the camera driver and measure the screen size if we're going to show the help on
-    // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
-    // off screen.
     cameraManager = new CameraManager(getApplication());
+    inactivityTimer.onResume();
+  }
 
+  private void setupViews() {
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
-
     resultView = findViewById(R.id.result_view);
     statusView = (TextView) findViewById(R.id.status_view);
+  }
 
-    handler = null;
-    lastResult = null;
-
+  private void handlePreferences() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
     if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
       setRequestedOrientation(getCurrentOrientation());
     } else {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
     }
+    copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true)
+      && (getIntent() == null || getIntent().getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
+  }
 
-    resetStatusView();
-
-
+  private void updateManagerPreferences() {
     beepManager.updatePrefs();
     ambientLightManager.start(cameraManager);
+  }
 
-    inactivityTimer.onResume();
-
-    Intent intent = getIntent();
-
-    copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true)
-        && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
-
-    source = IntentSource.NONE;
-    sourceUrl = null;
-    scanFromWebPageManager = null;
-    decodeFormats = null;
-    characterSet = null;
-
+  private void handleIntent(Intent intent) {
     if (intent != null) {
-
       String action = intent.getAction();
       String dataString = intent.getDataString();
-
-      if (Intents.Scan.ACTION.equals(action)) {
-
-        // Scan the formats the intent requested, and return the result to the calling activity.
-        source = IntentSource.NATIVE_APP_INTENT;
-        decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
-        decodeHints = DecodeHintManager.parseDecodeHints(intent);
-
-        if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
-          int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
-          int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
-          if (width > 0 && height > 0) {
-            cameraManager.setManualFramingRect(width, height);
-          }
-        }
-
-        if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
-          int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
-          if (cameraId >= 0) {
-            cameraManager.setManualCameraId(cameraId);
-          }
-        }
-
-        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
-        if (customPromptMessage != null) {
-          statusView.setText(customPromptMessage);
-        }
-
-      } else if (dataString != null &&
-                 dataString.contains("http://www.google") &&
-                 dataString.contains("/m/products/scan")) {
-
-        // Scan only products and send the result to mobile Product Search.
-        source = IntentSource.PRODUCT_SEARCH_LINK;
-        sourceUrl = dataString;
-        decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
-
-      } else if (isZXingURL(dataString)) {
-
-        // Scan formats requested in query string (all formats if none specified).
-        // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
-        source = IntentSource.ZXING_LINK;
-        sourceUrl = dataString;
-        Uri inputUri = Uri.parse(dataString);
-        scanFromWebPageManager = new ScanFromWebPageManager(inputUri);
-        decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
-        // Allow a sub-set of the hints to be specified by the caller.
-        decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
-
-      }
-
+      processScanIntent(intent, action, dataString);
+      processOtherIntents(intent, dataString);
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
-
     }
+  }
 
+  private void setupCamera() {
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
     SurfaceHolder surfaceHolder = surfaceView.getHolder();
     if (hasSurface) {
-      // The activity was paused but not stopped, so the surface still exists. Therefore
-      // surfaceCreated() won't be called, so init the camera here.
       initCamera(surfaceHolder);
     } else {
-      // Install the callback and wait for surfaceCreated() to init the camera.
       surfaceHolder.addCallback(this);
     }
   }
