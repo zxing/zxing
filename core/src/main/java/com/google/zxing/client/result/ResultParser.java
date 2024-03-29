@@ -74,10 +74,10 @@ public abstract class ResultParser {
    * of information (email, URL, etc.) and return a {@link ParsedResult} encapsulating
    * the result of parsing.
    *
-   * @param theResult the raw {@link Result} to parse
+   * @param barcodeResult the raw {@link Result} to parse
    * @return {@link ParsedResult} encapsulating the parsing result
    */
-  public abstract ParsedResult parse(Result theResult);
+  public abstract ParsedResult parse(Result barcodeResult);
 
   protected static String getMassagedText(Result result) {
     String text = result.getText();
@@ -87,14 +87,14 @@ public abstract class ResultParser {
     return text;
   }
 
-  public static ParsedResult parseResult(Result theResult) {
+  public static ParsedResult parseResult(Result barcodeResult) {
     for (ResultParser parser : PARSERS) {
-      ParsedResult result = parser.parse(theResult);
+      ParsedResult result = parser.parse(barcodeResult);
       if (result != null) {
         return result;
       }
     }
-    return new TextParsedResult(theResult.getText(), null);
+    return new TextParsedResult(barcodeResult.getText(), null);
   }
 
   protected static void maybeAppend(String value, StringBuilder result) {
