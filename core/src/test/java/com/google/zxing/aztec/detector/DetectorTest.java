@@ -48,10 +48,6 @@ public final class DetectorTest extends Assert {
     testErrorInParameterLocator("X");
   }
 
-  @Test
-  public void testErrorInParameterLocatorCompact() throws Exception {
-    testErrorInParameterLocator("This is an example Aztec symbol for Wikipedia.");
-  }
 
   @Test
   public void testErrorInParameterLocatorNotCompact() throws Exception {

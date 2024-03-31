@@ -485,27 +485,70 @@ public class IntentIntegrator {
     return Collections.unmodifiableList(Arrays.asList(values));
   }
 
-  private void attachMoreExtras(Intent intent) {
-    for (Map.Entry<String,Object> entry : moreExtras.entrySet()) {
-      String key = entry.getKey();
-      Object value = entry.getValue();
-      // Kind of hacky
-      if (value instanceof Integer) {
-        intent.putExtra(key, (Integer) value);
-      } else if (value instanceof Long) {
-        intent.putExtra(key, (Long) value);
-      } else if (value instanceof Boolean) {
-        intent.putExtra(key, (Boolean) value);
-      } else if (value instanceof Double) {
-        intent.putExtra(key, (Double) value);
-      } else if (value instanceof Float) {
-        intent.putExtra(key, (Float) value);
-      } else if (value instanceof Bundle) {
-        intent.putExtra(key, (Bundle) value);
-      } else {
-        intent.putExtra(key, value.toString());
+  interface ExtraDataPutter {
+    void putExtra(Intent intent, String key, Object value);
+  }
+  class IntegerExtraDataPutter implements ExtraDataPutter {
+    @Override
+    public void putExtra(Intent intent, String key, Object value) {
+      intent.putExtra(key, (Integer) value);
+    }
+  }
+  class LongExtraDataPutter implements ExtraDataPutter {
+    @Override
+    public void putExtra(Intent intent, String key, Object value) {
+      intent.putExtra(key, (Long) value);
+    }
+  }
+  class BooleanExtraDataPutter implements ExtraDataPutter {
+    @Override
+    public void putExtra(Intent intent, String key, Object value) {
+      intent.putExtra(key, (Boolean) value);
+    }
+  }
+  class DoubleExtraDataPutter implements ExtraDataPutter {
+    @Override
+    public void putExtra(Intent intent, String key, Object value) {
+      intent.putExtra(key, (Double) value);
+    }
+  }
+  class FloatExtraDataPutter implements ExtraDataPutter {
+    @Override
+    public void putExtra(Intent intent, String key, Object value) {
+      intent.putExtra(key, (Float) value);
+    }
+  }
+  class BundleExtraDataPutter implements ExtraDataPutter {
+    @Override
+    public void putExtra(Intent intent, String key, Object value) {
+      intent.putExtra(key, (Bundle) value);
+    }
+  }
+  public class YourClass {
+    private Map<String, Object> moreExtras;
+    private void attachMoreExtras(Intent intent) {
+      Map<Class<?>, ExtraDataPutter> putterMap = new HashMap<>();
+      putterMap.put(Integer.class, new IntegerExtraDataPutter());
+      putterMap.put(Long.class, new LongExtraDataPutter());
+      putterMap.put(Boolean.class, new BooleanExtraDataPutter());
+      putterMap.put(Double.class, new DoubleExtraDataPutter());
+      putterMap.put(Float.class, new FloatExtraDataPutter());
+      putterMap.put(Bundle.class, new BundleExtraDataPutter());
+
+      for (Map.Entry<String, Object> entry : moreExtras.entrySet()) {
+        String key = entry.getKey();
+        Object value = entry.getValue();
+        Class<?> valueClass = value.getClass();
+
+        if (putterMap.containsKey(valueClass)) {
+          putterMap.get(valueClass).putExtra(intent, key, value);
+        } else {
+          intent.putExtra(key, value.toString());
+        }
       }
     }
   }
+}
+
 
 }

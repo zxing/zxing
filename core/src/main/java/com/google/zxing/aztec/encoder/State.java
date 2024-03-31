@@ -29,7 +29,7 @@ import com.google.zxing.common.BitArray;
  */
 final class State {
 
-  static final State INITIAL_STATE = new State(Token.EMPTY, HighLevelEncoder.MODE_UPPER, 0, 0);
+  static final State INITIAL_STATE = new State(Token.EMPTY, StateEncoder.MODE_UPPER, 0, 0);
 
   // The current mode of the encoding (or the mode to which we'll return if
   // we're in Binary Shift mode.
@@ -69,7 +69,7 @@ final class State {
   }
 
   State appendFLGn(int eci) {
-    State result = shiftAndAppend(HighLevelEncoder.MODE_PUNCT, 0); // 0: FLG(n)
+    State result = shiftAndAppend(StateEncoder.MODE_PUNCT, 0); // 0: FLG(n)
     Token token = result.token;
     int bitsAdded = 3;
     if (eci < 0) {
@@ -93,11 +93,11 @@ final class State {
     int bitCount = this.bitCount;
     Token token = this.token;
     if (mode != this.mode) {
-      int latch = HighLevelEncoder.LATCH_TABLE[this.mode][mode];
+      int latch = StateEncoder.LATCH_TABLE[this.mode][mode];
       token = token.add(latch & 0xFFFF, latch >> 16);
       bitCount += latch >> 16;
     }
-    int latchModeBitCount = mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
+    int latchModeBitCount = mode == StateEncoder.MODE_DIGIT ? 4 : 5;
     token = token.add(value, latchModeBitCount);
     return new State(token, mode, 0, bitCount + latchModeBitCount);
   }
@@ -106,9 +106,9 @@ final class State {
   // to a different mode to output a single value.
   State shiftAndAppend(int mode, int value) {
     Token token = this.token;
-    int thisModeBitCount = this.mode == HighLevelEncoder.MODE_DIGIT ? 4 : 5;
+    int thisModeBitCount = this.mode == StateEncoder.MODE_DIGIT ? 4 : 5;
     // Shifts exist only to UPPER and PUNCT, both with tokens size 5.
-    token = token.add(HighLevelEncoder.SHIFT_TABLE[this.mode][mode], thisModeBitCount);
+    token = token.add(StateEncoder.SHIFT_TABLE[this.mode][mode], thisModeBitCount);
     token = token.add(value, 5);
     return new State(token, this.mode, 0, this.bitCount + thisModeBitCount + 5);
   }
@@ -119,11 +119,11 @@ final class State {
     Token token = this.token;
     int mode = this.mode;
     int bitCount = this.bitCount;
-    if (this.mode == HighLevelEncoder.MODE_PUNCT || this.mode == HighLevelEncoder.MODE_DIGIT) {
-      int latch = HighLevelEncoder.LATCH_TABLE[mode][HighLevelEncoder.MODE_UPPER];
+    if (this.mode == StateEncoder.MODE_PUNCT || this.mode == StateEncoder.MODE_DIGIT) {
+      int latch = StateEncoder.LATCH_TABLE[mode][StateEncoder.MODE_UPPER];
       token = token.add(latch & 0xFFFF, latch >> 16);
       bitCount += latch >> 16;
-      mode = HighLevelEncoder.MODE_UPPER;
+      mode = StateEncoder.MODE_UPPER;
     }
     int deltaBitCount =
         (binaryShiftByteCount == 0 || binaryShiftByteCount == 31) ? 18 :
@@ -150,7 +150,7 @@ final class State {
   // Returns true if "this" state is better (or equal) to be in than "that"
   // state under all possible circumstances.
   boolean isBetterThanOrEqualTo(State other) {
-    int newModeBitCount = this.bitCount + (HighLevelEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
+    int newModeBitCount = this.bitCount + (StateEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
     if (this.binaryShiftByteCount < other.binaryShiftByteCount) {
       // add additional B/S encoding cost of other, if any
       newModeBitCount += other.binaryShiftCost - this.binaryShiftCost;
@@ -176,7 +176,7 @@ final class State {
 
   @Override
   public String toString() {
-    return String.format("%s bits=%d bytes=%d", HighLevelEncoder.MODE_NAMES[mode], bitCount, binaryShiftByteCount);
+    return String.format("%s bits=%d bytes=%d", StateEncoder.MODE_NAMES[mode], bitCount, binaryShiftByteCount);
   }
 
   private static int calculateBinaryShiftCost(int binaryShiftByteCount) {

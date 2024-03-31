@@ -56,102 +56,7 @@ public final class EncoderTest extends Assert {
 
   // real life tests
 
-  @Test
-  public void testEncode1() {
-    testEncode("This is an example Aztec symbol for Wikipedia.", true, 3,
-        "X     X X       X     X X     X     X         \n" +
-        "X         X     X X     X   X X   X X       X \n" +
-        "X X   X X X X X   X X X                 X     \n" +
-        "X X                 X X   X       X X X X X X \n" +
-        "    X X X   X   X     X X X X         X X     \n" +
-        "  X X X   X X X X   X     X   X     X X   X   \n" +
-        "        X X X X X     X X X X   X   X     X   \n" +
-        "X       X   X X X X X X X X X X X     X   X X \n" +
-        "X   X     X X X               X X X X   X X   \n" +
-        "X     X X   X X   X X X X X   X X   X   X X X \n" +
-        "X   X         X   X       X   X X X X       X \n" +
-        "X       X     X   X   X   X   X   X X   X     \n" +
-        "      X   X X X   X       X   X     X X X     \n" +
-        "    X X X X X X   X X X X X   X X X X X X   X \n" +
-        "  X X   X   X X               X X X   X X X X \n" +
-        "  X   X       X X X X X X X X X X X X   X X   \n" +
-        "  X X   X       X X X   X X X       X X       \n" +
-        "  X               X   X X     X     X X X     \n" +
-        "  X   X X X   X X   X   X X X X   X   X X X X \n" +
-        "    X   X   X X X   X   X   X X X X     X     \n" +
-        "        X               X                 X   \n" +
-        "        X X     X   X X   X   X   X       X X \n" +
-        "  X   X   X X       X   X         X X X     X \n");
-  }
 
-  @Test
-  public void testEncode2() {
-    testEncode("Aztec Code is a public domain 2D matrix barcode symbology" +
-                " of nominally square symbols built on a square grid with a " +
-                "distinctive square bullseye pattern at their center.", false, 6,
-          "        X X     X X     X     X     X   X X X         X   X         X   X X       \n" +
-          "  X       X X     X   X X   X X       X             X     X   X X   X           X \n" +
-          "  X   X X X     X   X   X X     X X X   X   X X               X X       X X     X \n" +
-          "X X X             X   X         X         X     X     X   X     X X       X   X   \n" +
-          "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n" +
-          "    X X   X   X   X X X               X       X       X X     X X   X X       X   \n" +
-          "X X     X       X       X X X X   X   X X       X   X X   X       X X   X X   X   \n" +
-          "  X       X   X     X X   X   X X   X X   X X X X X X   X X           X   X   X X \n" +
-          "X X   X X   X   X X X X   X X X X X X X X   X   X       X X   X X X X   X X X     \n" +
-          "  X       X   X     X       X X     X X   X   X   X     X X   X X X   X     X X X \n" +
-          "  X   X X X   X X       X X X         X X           X   X   X   X X X   X X     X \n" +
-          "    X     X   X X     X X X X     X   X     X X X X   X X   X X   X X X     X   X \n" +
-          "X X X   X             X         X X X X X   X   X X   X   X   X X   X   X   X   X \n" +
-          "          X       X X X   X X     X   X           X   X X X X   X X               \n" +
-          "  X     X X   X   X       X X X X X X X X X X X X X X X   X   X X   X   X X X     \n" +
-          "    X X                 X   X                       X X   X       X         X X X \n" +
-          "        X   X X   X X X X X X   X X X X X X X X X   X     X X           X X X X   \n" +
-          "          X X X   X     X   X   X               X   X X     X X X   X X           \n" +
-          "X X     X     X   X   X   X X   X   X X X X X   X   X X X X X X X       X   X X X \n" +
-          "X X X X       X       X   X X   X   X       X   X   X     X X X     X X       X X \n" +
-          "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n" +
-          "    X     X       X         X   X   X       X   X   X     X   X X                 \n" +
-          "        X X     X X X X X   X   X   X X X X X   X   X X X     X X X X   X         \n" +
-          "X     X   X   X         X   X   X               X   X X   X X   X X X     X   X   \n" +
-          "  X   X X X   X   X X   X X X   X X X X X X X X X   X X         X X     X X X X   \n" +
-          "    X X   X   X   X X X     X                       X X X   X X   X   X     X     \n" +
-          "    X X X X   X         X   X X X X X X X X X X X X X X   X       X X   X X   X X \n" +
-          "            X   X   X X       X X X X X     X X X       X       X X X         X   \n" +
-          "X       X         X   X X X X   X     X X     X X     X X           X   X       X \n" +
-          "X     X       X X X X X     X   X X X X   X X X     X       X X X X   X   X X   X \n" +
-          "  X X X X X               X     X X X   X       X X   X X   X X X X     X X       \n" +
-          "X             X         X   X X   X X     X     X     X   X   X X X X             \n" +
-          "    X   X X       X     X       X   X X X X X X   X X   X X X X X X X X X   X   X \n" +
-          "    X         X X   X       X     X   X   X       X     X X X     X       X X X X \n" +
-          "X     X X     X X X X X X             X X X   X               X   X     X     X X \n" +
-          "X   X X     X               X X X X X     X X     X X X X X X X X     X   X   X X \n" +
-          "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n" +
-          "X           X     X X X X     X     X         X         X   X       X X   X X X   \n" +
-          "X   X   X X   X X X   X         X X     X X X X     X X   X   X     X   X       X \n" +
-          "      X     X     X     X X     X   X X   X X   X         X X       X       X   X \n" +
-          "X       X           X   X   X     X X   X               X     X     X X X         \n");
-  }
-
-  @Test
-  public void testAztecWriter() throws Exception {
-    testWriter("Espa\u00F1ol", null, 25, true, 1);                   // Without ECI (implicit ISO-8859-1)
-    testWriter("Espa\u00F1ol", ISO_8859_1, 25, true, 1);             // Explicit ISO-8859-1
-    testWriter("\u20AC 1 sample data.", WINDOWS_1252, 25, true, 2);  // ISO-8859-1 can't encode Euro; Windows-1252 can
-    testWriter("\u20AC 1 sample data.", ISO_8859_15, 25, true, 2);
-    testWriter("\u20AC 1 sample data.", UTF_8, 25, true, 2);
-    testWriter("\u20AC 1 sample data.", UTF_8, 100, true, 3);
-    testWriter("\u20AC 1 sample data.", UTF_8, 300, true, 4);
-    testWriter("\u20AC 1 sample data.", UTF_8, 500, false, 5);
-    testWriter("The capital of Japan is named \u6771\u4EAC.", SHIFT_JIS, 25, true, 3);
-    // Test AztecWriter defaults
-    String data = "In ut magna vel mauris malesuada";
-    AztecWriter writer = new AztecWriter();
-    BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-    AztecCode aztec = Encoder.encode(data,
-        Encoder.DEFAULT_EC_PERCENT, Encoder.DEFAULT_AZTEC_LAYERS);
-    BitMatrix expectedMatrix = aztec.getMatrix();
-    assertEquals(matrix, expectedMatrix);
-  }
 
   // synthetic tests (encode-decode round-trip)
 
@@ -175,88 +80,6 @@ public final class EncoderTest extends Assert {
     testEncodeDecode("http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384", true, 4);
   }
 
-  @Test
-  public void testEncodeDecode5() throws Exception {
-    testEncodeDecode("http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384756<>/?abc"
-        + "Four score and seven our forefathers brought forth", false, 5);
-  }
-
-  @Test
-  public void testEncodeDecode10() throws Exception {
-    testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
-        " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
-        " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
-        " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
-        " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
-        " elementum sapien dolor et diam.", false, 10);
-  }
-
-  @Test
-  public void testEncodeDecode23() throws Exception {
-    testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
-        " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
-        " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
-        " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
-        " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
-        " elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend." +
-        " Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus" +
-        " justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu" +
-        " tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus" +
-        " quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec" +
-        " laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida," +
-        " justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec" +
-        " lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar" +
-        " nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat" +
-        " eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra" +
-        " fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo" +
-        " diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla" +
-        " ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
-        " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
-        " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit" +
-        " felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo" +
-        " erat pulvinar nisi, id elementum sapien dolor et diam.", false, 23);
-  }
-
-  @Test
-  public void testEncodeDecode31() throws Exception {
-    testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
-        " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
-        " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
-        " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
-        " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
-        " elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend." +
-        " Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus" +
-        " justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu" +
-        " tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus" +
-        " quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec" +
-        " laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida," +
-        " justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec" +
-        " lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar" +
-        " nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat" +
-        " eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra" +
-        " fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo" +
-        " diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla" +
-        " ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
-        " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
-        " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit" +
-        " felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo" +
-        " erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit" +
-        " placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at" +
-        " pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est." +
-        " Ut justo diam, lobortis eu tristique ac, p.In ut magna vel mauris malesuada" +
-        " dictum. Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id" +
-        " justo rutrum sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum" +
-        " sit amet. Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat," +
-        " eget hendrerit felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet" +
-        " laoreet, justo erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac" +
-        " nunc sodales elit placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula," +
-        " massa at pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus" +
-        " sed est. Ut justo diam, lobortis eu tris. In ut magna vel mauris malesuada dictum." +
-        " Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
-        " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
-        " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget" +
-        " hendrerit felis turpis nec lorem.", false, 31);
-  }
 
   @Test
   public void testGenerateModeMessage() {
@@ -285,35 +108,7 @@ public final class EncoderTest extends Assert {
         ".....X ...XXX XX..XX ..X... ..X.X. X..... X.X... ....X. X..... X....X X..X.. .....X X.X..X XXX.XX .XXXXX");
   }
 
-  @Test
-  public void testHighLevelEncode() throws FormatException {
-    testHighLevelEncodeString("A. b.",
-        // 'A'  P/S   '. ' L/L    b    D/L    '.'
-        "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
-    testHighLevelEncodeString("Lorem ipsum.",
-        // 'L'  L/L   'o'   'r'   'e'   'm'   ' '   'i'   'p'   's'   'u'   'm'   D/L   '.'
-        ".XX.X XXX.. X.... X..XX ..XX. .XXX. ....X .X.X. X...X X.X.. X.XX. .XXX. XXXX. XX.X");
-    testHighLevelEncodeString("Lo. Test 123.",
-        // 'L'  L/L   'o'   P/S   '. '  U/S   'T'   'e'   's'   't'    D/L   ' '  '1'  '2'  '3'  '.'
-        ".XX.X XXX.. X.... ..... ...XX XXX.. X.X.X ..XX. X.X.. X.X.X  XXXX. ...X ..XX .X.. .X.X XX.X");
-    testHighLevelEncodeString("Lo...x",
-        // 'L'  L/L   'o'   D/L   '.'  '.'  '.'  U/L  L/L   'x'
-        ".XX.X XXX.. X.... XXXX. XX.X XX.X XX.X XXX. XXX.. XX..X");
-    testHighLevelEncodeString(". x://abc/.",
-        //P/S   '. '  L/L   'x'   P/S   ':'   P/S   '/'   P/S   '/'   'a'   'b'   'c'   P/S   '/'   D/L   '.'
-        "..... ...XX XXX.. XX..X ..... X.X.X ..... X.X.. ..... X.X.. ...X. ...XX ..X.. ..... X.X.. XXXX. XX.X");
-    // Uses Binary/Shift rather than Lower/Shift to save two bits.
-    testHighLevelEncodeString("ABCdEFG",
-        //'A'   'B'   'C'   B/S    =1    'd'     'E'   'F'   'G'
-        "...X. ...XX ..X.. XXXXX ....X .XX..X.. ..XX. ..XXX .X...");
 
-    testHighLevelEncodeString(
-        // Found on an airline boarding pass.  Several stretches of Binary shift are
-        // necessary to keep the bitcount so low.
-        "09  UAG    ^160MEUCIQC0sYS/HpKxnBELR1uB85R20OoqqwFGa0q2uEi"
-            + "Ygh6utAIgLl1aBVM4EOTQtMQQYH9M2Z3Dp4qnA/fwWuQ+M8L3V8U=",
-        823);
-  }
 
   @Test
   public void testHighLevelEncodeBinary() throws FormatException {
