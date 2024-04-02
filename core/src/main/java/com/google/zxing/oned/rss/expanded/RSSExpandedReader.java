@@ -222,25 +222,24 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   private List<ExpandedPair> checkRows(List<ExpandedRow> collectedRows, int currentRow) throws NotFoundException {
     for (int i = currentRow; i < rows.size(); i++) {
       ExpandedRow row = rows.get(i);
-      this.pairs.clear();
-      for (ExpandedRow collectedRow : collectedRows) {
-        this.pairs.addAll(collectedRow.getPairs());
-      }
       this.pairs.addAll(row.getPairs());
+      int addSize = row.getPairs().size();
 
       if (isValidSequence(this.pairs, false)) {
         if (checkChecksum()) {
           return this.pairs;
         }
-
-        List<ExpandedRow> rs = new ArrayList<>(collectedRows);
-        rs.add(row);
+        collectedRows.add(row);
         try {
           // Recursion: try to add more rows
-          return checkRows(rs, i + 1);
+          return checkRows(collectedRows, i + 1);
         } catch (NotFoundException e) {
           // We failed, try the next candidate
+          collectedRows.remove(collectedRows.size() - 1);
+          this.pairs.subList(this.pairs.size() - addSize, this.pairs.size()).clear();
         }
+      } else {
+        this.pairs.subList(this.pairs.size() - addSize, this.pairs.size()).clear();
       }
     }
 
