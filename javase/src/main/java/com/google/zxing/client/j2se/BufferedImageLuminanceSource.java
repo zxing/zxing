@@ -173,11 +173,15 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     g.drawImage(image, transform, null);
     g.dispose();
 
-    int halfDimension = Math.max(width, height) / 2;
-    int newLeft = Math.max(0, oldCenterX - halfDimension);
-    int newTop = Math.max(0, oldCenterY - halfDimension);
-    int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
-    int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
+  // Calculate half dimension
+  int halfDimension = Math.max(width, height) / 2;
+
+  // Calculate new boundaries
+  int newLeft = Math.max(0, oldCenterX - halfDimension);
+  int newTop = Math.max(0, oldCenterY - halfDimension);
+  int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
+  int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
+
 
     return new BufferedImageLuminanceSource(rotatedImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
   }
