@@ -78,14 +78,14 @@ public final class MatrixToImageWriterTestCase extends Assert {
     assertEquals(height, newImage.getHeight());
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        int expected = matrix.get(x, y) ? config.getPixelOnColor() : config.getPixelOffColor();
-        int actual = newImage.getRGB(x, y);
-        assertEquals(
-            "At " + x + "," + y + " expected " + Integer.toHexString(expected) +
-            " but got " + Integer.toHexString(actual),
-            expected, actual);
+          // Get the expected and actual colors
+          int expected = matrix.get(x, y) ? config.getPixelOnColor() : config.getPixelOffColor();
+          int actual = newImage.getRGB(x, y);
+  
+          // Assert equality
+          assertEquals("At " + x + "," + y + ":", expected, actual);
       }
-    }
+  }  
   }
 
 }
