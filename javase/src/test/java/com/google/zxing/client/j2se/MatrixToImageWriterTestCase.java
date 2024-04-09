@@ -65,14 +65,25 @@ public final class MatrixToImageWriterTestCase extends Assert {
     matrix.set(1, 2);
 
     BufferedImage newImage;
-    Path tempFile = Files.createTempFile(null, "." + format);
+    Path tempFile = null;
+    
     try {
-      MatrixToImageWriter.writeToPath(matrix, format, tempFile, config);
-      assertTrue(Files.size(tempFile) > 0);
-      newImage = ImageIO.read(tempFile.toFile());
+        tempFile = Files.createTempFile(null, "." + format);
+        MatrixToImageWriter.writeToPath(matrix, format, tempFile, config);
+        assertTrue(Files.size(tempFile) > 0);
+        newImage = ImageIO.read(tempFile.toFile());
     } finally {
-      Files.delete(tempFile);
+        if (tempFile != null) {
+            try {
+                Files.delete(tempFile);
+            } catch (IOException e) {
+                // Handle or log the exception
+            }
+        }
     }
+    
+    // Continue with newImage as needed
+    
 
     assertEquals(width, newImage.getWidth());
     assertEquals(height, newImage.getHeight());
