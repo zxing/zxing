@@ -22,6 +22,9 @@ import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.encoder.ByteMatrix;
+import com.google.zxing.qrcode.encoder.QRCode;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -133,4 +136,55 @@ public final class QRCodeWriterTestCase extends Assert {
         "renderer-test-01.png");
   }
 
+  @Test
+  public void renderResultScalesNothing() {
+    final int expectedSize = 33;           // Original Size (25) + quietZone
+    BitMatrix result;
+    ByteMatrix matrix;
+    QRCode code;
+
+    matrix = new ByteMatrix(25, 25);    // QR Version 2! It's all white 
+                                        // but it doesn't matter here
+
+    code = new QRCode();
+    code.setMatrix(matrix);
+
+    // Test:
+    result = QRCodeWriter.renderResult(code, -1, -1, 4);
+
+    assertNotNull(result);
+    assertEquals(result.getHeight(), expectedSize);
+    assertEquals(result.getWidth(), expectedSize);
+  }
+
+  @Test
+  public void renderResultScalesWhenRequired() {
+    final int expectedSize = 66;
+    BitMatrix result;
+    ByteMatrix matrix;
+    QRCode code;
+
+    matrix = new ByteMatrix(25, 25);    // QR Version 2! It's all white 
+                                        // but it doesn't matter here
+
+    code = new QRCode();
+    code.setMatrix(matrix);
+
+    // Test:
+    result = QRCodeWriter.renderResult(code, 66, 66, 4);
+
+    assertNotNull(result);
+    assertEquals(result.getHeight(), expectedSize);
+    assertEquals(result.getWidth(), expectedSize);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void renderResultThrowsExIfCcodeIsNull() {
+    QRCodeWriter.renderResult(null, 0, 0, 0);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void renderResultThrowsExIfCodeIsIncomplete() {
+    QRCodeWriter.renderResult(new QRCode(), 0, 0, 0);
+  }
 }

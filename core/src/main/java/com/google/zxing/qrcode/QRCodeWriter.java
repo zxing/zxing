@@ -79,9 +79,27 @@ public final class QRCodeWriter implements Writer {
     return renderResult(code, width, height, quietZone);
   }
 
-  // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
-  // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-  private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone) {
+  /**
+   * Renders the given {@link QRCode} as a {@link BitMatrix}, scaling the
+   * same to be compliant with the provided dimensions.
+   *
+   * <p>If no scaling is required, both {@code width} and {@code height}
+   * arguments should be non-positive numbers.
+   *
+   * @param code {@code QRCode} to be adapted as a {@code BitMatrix}
+   * @param width desired width for the {@code QRCode} (in pixel units)
+   * @param height desired height for the {@code QRCode} (in pixel units)
+   * @param quietZone the size of the QR quiet zone (in pixel units)
+   * @return {@code BitMatrix} instance
+   *
+   * @throws IllegalStateException if {@code code} does not have
+   *      a {@link QRCode#getMatrix() Matrix}
+   *
+   * @throws NullPointerException if {@code code} is {@code null}
+   */
+  public static BitMatrix renderResult(QRCode code, int width, int height, int quietZone) {
+    // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
+    // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
     ByteMatrix input = code.getMatrix();
     if (input == null) {
       throw new IllegalStateException();
@@ -114,5 +132,4 @@ public final class QRCodeWriter implements Writer {
 
     return output;
   }
-
 }
