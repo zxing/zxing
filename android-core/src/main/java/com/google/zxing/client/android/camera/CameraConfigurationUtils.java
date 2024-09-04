@@ -299,7 +299,9 @@ public final class CameraConfigurationUtils {
       int realWidth = size.width;
       int realHeight = size.height;
       int resolution = realWidth * realHeight;
-      if (resolution < MIN_PREVIEW_PIXELS) {
+      double distortion = Math.abs(aspectRatio - screenAspectRatio);
+      //Aplicamos refactor de simplificacion de condicionales
+      if (resolution < MIN_PREVIEW_PIXELS && distortion > MAX_ASPECT_DISTORTION) {
         continue;
       }
 
@@ -307,10 +309,7 @@ public final class CameraConfigurationUtils {
       int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
       int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
       double aspectRatio = maybeFlippedWidth / (double) maybeFlippedHeight;
-      double distortion = Math.abs(aspectRatio - screenAspectRatio);
-      if (distortion > MAX_ASPECT_DISTORTION) {
-        continue;
-      }
+      
 
       if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
         Point exactPoint = new Point(realWidth, realHeight);
