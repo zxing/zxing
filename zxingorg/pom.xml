@@ -39,7 +39,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>33.2.0-android</version>
+      <version>33.3.0-android</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -67,7 +67,7 @@
   </parent>
 
   <properties>
-    <spring.version>6.1.8</spring.version>
+    <spring.version>6.1.12</spring.version>
   </properties>
 
   <build>
