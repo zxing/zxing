@@ -30,19 +30,19 @@ public final class EmailAddressParsedResultTestCase extends Assert {
 
   @Test
   public void testEmailAddresses() {
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress(null));
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress(""));
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123.365.com"));
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("abc.def.com"));
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd.c"));
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab,cd.com"));
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab#cd.com"));
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab!#cd.com"));
-	    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab_cd.com"));
-	    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd.com"));
-	    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab-cd.com"));
-	    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("abc.456@ab-cd.com"));
-	    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("建設省.456@ab-cd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress(null));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress(""));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123.365.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("abc.def.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd.c"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab,cd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab#cd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab!#cd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab_cd.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab-cd.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("abc.456@ab-cd.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("建設省.456@ab-cd.com"));
   }
 
   @Test
