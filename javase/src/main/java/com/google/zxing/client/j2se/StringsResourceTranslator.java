@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Collection;
@@ -92,7 +91,7 @@ public final class StringsResourceTranslator {
   private StringsResourceTranslator() {}
 
   public static void main(String[] args) throws IOException {
-    Path resDir = Paths.get(args[0]);
+    Path resDir = Path.of(args[0]);
     Path valueDir = resDir.resolve("values");
     Path stringsFile = valueDir.resolve("strings.xml");
     Collection<String> forceRetranslation = Arrays.asList(args).subList(1, args.length);

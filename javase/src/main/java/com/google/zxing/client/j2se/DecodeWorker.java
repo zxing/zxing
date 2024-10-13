@@ -39,7 +39,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -88,11 +87,11 @@ final class DecodeWorker implements Callable<Integer> {
     Path outDir;
     String inputFileName;
     if ("file".equals(input.getScheme())) {
-      Path inputPath = Paths.get(input);
+      Path inputPath = Path.of(input);
       outDir = inputPath.getParent();
       inputFileName = inputPath.getFileName().toString();
     } else {
-      outDir = Paths.get(".").toRealPath();
+      outDir = Path.of(".").toRealPath();
       String path = input.getPath();
       if (path == null) {
         inputFileName = "input";
@@ -172,7 +171,7 @@ final class DecodeWorker implements Callable<Integer> {
 
           if (rawBytes != null) {
             for (byte b : rawBytes) {
-              rawData.append(String.format("%02X", b & 0xff));
+              rawData.append("%02X".formatted(b & 0xff));
               rawData.append(" ");
             }
             rawData.setLength(rawData.length() - 1);  // chop off final space

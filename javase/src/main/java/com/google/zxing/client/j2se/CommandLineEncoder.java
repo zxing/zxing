@@ -22,7 +22,7 @@ import com.google.zxing.common.BitMatrix;
 
 import com.beust.jcommander.JCommander;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
@@ -59,7 +59,7 @@ public final class CommandLineEncoder {
         config.contents.get(0), config.barcodeFormat, config.width,
         config.height, hints);
     MatrixToImageWriter.writeToPath(matrix, config.imageFormat,
-        Paths.get(outFileString));
+        Path.of(outFileString));
   }
 
 }

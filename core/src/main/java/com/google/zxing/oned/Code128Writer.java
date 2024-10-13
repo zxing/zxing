@@ -367,10 +367,12 @@ public final class Code128Writer extends OneDimensionalCodeWriter {
     private enum Charset { A, B, C, NONE }
     private enum Latch { A, B, C, SHIFT, NONE }
 
-    static final String A = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002" +
-                            "\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011" +
-                            "\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F" +
-                            "\u00FF";
+    static final String A = """
+                             !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_ \
+                            
+                            \
+                            \
+                            ÿ""";
     static final String B = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqr" +
                             "stuvwxyz{|}~\u007F\u00FF";
 

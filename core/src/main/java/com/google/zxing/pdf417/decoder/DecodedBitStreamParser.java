@@ -183,7 +183,7 @@ final class DecodedBitStreamParser {
            codeIndex < codewords.length &&
            codewords[codeIndex] != MACRO_PDF417_TERMINATOR &&
            codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
-      fileId.append(String.format("%03d", codewords[codeIndex]));
+      fileId.append("%03d".formatted(codewords[codeIndex]));
       codeIndex++;
     }
     if (fileId.length() == 0) {

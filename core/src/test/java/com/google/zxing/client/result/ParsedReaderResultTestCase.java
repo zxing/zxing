@@ -212,22 +212,40 @@ public final class ParsedReaderResultTestCase extends Assert {
   @Test
   public void testVEvent() {
     // UTC times
-    doTestResult("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
-        "DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR",
+    doTestResult("""
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        SUMMARY:foo
+        DTSTART:20080504T123456Z
+        DTEND:20080505T234555Z
+        END:VEVENT
+        END:VCALENDAR""",
         "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" + formatTime(2008, 5, 5, 23, 45, 55),
         ParsedResultType.CALENDAR);
-    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
-        "DTEND:20080505T234555Z\r\nEND:VEVENT", "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" +
+    doTestResult("""
+        BEGIN:VEVENT
+        SUMMARY:foo
+        DTSTART:20080504T123456Z
+        DTEND:20080505T234555Z
+        END:VEVENT""", "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" +
         formatTime(2008, 5, 5, 23, 45, 55),
         ParsedResultType.CALENDAR);
     // Local times
-    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n" +
-        "DTEND:20080505T234555\r\nEND:VEVENT", "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" +
+    doTestResult("""
+        BEGIN:VEVENT
+        SUMMARY:foo
+        DTSTART:20080504T123456
+        DTEND:20080505T234555
+        END:VEVENT""", "foo\n" + formatTime(2008, 5, 4, 12, 34, 56) + "\n" +
         formatTime(2008, 5, 5, 23, 45, 55),
         ParsedResultType.CALENDAR);
     // Date only (all day event)
-    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n" +
-        "DTEND:20080505\r\nEND:VEVENT", "foo\n" + formatDate(2008, 5, 4) + "\n" +
+    doTestResult("""
+        BEGIN:VEVENT
+        SUMMARY:foo
+        DTSTART:20080504
+        DTEND:20080505
+        END:VEVENT""", "foo\n" + formatDate(2008, 5, 4) + "\n" +
         formatDate(2008, 5, 5),
         ParsedResultType.CALENDAR);
     // Start time only

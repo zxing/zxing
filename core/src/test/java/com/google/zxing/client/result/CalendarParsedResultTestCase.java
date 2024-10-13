@@ -51,100 +51,132 @@ public final class CalendarParsedResultTestCase extends Assert {
   @Test
   public void testStartEnd() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "DTEND:20080505T234555Z\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        DTEND:20080505T234555Z
+        END:VEVENT
+        END:VCALENDAR""",
         null, null, null, "20080504T123456Z", "20080505T234555Z");
   }
 
   @Test
   public void testNoVCalendar() {
     doTest(
-        "BEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "DTEND:20080505T234555Z\r\n" +
-        "END:VEVENT",
+        """
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        DTEND:20080505T234555Z
+        END:VEVENT""",
         null, null, null, "20080504T123456Z", "20080505T234555Z");
   }
 
   @Test
   public void testStart() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        END:VEVENT
+        END:VCALENDAR""",
         null, null, null, "20080504T123456Z", null);
   }
 
   @Test
   public void testDuration() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "DURATION:P1D\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        DURATION:P1D
+        END:VEVENT
+        END:VCALENDAR""",
         null, null, null, "20080504T123456Z", "20080505T123456Z");
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "DURATION:P1DT2H3M4S\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        DURATION:P1DT2H3M4S
+        END:VEVENT
+        END:VCALENDAR""",
         null, null, null, "20080504T123456Z", "20080505T143800Z");
   }
 
   @Test
   public void testSummary() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "SUMMARY:foo\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        SUMMARY:foo
+        DTSTART:20080504T123456Z
+        END:VEVENT
+        END:VCALENDAR""",
         null, "foo", null, "20080504T123456Z", null);
   }
 
   @Test
   public void testLocation() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "LOCATION:Miami\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        LOCATION:Miami
+        DTSTART:20080504T123456Z
+        END:VEVENT
+        END:VCALENDAR""",
         null, null, "Miami", "20080504T123456Z", null);
   }
 
   @Test
   public void testDescription() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "DESCRIPTION:This is a test\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        DESCRIPTION:This is a test
+        END:VEVENT
+        END:VCALENDAR""",
         "This is a test", null, null, "20080504T123456Z", null);
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "DESCRIPTION:This is a test\r\n\t with a continuation\r\n" +        
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        DESCRIPTION:This is a test
+               with a continuation
+        END:VEVENT
+        END:VCALENDAR""",
         "This is a test with a continuation", null, null, "20080504T123456Z", null);
   }
 
   @Test
   public void testGeo() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "GEO:-12.345;-45.678\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        GEO:-12.345;-45.678
+        END:VEVENT
+        END:VCALENDAR""",
         null, null, null, "20080504T123456Z", null, null, null, -12.345, -45.678);
   }
 
   @Test
   public void testBadGeo() {
     // Not parsed as VEVENT
-    Result fakeResult = new Result("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "GEO:-12.345\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR", null, null, BarcodeFormat.QR_CODE);
+    Result fakeResult = new Result("""
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        GEO:-12.345
+        END:VEVENT
+        END:VCALENDAR""", null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertSame(ParsedResultType.TEXT, result.getType());
   }
@@ -152,42 +184,49 @@ public final class CalendarParsedResultTestCase extends Assert {
   @Test
   public void testOrganizer() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "ORGANIZER:mailto:bob@example.org\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        ORGANIZER:mailto:bob@example.org
+        END:VEVENT
+        END:VCALENDAR""",
         null, null, null, "20080504T123456Z", null, "bob@example.org", null, Double.NaN, Double.NaN);
   }
 
   @Test
   public void testAttendees() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
-        "DTSTART:20080504T123456Z\r\n" +
-        "ATTENDEE:mailto:bob@example.org\r\n" +
-        "ATTENDEE:mailto:alice@example.org\r\n" +
-        "END:VEVENT\r\nEND:VCALENDAR",
+        """
+        BEGIN:VCALENDAR
+        BEGIN:VEVENT
+        DTSTART:20080504T123456Z
+        ATTENDEE:mailto:bob@example.org
+        ATTENDEE:mailto:alice@example.org
+        END:VEVENT
+        END:VCALENDAR""",
         null, null, null, "20080504T123456Z", null, null,
         new String[] {"bob@example.org", "alice@example.org"}, Double.NaN, Double.NaN);
   }
 
   @Test
   public void testVEventEscapes() {
-    doTest("BEGIN:VEVENT\n" +
-           "CREATED:20111109T110351Z\n" +
-           "LAST-MODIFIED:20111109T170034Z\n" +
-           "DTSTAMP:20111109T170034Z\n" +
-           "UID:0f6d14ef-6cb7-4484-9080-61447ccdf9c2\n" +
-           "SUMMARY:Summary line\n" +
-           "CATEGORIES:Private\n" +
-           "DTSTART;TZID=Europe/Vienna:20111110T110000\n" +
-           "DTEND;TZID=Europe/Vienna:20111110T120000\n" +
-           "LOCATION:Location\\, with\\, escaped\\, commas\n" +
-           "DESCRIPTION:Meeting with a friend\\nlook at homepage first\\n\\n\n" +
-           "  \\n\n" +
-           "SEQUENCE:1\n" +
-           "X-MOZ-GENERATION:1\n" +
-           "END:VEVENT",
+    doTest("""
+           BEGIN:VEVENT
+           CREATED:20111109T110351Z
+           LAST-MODIFIED:20111109T170034Z
+           DTSTAMP:20111109T170034Z
+           UID:0f6d14ef-6cb7-4484-9080-61447ccdf9c2
+           SUMMARY:Summary line
+           CATEGORIES:Private
+           DTSTART;TZID=Europe/Vienna:20111110T110000
+           DTEND;TZID=Europe/Vienna:20111110T120000
+           LOCATION:Location\\, with\\, escaped\\, commas
+           DESCRIPTION:Meeting with a friend\\nlook at homepage first\\n\\n
+             \\n
+           SEQUENCE:1
+           X-MOZ-GENERATION:1
+           END:VEVENT""",
            "Meeting with a friend\nlook at homepage first\n\n\n  \n",
            "Summary line",
            "Location, with, escaped, commas",
@@ -197,10 +236,11 @@ public final class CalendarParsedResultTestCase extends Assert {
 
   @Test
   public void testAllDayValueDate() {
-    doTest("BEGIN:VEVENT\n" +
-           "DTSTART;VALUE=DATE:20111110\n" +
-           "DTEND;VALUE=DATE:20111110\n" +
-           "END:VEVENT",
+    doTest("""
+           BEGIN:VEVENT
+           DTSTART;VALUE=DATE:20111110
+           DTEND;VALUE=DATE:20111110
+           END:VEVENT""",
            null, null, null, "20111110T000000Z", "20111110T000000Z");
   }
 

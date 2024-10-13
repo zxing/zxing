@@ -64,7 +64,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java.version>1.8</java.version>
+    <java.version>17</java.version>
     <android.home>${env.ANDROID_HOME}</android.home>
     <proguard.plugin.version>2.6.1</proguard.plugin.version>
     <!-- This can't reference project.version as some subprojects version differently -->
@@ -74,6 +74,23 @@
 
   <build>
     <plugins>
+      <plugin>
+      <groupId>org.openrewrite.maven</groupId>
+      <artifactId>rewrite-maven-plugin</artifactId>
+      <version>5.42.0</version>
+      <configuration>
+        <activeRecipes>
+          <recipe>org.openrewrite.java.migrate.UpgradeToJava17</recipe>
+        </activeRecipes>
+      </configuration>
+      <dependencies>
+        <dependency>
+          <groupId>org.openrewrite.recipe</groupId>
+          <artifactId>rewrite-migrate-java</artifactId>
+          <version>2.26.1</version>
+        </dependency>
+      </dependencies>
+    </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -140,12 +157,11 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.13.0</version>
           <configuration>
-            <source>${java.version}</source>
-            <target>${java.version}</target>
             <compilerArgs>
               <arg>-Xlint:all</arg>
               <arg>-Xlint:-serial</arg>
             </compilerArgs>
+            <release>${java.version}</release>
           </configuration>
         </plugin>
         <plugin>
@@ -395,7 +411,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.4.0</version>
+          <version>3.5.0</version>
           <configuration>
             <configLocation>src/checkstyle/checkstyle.xml</configLocation>
             <includeTestSourceDirectory>true</includeTestSourceDirectory>

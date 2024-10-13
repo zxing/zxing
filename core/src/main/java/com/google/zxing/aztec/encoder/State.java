@@ -176,7 +176,7 @@ final class State {
 
   @Override
   public String toString() {
-    return String.format("%s bits=%d bytes=%d", HighLevelEncoder.MODE_NAMES[mode], bitCount, binaryShiftByteCount);
+    return "%s bits=%d bytes=%d".formatted(HighLevelEncoder.MODE_NAMES[mode], bitCount, binaryShiftByteCount);
   }
 
   private static int calculateBinaryShiftCost(int binaryShiftByteCount) {

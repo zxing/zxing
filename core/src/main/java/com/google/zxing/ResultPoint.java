@@ -44,8 +44,7 @@ public class ResultPoint {
 
   @Override
   public final boolean equals(Object other) {
-    if (other instanceof ResultPoint) {
-      ResultPoint otherPoint = (ResultPoint) other;
+    if (other instanceof ResultPoint otherPoint) {
       return x == otherPoint.x && y == otherPoint.y;
     }
     return false;

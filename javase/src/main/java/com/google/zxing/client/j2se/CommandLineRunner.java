@@ -23,7 +23,6 @@ import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -64,7 +63,7 @@ public final class CommandLineRunner {
         uri = new URI(inputPath);
       } catch (URISyntaxException use) {
         // Assume it must be a file
-        if (!Files.exists(Paths.get(inputPath))) {
+        if (!Files.exists(Path.of(inputPath))) {
           throw use;
         }
         uri = new URI("file", inputPath, null);
@@ -109,7 +108,7 @@ public final class CommandLineRunner {
     List<URI> expanded = new ArrayList<>();
     for (URI input : inputs) {
       if (isFileOrDir(input)) {
-        Path inputPath = Paths.get(input);
+        Path inputPath = Path.of(input);
         if (Files.isDirectory(inputPath)) {
           try (DirectoryStream<Path> childPaths = Files.newDirectoryStream(inputPath)) {
             for (Path childPath : childPaths) {
@@ -126,7 +125,7 @@ public final class CommandLineRunner {
     for (int i = 0; i < expanded.size(); i++) {
       URI input = expanded.get(i);
       if (input.getScheme() == null) {
-        expanded.set(i, Paths.get(input.getRawPath()).toUri());
+        expanded.set(i, Path.of(input.getRawPath()).toUri());
       }
     }
     return expanded;
@@ -137,7 +136,7 @@ public final class CommandLineRunner {
     for (URI input : inputs) {
       boolean retain;
       if (isFileOrDir(input)) {
-        Path inputPath = Paths.get(input);
+        Path inputPath = Path.of(input);
         retain =
             !inputPath.getFileName().toString().startsWith(".") &&
             (recursive || !Files.isDirectory(inputPath));
@@ -153,7 +152,7 @@ public final class CommandLineRunner {
 
   private static boolean isExpandable(Iterable<URI> inputs) {
     for (URI input : inputs) {
-      if (isFileOrDir(input) && Files.isDirectory(Paths.get(input))) {
+      if (isFileOrDir(input) && Files.isDirectory(Path.of(input))) {
         return true;
       }
     }

@@ -59,29 +59,31 @@ public final class EncoderTest extends Assert {
   @Test
   public void testEncode1() {
     testEncode("This is an example Aztec symbol for Wikipedia.", true, 3,
-        "X     X X       X     X X     X     X         \n" +
-        "X         X     X X     X   X X   X X       X \n" +
-        "X X   X X X X X   X X X                 X     \n" +
-        "X X                 X X   X       X X X X X X \n" +
-        "    X X X   X   X     X X X X         X X     \n" +
-        "  X X X   X X X X   X     X   X     X X   X   \n" +
-        "        X X X X X     X X X X   X   X     X   \n" +
-        "X       X   X X X X X X X X X X X     X   X X \n" +
-        "X   X     X X X               X X X X   X X   \n" +
-        "X     X X   X X   X X X X X   X X   X   X X X \n" +
-        "X   X         X   X       X   X X X X       X \n" +
-        "X       X     X   X   X   X   X   X X   X     \n" +
-        "      X   X X X   X       X   X     X X X     \n" +
-        "    X X X X X X   X X X X X   X X X X X X   X \n" +
-        "  X X   X   X X               X X X   X X X X \n" +
-        "  X   X       X X X X X X X X X X X X   X X   \n" +
-        "  X X   X       X X X   X X X       X X       \n" +
-        "  X               X   X X     X     X X X     \n" +
-        "  X   X X X   X X   X   X X X X   X   X X X X \n" +
-        "    X   X   X X X   X   X   X X X X     X     \n" +
-        "        X               X                 X   \n" +
-        "        X X     X   X X   X   X   X       X X \n" +
-        "  X   X   X X       X   X         X X X     X \n");
+        """
+        X     X X       X     X X     X     X        \s
+        X         X     X X     X   X X   X X       X\s
+        X X   X X X X X   X X X                 X    \s
+        X X                 X X   X       X X X X X X\s
+            X X X   X   X     X X X X         X X    \s
+          X X X   X X X X   X     X   X     X X   X  \s
+                X X X X X     X X X X   X   X     X  \s
+        X       X   X X X X X X X X X X X     X   X X\s
+        X   X     X X X               X X X X   X X  \s
+        X     X X   X X   X X X X X   X X   X   X X X\s
+        X   X         X   X       X   X X X X       X\s
+        X       X     X   X   X   X   X   X X   X    \s
+              X   X X X   X       X   X     X X X    \s
+            X X X X X X   X X X X X   X X X X X X   X\s
+          X X   X   X X               X X X   X X X X\s
+          X   X       X X X X X X X X X X X X   X X  \s
+          X X   X       X X X   X X X       X X      \s
+          X               X   X X     X     X X X    \s
+          X   X X X   X X   X   X X X X   X   X X X X\s
+            X   X   X X X   X   X   X X X X     X    \s
+                X               X                 X  \s
+                X X     X   X X   X   X   X       X X\s
+          X   X   X X       X   X         X X X     X\s
+        """);
   }
 
   @Test
@@ -89,47 +91,49 @@ public final class EncoderTest extends Assert {
     testEncode("Aztec Code is a public domain 2D matrix barcode symbology" +
                 " of nominally square symbols built on a square grid with a " +
                 "distinctive square bullseye pattern at their center.", false, 6,
-          "        X X     X X     X     X     X   X X X         X   X         X   X X       \n" +
-          "  X       X X     X   X X   X X       X             X     X   X X   X           X \n" +
-          "  X   X X X     X   X   X X     X X X   X   X X               X X       X X     X \n" +
-          "X X X             X   X         X         X     X     X   X     X X       X   X   \n" +
-          "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n" +
-          "    X X   X   X   X X X               X       X       X X     X X   X X       X   \n" +
-          "X X     X       X       X X X X   X   X X       X   X X   X       X X   X X   X   \n" +
-          "  X       X   X     X X   X   X X   X X   X X X X X X   X X           X   X   X X \n" +
-          "X X   X X   X   X X X X   X X X X X X X X   X   X       X X   X X X X   X X X     \n" +
-          "  X       X   X     X       X X     X X   X   X   X     X X   X X X   X     X X X \n" +
-          "  X   X X X   X X       X X X         X X           X   X   X   X X X   X X     X \n" +
-          "    X     X   X X     X X X X     X   X     X X X X   X X   X X   X X X     X   X \n" +
-          "X X X   X             X         X X X X X   X   X X   X   X   X X   X   X   X   X \n" +
-          "          X       X X X   X X     X   X           X   X X X X   X X               \n" +
-          "  X     X X   X   X       X X X X X X X X X X X X X X X   X   X X   X   X X X     \n" +
-          "    X X                 X   X                       X X   X       X         X X X \n" +
-          "        X   X X   X X X X X X   X X X X X X X X X   X     X X           X X X X   \n" +
-          "          X X X   X     X   X   X               X   X X     X X X   X X           \n" +
-          "X X     X     X   X   X   X X   X   X X X X X   X   X X X X X X X       X   X X X \n" +
-          "X X X X       X       X   X X   X   X       X   X   X     X X X     X X       X X \n" +
-          "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n" +
-          "    X     X       X         X   X   X       X   X   X     X   X X                 \n" +
-          "        X X     X X X X X   X   X   X X X X X   X   X X X     X X X X   X         \n" +
-          "X     X   X   X         X   X   X               X   X X   X X   X X X     X   X   \n" +
-          "  X   X X X   X   X X   X X X   X X X X X X X X X   X X         X X     X X X X   \n" +
-          "    X X   X   X   X X X     X                       X X X   X X   X   X     X     \n" +
-          "    X X X X   X         X   X X X X X X X X X X X X X X   X       X X   X X   X X \n" +
-          "            X   X   X X       X X X X X     X X X       X       X X X         X   \n" +
-          "X       X         X   X X X X   X     X X     X X     X X           X   X       X \n" +
-          "X     X       X X X X X     X   X X X X   X X X     X       X X X X   X   X X   X \n" +
-          "  X X X X X               X     X X X   X       X X   X X   X X X X     X X       \n" +
-          "X             X         X   X X   X X     X     X     X   X   X X X X             \n" +
-          "    X   X X       X     X       X   X X X X X X   X X   X X X X X X X X X   X   X \n" +
-          "    X         X X   X       X     X   X   X       X     X X X     X       X X X X \n" +
-          "X     X X     X X X X X X             X X X   X               X   X     X     X X \n" +
-          "X   X X     X               X X X X X     X X     X X X X X X X X     X   X   X X \n" +
-          "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n" +
-          "X           X     X X X X     X     X         X         X   X       X X   X X X   \n" +
-          "X   X   X X   X X X   X         X X     X X X X     X X   X   X     X   X       X \n" +
-          "      X     X     X     X X     X   X X   X X   X         X X       X       X   X \n" +
-          "X       X           X   X   X     X X   X               X     X     X X X         \n");
+          """
+                  X X     X X     X     X     X   X X X         X   X         X   X X      \s
+            X       X X     X   X X   X X       X             X     X   X X   X           X\s
+            X   X X X     X   X   X X     X X X   X   X X               X X       X X     X\s
+          X X X             X   X         X         X     X     X   X     X X       X   X  \s
+          X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X\s
+              X X   X   X   X X X               X       X       X X     X X   X X       X  \s
+          X X     X       X       X X X X   X   X X       X   X X   X       X X   X X   X  \s
+            X       X   X     X X   X   X X   X X   X X X X X X   X X           X   X   X X\s
+          X X   X X   X   X X X X   X X X X X X X X   X   X       X X   X X X X   X X X    \s
+            X       X   X     X       X X     X X   X   X   X     X X   X X X   X     X X X\s
+            X   X X X   X X       X X X         X X           X   X   X   X X X   X X     X\s
+              X     X   X X     X X X X     X   X     X X X X   X X   X X   X X X     X   X\s
+          X X X   X             X         X X X X X   X   X X   X   X   X X   X   X   X   X\s
+                    X       X X X   X X     X   X           X   X X X X   X X              \s
+            X     X X   X   X       X X X X X X X X X X X X X X X   X   X X   X   X X X    \s
+              X X                 X   X                       X X   X       X         X X X\s
+                  X   X X   X X X X X X   X X X X X X X X X   X     X X           X X X X  \s
+                    X X X   X     X   X   X               X   X X     X X X   X X          \s
+          X X     X     X   X   X   X X   X   X X X X X   X   X X X X X X X       X   X X X\s
+          X X X X       X       X   X X   X   X       X   X   X     X X X     X X       X X\s
+          X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X\s
+              X     X       X         X   X   X       X   X   X     X   X X                \s
+                  X X     X X X X X   X   X   X X X X X   X   X X X     X X X X   X        \s
+          X     X   X   X         X   X   X               X   X X   X X   X X X     X   X  \s
+            X   X X X   X   X X   X X X   X X X X X X X X X   X X         X X     X X X X  \s
+              X X   X   X   X X X     X                       X X X   X X   X   X     X    \s
+              X X X X   X         X   X X X X X X X X X X X X X X   X       X X   X X   X X\s
+                      X   X   X X       X X X X X     X X X       X       X X X         X  \s
+          X       X         X   X X X X   X     X X     X X     X X           X   X       X\s
+          X     X       X X X X X     X   X X X X   X X X     X       X X X X   X   X X   X\s
+            X X X X X               X     X X X   X       X X   X X   X X X X     X X      \s
+          X             X         X   X X   X X     X     X     X   X   X X X X            \s
+              X   X X       X     X       X   X X X X X X   X X   X X X X X X X X X   X   X\s
+              X         X X   X       X     X   X   X       X     X X X     X       X X X X\s
+          X     X X     X X X X X X             X X X   X               X   X     X     X X\s
+          X   X X     X               X X X X X     X X     X X X X X X X X     X   X   X X\s
+          X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X\s
+          X           X     X X X X     X     X         X         X   X       X X   X X X  \s
+          X   X   X X   X X X   X         X X     X X X X     X X   X   X     X   X       X\s
+                X     X     X     X X     X   X X   X X   X         X X       X       X   X\s
+          X       X           X   X   X     X X   X               X     X     X X X        \s
+          """);
   }
 
   @Test

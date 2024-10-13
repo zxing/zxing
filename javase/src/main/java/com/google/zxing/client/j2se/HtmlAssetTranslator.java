@@ -35,7 +35,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -77,7 +76,7 @@ public final class HtmlAssetTranslator {
                          "(all|lang1[,lang2 ...]) (all|file1.html[ file2.html ...])");
       return;
     }
-    Path assetsDir = Paths.get(args[0]);
+    Path assetsDir = Path.of(args[0]);
     Collection<String> languagesToTranslate = parseLanguagesToTranslate(assetsDir, args[1]);
     List<String> restOfArgs = Arrays.asList(args).subList(2, args.length);
     Collection<String> fileNamesToTranslate = parseFileNamesToTranslate(assetsDir, restOfArgs);

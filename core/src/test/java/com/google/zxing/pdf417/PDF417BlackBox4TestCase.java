@@ -80,7 +80,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     Path testBase = getTestBase();
 
     for (Entry<String,List<Path>> testImageGroup : imageFiles.entrySet()) {
-      log.fine(String.format("Starting Image Group %s", testImageGroup.getKey()));
+      log.fine("Starting Image Group %s".formatted(testImageGroup.getKey()));
 
       String fileBaseName = testImageGroup.getKey();
       String expectedText;
@@ -133,23 +133,23 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     int numberOfTests = imageFiles.keySet().size();
     for (int x = 0; x < testResults.size(); x++) {
       TestResult testResult = testResults.get(x);
-      log.info(String.format("Rotation %d degrees:", (int) testResult.getRotation()));
-      log.info(String.format(" %d of %d images passed (%d required)", passedCounts[x], numberOfTests,
+      log.info("Rotation %d degrees:".formatted((int) testResult.getRotation()));
+      log.info(" %d of %d images passed (%d required)".formatted(passedCounts[x], numberOfTests,
           testResult.getMustPassCount()));
-      log.info(String.format(" %d of %d images passed with try harder (%d required)", tryHarderCounts[x],
+      log.info(" %d of %d images passed with try harder (%d required)".formatted(tryHarderCounts[x],
           numberOfTests, testResult.getTryHarderCount()));
       totalFound += passedCounts[x] + tryHarderCounts[x];
       totalMustPass += testResult.getMustPassCount() + testResult.getTryHarderCount();
     }
 
     int totalTests = numberOfTests * testCount * 2;
-    log.info(String.format("Decoded %d images out of %d (%d%%, %d required)", totalFound, totalTests, totalFound *
+    log.info("Decoded %d images out of %d (%d%%, %d required)".formatted(totalFound, totalTests, totalFound *
         100 /
         totalTests, totalMustPass));
     if (totalFound > totalMustPass) {
-      log.warning(String.format("+++ Test too lax by %d images", totalFound - totalMustPass));
+      log.warning("+++ Test too lax by %d images".formatted(totalFound - totalMustPass));
     } else if (totalFound < totalMustPass) {
-      log.warning(String.format("--- Test failed by %d images", totalMustPass - totalFound));
+      log.warning("--- Test failed by %d images".formatted(totalMustPass - totalFound));
     }
 
     // Then run through again and assert if any failed

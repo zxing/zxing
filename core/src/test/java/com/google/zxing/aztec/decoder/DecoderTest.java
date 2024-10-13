@@ -66,29 +66,31 @@ public final class DecoderTest extends Assert {
   @Test
   public void testAztecResult() throws FormatException {
     BitMatrix matrix = BitMatrix.parse(
-        "X X X X X     X X X       X X X     X X X     \n" +
-        "X X X     X X X     X X X X     X X X     X X \n" +
-        "  X   X X       X   X   X X X X     X     X X \n" +
-        "  X   X X     X X     X     X   X       X   X \n" +
-        "  X X   X X         X               X X     X \n" +
-        "  X X   X X X X X X X X X X X X X X X     X   \n" +
-        "  X X X X X                       X   X X X   \n" +
-        "  X   X   X   X X X X X X X X X   X X X   X X \n" +
-        "  X   X X X   X               X   X X       X \n" +
-        "  X X   X X   X   X X X X X   X   X X X X   X \n" +
-        "  X X   X X   X   X       X   X   X   X X X   \n" +
-        "  X   X   X   X   X   X   X   X   X   X   X   \n" +
-        "  X X X   X   X   X       X   X   X X   X X   \n" +
-        "  X X X X X   X   X X X X X   X   X X X   X X \n" +
-        "X X   X X X   X               X   X   X X   X \n" +
-        "  X       X   X X X X X X X X X   X   X     X \n" +
-        "  X X   X X                       X X   X X   \n" +
-        "  X X X   X X X X X X X X X X X X X X   X X   \n" +
-        "X     X     X     X X   X X               X X \n" +
-        "X   X X X X X   X X X X X     X   X   X     X \n" +
-        "X X X   X X X X           X X X       X     X \n" +
-        "X X     X X X     X X X X     X X X     X X   \n" +
-        "    X X X     X X X       X X X     X X X X   \n",
+        """
+        X X X X X     X X X       X X X     X X X    \s
+        X X X     X X X     X X X X     X X X     X X\s
+          X   X X       X   X   X X X X     X     X X\s
+          X   X X     X X     X     X   X       X   X\s
+          X X   X X         X               X X     X\s
+          X X   X X X X X X X X X X X X X X X     X  \s
+          X X X X X                       X   X X X  \s
+          X   X   X   X X X X X X X X X   X X X   X X\s
+          X   X X X   X               X   X X       X\s
+          X X   X X   X   X X X X X   X   X X X X   X\s
+          X X   X X   X   X       X   X   X   X X X  \s
+          X   X   X   X   X   X   X   X   X   X   X  \s
+          X X X   X   X   X       X   X   X X   X X  \s
+          X X X X X   X   X X X X X   X   X X X   X X\s
+        X X   X X X   X               X   X   X X   X\s
+          X       X   X X X X X X X X X   X   X     X\s
+          X X   X X                       X X   X X  \s
+          X X X   X X X X X X X X X X X X X X   X X  \s
+        X     X     X     X X   X X               X X\s
+        X   X X X X X   X X X X X     X   X   X     X\s
+        X X X   X X X X           X X X       X     X\s
+        X X     X X X     X X X X     X X X     X X  \s
+            X X X     X X X       X X X     X X X X  \s
+        """,
         "X ", "  ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 30, 2);
     DecoderResult result = new Decoder().decode(r);
@@ -104,25 +106,27 @@ public final class DecoderTest extends Assert {
   @Test
   public void testAztecResultECI() throws FormatException {
     BitMatrix matrix = BitMatrix.parse(
-        "      X     X X X   X           X     \n" +
-        "    X X   X X   X X X X X X X   X     \n" +
-        "    X X                         X   X \n" +
-        "  X X X X X X X X X X X X X X X X X   \n" +
-        "      X                       X       \n" +
-        "      X   X X X X X X X X X   X   X   \n" +
-        "  X X X   X               X   X X X   \n" +
-        "  X   X   X   X X X X X   X   X X X   \n" +
-        "      X   X   X       X   X   X X X   \n" +
-        "  X   X   X   X   X   X   X   X   X   \n" +
-        "X   X X   X   X       X   X   X     X \n" +
-        "  X X X   X   X X X X X   X   X X     \n" +
-        "      X   X               X   X X   X \n" +
-        "      X   X X X X X X X X X   X   X X \n" +
-        "  X   X                       X       \n" +
-        "X X   X X X X X X X X X X X X X X X   \n" +
-        "X X     X   X         X X X       X X \n" +
-        "  X   X   X   X X X X X     X X   X   \n" +
-        "X     X       X X   X X X       X     \n",
+        """
+              X     X X X   X           X    \s
+            X X   X X   X X X X X X X   X    \s
+            X X                         X   X\s
+          X X X X X X X X X X X X X X X X X  \s
+              X                       X      \s
+              X   X X X X X X X X X   X   X  \s
+          X X X   X               X   X X X  \s
+          X   X   X   X X X X X   X   X X X  \s
+              X   X   X       X   X   X X X  \s
+          X   X   X   X   X   X   X   X   X  \s
+        X   X X   X   X       X   X   X     X\s
+          X X X   X   X X X X X   X   X X    \s
+              X   X               X   X X   X\s
+              X   X X X X X X X X X   X   X X\s
+          X   X                       X      \s
+        X X   X X X X X X X X X X X X X X X  \s
+        X X     X   X         X X X       X X\s
+          X   X   X   X X X X X     X X   X  \s
+        X     X       X X   X X X       X    \s
+        """,
         "X ", "  ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 15, 1);
     DecoderResult result = new Decoder().decode(r);
@@ -131,34 +135,35 @@ public final class DecoderTest extends Assert {
 
   @Test(expected = FormatException.class)
   public void testDecodeTooManyErrors() throws FormatException {
-    BitMatrix matrix = BitMatrix.parse(""
-        + "X X . X . . . X X . . . X . . X X X . X . X X X X X . \n"
-        + "X X . . X X . . . . . X X . . . X X . . . X . X . . X \n"
-        + "X . . . X X . . X X X . X X . X X X X . X X . . X . . \n"
-        + ". . . . X . X X . . X X . X X . X . X X X X . X . . X \n"
-        + "X X X . . X X X X X . . . . . X X . . . X . X . X . X \n"
-        + "X X . . . . . . . . X . . . X . X X X . X . . X . . . \n"
-        + "X X . . X . . . . . X X . . . . . X . . . . X . . X X \n"
-        + ". . . X . X . X . . . . . X X X X X X . . . . . . X X \n"
-        + "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n"
-        + "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n"
-        + ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n"
-        + ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n"
-        + "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n"
-        + "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n"
-        + "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n"
-        + "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n"
-        + ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n"
-        + "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n"
-        + "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n"
-        + ". . . . X . X X X . . . . X X X X . . X X X X . . . . \n"
-        + ". . X . . X . X . . . X . X X . X X . X . . . X . X . \n"
-        + "X X . . X . . X X X X X X X . . X . X X X X X X X . . \n"
-        + "X . X X . . X X . . . . . X . . . . . . X X . X X X . \n"
-        + "X . . X X . . X X . X . X . . . . X . X . . X . . X . \n"
-        + "X . X . X . . X . X X X X X X X X . X X X X . . X X . \n"
-        + "X X X X . . . X . . X X X . X X . . X . . . . X X X . \n"
-        + "X X . X . X . . . X . X . . . . X X . X . . X X . . . \n",
+    BitMatrix matrix = BitMatrix.parse("""
+        X X . X . . . X X . . . X . . X X X . X . X X X X X .\s
+        X X . . X X . . . . . X X . . . X X . . . X . X . . X\s
+        X . . . X X . . X X X . X X . X X X X . X X . . X . .\s
+        . . . . X . X X . . X X . X X . X . X X X X . X . . X\s
+        X X X . . X X X X X . . . . . X X . . . X . X . X . X\s
+        X X . . . . . . . . X . . . X . X X X . X . . X . . .\s
+        X X . . X . . . . . X X . . . . . X . . . . X . . X X\s
+        . . . X . X . X . . . . . X X X X X X . . . . . . X X\s
+        X . . . X . X X X X X X . . X X X . X . X X X X X X .\s
+        X . . X X X . X X X X X X X X X X X X X . . . X . X X\s
+        . . . . X X . . . X . . . . . . . X X . . . X X . X .\s
+        . . . X X X . . X X . X X X X X . X . . X . . . . . .\s
+        X . . . . X . X . X . X . . . X . X . X X . X X . X X\s
+        X . X . . X . X . X . X . X . X . X . . . . . X . X X\s
+        X . X X X . . X . X . X . . . X . X . X X X . . . X X\s
+        X X X X X X X X . X . X X X X X . X . X . X . X X X .\s
+        . . . . . . . X . X . . . . . . . X X X X . . . X X X\s
+        X X . . X . . X . X X X X X X X X X X X X X . . X . X\s
+        X X X . X X X X . . X X X X . . X . . . . X . . X X X\s
+        . . . . X . X X X . . . . X X X X . . X X X X . . . .\s
+        . . X . . X . X . . . X . X X . X X . X . . . X . X .\s
+        X X . . X . . X X X X X X X . . X . X X X X X X X . .\s
+        X . X X . . X X . . . . . X . . . . . . X X . X X X .\s
+        X . . X X . . X X . X . X . . . . X . X . . X . . X .\s
+        X . X . X . . X . X X X X X X X X . X X X X . . X X .\s
+        X X X X . . . X . . X X X . X X . . X . . . . X X X .\s
+        X X . X . X . . . X . X . . . . X X . X . . X X . . .\s
+        """,
         "X ", ". ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
     new Decoder().decode(r);
@@ -166,34 +171,35 @@ public final class DecoderTest extends Assert {
 
   @Test(expected = FormatException.class)
   public void testDecodeTooManyErrors2() throws FormatException {
-    BitMatrix matrix = BitMatrix.parse(""
-        + ". X X . . X . X X . . . X . . X X X . . . X X . X X . \n"
-        + "X X . X X . . X . . . X X . . . X X . X X X . X . X X \n"
-        + ". . . . X . . . X X X . X X . X X X X . X X . . X . . \n"
-        + "X . X X . . X . . . X X . X X . X . X X . . . . . X . \n"
-        + "X X . X . . X . X X . . . . . X X . . . . . X . . . X \n"
-        + "X . . X . . . . . . X . . . X . X X X X X X X . . . X \n"
-        + "X . . X X . . X . . X X . . . . . X . . . . . X X X . \n"
-        + ". . X X X X . X . . . . . X X X X X X . . . . . . X X \n"
-        + "X . . . X . X X X X X X . . X X X . X . X X X X X X . \n"
-        + "X . . X X X . X X X X X X X X X X X X X . . . X . X X \n"
-        + ". . . . X X . . . X . . . . . . . X X . . . X X . X . \n"
-        + ". . . X X X . . X X . X X X X X . X . . X . . . . . . \n"
-        + "X . . . . X . X . X . X . . . X . X . X X . X X . X X \n"
-        + "X . X . . X . X . X . X . X . X . X . . . . . X . X X \n"
-        + "X . X X X . . X . X . X . . . X . X . X X X . . . X X \n"
-        + "X X X X X X X X . X . X X X X X . X . X . X . X X X . \n"
-        + ". . . . . . . X . X . . . . . . . X X X X . . . X X X \n"
-        + "X X . . X . . X . X X X X X X X X X X X X X . . X . X \n"
-        + "X X X . X X X X . . X X X X . . X . . . . X . . X X X \n"
-        + ". . X X X X X . X . . . . X X X X . . X X X . X . X . \n"
-        + ". . X X . X . X . . . X . X X . X X . . . . X X . . . \n"
-        + "X . . . X . X . X X X X X X . . X . X X X X X . X . . \n"
-        + ". X . . . X X X . . . . . X . . . . . X X X X X . X . \n"
-        + "X . . X . X X X X . X . X . . . . X . X X . X . . X . \n"
-        + "X . . . X X . X . X X X X X X X X . X X X X . . X X . \n"
-        + ". X X X X . . X . . X X X . X X . . X . . . . X X X . \n"
-        + "X X . . . X X . . X . X . . . . X X . X . . X . X . X \n",
+    BitMatrix matrix = BitMatrix.parse("""
+        . X X . . X . X X . . . X . . X X X . . . X X . X X .\s
+        X X . X X . . X . . . X X . . . X X . X X X . X . X X\s
+        . . . . X . . . X X X . X X . X X X X . X X . . X . .\s
+        X . X X . . X . . . X X . X X . X . X X . . . . . X .\s
+        X X . X . . X . X X . . . . . X X . . . . . X . . . X\s
+        X . . X . . . . . . X . . . X . X X X X X X X . . . X\s
+        X . . X X . . X . . X X . . . . . X . . . . . X X X .\s
+        . . X X X X . X . . . . . X X X X X X . . . . . . X X\s
+        X . . . X . X X X X X X . . X X X . X . X X X X X X .\s
+        X . . X X X . X X X X X X X X X X X X X . . . X . X X\s
+        . . . . X X . . . X . . . . . . . X X . . . X X . X .\s
+        . . . X X X . . X X . X X X X X . X . . X . . . . . .\s
+        X . . . . X . X . X . X . . . X . X . X X . X X . X X\s
+        X . X . . X . X . X . X . X . X . X . . . . . X . X X\s
+        X . X X X . . X . X . X . . . X . X . X X X . . . X X\s
+        X X X X X X X X . X . X X X X X . X . X . X . X X X .\s
+        . . . . . . . X . X . . . . . . . X X X X . . . X X X\s
+        X X . . X . . X . X X X X X X X X X X X X X . . X . X\s
+        X X X . X X X X . . X X X X . . X . . . . X . . X X X\s
+        . . X X X X X . X . . . . X X X X . . X X X . X . X .\s
+        . . X X . X . X . . . X . X X . X X . . . . X X . . .\s
+        X . . . X . X . X X X X X X . . X . X X X X X . X . .\s
+        . X . . . X X X . . . . . X . . . . . X X X X X . X .\s
+        X . . X . X X X X . X . X . . . . X . X X . X . . X .\s
+        X . . . X X . X . X X X X X X X X . X X X X . . X X .\s
+        . X X X X . . X . . X X X . X X . . X . . . . X X X .\s
+        X X . . . X X . . X . X . . . . X X . X . . X . X . X\s
+        """,
         "X ", ". ");
     AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, true, 16, 4);
     new Decoder().decode(r);
