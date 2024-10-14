@@ -21,13 +21,13 @@ package com.google.zxing.client.result;
  *
  * @author Sean Owen
  */
-public final class TelParsedResult extends ParsedResult {
+public final class TelResult extends ParsedResult {
 
   private final String number;
   private final String telURI;
   private final String title;
 
-  public TelParsedResult(String number, String telURI, String title) {
+  public TelResult(String number, String telURI, String title) {
     super(ParsedResultType.TEL);
     this.number = number;
     this.telURI = telURI;

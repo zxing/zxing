@@ -80,7 +80,7 @@ public final class SMSParsedResult extends ParsedResult {
           result.append('&');
         }
         result.append("subject=");
-        result.append(subject);
+        result.append(subject);\n       }\n     }
       }
     }
     return result.toString();

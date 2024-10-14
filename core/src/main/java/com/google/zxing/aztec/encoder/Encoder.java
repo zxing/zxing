@@ -134,8 +134,7 @@ public final class Encoder {
       compact = userSpecifiedLayers < 0;
       layers = Math.abs(userSpecifiedLayers);
       if (layers > (compact ? MAX_NB_BITS_COMPACT : MAX_NB_BITS)) {
-        throw new IllegalArgumentException(
-            String.format("Illegal value %s for layers", userSpecifiedLayers));
+        throw new IllegalArgumentException(String.format("Illegal value %s for layers", userSpecifiedLayers));
       }
       totalBitsInLayer = totalBitsInLayer(layers, compact);
       wordSize = WORD_SIZE[layers];

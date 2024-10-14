@@ -174,7 +174,7 @@ public final class ExpandedProductResultParser extends ResultParser {
 
   private static String findAIvalue(int i, String rawText) {
     char c = rawText.charAt(i);
-    // First character must be a open parenthesis.If not, ERROR
+    // First character must be a open parenthesis. If not, ERROR
     if (c != '(') {
       return null;
     }

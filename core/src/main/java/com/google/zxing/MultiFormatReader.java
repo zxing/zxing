@@ -159,10 +159,8 @@ public final class MultiFormatReader implements Reader {
 
   @Override
   public void reset() {
-    if (readers != null) {
-      for (Reader reader : readers) {
-        reader.reset();
-      }
+    for (Reader reader : readers) {
+      reader.reset();
     }
   }
 

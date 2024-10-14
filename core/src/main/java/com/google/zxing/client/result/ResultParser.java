@@ -39,7 +39,6 @@ import java.util.regex.Pattern;
  */
 public abstract class ResultParser {
 
-  private static final ResultParser[] PARSERS = {
       new BookmarkDoCoMoResultParser(),
       new AddressBookDoCoMoResultParser(),
       new EmailDoCoMoResultParser(),
@@ -61,9 +60,7 @@ public abstract class ResultParser {
       new ExpandedProductResultParser(),
       new VINResultParser(),
   };
-
-  private static final Pattern DIGITS = Pattern.compile("\\d+");
-  private static final Pattern AMPERSAND = Pattern.compile("&");
+  private static final Pattern EQUALS = Pattern.compile("=");
   private static final Pattern EQUALS = Pattern.compile("=");
   private static final String BYTE_ORDER_MARK = "\ufeff";
 
@@ -114,7 +111,7 @@ public abstract class ResultParser {
   }
 
   protected static String[] maybeWrap(String value) {
-    return value == null ? null : new String[] { value };
+    return value == null ? null : new String[] {value};
   }
 
   protected static String unescapeBackslash(String escaped) {
@@ -152,7 +149,7 @@ public abstract class ResultParser {
   }
 
   protected static boolean isStringOfDigits(CharSequence value, int length) {
-    return value != null && length > 0 && length == value.length() && DIGITS.matcher(value).matches();
+    return value != null && length > 0 && length == value.length() && Pattern.matches("\\\\d+", value);
   }
 
   protected static boolean isSubstringOfDigits(CharSequence value, int offset, int length) {
@@ -160,7 +157,7 @@ public abstract class ResultParser {
       return false;
     }
     int max = offset + length;
-    return value.length() >= max && DIGITS.matcher(value.subSequence(offset, max)).matches();
+    return value.length() >= max && Pattern.matches("\\\\d+", value.subSequence(offset, max));
   }
 
   static Map<String,String> parseNameValuePairs(String uri) {
@@ -169,7 +166,7 @@ public abstract class ResultParser {
       return null;
     }
     Map<String,String> result = new HashMap<>(3);
-    for (String keyValue : AMPERSAND.split(uri.substring(paramStart + 1))) {
+    for (String keyValue : uri.substring(paramStart + 1).split("&")) {
       appendKeyValue(keyValue, result);
     }
     return result;
@@ -254,8 +251,7 @@ public abstract class ResultParser {
   }
 
   static String matchSinglePrefixedField(String prefix, String rawText, char endChar, boolean trim) {
-    String[] matches = matchPrefixedField(prefix, rawText, endChar, trim);
-    return matches == null ? null : matches[0];
+    String[] matches = matchPrefixedField(prefix, rawText, endChar, trim);\n    return matches == null ? null : matches[0];
   }
 
 }

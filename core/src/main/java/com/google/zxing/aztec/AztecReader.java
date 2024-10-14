@@ -89,9 +89,7 @@ public final class AztecReader implements Reader {
       }
     }
 
-    if (hints != null) {
-      ResultPointCallback rpcb = (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
-      if (rpcb != null) {
+    if (hints != null && hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK) instanceof ResultPointCallback rpcb) {
         for (ResultPoint point : points) {
           rpcb.foundPossibleResultPoint(point);
         }

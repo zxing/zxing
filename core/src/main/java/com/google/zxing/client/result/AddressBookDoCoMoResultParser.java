@@ -42,7 +42,7 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
       return null;
     }
     String[] rawName = matchDoCoMoPrefixedField("N:", rawText);
-    if (rawName == null) {
+    if (rawName == null || rawName.length == 0) {
       return null;
     }
     String name = parseName(rawName[0]);
