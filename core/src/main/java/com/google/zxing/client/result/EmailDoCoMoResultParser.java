@@ -29,7 +29,9 @@ import java.util.regex.Pattern;
  */
 public final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
-  private static final Pattern EMAIL = Pattern.compile("^[^:]+@([0-9a-zA-Z\\\\-]+\\.)+[0-9a-zA-Z\\\\-]{2,}$");
+  private static final String EMAIL_LOCAL = "[^:]+";
+  private static final String EMAIL_DOMAIN = "([0-9a-zA-Z]+[0-9a-zA-Z\\-]+[0-9a-zA-Z]+\\.)+[a-zA-Z]{2,}";
+  private static final Pattern EMAIL = Pattern.compile("^" + EMAIL_LOCAL + "@" + EMAIL_DOMAIN + "$");
   
   @Override
   public EmailAddressParsedResult parse(Result result) {
