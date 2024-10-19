@@ -29,8 +29,10 @@ import java.util.regex.Pattern;
  */
 public final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
-  private static final Pattern ATEXT_ALPHANUMERIC = Pattern.compile("[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+");
-
+  private static final String EMAIL_LOCAL = "[^:]+";
+  private static final String EMAIL_DOMAIN = "([0-9a-zA-Z]+[0-9a-zA-Z\\-]+[0-9a-zA-Z]+\\.)+[a-zA-Z]{2,}";
+  private static final Pattern EMAIL = Pattern.compile("^" + EMAIL_LOCAL + "@" + EMAIL_DOMAIN + "$");
+  
   @Override
   public EmailAddressParsedResult parse(Result result) {
     String rawText = getMassagedText(result);
@@ -58,7 +60,7 @@ public final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
    * in a barcode, not "judge" it.
    */
   static boolean isBasicallyValidEmailAddress(String email) {
-    return email != null && ATEXT_ALPHANUMERIC.matcher(email).matches() && email.indexOf('@') >= 0;
+    return email != null && EMAIL.matcher(email).matches();
   }
 
 }

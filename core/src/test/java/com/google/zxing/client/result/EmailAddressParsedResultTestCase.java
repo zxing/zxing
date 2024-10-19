@@ -29,11 +29,36 @@ import org.junit.Test;
 public final class EmailAddressParsedResultTestCase extends Assert {
 
   @Test
+  public void testEmailAddresses() {
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress(null));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress(""));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123.365.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("abc.def.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd.c"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab,cd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab#cd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab!#cd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab_cd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@-abcd.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd-.com"));
+    assertFalse(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd.c-m"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@abcd.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("123@ab-cd.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("abc.456@ab-cd.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("abc.456@ab-cd.BB-EZ-12.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("建設省.456@ab-cd.com"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("abc.Z456@ab-Cd9Z.co"));
+    assertTrue(EmailDoCoMoResultParser.isBasicallyValidEmailAddress("建設省.aZ456@Ab-cd9Z.co"));
+  }
+
+  @Test
   public void testEmailAddress() {
     doTest("srowen@example.org", "srowen@example.org", null, null);
     doTest("mailto:srowen@example.org", "srowen@example.org", null, null);
   }
 
+  
   @Test
   public void testTos() {
     doTest("mailto:srowen@example.org,bob@example.org",
