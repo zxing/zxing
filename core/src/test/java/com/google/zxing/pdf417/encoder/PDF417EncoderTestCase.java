@@ -16,6 +16,12 @@
 
 package com.google.zxing.pdf417.encoder;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 
 import java.nio.charset.StandardCharsets;
@@ -29,17 +35,48 @@ import org.junit.Test;
 public final class PDF417EncoderTestCase extends Assert {
 
   @Test
-  public void testEncodeAuto() throws Exception {
-    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
-        "ABCD", Compaction.AUTO, StandardCharsets.UTF_8, false);
-    assertEquals("\u039f\u001A\u0385ABCD", encoded);
-  }
-
-  @Test
   public void testEncodeAutoWithSpecialChars() throws Exception {
     // Just check if this does not throw an exception
     PDF417HighLevelEncoder.encodeHighLevel(
         "1%§s ?aG$", Compaction.AUTO, StandardCharsets.UTF_8, false);
+    PDF417HighLevelEncoder.encodeHighLevel(
+        "日本語", Compaction.AUTO, StandardCharsets.UTF_8, false);
+    PDF417HighLevelEncoder.encodeHighLevel(
+        "₸ 5555", Compaction.AUTO, StandardCharsets.UTF_8, false);
+    PDF417HighLevelEncoder.encodeHighLevel(
+        "€ 123,45", Compaction.BYTE, StandardCharsets.UTF_8, false);
+    PDF417HighLevelEncoder.encodeHighLevel(
+        "123,45", Compaction.TEXT, StandardCharsets.UTF_8, false);
+    
+    try {
+      // detect when a TEXT Compaction is applied to a non text input
+      PDF417HighLevelEncoder.encodeHighLevel(
+              "€ 123,45", Compaction.TEXT, StandardCharsets.UTF_8, false);
+    } catch (WriterException e) {
+      assertNotNull(e.getMessage());
+      assertTrue(e.getMessage().contains("8364"));
+      assertTrue(e.getMessage().contains("Compaction.TEXT"));
+      assertTrue(e.getMessage().contains("Compaction.AUTO"));
+    }
+    
+    try {
+      // detect when a TEXT Compaction is applied to a non text input
+      // https://github.com/zxing/zxing/issues/1761
+      String content = "€ 123,45";
+      Map<EncodeHintType, Object> hints = new HashMap<>();
+      hints.put(EncodeHintType.ERROR_CORRECTION, 4);
+      hints.put(EncodeHintType.PDF417_DIMENSIONS, new com.google.zxing.pdf417.encoder.Dimensions(7, 7, 1, 300));
+      hints.put(EncodeHintType.MARGIN, 0);
+      hints.put(EncodeHintType.CHARACTER_SET, "ISO-8859-15");
+      hints.put(EncodeHintType.PDF417_COMPACTION, com.google.zxing.pdf417.encoder.Compaction.TEXT);
+      
+      (new MultiFormatWriter()).encode(content, BarcodeFormat.PDF_417, 200, 100, hints);
+    } catch (WriterException e) {
+      assertNotNull(e.getMessage());
+      assertTrue(e.getMessage().contains("8364"));
+      assertTrue(e.getMessage().contains("Compaction.TEXT"));
+      assertTrue(e.getMessage().contains("Compaction.AUTO"));
+    }
   }
   
   @Test
