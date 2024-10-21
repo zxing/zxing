@@ -174,6 +174,16 @@ final class PDF417HighLevelEncoder {
     if (msg.isEmpty()) {
       throw new WriterException("Empty message not allowed");
     }
+    
+    if (Compaction.TEXT == compaction) {
+      for (int i = 0; i < msg.length(); i++) {
+        if (msg.charAt(i) > 255) {
+          throw new WriterException("Non-encodable character detected: " + msg.charAt(i) + " (Unicode: " +
+            (int) msg.charAt(i) +
+            "). Consider specifying Compaction.AUTO instead of Compaction.TEXT");
+        }
+      }
+    }
 
     if (encoding == null && !autoECI) {
       for (int i = 0; i < msg.length(); i++) {
