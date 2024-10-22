@@ -25,6 +25,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
@@ -38,21 +39,27 @@ public final class PDF417EncoderTestCase extends Assert {
   @Test
   public void testEncodeAutoWithSpecialChars() throws Exception {
     // Just check if this does not throw an exception
-    PDF417HighLevelEncoder.encodeHighLevel(
-        "1%§s ?aG$", Compaction.AUTO, StandardCharsets.UTF_8, false);
-    PDF417HighLevelEncoder.encodeHighLevel(
-        "日本語", Compaction.AUTO, StandardCharsets.UTF_8, false);
-    PDF417HighLevelEncoder.encodeHighLevel(
-        "₸ 5555", Compaction.AUTO, StandardCharsets.UTF_8, false);
-    PDF417HighLevelEncoder.encodeHighLevel(
-        "€ 123,45", Compaction.BYTE, StandardCharsets.UTF_8, false);
-    PDF417HighLevelEncoder.encodeHighLevel(
-        "123,45", Compaction.TEXT, StandardCharsets.UTF_8, false);
+    checkEncodeAutoWithSpecialChars("1%§s ?aG$", Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars("日本語", Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars("₸ 5555", Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars("€ 123,45", Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars("€ 123,45", Compaction.BYTE);
+    checkEncodeAutoWithSpecialChars("123,45", Compaction.TEXT);
+
+    // Greek alphabet
+    Charset cp437 = Charset.forName("IBM437");
+    assertNotNull(cp437);
+    byte[] cp437Array = {(byte) 224,(byte) 225,(byte) 226,(byte) 227,(byte) 228}; //αßΓπΣ
+    String greek = new String(cp437Array, cp437);
+    assertEquals("αßΓπΣ", greek);
+    checkEncodeAutoWithSpecialChars(greek, Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars(greek, Compaction.BYTE);
+    PDF417HighLevelEncoder.encodeHighLevel(greek, Compaction.AUTO, cp437, true);
+    PDF417HighLevelEncoder.encodeHighLevel(greek, Compaction.AUTO, cp437, false);
     
     try {
       // detect when a TEXT Compaction is applied to a non text input
-      PDF417HighLevelEncoder.encodeHighLevel(
-              "€ 123,45", Compaction.TEXT, StandardCharsets.UTF_8, false);
+      checkEncodeAutoWithSpecialChars("€ 123,45", Compaction.TEXT);
     } catch (WriterException e) {
       assertNotNull(e.getMessage());
       assertTrue(e.getMessage().contains("8364"));
@@ -60,6 +67,17 @@ public final class PDF417EncoderTestCase extends Assert {
       assertTrue(e.getMessage().contains("Compaction.AUTO"));
     }
     
+    try {
+      // detect when a TEXT Compaction is applied to a non text input
+      String input = "Hello! " + (char) 128;
+      checkEncodeAutoWithSpecialChars(input, Compaction.TEXT);
+    } catch (WriterException e) {
+      assertNotNull(e.getMessage());
+      assertTrue(e.getMessage().contains("128"));
+      assertTrue(e.getMessage().contains("Compaction.TEXT"));
+      assertTrue(e.getMessage().contains("Compaction.AUTO"));
+    }
+
     try {
       // detect when a TEXT Compaction is applied to a non text input
       // https://github.com/zxing/zxing/issues/1761
@@ -78,6 +96,10 @@ public final class PDF417EncoderTestCase extends Assert {
       assertTrue(e.getMessage().contains("Compaction.TEXT"));
       assertTrue(e.getMessage().contains("Compaction.AUTO"));
     }
+  }
+  
+  public void checkEncodeAutoWithSpecialChars(String input, Compaction compaction) throws Exception {
+    PDF417HighLevelEncoder.encodeHighLevel(input, compaction, StandardCharsets.UTF_8, false);
   }
 
   @Test
