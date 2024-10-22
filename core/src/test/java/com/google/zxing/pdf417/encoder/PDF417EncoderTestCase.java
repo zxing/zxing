@@ -88,7 +88,7 @@ public final class PDF417EncoderTestCase extends Assert {
     // no exception
     PDF417HighLevelEncoder.checkCharset(input,255,errorMessage);
     PDF417HighLevelEncoder.checkCharset(input,1255,errorMessage);
-    PDF417HighLevelEncoder.checkCharset(input,112,errorMessage);
+    PDF417HighLevelEncoder.checkCharset(input,111,errorMessage);
     
     try {
       // should throw an exception for character 'o' because it exceeds upper limit 110

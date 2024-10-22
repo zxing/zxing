@@ -288,7 +288,7 @@ final class PDF417HighLevelEncoder {
    * @param input          the input
    * @param max            the upper limit for charset
    * @param errorMessage   the message to explain the error
-   * @throws WriterException exception highlighting the offending charcater and a suggestion to avoid the error
+   * @throws WriterException exception highlighting the offending character and a suggestion to avoid the error
    */
   protected static void checkCharset(String input,int max, String errorMessage) throws WriterException {
     for (int i = 0; i < input.length(); i++) {
