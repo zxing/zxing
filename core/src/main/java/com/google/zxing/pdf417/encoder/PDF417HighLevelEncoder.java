@@ -174,16 +174,15 @@ final class PDF417HighLevelEncoder {
     if (msg.isEmpty()) {
       throw new WriterException("Empty message not allowed");
     }
+    
+    if (Compaction.TEXT == compaction) {
+      checkCharset(msg, 127, "Consider specifying Compaction.AUTO instead of Compaction.TEXT");
+    }
 
     if (encoding == null && !autoECI) {
-      for (int i = 0; i < msg.length(); i++) {
-        if (msg.charAt(i) > 255) {
-          throw new WriterException("Non-encodable character detected: " + msg.charAt(i) + " (Unicode: " +
-              (int) msg.charAt(i) +
-              "). Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET.");
-        }
-      }
+      checkCharset(msg, 255, "Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET");
     }
+
     //the codewords 0..928 are encoded as Unicode characters
     StringBuilder sb = new StringBuilder(msg.length());
 
@@ -282,6 +281,22 @@ final class PDF417HighLevelEncoder {
     }
 
     return sb.toString();
+  }
+  
+  /**
+   * Check if input is only made of characters between 0 and the upper limit 
+   * @param input          the input
+   * @param max            the upper limit for charset
+   * @param errorMessage   the message to explain the error
+   * @throws WriterException exception highlighting the offending character and a suggestion to avoid the error
+   */
+  protected static void checkCharset(String input, int max, String errorMessage) throws WriterException {
+    for (int i = 0; i < input.length(); i++) {
+      if (input.charAt(i) > max) {
+        throw new WriterException("Non-encodable character detected: " + input.charAt(i) + " (Unicode: " +
+                (int) input.charAt(i) + ") at position #" + i + " - " + errorMessage);
+      }
+    } 
   }
 
   /**

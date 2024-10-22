@@ -16,8 +16,16 @@
 
 package com.google.zxing.pdf417.encoder;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
@@ -28,18 +36,98 @@ import org.junit.Test;
  */
 public final class PDF417EncoderTestCase extends Assert {
 
+  private static final String PDF417PFX = "\u039f\u001A\u0385";
+
   @Test
   public void testEncodeAuto() throws Exception {
-    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
-        "ABCD", Compaction.AUTO, StandardCharsets.UTF_8, false);
-    assertEquals("\u039f\u001A\u0385ABCD", encoded);
+    String input = "ABCD";
+    assertEquals(PDF417PFX + input, checkEncodeAutoWithSpecialChars(input, Compaction.AUTO));
   }
-
+  
   @Test
   public void testEncodeAutoWithSpecialChars() throws Exception {
     // Just check if this does not throw an exception
-    PDF417HighLevelEncoder.encodeHighLevel(
-        "1%§s ?aG$", Compaction.AUTO, StandardCharsets.UTF_8, false);
+    checkEncodeAutoWithSpecialChars("1%§s ?aG$", Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars("日本語", Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars("₸ 5555", Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars("€ 123,45", Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars("€ 123,45", Compaction.BYTE);
+    checkEncodeAutoWithSpecialChars("123,45", Compaction.TEXT);
+
+    // Greek alphabet
+    Charset cp437 = Charset.forName("IBM437");
+    assertNotNull(cp437);
+    byte[] cp437Array = {(byte) 224,(byte) 225,(byte) 226,(byte) 227,(byte) 228}; //αßΓπΣ
+    String greek = new String(cp437Array, cp437);
+    assertEquals("αßΓπΣ", greek);
+    checkEncodeAutoWithSpecialChars(greek, Compaction.AUTO);
+    checkEncodeAutoWithSpecialChars(greek, Compaction.BYTE);
+    PDF417HighLevelEncoder.encodeHighLevel(greek, Compaction.AUTO, cp437, true);
+    PDF417HighLevelEncoder.encodeHighLevel(greek, Compaction.AUTO, cp437, false);
+    
+    try {
+      // detect when a TEXT Compaction is applied to a non text input
+      checkEncodeAutoWithSpecialChars("€ 123,45", Compaction.TEXT);
+    } catch (WriterException e) {
+      assertNotNull(e.getMessage());
+      assertTrue(e.getMessage().contains("8364"));
+      assertTrue(e.getMessage().contains("Compaction.TEXT"));
+      assertTrue(e.getMessage().contains("Compaction.AUTO"));
+    }
+    
+    try {
+      // detect when a TEXT Compaction is applied to a non text input
+      String input = "Hello! " + (char) 128;
+      checkEncodeAutoWithSpecialChars(input, Compaction.TEXT);
+    } catch (WriterException e) {
+      assertNotNull(e.getMessage());
+      assertTrue(e.getMessage().contains("128"));
+      assertTrue(e.getMessage().contains("Compaction.TEXT"));
+      assertTrue(e.getMessage().contains("Compaction.AUTO"));
+    }
+
+    try {
+      // detect when a TEXT Compaction is applied to a non text input
+      // https://github.com/zxing/zxing/issues/1761
+      String content = "€ 123,45";
+      Map<EncodeHintType, Object> hints = new HashMap<>();
+      hints.put(EncodeHintType.ERROR_CORRECTION, 4);
+      hints.put(EncodeHintType.PDF417_DIMENSIONS, new Dimensions(7, 7, 1, 300));
+      hints.put(EncodeHintType.MARGIN, 0);
+      hints.put(EncodeHintType.CHARACTER_SET, "ISO-8859-15");
+      hints.put(EncodeHintType.PDF417_COMPACTION, Compaction.TEXT);
+      
+      (new MultiFormatWriter()).encode(content, BarcodeFormat.PDF_417, 200, 100, hints);
+    } catch (WriterException e) {
+      assertNotNull(e.getMessage());
+      assertTrue(e.getMessage().contains("8364"));
+      assertTrue(e.getMessage().contains("Compaction.TEXT"));
+      assertTrue(e.getMessage().contains("Compaction.AUTO"));
+    }
+  }
+  
+  public String checkEncodeAutoWithSpecialChars(String input, Compaction compaction) throws Exception {
+    return PDF417HighLevelEncoder.encodeHighLevel(input, compaction, StandardCharsets.UTF_8, false);
+  }
+
+  @Test
+  public void testCheckCharset() throws Exception {
+    String input = "Hello!";
+    String errorMessage = UUID.randomUUID().toString();
+    
+    // no exception
+    PDF417HighLevelEncoder.checkCharset(input,255,errorMessage);
+    PDF417HighLevelEncoder.checkCharset(input,1255,errorMessage);
+    PDF417HighLevelEncoder.checkCharset(input,111,errorMessage);
+    
+    try {
+      // should throw an exception for character 'o' because it exceeds upper limit 110
+      PDF417HighLevelEncoder.checkCharset(input,110,errorMessage);
+    } catch (WriterException e) {
+      assertNotNull(e.getMessage());
+      assertTrue(e.getMessage().contains("111"));
+      assertTrue(e.getMessage().contains(errorMessage));
+    }
   }
   
   @Test
