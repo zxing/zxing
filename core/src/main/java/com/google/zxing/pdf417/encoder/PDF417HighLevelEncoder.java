@@ -176,11 +176,11 @@ final class PDF417HighLevelEncoder {
     }
     
     if (Compaction.TEXT == compaction) {
-      checkCharset(msg,127,"Consider specifying Compaction.AUTO instead of Compaction.TEXT");
+      checkCharset(msg, 127, "Consider specifying Compaction.AUTO instead of Compaction.TEXT");
     }
 
     if (encoding == null && !autoECI) {
-      checkCharset(msg,255,"Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET.");
+      checkCharset(msg, 255, "Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET");
     }
 
     //the codewords 0..928 are encoded as Unicode characters
@@ -290,7 +290,7 @@ final class PDF417HighLevelEncoder {
    * @param errorMessage   the message to explain the error
    * @throws WriterException exception highlighting the offending character and a suggestion to avoid the error
    */
-  protected static void checkCharset(String input,int max, String errorMessage) throws WriterException {
+  protected static void checkCharset(String input, int max, String errorMessage) throws WriterException {
     for (int i = 0; i < input.length(); i++) {
       if (input.charAt(i) > max) {
         throw new WriterException("Non-encodable character detected: " + input.charAt(i) + " (Unicode: " +

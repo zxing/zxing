@@ -35,7 +35,9 @@ import org.junit.Test;
  * Tests {@link PDF417HighLevelEncoder}.
  */
 public final class PDF417EncoderTestCase extends Assert {
+
   private static final String PDF417PFX = "\u039f\u001A\u0385";
+
   @Test
   public void testEncodeAuto() throws Exception {
     String input = "ABCD";
