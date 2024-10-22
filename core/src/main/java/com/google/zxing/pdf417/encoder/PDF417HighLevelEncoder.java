@@ -176,7 +176,7 @@ final class PDF417HighLevelEncoder {
     }
     
     if (Compaction.TEXT == compaction) {
-      checkCharset(msg,255,"Consider specifying Compaction.AUTO instead of Compaction.TEXT");
+      checkCharset(msg,127,"Consider specifying Compaction.AUTO instead of Compaction.TEXT");
     }
 
     if (encoding == null && !autoECI) {
@@ -294,7 +294,7 @@ final class PDF417HighLevelEncoder {
     for (int i = 0; i < input.length(); i++) {
       if (input.charAt(i) > max) {
         throw new WriterException("Non-encodable character detected: " + input.charAt(i) + " (Unicode: " +
-                (int) input.charAt(i) + "). " + errorMessage);
+                (int) input.charAt(i) + ") at position #" + i + " - " + errorMessage);
       }
     } 
   }
