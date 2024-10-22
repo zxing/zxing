@@ -90,10 +90,10 @@ public final class PDF417EncoderTestCase extends Assert {
       String content = "€ 123,45";
       Map<EncodeHintType, Object> hints = new HashMap<>();
       hints.put(EncodeHintType.ERROR_CORRECTION, 4);
-      hints.put(EncodeHintType.PDF417_DIMENSIONS, new com.google.zxing.pdf417.encoder.Dimensions(7, 7, 1, 300));
+      hints.put(EncodeHintType.PDF417_DIMENSIONS, new Dimensions(7, 7, 1, 300));
       hints.put(EncodeHintType.MARGIN, 0);
       hints.put(EncodeHintType.CHARACTER_SET, "ISO-8859-15");
-      hints.put(EncodeHintType.PDF417_COMPACTION, com.google.zxing.pdf417.encoder.Compaction.TEXT);
+      hints.put(EncodeHintType.PDF417_COMPACTION, Compaction.TEXT);
       
       (new MultiFormatWriter()).encode(content, BarcodeFormat.PDF_417, 200, 100, hints);
     } catch (WriterException e) {
