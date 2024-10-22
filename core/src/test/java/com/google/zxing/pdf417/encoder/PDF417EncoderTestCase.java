@@ -18,6 +18,7 @@ package com.google.zxing.pdf417.encoder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -76,6 +77,26 @@ public final class PDF417EncoderTestCase extends Assert {
       assertTrue(e.getMessage().contains("8364"));
       assertTrue(e.getMessage().contains("Compaction.TEXT"));
       assertTrue(e.getMessage().contains("Compaction.AUTO"));
+    }
+  }
+
+  @Test
+  public void testCheckCharset() throws Exception {
+    String input = "Hello!";
+    String errorMessage = UUID.randomUUID().toString();
+    
+    // no exception
+    PDF417HighLevelEncoder.checkCharset(input,255,errorMessage);
+    PDF417HighLevelEncoder.checkCharset(input,1255,errorMessage);
+    PDF417HighLevelEncoder.checkCharset(input,112,errorMessage);
+    
+    try {
+      // should throw an exception for character 'o' because it exceeds upper limit 110
+      PDF417HighLevelEncoder.checkCharset(input,110,errorMessage);
+    } catch (WriterException e) {
+      assertNotNull(e.getMessage());
+      assertTrue(e.getMessage().contains("111"));
+      assertTrue(e.getMessage().contains(errorMessage));
     }
   }
   
