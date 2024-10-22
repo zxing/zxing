@@ -38,9 +38,8 @@ public final class PDF417EncoderTestCase extends Assert {
   private static final String PDF417PFX = "\u039f\u001A\u0385";
   @Test
   public void testEncodeAuto() throws Exception {
-    String encoded = PDF417HighLevelEncoder.encodeHighLevel(
-        "ABCD", Compaction.AUTO, StandardCharsets.UTF_8, false);
-    assertEquals(PDF417PFX + "ABCD", encoded);
+    String input = "ABCD";
+    assertEquals(PDF417PFX + input, checkEncodeAutoWithSpecialChars(input, Compaction.AUTO));
   }
   
   @Test
