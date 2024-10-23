@@ -23,7 +23,10 @@ import java.util.UUID;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.pdf417.PDF417Writer;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -160,5 +163,44 @@ public final class PDF417EncoderTestCase extends Assert {
   @Test(expected = WriterException.class)
   public void testEncodeEmptyString() throws Exception {
     PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false);
+  }
+
+  @Test
+  public void testDimensions() throws Exception {
+    // test https://github.com/zxing/zxing/issues/1831
+    String input = "0000000001000000022200000003330444400888888881010101010";
+    testDimensions(input, new Dimensions(1,  30,  7, 10));
+    testDimensions(input, new Dimensions(1,  40,  1,  7));
+    testDimensions(input, new Dimensions(10, 30,  1,  5));
+    testDimensions(input, new Dimensions(1,   3,  1, 15));
+    testDimensions(input, new Dimensions(5,  30,  7,  7));
+    testDimensions(input, new Dimensions(12, 12,  1, 17));
+    testDimensions(input, new Dimensions(1,  30,  7,  7));
+  }
+
+  public static void testDimensions(String input, Dimensions dimensions) throws Exception {
+    int sourceCodeWords = 20;
+    int errorCorrectionCodeWords = 8;
+    
+    int[] calculated = PDF417.determineDimensions(dimensions.getMinCols(), dimensions.getMaxCols(), 
+          dimensions.getMinRows(), dimensions.getMaxRows(),
+          sourceCodeWords, errorCorrectionCodeWords);
+    
+    assertNotNull(calculated);
+    assertEquals(2,calculated.length);
+    assertTrue(dimensions.getMinCols() <= calculated[0]);
+    assertTrue(dimensions.getMaxCols() >= calculated[0]);
+    assertTrue(dimensions.getMinRows() <= calculated[1]);
+    assertTrue(dimensions.getMaxRows() >= calculated[1]);
+    assertNotNull(generatePDF417BitMatrix(input, 371, null, dimensions));
+  }
+
+  public static BitMatrix generatePDF417BitMatrix(final String barcodeText, final int width, 
+        final Integer heightRequested, final Dimensions dimensions) throws WriterException {
+    final Writer barcodeWriter = new PDF417Writer();
+    final int height = heightRequested == null ? width / 4 : heightRequested;
+    final Map<EncodeHintType, ?> hints = Map.of(EncodeHintType.MARGIN, 0,
+        EncodeHintType.PDF417_DIMENSIONS, dimensions);
+    return barcodeWriter.encode(barcodeText, BarcodeFormat.PDF_417, width, height, hints);
   }
 }
