@@ -199,8 +199,9 @@ public final class PDF417EncoderTestCase extends Assert {
         final Integer heightRequested, final Dimensions dimensions) throws WriterException {
     final Writer barcodeWriter = new PDF417Writer();
     final int height = heightRequested == null ? width / 4 : heightRequested;
-    final Map<EncodeHintType, ?> hints = Map.of(EncodeHintType.MARGIN, 0,
-        EncodeHintType.PDF417_DIMENSIONS, dimensions);
+    Map<EncodeHintType, Object> hints = new HashMap<>();
+    hints.put(EncodeHintType.MARGIN, 0);
+    hints.put(EncodeHintType.PDF417_DIMENSIONS, dimensions);
     return barcodeWriter.encode(barcodeText, BarcodeFormat.PDF_417, width, height, hints);
   }
 }
