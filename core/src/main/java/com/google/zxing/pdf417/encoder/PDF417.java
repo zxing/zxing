@@ -693,12 +693,12 @@ public final class PDF417 {
    * Determine optimal nr of columns and rows for the specified number of
    * codewords.
    *
-   * @param sourceCodeWords number of code words
-   * @param errorCorrectionCodeWords number of error correction code words
    * @param minCols minimum number of columns
    * @param maxCols maximum number of columns
    * @param minRows minimum number of rows
    * @param maxRows maximum number of rows
+   * @param sourceCodeWords number of code words
+   * @param errorCorrectionCodeWords number of error correction code words
    * @return dimension object containing cols as width and rows as height
    * @throws WriterException when dimensions can't be determined
    */

@@ -181,21 +181,18 @@ public final class PDF417EncoderTestCase extends Assert {
   public static void testDimensions(String input, Dimensions dimensions) throws Exception {
     int sourceCodeWords = 20;
     int errorCorrectionCodeWords = 8;
-    try {
-      int[] calculated = PDF417.determineDimensions(dimensions.getMinCols(), dimensions.getMaxCols(), 
+    
+    int[] calculated = PDF417.determineDimensions(dimensions.getMinCols(), dimensions.getMaxCols(), 
           dimensions.getMinRows(), dimensions.getMaxRows(),
           sourceCodeWords, errorCorrectionCodeWords);
-      assertNotNull(calculated);
-      assertEquals(2,calculated.length);
-      assertTrue(dimensions.getMinCols() <= calculated[0]);
-      assertTrue(dimensions.getMaxCols() >= calculated[0]);
-      assertTrue(dimensions.getMinRows() <= calculated[1]);
-      assertTrue(dimensions.getMaxRows() >= calculated[1]);
-      assertNotNull(generatePDF417BitMatrix(input, 371, null, dimensions));
-    } catch (Exception e) {
-      e.printStackTrace(); 
-      throw e;
-    }
+    
+    assertNotNull(calculated);
+    assertEquals(2,calculated.length);
+    assertTrue(dimensions.getMinCols() <= calculated[0]);
+    assertTrue(dimensions.getMaxCols() >= calculated[0]);
+    assertTrue(dimensions.getMinRows() <= calculated[1]);
+    assertTrue(dimensions.getMaxRows() >= calculated[1]);
+    assertNotNull(generatePDF417BitMatrix(input, 371, null, dimensions));
   }
 
   public static BitMatrix generatePDF417BitMatrix(final String barcodeText, final int width, 
