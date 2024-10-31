@@ -44,7 +44,7 @@ public final class ECIStringBuilder {
    * @param value character whose lowest byte is to be appended
    */
   public void append(char value) {
-    currentBytes.append((char) (value & 0xff));
+    currentBytes.append(value);
   }
 
   /**
