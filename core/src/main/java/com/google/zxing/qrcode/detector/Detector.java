@@ -211,7 +211,7 @@ public class Detector {
         dimension--;
         break;
       case 3:
-        throw NotFoundException.getNotFoundInstance();
+        dimension = dimension - 2;
     }
     return dimension;
   }
