@@ -80,10 +80,10 @@ public class Detector {
     FinderPatternFinder finder = new FinderPatternFinder(image, resultPointCallback);
     FinderPatternInfo info = finder.find(hints);
 
-    return processFinderPatternInfo(info);
+    return processFinderPatternInfo(info, hints);
   }
 
-  protected final DetectorResult processFinderPatternInfo(FinderPatternInfo info)
+  protected final DetectorResult processFinderPatternInfo(FinderPatternInfo info, Map<DecodeHintType,?> hints)
       throws NotFoundException, FormatException {
 
     FinderPattern topLeft = info.getTopLeft();
@@ -94,7 +94,7 @@ public class Detector {
     if (moduleSize < 1.0f) {
       throw NotFoundException.getNotFoundInstance();
     }
-    int dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
+    int dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize, hints);
     Version provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
     int modulesBetweenFPCenters = provisionalVersion.getDimensionForVersion() - 7;
 
@@ -198,7 +198,8 @@ public class Detector {
   private static int computeDimension(ResultPoint topLeft,
                                       ResultPoint topRight,
                                       ResultPoint bottomLeft,
-                                      float moduleSize) throws NotFoundException {
+                                      float moduleSize,
+                                      Map<DecodeHintType,?> hints) throws NotFoundException {
     int tltrCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
     int tlblCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
     int dimension = ((tltrCentersDimension + tlblCentersDimension) / 2) + 7;
@@ -211,7 +212,12 @@ public class Detector {
         dimension--;
         break;
       case 3:
-        throw NotFoundException.getNotFoundInstance();
+        if (hints != null && hints.get(DecodeHintType.CORRECT_DIMENSION_TO_LOWER_VALUE)!=null)
+          dimension = dimension - 2;
+        else if (hints != null && hints.get(DecodeHintType.CORRECT_DIMENSION_TO_UPPER_VALUE)!=null)
+          dimension = dimension + 2;
+        else
+          throw NotFoundException.getNotFoundInstance();
     }
     return dimension;
   }

@@ -58,7 +58,7 @@ public final class MultiDetector extends Detector {
     List<DetectorResult> result = new ArrayList<>();
     for (FinderPatternInfo info : infos) {
       try {
-        result.add(processFinderPatternInfo(info));
+        result.add(processFinderPatternInfo(info, hints));
       } catch (ReaderException e) {
         // ignore
       }
