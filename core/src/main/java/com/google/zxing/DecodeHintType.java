@@ -104,19 +104,6 @@ public enum DecodeHintType {
    */
   ALSO_INVERTED(Void.class),
 
-
-  /**
-   * If true, it will round down wrong dimension to next possible value.
-   * Doesn't matter what it maps to; use {@link Boolean#TRUE}.
-   */
-  CORRECT_DIMENSION_TO_LOWER_VALUE(Void.class),
-
-  /**
-   * If true, it will round up wrong dimension to next possible value.
-   * Doesn't matter what it maps to; use {@link Boolean#TRUE}.
-   */
-  CORRECT_DIMENSION_TO_UPPER_VALUE(Void.class),
-
   // End of enumeration values.
   ;
 
