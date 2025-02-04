@@ -211,7 +211,8 @@ public class Detector {
         dimension--;
         break;
       case 3:
-        dimension = dimension - 2;
+        dimension -= 2;
+        break;
     }
     return dimension;
   }
