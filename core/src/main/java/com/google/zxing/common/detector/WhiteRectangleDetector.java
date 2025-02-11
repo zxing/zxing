@@ -83,7 +83,31 @@ public final class WhiteRectangleDetector {
    * @throws NotFoundException if no Data Matrix Code can be found
    */
   public ResultPoint[] detect() throws NotFoundException {
-
+    if( this.tryHarder ) {
+      try {
+        return this.internalDetect();
+      }
+      catch( NotFoundException e ) {
+        for( int x=0; x < image.getWidth(); x += 50 ) {
+          for( int y=0; y < image.getHeight(); y += 50 ) {  
+            try {
+              return new WhiteRectangleDetector( image, INIT_SIZE, x, y ).internalDetect();
+            }
+            catch( NotFoundException nfe ) {
+              //Ignore
+            }
+          }
+        }
+        //also try harder did not found anything
+        throw e;
+      }
+    }
+    else {
+      return this.internalDetect();
+    }
+  }
+  
+  protected ResultPoint[] internalDetect() throws NotFoundException {
     int left = leftInit;
     int right = rightInit;
     int up = upInit;
