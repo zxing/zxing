@@ -164,7 +164,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.10.0</version>
+          <version>3.11.2</version>
           <configuration>
             <source>${java.version}</source>
             <quiet>true</quiet>
