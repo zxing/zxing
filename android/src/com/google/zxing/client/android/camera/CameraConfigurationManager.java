@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2010 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.google.zxing.client.android.camera;
 
 import android.content.Context;
@@ -30,11 +14,7 @@ import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.camera.open.CameraFacing;
 import com.google.zxing.client.android.camera.open.OpenCamera;
 
-/**
- * A class which deals with reading, parsing, and setting the camera parameters which are used to
- * configure the camera hardware.
- */
-@SuppressWarnings("deprecation") // camera APIs
+@SuppressWarnings("deprecation") // Se suprimen advertencias por uso de APIs antiguas
 final class CameraConfigurationManager {
 
   private static final String TAG = "CameraConfiguration";
@@ -51,9 +31,6 @@ final class CameraConfigurationManager {
     this.context = context;
   }
 
-  /**
-   * Reads, one time, values from the camera that are needed by the app.
-   */
   void initFromCameraParameters(OpenCamera camera) {
     Camera.Parameters parameters = camera.getCamera().getParameters();
     WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -61,6 +38,7 @@ final class CameraConfigurationManager {
 
     int displayRotation = display.getRotation();
     int cwRotationFromNaturalToDisplay;
+
     switch (displayRotation) {
       case Surface.ROTATION_0:
         cwRotationFromNaturalToDisplay = 0;
@@ -75,69 +53,69 @@ final class CameraConfigurationManager {
         cwRotationFromNaturalToDisplay = 270;
         break;
       default:
-        // Have seen this return incorrect values like -90
+        // Corrección para rotaciones no estándar
         if (displayRotation % 90 == 0) {
           cwRotationFromNaturalToDisplay = (360 + displayRotation) % 360;
         } else {
-          throw new IllegalArgumentException("Bad rotation: " + displayRotation);
+          throw new IllegalArgumentException("Rotación inválida: " + displayRotation);
         }
     }
-    Log.i(TAG, "Display at: " + cwRotationFromNaturalToDisplay);
+    Log.i(TAG, "Display en rotación: " + cwRotationFromNaturalToDisplay);
 
     int cwRotationFromNaturalToCamera = camera.getOrientation();
-    Log.i(TAG, "Camera at: " + cwRotationFromNaturalToCamera);
+    Log.i(TAG, "Orientación de la cámara: " + cwRotationFromNaturalToCamera);
 
-    // Still not 100% sure about this. But acts like we need to flip this:
     if (camera.getFacing() == CameraFacing.FRONT) {
       cwRotationFromNaturalToCamera = (360 - cwRotationFromNaturalToCamera) % 360;
-      Log.i(TAG, "Front camera overriden to: " + cwRotationFromNaturalToCamera);
+      Log.i(TAG, "Cámara frontal ajustada a: " + cwRotationFromNaturalToCamera);
     }
 
     cwRotationFromDisplayToCamera =
         (360 + cwRotationFromNaturalToCamera - cwRotationFromNaturalToDisplay) % 360;
-    Log.i(TAG, "Final display orientation: " + cwRotationFromDisplayToCamera);
+    Log.i(TAG, "Orientación final: " + cwRotationFromDisplayToCamera);
+
     if (camera.getFacing() == CameraFacing.FRONT) {
-      Log.i(TAG, "Compensating rotation for front camera");
+      Log.i(TAG, "Compensando rotación para cámara frontal");
       cwNeededRotation = (360 - cwRotationFromDisplayToCamera) % 360;
     } else {
       cwNeededRotation = cwRotationFromDisplayToCamera;
     }
-    Log.i(TAG, "Clockwise rotation from display to camera: " + cwNeededRotation);
+    Log.i(TAG, "Rotación necesaria: " + cwNeededRotation);
 
     Point theScreenResolution = new Point();
     display.getSize(theScreenResolution);
     screenResolution = theScreenResolution;
-    Log.i(TAG, "Screen resolution in current orientation: " + screenResolution);
+    Log.i(TAG, "Resolución de pantalla: " + screenResolution);
+
     cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
-    Log.i(TAG, "Camera resolution: " + cameraResolution);
+    Log.i(TAG, "Resolución de cámara: " + cameraResolution);
+
     bestPreviewSize = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
-    Log.i(TAG, "Best available preview size: " + bestPreviewSize);
+    Log.i(TAG, "Mejor tamaño de previsualización: " + bestPreviewSize);
 
     boolean isScreenPortrait = screenResolution.x < screenResolution.y;
-    boolean isPreviewSizePortrait = bestPreviewSize.x < bestPreviewSize.y;
+    boolean isPreviewPortrait = bestPreviewSize.x < bestPreviewSize.y;
 
-    if (isScreenPortrait == isPreviewSizePortrait) {
-      previewSizeOnScreen = bestPreviewSize;
-    } else {
-      previewSizeOnScreen = new Point(bestPreviewSize.y, bestPreviewSize.x);
-    }
-    Log.i(TAG, "Preview size on screen: " + previewSizeOnScreen);
+    previewSizeOnScreen = isScreenPortrait == isPreviewPortrait
+        ? bestPreviewSize
+        : new Point(bestPreviewSize.y, bestPreviewSize.x);
+
+    Log.i(TAG, "Tamaño de previsualización en pantalla: " + previewSizeOnScreen);
   }
 
   void setDesiredCameraParameters(OpenCamera camera, boolean safeMode) {
-
     Camera theCamera = camera.getCamera();
     Camera.Parameters parameters = theCamera.getParameters();
 
     if (parameters == null) {
-      Log.w(TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
+      Log.w(TAG, "No hay parámetros disponibles de cámara.");
       return;
     }
 
-    Log.i(TAG, "Initial camera parameters: " + parameters.flatten());
+    Log.i(TAG, "Parámetros iniciales de cámara: " + parameters.flatten());
 
     if (safeMode) {
-      Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
+      Log.w(TAG, "Modo seguro activado, se ignorarán varios ajustes.");
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -165,23 +143,18 @@ final class CameraConfigurationManager {
         CameraConfigurationUtils.setMetering(parameters);
       }
 
-      //SetRecordingHint to true also a workaround for low framerate on Nexus 4
-      //https://stackoverflow.com/questions/14131900/extreme-camera-lag-on-nexus-4
-      parameters.setRecordingHint(true);
-
+      parameters.setRecordingHint(true); // Mejora el rendimiento en algunos dispositivos
     }
 
     parameters.setPreviewSize(bestPreviewSize.x, bestPreviewSize.y);
-
     theCamera.setParameters(parameters);
-
     theCamera.setDisplayOrientation(cwRotationFromDisplayToCamera);
 
-    Camera.Parameters afterParameters = theCamera.getParameters();
-    Camera.Size afterSize = afterParameters.getPreviewSize();
-    if (afterSize != null && (bestPreviewSize.x != afterSize.width || bestPreviewSize.y != afterSize.height)) {
-      Log.w(TAG, "Camera said it supported preview size " + bestPreviewSize.x + 'x' + bestPreviewSize.y +
-          ", but after setting it, preview size is " + afterSize.width + 'x' + afterSize.height);
+    Camera.Size afterSize = theCamera.getParameters().getPreviewSize();
+    if (afterSize != null &&
+        (bestPreviewSize.x != afterSize.width || bestPreviewSize.y != afterSize.height)) {
+      Log.w(TAG, "Tamaño de previsualización cambiado por el sistema: " +
+          afterSize.width + "x" + afterSize.height);
       bestPreviewSize.x = afterSize.width;
       bestPreviewSize.y = afterSize.height;
     }
@@ -212,9 +185,8 @@ final class CameraConfigurationManager {
       Camera.Parameters parameters = camera.getParameters();
       if (parameters != null) {
         String flashMode = parameters.getFlashMode();
-        return
-            Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
-            Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode);
+        return Camera.Parameters.FLASH_MODE_ON.equals(flashMode)
+            || Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode);
       }
     }
     return false;
@@ -238,5 +210,4 @@ final class CameraConfigurationManager {
       CameraConfigurationUtils.setBestExposure(parameters, newSetting);
     }
   }
-
 }
