@@ -60,4 +60,19 @@ public final class RGBLuminanceSourceTestCase extends Assert {
     assertEquals("#+ \n#+#\n#+#\n", SOURCE.toString());
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullPixelArray() {
+    // Test regression: null pixel array should throw IllegalArgumentException
+    new RGBLuminanceSource(3, 3, null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testPixelArrayTooSmall() {
+    // Test regression: pixel array smaller than width * height should throw IllegalArgumentException
+    int width = 3;
+    int height = 3;
+    int[] pixels = new int[width * height - 1]; // One pixel short
+    new RGBLuminanceSource(width, height, pixels);
+  }  
+
 }

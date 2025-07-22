@@ -44,6 +44,9 @@ public final class RGBLuminanceSource extends LuminanceSource {
     //
     // Total number of pixels suffices, can ignore shape
     int size = width * height;
+    if (pixels == null || pixels.length < size) {
+      throw new IllegalArgumentException("Pixel array length is less than width * height");
+    }
     luminances = new byte[size];
     for (int offset = 0; offset < size; offset++) {
       int pixel = pixels[offset];
