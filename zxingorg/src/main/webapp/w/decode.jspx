@@ -76,10 +76,6 @@
 
       <p>This web application is powered by the barcode scanning implementation in the
         open source <a href="https://github.com/zxing/zxing">ZXing</a> project.</p>
-      <p>Android users may download the
-        <a href="https://play.google.com/store/apps/details?id=com.google.zxing.client.android">Barcode Scanner</a> or
-        <a href="https://play.google.com/store/apps/details?id=com.srowen.bs.android">Barcode Scanner+</a> application
-        to access the same decoding as a mobile application.</p>
       <p style="font-style:italic">Copyright 2008 and onwards ZXing authors</p>
     </div>
   </body>

@@ -35,7 +35,7 @@ library implemented in Java, with ports to other languages.
 | ------------------- | -----------
 | core                | The core image decoding library, and test code
 | javase              | JavaSE-specific client code
-| android             | Android client Barcode Scanner [<img height='62' width='161' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=com.google.zxing.client.android)
+| android             | Android client Barcode Scanner 
 | android-integration | Supports integration with Barcode Scanner via `Intent`
 | android-core        | Android-related code shared among `android`, other Android apps
 | zxingorg            | The source behind `zxing.org`
