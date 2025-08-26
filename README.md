@@ -55,6 +55,7 @@ library implemented in Java, with ports to other languages.
 
 | Module                                                                                    | Description
 | ----------------------------------------------------------------------------------------- | -----------
+| [Barcode-Lib4J](https://github.com/vws-java/Barcode-Lib4J)                                | Java library for printing and exporting 1D/2D barcodes to vector/raster image formats (CMYK+RGB), high precision, DPI awareness, and GS1 validation.
 | [SCodes](https://github.com/scytheStudio/SCodes)                                          | Qt & Qml wrapper
 | [QZXing](https://github.com/ftylitak/qzxing)                                              | port to Qt framework
 | [glassechidna/zxing-cpp](https://github.com/glassechidna/zxing-cpp)                       | port to C++ (forked from the [deprecated official C++ port](https://github.com/zxing/zxing/tree/00f634024ceeee591f54e6984ea7dd666fab22ae/cpp))
