@@ -18,7 +18,7 @@ package com.google.zxing;
 
 /**
  * This class is used to help decode images from files which arrive as RGB data from
- * an ARGB pixel array. It does not support rotation.
+ * an ARGB pixel array.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Betaminos
@@ -133,4 +133,27 @@ public final class RGBLuminanceSource extends LuminanceSource {
                                   height);
   }
 
+  @Override
+  public boolean isRotateSupported() {
+    return true;
+  }
+
+  @Override
+  public LuminanceSource rotateCounterClockwise() {
+    byte[] rotated = new byte[luminances.length];
+    for (int y = 0; y < dataHeight; y++) {
+      for (int x = 0; x < dataWidth; x++) {
+        int i = (y * dataWidth) + x;
+        int x2 = y;
+        int y2 = dataWidth - 1 - x;
+        int j = (y2 * dataHeight) + x2;
+        rotated[j] = luminances[i];
+      }
+    }
+    int newWidth = getHeight();
+    int newHeight = getWidth();
+    int newLeft = top;
+    int newTop = dataWidth - (left + getWidth());
+    return new RGBLuminanceSource(rotated, dataHeight, dataWidth, newLeft, newTop, newWidth, newHeight);
+  }
 }

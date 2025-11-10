@@ -39,6 +39,53 @@ public final class RGBLuminanceSourceTestCase extends Assert {
   }
 
   @Test
+  public void testRotate() {
+    assertTrue(SOURCE.isRotateSupported());
+    assertArrayEquals(new byte[] { 0x00, 0x7F, (byte) 0xFF}, SOURCE.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x3F, 0x7F, 0x3F}, SOURCE.getRow(1, null));
+    assertArrayEquals(new byte[] { 0x3F, 0x7F, 0x3F}, SOURCE.getRow(2, null));
+    LuminanceSource rot90 = SOURCE.rotateCounterClockwise();
+    assertArrayEquals(new byte[] { (byte) 0xFF, 0x3F, 0x3F}, rot90.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x7F, 0x7F, 0x7F}, rot90.getRow(1, null));
+    assertArrayEquals(new byte[] { 0x00, 0x3F, 0x3F}, rot90.getRow(2, null));
+    LuminanceSource rot180 = rot90.rotateCounterClockwise();
+    assertArrayEquals(new byte[] { 0x3F, 0x7F, 0x3F}, rot180.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x3F, 0x7F, 0x3F}, rot180.getRow(1, null));
+    assertArrayEquals(new byte[] { (byte) 0xFF, 0x7F, 0x00}, rot180.getRow(2, null));
+    LuminanceSource rot270 = rot180.rotateCounterClockwise();
+    assertArrayEquals(new byte[] { 0x3F, 0x3F, 0x00}, rot270.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x7F, 0x7F, 0x7F}, rot270.getRow(1, null));
+    assertArrayEquals(new byte[] { 0x3F, 0x3F, (byte) 0xFF}, rot270.getRow(2, null));
+    LuminanceSource rot360 = rot270.rotateCounterClockwise();
+    assertArrayEquals(new byte[] { 0x00, 0x7F, (byte) 0xFF}, rot360.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x3F, 0x7F, 0x3F}, rot360.getRow(1, null));
+    assertArrayEquals(new byte[] { 0x3F, 0x7F, 0x3F}, rot360.getRow(2, null));
+    assertArrayEquals(SOURCE.getMatrix(), rot360.getMatrix());
+  }
+
+  @Test
+  public void testRotateCropped() {
+    assertTrue(SOURCE.isCropSupported());
+    assertTrue(SOURCE.isRotateSupported());
+    LuminanceSource cropped = SOURCE.crop(1, 1, 2, 2);
+    assertArrayEquals(new byte[] { 0x7F, 0x3F}, cropped.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x7F, 0x3F}, cropped.getRow(1, null));
+    LuminanceSource rot90 = cropped.rotateCounterClockwise();
+    assertArrayEquals(new byte[] { 0x3F, 0x3F}, rot90.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x7F, 0x7F}, rot90.getRow(1, null));
+    LuminanceSource rot180 = rot90.rotateCounterClockwise();
+    assertArrayEquals(new byte[] { 0x3F, 0x7F}, rot180.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x3F, 0x7F}, rot180.getRow(1, null));
+    LuminanceSource rot270 = rot180.rotateCounterClockwise();
+    assertArrayEquals(new byte[] { 0x7F, 0x7F}, rot270.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x3F, 0x3F}, rot270.getRow(1, null));
+    LuminanceSource rot360 = rot270.rotateCounterClockwise();
+    assertArrayEquals(new byte[] { 0x7F, 0x3F}, rot360.getRow(0, null));
+    assertArrayEquals(new byte[] { 0x7F, 0x3F}, rot360.getRow(1, null));
+    assertArrayEquals(cropped.getMatrix(), rot360.getMatrix());
+  }
+
+  @Test
   public void testMatrix() {
     assertArrayEquals(new byte[] { 0x00, 0x7F, (byte) 0xFF, 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F },
                       SOURCE.getMatrix());
