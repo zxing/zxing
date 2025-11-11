@@ -46,11 +46,12 @@ import java.util.Map;
 public final class ITFReader extends OneDReader {
 
   private static final float MAX_AVG_VARIANCE = 0.38f;
-  private static final float MAX_INDIVIDUAL_VARIANCE = 0.5f;
+  private static final float MAX_INDIVIDUAL_VARIANCE_2X = 0.5f; // 2x wide lines -> stricter
+  private static final float MAX_INDIVIDUAL_VARIANCE_3X = 0.75f; // 3x wide lines -> less strict
 
   private static final int W = 3; // Pixel width of a 3x wide line
   private static final int w = 2; // Pixel width of a 2x wide line
-  private static final int N = 1; // Pixed width of a narrow line
+  private static final int N = 1; // Pixel width of a narrow line
 
   /** Valid ITF lengths. Anything longer than the largest value is also allowed. */
   private static final int[] DEFAULT_ALLOWED_LENGTHS = {6, 8, 10, 12, 14};
@@ -328,7 +329,7 @@ public final class ITFReader extends OneDReader {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
+          if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE_2X) < MAX_AVG_VARIANCE) {
             return new int[]{patternStart, x};
           }
           patternStart += counters[0] + counters[1];
@@ -360,7 +361,8 @@ public final class ITFReader extends OneDReader {
     int max = PATTERNS.length;
     for (int i = 0; i < max; i++) {
       int[] pattern = PATTERNS[i];
-      float variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+      float maxVariance = (i <= 9 ? MAX_INDIVIDUAL_VARIANCE_2X : MAX_INDIVIDUAL_VARIANCE_3X);
+      float variance = patternMatchVariance(counters, pattern, maxVariance);
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = i;
