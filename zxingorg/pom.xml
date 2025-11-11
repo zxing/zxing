@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>zxingorg</artifactId>
-  <version>3.5.4-SNAPSHOT</version>
+  <version>3.5.4</version>
   <packaging>war</packaging>
 
   <dependencies>
