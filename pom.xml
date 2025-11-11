@@ -647,12 +647,12 @@
     <repository>
       <id>sonatype-nexus-staging</id>
       <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
       <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      <url>https://ossrh-staging-api.central.sonatype.com/content/repositories/snapshots/</url>
     </snapshotRepository>
     <site>
       <id>zxing.website</id>
