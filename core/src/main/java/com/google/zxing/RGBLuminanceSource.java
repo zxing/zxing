@@ -23,31 +23,18 @@ package com.google.zxing;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Betaminos
  */
-public final class RGBLuminanceSource extends LuminanceSource {
-
-  private final byte[] luminances;
-  private final int dataWidth;
-  private final int dataHeight;
-  private final int left;
-  private final int top;
+public final class RGBLuminanceSource extends GrayscaleLuminanceSource {
 
   public RGBLuminanceSource(int width, int height, int[] pixels) {
-    super(width, height);
+    super(width, height, toGrayscale(width, height, pixels));
+  }
 
-    dataWidth = width;
-    dataHeight = height;
-    left = 0;
-    top = 0;
-
-    // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-    // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-    //
-    // Total number of pixels suffices, can ignore shape
+  private static byte[] toGrayscale(int width, int height, int[] pixels) {
     int size = width * height;
     if (pixels == null || pixels.length < size) {
       throw new IllegalArgumentException("Pixel array length is less than width * height");
     }
-    luminances = new byte[size];
+    byte[] luminances = new byte[size];
     for (int offset = 0; offset < size; offset++) {
       int pixel = pixels[offset];
       int r = (pixel >> 16) & 0xff; // red
@@ -56,107 +43,6 @@ public final class RGBLuminanceSource extends LuminanceSource {
       // Calculate green-favouring average cheaply
       luminances[offset] = (byte) ((r + g2 + b) / 4);
     }
-  }
-
-  private RGBLuminanceSource(byte[] pixels,
-                             int dataWidth,
-                             int dataHeight,
-                             int left,
-                             int top,
-                             int width,
-                             int height) {
-    super(width, height);
-    if (left + width > dataWidth || top + height > dataHeight) {
-      throw new IllegalArgumentException("Crop rectangle does not fit within image data.");
-    }
-    this.luminances = pixels;
-    this.dataWidth = dataWidth;
-    this.dataHeight = dataHeight;
-    this.left = left;
-    this.top = top;
-  }
-
-  @Override
-  public byte[] getRow(int y, byte[] row) {
-    if (y < 0 || y >= getHeight()) {
-      throw new IllegalArgumentException("Requested row is outside the image: " + y);
-    }
-    int width = getWidth();
-    if (row == null || row.length < width) {
-      row = new byte[width];
-    }
-    int offset = (y + top) * dataWidth + left;
-    System.arraycopy(luminances, offset, row, 0, width);
-    return row;
-  }
-
-  @Override
-  public byte[] getMatrix() {
-    int width = getWidth();
-    int height = getHeight();
-
-    // If the caller asks for the entire underlying image, save the copy and give them the
-    // original data. The docs specifically warn that result.length must be ignored.
-    if (width == dataWidth && height == dataHeight) {
-      return luminances;
-    }
-
-    int area = width * height;
-    byte[] matrix = new byte[area];
-    int inputOffset = top * dataWidth + left;
-
-    // If the width matches the full width of the underlying data, perform a single copy.
-    if (width == dataWidth) {
-      System.arraycopy(luminances, inputOffset, matrix, 0, area);
-      return matrix;
-    }
-
-    // Otherwise copy one cropped row at a time.
-    for (int y = 0; y < height; y++) {
-      int outputOffset = y * width;
-      System.arraycopy(luminances, inputOffset, matrix, outputOffset, width);
-      inputOffset += dataWidth;
-    }
-    return matrix;
-  }
-
-  @Override
-  public boolean isCropSupported() {
-    return true;
-  }
-
-  @Override
-  public LuminanceSource crop(int left, int top, int width, int height) {
-    return new RGBLuminanceSource(luminances,
-                                  dataWidth,
-                                  dataHeight,
-                                  this.left + left,
-                                  this.top + top,
-                                  width,
-                                  height);
-  }
-
-  @Override
-  public boolean isRotateSupported() {
-    return true;
-  }
-
-  @Override
-  public LuminanceSource rotateCounterClockwise() {
-    byte[] rotated = new byte[luminances.length];
-    for (int y = 0; y < dataHeight; y++) {
-      for (int x = 0; x < dataWidth; x++) {
-        int i = (y * dataWidth) + x;
-        int x2 = y;
-        int y2 = dataWidth - 1 - x;
-        int j = (y2 * dataHeight) + x2;
-        rotated[j] = luminances[i];
-      }
-    }
-    int newWidth = getHeight();
-    int newHeight = getWidth();
-    int newLeft = top;
-    int newTop = dataWidth - (left + getWidth());
-    return new RGBLuminanceSource(rotated, dataHeight, dataWidth, newLeft, newTop, newWidth, newHeight);
+    return luminances;
   }
 }
