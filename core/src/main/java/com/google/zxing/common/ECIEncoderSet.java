@@ -110,7 +110,6 @@ public final class ECIEncoderSet {
             //the input
             neededEncoders.add(encoder);
             canEncode = true;
-            break;
           }
         }
       }
