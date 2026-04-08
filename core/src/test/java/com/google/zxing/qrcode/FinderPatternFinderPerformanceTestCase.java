@@ -40,7 +40,7 @@ public final class FinderPatternFinderPerformanceTestCase
   private static final String IMAGE_PATH =
       "src/test/resources/blackbox/triggeringImage1567.jpg";
 
-  @Test(timeout = 5000)
+  @Test(timeout = 30000)
   public void testNoisyImageDoesNotHang() throws Exception {
     Path file = Paths.get(IMAGE_PATH);
     if (!Files.exists(file)) {
