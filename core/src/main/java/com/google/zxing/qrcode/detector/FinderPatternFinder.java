@@ -42,6 +42,7 @@ import java.util.Map;
 public class FinderPatternFinder {
 
   private static final int CENTER_QUORUM = 2;
+  private static final int MAX_FINDER_PATTERN_CANDIDATES = 25;
   private static final EstimatedModuleComparator moduleComparator = new EstimatedModuleComparator();
   protected static final int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
   protected static final int MAX_MODULES = 97; // support up to version 20 for mobile clients
@@ -623,9 +624,17 @@ public class FinderPatternFinder {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    for (Iterator<FinderPattern> it = possibleCenters.iterator(); it.hasNext();) {
-      if (it.next().getCount() < CENTER_QUORUM) {
-        it.remove();
+    int confirmedCount = 0;
+    for (FinderPattern pattern : possibleCenters) {
+      if (pattern.getCount() >= CENTER_QUORUM) {
+        confirmedCount++;
+      }
+    }
+    if (confirmedCount >= 3 || startSize > MAX_FINDER_PATTERN_CANDIDATES) {
+      for (Iterator<FinderPattern> it = possibleCenters.iterator(); it.hasNext();) {
+        if (it.next().getCount() < CENTER_QUORUM) {
+          it.remove();
+        }
       }
     }
 
