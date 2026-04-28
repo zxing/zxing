@@ -95,6 +95,13 @@ public enum ResultMetadataType {
   PDF417_EXTRA_METADATA,
 
   /**
+   * If the code format supports reader initialization, maps to a {@link Boolean} indicating
+   * whether or not the symbol is a reader initialization symbol. Reader initialization symbols
+   * are used to provide initialization or configuration to a reader.
+   */
+  READER_INIT,
+
+  /**
    * If the code format supports structured append and the current scanned code is part of one then the
    * sequence number is given with it.
    */

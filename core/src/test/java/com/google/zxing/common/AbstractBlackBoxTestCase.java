@@ -167,6 +167,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         }
         correctInteger(expectedMetadata, ResultMetadataType.ERRORS_CORRECTED);
         correctInteger(expectedMetadata, ResultMetadataType.ERASURES_CORRECTED);
+        correctBoolean(expectedMetadata, ResultMetadataType.READER_INIT);
       }
 
       for (int x = 0; x < testCount; x++) {
@@ -257,6 +258,15 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       String sval = metadata.getProperty(skey);
       Integer ival = Integer.parseInt(sval);
       metadata.put(skey, ival);
+    }
+  }
+
+  private static void correctBoolean(Properties metadata, ResultMetadataType key) {
+    String skey = key.toString();
+    if (metadata.containsKey(skey)) {
+      String sval = metadata.getProperty(skey);
+      Boolean bval = Boolean.valueOf(sval);
+      metadata.put(skey, bval);
     }
   }
 
