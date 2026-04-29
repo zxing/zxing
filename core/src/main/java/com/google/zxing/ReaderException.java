@@ -38,10 +38,13 @@ public abstract class ReaderException extends Exception {
     super(cause);
   }
 
-  // Prevent stack traces from being taken
   @Override
   public final synchronized Throwable fillInStackTrace() {
-    return null;
+    if (isStackTrace) {
+      return super.fillInStackTrace();
+    } else {
+      return this; // prevent stack traces from being taken
+    }
   }
 
   /**
