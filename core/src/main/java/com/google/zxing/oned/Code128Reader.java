@@ -240,6 +240,7 @@ public final class Code128Reader extends OneDReader {
     boolean convertFNC1 = hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1);
 
     int symbologyModifier = 0;
+    boolean readerInit = false;
 
     int[] startPatternInfo = findStartPattern(row);
     int startCode = startPatternInfo[2];
@@ -362,7 +363,7 @@ public final class Code128Reader extends OneDReader {
                 symbologyModifier = 4;
                 break;
               case CODE_FNC_3:
-                // do nothing?
+                readerInit = true;
                 break;
               case CODE_FNC_4_A:
                 if (!upperMode && shiftUpperMode) {
@@ -425,7 +426,7 @@ public final class Code128Reader extends OneDReader {
                 symbologyModifier = 4;
                 break;
               case CODE_FNC_3:
-                // do nothing?
+                readerInit = true;
                 break;
               case CODE_FNC_4_B:
                 if (!upperMode && shiftUpperMode) {
@@ -547,6 +548,7 @@ public final class Code128Reader extends OneDReader {
     for (int i = 0; i < rawCodesSize; i++) {
       rawBytes[i] = rawCodes.get(i);
     }
+
     Result resultObject = new Result(
         result.toString(),
         rawBytes,
@@ -554,9 +556,11 @@ public final class Code128Reader extends OneDReader {
             new ResultPoint(left, rowNumber),
             new ResultPoint(right, rowNumber)},
         BarcodeFormat.CODE_128);
-    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]C" + symbologyModifier);
-    return resultObject;
 
+    resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]C" + symbologyModifier);
+    resultObject.putMetadata(ResultMetadataType.READER_INIT, readerInit);
+
+    return resultObject;
   }
 
 }

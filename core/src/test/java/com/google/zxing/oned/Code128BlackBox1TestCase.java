@@ -27,8 +27,8 @@ public final class Code128BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public Code128BlackBox1TestCase() {
     super("src/test/resources/blackbox/code128-1", new MultiFormatReader(), BarcodeFormat.CODE_128);
-    addTest(6, 6, 0.0f);
-    addTest(6, 6, 180.0f);
+    addTest(7, 7, 0.0f);
+    addTest(7, 7, 180.0f);
   }
 
 }
