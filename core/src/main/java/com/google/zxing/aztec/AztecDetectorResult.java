@@ -29,6 +29,7 @@ import com.google.zxing.common.DetectorResult;
 public final class AztecDetectorResult extends DetectorResult {
 
   private final boolean compact;
+  private final boolean readerInit;
   private final int nbDatablocks;
   private final int nbLayers;
   private final int errorsCorrected;
@@ -38,7 +39,16 @@ public final class AztecDetectorResult extends DetectorResult {
                              boolean compact,
                              int nbDatablocks,
                              int nbLayers) {
-    this(bits, points, compact, nbDatablocks, nbLayers, 0);
+    this(bits, points, compact, nbDatablocks, nbLayers, 0, false);
+  }
+
+  public AztecDetectorResult(BitMatrix bits,
+      ResultPoint[] points,
+      boolean compact,
+      int nbDatablocks,
+      int nbLayers,
+      int errorsCorrected) {
+    this(bits, points, compact, nbDatablocks, nbLayers, errorsCorrected, false);
   }
 
   public AztecDetectorResult(BitMatrix bits,
@@ -46,9 +56,11 @@ public final class AztecDetectorResult extends DetectorResult {
                              boolean compact,
                              int nbDatablocks,
                              int nbLayers,
-                             int errorsCorrected) {
+                             int errorsCorrected,
+                             boolean readerInit) {
     super(bits, points);
     this.compact = compact;
+    this.readerInit = readerInit;
     this.nbDatablocks = nbDatablocks;
     this.nbLayers = nbLayers;
     this.errorsCorrected = errorsCorrected;
@@ -64,6 +76,10 @@ public final class AztecDetectorResult extends DetectorResult {
 
   public boolean isCompact() {
     return compact;
+  }
+
+  public boolean isReaderInit() {
+    return readerInit;
   }
 
   public int getErrorsCorrected() {

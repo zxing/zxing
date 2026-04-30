@@ -46,6 +46,7 @@ public final class Detector {
   private final BitMatrix image;
 
   private boolean compact;
+  private boolean readerInit;
   private int nbLayers;
   private int nbDataBlocks;
   private int nbCenterLayers;
@@ -94,7 +95,7 @@ public final class Detector {
     // 5. Get the corners of the matrix.
     ResultPoint[] corners = getMatrixCornerPoints(bullsEyeCorners);
 
-    return new AztecDetectorResult(bits, corners, compact, nbDataBlocks, nbLayers, errorsCorrected);
+    return new AztecDetectorResult(bits, corners, compact, nbDataBlocks, nbLayers, errorsCorrected, readerInit);
   }
 
   /**
@@ -144,14 +145,40 @@ public final class Detector {
     CorrectedParameter correctedParam = getCorrectedParameterData(parameterData, compact);
     int correctedData = correctedParam.getData();
 
+    int dataMsb;
     if (compact) {
       // 8 bits:  2 bits layers and 6 bits data blocks
       nbLayers = (correctedData >> 6) + 1;
       nbDataBlocks = (correctedData & 0x3F) + 1;
+      dataMsb = (correctedData & 0x3F) >> 5;
     } else {
       // 16 bits:  5 bits layers and 11 bits data blocks
       nbLayers = (correctedData >> 11) + 1;
       nbDataBlocks = (correctedData & 0x7FF) + 1;
+      dataMsb = (correctedData & 0x7FF) >> 10;
+    }
+
+    // If the most significant bit of D is set and D exceeds the capacity of L data layers,
+    // this symbols is identified as a reader initialization symbol and the most significant
+    // bit of D is cleared.
+    if (dataMsb == 1) {
+      int codewordSize;
+      if (nbLayers <= 2) {
+        codewordSize = 6;
+      } else if (nbLayers <= 8) {
+        codewordSize = 8;
+      } else if (nbLayers <= 22) {
+        codewordSize = 10;
+      } else {
+        codewordSize = 12;
+      }
+      int layersBitCapacity = ((compact ? 88 : 112) + 16 * nbLayers) * nbLayers;
+      int dataBits = nbDataBlocks * codewordSize;
+      if (dataBits > layersBitCapacity) {
+        int mask = (compact ? 0x1F : 0x3FF);
+        nbDataBlocks = ((nbDataBlocks - 1) & mask) + 1; // clear data MSB
+        readerInit = true;
+      }
     }
 
     return correctedParam.getErrorsCorrected();
