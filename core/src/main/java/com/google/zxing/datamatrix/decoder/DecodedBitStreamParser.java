@@ -93,6 +93,7 @@ final class DecodedBitStreamParser {
     List<byte[]> byteSegments = new ArrayList<>(1);
     Mode mode = Mode.ASCII_ENCODE;
     // Could look directly at 'bytes', if we're sure of not having to account for multi byte values
+    boolean readerInit = (bytes.length > 0 && (bytes[0] & 0xFF) == 234);
     Set<Integer> fnc1Positions = new HashSet<>();
     int symbologyModifier;
     boolean isECIencoded = false;
@@ -149,11 +150,13 @@ final class DecodedBitStreamParser {
       }
     }
 
-    return new DecoderResult(bytes,
-                             result.toString(),
-                             byteSegments.isEmpty() ? null : byteSegments,
-                             null,
-                             symbologyModifier);
+    DecoderResult res = new DecoderResult(bytes,
+                                          result.toString(),
+                                          byteSegments.isEmpty() ? null : byteSegments,
+                                          null,
+                                          symbologyModifier);
+    res.setReaderInit(readerInit);
+    return res;
   }
 
   /**
@@ -194,9 +197,10 @@ final class DecodedBitStreamParser {
             result.append((char) 29); // translate as ASCII 29
             break;
           case 233: // Structured Append
+            // Ignore for now
+            break;
           case 234: // Reader Programming
-            // Ignore these symbols for now
-            //throw ReaderException.getInstance();
+            // Effective only as first codeword (handled above)
             break;
           case 235: // Upper Shift (shift to Extended ASCII)
             upperShift = true;
