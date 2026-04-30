@@ -51,6 +51,7 @@ final class DecodedBitStreamParser {
   private static final int BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
   private static final int BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
   private static final int MACRO_PDF417_TERMINATOR = 922;
+  private static final int READER_INITIALIZATION = 921;
   private static final int MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
   private static final int MAX_NUMERIC_CODEWORDS = 15;
 
@@ -98,10 +99,12 @@ final class DecodedBitStreamParser {
   }
 
   static DecoderResult decode(int[] codewords, String ecLevel) throws FormatException {
+    int count = codewords[0];
+    boolean readerInit = (codewords.length > 1 && codewords[1] == READER_INITIALIZATION);
     ECIStringBuilder result = new ECIStringBuilder(codewords.length * 2);
     int codeIndex = textCompaction(codewords, 1, result);
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
-    while (codeIndex < codewords[0]) {
+    while (codeIndex < count) {
       int code = codewords[codeIndex++];
       switch (code) {
         case TEXT_COMPACTION_MODE_LATCH:
@@ -149,6 +152,7 @@ final class DecodedBitStreamParser {
     }
     DecoderResult decoderResult = new DecoderResult(null, result.toString(), null, ecLevel);
     decoderResult.setOther(resultMetadata);
+    decoderResult.setReaderInit(readerInit);
     return decoderResult;
   }
 

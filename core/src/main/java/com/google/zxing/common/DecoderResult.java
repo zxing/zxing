@@ -35,6 +35,7 @@ public final class DecoderResult {
   private Integer errorsCorrected;
   private Integer erasures;
   private Object other;
+  private Boolean readerInit;
   private final int structuredAppendParity;
   private final int structuredAppendSequenceNumber;
   private final int symbologyModifier;
@@ -155,6 +156,18 @@ public final class DecoderResult {
 
   public void setOther(Object other) {
     this.other = other;
+  }
+
+  /**
+   * @return whether or not the message is a reader initialization message,
+   * or {@code null} if not applicable
+   */
+  public Boolean getReaderInit() {
+    return readerInit;
+  }
+
+  public void setReaderInit(Boolean readerInit) {
+    this.readerInit = readerInit;
   }
 
   public boolean hasStructuredAppend() {
