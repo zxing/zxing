@@ -19,8 +19,8 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
-import com.google.zxing.common.StringUtils;
 import com.google.zxing.common.CharacterSetECI;
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -249,7 +249,9 @@ public final class Encoder {
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
   private static Mode chooseMode(String content, Charset encoding) {
-    if (StringUtils.SHIFT_JIS_CHARSET != null &&
+    if (encoding != null &&
+        ("Shift_JIS".equalsIgnoreCase(encoding.name()) || "SJIS".equalsIgnoreCase(encoding.name())) &&
+        StringUtils.SHIFT_JIS_CHARSET != null &&
         StringUtils.SHIFT_JIS_CHARSET.equals(encoding) &&
         isOnlyDoubleByteKanji(content)) {
       // Choose Kanji mode if all input are double-byte characters
