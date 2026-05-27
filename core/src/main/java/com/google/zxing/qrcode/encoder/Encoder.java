@@ -249,7 +249,8 @@ public final class Encoder {
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
   private static Mode chooseMode(String content, Charset encoding) {
-    if (isShiftJIS(encoding) &&
+    if (encoding != null &&
+        ("Shift_JIS".equalsIgnoreCase(encoding.name()) || "SJIS".equalsIgnoreCase(encoding.name())) &&
         StringUtils.SHIFT_JIS_CHARSET != null &&
         StringUtils.SHIFT_JIS_CHARSET.equals(encoding) &&
         isOnlyDoubleByteKanji(content)) {
@@ -275,11 +276,6 @@ public final class Encoder {
       return Mode.NUMERIC;
     }
     return Mode.BYTE;
-  }
-
-  private static boolean isShiftJIS(Charset encoding) {
-    return encoding != null &&
-        ("Shift_JIS".equalsIgnoreCase(encoding.name()) || "SJIS".equalsIgnoreCase(encoding.name()));
   }
 
   static boolean isOnlyDoubleByteKanji(String content) {
