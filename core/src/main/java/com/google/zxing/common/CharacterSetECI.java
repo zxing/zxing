@@ -19,7 +19,8 @@ package com.google.zxing.common;
 import com.google.zxing.FormatException;
 
 import java.nio.charset.Charset;
-
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,12 +61,11 @@ public enum CharacterSetECI {
   GB18030(29, "GB2312", "EUC_CN", "GBK"),
   EUC_KR(30, "EUC-KR");
 
-  // only character sets supported by the current JVM are registered here
-  private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<>();
-  private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
-  static {
-    for (CharacterSetECI eci : values()) {
-      if (Charset.isSupported(eci.name())) {
+  private static final class Maps {
+    private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<>();
+    private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
+    static {
+      for (CharacterSetECI eci : values()) {
         for (int value : eci.values) {
           VALUE_TO_ECI.put(value, eci);
         }
@@ -99,7 +99,34 @@ public enum CharacterSetECI {
   }
 
   public Charset getCharset() {
-    return Charset.forName(name());
+    Charset charset = getPrimaryCharsetOrNull();
+    if (charset != null) {
+      return charset;
+    }
+    throw new UnsupportedCharsetException(name());
+  }
+
+  private Charset getPrimaryCharsetOrNull() {
+    switch (this) {
+      case ISO8859_1:
+        return StandardCharsets.ISO_8859_1;
+      case UTF8:
+        return StandardCharsets.UTF_8;
+      case ASCII:
+        return StandardCharsets.US_ASCII;
+      case UnicodeBigUnmarked:
+        return StandardCharsets.UTF_16BE;
+      default:
+    }
+    try {
+      return Charset.forName(name());
+    } catch (UnsupportedCharsetException uce) {
+      return null;
+    }
+  }
+
+  private boolean isCharsetSupported() {
+    return getPrimaryCharsetOrNull() != null;
   }
 
   /**
@@ -108,7 +135,8 @@ public enum CharacterSetECI {
    *   but unsupported
    */
   public static CharacterSetECI getCharacterSetECI(Charset charset) {
-    return NAME_TO_ECI.get(charset.name());
+    CharacterSetECI eci = Maps.NAME_TO_ECI.get(charset.name());
+    return eci == null || eci.isCharsetSupported() ? eci : null;
   }
 
   /**
@@ -121,7 +149,8 @@ public enum CharacterSetECI {
     if (value < 0 || value >= 900) {
       throw FormatException.getFormatInstance();
     }
-    return VALUE_TO_ECI.get(value);
+    CharacterSetECI eci = Maps.VALUE_TO_ECI.get(value);
+    return eci == null || eci.isCharsetSupported() ? eci : null;
   }
 
   /**
@@ -130,7 +159,8 @@ public enum CharacterSetECI {
    *   but unsupported
    */
   public static CharacterSetECI getCharacterSetECIByName(String name) {
-    return NAME_TO_ECI.get(name);
+    CharacterSetECI eci = Maps.NAME_TO_ECI.get(name);
+    return eci == null || eci.isCharsetSupported() ? eci : null;
   }
 
 }
