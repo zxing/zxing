@@ -158,7 +158,7 @@ final class DecodedBitStreamParser {
     return sb.toString();
   }
 
-  private static String getMessage(byte[] bytes, int start, int len) {
+  private static String getMessage(byte[] bytes, int start, int len) throws FormatException {
     StringBuilder sb = new StringBuilder();
     int shift = -1;
     int set = 0;
@@ -194,6 +194,9 @@ final class DecodedBitStreamParser {
           shift = 3;
           break;
         case NS:
+          if (i + 5 >= start + len) {
+            throw FormatException.getFormatInstance();
+          }
           int nsval = (bytes[++i] << 24) + (bytes[++i] << 18) + (bytes[++i] << 12) + (bytes[++i] << 6) + bytes[++i];
           sb.append(new DecimalFormat("000000000").format(nsval));
           break;
