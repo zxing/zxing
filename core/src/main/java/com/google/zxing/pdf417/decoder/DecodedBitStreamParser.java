@@ -197,7 +197,7 @@ final class DecodedBitStreamParser {
     resultMetadata.setFileId(fileId.toString());
 
     int optionalFieldsStart = -1;
-    if (codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
+    if (codeIndex < codewords[0] && codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
       optionalFieldsStart = codeIndex + 1;
     }
 
@@ -205,6 +205,9 @@ final class DecodedBitStreamParser {
       switch (codewords[codeIndex]) {
         case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
           codeIndex++;
+          if (codeIndex >= codewords[0]) {
+            throw FormatException.getFormatInstance();
+          }
           switch (codewords[codeIndex]) {
             case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
               ECIStringBuilder fileName = new ECIStringBuilder();
