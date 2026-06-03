@@ -159,7 +159,8 @@ final class DecodedBitStreamParser {
   @SuppressWarnings("deprecation")
   static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
       throws FormatException {
-    if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
+    int maxLength = codewords[0];
+    if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > maxLength) {
       // we must have at least two bytes left for the segment index
       throw FormatException.getFormatInstance();
     }
@@ -183,7 +184,7 @@ final class DecodedBitStreamParser {
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
     // the fileId using text compaction, so in those cases the fileId will appear mangled.
     StringBuilder fileId = new StringBuilder();
-    while (codeIndex < codewords[0] &&
+    while (codeIndex < maxLength &&
            codeIndex < codewords.length &&
            codewords[codeIndex] != MACRO_PDF417_TERMINATOR &&
            codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
@@ -197,15 +198,15 @@ final class DecodedBitStreamParser {
     resultMetadata.setFileId(fileId.toString());
 
     int optionalFieldsStart = -1;
-    if (codeIndex < codewords[0] && codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
+    if (codeIndex < maxLength && codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
       optionalFieldsStart = codeIndex + 1;
     }
 
-    while (codeIndex < codewords[0]) {
+    while (codeIndex < maxLength) {
       switch (codewords[codeIndex]) {
         case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
           codeIndex++;
-          if (codeIndex >= codewords[0]) {
+          if (codeIndex >= maxLength) {
             throw FormatException.getFormatInstance();
           }
           switch (codewords[codeIndex]) {
