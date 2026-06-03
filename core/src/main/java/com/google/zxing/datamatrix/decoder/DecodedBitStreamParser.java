@@ -530,6 +530,9 @@ final class DecodedBitStreamParser {
     } else if (d1 < 250) {
       count = d1;
     } else {
+      if (bits.available() < 8) {
+        throw FormatException.getFormatInstance();
+      }
       count = 250 * (d1 - 249) + unrandomize255State(bits.readBits(8), codewordPosition++);
     }
 
