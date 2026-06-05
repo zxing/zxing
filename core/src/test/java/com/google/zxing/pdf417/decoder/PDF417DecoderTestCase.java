@@ -182,6 +182,38 @@ public class PDF417DecoderTestCase extends Assert {
     DecodedBitStreamParser.decode(sampleCodes, "0");
   }
 
+  @Test(expected = FormatException.class)
+  public void testTextCompactionModeShiftAtEnd() throws FormatException {
+    // mode shift to byte compaction (913) as the final codeword, no value follows
+    DecodedBitStreamParser.decode(new int[] {3, 65, 913}, "0");
+  }
+
+  @Test(expected = FormatException.class)
+  public void testTextCompactionEciAtEnd() throws FormatException {
+    // ECI charset marker (927) as the final codeword, no charset value follows
+    DecodedBitStreamParser.decode(new int[] {3, 65, 927}, "0");
+  }
+
+  @Test(expected = FormatException.class)
+  public void testByteCompactionLeadingEciAtEnd() throws FormatException {
+    DecodedBitStreamParser.decode(new int[] {3, 901, 927}, "0");
+  }
+
+  @Test(expected = FormatException.class)
+  public void testByteCompactionEciAtEnd() throws FormatException {
+    DecodedBitStreamParser.decode(new int[] {5, 901, 65, 66, 927}, "0");
+  }
+
+  @Test(expected = FormatException.class)
+  public void testModeShiftToByteAtEnd() throws FormatException {
+    DecodedBitStreamParser.decode(new int[] {4, 901, 65, 913}, "0");
+  }
+
+  @Test(expected = FormatException.class)
+  public void testEciCharsetAtEnd() throws FormatException {
+    DecodedBitStreamParser.decode(new int[] {5, 902, 1, 200, 927}, "0");
+  }
+
   @Test
   public void testUppercase() throws WriterException, FormatException {
     //encodeDecode("", 0);

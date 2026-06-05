@@ -115,12 +115,18 @@ final class DecodedBitStreamParser {
           codeIndex = byteCompaction(code, codewords, codeIndex, result);
           break;
         case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+          if (codeIndex >= count) {
+            throw FormatException.getFormatInstance();
+          }
           result.append((char) codewords[codeIndex++]);
           break;
         case NUMERIC_COMPACTION_MODE_LATCH:
           codeIndex = numericCompaction(codewords, codeIndex, result);
           break;
         case ECI_CHARSET:
+          if (codeIndex >= count) {
+            throw FormatException.getFormatInstance();
+          }
           result.appendECI(codewords[codeIndex++]);
           break;
         case ECI_GENERAL_PURPOSE:
@@ -338,16 +344,19 @@ final class DecodedBitStreamParser {
             // of the Text Compaction mode. Codeword 913 is only available
             // in Text Compaction mode; its use is described in 5.4.2.4.
             textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
+            if (codeIndex >= codewords[0]) {
+              throw FormatException.getFormatInstance();
+            }
             code = codewords[codeIndex++];
             byteCompactionData[index] = code;
             index++;
             break;
           case ECI_CHARSET:
-            subMode = decodeTextCompaction(textCompactionData, byteCompactionData, index, result, subMode);
-            result.appendECI(codewords[codeIndex++]);
-            if (codeIndex > codewords[0]) {
+            if (codeIndex >= codewords[0]) {
               throw FormatException.getFormatInstance();
             }
+            subMode = decodeTextCompaction(textCompactionData, byteCompactionData, index, result, subMode);
+            result.appendECI(codewords[codeIndex++]);
             textCompactionData = new int[(codewords[0] - codeIndex) * 2];
             byteCompactionData = new int[(codewords[0] - codeIndex) * 2];
             index = 0;
@@ -580,6 +589,9 @@ final class DecodedBitStreamParser {
     while (codeIndex < codewords[0] && !end) {
       //handle leading ECIs
       while (codeIndex < codewords[0] && codewords[codeIndex] == ECI_CHARSET) {
+        if (codeIndex + 1 >= codewords[0]) {
+          throw FormatException.getFormatInstance();
+        }
         result.appendECI(codewords[++codeIndex]);
         codeIndex++;
       }
@@ -609,6 +621,9 @@ final class DecodedBitStreamParser {
             if (code < TEXT_COMPACTION_MODE_LATCH) {
               result.append((byte) code);
             } else if (code == ECI_CHARSET) {
+              if (codeIndex >= codewords[0]) {
+                throw FormatException.getFormatInstance();
+              }
               result.appendECI(codewords[codeIndex++]);
             } else {
               codeIndex--;
