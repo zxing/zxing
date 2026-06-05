@@ -275,6 +275,9 @@ public final class Code39Reader extends OneDReader {
     for (int i = 0; i < length; i++) {
       char c = encoded.charAt(i);
       if (c == '+' || c == '$' || c == '%' || c == '/') {
+        if (i >= length - 1) {
+          throw FormatException.getFormatInstance();
+        }
         char next = encoded.charAt(i + 1);
         char decodedChar = '\0';
         switch (c) {
