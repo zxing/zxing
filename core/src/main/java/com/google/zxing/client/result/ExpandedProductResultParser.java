@@ -192,7 +192,8 @@ public final class ExpandedProductResultParser extends ResultParser {
       }
       buf.append(currentChar);
     }
-    return buf.toString();
+    // no closing parenthesis, so this is not a valid AI
+    return null;
   }
 
   private static String findValue(int i, String rawText) {
