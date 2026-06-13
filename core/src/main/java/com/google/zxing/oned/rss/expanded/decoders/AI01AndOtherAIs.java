@@ -44,6 +44,10 @@ final class AI01AndOtherAIs extends AI01decoder {
 
   @Override
   public String parseInformation() throws NotFoundException, FormatException {
+    if (this.getInformation().getSize() < HEADER_SIZE + GTIN_SIZE + 4) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
     StringBuilder buff = new StringBuilder();
 
     buff.append("(01)");
