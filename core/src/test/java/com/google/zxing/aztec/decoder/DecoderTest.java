@@ -64,6 +64,13 @@ public final class DecoderTest extends Assert {
   }
 
   @Test
+  public void testHighLevelDecodeShortInput() throws FormatException {
+    // fewer than 5 corrected bits decode to nothing and must not throw NegativeArraySizeException
+    assertEquals("", Decoder.highLevelDecode(new boolean[0]));
+    assertEquals("", Decoder.highLevelDecode(new boolean[1]));
+  }
+
+  @Test
   public void testAztecResult() throws FormatException {
     BitMatrix matrix = BitMatrix.parse(
         "X X X X X     X X X       X X X     X X X     \n" +

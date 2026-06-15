@@ -108,7 +108,7 @@ public final class Decoder {
 
     // Final decoded string result
     // (correctedBits-5) / 4 is an upper bound on the size (all-digit result)
-    StringBuilder result = new StringBuilder((correctedBits.length - 5) / 4);
+    StringBuilder result = new StringBuilder(Math.max(0, (correctedBits.length - 5) / 4));
 
     // Intermediary buffer of decoded bytes, which is decoded into a string and flushed
     // when character encoding changes (ECI) or input ends.
