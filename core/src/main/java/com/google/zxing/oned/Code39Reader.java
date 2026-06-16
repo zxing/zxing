@@ -141,6 +141,10 @@ public final class Code39Reader extends OneDReader {
     }
 
     if (usingCheckDigit) {
+      if (result.length() == 0) {
+        // false positive -- a symbol with no payload cannot carry a check digit
+        throw NotFoundException.getNotFoundInstance();
+      }
       int max = result.length() - 1;
       int total = 0;
       for (int i = 0; i < max; i++) {

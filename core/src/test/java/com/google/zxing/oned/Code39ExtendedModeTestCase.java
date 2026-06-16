@@ -64,6 +64,24 @@ public final class Code39ExtendedModeTestCase extends Assert {
     }
   }
 
+  @Test
+  public void testRejectsEmptySymbolWithCheckDigit() throws FormatException, ChecksumException {
+    // The asterisk (0x094) start/stop pattern as wide/narrow modules. A symbol that is just the
+    // start and stop asterisks decodes to an empty payload, so there is no character to validate
+    // as a check digit. It must fail with a ReaderException, not read result.charAt(-1).
+    String asterisk = "100101101101";
+    BitMatrix matrix = BitMatrix.parse("0000" + asterisk + '0' + asterisk + "0000", "1", "0");
+    BitArray row = new BitArray(matrix.getWidth());
+    matrix.getRow(0, row);
+    Code39Reader sut = new Code39Reader(true, false);
+    try {
+      sut.decodeRow(0, row, null);
+      fail("Expected NotFoundException for empty check-digit symbol");
+    } catch (NotFoundException expected) {
+      // expected
+    }
+  }
+
   private static void doTest(String expectedResult, String encodedResult)
       throws FormatException, ChecksumException, NotFoundException {
     Code39Reader sut = new Code39Reader(false, true);
