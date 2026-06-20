@@ -84,6 +84,21 @@ public final class ErrorCorrectionTestCase extends AbstractErrorCorrectionTestCa
     }
   }
 
+  @Test
+  public void testOversizedReceived() {
+    // A received array longer than the field would index past the exponent table
+    // during erasure handling; it must be rejected instead of throwing AIOOBE.
+    int[] received = new int[ModulusGF.PDF417_GF.getSize() + 1];
+    System.arraycopy(PDF417_TEST_WITH_EC, 0, received, 0, PDF417_TEST_WITH_EC.length);
+    received[10] = (received[10] + 1) % ModulusGF.PDF417_GF.getSize(); // force a non-zero syndrome
+    try {
+      ec.decode(received, ECC_BYTES, new int[] {0});
+      fail("Should not have decoded");
+    } catch (ChecksumException ce) {
+      // good
+    }
+  }
+
   private void checkDecode(int[] received) throws ChecksumException {
     checkDecode(received, new int[0]);
   }
