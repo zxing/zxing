@@ -46,6 +46,12 @@ public final class ErrorCorrection {
                     int numECCodewords,
                     int[] erasures) throws ChecksumException {
 
+    if (received.length > field.getSize()) {
+      // A codeword cannot be longer than the field; otherwise erasure and error positions
+      // index past the exponent table in exp()/log().
+      throw ChecksumException.getChecksumInstance();
+    }
+
     ModulusPoly poly = new ModulusPoly(field, received);
     int[] S = new int[numECCodewords];
     boolean error = false;
