@@ -31,11 +31,11 @@ final class BitMatrixParser {
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
-   * @throws FormatException if dimension is not >= 21 and 1 mod 4
+   * @throws FormatException if dimension is not square, or not >= 21 and 1 mod 4
    */
   BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
     int dimension = bitMatrix.getHeight();
-    if (dimension < 21 || (dimension & 0x03) != 1) {
+    if (dimension < 21 || (dimension & 0x03) != 1 || bitMatrix.getWidth() != dimension) {
       throw FormatException.getFormatInstance();
     }
     this.bitMatrix = bitMatrix;
