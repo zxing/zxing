@@ -19,6 +19,9 @@ package com.google.zxing.maxicode.decoder;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.DecoderResult;
+
+import java.util.Locale;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -45,6 +48,25 @@ public final class DecoderTestCase extends Assert {
       fail("Expected FormatException");
     } catch (FormatException expected) {
       // good
+    }
+  }
+
+  @Test
+  public void testStructuredCarrierMessageLocaleIndependent() throws FormatException {
+    // Mode 2 prepends a numeric postcode, country code and service class. These must decode to
+    // Latin digits regardless of the JVM default locale (e.g. Arabic-Indic digits otherwise).
+    byte[] datawords = new byte[94];
+    Locale defaultLocale = Locale.getDefault();
+    String expected;
+    try {
+      Locale.setDefault(Locale.ENGLISH);
+      expected = DecodedBitStreamParser.decode(datawords, 2).getText();
+      Locale.setDefault(new Locale("ar", "EG"));
+      DecoderResult result = DecodedBitStreamParser.decode(datawords, 2);
+      assertEquals(expected, result.getText());
+      assertTrue(result.getText().startsWith("0"));
+    } finally {
+      Locale.setDefault(defaultLocale);
     }
   }
 
