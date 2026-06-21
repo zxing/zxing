@@ -19,7 +19,9 @@ package com.google.zxing.maxicode.decoder;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.DecoderResult;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * <p>MaxiCodes can encode text or structured information as bits in one of several modes,
@@ -96,12 +98,13 @@ final class DecodedBitStreamParser {
           if (ps2Length > 10) {
             throw FormatException.getFormatInstance();
           }
-          NumberFormat df = new DecimalFormat("0000000000".substring(0, ps2Length));
+          NumberFormat df = new DecimalFormat("0000000000".substring(0, ps2Length),
+              DecimalFormatSymbols.getInstance(Locale.ROOT));
           postcode = df.format(pc);
         } else {
           postcode = getPostCode3(bytes);
         }
-        NumberFormat threeDigits = new DecimalFormat("000");
+        NumberFormat threeDigits = new DecimalFormat("000", DecimalFormatSymbols.getInstance(Locale.ROOT));
         String country = threeDigits.format(getCountry(bytes));
         String service = threeDigits.format(getServiceClass(bytes));
         result.append(getMessage(bytes, 10, 84));
@@ -198,7 +201,7 @@ final class DecodedBitStreamParser {
             throw FormatException.getFormatInstance();
           }
           int nsval = (bytes[++i] << 24) + (bytes[++i] << 18) + (bytes[++i] << 12) + (bytes[++i] << 6) + bytes[++i];
-          sb.append(new DecimalFormat("000000000").format(nsval));
+          sb.append(new DecimalFormat("000000000", DecimalFormatSymbols.getInstance(Locale.ROOT)).format(nsval));
           break;
         case LOCK:
           shift = -1;

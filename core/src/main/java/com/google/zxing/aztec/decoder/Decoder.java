@@ -30,6 +30,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * <p>The main class which implements Aztec Code decoding -- as opposed to locating and extracting
@@ -85,7 +86,7 @@ public final class Decoder {
     byte[] rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
     String result = getEncodedData(correctedBits.correctBits);
     DecoderResult decoderResult =
-        new DecoderResult(rawBytes, result, null, String.format("%d%%", correctedBits.ecLevel));
+        new DecoderResult(rawBytes, result, null, String.format(Locale.ROOT, "%d%%", correctedBits.ecLevel));
     decoderResult.setNumBits(correctedBits.correctBits.length);
     decoderResult.setErrorsCorrected(correctedBits.errorsCorrected);
     return decoderResult;
