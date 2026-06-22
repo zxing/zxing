@@ -61,7 +61,12 @@ public final class ImageReader {
       throw new IOException("Unsupported data URI encoding");
     }
     String base64Data = uriString.substring(base64Start + BASE64TOKEN.length());
-    byte[] imageBytes = Base64.getDecoder().decode(base64Data);
+    byte[] imageBytes;
+    try {
+      imageBytes = Base64.getDecoder().decode(base64Data);
+    } catch (IllegalArgumentException iae) {
+      throw new IOException("Invalid base64 data URI", iae);
+    }
     return ImageIO.read(new ByteArrayInputStream(imageBytes));
   }
 
