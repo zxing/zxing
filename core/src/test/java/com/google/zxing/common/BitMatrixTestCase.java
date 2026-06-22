@@ -343,4 +343,38 @@ public final class BitMatrixTestCase extends Assert {
     return result;
   }
 
+  @Test
+  public void testFlipDoesNotCorruptPaddingBits() {
+    // Width 5 means rowSize = 1, so last int has 27 padding bits
+    BitMatrix matrix = new BitMatrix(5, 5);
+    // Flip all bits in empty matrix
+    matrix.flip();
+
+    // All logical bits should be true
+    for (int y = 0; y < 5; y++) {
+      for (int x = 0; x < 5; x++) {
+        assertTrue("Bit (" + x + "," + y + ") should be true after flip()", matrix.get(x, y));
+      }
+    }
+
+    // getTopLeftOnBit should return (0, 0), not something beyond width due to padding bits
+    int[] topLeft = matrix.getTopLeftOnBit();
+    assertNotNull(topLeft);
+    assertArrayEquals(new int[] { 0, 0 }, topLeft);
+
+    // getBottomRightOnBit should return (4, 4), not (31, 4) or worse due to padding
+    int[] bottomRight = matrix.getBottomRightOnBit();
+    assertNotNull(bottomRight);
+    assertArrayEquals(new int[] { 4, 4 }, bottomRight);
+
+    // getEnclosingRectangle should return (0, 0, 5, 5), not (0, 0, 32, 5) due to padding
+    int[] enclosing = matrix.getEnclosingRectangle();
+    assertNotNull(enclosing);
+    assertArrayEquals(new int[] { 0, 0, 5, 5 }, enclosing);
+
+    // Double flip should restore the matrix to all-zeros, equal to a fresh matrix
+    matrix.flip();
+    assertEquals(new BitMatrix(5, 5), matrix);
+  }
+
 }
