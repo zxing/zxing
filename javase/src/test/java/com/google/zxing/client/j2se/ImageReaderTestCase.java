@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URI;
 
 /**
@@ -37,5 +38,10 @@ public final class ImageReaderTestCase extends Assert {
     assertEquals(16, image.getWidth());
     assertEquals(16, image.getHeight());
   }
-  
+
+  @Test(expected = IOException.class)
+  public void testInvalidBase64DataURI() throws Exception {
+    ImageReader.readImage(new URI("data:image/png;base64,@@@notbase64@@@"));
+  }
+
 }
