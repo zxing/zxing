@@ -71,6 +71,28 @@ public final class DecoderTestCase extends Assert {
   }
 
   @Test
+  public void testTruncatedStructuredCarrierMessageHeader() {
+    // A mode 2/3 secondary message that starts with the structured append header "[)>RS01GS"
+    // but is shorter than the 9 characters the postcode/country/service splice assumes must be
+    // rejected as a format error, not insert past the end of the buffer.
+    byte[] datawords = new byte[94];
+    // SHIFTB '[' ')' SHIFTB '>' RS '0' '1' GS -> decodes to exactly "[)>01" (7 chars)
+    int[] message = {59, 42, 41, 59, 40, 30, 48, 49, 29};
+    for (int i = 0; i < message.length; i++) {
+      datawords[10 + i] = (byte) message[i];
+    }
+    for (int i = 10 + message.length; i < datawords.length; i++) {
+      datawords[i] = 33; // PAD, trimmed off the decoded message
+    }
+    try {
+      DecodedBitStreamParser.decode(datawords, 2);
+      fail("Expected FormatException");
+    } catch (FormatException expected) {
+      // good
+    }
+  }
+
+  @Test
   public void testWrongDimensions() throws ChecksumException {
     for (int[] wh : new int[][] {{31, 33}, {30, 34}, {29, 33}, {30, 32}}) {
       try {

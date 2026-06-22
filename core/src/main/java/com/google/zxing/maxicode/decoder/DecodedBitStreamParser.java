@@ -109,6 +109,9 @@ final class DecodedBitStreamParser {
         String service = threeDigits.format(getServiceClass(bytes));
         result.append(getMessage(bytes, 10, 84));
         if (result.toString().startsWith("[)>" + RS + "01" + GS)) {
+          if (result.length() < 9) {
+            throw FormatException.getFormatInstance();
+          }
           result.insert(9, postcode + GS + country + GS + service + GS);
         } else {
           result.insert(0, postcode + GS + country + GS + service + GS);
