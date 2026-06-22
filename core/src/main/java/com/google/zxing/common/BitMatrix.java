@@ -197,6 +197,15 @@ public final class BitMatrix implements Cloneable {
     for (int i = 0; i < max; i++) {
       bits[i] = ~bits[i];
     }
+    // Clear padding bits beyond the logical width in the last int of each row
+    int remainder = width % 32;
+    if (remainder != 0) {
+      int mask = (1 << remainder) - 1;
+      for (int y = 0; y < height; y++) {
+        int offset = y * rowSize + rowSize - 1;
+        bits[offset] &= mask;
+      }
+    }
   }
 
   /**
