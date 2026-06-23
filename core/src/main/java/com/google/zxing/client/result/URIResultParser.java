@@ -18,7 +18,6 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -70,12 +69,12 @@ public final class URIResultParser extends ResultParser {
       // Quick hack check for a common case
       return false;
     }
-    Matcher m = URL_WITH_PROTOCOL_PATTERN.matcher(uri);
-    if (m.find() && m.start() == 0) { // match at start only
+    // Anchor at the start. find() rescans from every position, which is quadratic on long
+    // input that has no match at the start; lookingAt() matches only a prefix.
+    if (URL_WITH_PROTOCOL_PATTERN.matcher(uri).lookingAt()) {
       return true;
     }
-    m = URL_WITHOUT_PROTOCOL_PATTERN.matcher(uri);
-    return m.find() && m.start() == 0;
+    return URL_WITHOUT_PROTOCOL_PATTERN.matcher(uri).lookingAt();
   }
 
 }

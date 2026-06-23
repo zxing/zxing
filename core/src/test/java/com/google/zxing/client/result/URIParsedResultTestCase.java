@@ -65,6 +65,17 @@ public final class URIParsedResultTestCase extends Assert {
     doTestNotUri("foo.bar.bing.baz.foo.bar.bing.baz");
   }
 
+  // A long run of characters that never forms a URI at the start must be rejected quickly;
+  // find() rescanned from every position and was quadratic on such input.
+  @Test(timeout = 5000L)
+  public void testNoQuadraticScanning() {
+    StringBuilder sb = new StringBuilder(200000);
+    for (int i = 0; i < 200000; i++) {
+      sb.append('a');
+    }
+    assertFalse(URIResultParser.isBasicallyValidURI(sb.toString()));
+  }
+
   @Test
   public void testURLTO() {
     doTest("urlto::bar.com", "http://bar.com", null);
