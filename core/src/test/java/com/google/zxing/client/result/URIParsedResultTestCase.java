@@ -76,6 +76,18 @@ public final class URIParsedResultTestCase extends Assert {
     assertFalse(URIResultParser.isBasicallyValidURI(sb.toString()));
   }
 
+  // A scheme followed by a long run of ':' must be checked quickly; ':' is a member of the userinfo
+  // class, so the find() of the user-in-host regex backtracked quadratically on such input.
+  @Test(timeout = 5000L)
+  public void testNoQuadraticMaliciousScanning() {
+    StringBuilder sb = new StringBuilder(200007);
+    sb.append("http://");
+    for (int i = 0; i < 200000; i++) {
+      sb.append(':');
+    }
+    assertFalse(URIResultParser.isPossiblyMaliciousURI(sb.toString()));
+  }
+
   @Test
   public void testURLTO() {
     doTest("urlto::bar.com", "http://bar.com", null);
@@ -101,7 +113,9 @@ public final class URIParsedResultTestCase extends Assert {
     doTestIsPossiblyMalicious("https://google.com:443", false);
     doTestIsPossiblyMalicious("https://google.com:443/", false);
     doTestIsPossiblyMalicious("https://evil@google.com:443", true);
+    doTestIsPossiblyMalicious("http://user:pass@evil.com", true);
     doTestIsPossiblyMalicious("http://google.com/foo@bar", false);
+    doTestIsPossiblyMalicious("http://google.com:8080/path@x", false);
     doTestIsPossiblyMalicious("http://google.com/@@", false);
   }
 

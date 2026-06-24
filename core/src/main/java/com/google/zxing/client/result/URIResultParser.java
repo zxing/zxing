@@ -29,7 +29,6 @@ public final class URIResultParser extends ResultParser {
 
   private static final Pattern ALLOWED_URI_CHARS_PATTERN =
       Pattern.compile("[-._~:/?#\\[\\]@!$&'()*+,;=%A-Za-z0-9]+");
-  private static final Pattern USER_IN_HOST = Pattern.compile(":/*([^/@]+)@[^/]+");
   // See http://www.ietf.org/rfc/rfc2396.txt
   private static final Pattern URL_WITH_PROTOCOL_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9+-.]+:");
   private static final Pattern URL_WITHOUT_PROTOCOL_PATTERN = Pattern.compile(
@@ -61,7 +60,49 @@ public final class URIResultParser extends ResultParser {
    *  to connect to yourbank.com at first glance.
    */
   static boolean isPossiblyMaliciousURI(String uri) {
-    return !ALLOWED_URI_CHARS_PATTERN.matcher(uri).matches() || USER_IN_HOST.matcher(uri).find();
+    return !ALLOWED_URI_CHARS_PATTERN.matcher(uri).matches() || containsUserInHost(uri);
+  }
+
+  /**
+   * Linear equivalent of finding {@code :/*([^/@]+)@[^/]+} anywhere in the URI, i.e. user/password
+   * syntax in the authority. A regex with {@link java.util.regex.Matcher#find()} backtracks
+   * quadratically here because ':' is itself a member of the userinfo class {@code [^/@]}, so a
+   * scheme followed by a long run of ':' restarts the greedy scan at every colon. This scans from
+   * each '@' instead, examining each character a constant number of times.
+   */
+  private static boolean containsUserInHost(String uri) {
+    int length = uri.length();
+    for (int at = uri.indexOf('@'); at >= 0; at = uri.indexOf('@', at + 1)) {
+      // Host part "[^/]+": at least one non-'/' character must follow '@'.
+      if (at + 1 >= length || uri.charAt(at + 1) == '/') {
+        continue;
+      }
+      // Userinfo "[^/@]+" ends just before '@'. A ':' inside the run (with a character after it)
+      // can serve as the scheme colon.
+      boolean schemeColon = false;
+      int i = at - 1;
+      while (i >= 0 && uri.charAt(i) != '/' && uri.charAt(i) != '@') {
+        if (uri.charAt(i) == ':' && i <= at - 2) {
+          schemeColon = true;
+        }
+        i--;
+      }
+      if (i + 1 == at) {
+        // No userinfo character immediately before '@'.
+        continue;
+      }
+      if (schemeColon) {
+        return true;
+      }
+      // Otherwise the scheme colon may sit before the run, separated by "/*".
+      while (i >= 0 && uri.charAt(i) == '/') {
+        i--;
+      }
+      if (i >= 0 && uri.charAt(i) == ':') {
+        return true;
+      }
+    }
+    return false;
   }
 
   static boolean isBasicallyValidURI(String uri) {
