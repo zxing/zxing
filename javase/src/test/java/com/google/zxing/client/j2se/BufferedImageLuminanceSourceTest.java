@@ -51,6 +51,34 @@ public final class BufferedImageLuminanceSourceTest extends Assert {
   }
 
   @Test
+  public void testNegativeOffsetOnGrayImage() {
+    BufferedImage grayImage = new BufferedImage(10, 10, BufferedImage.TYPE_BYTE_GRAY);
+    Assert.assertThrows(IllegalArgumentException.class, () ->
+        new BufferedImageLuminanceSource(grayImage, -1, 0, 5, 5)
+    );
+    Assert.assertThrows(IllegalArgumentException.class, () ->
+        new BufferedImageLuminanceSource(grayImage, 0, -1, 5, 5)
+    );
+  }
+
+  @Test
+  public void testNegativeOffsetOnColorImage() {
+    BufferedImage colorImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
+    Assert.assertThrows(IllegalArgumentException.class, () ->
+        new BufferedImageLuminanceSource(colorImage, -1, 0, 5, 5)
+    );
+  }
+
+  @Test
+  public void testCropOffsetOverflowOnGrayImage() {
+    BufferedImage grayImage = new BufferedImage(10, 10, BufferedImage.TYPE_BYTE_GRAY);
+    // left + width overflows int and wraps negative, so an upper-bound-only check passes
+    Assert.assertThrows(IllegalArgumentException.class, () ->
+        new BufferedImageLuminanceSource(grayImage, Integer.MAX_VALUE, 0, 10, 5)
+    );
+  }
+
+  @Test
   public void testValidCropRectangleOnGrayImage() {
     BufferedImage grayImage = new BufferedImage(10, 10, BufferedImage.TYPE_BYTE_GRAY);
     
