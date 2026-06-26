@@ -72,6 +72,16 @@ public final class PlanarYUVLuminanceSourceTestCase extends Assert {
         source.renderThumbnail());
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testNegativeCrop() {
+    new PlanarYUVLuminanceSource(YUV, COLS, ROWS, -1, 0, COLS, ROWS, false);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testOverflowCrop() {
+    new PlanarYUVLuminanceSource(YUV, COLS, ROWS, 1, 0, Integer.MAX_VALUE, ROWS, false);
+  }
+
   private static void assertEquals(byte[] expected, int expectedFrom,
                                    byte[] actual, int actualFrom,
                                    int length) {

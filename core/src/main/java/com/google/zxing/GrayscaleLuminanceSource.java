@@ -48,7 +48,8 @@ public class GrayscaleLuminanceSource extends LuminanceSource {
                                    int width,
                                    int height) {
     super(width, height);
-    if (left + width > dataWidth || top + height > dataHeight) {
+    if (left < 0 || top < 0 || width < 0 || height < 0 ||
+        width > dataWidth - left || height > dataHeight - top) {
       throw new IllegalArgumentException("Crop rectangle does not fit within image data.");
     }
     this.luminances = pixels;

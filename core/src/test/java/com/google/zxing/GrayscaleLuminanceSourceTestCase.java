@@ -109,6 +109,16 @@ public final class GrayscaleLuminanceSourceTestCase extends Assert {
   }
 
   @Test(expected = IllegalArgumentException.class)
+  public void testNegativeCrop() {
+    SOURCE.crop(-1, 0, 3, 3);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testOverflowCrop() {
+    SOURCE.crop(1, 0, Integer.MAX_VALUE, 3);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
   public void testNullPixelArray() {
     // Test regression: null pixel array should throw IllegalArgumentException
     new RGBLuminanceSource(3, 3, null);
