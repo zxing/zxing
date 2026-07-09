@@ -239,7 +239,7 @@ public final class Encoder {
       drawBullsEye(matrix, matrixSize / 2, 5);
     } else {
       drawBullsEye(matrix, matrixSize / 2, 7);
-      for (int i = 0, j = 0; i < baseMatrixSize / 2 - 1; i += 15, j += 16) {
+      for (int i = 0, j = 0; i < baseMatrixSize / 2; i += 15, j += 16) {
         for (int k = (matrixSize / 2) & 1; k < matrixSize; k += 2) {
           matrix.set(matrixSize / 2 - j, k);
           matrix.set(matrixSize / 2 + j, k);
