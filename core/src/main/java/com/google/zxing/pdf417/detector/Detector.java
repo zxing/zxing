@@ -212,11 +212,12 @@ public final class Detector {
                                                    int[] pattern) {
     ResultPoint[] result = new ResultPoint[4];
     boolean found = false;
+    int minStartRow = startRow;
     int[] counters = new int[pattern.length];
     for (; startRow < height; startRow += ROW_STEP) {
       int[] loc = findGuardPattern(matrix, startColumn, startRow, width, pattern, counters);
       if (loc != null) {
-        while (startRow > 0) {
+        while (startRow > minStartRow + 1) {
           int[] previousRowLoc = findGuardPattern(matrix, startColumn, --startRow, width, pattern, counters);
           if (previousRowLoc != null) {
             loc = previousRowLoc;
