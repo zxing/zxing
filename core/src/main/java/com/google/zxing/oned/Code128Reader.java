@@ -276,7 +276,9 @@ public final class Code128Reader extends OneDReader {
     int code = 0;
     int checksumTotal = startCode;
     int multiplier = 0;
-    boolean lastCharacterWasPrintable = true;
+    int lastResultLength = 0;
+    int lastSymbologyModifier = symbologyModifier;
+    boolean lastReaderInit = readerInit;
     boolean upperMode = false;
     boolean shiftUpperMode = false;
 
@@ -293,13 +295,11 @@ public final class Code128Reader extends OneDReader {
 
       rawCodes.add((byte) code);
 
-      // Remember whether the last code was printable or not (excluding CODE_STOP)
+      // Save the output in case this code is the checksum.
       if (code != CODE_STOP) {
-        lastCharacterWasPrintable = true;
-      }
-
-      // Add to checksum computation (if not CODE_STOP of course)
-      if (code != CODE_STOP) {
+        lastResultLength = result.length();
+        lastSymbologyModifier = symbologyModifier;
+        lastReaderInit = readerInit;
         multiplier++;
         checksumTotal += multiplier * code;
       }
@@ -336,11 +336,6 @@ public final class Code128Reader extends OneDReader {
             }
             shiftUpperMode = false;
           } else {
-            // Don't let CODE_STOP, which always appears, affect whether whether we think the last
-            // code was printable or not.
-            if (code != CODE_STOP) {
-              lastCharacterWasPrintable = false;
-            }
             switch (code) {
               case CODE_FNC_1:
                 if (result.length() == 0) { // FNC1 at first or second character determines the symbology
@@ -401,9 +396,6 @@ public final class Code128Reader extends OneDReader {
             }
             shiftUpperMode = false;
           } else {
-            if (code != CODE_STOP) {
-              lastCharacterWasPrintable = false;
-            }
             switch (code) {
               case CODE_FNC_1:
                 if (result.length() == 0) { // FNC1 at first or second character determines the symbology
@@ -462,9 +454,6 @@ public final class Code128Reader extends OneDReader {
             }
             result.append(code);
           } else {
-            if (code != CODE_STOP) {
-              lastCharacterWasPrintable = false;
-            }
             switch (code) {
               case CODE_FNC_1:
                 if (result.length() == 0) { // FNC1 at first or second character determines the symbology
@@ -523,22 +512,16 @@ public final class Code128Reader extends OneDReader {
       throw ChecksumException.getChecksumInstance();
     }
 
-    // Need to pull out the check digits from string
     int resultLength = result.length();
     if (resultLength == 0) {
       // false positive
       throw NotFoundException.getNotFoundInstance();
     }
 
-    // Only bother if the result had at least one character, and if the checksum digit happened to
-    // be a printable character. If it was just interpreted as a control code, nothing to remove.
-    if (resultLength > 0 && lastCharacterWasPrintable) {
-      if (codeSet == CODE_CODE_C) {
-        result.delete(resultLength - 2, resultLength);
-      } else {
-        result.delete(resultLength - 1, resultLength);
-      }
-    }
+    // Discard the checksum's text and function code effects.
+    result.setLength(lastResultLength);
+    symbologyModifier = lastSymbologyModifier;
+    readerInit = lastReaderInit;
 
     float left = (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
