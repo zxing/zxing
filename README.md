@@ -72,6 +72,7 @@ library implemented in Java, with ports to other languages.
 | [pyzxing](https://github.com/ChenjieXu/pyzxing)                                           | Python wrapper to ZXing library
 | [zxing-dart](https://github.com/shirne/zxing-dart)                                        | Port to dart
 | [rxing](https://github.com/rxing-core/rxing)                                                | Port to rust
+| [Barleader](https://github.com/kamilkrzywanski/barleader)                                 | Pure Java port of the zxing-cpp reader (no JNI or native code), with writers for every ZXing and Barcode-Lib4J symbology
 
 ### Other related third-party open source projects
 
