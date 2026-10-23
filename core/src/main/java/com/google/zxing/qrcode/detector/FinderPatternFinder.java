@@ -581,8 +581,12 @@ public class FinderPatternFinder {
     int confirmedCount = 0;
     float totalModuleSize = 0.0f;
     int max = possibleCenters.size();
+    FinderPattern[] confirmed = new FinderPattern[3];
     for (FinderPattern pattern : possibleCenters) {
       if (pattern.getCount() >= CENTER_QUORUM) {
+        if (confirmedCount < 3) {
+          confirmed[confirmedCount] = pattern;
+        }
         confirmedCount++;
         totalModuleSize += pattern.getEstimatedModuleSize();
       }
@@ -599,7 +603,25 @@ public class FinderPatternFinder {
     for (FinderPattern pattern : possibleCenters) {
       totalDeviation += Math.abs(pattern.getEstimatedModuleSize() - average);
     }
-    return totalDeviation <= 0.05f * totalModuleSize;
+    if (totalDeviation > 0.05f * totalModuleSize) {
+      return false;
+    }
+    // Three patterns that cannot be the corners of a QR code are not the answer either: one of
+    // them is a pattern inside the data. With exactly 3 confirmed centers, nothing else can
+    // replace it, so keep scanning for the real corner.
+    return confirmedCount > 3 || isPlausibleTriangle(confirmed[0], confirmed[1], confirmed[2]);
+  }
+
+  /**
+   * @return false iff the three patterns are far from the corners of an isosceles right triangle,
+   *         even allowing for a QR code that is seen at an angle
+   */
+  private static boolean isPlausibleTriangle(FinderPattern p0, FinderPattern p1, FinderPattern p2) {
+    double[] sides = {squaredDistance(p0, p1), squaredDistance(p1, p2), squaredDistance(p0, p2)};
+    Arrays.sort(sides);
+    // Same measure as selectBestPatterns(): it is 0 for an isosceles right triangle
+    double distortion = Math.abs(sides[2] - 2 * sides[1]) + Math.abs(sides[2] - 2 * sides[0]);
+    return distortion <= sides[2] / 2;
   }
 
   /**
