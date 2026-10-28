@@ -71,6 +71,7 @@ public final class PDF417EncoderTestCase extends Assert {
     try {
       // detect when a TEXT Compaction is applied to a non text input
       checkEncodeAutoWithSpecialChars("€ 123,45", Compaction.TEXT);
+      fail("Expected WriterException");
     } catch (WriterException e) {
       assertNotNull(e.getMessage());
       assertTrue(e.getMessage().contains("8364"));
@@ -82,6 +83,7 @@ public final class PDF417EncoderTestCase extends Assert {
       // detect when a TEXT Compaction is applied to a non text input
       String input = "Hello! " + (char) 128;
       checkEncodeAutoWithSpecialChars(input, Compaction.TEXT);
+      fail("Expected WriterException");
     } catch (WriterException e) {
       assertNotNull(e.getMessage());
       assertTrue(e.getMessage().contains("128"));
@@ -101,6 +103,7 @@ public final class PDF417EncoderTestCase extends Assert {
       hints.put(EncodeHintType.PDF417_COMPACTION, Compaction.TEXT);
       
       (new MultiFormatWriter()).encode(content, BarcodeFormat.PDF_417, 200, 100, hints);
+      fail("Expected WriterException");
     } catch (WriterException e) {
       assertNotNull(e.getMessage());
       assertTrue(e.getMessage().contains("8364"));
@@ -126,6 +129,7 @@ public final class PDF417EncoderTestCase extends Assert {
     try {
       // should throw an exception for character 'o' because it exceeds upper limit 110
       PDF417HighLevelEncoder.checkCharset(input,110,errorMessage);
+      fail("Expected WriterException");
     } catch (WriterException e) {
       assertNotNull(e.getMessage());
       assertTrue(e.getMessage().contains("111"));
