@@ -371,6 +371,7 @@ public final class EncoderTestCase extends Assert {
     // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
     try {
       Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+      fail("Expected WriterException");
     } catch (WriterException we) {
       // good
     }
@@ -570,6 +571,7 @@ public final class EncoderTestCase extends Assert {
     // Invalid data.
     try {
       Encoder.appendAlphanumericBytes("abc", new BitArray());
+      fail("Expected WriterException");
     } catch (WriterException we) {
       // good
     }
