@@ -300,6 +300,7 @@ public class PDF417DecoderTestCase extends Assert {
     performPermutationTest(new char[] {'a', '\u00c4'}, 10, 11233);
   }
 
+  @Test
   public void testUppercaseLowercaseNumericMix() throws WriterException, FormatException {
     performPermutationTest(new char[] {'A', 'a', '1'}, 7, 15491);
   }
