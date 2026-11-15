@@ -1,4 +1,4 @@
-name: Library Bug Report
+name: Core Library Bug Report
 description: Report a reproducible bug in the core ZXing Java library
 title: "[Bug]: "
 labels: ["bug"]
@@ -6,58 +6,53 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Note:** ZXing is in maintenance mode. Feature requests, general usage questions, and issues with third-party ports (e.g., ZXing.Net, zxing-cpp, html5-qrcode) or the retired Barcode Scanner Android app will be closed.
+        Please read [CONTRIBUTING.md](https://github.com/zxing/zxing/blob/master/.github/CONTRIBUTING.md) before submitting.
+        - **Maintenance Mode:** ZXing is not under active feature development. Feature requests, new barcode format requests, and general questions will be closed.
+        - **Core Java Library Only:** Do not report issues with the retired Barcode Scanner Android app, device camera focus/hardware, or third-party ports (`ZXing.Net`, `zxing-cpp`, `html5-qrcode`, `zxing-js`, etc.).
 
   - type: checkboxes
     id: preflight
     attributes:
-      label: Pre-flight Checklist
+      label: Pre-Submission Checks
       options:
-        - label: I have tested against the latest release of the core `zxing` Java library.
+        - label: I have tested against the latest release/HEAD or the online decoder (https://zxing.org/w/decode.jspx).
           required: true
-        - label: I have searched existing open and closed issues to verify this is not a duplicate.
+        - label: I have searched existing open and closed issues to confirm this is not a duplicate.
           required: true
-        - label: This is a bug in the core Java library, not a usage question or feature request.
+        - label: This is a reproducible bug in the core Java library (`core` / `javase`), not a usage question, feature request, or Android app/camera issue.
           required: true
 
   - type: input
     id: version
     attributes:
-      label: ZXing Core Version
-      description: Specify the exact Maven/Gradle artifact version (e.g., `3.5.3`).
+      label: ZXing Version
+      description: Exact Maven/Gradle version (e.g., `3.5.3`) or commit SHA.
       placeholder: "3.5.3"
-    validations:
-      required: true
-
-  - type: input
-    id: environment
-    attributes:
-      label: Java / Runtime Environment
-      description: JDK version, OS, and any relevant build tools.
-      placeholder: "OpenJDK 21, Ubuntu 24.04"
     validations:
       required: true
 
   - type: textarea
     id: description
     attributes:
-      label: Description of the Bug
-      description: A clear description of what failed and what you expected to happen.
+      label: Expected vs. Actual Behavior
+      description: |
+        State what you expected (including the **exact text/data encoded in the barcode**, if applicable) and what actually happened (e.g., `NotFoundException`, `ChecksumException`, `FormatException`, or incorrect decoded output).
     validations:
       required: true
 
   - type: textarea
     id: reproduction
     attributes:
-      label: Steps to Reproduce & Sample Barcode
+      label: Sample Barcode Image & Reproduction Code
       description: |
-        Provide minimal Java code to reproduce the issue, including any `DecodeHintType` / `EncodeHintType` settings.
-        **If reporting a decoding failure, attach the original, uncompressed barcode image.**
+        1. **Attach the original, unmodified barcode image** (required for decoding issues—avoid screenshots or photos of screens unless testing camera capture).
+        2. Provide minimal Java reproduction code, including any `DecodeHintType` (e.g., `TRY_HARDER`, `PURE_BARCODE`, `POSSIBLE_FORMATS`) or `EncodeHintType` settings used.
     validations:
       required: true
 
   - type: textarea
-    id: logs
+    id: environment
     attributes:
-      label: Stack Trace or Error Output
+      label: Environment & Stack Trace
+      description: Include JDK version, OS, and any relevant exception stack trace.
       render: shell

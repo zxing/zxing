@@ -1,7 +1,7 @@
 ## Summary
 
-<!-- Briefly describe the bug being fixed and the root cause. -->
-<!-- Note: ZXing is in maintenance mode. Pull requests adding new features, format support, or unsolicited refactoring will generally be closed without merging. -->
+<!-- Describe the bug being fixed or the focused improvement being made, and link the related issue. -->
+<!-- Please read CONTRIBUTING.md before submitting: https://github.com/zxing/zxing/blob/master/.github/CONTRIBUTING.md -->
 
 Fixes #(issue_number)
 
@@ -12,12 +12,12 @@ Fixes #(issue_number)
 
 ## Test Plan
 
-<!-- Explain how this fix was verified (e.g., new unit test case with a sample barcode image, existing regression tests). -->
+<!-- Describe the unit tests added or updated to verify this change (e.g., decoding a new test barcode image or verifying an edge case). -->
 
 ## Pre-Submission Checklist
 
-- [ ] This PR fixes a reproducible bug in the core Java library (`core` / `javase`) and does not introduce new features or public API changes.
-- [ ] An existing issue is linked above (or the bug is thoroughly documented in the summary).
-- [ ] Unit tests covering the fix have been added or updated (including sample barcode images in `core/src/test/resources/` if applicable).
-- [ ] The full Maven test suite and checkstyle/static analysis checks pass locally (`mvn test` / `mvn verify`).
-- [ ] Changes follow the existing code style and formatting conventions of the repository.
+- [ ] **Scope:** This PR addresses a reproducible bug or small, self-contained improvement in the core Java library (`core` / `javase`), not the retired Android app or an unsolicited large refactor.
+- [ ] **Tests:** New or updated unit tests cover the change (with any new test barcode images added under `core/src/test/resources/`).
+- [ ] **Build & Static Analysis:** `mvn verify` passes locally with zero test, Checkstyle, or static analysis failures.
+- [ ] **Code Style:** Changes match the repository's existing formatting conventions (including 2-space indentation and Javadoc standards).
+- [ ] **Licensing:** I have the right to submit this work under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), and any new source files include the standard ZXing Apache 2.0 license header.
