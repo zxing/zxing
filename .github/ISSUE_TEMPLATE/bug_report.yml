@@ -1,0 +1,63 @@
+name: Library Bug Report
+description: Report a reproducible bug in the core ZXing Java library
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Note:** ZXing is in maintenance mode. Feature requests, general usage questions, and issues with third-party ports (e.g., ZXing.Net, zxing-cpp, html5-qrcode) or the retired Barcode Scanner Android app will be closed.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight Checklist
+      options:
+        - label: I have tested against the latest release of the core `zxing` Java library.
+          required: true
+        - label: I have searched existing open and closed issues to verify this is not a duplicate.
+          required: true
+        - label: This is a bug in the core Java library, not a usage question or feature request.
+          required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: ZXing Core Version
+      description: Specify the exact Maven/Gradle artifact version (e.g., `3.5.3`).
+      placeholder: "3.5.3"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Java / Runtime Environment
+      description: JDK version, OS, and any relevant build tools.
+      placeholder: "OpenJDK 21, Ubuntu 24.04"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Bug
+      description: A clear description of what failed and what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce & Sample Barcode
+      description: |
+        Provide minimal Java code to reproduce the issue, including any `DecodeHintType` / `EncodeHintType` settings.
+        **If reporting a decoding failure, attach the original, uncompressed barcode image.**
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Stack Trace or Error Output
+      render: shell

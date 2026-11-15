@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Usage Questions & How-To Help
+    url: https://stackoverflow.com/questions/tagged/zxing
+    about: Please ask usage, integration, and decoding questions on Stack Overflow using the "zxing" tag.
+  - name: General Discussion
+    url: https://github.com/zxing/zxing/discussions
+    about: Discuss project topics or ask community questions outside the bug tracker.
