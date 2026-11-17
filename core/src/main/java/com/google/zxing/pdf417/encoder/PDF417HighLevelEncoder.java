@@ -266,7 +266,7 @@ final class PDF417HighLevelEncoder {
               } else {
                 //Mode latch performed by encodeBinary()
                 if (autoECI) {
-                  encodeMultiECIBinary(input, p, p + b, encodingMode, sb);
+                  encodeMultiECIBinary(input, p, b, encodingMode, sb);
                 } else {
                   encodeBinary(bytes, 0, bytes.length, encodingMode, sb);
                 }

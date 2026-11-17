@@ -386,6 +386,13 @@ public class PDF417DecoderTestCase extends Assert {
   }
 
   @Test
+  public void testECIBinaryFollowedByNumeric() throws Exception {
+    //the byte compaction ends where the numeric compaction of 13 digits or more starts
+    encodeDecode("\u041f\u0440\u0438\u0432\u0435\u04421234567890123", null, true, true);
+    encodeDecode("hello\u00e9\u00e91234567890123", null, true, true);
+  }
+
+  @Test
   public void testBinaryMultiECI() throws Exception {
     //Test the cases described in 5.5.5.3 "ECI and Byte Compaction mode using latch 924 and 901"
     performDecodeTest(new int[] {5, 927, 4, 913, 200}, "\u010c");
