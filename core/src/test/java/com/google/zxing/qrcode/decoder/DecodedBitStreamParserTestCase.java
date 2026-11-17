@@ -41,6 +41,18 @@ public final class DecodedBitStreamParserTestCase extends Assert {
   }
 
   @Test
+  public void testByteModeLatin1NotMistakenForUTF8() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x04, 4); // Byte mode
+    builder.write(0x02, 8); // 2 bytes
+    builder.write(0xC4, 8); // looks like a UTF-8 lead byte...
+    builder.write(0xE4, 8); // ...but this is not a continuation byte
+    String result = DecodedBitStreamParser.decode(builder.toByteArray(),
+        Version.getVersionForNumber(1), null, null).getText();
+    assertEquals("\u00c4\u00e4", result);
+  }
+
+  @Test
   public void testSimpleSJIS() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x04, 4); // Byte mode

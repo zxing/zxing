@@ -49,6 +49,18 @@ public final class StringUtilsTestCase extends Assert {
   }
 
   @Test
+  public void testShortISO885912() {
+    // Öé! -- 0xD6 looks like a UTF-8 lead byte, but 0xE9 is not a continuation byte
+    doTest(new byte[] { (byte) 0xd6, (byte) 0xe9, (byte) 0x21, }, StandardCharsets.ISO_8859_1, "ISO8859_1");
+  }
+
+  @Test
+  public void testShortISO885913() {
+    // Ää -- 0xC4 looks like a UTF-8 lead byte, but 0xE4 is not a continuation byte
+    doTest(new byte[] { (byte) 0xc4, (byte) 0xe4, }, StandardCharsets.ISO_8859_1, "ISO8859_1");
+  }
+
+  @Test
   public void testShortUTF81() {
     // Español
     doTest(new byte[] { (byte) 0x45, (byte) 0x73, (byte) 0x70, (byte) 0x61, (byte) 0xc3,

@@ -149,7 +149,8 @@ public final class StringUtils {
       // UTF-8 stuff
       if (canBeUTF8) {
         if (utf8BytesLeft > 0) {
-          if ((value & 0x80) == 0) {
+          // continuation bytes must look like 10xxxxxx
+          if ((value & 0xC0) != 0x80) {
             canBeUTF8 = false;
           } else {
             utf8BytesLeft--;
