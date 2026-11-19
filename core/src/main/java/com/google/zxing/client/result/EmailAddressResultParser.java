@@ -73,6 +73,8 @@ public final class EmailAddressResultParser extends ResultParser {
         if (bccString != null) {
           bccs = COMMA.split(bccString);
         }
+        // RFC 6068 makes '+' a plus sign in the subject and body too. They deliberately keep the form decoding,
+        // where it is a space, so that existing codes written that way still read as before.
         subject = nameValues.get("subject");
         body = nameValues.get("body");
       }
