@@ -65,12 +65,23 @@ public final class URIParsedResult extends ParsedResult {
   private static String massageURI(String uri) {
     uri = uri.trim();
     int protocolEnd = uri.indexOf(':');
-    if (protocolEnd < 0 || isColonFollowedByPortNumber(uri, protocolEnd)) {
+    if (protocolEnd < 0 || isColonFollowedByPortNumber(uri, protocolEnd) || isColonAfterHost(uri, protocolEnd)) {
       // No protocol, or found a colon, but it looks like it is after the host, so the protocol is still missing,
       // so assume http
       uri = "http://" + uri;
     }
     return uri;
+  }
+
+  private static boolean isColonAfterHost(String uri, int protocolEnd) {
+    // A scheme contains no '/', '?' or '#', so a colon after one of them is in the path, query or fragment
+    for (int i = 0; i < protocolEnd; i++) {
+      char c = uri.charAt(i);
+      if (c == '/' || c == '?' || c == '#') {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static boolean isColonFollowedByPortNumber(String uri, int protocolEnd) {
