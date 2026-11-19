@@ -40,6 +40,7 @@ public final class GeoParsedResultTestCase extends Assert {
     doTest("geo:-20.33,132.3344,0.01?q=foobar", -20.33, 132.3344, 0.01, "q=foobar", null);
     doTest("GEO:-20.33,132.3344,0.01?q=foobar", -20.33, 132.3344, 0.01, "q=foobar", null);
     doTest("geo:31.5,35.47,-430.5", 31.5, 35.47, -430.5, null, null);
+    doTest("geo:31.5,35.47,-430.5?q=foobar", 31.5, 35.47, -430.5, "q=foobar", null);
   }
 
   private static void doTest(String contents,
