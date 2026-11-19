@@ -71,6 +71,36 @@ public final class EmailAddressParsedResultTestCase extends Assert {
 
   
   @Test
+  public void testEmailAddressWithPlus() {
+    doTest("mailto:bill+ietf@example.org", "bill+ietf@example.org", null, null);
+    doTest("mailto:bill%2Bietf@example.org", "bill+ietf@example.org", null, null);
+    doTest("mailto:?to=bill+ietf@example.org&cc=bob+ietf@example.org&bcc=carol+ietf@example.org&subject=foo+bar",
+           new String[] {"bill+ietf@example.org"},
+           new String[] {"bob+ietf@example.org"},
+           new String[] {"carol+ietf@example.org"},
+           "foo bar",
+           null);
+    doTest("mailto:bill+ietf@example.org?body=foo+bar",
+           new String[] {"bill+ietf@example.org"},
+           null, null, null,
+           "foo bar");
+    doTest("mailto:?to=bill%2Bietf@example.org&cc=bob%2Bietf@example.org&bcc=carol%2Bietf@example.org",
+           new String[] {"bill+ietf@example.org"},
+           new String[] {"bob+ietf@example.org"},
+           new String[] {"carol+ietf@example.org"},
+           null, null);
+    doTest("mailto:bill+ietf@example.org,bob+ietf@example.org",
+           new String[] {"bill+ietf@example.org", "bob+ietf@example.org"},
+           null, null, null, null);
+    doTest("mailto:?to=bill+ietf@example.org,bob+ietf@example.org&cc=carol+ietf@example.org,dave+ietf@example.org"
+               + "&bcc=erin+ietf@example.org,frank+ietf@example.org",
+           new String[] {"bill+ietf@example.org", "bob+ietf@example.org"},
+           new String[] {"carol+ietf@example.org", "dave+ietf@example.org"},
+           new String[] {"erin+ietf@example.org", "frank+ietf@example.org"},
+           null, null);
+  }
+
+  @Test
   public void testTos() {
     doTest("mailto:srowen@example.org,bob@example.org",
            new String[] {"srowen@example.org", "bob@example.org"},
