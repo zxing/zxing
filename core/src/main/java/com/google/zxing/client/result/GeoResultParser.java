@@ -59,10 +59,8 @@ public final class GeoResultParser extends ResultParser {
       if (matcher.group(3) == null) {
         altitude = 0.0;
       } else {
+        // May be negative: a place can lie below the reference surface (RFC 5870)
         altitude = Double.parseDouble(matcher.group(3));
-        if (altitude < 0.0) {
-          return null;
-        }
       }
     } catch (NumberFormatException ignored) {
       return null;

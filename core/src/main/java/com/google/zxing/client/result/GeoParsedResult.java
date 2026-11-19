@@ -43,7 +43,7 @@ public final class GeoParsedResult extends ParsedResult {
     result.append(latitude);
     result.append(',');
     result.append(longitude);
-    if (altitude > 0) {
+    if (altitude != 0.0) {
       result.append(',');
       result.append(altitude);
     }
@@ -88,7 +88,7 @@ public final class GeoParsedResult extends ParsedResult {
     result.append(latitude);
     result.append(", ");
     result.append(longitude);
-    if (altitude > 0.0) {
+    if (altitude != 0.0) {
       result.append(", ");
       result.append(altitude);
       result.append('m');
