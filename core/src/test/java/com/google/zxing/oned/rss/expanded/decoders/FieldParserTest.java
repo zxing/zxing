@@ -51,4 +51,10 @@ public final class FieldParserTest extends Assert {
   public void testParseField2() throws Exception {
     checkFields("(15)991231(15)991231(3103)001750(10)12A");
   }
+
+  @Test
+  public void testParseCompanyInternalField() throws Exception {
+    // AIs 91 to 99 hold up to 90 characters
+    checkFields("(91)1234567890123456789012345678901234567890");
+  }
 }

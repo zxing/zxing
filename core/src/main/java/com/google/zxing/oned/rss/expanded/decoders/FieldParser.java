@@ -55,8 +55,9 @@ final class FieldParser {
     TWO_DIGIT_DATA_LENGTH.put("30", DataLength.variable(8));
     TWO_DIGIT_DATA_LENGTH.put("37", DataLength.variable(8));
     //internal company codes
-    for (int i = 90; i <= 99; i++) {
-      TWO_DIGIT_DATA_LENGTH.put(String.valueOf(i), DataLength.variable(30));
+    TWO_DIGIT_DATA_LENGTH.put("90", DataLength.variable(30));
+    for (int i = 91; i <= 99; i++) {
+      TWO_DIGIT_DATA_LENGTH.put(String.valueOf(i), DataLength.variable(90));
     }
   }
 
