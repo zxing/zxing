@@ -144,6 +144,15 @@ public final class EncoderTestCase extends Assert {
   }
 
   @Test
+  public void testThaiWithCompactHint() throws WriterException {
+    // ISO-8859-11 is the smallest encoding of Thai text; its canonical Java name is x-iso-8859-11
+    Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.QR_COMPACT, true);
+    QRCode qrCode = Encoder.encode("\u0e01\u0e02", ErrorCorrectionLevel.L, hints);
+    assertSame(Mode.BYTE, qrCode.getMode());
+  }
+
+  @Test
   public void testSimpleUTF8ECI() throws WriterException {
     Map<EncodeHintType,Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.CHARACTER_SET, "UTF8");

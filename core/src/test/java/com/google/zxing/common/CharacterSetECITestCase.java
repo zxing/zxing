@@ -61,4 +61,12 @@ public final class CharacterSetECITestCase extends Assert {
     }
   }
 
+  @Test
+  public void testCharsetWithOtherCanonicalName() {
+    // The canonical Java name of ISO-8859-11 is x-iso-8859-11
+    if (Charset.isSupported("ISO-8859-11")) {
+      assertSame(CharacterSetECI.ISO8859_11, CharacterSetECI.getCharacterSetECI(Charset.forName("ISO-8859-11")));
+    }
+  }
+
 }
