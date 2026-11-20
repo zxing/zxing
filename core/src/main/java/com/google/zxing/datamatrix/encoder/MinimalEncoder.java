@@ -488,7 +488,7 @@ public final class MinimalEncoder {
    * symbol remain unused, the unlatch character must follow, or the padding would be read as EDIFACT data. With one
    * or two codewords left the decoder returns to ASCII on its own (see 5.2.8.2 EDIFACT encodation rules).
    */
-  static boolean needsEDFUnlatch(Edge solution, int size) {
+  private static boolean needsEDFUnlatch(Edge solution, int size) {
     return solution.getEndMode() == Mode.EDF && solution.getCodewordsRemaining(size) >= 3;
   }
 
@@ -764,16 +764,18 @@ public final class MinimalEncoder {
     }
 
     static int getShiftValue(char c, boolean c40, int fnc1) {
+      if (c == fnc1) {
+        return 1; //FNC1 is in the Shift 2 set, even when its character (usually GS) is a control character
+      }
       return (c40 && isInC40Shift1Set(c) ||
              !c40 && isInTextShift1Set(c)) ? 0 :
              (c40 && isInC40Shift2Set(c, fnc1) ||
              !c40 && isInTextShift2Set(c, fnc1)) ? 1 : 2;
     }
 
-    private static int getC40Value(boolean c40, int setIndex, char c, int fnc1) {
+    private static int getC40Value(boolean c40, char c, int fnc1) {
       if (c == fnc1) {
-        assert setIndex ==  2;
-        return  27;
+        return 27; //FNC1 in the Shift 2 set
       }
       if (c40) {
         return c <= 31 ? c :
@@ -803,24 +805,24 @@ public final class MinimalEncoder {
       for (int i = 0; i < characterLength; i++) {
         char ci = input.charAt(fromPosition + i);
         if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
-          c40Values.add((byte) getC40Value(c40, 0, ci, fnc1));
+          c40Values.add((byte) getC40Value(c40, ci, fnc1));
         } else if (!isExtendedASCII(ci, fnc1)) {
           int shiftValue = getShiftValue(ci, c40, fnc1);
           c40Values.add((byte) shiftValue); //Shift[123]
-          c40Values.add((byte) getC40Value(c40, shiftValue, ci, fnc1));
+          c40Values.add((byte) getC40Value(c40, ci, fnc1));
         } else {
           char asciiValue = (char) ((ci & 0xff) - 128);
           if (c40 && HighLevelEncoder.isNativeC40(asciiValue) ||
               !c40 && HighLevelEncoder.isNativeText(asciiValue)) {
             c40Values.add((byte) 1); //Shift 2
             c40Values.add((byte) 30); //Upper Shift
-            c40Values.add((byte) getC40Value(c40, 0, asciiValue, fnc1));
+            c40Values.add((byte) getC40Value(c40, asciiValue, fnc1));
           } else {
             c40Values.add((byte) 1); //Shift 2
             c40Values.add((byte) 30); //Upper Shift
             int shiftValue = getShiftValue(asciiValue, c40, fnc1);
             c40Values.add((byte) shiftValue); // Shift[123]
-            c40Values.add((byte) getC40Value(c40, shiftValue, asciiValue, fnc1));
+            c40Values.add((byte) getC40Value(c40, asciiValue, fnc1));
           }
         }
       }
@@ -984,7 +986,7 @@ public final class MinimalEncoder {
         size += prepend(MinimalEncoder.Edge.getBytes(237), bytesAL);
       }
 
-      if (input.getFNC1Character() > 0) {
+      if (input.hasFNC1Prefix()) {
         size += prepend(MinimalEncoder.Edge.getBytes(232), bytesAL);
       }
       for (int i = 0; i < randomizePostfixLength.size(); i++) {
@@ -1055,7 +1057,12 @@ public final class MinimalEncoder {
 
     /** Returns the number of codewords written ahead of the data: a macro and/or a leading FNC1. */
     private int getPrefixLength() {
-      return (macroId == 5 || macroId == 6 ? 1 : 0) + (getFNC1Character() > 0 ? 1 : 0);
+      return (macroId == 5 || macroId == 6 ? 1 : 0) + (hasFNC1Prefix() ? 1 : 0);
+    }
+
+    /** Whether a FNC1 codeword is written ahead of the data, which makes this a GS1 symbol. */
+    private boolean hasFNC1Prefix() {
+      return getFNC1Character() > 0;
     }
 
     private SymbolShapeHint getShapeHint() {
