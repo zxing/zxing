@@ -28,6 +28,10 @@ import java.nio.charset.StandardCharsets;
  */
 public final class MinimalEncoderRoundTripTestCase extends Assert {
 
+  private static final String MACRO_05 = "[)>\u001E05\u001D";
+  private static final String MACRO_06 = "[)>\u001E06\u001D";
+  private static final String MACRO_TRAILER = "\u001E\u0004";
+
   @Test
   public void testEdifactAtEndOfDataIsUnlatched() throws Exception {
     // Used to end with a full EDIFACT triple followed by padding, which was then read as EDIFACT data
@@ -99,10 +103,6 @@ public final class MinimalEncoderRoundTripTestCase extends Assert {
     String edifact40 = "[@@]^^\\[[@@]^^\\[[@@]^^\\[[@@]^^\\[[@@]^^\\[";
     assertEdifactEnd(MACRO_06 + edifact40 + MACRO_TRAILER, SymbolShapeHint.FORCE_NONE, 32, 32); // 0 left
   }
-
-  private static final String MACRO_05 = "[)>\u001E05\u001D";
-  private static final String MACRO_06 = "[)>\u001E06\u001D";
-  private static final String MACRO_TRAILER = "\u001E\u0004";
 
   /**
    * Checks that input encoded entirely in EDIFACT ends with a full triple at {@code dataCodewords}, followed by
