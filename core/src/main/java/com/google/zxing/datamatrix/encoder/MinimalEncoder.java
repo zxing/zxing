@@ -201,13 +201,16 @@ public final class MinimalEncoder {
 
   static void addEdges(Input input, Edge[][] edges, int from, Edge previous) {
 
+    boolean afterFullEDF = previous != null && previous.getEndMode() == Mode.EDF;
     if (input.isECI(from)) {
-      addEdge(edges, new Edge(input, Mode.ASCII, from, 1, previous));
+      if (!afterFullEDF) { //an ECI is encoded in ASCII, which a full EDF edge cannot unlatch to
+        addEdge(edges, new Edge(input, Mode.ASCII, from, 1, previous));
+      }
       return;
     }
 
     char ch = input.charAt(from);
-    if (previous == null || previous.getEndMode() != Mode.EDF) { //not possible to unlatch a full EDF edge to something
+    if (!afterFullEDF) { //not possible to unlatch a full EDF edge to something
                                                                  //else
       if (HighLevelEncoder.isDigit(ch) && input.haveNCharacters(from, 2) &&
           HighLevelEncoder.isDigit(input.charAt(from + 1))) {
@@ -464,6 +467,9 @@ public final class MinimalEncoder {
         Edge edge = edges[inputLength][j];
         int size = j >= 1 && j <= 3 ? edge.cachedTotalSize + 1 : edge.cachedTotalSize; //C40, TEXT and X12 need an
                                                                                        // extra unlatch at the end
+        if (j == Mode.EDF.ordinal() && needsEDFUnlatch(edge, size)) {
+          size++;
+        }
         if (size < minimalSize) {
           minimalSize = size;
           minimalJ = j;
@@ -475,6 +481,15 @@ public final class MinimalEncoder {
       throw new IllegalStateException("Failed to encode \"" + input + "\"");
     }
     return new Result(edges[inputLength][minimalJ]);
+  }
+
+  /**
+   * An encoding that ends with a full EDIFACT triple is still in EDIFACT mode. If at least three codewords of the
+   * symbol remain unused, the unlatch character must follow, or the padding would be read as EDIFACT data. With one
+   * or two codewords left the decoder returns to ASCII on its own (see 5.2.8.2 EDIFACT encodation rules).
+   */
+  private static boolean needsEDFUnlatch(Edge solution, int size) {
+    return solution.getEndMode() == Mode.EDF && solution.getCodewordsRemaining(size) >= 3;
   }
 
   private static final class Edge {
@@ -498,7 +513,7 @@ public final class MinimalEncoder {
       this.previous = previous;
       assert fromPosition + characterLength <= input.length();
 
-      int size = previous != null ? previous.cachedTotalSize : 0;
+      int size = previous != null ? previous.cachedTotalSize : input.getPrefixLength();
 
       Mode previousMode = getPreviousMode();
 
@@ -749,16 +764,18 @@ public final class MinimalEncoder {
     }
 
     static int getShiftValue(char c, boolean c40, int fnc1) {
+      if (c == fnc1) {
+        return 1; //FNC1 is in the Shift 2 set, even when its character (usually GS) is a control character
+      }
       return (c40 && isInC40Shift1Set(c) ||
              !c40 && isInTextShift1Set(c)) ? 0 :
              (c40 && isInC40Shift2Set(c, fnc1) ||
              !c40 && isInTextShift2Set(c, fnc1)) ? 1 : 2;
     }
 
-    private static int getC40Value(boolean c40, int setIndex, char c, int fnc1) {
+    private static int getC40Value(boolean c40, char c, int fnc1) {
       if (c == fnc1) {
-        assert setIndex ==  2;
-        return  27;
+        return 27; //FNC1 in the Shift 2 set
       }
       if (c40) {
         return c <= 31 ? c :
@@ -770,9 +787,7 @@ public final class MinimalEncoder {
                c <= 95 ? c - 69 :
                c <= 127 ? c - 96 : c;
       } else {
-        return c == 0 ? 0 :
-               setIndex == 0 && c <= 3 ? c - 1 : //is this a bug in the spec?
-               setIndex == 1 && c <= 31 ? c :
+        return c <= 31 ? c :
                c == 32 ? 3 :
                c >= 33 && c <= 47 ? c - 33 :
                c >= 48 && c <= 57 ? c - 44 :
@@ -790,24 +805,24 @@ public final class MinimalEncoder {
       for (int i = 0; i < characterLength; i++) {
         char ci = input.charAt(fromPosition + i);
         if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
-          c40Values.add((byte) getC40Value(c40, 0, ci, fnc1));
+          c40Values.add((byte) getC40Value(c40, ci, fnc1));
         } else if (!isExtendedASCII(ci, fnc1)) {
           int shiftValue = getShiftValue(ci, c40, fnc1);
           c40Values.add((byte) shiftValue); //Shift[123]
-          c40Values.add((byte) getC40Value(c40, shiftValue, ci, fnc1));
+          c40Values.add((byte) getC40Value(c40, ci, fnc1));
         } else {
           char asciiValue = (char) ((ci & 0xff) - 128);
           if (c40 && HighLevelEncoder.isNativeC40(asciiValue) ||
               !c40 && HighLevelEncoder.isNativeText(asciiValue)) {
             c40Values.add((byte) 1); //Shift 2
             c40Values.add((byte) 30); //Upper Shift
-            c40Values.add((byte) getC40Value(c40, 0, asciiValue, fnc1));
+            c40Values.add((byte) getC40Value(c40, asciiValue, fnc1));
           } else {
             c40Values.add((byte) 1); //Shift 2
             c40Values.add((byte) 30); //Upper Shift
             int shiftValue = getShiftValue(asciiValue, c40, fnc1);
             c40Values.add((byte) shiftValue); // Shift[123]
-            c40Values.add((byte) getC40Value(c40, shiftValue, asciiValue, fnc1));
+            c40Values.add((byte) getC40Value(c40, asciiValue, fnc1));
           }
         }
       }
@@ -971,11 +986,14 @@ public final class MinimalEncoder {
         size += prepend(MinimalEncoder.Edge.getBytes(237), bytesAL);
       }
 
-      if (input.getFNC1Character() > 0) {
+      if (input.hasFNC1Prefix()) {
         size += prepend(MinimalEncoder.Edge.getBytes(232), bytesAL);
       }
       for (int i = 0; i < randomizePostfixLength.size(); i++) {
         applyRandomPattern(bytesAL,bytesAL.size() - randomizePostfixLength.get(i), randomizeLengths.get(i));
+      }
+      if (needsEDFUnlatch(solution, bytesAL.size())) {
+        bytesAL.add((byte) (0x1f << 2)); // unlatch character followed by two zero bits
       }
       //add padding
       int capacity = solution.getMinSymbolSize(bytesAL.size());
@@ -1035,6 +1053,16 @@ public final class MinimalEncoder {
 
     private int getMacroId() {
       return macroId;
+    }
+
+    /** Returns the number of codewords written ahead of the data: a macro and/or a leading FNC1. */
+    private int getPrefixLength() {
+      return (macroId == 5 || macroId == 6 ? 1 : 0) + (hasFNC1Prefix() ? 1 : 0);
+    }
+
+    /** Whether a FNC1 codeword is written ahead of the data, which makes this a GS1 symbol. */
+    private boolean hasFNC1Prefix() {
+      return getFNC1Character() > 0;
     }
 
     private SymbolShapeHint getShapeHint() {
