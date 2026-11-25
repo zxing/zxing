@@ -43,7 +43,7 @@ public final class GeoParsedResult extends ParsedResult {
     result.append(latitude);
     result.append(',');
     result.append(longitude);
-    if (altitude > 0) {
+    if (altitude != 0.0) {
       result.append(',');
       result.append(altitude);
     }
@@ -69,7 +69,8 @@ public final class GeoParsedResult extends ParsedResult {
   }
 
   /**
-   * @return altitude in meters. If not specified, in the geo URI, returns 0.0
+   * @return altitude in meters, negative for a place below the reference surface. If not specified, in the
+   *  geo URI, returns 0.0
    */
   public double getAltitude() {
     return altitude;
@@ -88,7 +89,7 @@ public final class GeoParsedResult extends ParsedResult {
     result.append(latitude);
     result.append(", ");
     result.append(longitude);
-    if (altitude > 0.0) {
+    if (altitude != 0.0) {
       result.append(", ");
       result.append(altitude);
       result.append('m');
