@@ -45,6 +45,9 @@ public final class URIParsedResultTestCase extends Assert {
     doTest("google.com:443", "http://google.com:443", null);
     doTest("en.wikipedia.org/wiki/Help:Contents", "http://en.wikipedia.org/wiki/Help:Contents", null);
     doTest("google.com/search?q=a:b", "http://google.com/search?q=a:b", null);
+    doTest("google.com?q=a:b", "http://google.com?q=a:b", null);
+    // A bare host followed by '#' is not recognized as a URI, so the fragment case uses the URL: prefix
+    doTest("URL:google.com#a:b", "http://google.com#a:b", null);
     doTest("google.com:8080/a:b", "http://google.com:8080/a:b", null);
     doTest("http://google.com/a:b", "http://google.com/a:b", null);
     doTest("https://www.google.com/calendar/hosted/google.com/embed?mode=AGENDA&force_login=true&src=google.com_726f6f6d5f6265707075@resource.calendar.google.com",
