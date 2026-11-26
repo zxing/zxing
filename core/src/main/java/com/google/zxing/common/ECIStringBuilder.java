@@ -118,7 +118,11 @@ public final class ECIStringBuilder {
    */
   public void appendCharacters(StringBuilder value) {
     encodeCurrentBytesIfAny();
-    result.append(value);
+    if (result == null) {
+      result = new StringBuilder(value);
+    } else {
+      result.append(value);
+    }
   }
 
   /**
