@@ -21,7 +21,6 @@ import com.google.zxing.common.BitSource;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.ECIStringBuilder;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -119,14 +118,14 @@ final class DecodedBitStreamParser {
             break;
           case ECI_ENCODE:
             decodeECISegment(bits, result);
-            isECIencoded = true; // ECI detection only, atm continue decoding as ASCII
+            isECIencoded = true;
             break;
           default:
             throw FormatException.getFormatInstance();
         }
         mode = Mode.ASCII_ENCODE;
       }
-    } while (mode != Mode.PAD_ENCODE && bits.available() > 0);
+    } while (mode != Mode.PAD_ENCODE && (bits.available() > 0 || mode == Mode.ECI_ENCODE));
     if (resultTrailer.length() > 0) {
       result.appendCharacters(resultTrailer);
     }
@@ -551,36 +550,50 @@ final class DecodedBitStreamParser {
       bytes[i] = (byte) unrandomize255State(bits.readBits(8), codewordPosition++);
     }
     byteSegments.add(bytes);
-    result.append(new String(bytes, StandardCharsets.ISO_8859_1));
+    for (byte b : bytes) {
+      result.append(b);
+    }
   }
 
   /**
-   * See ISO 16022:2007, 5.4.1
+   * See ISO 16022:2006, 5.4.1
    */
   private static void decodeECISegment(BitSource bits,
-                                           ECIStringBuilder result)
+                                       ECIStringBuilder result)
       throws FormatException {
     if (bits.available() < 8) {
       throw FormatException.getFormatInstance();
     }
     int c1 = bits.readBits(8);
-    if (c1 <= 127) {
-      result.appendECI(c1 - 1);
+    if (c1 == 0) {
+      throw FormatException.getFormatInstance();
     }
-    //currently we only support character set ECIs
-    /*} else {
+    int eci;
+    if (c1 <= 127) {
+      eci = c1 - 1;
+    } else if (c1 <= 191) {
       if (bits.available() < 8) {
         throw FormatException.getFormatInstance();
       }
       int c2 = bits.readBits(8);
-      if (c1 >= 128 && c1 <= 191) {
-      } else {
-        if (bits.available() < 8) {
-          throw FormatException.getFormatInstance();
-        }
-        int c3 = bits.readBits(8);
+      if (c2 == 0 || c2 == 255) {
+        throw FormatException.getFormatInstance();
       }
-    }*/
+      eci = (c1 - 128) * 254 + (c2 - 1) + 127;
+    } else if (c1 <= 207) {
+      if (bits.available() < 16) {
+        throw FormatException.getFormatInstance();
+      }
+      int c2 = bits.readBits(8);
+      int c3 = bits.readBits(8);
+      if (c2 == 0 || c2 == 255 || c3 == 0 || c3 == 255) {
+        throw FormatException.getFormatInstance();
+      }
+      eci = (c1 - 192) * 64516 + (c2 - 1) * 254 + (c3 - 1) + 16383;
+    } else {
+      throw FormatException.getFormatInstance();
+    }
+    result.appendECI(eci);
   }
 
 
