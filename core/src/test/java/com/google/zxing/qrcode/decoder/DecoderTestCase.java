@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -49,6 +50,11 @@ public final class DecoderTestCase extends Assert {
     assertErrorCorrectionLimit(2, ErrorCorrectionLevel.L, 4);
     // Version 3-L: d=15, p=1 -> max 7 errors
     assertErrorCorrectionLimit(3, ErrorCorrectionLevel.L, 7);
+  }
+
+  @Test(expected = FormatException.class)
+  public void testDimensionExceedingVersion40Rejected() throws Exception {
+    new Decoder().decode(new BitMatrix(181, 181));
   }
 
   private static void assertErrorCorrectionLimit(int versionNumber,

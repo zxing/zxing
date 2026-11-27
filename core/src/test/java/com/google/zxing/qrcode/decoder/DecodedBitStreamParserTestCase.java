@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.BitSourceBuilder;
 import com.google.zxing.common.DecoderResult;
 import org.junit.Assert;
@@ -163,6 +164,138 @@ public final class DecodedBitStreamParserTestCase extends Assert {
     assertEquals(1, plain.getSymbologyModifier());
   }
 
-  // TODO definitely need more tests here
+  @Test
+  public void testFNC1SecondPosition() throws Exception {
+    // Two-digit numeric indicator with leading zero (05) + Alphanumeric "A%B%%C"
+    BitSourceBuilder numeric = new BitSourceBuilder();
+    numeric.write(0x09, 4); // FNC1 in second position
+    numeric.write(5, 8);    // Application indicator "05"
+    numeric.write(0x02, 4); // Alphanumeric mode
+    numeric.write(6, 9);
+    numeric.write(10 * 45 + 38, 11);
+    numeric.write(11 * 45 + 38, 11);
+    numeric.write(38 * 45 + 12, 11);
+    DecoderResult r = decode(numeric);
+    assertEquals("05A\u001dB%C", r.getText());
+    assertEquals(5, r.getSymbologyModifier());
+
+    // Alphabetic indicator ('a' = 97 + 100) with ECI -> symbology modifier 6
+    BitSourceBuilder alphaWithEci = new BitSourceBuilder();
+    alphaWithEci.write(0x07, 4);      // ECI
+    alphaWithEci.write(26, 8);        // UTF-8
+    alphaWithEci.write(0x09, 4);      // FNC1 in second position
+    alphaWithEci.write('a' + 100, 8); // Application indicator 'a'
+    alphaWithEci.write(0x04, 4);      // Byte mode
+    alphaWithEci.write(2, 8);
+    alphaWithEci.write('O', 8);
+    alphaWithEci.write('K', 8);
+    DecoderResult r2 = decode(alphaWithEci);
+    assertEquals("aOK", r2.getText());
+    assertEquals(6, r2.getSymbologyModifier());
+  }
+
+  @Test
+  public void testInvalidFNC1() {
+    // Reserved application indicator value (outside 0..99, A..Z+100, a..z+100)
+    BitSourceBuilder badIndicator = new BitSourceBuilder();
+    badIndicator.write(0x09, 4);
+    badIndicator.write(100, 8);
+    assertFormatException(badIndicator.toByteArray());
+
+    // Truncated application indicator
+    assertFormatException(new byte[]{(byte) 0x90});
+
+    // Mutually exclusive FNC1 first + second position
+    BitSourceBuilder both = new BitSourceBuilder();
+    both.write(0x05, 4);
+    both.write(0x09, 4);
+    both.write(37, 8);
+    assertFormatException(both.toByteArray());
+
+    // FNC1 after a data segment
+    BitSourceBuilder afterData = new BitSourceBuilder();
+    afterData.write(0x01, 4);
+    afterData.write(1, 10);
+    afterData.write(5, 4);
+    afterData.write(0x05, 4);
+    assertFormatException(afterData.toByteArray());
+  }
+
+  @Test
+  public void testHanziAndKanjiValidation() {
+    // Unknown Hanzi subset must fail instead of skipping payload bits
+    BitSourceBuilder badSubset = new BitSourceBuilder();
+    badSubset.write(0x0D, 4);
+    badSubset.write(0x02, 4);
+    badSubset.write(1, 8);
+    badSubset.write(0x03C1, 13);
+    assertFormatException(badSubset.toByteArray());
+
+    // Hanzi low-byte carry (0x005F) and out-of-range high byte (0x1FE0)
+    for (int badHanzi : new int[]{0x005F, 0x1FE0}) {
+      BitSourceBuilder b = new BitSourceBuilder();
+      b.write(0x0D, 4);
+      b.write(0x01, 4);
+      b.write(1, 8);
+      b.write(badHanzi, 13);
+      assertFormatException(b.toByteArray());
+    }
+
+    // Kanji invalid Shift_JIS trail bytes: 0x7F (0x003F) and 0xFD (0x173D -> 0x9FFD)
+    for (int badKanji : new int[]{0x003F, 0x173D}) {
+      BitSourceBuilder b = new BitSourceBuilder();
+      b.write(0x08, 4);
+      b.write(1, 8);
+      b.write(badKanji, 13);
+      assertFormatException(b.toByteArray());
+    }
+  }
+
+  @Test
+  public void testStructuredAppendAndECIValidation() throws Exception {
+    // Valid Structured Append (symbol 2 of 3) + 2-byte ECI 170 (ASCII)
+    BitSourceBuilder valid = new BitSourceBuilder();
+    valid.write(0x03, 4);
+    valid.write(0x12, 8);
+    valid.write(0xAB, 8);
+    valid.write(0x07, 4);
+    valid.write(0x80, 8);
+    valid.write(170, 8);
+    valid.write(0x04, 4);
+    valid.write(2, 8);
+    valid.write('H', 8);
+    valid.write('i', 8);
+    DecoderResult r = decode(valid);
+    assertEquals("Hi", r.getText());
+    assertEquals(0x12, r.getStructuredAppendSequenceNumber());
+    assertEquals(0xAB, r.getStructuredAppendParity());
+
+    // Position > total (symbol 4 of 3)
+    BitSourceBuilder badPos = new BitSourceBuilder();
+    badPos.write(0x03, 4);
+    badPos.write(0x32, 8);
+    badPos.write(0xAB, 8);
+    assertFormatException(badPos.toByteArray());
+
+    // Overlong 2-byte ECI encoding of value < 128
+    BitSourceBuilder overlongEci = new BitSourceBuilder();
+    overlongEci.write(0x07, 4);
+    overlongEci.write(0x80, 8);
+    overlongEci.write(26, 8);
+    assertFormatException(overlongEci.toByteArray());
+  }
+
+  private static DecoderResult decode(BitSourceBuilder builder) throws FormatException {
+    return DecodedBitStreamParser.decode(builder.toByteArray(), Version.getVersionForNumber(1), null, null);
+  }
+
+  private static void assertFormatException(byte[] bytes) {
+    try {
+      DecodedBitStreamParser.decode(bytes, Version.getVersionForNumber(1), null, null);
+      fail("Expected FormatException");
+    } catch (FormatException expected) {
+      // expected
+    }
+  }
 
 }
