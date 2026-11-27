@@ -58,7 +58,9 @@ public final class Detector {
   // ensure we don't miss it.
   private static final int ROW_STEP = 5;
   private static final int BARCODE_MIN_HEIGHT = 10;
-  private static final int[] ROTATIONS = {0, 180, 270, 90};
+  // Incremental steps from 0 -> 180 -> 270 -> 90 using a single private clone and one 90-degree transpose
+  private static final int[] STEP_ROTATIONS = {180, 90, 180};
+  private static final int[] TOTAL_ROTATIONS = {180, 270, 90};
 
   private Detector() {
   }
@@ -80,30 +82,19 @@ public final class Detector {
     //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
     BitMatrix originalMatrix = image.getBlackMatrix();
-    for (int rotation : ROTATIONS) {
-      BitMatrix bitMatrix = applyRotation(originalMatrix, rotation);
-      List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
+    List<ResultPoint[]> barcodeCoordinates = detect(multiple, originalMatrix);
+    if (!barcodeCoordinates.isEmpty()) {
+      return new PDF417DetectorResult(originalMatrix, barcodeCoordinates, 0);
+    }
+    BitMatrix rotated = originalMatrix.clone();
+    for (int i = 0; i < STEP_ROTATIONS.length; i++) {
+      rotated.rotate(STEP_ROTATIONS[i]);
+      barcodeCoordinates = detect(multiple, rotated);
       if (!barcodeCoordinates.isEmpty()) {
-        return new PDF417DetectorResult(bitMatrix, barcodeCoordinates, rotation);
+        return new PDF417DetectorResult(rotated, barcodeCoordinates, TOTAL_ROTATIONS[i]);
       }
     }
     return new PDF417DetectorResult(originalMatrix, new ArrayList<>(), 0);
-  }
-
-  /**
-   * Applies a rotation to the supplied BitMatrix.
-   * @param matrix bit matrix to apply rotation to
-   * @param rotation the degrees of rotation to apply
-   * @return BitMatrix with applied rotation
-   */
-  private static BitMatrix applyRotation(BitMatrix matrix, int rotation) {
-    if (rotation % 360 == 0) {
-      return matrix;
-    }
-
-    BitMatrix newMatrix = matrix.clone();
-    newMatrix.rotate(rotation);
-    return newMatrix;
   }
 
   /**

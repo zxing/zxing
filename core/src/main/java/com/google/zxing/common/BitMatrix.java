@@ -356,8 +356,7 @@ public final class BitMatrix implements Cloneable {
         rotate180();
         return;
       case 270:
-        rotate90();
-        rotate180();
+        rotateQuarterTurn(false);
         return;
     }
     throw new IllegalArgumentException("degrees must be a multiple of 0, 90, 180, or 270");
@@ -367,17 +366,26 @@ public final class BitMatrix implements Cloneable {
    * Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
    */
   public void rotate180() {
-    BitArray topRow = new BitArray(width);
-    BitArray bottomRow = new BitArray(width);
-    int maxHeight = (height + 1) / 2;
-    for (int i = 0; i < maxHeight; i++) {
-      topRow = getRow(i, topRow);
-      int bottomRowIndex = height - 1 - i;
-      bottomRow = getRow(bottomRowIndex, bottomRow);
-      topRow.reverse();
-      bottomRow.reverse();
-      setRow(i, bottomRow);
-      setRow(bottomRowIndex, topRow);
+    int[] bits = this.bits;
+    int totalWords = height * rowSize;
+    for (int i = 0, j = totalWords - 1; i <= j; i++, j--) {
+      int left = Integer.reverse(bits[i]);
+      int right = Integer.reverse(bits[j]);
+      bits[i] = right;
+      bits[j] = left;
+    }
+    int leftOffset = rowSize * 32 - width;
+    if (leftOffset != 0) {
+      int rightShift = 32 - leftOffset;
+      for (int rowStart = 0; rowStart < totalWords; rowStart += rowSize) {
+        int current = bits[rowStart] >>> leftOffset;
+        for (int i = 1; i < rowSize; i++) {
+          int next = bits[rowStart + i];
+          bits[rowStart + i - 1] = current | (next << rightShift);
+          current = next >>> leftOffset;
+        }
+        bits[rowStart + rowSize - 1] = current;
+      }
     }
   }
 
@@ -385,17 +393,42 @@ public final class BitMatrix implements Cloneable {
    * Modifies this {@code BitMatrix} to represent the same but rotated 90 degrees counterclockwise
    */
   public void rotate90() {
+    rotateQuarterTurn(true);
+  }
+
+  private void rotateQuarterTurn(boolean counterClockwise) {
     int newWidth = height;
     int newHeight = width;
     int newRowSize = (newWidth + 31) / 32;
     int[] newBits = new int[newRowSize * newHeight];
+    int[] tile = new int[32];
+    int srcStep = counterClockwise ? rowSize : -rowSize;
+    int dstStep = counterClockwise ? -newRowSize : newRowSize;
 
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        int offset = y * rowSize + (x / 32);
-        if (((bits[offset] >>> (x & 0x1f)) & 1) != 0) {
-          int newOffset = (newHeight - 1 - x) * newRowSize + (y / 32);
-          newBits[newOffset] |= 1 << (y & 0x1f);
+    for (int wy = 0; wy < newRowSize; wy++) {
+      int by = wy << 5;
+      int blockH = Math.min(32, height - by);
+      int srcRowBase = (counterClockwise ? by : height - 1 - by) * rowSize;
+      for (int wx = 0; wx < rowSize; wx++) {
+        int any = 0;
+        int srcIndex = srcRowBase + wx;
+        for (int dy = 0; dy < blockH; dy++, srcIndex += srcStep) {
+          int w = bits[srcIndex];
+          tile[dy] = w;
+          any |= w;
+        }
+        if (any == 0) {
+          continue;
+        }
+        if (blockH < 32) {
+          Arrays.fill(tile, blockH, 32, 0);
+        }
+        transpose32(tile);
+        int bx = wx << 5;
+        int blockW = Math.min(32, width - bx);
+        int dstIndex = (counterClockwise ? newHeight - 1 - bx : bx) * newRowSize + wy;
+        for (int dx = 0; dx < blockW; dx++, dstIndex += dstStep) {
+          newBits[dstIndex] = tile[dx];
         }
       }
     }
@@ -403,6 +436,21 @@ public final class BitMatrix implements Cloneable {
     height = newHeight;
     rowSize = newRowSize;
     bits = newBits;
+  }
+
+  private static void transpose32(int[] t) {
+    // 5-stage 32x32 bit-matrix transpose (Hacker's Delight, Fig. 7-2)
+    for (int stage = 16, mask = 0x0000FFFF; stage > 0; stage >>>= 1, mask ^= mask << stage) {
+      for (int i = 0; i < 32; i += stage << 1) {
+        for (int j = i, end = i + stage; j < end; j++) {
+          int a = t[j];
+          int b = t[j + stage];
+          int diff = ((a >>> stage) ^ b) & mask;
+          t[j] = a ^ (diff << stage);
+          t[j + stage] = b ^ diff;
+        }
+      }
+    }
   }
 
   /**

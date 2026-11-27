@@ -87,6 +87,28 @@ public final class GrayscaleLuminanceSourceTestCase extends Assert {
   }
 
   @Test
+  public void testRotateLargeRectangular() {
+    int width = 75;
+    int height = 41;
+    byte[] pixels = new byte[width * height];
+    for (int i = 0; i < pixels.length; i++) {
+      pixels[i] = (byte) ((i * 31 + 7) & 0xFF);
+    }
+    GrayscaleLuminanceSource source = new GrayscaleLuminanceSource(width, height, pixels);
+    LuminanceSource rot90 = source.rotateCounterClockwise();
+    assertEquals(height, rot90.getWidth());
+    assertEquals(width, rot90.getHeight());
+    byte[] rotMatrix = rot90.getMatrix();
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        assertEquals(pixels[y * width + x], rotMatrix[(width - 1 - x) * height + y]);
+      }
+    }
+    LuminanceSource rot360 = rot90.rotateCounterClockwise().rotateCounterClockwise().rotateCounterClockwise();
+    assertArrayEquals(pixels, rot360.getMatrix());
+  }
+
+  @Test
   public void testMatrix() {
     assertArrayEquals(new byte[] { 0x00, 0x7F, (byte) 0xFF, 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F },
                       SOURCE.getMatrix());

@@ -299,26 +299,33 @@ public final class BitArray implements Cloneable {
    * Reverses all bits in the array.
    */
   public void reverse() {
-    int[] newBits = new int[bits.length];
-    // reverse all int's first
-    int len = (size - 1) / 32;
-    int oldBitsLen = len + 1;
-    for (int i = 0; i < oldBitsLen; i++) {
-      newBits[len - i] = Integer.reverse(bits[i]);
+    if (size == 0) {
+      return;
     }
-    // now correct the int's if the bit size isn't a multiple of 32
-    if (size != oldBitsLen * 32) {
-      int leftOffset = oldBitsLen * 32 - size;
-      int currentInt = newBits[0] >>> leftOffset;
+    int oldBitsLen = (size - 1) / 32 + 1;
+    int[] bits = this.bits;
+    // Reverse word order and bits within each word in place
+    for (int i = 0, j = oldBitsLen - 1; i <= j; i++, j--) {
+      int left = Integer.reverse(bits[i]);
+      int right = Integer.reverse(bits[j]);
+      bits[i] = right;
+      bits[j] = left;
+    }
+    // Now correct the ints if the bit size isn't a multiple of 32
+    int leftOffset = oldBitsLen * 32 - size;
+    if (leftOffset != 0) {
+      int rightShift = 32 - leftOffset;
+      int currentInt = bits[0] >>> leftOffset;
       for (int i = 1; i < oldBitsLen; i++) {
-        int nextInt = newBits[i];
-        currentInt |= nextInt << (32 - leftOffset);
-        newBits[i - 1] = currentInt;
+        int nextInt = bits[i];
+        bits[i - 1] = currentInt | (nextInt << rightShift);
         currentInt = nextInt >>> leftOffset;
       }
-      newBits[oldBitsLen - 1] = currentInt;
+      bits[oldBitsLen - 1] = currentInt;
     }
-    bits = newBits;
+    if (oldBitsLen < bits.length) {
+      Arrays.fill(bits, oldBitsLen, bits.length, 0);
+    }
   }
 
   private static int[] makeArray(int size) {
