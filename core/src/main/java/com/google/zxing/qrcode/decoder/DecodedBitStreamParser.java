@@ -71,10 +71,7 @@ final class DecodedBitStreamParser {
       do {
         // While still another segment to read...
         if (bits.available() < 4) {
-          // Per ISO/IEC 18004 Section 7.4.9, an abbreviated terminator (< 4 remaining bits) must be all zeros
-          if (bits.available() > 0 && bits.readBits(bits.available()) != 0) {
-            throw FormatException.getFormatInstance();
-          }
+          // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
           mode = Mode.TERMINATOR;
         } else {
           mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
@@ -99,18 +96,13 @@ final class DecodedBitStreamParser {
             decodeFNC1SecondPositionApplicationIndicator(bits, result);
             break;
           case STRUCTURED_APPEND:
-            if (symbolSequence != -1 || currentCharacterSetECI != null || fc1InEffect || hasDataSegment) {
-              throw FormatException.getFormatInstance();
-            }
-            if (bits.available() < 16) {
+            if (symbolSequence != -1 || bits.available() < 16) {
               throw FormatException.getFormatInstance();
             }
             // sequence number and parity is added later to the result metadata
             // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
             int sequence = bits.readBits(8);
-            int position = sequence >>> 4;
-            int totalMinusOne = sequence & 0x0F;
-            if (totalMinusOne == 0 || position > totalMinusOne) {
+            if ((sequence >>> 4) > (sequence & 0x0F)) {
               throw FormatException.getFormatInstance();
             }
             symbolSequence = sequence;
@@ -205,15 +197,10 @@ final class DecodedBitStreamParser {
    */
   private static void decodeFNC1SecondPositionApplicationIndicator(BitSource bits,
                                                                    StringBuilder result) throws FormatException {
-    if (bits.available() < 8) {
-      throw FormatException.getFormatInstance();
-    }
     int appIndicator = bits.readBits(8);
     if (appIndicator < 100) {
-      if (appIndicator < 10) {
-        result.append('0');
-      }
-      result.append(appIndicator);
+      result.append((char) ('0' + appIndicator / 10));
+      result.append((char) ('0' + appIndicator % 10));
     } else {
       int letter = appIndicator - 100;
       if ((letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z')) {
@@ -248,21 +235,12 @@ final class DecodedBitStreamParser {
       int twoBytes = bits.readBits(13);
       int high = twoBytes / 0x060;
       int low = twoBytes % 0x060;
-      // GB 2312 code ranges: 0xA1A1..0xAAFE (high 0x00..0x09) and 0xB0A1..0xFAFE (high 0x0A..0x54),
-      // with second byte in 0xA1..0xFE (low 0x00..0x5D).
+      // GB 2312 ranges: 0xA1A1..0xAAFE (high 0x00..0x09) and 0xB0A1..0xFAFE (high 0x0A..0x54)
       if (high > 0x54 || low > 0x5D) {
         throw FormatException.getFormatInstance();
       }
-      int assembledTwoBytes = (high << 8) | low;
-      if (assembledTwoBytes < 0x00A00) {
-        // In the 0xA1A1 to 0xAAFE range
-        assembledTwoBytes += 0x0A1A1;
-      } else {
-        // In the 0xB0A1 to 0xFAFE range
-        assembledTwoBytes += 0x0A6A1;
-      }
-      buffer[offset] = (byte) ((assembledTwoBytes >> 8) & 0xFF);
-      buffer[offset + 1] = (byte) (assembledTwoBytes & 0xFF);
+      buffer[offset] = (byte) (high + (high < 0x0A ? 0xA1 : 0xA6));
+      buffer[offset + 1] = (byte) (low + 0xA1);
       offset += 2;
       count--;
     }
@@ -289,20 +267,13 @@ final class DecodedBitStreamParser {
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
       int twoBytes = bits.readBits(13);
-      int assembledTwoBytes = ((twoBytes / 0x0C0) << 8) | (twoBytes % 0x0C0);
-      if (assembledTwoBytes < 0x01F00) {
-        // In the 0x8140 to 0x9FFC range
-        assembledTwoBytes += 0x08140;
-      } else {
-        // In the 0xE040 to 0xEBBF range
-        assembledTwoBytes += 0x0C140;
-      }
-      int lowByte = assembledTwoBytes & 0xFF;
-      // Shift_JIS trail bytes are 0x40..0x7E and 0x80..0xFC (ISO/IEC 18004 Section 7.4.6)
+      int high = twoBytes / 0x0C0;
+      int lowByte = (twoBytes % 0x0C0) + 0x40;
+      // Shift_JIS ranges: 0x8140..0x9FFC and 0xE040..0xEBBF (trail bytes 0x40..0x7E, 0x80..0xFC)
       if (lowByte == 0x7F || lowByte > 0xFC) {
         throw FormatException.getFormatInstance();
       }
-      buffer[offset] = (byte) (assembledTwoBytes >> 8);
+      buffer[offset] = (byte) (high + (high < 0x1F ? 0x81 : 0xC1));
       buffer[offset + 1] = (byte) lowByte;
       offset += 2;
       count--;
