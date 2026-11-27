@@ -64,7 +64,18 @@ public final class URIParsedResult extends ParsedResult {
    */
   private static String massageURI(String uri) {
     uri = uri.trim();
-    int protocolEnd = uri.indexOf(':');
+    int protocolEnd = -1;
+    for (int i = 0; i < uri.length(); i++) {
+      char c = uri.charAt(i);
+      if (c == ':') {
+        protocolEnd = i;
+        break;
+      }
+      if (c == '/' || c == '?' || c == '#') {
+        // A scheme contains none of these, so a later colon is in the path, query or fragment
+        break;
+      }
+    }
     if (protocolEnd < 0 || isColonFollowedByPortNumber(uri, protocolEnd)) {
       // No protocol, or found a colon, but it looks like it is after the host, so the protocol is still missing,
       // so assume http
