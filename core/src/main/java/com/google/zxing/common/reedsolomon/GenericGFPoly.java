@@ -99,20 +99,7 @@ final class GenericGFPoly {
       // Just return the x^0 coefficient
       return getCoefficient(0);
     }
-    if (a == 1) {
-      // Just the sum of the coefficients
-      int result = 0;
-      for (int coefficient : coefficients) {
-        result = GenericGF.addOrSubtract(result, coefficient);
-      }
-      return result;
-    }
-    int result = coefficients[0];
-    int size = coefficients.length;
-    for (int i = 1; i < size; i++) {
-      result = GenericGF.addOrSubtract(field.multiply(a, result), coefficients[i]);
-    }
-    return result;
+    return field.evaluateByLog(coefficients, field.log(a));
   }
 
   GenericGFPoly addOrSubtract(GenericGFPoly other) {
@@ -159,9 +146,11 @@ final class GenericGFPoly {
     int[] product = new int[aLength + bLength - 1];
     for (int i = 0; i < aLength; i++) {
       int aCoeff = aCoefficients[i];
-      for (int j = 0; j < bLength; j++) {
-        product[i + j] = GenericGF.addOrSubtract(product[i + j],
-            field.multiply(aCoeff, bCoefficients[j]));
+      if (aCoeff != 0) {
+        int logA = field.log(aCoeff);
+        for (int j = 0; j < bLength; j++) {
+          product[i + j] ^= field.multiplyByLog(bCoefficients[j], logA);
+        }
       }
     }
     return new GenericGFPoly(field, product);
@@ -174,10 +163,11 @@ final class GenericGFPoly {
     if (scalar == 1) {
       return this;
     }
+    int logScalar = field.log(scalar);
     int size = coefficients.length;
     int[] product = new int[size];
     for (int i = 0; i < size; i++) {
-      product[i] = field.multiply(coefficients[i], scalar);
+      product[i] = field.multiplyByLog(coefficients[i], logScalar);
     }
     return new GenericGFPoly(field, product);
   }
@@ -189,10 +179,11 @@ final class GenericGFPoly {
     if (coefficient == 0) {
       return field.getZero();
     }
+    int logCoeff = field.log(coefficient);
     int size = coefficients.length;
     int[] product = new int[size + degree];
     for (int i = 0; i < size; i++) {
-      product[i] = field.multiply(coefficients[i], coefficient);
+      product[i] = field.multiplyByLog(coefficients[i], logCoeff);
     }
     return new GenericGFPoly(field, product);
   }

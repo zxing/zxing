@@ -81,18 +81,25 @@ public final class ReedSolomonDecoder {
         throw new ReedSolomonException("Invalid codeword value");
       }
     }
-    GenericGFPoly poly = new GenericGFPoly(field, received);
-    int[] syndromeCoefficients = new int[twoS];
-    boolean noError = true;
-    int generatorBase = field.getGeneratorBase() % (field.getSize() - 1);
+    int[] syndromeCoefficients = null;
+    int order = field.getSize() - 1;
+    int logA = field.getGeneratorBase() % order;
+    if (logA < 0) {
+      logA += order;
+    }
     for (int i = 0; i < twoS; i++) {
-      int eval = poly.evaluateAt(field.exp(i + generatorBase));
-      syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
+      int eval = field.evaluateByLog(received, logA);
       if (eval != 0) {
-        noError = false;
+        if (syndromeCoefficients == null) {
+          syndromeCoefficients = new int[twoS];
+        }
+        syndromeCoefficients[twoS - 1 - i] = eval;
+      }
+      if (++logA == order) {
+        logA = 0;
       }
     }
-    if (noError) {
+    if (syndromeCoefficients == null) {
       return 0;
     }
     GenericGFPoly syndrome = new GenericGFPoly(field, syndromeCoefficients);
@@ -205,15 +212,11 @@ public final class ReedSolomonDecoder {
     }
     for (int i = 0; i < s; i++) {
       int xiInverse = field.inverse(errorLocations[i]);
+      int logXiInverse = field.log(xiInverse);
       int denominator = 1;
       for (int j = 0; j < s; j++) {
         if (i != j) {
-          //denominator = field.multiply(denominator,
-          //    GenericGF.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
-          // Above should work but fails on some Apple and Linux JDKs due to a Hotspot bug.
-          // Below is a funny-looking workaround from Steven Parkes
-          int term = field.multiply(errorLocations[j], xiInverse);
-          int termPlus1 = (term & 0x1) == 0 ? term | 1 : term & ~1;
+          int termPlus1 = field.multiplyByLog(errorLocations[j], logXiInverse) ^ 1;
           denominator = field.multiply(denominator, termPlus1);
         }
       }
@@ -222,7 +225,7 @@ public final class ReedSolomonDecoder {
       if (generatorBase != 0) {
         int factor = generatorBase == 1
             ? xiInverse
-            : field.exp((int) (((long) field.log(xiInverse) * generatorBase) % order));
+            : field.exp((int) (((long) logXiInverse * generatorBase) % order));
         result[i] = field.multiply(result[i], factor);
       }
     }
