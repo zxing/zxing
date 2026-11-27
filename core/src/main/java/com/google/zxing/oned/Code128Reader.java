@@ -399,6 +399,8 @@ public final class Code128Reader extends OneDReader {
               case CODE_CODE_C:
                 codeSet = CODE_CODE_C;
                 break;
+              default:
+                break;
             }
           }
           break;
@@ -435,6 +437,8 @@ public final class Code128Reader extends OneDReader {
               case CODE_CODE_C:
                 codeSet = CODE_CODE_C;
                 break;
+              default:
+                break;
             }
           }
           break;
@@ -452,8 +456,12 @@ public final class Code128Reader extends OneDReader {
               case CODE_CODE_B:
                 codeSet = CODE_CODE_B;
                 break;
+              default:
+                break;
             }
           }
+          break;
+        default:
           break;
       }
     }
