@@ -39,9 +39,10 @@ public final class ReedSolomonEncoder {
   private GenericGFPoly buildGenerator(int degree) {
     if (degree >= cachedGenerators.size()) {
       GenericGFPoly lastGenerator = cachedGenerators.get(cachedGenerators.size() - 1);
+      int generatorBase = field.getGeneratorBase() % (field.getSize() - 1);
       for (int d = cachedGenerators.size(); d <= degree; d++) {
         GenericGFPoly nextGenerator = lastGenerator.multiply(
-            new GenericGFPoly(field, new int[] { 1, field.exp(d - 1 + field.getGeneratorBase()) }));
+            new GenericGFPoly(field, new int[] { 1, field.exp(d - 1 + generatorBase) }));
         cachedGenerators.add(nextGenerator);
         lastGenerator = nextGenerator;
       }
@@ -50,12 +51,20 @@ public final class ReedSolomonEncoder {
   }
 
   public void encode(int[] toEncode, int ecBytes) {
-    if (ecBytes == 0) {
+    if (ecBytes <= 0) {
       throw new IllegalArgumentException("No error correction bytes");
     }
     int dataBytes = toEncode.length - ecBytes;
     if (dataBytes <= 0) {
       throw new IllegalArgumentException("No data bytes provided");
+    }
+    if (toEncode.length >= field.getSize()) {
+      throw new IllegalArgumentException("Block length exceeds field size");
+    }
+    for (int i = 0; i < dataBytes; i++) {
+      if (toEncode[i] < 0 || toEncode[i] >= field.getSize()) {
+        throw new IllegalArgumentException("Invalid data value: " + toEncode[i]);
+      }
     }
     GenericGFPoly generator = buildGenerator(ecBytes);
     int[] infoCoefficients = new int[dataBytes];

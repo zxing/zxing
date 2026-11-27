@@ -412,6 +412,221 @@ public final class ReedSolomonTestCase extends Assert {
     testEncodeDecodeRandom(GenericGF.AZTEC_DATA_12, 3072, 1023);
   }
 
+  @Test
+  public void testRejectZeroIterationNonCodeword() {
+    // Non-zero syndrome with deg(S) < twoS / 2 previously skipped the EEA loop and silently returned 0.
+    int[] syndromes8 = { 1, 0, 0, 0, 0, 0, 0, 0 };
+    assertRejectedWithoutMutation(GenericGF.QR_CODE_FIELD_256, 20, syndromes8);
+
+    int[] syndromes5 = { 1, 0, 0, 0, 0 };
+    assertRejectedWithoutMutation(GenericGF.AZTEC_PARAM, 7, syndromes5);
+  }
+
+  @Test
+  public void testRejectOmegaDegreeNotLessThanSigmaDegree() {
+    // Even twoS: S(x) = (1 + x^2) / (1 + X1*x) mod x^8 yields deg(sigma)=1, deg(omega)=2.
+    GenericGF qrField = GenericGF.QR_CODE_FIELD_256;
+    int x1 = qrField.exp(5);
+    int[] evenSyndromes = new int[8];
+    int x1Pow = 1;
+    for (int i = 0; i < evenSyndromes.length; i++) {
+      evenSyndromes[i] = i < 2 ? x1Pow : GenericGF.addOrSubtract(x1Pow, qrField.exp(5 * (i - 2)));
+      x1Pow = qrField.multiply(x1Pow, x1);
+    }
+    assertRejectedWithoutMutation(qrField, 20, evenSyndromes);
+
+    // Odd twoS (e.g. QR Version 1-L with R=7, Aztec compact param with R=5).
+    int[] oddQrSyndromes = Arrays.copyOf(evenSyndromes, 7);
+    assertRejectedWithoutMutation(qrField, 20, oddQrSyndromes);
+
+    GenericGF aztecField = GenericGF.AZTEC_PARAM;
+    int ax1 = aztecField.exp(2);
+    int[] oddAztecSyndromes = new int[5];
+    int ax1Pow = 1;
+    for (int i = 0; i < oddAztecSyndromes.length; i++) {
+      oddAztecSyndromes[i] = i < 2 ? ax1Pow : GenericGF.addOrSubtract(ax1Pow, aztecField.exp(2 * (i - 2)));
+      ax1Pow = aztecField.multiply(ax1Pow, ax1);
+    }
+    assertRejectedWithoutMutation(aztecField, 7, oddAztecSyndromes);
+  }
+
+  @Test
+  public void testGeneralGeneratorBase() {
+    // b = 2, b = 112 (CCSDS-style), b = 250 (twoS + b > size), and negative b = -3.
+    int[] bases = { 2, 112, 250, -3 };
+    for (int b : bases) {
+      GenericGF field = new GenericGF(0b100011101, 256, b);
+      testEncodeDecodeRandom(field, 20, 12);
+    }
+  }
+
+  @Test
+  public void testBlockLengthValidation() {
+    GenericGF field = GenericGF.AZTEC_PARAM; // size 16, max block length 15
+    ReedSolomonDecoder decoder = new ReedSolomonDecoder(field);
+    ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
+
+    try {
+      decoder.decodeWithECCount(new int[field.getSize()], 4);
+      fail("Expected ReedSolomonException for length == field.getSize()");
+    } catch (ReedSolomonException expected) {
+      // expected
+    }
+    try {
+      decoder.decodeWithECCount(new int[10], -1);
+      fail("Expected ReedSolomonException for negative twoS");
+    } catch (ReedSolomonException expected) {
+      // expected
+    }
+    try {
+      decoder.decodeWithECCount(new int[10], 11);
+      fail("Expected ReedSolomonException for twoS > received.length");
+    } catch (ReedSolomonException expected) {
+      // expected
+    }
+    try {
+      encoder.encode(new int[field.getSize()], 4);
+      fail("Expected IllegalArgumentException for length == field.getSize()");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+    try {
+      encoder.encode(new int[10], -1);
+      fail("Expected IllegalArgumentException for negative ecBytes");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+  }
+
+  @Test
+  public void testAtomicFailureOnBadErrorLocation() {
+    // 2 errors: one in-bounds (power 2 -> index 7) and one out-of-bounds (power 15 -> index -6).
+    GenericGF field = GenericGF.QR_CODE_FIELD_256;
+    int e1 = 5;
+    int e2 = 7;
+    int[] syndromes = new int[6];
+    for (int i = 0; i < syndromes.length; i++) {
+      int term1 = field.multiply(e1, field.exp(2 * i));
+      int term2 = field.multiply(e2, field.exp(15 * i));
+      syndromes[i] = GenericGF.addOrSubtract(term1, term2);
+    }
+    assertRejectedWithoutMutation(field, 10, syndromes);
+  }
+
+  @Test
+  public void testInvalidCodewordValues() {
+    ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
+    int[] negative = { 1, -1, 2, 3, 4, 5, 6 };
+    try {
+      decoder.decodeWithECCount(negative, 4);
+      fail("Expected ReedSolomonException for negative codeword");
+    } catch (ReedSolomonException expected) {
+      // expected
+    }
+    int[] tooLarge = { 1, 16, 2, 3, 4, 5, 6 };
+    try {
+      decoder.decodeWithECCount(tooLarge, 4);
+      fail("Expected ReedSolomonException for out-of-range codeword");
+    } catch (ReedSolomonException expected) {
+      // expected
+    }
+
+    ReedSolomonEncoder encoder = new ReedSolomonEncoder(GenericGF.AZTEC_PARAM);
+    try {
+      encoder.encode(new int[] { 1, -1, 0, 0, 0, 0 }, 4);
+      fail("Expected IllegalArgumentException for negative data value");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+    try {
+      encoder.encode(new int[] { 1, 16, 0, 0, 0, 0 }, 4);
+      fail("Expected IllegalArgumentException for out-of-range data value");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+  }
+
+  @Test
+  public void testInvalidGenericGFParameters() {
+    // Irreducible but non-primitive polynomial over GF(16): x^4 + x^3 + x^2 + x + 1
+    try {
+      new GenericGF(0b11111, 16, 1);
+      fail("Expected IllegalArgumentException for non-primitive irreducible polynomial");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+    // Reducible polynomials over GF(16)
+    try {
+      new GenericGF(0b10010, 16, 1);
+      fail("Expected IllegalArgumentException for reducible polynomial");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+    try {
+      new GenericGF(0b10000, 16, 1);
+      fail("Expected IllegalArgumentException for x^4");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+    // Non-power-of-two or too-small sizes
+    for (int badSize : new int[] { -16, 0, 1, 3, 15, 255 }) {
+      try {
+        new GenericGF(0b10011, badSize, 1);
+        fail("Expected IllegalArgumentException for size " + badSize);
+      } catch (IllegalArgumentException expected) {
+        // expected
+      }
+    }
+  }
+
+  private static void assertRejectedWithoutMutation(GenericGF field, int length, int[] syndromes) {
+    int[] received = buildVectorWithSyndromes(field, length, syndromes);
+    int[] original = received.clone();
+    ReedSolomonDecoder decoder = new ReedSolomonDecoder(field);
+    try {
+      decoder.decodeWithECCount(received, syndromes.length);
+      fail("Expected ReedSolomonException");
+    } catch (ReedSolomonException expected) {
+      assertArrayEquals("received array must not be mutated on failure", original, received);
+    }
+  }
+
+  private static int[] buildVectorWithSyndromes(GenericGF field, int length, int[] syndromes) {
+    int twoS = syndromes.length;
+    int[] points = new int[twoS];
+    for (int i = 0; i < twoS; i++) {
+      points[i] = field.exp(i + field.getGeneratorBase());
+    }
+    GenericGFPoly result = field.getZero();
+    for (int j = 0; j < twoS; j++) {
+      if (syndromes[j] == 0) {
+        continue;
+      }
+      GenericGFPoly basis = field.getOne();
+      int denom = 1;
+      for (int k = 0; k < twoS; k++) {
+        if (k != j) {
+          basis = basis.multiply(new GenericGFPoly(field, new int[] { 1, points[k] }));
+          denom = field.multiply(denom, GenericGF.addOrSubtract(points[j], points[k]));
+        }
+      }
+      int scale = field.multiply(syndromes[j], field.inverse(denom));
+      result = result.addOrSubtract(basis.multiply(scale));
+    }
+    int[] vector = new int[length];
+    int[] coeffs = result.getCoefficients();
+    System.arraycopy(coeffs, 0, vector, length - coeffs.length, coeffs.length);
+    return vector;
+  }
+
+  private static void assertZeroSyndromes(GenericGF field, int[] codeword, int twoS) {
+    GenericGFPoly poly = new GenericGFPoly(field, codeword);
+    for (int i = 0; i < twoS; i++) {
+      assertEquals("Residual non-zero syndrome at index " + i,
+          0, poly.evaluateAt(field.exp(i + field.getGeneratorBase())));
+    }
+  }
+
   public static void corrupt(int[] received, int howMany, Random random, int max) {
     BitSet corrupted = new BitSet(received.length);
     for (int j = 0; j < howMany; j++) {
@@ -491,6 +706,7 @@ public final class ReedSolomonTestCase extends Assert {
           // else stop
           break;
         }
+        assertZeroSyndromes(field, message, ecWords.length);
         if (i < maxErrors) {
           assertDataEquals("Decode in " + field + " (" + dataWords.length + ',' + ecWords.length + ") failed at " +
                            i + " errors",

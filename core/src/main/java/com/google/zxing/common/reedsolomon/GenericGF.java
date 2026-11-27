@@ -50,15 +50,20 @@ public final class GenericGF {
   /**
    * Create a representation of GF(size) using the given primitive polynomial.
    *
-   * @param primitive irreducible polynomial whose coefficients are represented by
+   * @param primitive primitive polynomial whose coefficients are represented by
    *  the bits of an int, where the least-significant bit represents the constant
    *  coefficient
-   * @param size the size of the field
-   * @param b the factor b in the generator polynomial can be 0- or 1-based
+   * @param size the size of the field, which must be a power of two {@code >= 2}
+   * @param b the factor b in the generator polynomial
    *  (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
-   *  In most cases it should be 1, but for QR code it is 0.
+   *  In most cases it is 1, and for QR code it is 0.
+   * @throws IllegalArgumentException if {@code size} is not a power of two {@code >= 2},
+   *  or if {@code primitive} is not a primitive polynomial for {@code GF(size)}
    */
   public GenericGF(int primitive, int size, int b) {
+    if (size < 2 || (size & (size - 1)) != 0) {
+      throw new IllegalArgumentException("Field size must be a power of 2 >= 2: " + size);
+    }
     this.primitive = primitive;
     this.size = size;
     this.generatorBase = b;
@@ -66,17 +71,24 @@ public final class GenericGF {
     expTable = new int[size];
     logTable = new int[size];
     int x = 1;
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size - 1; i++) {
+      if (x == 0 || (i > 0 && (x == 1 || logTable[x] != 0))) {
+        throw new IllegalArgumentException("Polynomial 0x" + Integer.toHexString(primitive) +
+            " is not primitive for GF(" + size + ')');
+      }
       expTable[i] = x;
+      logTable[x] = i;
       x *= 2; // 2 (the polynomial x) is a primitive element
       if (x >= size) {
         x ^= primitive;
         x &= size - 1;
       }
     }
-    for (int i = 0; i < size - 1; i++) {
-      logTable[expTable[i]] = i;
+    if (x != 1) {
+      throw new IllegalArgumentException("Polynomial 0x" + Integer.toHexString(primitive) +
+          " is not primitive for GF(" + size + ')');
     }
+    expTable[size - 1] = 1;
     // logTable[0] == 0 but this should never be used
     zero = new GenericGFPoly(this, new int[]{0});
     one = new GenericGFPoly(this, new int[]{1});
@@ -118,7 +130,12 @@ public final class GenericGF {
    * @return 2 to the power of a in GF(size)
    */
   int exp(int a) {
-    return expTable[a];
+    int order = size - 1;
+    int mod = a % order;
+    if (mod < 0) {
+      mod += order;
+    }
+    return expTable[mod];
   }
 
   /**

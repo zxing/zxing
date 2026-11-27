@@ -86,17 +86,114 @@ public final class ErrorCorrectionTestCase extends AbstractErrorCorrectionTestCa
 
   @Test
   public void testOversizedReceived() {
-    // A received array longer than the field would index past the exponent table
-    // during erasure handling; it must be rejected instead of throwing AIOOBE.
-    int[] received = new int[ModulusGF.PDF417_GF.getSize() + 1];
-    System.arraycopy(PDF417_TEST_WITH_EC, 0, received, 0, PDF417_TEST_WITH_EC.length);
-    received[10] = (received[10] + 1) % ModulusGF.PDF417_GF.getSize(); // force a non-zero syndrome
+    // A received array of length >= field.getSize() would alias modulo (field.getSize() - 1)
+    // or index past the exponent table; it must be rejected instead of throwing AIOOBE.
+    for (int length : new int[] { ModulusGF.PDF417_GF.getSize(), ModulusGF.PDF417_GF.getSize() + 1 }) {
+      int[] received = new int[length];
+      System.arraycopy(PDF417_TEST_WITH_EC, 0, received, 0, PDF417_TEST_WITH_EC.length);
+      received[10] = (received[10] + 1) % ModulusGF.PDF417_GF.getSize(); // force a non-zero syndrome
+      try {
+        ec.decode(received, ECC_BYTES, new int[] {0});
+        fail("Should not have decoded for length " + length);
+      } catch (ChecksumException ce) {
+        // good
+      }
+    }
+  }
+
+  @Test
+  public void testInvalidCodewordAndErasureValues() {
+    int[] negative = PDF417_TEST_WITH_EC.clone();
+    negative[0] = -1;
     try {
-      ec.decode(received, ECC_BYTES, new int[] {0});
-      fail("Should not have decoded");
-    } catch (ChecksumException ce) {
+      ec.decode(negative, ECC_BYTES, null);
+      fail("Should not have decoded negative codeword");
+    } catch (ChecksumException expected) {
       // good
     }
+
+    int[] outOfRange = PDF417_TEST_WITH_EC.clone();
+    outOfRange[0] = ModulusGF.PDF417_GF.getSize();
+    try {
+      ec.decode(outOfRange, ECC_BYTES, null);
+      fail("Should not have decoded out-of-range codeword");
+    } catch (ChecksumException expected) {
+      // good
+    }
+
+    int[] corrupted = PDF417_TEST_WITH_EC.clone();
+    corrupted[0] = (corrupted[0] + 1) % ModulusGF.PDF417_GF.getSize();
+    try {
+      ec.decode(corrupted, ECC_BYTES, new int[] { corrupted.length });
+      fail("Should not have decoded with out-of-bounds erasure");
+    } catch (ChecksumException expected) {
+      // good
+    }
+  }
+
+  @Test
+  public void testRejectZeroIterationNonCodeword() {
+    // S(x) = 1 with R = 8 has deg(S) = 0 < R/2; must be rejected rather than returning 0.
+    int[] syndromes = { 1, 0, 0, 0, 0, 0, 0, 0 };
+    int[] received = buildVectorWithSyndromes(20, syndromes);
+    int[] original = received.clone();
+    try {
+      ec.decode(received, syndromes.length, null);
+      fail("Should not have accepted non-codeword");
+    } catch (ChecksumException expected) {
+      assertArrayEquals(original, received);
+    }
+  }
+
+  @Test
+  public void testAtomicFailureOnBadErrorLocation() {
+    // 2 errors: one in-bounds (power 2 -> index 7) and one out-of-bounds (power 15 -> index -6).
+    ModulusGF field = ModulusGF.PDF417_GF;
+    int e1 = 5;
+    int e2 = 7;
+    int[] syndromes = new int[6];
+    for (int k = 0; k < syndromes.length; k++) {
+      int term1 = field.multiply(e1, field.exp((2 * (k + 1)) % (field.getSize() - 1)));
+      int term2 = field.multiply(e2, field.exp((15 * (k + 1)) % (field.getSize() - 1)));
+      syndromes[k] = field.add(term1, term2);
+    }
+    int[] received = buildVectorWithSyndromes(10, syndromes);
+    int[] original = received.clone();
+    try {
+      ec.decode(received, syndromes.length, null);
+      fail("Should not have decoded with out-of-bounds error location");
+    } catch (ChecksumException expected) {
+      assertArrayEquals("received array must not be mutated on failure", original, received);
+    }
+  }
+
+  private static int[] buildVectorWithSyndromes(int length, int[] syndromes) {
+    ModulusGF field = ModulusGF.PDF417_GF;
+    int r = syndromes.length;
+    int[] points = new int[r];
+    for (int k = 0; k < r; k++) {
+      points[k] = field.exp(k + 1);
+    }
+    ModulusPoly result = field.getZero();
+    for (int j = 0; j < r; j++) {
+      if (syndromes[j] == 0) {
+        continue;
+      }
+      ModulusPoly basis = field.getOne();
+      int denom = 1;
+      for (int k = 0; k < r; k++) {
+        if (k != j) {
+          basis = basis.multiply(new ModulusPoly(field, new int[] { 1, field.subtract(0, points[k]) }));
+          denom = field.multiply(denom, field.subtract(points[j], points[k]));
+        }
+      }
+      int scale = field.multiply(syndromes[j], field.inverse(denom));
+      result = result.add(basis.multiply(scale));
+    }
+    int[] vector = new int[length];
+    int[] coeffs = result.getCoefficients();
+    System.arraycopy(coeffs, 0, vector, length - coeffs.length, coeffs.length);
+    return vector;
   }
 
   private void checkDecode(int[] received) throws ChecksumException {

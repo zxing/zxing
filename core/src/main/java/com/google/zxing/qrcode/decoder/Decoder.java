@@ -146,11 +146,12 @@ public final class Decoder {
     int resultOffset = 0;
 
     // Error-correct and copy data blocks together into a stream of bytes
+    int misdecodeProtection = getMisdecodeProtection(version, ecLevel);
     int errorsCorrected = 0;
     for (DataBlock dataBlock : dataBlocks) {
       byte[] codewordBytes = dataBlock.getCodewords();
       int numDataCodewords = dataBlock.getNumDataCodewords();
-      errorsCorrected += correctErrors(codewordBytes, numDataCodewords);
+      errorsCorrected += correctErrors(codewordBytes, numDataCodewords, misdecodeProtection);
       for (int i = 0; i < numDataCodewords; i++) {
         resultBytes[resultOffset++] = codewordBytes[i];
       }
@@ -163,25 +164,56 @@ public final class Decoder {
   }
 
   /**
+   * Returns the number of error-correction codewords reserved for misdecode protection (p)
+   * per ISO/IEC 18004 Table 9.
+   */
+  private static int getMisdecodeProtection(Version version, ErrorCorrectionLevel ecLevel) {
+    switch (version.getVersionNumber()) {
+      case 1:
+        switch (ecLevel) {
+          case L:
+            return 3;
+          case M:
+            return 2;
+          default:
+            return 1;
+        }
+      case 2:
+        return ecLevel == ErrorCorrectionLevel.L ? 2 : 0;
+      case 3:
+        return ecLevel == ErrorCorrectionLevel.L ? 1 : 0;
+      default:
+        return 0;
+    }
+  }
+
+  /**
    * <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
    * correct the errors in-place using Reed-Solomon error correction.</p>
    *
    * @param codewordBytes data and error correction codewords
    * @param numDataCodewords number of codewords that are data bytes
+   * @param misdecodeProtection number of EC codewords reserved for misdecode protection
    * @return the number of errors corrected
    * @throws ChecksumException if error correction fails
    */
-  private int correctErrors(byte[] codewordBytes, int numDataCodewords) throws ChecksumException {
+  private int correctErrors(byte[] codewordBytes,
+                            int numDataCodewords,
+                            int misdecodeProtection) throws ChecksumException {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
     int[] codewordsInts = new int[numCodewords];
     for (int i = 0; i < numCodewords; i++) {
       codewordsInts[i] = codewordBytes[i] & 0xFF;
     }
-    int errorsCorrected = 0;
+    int numECCodewords = codewordBytes.length - numDataCodewords;
+    int errorsCorrected;
     try {
-      errorsCorrected = rsDecoder.decodeWithECCount(codewordsInts, codewordBytes.length - numDataCodewords);
+      errorsCorrected = rsDecoder.decodeWithECCount(codewordsInts, numECCodewords);
     } catch (ReedSolomonException ignored) {
+      throw ChecksumException.getChecksumInstance();
+    }
+    if (2 * errorsCorrected > numECCodewords - misdecodeProtection) {
       throw ChecksumException.getChecksumInstance();
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data

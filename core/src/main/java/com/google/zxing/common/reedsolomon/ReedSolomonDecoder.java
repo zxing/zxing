@@ -70,11 +70,23 @@ public final class ReedSolomonDecoder {
    * @throws ReedSolomonException if decoding fails for any reason
    */
   public int decodeWithECCount(int[] received, int twoS) throws ReedSolomonException {
+    if (received.length >= field.getSize()) {
+      throw new ReedSolomonException("Received data length exceeds field maximum");
+    }
+    if (twoS < 0 || twoS > received.length) {
+      throw new ReedSolomonException("Invalid number of error correction codewords");
+    }
+    for (int codeword : received) {
+      if (codeword < 0 || codeword >= field.getSize()) {
+        throw new ReedSolomonException("Invalid codeword value");
+      }
+    }
     GenericGFPoly poly = new GenericGFPoly(field, received);
     int[] syndromeCoefficients = new int[twoS];
     boolean noError = true;
+    int generatorBase = field.getGeneratorBase() % (field.getSize() - 1);
     for (int i = 0; i < twoS; i++) {
-      int eval = poly.evaluateAt(field.exp(i + field.getGeneratorBase()));
+      int eval = poly.evaluateAt(field.exp(i + generatorBase));
       syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
       if (eval != 0) {
         noError = false;
@@ -89,24 +101,27 @@ public final class ReedSolomonDecoder {
     GenericGFPoly sigma = sigmaOmega[0];
     GenericGFPoly omega = sigmaOmega[1];
     int[] errorLocations = findErrorLocations(sigma);
-    int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations);
+    int[] errorPositions = new int[errorLocations.length];
     for (int i = 0; i < errorLocations.length; i++) {
       int position = received.length - 1 - field.log(errorLocations[i]);
       if (position < 0) {
         throw new ReedSolomonException("Bad error location");
       }
-      received[position] = GenericGF.addOrSubtract(received[position], errorMagnitudes[i]);
+      errorPositions[i] = position;
+    }
+    int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations);
+    for (int i = 0; i < errorPositions.length; i++) {
+      received[errorPositions[i]] =
+          GenericGF.addOrSubtract(received[errorPositions[i]], errorMagnitudes[i]);
     }
     return errorLocations.length;
   }
 
   private GenericGFPoly[] runEuclideanAlgorithm(GenericGFPoly a, GenericGFPoly b, int R)
       throws ReedSolomonException {
-    // Assume a's degree is >= b's
+    // a is x^R (degree R) and b is the syndrome polynomial (degree < R)
     if (a.getDegree() < b.getDegree()) {
-      GenericGFPoly temp = a;
-      a = b;
-      b = temp;
+      throw new IllegalArgumentException();
     }
 
     GenericGFPoly rLast = a;
@@ -115,7 +130,7 @@ public final class ReedSolomonDecoder {
     GenericGFPoly t = field.getOne();
 
     // Run Euclidean algorithm until r's degree is less than R/2
-    while (2 * r.getDegree() >= R) {
+    while (!r.isZero() && 2 * r.getDegree() >= R) {
       GenericGFPoly rLastLast = rLast;
       GenericGFPoly tLastLast = tLast;
       rLast = r;
@@ -139,7 +154,7 @@ public final class ReedSolomonDecoder {
 
       t = q.multiply(tLast).addOrSubtract(tLastLast);
 
-      if (r.getDegree() >= rLast.getDegree()) {
+      if (!r.isZero() && r.getDegree() >= rLast.getDegree()) {
         throw new IllegalStateException("Division algorithm failed to reduce polynomial? " +
           "r: " + r + ", rLast: " + rLast);
       }
@@ -153,6 +168,9 @@ public final class ReedSolomonDecoder {
     int inverse = field.inverse(sigmaTildeAtZero);
     GenericGFPoly sigma = t.multiply(inverse);
     GenericGFPoly omega = r.multiply(inverse);
+    if (omega.isZero() || omega.getDegree() >= sigma.getDegree()) {
+      throw new ReedSolomonException("Error evaluator degree is not less than error locator degree");
+    }
     return new GenericGFPoly[]{sigma, omega};
   }
 
@@ -180,6 +198,11 @@ public final class ReedSolomonDecoder {
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
     int[] result = new int[s];
+    int order = field.getSize() - 1;
+    int generatorBase = field.getGeneratorBase() % order;
+    if (generatorBase < 0) {
+      generatorBase += order;
+    }
     for (int i = 0; i < s; i++) {
       int xiInverse = field.inverse(errorLocations[i]);
       int denominator = 1;
@@ -196,8 +219,11 @@ public final class ReedSolomonDecoder {
       }
       result[i] = field.multiply(errorEvaluator.evaluateAt(xiInverse),
           field.inverse(denominator));
-      if (field.getGeneratorBase() != 0) {
-        result[i] = field.multiply(result[i], xiInverse);
+      if (generatorBase != 0) {
+        int factor = generatorBase == 1
+            ? xiInverse
+            : field.exp((int) (((long) field.log(xiInverse) * generatorBase) % order));
+        result[i] = field.multiply(result[i], factor);
       }
     }
     return result;
