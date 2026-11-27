@@ -158,7 +158,7 @@ public final class BitMatrix implements Cloneable {
    * @return value of given bit in matrix
    */
   public boolean get(int x, int y) {
-    int offset = y * rowSize + (x / 32);
+    int offset = y * rowSize + (x >>> 5);
     return ((bits[offset] >>> (x & 0x1f)) & 1) != 0;
   }
 
@@ -214,12 +214,12 @@ public final class BitMatrix implements Cloneable {
    * @param y The vertical component (i.e. which row)
    */
   public void set(int x, int y) {
-    int offset = y * rowSize + (x / 32);
+    int offset = y * rowSize + (x >>> 5);
     bits[offset] |= 1 << (x & 0x1f);
   }
 
   public void unset(int x, int y) {
-    int offset = y * rowSize + (x / 32);
+    int offset = y * rowSize + (x >>> 5);
     bits[offset] &= ~(1 << (x & 0x1f));
   }
 
@@ -230,7 +230,7 @@ public final class BitMatrix implements Cloneable {
    * @param y The vertical component (i.e. which row)
    */
   public void flip(int x, int y) {
-    int offset = y * rowSize + (x / 32);
+    int offset = y * rowSize + (x >>> 5);
     bits[offset] ^= 1 << (x & 0x1f);
   }
 
@@ -263,13 +263,9 @@ public final class BitMatrix implements Cloneable {
     if (width != mask.width || height != mask.height || rowSize != mask.rowSize) {
       throw new IllegalArgumentException("input matrix dimensions do not match");
     }
-    BitArray rowArray = new BitArray(width);
-    for (int y = 0; y < height; y++) {
-      int offset = y * rowSize;
-      int[] row = mask.getRow(y, rowArray).getBitArray();
-      for (int x = 0; x < rowSize; x++) {
-        bits[offset + x] ^= row[x];
-      }
+    int[] maskBits = mask.bits;
+    for (int i = 0; i < bits.length; i++) {
+      bits[i] ^= maskBits[i];
     }
   }
 
@@ -277,10 +273,7 @@ public final class BitMatrix implements Cloneable {
    * Clears all bits (sets to false).
    */
   public void clear() {
-    int max = bits.length;
-    for (int i = 0; i < max; i++) {
-      bits[i] = 0;
-    }
+    Arrays.fill(bits, 0);
   }
 
   /**
@@ -306,7 +299,7 @@ public final class BitMatrix implements Cloneable {
     for (int y = top; y < bottom; y++) {
       int offset = y * rowSize;
       for (int x = left; x < right; x++) {
-        bits[offset + (x / 32)] |= 1 << (x & 0x1f);
+        bits[offset + (x >>> 5)] |= 1 << (x & 0x1f);
       }
     }
   }
@@ -322,12 +315,11 @@ public final class BitMatrix implements Cloneable {
   public BitArray getRow(int y, BitArray row) {
     if (row == null || row.getSize() < width) {
       row = new BitArray(width);
-    } else {
-      row.clear();
     }
-    int offset = y * rowSize;
-    for (int x = 0; x < rowSize; x++) {
-      row.setBulk(x * 32, bits[offset + x]);
+    int[] rowBits = row.getBitArray();
+    System.arraycopy(bits, y * rowSize, rowBits, 0, rowSize);
+    if (rowBits.length > rowSize) {
+      Arrays.fill(rowBits, rowSize, rowBits.length, 0);
     }
     return row;
   }
@@ -465,8 +457,9 @@ public final class BitMatrix implements Cloneable {
     int bottom = -1;
 
     for (int y = 0; y < height; y++) {
+      int rowOffset = y * rowSize;
       for (int x32 = 0; x32 < rowSize; x32++) {
-        int theBits = bits[y * rowSize + x32];
+        int theBits = bits[rowOffset + x32];
         if (theBits != 0) {
           if (y < top) {
             top = y;
@@ -474,23 +467,12 @@ public final class BitMatrix implements Cloneable {
           if (y > bottom) {
             bottom = y;
           }
-          if (x32 * 32 < left) {
-            int bit = 0;
-            while ((theBits << (31 - bit)) == 0) {
-              bit++;
-            }
-            if ((x32 * 32 + bit) < left) {
-              left = x32 * 32 + bit;
-            }
+          int xBase = x32 << 5;
+          if (xBase < left) {
+            left = Math.min(left, xBase + Integer.numberOfTrailingZeros(theBits));
           }
-          if (x32 * 32 + 31 > right) {
-            int bit = 31;
-            while ((theBits >>> bit) == 0) {
-              bit--;
-            }
-            if ((x32 * 32 + bit) > right) {
-              right = x32 * 32 + bit;
-            }
+          if (xBase + 31 > right) {
+            right = Math.max(right, xBase + 31 - Integer.numberOfLeadingZeros(theBits));
           }
         }
       }
@@ -517,14 +499,8 @@ public final class BitMatrix implements Cloneable {
       return null;
     }
     int y = bitsOffset / rowSize;
-    int x = (bitsOffset % rowSize) * 32;
-
-    int theBits = bits[bitsOffset];
-    int bit = 0;
-    while ((theBits << (31 - bit)) == 0) {
-      bit++;
-    }
-    x += bit;
+    int x = (bitsOffset % rowSize) << 5;
+    x += Integer.numberOfTrailingZeros(bits[bitsOffset]);
     return new int[] {x, y};
   }
 
@@ -538,14 +514,8 @@ public final class BitMatrix implements Cloneable {
     }
 
     int y = bitsOffset / rowSize;
-    int x = (bitsOffset % rowSize) * 32;
-
-    int theBits = bits[bitsOffset];
-    int bit = 31;
-    while ((theBits >>> bit) == 0) {
-      bit--;
-    }
-    x += bit;
+    int x = (bitsOffset % rowSize) << 5;
+    x += 31 - Integer.numberOfLeadingZeros(bits[bitsOffset]);
 
     return new int[] {x, y};
   }

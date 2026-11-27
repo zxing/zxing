@@ -304,13 +304,8 @@ public final class WhiteRectangleDetector {
    * @return true if a black point has been found, else false.
    */
   private boolean containsBlackPoint(int a, int b, int fixed, boolean horizontal) {
-
     if (horizontal) {
-      for (int x = a; x <= b; x++) {
-        if (image.get(x, fixed)) {
-          return true;
-        }
-      }
+      return image.getNextSet(a, fixed) <= b;
     } else {
       for (int y = a; y <= b; y++) {
         if (image.get(fixed, y)) {
@@ -318,7 +313,6 @@ public final class WhiteRectangleDetector {
         }
       }
     }
-
     return false;
   }
 

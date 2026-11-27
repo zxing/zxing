@@ -68,7 +68,7 @@ public final class BitArray implements Cloneable {
    * @return true iff bit i is set
    */
   public boolean get(int i) {
-    return (bits[i / 32] & (1 << (i & 0x1F))) != 0;
+    return (bits[i >>> 5] & (1 << (i & 0x1F))) != 0;
   }
 
   /**
@@ -77,7 +77,7 @@ public final class BitArray implements Cloneable {
    * @param i bit to set
    */
   public void set(int i) {
-    bits[i / 32] |= 1 << (i & 0x1F);
+    bits[i >>> 5] |= 1 << (i & 0x1F);
   }
 
   /**
@@ -86,7 +86,7 @@ public final class BitArray implements Cloneable {
    * @param i bit to set
    */
   public void flip(int i) {
-    bits[i / 32] ^= 1 << (i & 0x1F);
+    bits[i >>> 5] ^= 1 << (i & 0x1F);
   }
 
   /**
@@ -99,7 +99,7 @@ public final class BitArray implements Cloneable {
     if (from >= size) {
       return size;
     }
-    int bitsOffset = from / 32;
+    int bitsOffset = from >>> 5;
     int currentBits = bits[bitsOffset];
     // mask off lesser bits first
     currentBits &= -(1 << (from & 0x1F));
@@ -109,7 +109,7 @@ public final class BitArray implements Cloneable {
       }
       currentBits = bits[bitsOffset];
     }
-    int result = (bitsOffset * 32) + Integer.numberOfTrailingZeros(currentBits);
+    int result = (bitsOffset << 5) + Integer.numberOfTrailingZeros(currentBits);
     return Math.min(result, size);
   }
 
@@ -122,7 +122,7 @@ public final class BitArray implements Cloneable {
     if (from >= size) {
       return size;
     }
-    int bitsOffset = from / 32;
+    int bitsOffset = from >>> 5;
     int currentBits = ~bits[bitsOffset];
     // mask off lesser bits first
     currentBits &= -(1 << (from & 0x1F));
@@ -132,7 +132,7 @@ public final class BitArray implements Cloneable {
       }
       currentBits = ~bits[bitsOffset];
     }
-    int result = (bitsOffset * 32) + Integer.numberOfTrailingZeros(currentBits);
+    int result = (bitsOffset << 5) + Integer.numberOfTrailingZeros(currentBits);
     return Math.min(result, size);
   }
 
@@ -144,7 +144,7 @@ public final class BitArray implements Cloneable {
    * corresponds to bit i, the next-least-significant to i+1, and so on.
    */
   public void setBulk(int i, int newBits) {
-    bits[i / 32] = newBits;
+    bits[i >>> 5] = newBits;
   }
 
   /**
@@ -161,8 +161,8 @@ public final class BitArray implements Cloneable {
       return;
     }
     end--; // will be easier to treat this as the last actually set bit -- inclusive
-    int firstInt = start / 32;
-    int lastInt = end / 32;
+    int firstInt = start >>> 5;
+    int lastInt = end >>> 5;
     for (int i = firstInt; i <= lastInt; i++) {
       int firstBit = i > firstInt ? 0 : start & 0x1F;
       int lastBit = i < lastInt ? 31 : end & 0x1F;
@@ -176,10 +176,7 @@ public final class BitArray implements Cloneable {
    * Clears all bits (sets to false).
    */
   public void clear() {
-    int max = bits.length;
-    for (int i = 0; i < max; i++) {
-      bits[i] = 0;
-    }
+    Arrays.fill(bits, 0);
   }
 
   /**
@@ -199,8 +196,8 @@ public final class BitArray implements Cloneable {
       return true; // empty range matches
     }
     end--; // will be easier to treat this as the last actually set bit -- inclusive
-    int firstInt = start / 32;
-    int lastInt = end / 32;
+    int firstInt = start >>> 5;
+    int lastInt = end >>> 5;
     for (int i = firstInt; i <= lastInt; i++) {
       int firstBit = i > firstInt ? 0 : start & 0x1F;
       int lastBit = i < lastInt ? 31 : end & 0x1F;
@@ -219,7 +216,7 @@ public final class BitArray implements Cloneable {
   public void appendBit(boolean bit) {
     ensureCapacity(size + 1);
     if (bit) {
-      bits[size / 32] |= 1 << (size & 0x1F);
+      bits[size >>> 5] |= 1 << (size & 0x1F);
     }
     size++;
   }
@@ -240,7 +237,7 @@ public final class BitArray implements Cloneable {
     ensureCapacity(nextSize + numBits);
     for (int numBitsLeft = numBits - 1; numBitsLeft >= 0; numBitsLeft--) {
       if ((value & (1 << numBitsLeft)) != 0) {
-        bits[nextSize / 32] |= 1 << (nextSize & 0x1F);
+        bits[nextSize >>> 5] |= 1 << (nextSize & 0x1F);
       }
       nextSize++;
     }
