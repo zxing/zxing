@@ -26,8 +26,7 @@ import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -257,8 +256,9 @@ public final class Code128Reader extends OneDReader {
         throw FormatException.getFormatInstance();
     }
 
-    List<Byte> rawCodes = new ArrayList<>(20);
-    rawCodes.add((byte) startCode);
+    byte[] rawCodes = new byte[20];
+    rawCodes[0] = (byte) startCode;
+    int rawCodesSize = 1;
 
     int lastStart = startPatternInfo[0];
     int nextStart = startPatternInfo[1];
@@ -267,7 +267,10 @@ public final class Code128Reader extends OneDReader {
     // Pass 1: Read all codewords up to CODE_STOP without speculatively mutating output state.
     while (true) {
       int code = decodeCode(row, counters, nextStart);
-      rawCodes.add((byte) code);
+      if (rawCodesSize == rawCodes.length) {
+        rawCodes = Arrays.copyOf(rawCodes, rawCodesSize * 2);
+      }
+      rawCodes[rawCodesSize++] = (byte) code;
 
       // Advance to where the next code will start
       lastStart = nextStart;
@@ -301,7 +304,6 @@ public final class Code128Reader extends OneDReader {
     }
 
     // A valid symbol requires at least Start, one payload codeword, Check, and Stop.
-    int rawCodesSize = rawCodes.size();
     if (rawCodesSize < 4) {
       throw NotFoundException.getNotFoundInstance();
     }
@@ -310,9 +312,9 @@ public final class Code128Reader extends OneDReader {
     int payloadEnd = rawCodesSize - 2; // exclusive; index of check code
     int checksumTotal = startCode;
     for (int i = 1; i < payloadEnd; i++) {
-      checksumTotal = (checksumTotal + i * (rawCodes.get(i) & 0xFF)) % 103;
+      checksumTotal = (checksumTotal + i * (rawCodes[i] & 0xFF)) % 103;
     }
-    int checkCode = rawCodes.get(payloadEnd) & 0xFF;
+    int checkCode = rawCodes[payloadEnd] & 0xFF;
     if (checksumTotal != checkCode) {
       throw ChecksumException.getChecksumInstance();
     }
@@ -328,7 +330,7 @@ public final class Code128Reader extends OneDReader {
     boolean shiftUpperMode = false;
 
     for (int i = 1; i < payloadEnd; i++) {
-      int code = rawCodes.get(i) & 0xFF;
+      int code = rawCodes[i] & 0xFF;
 
       int currentCodeSet = codeSet;
       if (isNextShifted) {
@@ -474,10 +476,7 @@ public final class Code128Reader extends OneDReader {
     float left = (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
 
-    byte[] rawBytes = new byte[rawCodesSize];
-    for (int i = 0; i < rawCodesSize; i++) {
-      rawBytes[i] = rawCodes.get(i);
-    }
+    byte[] rawBytes = Arrays.copyOf(rawCodes, rawCodesSize);
 
     Result resultObject = new Result(
         result.toString(),

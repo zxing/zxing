@@ -202,9 +202,10 @@ public final class Decoder {
             latchTable = shiftTable;
           }
         } else {
-          // Though stored as a table of strings for convenience, codes actually represent 1 or 2 *bytes*.
-          byte[] b = str.getBytes(StandardCharsets.US_ASCII);
-          decodedBytes.write(b, 0, b.length);
+          // Though stored as a table of strings for convenience, codes actually represent 1 or 2 ASCII bytes.
+          for (int i = 0; i < str.length(); i++) {
+            decodedBytes.write(str.charAt(i));
+          }
           // Go back to whatever mode we had been in
           shiftTable = latchTable;
         }
