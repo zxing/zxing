@@ -84,6 +84,16 @@ public final class BitMatrixTestCase extends Assert {
     matrix.setRegion(0, 0, 5, 5);
     assertArrayEquals(new int[] { 0, 0 }, matrix.getTopLeftOnBit());
     assertArrayEquals(new int[] { 4, 4 }, matrix.getBottomRightOnBit());
+
+    BitMatrix wide = new BitMatrix(75, 41);
+    wide.set(31, 5);
+    wide.set(64, 30);
+    assertArrayEquals(new int[] { 31, 5 }, wide.getTopLeftOnBit());
+    assertArrayEquals(new int[] { 64, 30 }, wide.getBottomRightOnBit());
+    assertArrayEquals(new int[] { 31, 5, 34, 26 }, wide.getEnclosingRectangle());
+    wide.set(74, 30);
+    assertArrayEquals(new int[] { 74, 30 }, wide.getBottomRightOnBit());
+    assertArrayEquals(new int[] { 31, 5, 44, 26 }, wide.getEnclosingRectangle());
   }
 
   @Test
@@ -146,8 +156,9 @@ public final class BitMatrixTestCase extends Assert {
     array2 = matrix.getRow(2, array2);
     assertEquals(102, array2.getSize());
 
-    // Should use provided object, with original BitArray size
+    // Should use provided object, with original BitArray size, clearing trailing bits
     BitArray array3 = new BitArray(200);
+    array3.setRange(0, 200);
     array3 = matrix.getRow(2, array3);
     assertEquals(200, array3.getSize());
 
@@ -157,6 +168,7 @@ public final class BitMatrixTestCase extends Assert {
       assertEquals(on, array2.get(x));
       assertEquals(on, array3.get(x));
     }
+    assertTrue(array3.isRange(102, 200, false));
   }
 
   @Test
