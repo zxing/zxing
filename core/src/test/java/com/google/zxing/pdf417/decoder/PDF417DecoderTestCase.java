@@ -235,6 +235,197 @@ public class PDF417DecoderTestCase extends Assert {
   }
 
   @Test
+  public void testInvalidCodewordArraysAndLengths() {
+    int[][] invalidInputs = {
+        {},
+        {0},
+        {0, 900},
+        {-1, 65},
+        {1},
+        {1, 900},
+        {1, 921},
+        {5, 65}, // count exceeds array length
+        {3, 840, -1}, // negative codeword in MIXED mode
+        {3, 65, 929}, // codeword outside GF(929)
+        {2, 900},
+        {2, 901},
+        {2, 902},
+        {2, 913},
+        {2, 921},
+        {2, 922},
+        {2, 923},
+        {2, 924},
+        {2, 925},
+        {2, 926},
+        {2, 927},
+        {2, 928},
+    };
+    for (int[] input : invalidInputs) {
+      try {
+        DecodedBitStreamParser.decode(input, "0");
+        fail("Expected FormatException");
+      } catch (FormatException expected) {
+        // expected
+      }
+    }
+  }
+
+  @Test
+  public void testModeShiftToByteInvalidOperands() {
+    int[][] invalidInputs = {
+        {4, 65, 913, 900}, // control codeword after 913 in text compaction
+        {4, 65, 913, 928}, // macro block start after 913 in text compaction
+        {4, 65, 913, 256}, // out-of-byte-range operand after 913
+        {5, 901, 65, 913, 900}, // control codeword after 913 in top-level decode
+        {5, 901, 65, 913, 256}, // out-of-byte-range operand after 913 in top-level decode
+        {5, 902, 1, 200, 913}, // truncated 913 after numeric compaction
+        {6, 902, 1, 200, 913, 900}, // control codeword after 913 following numeric compaction
+        {4, 901, 65, 300}, // out-of-byte-range codeword in single-byte compaction
+    };
+    for (int[] input : invalidInputs) {
+      try {
+        DecodedBitStreamParser.decode(input, "0");
+        fail("Expected FormatException");
+      } catch (FormatException expected) {
+        // expected
+      }
+    }
+  }
+
+  @Test
+  public void testTextCompactionShiftStateTransitions() throws FormatException {
+    // LL + 'a' (810), 'a' + AS (27), SHIFT_TO_BYTE + 'B' (913, 66), 'a' + 'a' (0)
+    performDecodeTest(new int[] {6, 810, 27, 913, 66, 0}, "aaBaa");
+
+    // LL + 'a' (810), 'a' + PS (29), LATCH_TO_TEXT (900), ECI UTF-8 (927, 26), 'A' + 'A' (0)
+    // Latching back to ALPHA from PUNCT_SHIFT must also update latchedMode across ECI
+    performDecodeTest(new int[] {7, 810, 29, 900, 927, 26, 0}, "aaAA");
+
+    // LL + 'a' (810), 'a' + AS (27), LATCH_TO_TEXT (900), ECI UTF-8 (927, 26), 'A' + 'A' (0)
+    performDecodeTest(new int[] {7, 810, 27, 900, 927, 26, 0}, "aaAA");
+  }
+
+  @Test
+  public void testGeneralPurposeAndUserDefinedEciAcrossModes() throws FormatException {
+    // Text compaction: 925 (1 arg) and 926 (2 args) must skip args and preserve text submode
+    performDecodeTest(new int[] {5, 810, 925, 42, 0}, "aaa");
+    performDecodeTest(new int[] {6, 810, 926, 0, 1, 0}, "aaa");
+
+    // Byte compaction: 925 and 926 must skip args without dropping out of byte compaction
+    performDecodeTest(new int[] {6, 901, 65, 925, 1, 66}, "AB");
+    performDecodeTest(new int[] {7, 901, 65, 926, 0, 1, 66}, "AB");
+
+    // Byte compaction 901: 5 single bytes followed by ECI and trailing single byte
+    performDecodeTest(
+        new int[] {12, 927, 4, 901, 200, 200, 200, 200, 200, 927, 7, 207},
+        "\u010c\u010c\u010c\u010c\u010c\u042f");
+
+    // Numeric compaction: ECIs terminate current numeric group and stay in numeric mode
+    performDecodeTest(new int[] {8, 902, 1, 200, 927, 26, 1, 201}, "100101");
+    performDecodeTest(new int[] {8, 902, 1, 200, 925, 42, 1, 201}, "100101");
+    performDecodeTest(new int[] {9, 902, 1, 200, 926, 0, 1, 1, 201}, "100101");
+
+    // Truncated or control-codeword arguments to 925/926 must throw FormatException
+    int[][] invalidEcis = {
+        {3, 65, 925},
+        {4, 65, 925, 900},
+        {3, 65, 926},
+        {4, 65, 926, 0},
+        {5, 65, 926, 0, 900},
+        {4, 901, 65, 925},
+        {5, 901, 65, 926, 0},
+        {5, 902, 1, 200, 925},
+        {6, 902, 1, 200, 926, 0},
+    };
+    for (int[] input : invalidEcis) {
+      try {
+        DecodedBitStreamParser.decode(input, "0");
+        fail("Expected FormatException");
+      } catch (FormatException expected) {
+        // expected
+      }
+    }
+  }
+
+  @Test
+  public void testMacroBlockEdgeCases() throws FormatException {
+    // Trailing pad codewords (900) after fileId
+    PDF417ResultMetadata meta1 = new PDF417ResultMetadata();
+    DecodedBitStreamParser.decodeMacroBlock(new int[] {8, 928, 111, 100, 17, 53, 900, 900}, 2, meta1);
+    assertEquals(0, meta1.getSegmentIndex());
+    assertEquals("017053", meta1.getFileId());
+    assertFalse(meta1.isLastSegment());
+
+    // Trailing pad codewords (900) after terminator (922)
+    PDF417ResultMetadata meta2 = new PDF417ResultMetadata();
+    DecodedBitStreamParser.decodeMacroBlock(
+        new int[] {13, 928, 111, 103, 17, 53, 923, 1, 111, 104, 922, 900, 900}, 2, meta2);
+    assertEquals(3, meta2.getSegmentIndex());
+    assertEquals("017053", meta2.getFileId());
+    assertTrue(meta2.isLastSegment());
+    assertEquals(4, meta2.getSegmentCount());
+
+    // Trailing pad codewords (900) after numeric optional field without terminator
+    PDF417ResultMetadata meta3 = new PDF417ResultMetadata();
+    DecodedBitStreamParser.decodeMacroBlock(
+        new int[] {11, 928, 111, 100, 17, 53, 923, 1, 111, 104, 900}, 2, meta3);
+    assertEquals(4, meta3.getSegmentCount());
+    assertFalse(meta3.isLastSegment());
+
+    // Invalid macro blocks must throw FormatException rather than corrupting metadata or throwing RuntimeException
+    int[][] invalidMacros = {
+        {6, 928, 111, 900, 17, 53}, // control codeword inside segment index
+        {6, 928, 111, 100, 928, 53}, // control codeword instead of fileId
+        {9, 928, 111, 103, 17, 53, 922, 922, 900}, // duplicate terminator
+        {10, 928, 111, 103, 17, 53, 922, 923, 0, 65}, // optional field after terminator
+        {10, 928, 111, 100, 17, 53, 900, 65, 900, 900}, // data after trailing pad
+        {20, 928, 111, 100, 17}, // count exceeds array length
+    };
+    for (int[] input : invalidMacros) {
+      try {
+        DecodedBitStreamParser.decodeMacroBlock(input, 2, new PDF417ResultMetadata());
+        fail("Expected FormatException");
+      } catch (FormatException expected) {
+        // expected
+      }
+    }
+  }
+
+  @Test
+  public void testFuzzedCodewordsOnlyThrowFormatException() {
+    Random random = new Random(0x5eed1234L);
+    int[] interestingCodewords = {
+        -1, 0, 1, 26, 27, 28, 29, 65, 200, 255, 256, 899,
+        900, 901, 902, 903, 913, 921, 922, 923, 924, 925, 926, 927, 928, 929
+    };
+    for (int trial = 0; trial < 200; trial++) {
+      int len = random.nextInt(25);
+      int[] codewords = new int[len];
+      if (len > 0) {
+        // Mostly valid lengths, occasionally out-of-range lengths
+        codewords[0] = random.nextInt(10) == 0 ? random.nextInt(len + 5) - 2 : random.nextInt(len) + 1;
+        for (int i = 1; i < len; i++) {
+          if (random.nextBoolean()) {
+            codewords[i] = interestingCodewords[random.nextInt(interestingCodewords.length)];
+          } else {
+            codewords[i] = random.nextInt(929);
+          }
+        }
+      }
+      try {
+        DecodedBitStreamParser.decode(codewords, "0");
+      } catch (FormatException expected) {
+        // Only FormatException is permitted for malformed codeword streams
+      }
+      try {
+        DecodedBitStreamParser.decodeMacroBlock(codewords, random.nextInt(5) - 1, new PDF417ResultMetadata());
+      } catch (FormatException expected) {
+        // Only FormatException is permitted for malformed macro blocks
+      }
+    }
+  }
+
+  @Test
   public void testUppercase() throws WriterException, FormatException {
     //encodeDecode("", 0);
     performEncodeTest('A', new int[] { 3, 4, 5, 6, 4, 4, 5, 5});

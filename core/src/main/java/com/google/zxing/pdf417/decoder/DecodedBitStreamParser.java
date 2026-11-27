@@ -19,6 +19,7 @@ package com.google.zxing.pdf417.decoder;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.ECIStringBuilder;
 import com.google.zxing.common.DecoderResult;
+import com.google.zxing.pdf417.PDF417Common;
 import com.google.zxing.pdf417.PDF417ResultMetadata;
 
 import java.math.BigInteger;
@@ -100,8 +101,15 @@ final class DecodedBitStreamParser {
   }
 
   static DecoderResult decode(int[] codewords, String ecLevel) throws FormatException {
+    if (codewords.length == 0) {
+      throw FormatException.getFormatInstance();
+    }
     int count = codewords[0];
-    boolean readerInit = (codewords.length > 1 && codewords[1] == READER_INITIALIZATION);
+    if (count < 1 || count > codewords.length) {
+      throw FormatException.getFormatInstance();
+    }
+    validateCodewords(codewords, 1, count);
+    boolean readerInit = count > 1 && codewords[1] == READER_INITIALIZATION;
     ECIStringBuilder result = new ECIStringBuilder(codewords.length * 2);
     int codeIndex = textCompaction(codewords, 1, result);
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
@@ -116,7 +124,7 @@ final class DecodedBitStreamParser {
           codeIndex = byteCompaction(code, codewords, codeIndex, result);
           break;
         case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-          if (codeIndex >= count) {
+          if (codeIndex >= count || codewords[codeIndex] > 255) {
             throw FormatException.getFormatInstance();
           }
           result.append((char) codewords[codeIndex++]);
@@ -125,18 +133,9 @@ final class DecodedBitStreamParser {
           codeIndex = numericCompaction(codewords, codeIndex, result);
           break;
         case ECI_CHARSET:
-          if (codeIndex >= count) {
-            throw FormatException.getFormatInstance();
-          }
-          result.appendECI(codewords[codeIndex++]);
-          break;
         case ECI_GENERAL_PURPOSE:
-          // Can't do anything with generic ECI; skip its 2 characters
-          codeIndex += 2;
-          break;
         case ECI_USER_DEFINED:
-          // Can't do anything with user ECI; skip its 1 character
-          codeIndex++;
+          codeIndex = processECI(code, codewords, codeIndex, result);
           break;
         case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
           codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
@@ -163,17 +162,70 @@ final class DecodedBitStreamParser {
     return decoderResult;
   }
 
+  private static void validateCodewords(int[] codewords, int startIndex, int endIndex) throws FormatException {
+    for (int i = startIndex; i < endIndex; i++) {
+      if (codewords[i] < 0 || codewords[i] >= PDF417Common.NUMBER_OF_CODEWORDS) {
+        throw FormatException.getFormatInstance();
+      }
+    }
+  }
+
+  private static boolean isECI(int code) {
+    return code == ECI_CHARSET || code == ECI_GENERAL_PURPOSE || code == ECI_USER_DEFINED;
+  }
+
+  private static int processECI(int code,
+                                int[] codewords,
+                                int codeIndex,
+                                ECIStringBuilder result) throws FormatException {
+    int count = codewords[0];
+    switch (code) {
+      case ECI_CHARSET:
+        if (codeIndex >= count) {
+          throw FormatException.getFormatInstance();
+        }
+        result.appendECI(codewords[codeIndex++]);
+        return codeIndex;
+      case ECI_GENERAL_PURPOSE:
+        // Can't do anything with generic ECI; skip its 2 characters
+        if (codeIndex + 1 >= count ||
+            codewords[codeIndex] >= TEXT_COMPACTION_MODE_LATCH ||
+            codewords[codeIndex + 1] >= TEXT_COMPACTION_MODE_LATCH) {
+          throw FormatException.getFormatInstance();
+        }
+        return codeIndex + 2;
+      case ECI_USER_DEFINED:
+        // Can't do anything with user ECI; skip its 1 character
+        if (codeIndex >= count ||
+            codewords[codeIndex] >= TEXT_COMPACTION_MODE_LATCH) {
+          throw FormatException.getFormatInstance();
+        }
+        return codeIndex + 1;
+      default:
+        throw FormatException.getFormatInstance();
+    }
+  }
+
   @SuppressWarnings("deprecation")
   static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
       throws FormatException {
-    int maxLength = codewords[0];
-    if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > maxLength) {
-      // we must have at least two bytes left for the segment index
+    if (codewords.length == 0) {
       throw FormatException.getFormatInstance();
     }
+    int maxLength = codewords[0];
+    if (maxLength < 0 || maxLength > codewords.length ||
+        codeIndex < 0 || codeIndex > maxLength - NUMBER_OF_SEQUENCE_CODEWORDS) {
+      // we must have at least two codewords left for the segment index
+      throw FormatException.getFormatInstance();
+    }
+    validateCodewords(codewords, codeIndex, maxLength);
     int[] segmentIndexArray = new int[NUMBER_OF_SEQUENCE_CODEWORDS];
     for (int i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
-      segmentIndexArray[i] = codewords[codeIndex];
+      int code = codewords[codeIndex];
+      if (code >= TEXT_COMPACTION_MODE_LATCH) {
+        throw FormatException.getFormatInstance();
+      }
+      segmentIndexArray[i] = code;
     }
     String segmentIndexString = decodeBase900toBase10(segmentIndexArray, NUMBER_OF_SEQUENCE_CODEWORDS);
     if (segmentIndexString.isEmpty()) {
@@ -191,10 +243,7 @@ final class DecodedBitStreamParser {
     // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
     // the fileId using text compaction, so in those cases the fileId will appear mangled.
     StringBuilder fileId = new StringBuilder();
-    while (codeIndex < maxLength &&
-           codeIndex < codewords.length &&
-           codewords[codeIndex] != MACRO_PDF417_TERMINATOR &&
-           codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
+    while (codeIndex < maxLength && codewords[codeIndex] < TEXT_COMPACTION_MODE_LATCH) {
       fileId.append(String.format(Locale.ROOT, "%03d", codewords[codeIndex]));
       codeIndex++;
     }
@@ -205,6 +254,7 @@ final class DecodedBitStreamParser {
     resultMetadata.setFileId(fileId.toString());
 
     int optionalFieldsStart = -1;
+    int optionalFieldsEnd = -1;
     if (codeIndex < maxLength && codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
       optionalFieldsStart = codeIndex + 1;
     }
@@ -271,10 +321,15 @@ final class DecodedBitStreamParser {
             default:
               throw FormatException.getFormatInstance();
           }
+          optionalFieldsEnd = codeIndex;
           break;
         case MACRO_PDF417_TERMINATOR:
           codeIndex++;
           resultMetadata.setLastSegment(true);
+          codeIndex = consumePadCodewords(codewords, codeIndex, maxLength);
+          break;
+        case TEXT_COMPACTION_MODE_LATCH:
+          codeIndex = consumePadCodewords(codewords, codeIndex, maxLength);
           break;
         default:
           throw FormatException.getFormatInstance();
@@ -282,18 +337,21 @@ final class DecodedBitStreamParser {
     }
 
     // copy optional fields to additional options
-    if (optionalFieldsStart != -1) {
-      int optionalFieldsLength = codeIndex - optionalFieldsStart;
-      if (resultMetadata.isLastSegment()) {
-        // do not include terminator
-        optionalFieldsLength--;
-      }
-      if (optionalFieldsLength > 0) {
-        resultMetadata.setOptionalData(Arrays.copyOfRange(codewords,
-            optionalFieldsStart, optionalFieldsStart + optionalFieldsLength));
-      }
+    if (optionalFieldsStart != -1 && optionalFieldsEnd > optionalFieldsStart) {
+      resultMetadata.setOptionalData(Arrays.copyOfRange(codewords,
+          optionalFieldsStart, optionalFieldsEnd));
     }
 
+    return codeIndex;
+  }
+
+  private static int consumePadCodewords(int[] codewords, int codeIndex, int maxLength) throws FormatException {
+    while (codeIndex < maxLength) {
+      if (codewords[codeIndex] != TEXT_COMPACTION_MODE_LATCH) {
+        throw FormatException.getFormatInstance();
+      }
+      codeIndex++;
+    }
     return codeIndex;
   }
 
@@ -349,17 +407,17 @@ final class DecodedBitStreamParser {
               throw FormatException.getFormatInstance();
             }
             code = codewords[codeIndex++];
+            if (code > 255) {
+              throw FormatException.getFormatInstance();
+            }
             byteCompactionData[index] = code;
             index++;
             break;
           case ECI_CHARSET:
-            if (codeIndex >= codewords[0]) {
-              throw FormatException.getFormatInstance();
-            }
+          case ECI_GENERAL_PURPOSE:
+          case ECI_USER_DEFINED:
             subMode = decodeTextCompaction(textCompactionData, byteCompactionData, index, result, subMode);
-            result.appendECI(codewords[codeIndex++]);
-            textCompactionData = new int[(codewords[0] - codeIndex) * 2];
-            byteCompactionData = new int[(codewords[0] - codeIndex) * 2];
+            codeIndex = processECI(code, codewords, codeIndex, result);
             index = 0;
             break;
         }
@@ -534,8 +592,12 @@ final class DecodedBitStreamParser {
               case 26:
                 ch = ' ';
                 break;
+              case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+                result.append((char) byteCompactionData[i]);
+                break;
               case TEXT_COMPACTION_MODE_LATCH:
                 subMode = Mode.ALPHA;
+                latchedMode = subMode;
                 break;
             }
           }
@@ -551,6 +613,7 @@ final class DecodedBitStreamParser {
               case PAL:
               case TEXT_COMPACTION_MODE_LATCH:
                 subMode = Mode.ALPHA;
+                latchedMode = subMode;
                 break;
               case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                 // PS before Shift-to-Byte is used as a padding character,
@@ -589,12 +652,9 @@ final class DecodedBitStreamParser {
 
     while (codeIndex < codewords[0] && !end) {
       //handle leading ECIs
-      while (codeIndex < codewords[0] && codewords[codeIndex] == ECI_CHARSET) {
-        if (codeIndex + 1 >= codewords[0]) {
-          throw FormatException.getFormatInstance();
-        }
-        result.appendECI(codewords[++codeIndex]);
-        codeIndex++;
+      while (codeIndex < codewords[0] && isECI(codewords[codeIndex])) {
+        int code = codewords[codeIndex++];
+        codeIndex = processECI(code, codewords, codeIndex, result);
       }
 
       if (codeIndex >= codewords[0] || codewords[codeIndex] >= TEXT_COMPACTION_MODE_LATCH) {
@@ -620,12 +680,12 @@ final class DecodedBitStreamParser {
           while ((codeIndex < codewords[0]) && !end) {
             int code = codewords[codeIndex++];
             if (code < TEXT_COMPACTION_MODE_LATCH) {
-              result.append((byte) code);
-            } else if (code == ECI_CHARSET) {
-              if (codeIndex >= codewords[0]) {
+              if (code > 255) {
                 throw FormatException.getFormatInstance();
               }
-              result.appendECI(codewords[codeIndex++]);
+              result.append((byte) code);
+            } else if (isECI(code)) {
+              codeIndex = processECI(code, codewords, codeIndex, result);
             } else {
               codeIndex--;
               end = true;
@@ -647,40 +707,38 @@ final class DecodedBitStreamParser {
    */
   private static int numericCompaction(int[] codewords, int codeIndex, ECIStringBuilder result) throws FormatException {
     int count = 0;
-    boolean end = false;
-
     int[] numericCodewords = new int[MAX_NUMERIC_CODEWORDS];
 
-    while (codeIndex < codewords[0] && !end) {
+    while (codeIndex < codewords[0]) {
       int code = codewords[codeIndex++];
-      if (codeIndex == codewords[0]) {
-        end = true;
-      }
       if (code < TEXT_COMPACTION_MODE_LATCH) {
-        numericCodewords[count] = code;
-        count++;
+        numericCodewords[count++] = code;
+        if (count == MAX_NUMERIC_CODEWORDS) {
+          result.append(decodeBase900toBase10(numericCodewords, count));
+          count = 0;
+        }
       } else {
-        switch (code) {
-          case TEXT_COMPACTION_MODE_LATCH:
-          case BYTE_COMPACTION_MODE_LATCH:
-          case BYTE_COMPACTION_MODE_LATCH_6:
-          case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-          case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-          case MACRO_PDF417_TERMINATOR:
-          case ECI_CHARSET:
-            codeIndex--;
-            end = true;
-            break;
+        if (count > 0) {
+          result.append(decodeBase900toBase10(numericCodewords, count));
+          count = 0;
+        }
+        if (code == NUMERIC_COMPACTION_MODE_LATCH) {
+          // Re-invoking Numeric Compaction mode (by using codeword 902
+          // while in Numeric Compaction mode) serves to terminate the
+          // current Numeric Compaction mode grouping as described in 5.4.4.2,
+          // and then to start a new grouping.
+          continue;
+        }
+        if (isECI(code)) {
+          codeIndex = processECI(code, codewords, codeIndex, result);
+        } else {
+          codeIndex--;
+          break;
         }
       }
-      if ((count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) && count > 0) {
-        // Re-invoking Numeric Compaction mode (by using codeword 902
-        // while in Numeric Compaction mode) serves  to terminate the
-        // current Numeric Compaction mode grouping as described in 5.4.4.2,
-        // and then to start a new one grouping.
-        result.append(decodeBase900toBase10(numericCodewords, count));
-        count = 0;
-      }
+    }
+    if (count > 0) {
+      result.append(decodeBase900toBase10(numericCodewords, count));
     }
     return codeIndex;
   }
