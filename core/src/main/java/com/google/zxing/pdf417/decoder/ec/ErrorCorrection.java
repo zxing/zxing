@@ -46,10 +46,18 @@ public final class ErrorCorrection {
                     int numECCodewords,
                     int[] erasures) throws ChecksumException {
 
-    if (received.length > field.getSize()) {
-      // A codeword cannot be longer than the field; otherwise erasure and error positions
-      // index past the exponent table in exp()/log().
+    if (received.length >= field.getSize()) {
+      // A codeword must be shorter than the field; otherwise erasure and error positions
+      // alias modulo (field.getSize() - 1) or index past the exponent table in exp()/log().
       throw ChecksumException.getChecksumInstance();
+    }
+    if (numECCodewords < 0 || numECCodewords > received.length) {
+      throw ChecksumException.getChecksumInstance();
+    }
+    for (int codeword : received) {
+      if (codeword < 0 || codeword >= field.getSize()) {
+        throw ChecksumException.getChecksumInstance();
+      }
     }
 
     ModulusPoly poly = new ModulusPoly(field, received);
@@ -70,6 +78,9 @@ public final class ErrorCorrection {
     ModulusPoly knownErrors = field.getOne();
     if (erasures != null) {
       for (int erasure : erasures) {
+        if (erasure < 0 || erasure >= received.length) {
+          throw ChecksumException.getChecksumInstance();
+        }
         int b = field.exp(received.length - 1 - erasure);
         // Add (1 - bx) term:
         ModulusPoly term = new ModulusPoly(field, new int[]{field.subtract(0, b), 1});
@@ -88,25 +99,27 @@ public final class ErrorCorrection {
     //sigma = sigma.multiply(knownErrors);
 
     int[] errorLocations = findErrorLocations(sigma);
-    int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
-
+    int[] errorPositions = new int[errorLocations.length];
     for (int i = 0; i < errorLocations.length; i++) {
       int position = received.length - 1 - field.log(errorLocations[i]);
       if (position < 0) {
         throw ChecksumException.getChecksumInstance();
       }
-      received[position] = field.subtract(received[position], errorMagnitudes[i]);
+      errorPositions[i] = position;
+    }
+    int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
+
+    for (int i = 0; i < errorPositions.length; i++) {
+      received[errorPositions[i]] = field.subtract(received[errorPositions[i]], errorMagnitudes[i]);
     }
     return errorLocations.length;
   }
 
   private ModulusPoly[] runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R)
       throws ChecksumException {
-    // Assume a's degree is >= b's
+    // a is x^R (degree R) and b is the syndrome polynomial (degree < R)
     if (a.getDegree() < b.getDegree()) {
-      ModulusPoly temp = a;
-      a = b;
-      b = temp;
+      throw new IllegalArgumentException();
     }
 
     ModulusPoly rLast = a;
@@ -115,7 +128,7 @@ public final class ErrorCorrection {
     ModulusPoly t = field.getOne();
 
     // Run Euclidean algorithm until r's degree is less than R/2
-    while (r.getDegree() >= R / 2) {
+    while (!r.isZero() && 2 * r.getDegree() >= R) {
       ModulusPoly rLastLast = rLast;
       ModulusPoly tLastLast = tLast;
       rLast = r;
@@ -148,6 +161,9 @@ public final class ErrorCorrection {
     int inverse = field.inverse(sigmaTildeAtZero);
     ModulusPoly sigma = t.multiply(inverse);
     ModulusPoly omega = r.multiply(inverse);
+    if (omega.isZero() || omega.getDegree() >= sigma.getDegree()) {
+      throw ChecksumException.getChecksumInstance();
+    }
     return new ModulusPoly[]{sigma, omega};
   }
 
