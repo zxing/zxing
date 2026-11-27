@@ -19,8 +19,10 @@ package com.google.zxing.oned;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
+import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 
 import org.junit.Assert;
@@ -137,6 +139,177 @@ public final class Code128ReaderTestCase extends Assert {
     Result aimWithHint = decode("A\u00f1B", "B", true);
     assertEquals("A\u001dB", aimWithHint.getText());
     assertEquals("]C2", aimWithHint.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+  }
+
+  @Test
+  public void testSingleFNC3ReaderInitializationWithNonPrintableChecksum() throws Exception {
+    // START_A(103) + 1*FNC3(96) => checksum 96 (FNC3); START_B(104) + 1*FNC3(96) => checksum 97 (FNC2).
+    // Both must decode as empty reader-initialization symbols rather than throwing NotFoundException.
+    for (String codeSet : new String[] {"A", "B"}) {
+      Result result = decode("\u00f3", codeSet, false);
+      assertEquals("", result.getText());
+      assertEquals("]C0", result.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+      assertEquals(Boolean.TRUE, result.getResultMetadata().get(ResultMetadataType.READER_INIT));
+    }
+  }
+
+  @Test
+  public void testRejectsZeroPayloadAndMissingChecksumSymbols() throws Exception {
+    int[][] invalidSequences = {
+        {103, 106},       // START_A, STOP (missing check digit)
+        {104, 106},       // START_B, STOP (missing check digit)
+        {105, 106},       // START_C, STOP (missing check digit)
+        {103, 0, 106},    // START_A, valid check 0, STOP (zero payload)
+        {104, 1, 106},    // START_B, valid check 1, STOP (zero payload)
+        {105, 2, 106},    // START_C, valid check 2, STOP (zero payload)
+    };
+    Code128Reader reader = new Code128Reader();
+    for (int[] seq : invalidSequences) {
+      try {
+        reader.decodeRow(0, encodeRawCodes(seq), null);
+        fail("Expected NotFoundException for short/empty Code 128 symbol");
+      } catch (NotFoundException expected) {
+        // expected
+      }
+    }
+  }
+
+  @Test
+  public void testRejectsControlOnlyEmptySymbols() throws Exception {
+    int[][] controlOnlyPayloads = {
+        {105, 101},          // START_C, CODE_A => checksum 0 (printable ' ')
+        {104, 101, 98},      // START_B, CODE_A, SHIFT => checksum 92 (printable '|')
+        {103, 100},          // START_A, CODE_B => checksum 100 (non-printable)
+    };
+    for (int[] payload : controlOnlyPayloads) {
+      try {
+        decodeWithChecksum(false, payload);
+        fail("Expected NotFoundException for control-only empty symbol");
+      } catch (NotFoundException expected) {
+        // expected
+      }
+    }
+  }
+
+  @Test
+  public void testControlAndShiftCodewordsBeforeCheckDigit() throws Exception {
+    // Trailing CODE_SHIFT followed by function-code check digits (102=FNC1, 97=FNC2, 96=FNC3) and printable check
+    Result trailingShiftFnc1 = decodeWithChecksum(true, 104, 8, 98); // '(' + SHIFT, checksum 102
+    assertEquals(102, trailingShiftFnc1.getRawBytes()[trailingShiftFnc1.getRawBytes().length - 2] & 0xFF);
+    assertEquals("(", trailingShiftFnc1.getText());
+    assertEquals("]C0", trailingShiftFnc1.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+    assertEquals(Boolean.FALSE, trailingShiftFnc1.getResultMetadata().get(ResultMetadataType.READER_INIT));
+
+    Result trailingShiftFnc2 = decodeWithChecksum(false, 104, 3, 98); // '#' + SHIFT, checksum 97
+    assertEquals(97, trailingShiftFnc2.getRawBytes()[trailingShiftFnc2.getRawBytes().length - 2] & 0xFF);
+    assertEquals("#", trailingShiftFnc2.getText());
+    assertEquals("]C0", trailingShiftFnc2.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+
+    Result trailingShiftFnc3 = decodeWithChecksum(false, 104, 2, 98); // '"' + SHIFT, checksum 96
+    assertEquals(96, trailingShiftFnc3.getRawBytes()[trailingShiftFnc3.getRawBytes().length - 2] & 0xFF);
+    assertEquals("\"", trailingShiftFnc3.getText());
+    assertEquals(Boolean.FALSE, trailingShiftFnc3.getResultMetadata().get(ResultMetadataType.READER_INIT));
+
+    Result trailingShiftPrintable = decodeWithChecksum(false, 104, 65, 98); // 'a' + SHIFT, checksum 56
+    assertEquals("a", trailingShiftPrintable.getText());
+
+    // Trailing CODE_C latch before printable check digit (26 in Code C would emit 2 digits if speculatively decoded)
+    Result trailingCodeC = decodeWithChecksum(false, 104, 33, 99); // 'A' + CODE_C, checksum 26
+    assertEquals("A", trailingCodeC.getText());
+
+    // Trailing FNC4 before check digit
+    Result trailingFnc4 = decodeWithChecksum(false, 104, 33, 100); // 'A' + FNC4_B, checksum 28
+    assertEquals("A", trailingFnc4.getText());
+  }
+
+  @Test
+  public void testAllNonPrintableChecksumsInAllCodeSets() throws Exception {
+    for (int startCode = 103; startCode <= 105; startCode++) {
+      for (int targetChecksum = 96; targetChecksum <= 102; targetChecksum++) {
+        // Choose c2 = 30 and solve (startCode + 1*c1 + 2*30) % 103 == targetChecksum; c1 lands in 34..42.
+        int c1 = (targetChecksum - startCode - 60 + 206) % 103;
+        int c2 = 30;
+        String expected = startCode == 105
+            ? String.format("%02d%02d", c1, c2)
+            : String.valueOf((char) (' ' + c1)) + (char) (' ' + c2);
+        for (boolean assumeGS1 : new boolean[] {false, true}) {
+          Result result = decodeWithChecksum(assumeGS1, startCode, c1, c2);
+          byte[] raw = result.getRawBytes();
+          assertEquals(targetChecksum, raw[raw.length - 2] & 0xFF);
+          assertEquals(expected, result.getText());
+          assertEquals("]C0", result.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+          assertEquals(Boolean.FALSE, result.getResultMetadata().get(ResultMetadataType.READER_INIT));
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testShiftFollowedByCodeSetLatch() throws Exception {
+    // START_A, SHIFT, CODE_C, 12 => latch to Code C must not be overwritten by unshift
+    Result shiftThenCodeC = decodeWithChecksum(false, 103, 98, 99, 12);
+    assertEquals("12", shiftThenCodeC.getText());
+
+    // START_A, SHIFT, CODE_A(101 in Code B), 65 => must stay in Code A (65 => SOH '\u0001')
+    Result shiftThenCodeA = decodeWithChecksum(false, 103, 98, 101, 65);
+    assertEquals("\u0001", shiftThenCodeA.getText());
+
+    // START_B, SHIFT, CODE_B(100 in Code A), 65 => must stay in Code B (65 => 'a')
+    Result shiftThenCodeB = decodeWithChecksum(false, 104, 98, 100, 65);
+    assertEquals("a", shiftThenCodeB.getText());
+  }
+
+  @Test
+  public void testFNC4WithShiftAndCodeC() throws Exception {
+    // START_A, FNC4_A(101), SHIFT(98), 'a'(65 in B => 'á'), 'A'(33 in A)
+    Result fnc4Shift = decodeWithChecksum(false, 103, 101, 98, 65, 33);
+    assertEquals("\u00e1A", fnc4Shift.getText());
+
+    // START_B, FNC4_B, FNC4_B (latch upper), 'a'(65 => 'á'), CODE_C(99), 12, CODE_B(100), 'b'(66 => 'â')
+    Result fnc4AcrossCodeC = decodeWithChecksum(false, 104, 100, 100, 65, 99, 12, 100, 66);
+    assertEquals("\u00e112\u00e2", fnc4AcrossCodeC.getText());
+  }
+
+  private static BitArray encodeRawCodes(int... codes) {
+    int quietZone = 10;
+    int totalWidth = quietZone * 2;
+    for (int code : codes) {
+      for (int w : Code128Reader.CODE_PATTERNS[code]) {
+        totalWidth += w;
+      }
+    }
+    BitArray row = new BitArray(totalWidth);
+    int pos = quietZone;
+    for (int code : codes) {
+      boolean black = true;
+      for (int w : Code128Reader.CODE_PATTERNS[code]) {
+        if (black) {
+          for (int i = 0; i < w; i++) {
+            row.set(pos + i);
+          }
+        }
+        pos += w;
+        black = !black;
+      }
+    }
+    return row;
+  }
+
+  private static Result decodeWithChecksum(boolean assumeGS1, int... startAndPayload) throws Exception {
+    int checksum = startAndPayload[0];
+    for (int i = 1; i < startAndPayload.length; i++) {
+      checksum = (checksum + i * startAndPayload[i]) % 103;
+    }
+    int[] full = new int[startAndPayload.length + 2];
+    System.arraycopy(startAndPayload, 0, full, 0, startAndPayload.length);
+    full[startAndPayload.length] = checksum;
+    full[startAndPayload.length + 1] = 106; // CODE_STOP
+    Map<DecodeHintType,Object> decodeHints = null;
+    if (assumeGS1) {
+      decodeHints = new EnumMap<>(DecodeHintType.class);
+      decodeHints.put(DecodeHintType.ASSUME_GS1, Boolean.TRUE);
+    }
+    return new Code128Reader().decodeRow(0, encodeRawCodes(full), decodeHints);
   }
 
   private static Result decode(String input, String codeSet, boolean assumeGS1) throws Exception {

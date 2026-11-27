@@ -239,16 +239,8 @@ public final class Code128Reader extends OneDReader {
 
     boolean convertFNC1 = hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1);
 
-    int symbologyModifier = 0;
-    boolean hasLeadingFNC1 = false;
-    boolean hasSecondFNC1 = false;
-    boolean readerInit = false;
-
     int[] startPatternInfo = findStartPattern(row);
     int startCode = startPatternInfo[2];
-
-    List<Byte> rawCodes = new ArrayList<>(20);
-    rawCodes.add((byte) startCode);
 
     int codeSet;
     switch (startCode) {
@@ -265,55 +257,26 @@ public final class Code128Reader extends OneDReader {
         throw FormatException.getFormatInstance();
     }
 
-    boolean done = false;
-    boolean isNextShifted = false;
-
-    StringBuilder result = new StringBuilder(20);
+    List<Byte> rawCodes = new ArrayList<>(20);
+    rawCodes.add((byte) startCode);
 
     int lastStart = startPatternInfo[0];
     int nextStart = startPatternInfo[1];
     int[] counters = new int[6];
 
-    int lastCode = 0;
-    int code = 0;
-    int checksumTotal = startCode;
-    int multiplier = 0;
-    int lastResultLength = 0;
-    int lastSymbologyModifier = symbologyModifier;
-    boolean lastHasLeadingFNC1 = hasLeadingFNC1;
-    boolean lastHasSecondFNC1 = hasSecondFNC1;
-    boolean lastReaderInit = readerInit;
-    boolean upperMode = false;
-    boolean shiftUpperMode = false;
-
-    while (!done) {
-
-      boolean unshift = isNextShifted;
-      isNextShifted = false;
-
-      // Save off last code
-      lastCode = code;
-
-      // Decode another code from image
-      code = decodeCode(row, counters, nextStart);
-
+    // Pass 1: Read all codewords up to CODE_STOP without speculatively mutating output state.
+    while (true) {
+      int code = decodeCode(row, counters, nextStart);
       rawCodes.add((byte) code);
 
-      // Save the output in case this code is the checksum.
-      if (code != CODE_STOP) {
-        lastResultLength = result.length();
-        lastSymbologyModifier = symbologyModifier;
-        lastHasLeadingFNC1 = hasLeadingFNC1;
-        lastHasSecondFNC1 = hasSecondFNC1;
-        lastReaderInit = readerInit;
-        multiplier++;
-        checksumTotal += multiplier * code;
-      }
-
-      // Advance to where the next code will to start
+      // Advance to where the next code will start
       lastStart = nextStart;
       for (int counter : counters) {
         nextStart += counter;
+      }
+
+      if (code == CODE_STOP) {
+        break;
       }
 
       // Take care of illegal start codes
@@ -323,9 +286,79 @@ public final class Code128Reader extends OneDReader {
         case CODE_START_C:
           throw FormatException.getFormatInstance();
       }
+    }
 
-      switch (codeSet) {
+    int lastPatternSize = nextStart - lastStart;
 
+    // Check for ample whitespace following pattern, but, to do this we first need to remember that
+    // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
+    // to read off. Would be slightly better to properly read. Here we just skip it:
+    nextStart = row.getNextUnset(nextStart);
+    if (!row.isRange(nextStart,
+                     Math.min(row.getSize(), nextStart + (nextStart - lastStart) / 2),
+                     false)) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    // A valid symbol requires at least Start, one payload codeword, Check, and Stop.
+    int rawCodesSize = rawCodes.size();
+    if (rawCodesSize < 4) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    // Verify Mod-103 checksum over start + payload codewords before decoding payload.
+    int payloadEnd = rawCodesSize - 2; // exclusive; index of check code
+    int checksumTotal = startCode;
+    for (int i = 1; i < payloadEnd; i++) {
+      checksumTotal = (checksumTotal + i * (rawCodes.get(i) & 0xFF)) % 103;
+    }
+    int checkCode = rawCodes.get(payloadEnd) & 0xFF;
+    if (checksumTotal != checkCode) {
+      throw ChecksumException.getChecksumInstance();
+    }
+
+    // Pass 2: Decode only the verified payload codewords (excluding Start, Check, and Stop).
+    StringBuilder result = new StringBuilder(20);
+    int symbologyModifier = 0;
+    boolean hasLeadingFNC1 = false;
+    boolean hasSecondFNC1 = false;
+    boolean readerInit = false;
+    boolean isNextShifted = false;
+    boolean upperMode = false;
+    boolean shiftUpperMode = false;
+
+    for (int i = 1; i < payloadEnd; i++) {
+      int code = rawCodes.get(i) & 0xFF;
+
+      int currentCodeSet = codeSet;
+      if (isNextShifted) {
+        currentCodeSet = codeSet == CODE_CODE_A ? CODE_CODE_B : CODE_CODE_A;
+        isNextShifted = false;
+      }
+
+      if (code == CODE_FNC_1) {
+        if (result.length() == 0 && !hasLeadingFNC1) {
+          // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+          // is FNC1 then this is GS1-128.
+          hasLeadingFNC1 = true;
+          symbologyModifier = 1;
+          if (convertFNC1) {
+            result.append("]C1");
+          }
+        } else if (result.length() == 1 && !hasLeadingFNC1 && !hasSecondFNC1) {
+          hasSecondFNC1 = true;
+          symbologyModifier = 2;
+          if (convertFNC1) {
+            result.append((char) 29);
+          }
+        } else {
+          // ISO/IEC 15417 4.3.4.3 / GS1 5.4.7.5: every subsequent FNC1 is returned as ASCII 29 (GS).
+          result.append((char) 29);
+        }
+        continue;
+      }
+
+      switch (currentCodeSet) {
         case CODE_CODE_A:
           if (code < 64) {
             if (shiftUpperMode == upperMode) {
@@ -343,26 +376,6 @@ public final class Code128Reader extends OneDReader {
             shiftUpperMode = false;
           } else {
             switch (code) {
-              case CODE_FNC_1:
-                if (result.length() == 0 && !hasLeadingFNC1) {
-                  // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                  // is FNC1 then this is GS1-128.
-                  hasLeadingFNC1 = true;
-                  symbologyModifier = 1;
-                  if (convertFNC1) {
-                    result.append("]C1");
-                  }
-                } else if (result.length() == 1 && !hasLeadingFNC1 && !hasSecondFNC1) {
-                  hasSecondFNC1 = true;
-                  symbologyModifier = 2;
-                  if (convertFNC1) {
-                    result.append((char) 29);
-                  }
-                } else {
-                  // ISO/IEC 15417 4.3.4.3 / GS1 5.4.7.5: every subsequent FNC1 is returned as ASCII 29 (GS).
-                  result.append((char) 29);
-                }
-                break;
               case CODE_FNC_2:
                 symbologyModifier = 4;
                 break;
@@ -370,11 +383,8 @@ public final class Code128Reader extends OneDReader {
                 readerInit = true;
                 break;
               case CODE_FNC_4_A:
-                if (!upperMode && shiftUpperMode) {
-                  upperMode = true;
-                  shiftUpperMode = false;
-                } else if (upperMode && shiftUpperMode) {
-                  upperMode = false;
+                if (shiftUpperMode) {
+                  upperMode = !upperMode;
                   shiftUpperMode = false;
                 } else {
                   shiftUpperMode = true;
@@ -382,16 +392,12 @@ public final class Code128Reader extends OneDReader {
                 break;
               case CODE_SHIFT:
                 isNextShifted = true;
-                codeSet = CODE_CODE_B;
                 break;
               case CODE_CODE_B:
                 codeSet = CODE_CODE_B;
                 break;
               case CODE_CODE_C:
                 codeSet = CODE_CODE_C;
-                break;
-              case CODE_STOP:
-                done = true;
                 break;
             }
           }
@@ -406,26 +412,6 @@ public final class Code128Reader extends OneDReader {
             shiftUpperMode = false;
           } else {
             switch (code) {
-              case CODE_FNC_1:
-                if (result.length() == 0 && !hasLeadingFNC1) {
-                  // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                  // is FNC1 then this is GS1-128.
-                  hasLeadingFNC1 = true;
-                  symbologyModifier = 1;
-                  if (convertFNC1) {
-                    result.append("]C1");
-                  }
-                } else if (result.length() == 1 && !hasLeadingFNC1 && !hasSecondFNC1) {
-                  hasSecondFNC1 = true;
-                  symbologyModifier = 2;
-                  if (convertFNC1) {
-                    result.append((char) 29);
-                  }
-                } else {
-                  // ISO/IEC 15417 4.3.4.3 / GS1 5.4.7.5: every subsequent FNC1 is returned as ASCII 29 (GS).
-                  result.append((char) 29);
-                }
-                break;
               case CODE_FNC_2:
                 symbologyModifier = 4;
                 break;
@@ -433,11 +419,8 @@ public final class Code128Reader extends OneDReader {
                 readerInit = true;
                 break;
               case CODE_FNC_4_B:
-                if (!upperMode && shiftUpperMode) {
-                  upperMode = true;
-                  shiftUpperMode = false;
-                } else if (upperMode && shiftUpperMode) {
-                  upperMode = false;
+                if (shiftUpperMode) {
+                  upperMode = !upperMode;
                   shiftUpperMode = false;
                 } else {
                   shiftUpperMode = true;
@@ -445,16 +428,12 @@ public final class Code128Reader extends OneDReader {
                 break;
               case CODE_SHIFT:
                 isNextShifted = true;
-                codeSet = CODE_CODE_A;
                 break;
               case CODE_CODE_A:
                 codeSet = CODE_CODE_A;
                 break;
               case CODE_CODE_C:
                 codeSet = CODE_CODE_C;
-                break;
-              case CODE_STOP:
-                done = true;
                 break;
             }
           }
@@ -467,83 +446,26 @@ public final class Code128Reader extends OneDReader {
             result.append(code);
           } else {
             switch (code) {
-              case CODE_FNC_1:
-                if (result.length() == 0 && !hasLeadingFNC1) {
-                  // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                  // is FNC1 then this is GS1-128.
-                  hasLeadingFNC1 = true;
-                  symbologyModifier = 1;
-                  if (convertFNC1) {
-                    result.append("]C1");
-                  }
-                } else if (result.length() == 1 && !hasLeadingFNC1 && !hasSecondFNC1) {
-                  hasSecondFNC1 = true;
-                  symbologyModifier = 2;
-                  if (convertFNC1) {
-                    result.append((char) 29);
-                  }
-                } else {
-                  // ISO/IEC 15417 4.3.4.3 / GS1 5.4.7.5: every subsequent FNC1 is returned as ASCII 29 (GS).
-                  result.append((char) 29);
-                }
-                break;
               case CODE_CODE_A:
                 codeSet = CODE_CODE_A;
                 break;
               case CODE_CODE_B:
                 codeSet = CODE_CODE_B;
                 break;
-              case CODE_STOP:
-                done = true;
-                break;
             }
           }
           break;
       }
-
-      // Unshift back to another code set if we were shifted
-      if (unshift) {
-        codeSet = codeSet == CODE_CODE_A ? CODE_CODE_B : CODE_CODE_A;
-      }
-
     }
 
-    int lastPatternSize = nextStart - lastStart;
-
-    // Check for ample whitespace following pattern, but, to do this we first need to remember that
-    // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
-    // to read off. Would be slightly better to properly read. Here we just skip it:
-    nextStart = row.getNextUnset(nextStart);
-    if (!row.isRange(nextStart,
-                     Math.min(row.getSize(), nextStart + (nextStart - lastStart) / 2),
-                     false)) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
-    // Pull out from sum the value of the penultimate check code
-    checksumTotal -= multiplier * lastCode;
-    // lastCode is the checksum then:
-    if (checksumTotal % 103 != lastCode) {
-      throw ChecksumException.getChecksumInstance();
-    }
-
-    int resultLength = result.length();
-    if (resultLength == 0) {
+    if (result.length() == 0 && !readerInit) {
       // false positive
       throw NotFoundException.getNotFoundInstance();
     }
 
-    // Discard the checksum's text and function code effects.
-    result.setLength(lastResultLength);
-    symbologyModifier = lastSymbologyModifier;
-    hasLeadingFNC1 = lastHasLeadingFNC1;
-    hasSecondFNC1 = lastHasSecondFNC1;
-    readerInit = lastReaderInit;
-
     float left = (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
     float right = lastStart + lastPatternSize / 2.0f;
 
-    int rawCodesSize = rawCodes.size();
     byte[] rawBytes = new byte[rawCodesSize];
     for (int i = 0; i < rawCodesSize; i++) {
       rawBytes[i] = rawCodes.get(i);
