@@ -571,6 +571,10 @@ public final class BitMatrix implements Cloneable {
     return rowSize;
   }
 
+  int[] getBits() {
+    return bits;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (!(o instanceof BitMatrix)) {

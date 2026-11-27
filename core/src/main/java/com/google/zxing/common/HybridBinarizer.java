@@ -107,6 +107,8 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
                                                  BitMatrix matrix) {
     int maxYOffset = height - BLOCK_SIZE;
     int maxXOffset = width - BLOCK_SIZE;
+    int[] bits = matrix.getBits();
+    int rowSize = matrix.getRowSize();
     for (int y = 0; y < subHeight; y++) {
       int yoffset = y << BLOCK_SIZE_POWER;
       if (yoffset > maxYOffset) {
@@ -125,7 +127,7 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
           sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] + blackRow[left + 2];
         }
         int average = sum / 25;
-        thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
+        thresholdBlock(luminances, xoffset, yoffset, average, width, bits, rowSize);
       }
     }
   }
@@ -142,13 +144,20 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
                                      int yoffset,
                                      int threshold,
                                      int stride,
-                                     BitMatrix matrix) {
-    for (int y = 0, offset = yoffset * stride + xoffset; y < BLOCK_SIZE; y++, offset += stride) {
-      for (int x = 0; x < BLOCK_SIZE; x++) {
-        // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
-        if ((luminances[offset + x] & 0xFF) <= threshold) {
-          matrix.set(xoffset + x, yoffset + y);
-        }
+                                     int[] bits,
+                                     int rowSize) {
+    // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
+    // Since pixel and threshold are in [0, 255], (pixel - (threshold + 1)) >>> 31 is 1 iff pixel <= threshold.
+    int limit = threshold + 1;
+    int bitShift = xoffset & 31;
+    int wordIndex = yoffset * rowSize + (xoffset >>> 5);
+    boolean spansTwoWords = bitShift > 24;
+    int nextShift = 32 - bitShift;
+    for (int y = 0, offset = yoffset * stride + xoffset; y < BLOCK_SIZE; y++, offset += stride, wordIndex += rowSize) {
+      int mask = pack8(luminances, offset, limit);
+      bits[wordIndex] |= mask << bitShift;
+      if (spansTwoWords) {
+        bits[wordIndex + 1] |= mask >>> nextShift;
       }
     }
   }
@@ -179,26 +188,26 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
         int sum = 0;
         int min = 0xFF;
         int max = 0;
-        for (int yy = 0, offset = yoffset * width + xoffset; yy < BLOCK_SIZE; yy++, offset += width) {
+        int yy = 0;
+        int offset = yoffset * width + xoffset;
+        for (; yy < BLOCK_SIZE; yy++, offset += width) {
           for (int xx = 0; xx < BLOCK_SIZE; xx++) {
             int pixel = luminances[offset + xx] & 0xFF;
             sum += pixel;
             // still looking for good contrast
-            if (pixel < min) {
-              min = pixel;
-            }
-            if (pixel > max) {
-              max = pixel;
-            }
+            min = Math.min(min, pixel);
+            max = Math.max(max, pixel);
           }
           // short-circuit min/max tests once dynamic range is met
           if (max - min > MIN_DYNAMIC_RANGE) {
-            // finish the rest of the rows quickly
-            for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width) {
-              for (int xx = 0; xx < BLOCK_SIZE; xx++) {
-                sum += luminances[offset + xx] & 0xFF;
-              }
-            }
+            yy++;
+            offset += width;
+            break;
+          }
+        }
+        for (; yy < BLOCK_SIZE; yy++, offset += width) {
+          for (int xx = 0; xx < BLOCK_SIZE; xx++) {
+            sum += luminances[offset + xx] & 0xFF;
           }
         }
 
