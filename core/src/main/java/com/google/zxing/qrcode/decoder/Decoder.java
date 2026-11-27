@@ -152,9 +152,8 @@ public final class Decoder {
       byte[] codewordBytes = dataBlock.getCodewords();
       int numDataCodewords = dataBlock.getNumDataCodewords();
       errorsCorrected += correctErrors(codewordBytes, numDataCodewords, misdecodeProtection);
-      for (int i = 0; i < numDataCodewords; i++) {
-        resultBytes[resultOffset++] = codewordBytes[i];
-      }
+      System.arraycopy(codewordBytes, 0, resultBytes, resultOffset, numDataCodewords);
+      resultOffset += numDataCodewords;
     }
 
     // Decode the contents of that stream of bytes
@@ -218,8 +217,10 @@ public final class Decoder {
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data
     // We don't care about errors in the error-correction codewords
-    for (int i = 0; i < numDataCodewords; i++) {
-      codewordBytes[i] = (byte) codewordsInts[i];
+    if (errorsCorrected > 0) {
+      for (int i = 0; i < numDataCodewords; i++) {
+        codewordBytes[i] = (byte) codewordsInts[i];
+      }
     }
     return errorsCorrected;
   }

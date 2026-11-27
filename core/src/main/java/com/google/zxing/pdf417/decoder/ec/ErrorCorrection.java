@@ -60,43 +60,36 @@ public final class ErrorCorrection {
       }
     }
 
-    ModulusPoly poly = new ModulusPoly(field, received);
-    int[] S = new int[numECCodewords];
-    boolean error = false;
+    int[] S = null;
+    int order = field.getSize() - 1;
     for (int i = numECCodewords; i > 0; i--) {
-      int eval = poly.evaluateAt(field.exp(i));
-      S[numECCodewords - i] = eval;
+      int eval = field.evaluateByLog(received, i == order ? 0 : i);
       if (eval != 0) {
-        error = true;
+        if (S == null) {
+          S = new int[numECCodewords];
+        }
+        S[numECCodewords - i] = eval;
       }
     }
 
-    if (!error) {
+    if (S == null) {
       return 0;
     }
 
-    ModulusPoly knownErrors = field.getOne();
     if (erasures != null) {
       for (int erasure : erasures) {
         if (erasure < 0 || erasure >= received.length) {
           throw ChecksumException.getChecksumInstance();
         }
-        int b = field.exp(received.length - 1 - erasure);
-        // Add (1 - bx) term:
-        ModulusPoly term = new ModulusPoly(field, new int[]{field.subtract(0, b), 1});
-        knownErrors = knownErrors.multiply(term);
       }
     }
 
     ModulusPoly syndrome = new ModulusPoly(field, S);
-    //syndrome = syndrome.multiply(knownErrors);
 
     ModulusPoly[] sigmaOmega =
         runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
     ModulusPoly sigma = sigmaOmega[0];
     ModulusPoly omega = sigmaOmega[1];
-
-    //sigma = sigma.multiply(knownErrors);
 
     int[] errorLocations = findErrorLocations(sigma);
     int[] errorPositions = new int[errorLocations.length];
@@ -150,7 +143,7 @@ public final class ErrorCorrection {
         r = r.subtract(rLast.multiplyByMonomial(degreeDiff, scale));
       }
 
-      t = q.multiply(tLast).subtract(tLastLast).negative();
+      t = tLastLast.subtract(q.multiply(tLast));
     }
 
     int sigmaTildeAtZero = t.getCoefficient(0);

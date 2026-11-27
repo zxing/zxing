@@ -36,15 +36,15 @@ public final class ModulusGF {
 
   private ModulusGF(int modulus, int generator) {
     this.modulus = modulus;
-    expTable = new int[modulus];
+    int order = modulus - 1;
+    expTable = new int[2 * order];
     logTable = new int[modulus];
     int x = 1;
-    for (int i = 0; i < modulus; i++) {
+    for (int i = 0; i < order; i++) {
       expTable[i] = x;
+      expTable[i + order] = x;
+      logTable[x] = i;
       x = (x * generator) % modulus;
-    }
-    for (int i = 0; i < modulus - 1; i++) {
-      logTable[expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
     zero = new ModulusPoly(this, new int[]{0});
@@ -73,11 +73,13 @@ public final class ModulusGF {
   }
 
   int add(int a, int b) {
-    return (a + b) % modulus;
+    int sum = a + b;
+    return sum >= modulus ? sum - modulus : sum;
   }
 
   int subtract(int a, int b) {
-    return (modulus + a - b) % modulus;
+    int diff = a - b;
+    return diff < 0 ? diff + modulus : diff;
   }
 
   int exp(int a) {
@@ -102,7 +104,41 @@ public final class ModulusGF {
     if (a == 0 || b == 0) {
       return 0;
     }
-    return expTable[(logTable[a] + logTable[b]) % (modulus - 1)];
+    return expTable[logTable[a] + logTable[b]];
+  }
+
+  int multiplyByLog(int a, int logB) {
+    if (a == 0) {
+      return 0;
+    }
+    return expTable[logTable[a] + logB];
+  }
+
+  int evaluateByLog(int[] coefficients, int logA) {
+    int mod = this.modulus;
+    if (logA == 0) {
+      int result = 0;
+      for (int c : coefficients) {
+        result += c;
+        if (result >= mod) {
+          result -= mod;
+        }
+      }
+      return result;
+    }
+    int[] exp = this.expTable;
+    int[] log = this.logTable;
+    int result = coefficients[0];
+    for (int i = 1; i < coefficients.length; i++) {
+      if (result != 0) {
+        result = exp[log[result] + logA];
+      }
+      result += coefficients[i];
+      if (result >= mod) {
+        result -= mod;
+      }
+    }
+    return result;
   }
 
   int getSize() {

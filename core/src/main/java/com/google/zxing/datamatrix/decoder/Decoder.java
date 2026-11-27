@@ -155,8 +155,10 @@ public final class Decoder {
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data
     // We don't care about errors in the error-correction codewords
-    for (int i = 0; i < numDataCodewords; i++) {
-      codewordBytes[i] = (byte) codewordsInts[i];
+    if (errorsCorrected > 0) {
+      for (int i = 0; i < numDataCodewords; i++) {
+        codewordBytes[i] = (byte) codewordsInts[i];
+      }
     }
     return errorsCorrected;
   }

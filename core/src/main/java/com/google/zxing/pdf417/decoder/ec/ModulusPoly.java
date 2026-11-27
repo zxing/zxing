@@ -84,20 +84,7 @@ final class ModulusPoly {
       // Just return the x^0 coefficient
       return getCoefficient(0);
     }
-    if (a == 1) {
-      // Just the sum of the coefficients
-      int result = 0;
-      for (int coefficient : coefficients) {
-        result = field.add(result, coefficient);
-      }
-      return result;
-    }
-    int result = coefficients[0];
-    int size = coefficients.length;
-    for (int i = 1; i < size; i++) {
-      result = field.add(field.multiply(a, result), coefficients[i]);
-    }
-    return result;
+    return field.evaluateByLog(coefficients, field.log(a));
   }
 
   ModulusPoly add(ModulusPoly other) {
@@ -137,7 +124,32 @@ final class ModulusPoly {
     if (other.isZero()) {
       return this;
     }
-    return add(other.negative());
+    if (isZero()) {
+      return other.negative();
+    }
+    int[] a = this.coefficients;
+    int[] b = other.coefficients;
+    int aLen = a.length;
+    int bLen = b.length;
+    if (aLen >= bLen) {
+      int[] diff = new int[aLen];
+      int lengthDiff = aLen - bLen;
+      System.arraycopy(a, 0, diff, 0, lengthDiff);
+      for (int i = lengthDiff; i < aLen; i++) {
+        diff[i] = field.subtract(a[i], b[i - lengthDiff]);
+      }
+      return new ModulusPoly(field, diff);
+    } else {
+      int[] diff = new int[bLen];
+      int lengthDiff = bLen - aLen;
+      for (int i = 0; i < lengthDiff; i++) {
+        diff[i] = field.subtract(0, b[i]);
+      }
+      for (int i = lengthDiff; i < bLen; i++) {
+        diff[i] = field.subtract(a[i - lengthDiff], b[i]);
+      }
+      return new ModulusPoly(field, diff);
+    }
   }
 
   ModulusPoly multiply(ModulusPoly other) {
@@ -154,8 +166,11 @@ final class ModulusPoly {
     int[] product = new int[aLength + bLength - 1];
     for (int i = 0; i < aLength; i++) {
       int aCoeff = aCoefficients[i];
-      for (int j = 0; j < bLength; j++) {
-        product[i + j] = field.add(product[i + j], field.multiply(aCoeff, bCoefficients[j]));
+      if (aCoeff != 0) {
+        int logA = field.log(aCoeff);
+        for (int j = 0; j < bLength; j++) {
+          product[i + j] = field.add(product[i + j], field.multiplyByLog(bCoefficients[j], logA));
+        }
       }
     }
     return new ModulusPoly(field, product);
@@ -177,10 +192,11 @@ final class ModulusPoly {
     if (scalar == 1) {
       return this;
     }
+    int logScalar = field.log(scalar);
     int size = coefficients.length;
     int[] product = new int[size];
     for (int i = 0; i < size; i++) {
-      product[i] = field.multiply(coefficients[i], scalar);
+      product[i] = field.multiplyByLog(coefficients[i], logScalar);
     }
     return new ModulusPoly(field, product);
   }
@@ -192,10 +208,11 @@ final class ModulusPoly {
     if (coefficient == 0) {
       return field.getZero();
     }
+    int logCoeff = field.log(coefficient);
     int size = coefficients.length;
     int[] product = new int[size + degree];
     for (int i = 0; i < size; i++) {
-      product[i] = field.multiply(coefficients[i], coefficient);
+      product[i] = field.multiplyByLog(coefficients[i], logCoeff);
     }
     return new ModulusPoly(field, product);
   }

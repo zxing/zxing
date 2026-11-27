@@ -68,15 +68,17 @@ public final class GenericGF {
     this.size = size;
     this.generatorBase = b;
 
-    expTable = new int[size];
+    int order = size - 1;
+    expTable = new int[2 * order];
     logTable = new int[size];
     int x = 1;
-    for (int i = 0; i < size - 1; i++) {
+    for (int i = 0; i < order; i++) {
       if (x == 0 || (i > 0 && (x == 1 || logTable[x] != 0))) {
         throw new IllegalArgumentException("Polynomial 0x" + Integer.toHexString(primitive) +
             " is not primitive for GF(" + size + ')');
       }
       expTable[i] = x;
+      expTable[i + order] = x;
       logTable[x] = i;
       x *= 2; // 2 (the polynomial x) is a primitive element
       if (x >= size) {
@@ -88,7 +90,6 @@ public final class GenericGF {
       throw new IllegalArgumentException("Polynomial 0x" + Integer.toHexString(primitive) +
           " is not primitive for GF(" + size + ')');
     }
-    expTable[size - 1] = 1;
     // logTable[0] == 0 but this should never be used
     zero = new GenericGFPoly(this, new int[]{0});
     one = new GenericGFPoly(this, new int[]{1});
@@ -130,6 +131,9 @@ public final class GenericGF {
    * @return 2 to the power of a in GF(size)
    */
   int exp(int a) {
+    if (a >= 0 && a < expTable.length) {
+      return expTable[a];
+    }
     int order = size - 1;
     int mod = a % order;
     if (mod < 0) {
@@ -165,7 +169,46 @@ public final class GenericGF {
     if (a == 0 || b == 0) {
       return 0;
     }
-    return expTable[(logTable[a] + logTable[b]) % (size - 1)];
+    return expTable[logTable[a] + logTable[b]];
+  }
+
+  /**
+   * @param a first factor
+   * @param logB base-2 log of a non-zero second factor, in {@code [0, size - 2]}
+   * @return product of {@code a} and {@code exp(logB)} in GF(size)
+   */
+  int multiplyByLog(int a, int logB) {
+    if (a == 0) {
+      return 0;
+    }
+    return expTable[logTable[a] + logB];
+  }
+
+  /**
+   * Evaluates a polynomial (most-significant coefficient first) at {@code exp(logA)} using Horner's rule.
+   *
+   * @param coefficients polynomial coefficients, non-empty
+   * @param logA base-2 log of evaluation point, in {@code [0, size - 2]}
+   * @return polynomial value at {@code exp(logA)}
+   */
+  int evaluateByLog(int[] coefficients, int logA) {
+    if (logA == 0) {
+      int result = 0;
+      for (int c : coefficients) {
+        result ^= c;
+      }
+      return result;
+    }
+    int[] exp = this.expTable;
+    int[] log = this.logTable;
+    int result = coefficients[0];
+    for (int i = 1; i < coefficients.length; i++) {
+      if (result != 0) {
+        result = exp[log[result] + logA];
+      }
+      result ^= coefficients[i];
+    }
+    return result;
   }
 
   public int getSize() {
