@@ -74,16 +74,25 @@ public class GlobalHistogramBinarizer extends Binarizer {
         }
       }
     } else {
-      int left = localLuminances[0] & 0xff;
-      int center = localLuminances[1] & 0xff;
+      int[] rowBits = row.getBitArray();
+      int threshold2 = blackPoint << 1;
+      int left = localLuminances[0] & 0xFF;
+      int center = localLuminances[1] & 0xFF;
+      int word = 0;
       for (int x = 1; x < width - 1; x++) {
-        int right = localLuminances[x + 1] & 0xff;
-        // A simple -1 4 -1 box filter with a weight of 2.
-        if (((center * 4) - left - right) / 2 < blackPoint) {
-          row.set(x);
+        int right = localLuminances[x + 1] & 0xFF;
+        // A simple -1 4 -1 box filter with a weight of 2: ((4 * center - left - right) / 2) < blackPoint
+        // is equivalent to (4 * center - left - right) < (2 * blackPoint) because blackPoint >= 8.
+        word |= (((center << 2) - left - right - threshold2) >>> 31) << x;
+        if ((x & 31) == 31) {
+          rowBits[x >>> 5] = word;
+          word = 0;
         }
         left = center;
         center = right;
+      }
+      if (word != 0) {
+        rowBits[(width - 2) >>> 5] = word;
       }
     }
     return row;
@@ -116,13 +125,25 @@ public class GlobalHistogramBinarizer extends Binarizer {
     // Although we end up reading four rows twice, it is consistent with our motto of
     // "fail quickly" which is necessary for continuous scanning.
     byte[] localLuminances = source.getMatrix();
+    int[] bits = matrix.getBits();
+    int rowSize = matrix.getRowSize();
+    int fullWords = width >>> 5;
+    int tailBits = width & 31;
     for (int y = 0; y < height; y++) {
       int offset = y * width;
-      for (int x = 0; x < width; x++) {
-        int pixel = localLuminances[offset + x] & 0xff;
-        if (pixel < blackPoint) {
-          matrix.set(x, y);
+      int rowOffset = y * rowSize;
+      for (int w = 0; w < fullWords; w++, offset += 32) {
+        bits[rowOffset + w] = pack8(localLuminances, offset, blackPoint)
+            | (pack8(localLuminances, offset + 8, blackPoint) << 8)
+            | (pack8(localLuminances, offset + 16, blackPoint) << 16)
+            | (pack8(localLuminances, offset + 24, blackPoint) << 24);
+      }
+      if (tailBits != 0) {
+        int word = 0;
+        for (int b = 0; b < tailBits; b++) {
+          word |= (((localLuminances[offset + b] & 0xFF) - blackPoint) >>> 31) << b;
         }
+        bits[rowOffset + fullWords] = word;
       }
     }
 
@@ -132,6 +153,22 @@ public class GlobalHistogramBinarizer extends Binarizer {
   @Override
   public Binarizer createBinarizer(LuminanceSource source) {
     return new GlobalHistogramBinarizer(source);
+  }
+
+  /**
+   * Packs 8 consecutive pixels into the low 8 bits of an {@code int}, setting bit {@code i} iff
+   * {@code (luminances[offset + i] & 0xFF) < limit}. Both pixel values and {@code limit} must be
+   * non-negative and fit safely without int overflow (e.g. {@code [0, 256]}).
+   */
+  static int pack8(byte[] luminances, int offset, int limit) {
+    return (((luminances[offset] & 0xFF) - limit) >>> 31)
+        | ((((luminances[offset + 1] & 0xFF) - limit) >>> 31) << 1)
+        | ((((luminances[offset + 2] & 0xFF) - limit) >>> 31) << 2)
+        | ((((luminances[offset + 3] & 0xFF) - limit) >>> 31) << 3)
+        | ((((luminances[offset + 4] & 0xFF) - limit) >>> 31) << 4)
+        | ((((luminances[offset + 5] & 0xFF) - limit) >>> 31) << 5)
+        | ((((luminances[offset + 6] & 0xFF) - limit) >>> 31) << 6)
+        | ((((luminances[offset + 7] & 0xFF) - limit) >>> 31) << 7);
   }
 
   private void initArrays(int luminanceSize) {
