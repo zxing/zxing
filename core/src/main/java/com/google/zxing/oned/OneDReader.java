@@ -191,30 +191,22 @@ public abstract class OneDReader implements Reader {
                                       int start,
                                       int[] counters) throws NotFoundException {
     int numCounters = counters.length;
-    Arrays.fill(counters, 0, numCounters, 0);
     int end = row.getSize();
     if (start >= end) {
+      Arrays.fill(counters, 0, numCounters, 0);
       throw NotFoundException.getNotFoundInstance();
     }
     boolean isWhite = !row.get(start);
     int counterPosition = 0;
     int i = start;
-    while (i < end) {
-      if (row.get(i) != isWhite) {
-        counters[counterPosition]++;
-      } else {
-        if (++counterPosition == numCounters) {
-          break;
-        } else {
-          counters[counterPosition] = 1;
-          isWhite = !isWhite;
-        }
-      }
-      i++;
+    while (counterPosition < numCounters && i < end) {
+      int next = isWhite ? row.getNextSet(i) : row.getNextUnset(i);
+      counters[counterPosition++] = next - i;
+      i = next;
+      isWhite = !isWhite;
     }
-    // If we read fully the last section of pixels and filled up our counters -- or filled
-    // the last counter but ran off the side of the image, OK. Otherwise, a problem.
-    if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end))) {
+    if (counterPosition < numCounters) {
+      Arrays.fill(counters, counterPosition, numCounters, 0);
       throw NotFoundException.getNotFoundInstance();
     }
   }

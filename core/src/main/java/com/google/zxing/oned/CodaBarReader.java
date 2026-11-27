@@ -234,18 +234,12 @@ public final class CodaBarReader extends OneDReader {
       throw NotFoundException.getNotFoundInstance();
     }
     boolean isWhite = true;
-    int count = 0;
     while (i < end) {
-      if (row.get(i) != isWhite) {
-        count++;
-      } else {
-        counterAppend(count);
-        count = 1;
-        isWhite = !isWhite;
-      }
-      i++;
+      int next = isWhite ? row.getNextSet(i) : row.getNextUnset(i);
+      counterAppend(next - i);
+      i = next;
+      isWhite = !isWhite;
     }
-    counterAppend(count);
   }
 
   private void counterAppend(int e) {

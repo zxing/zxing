@@ -377,4 +377,52 @@ public final class BitMatrixTestCase extends Assert {
     assertEquals(new BitMatrix(5, 5), matrix);
   }
 
+  @Test
+  public void testGetNextSetAndUnset() {
+    BitMatrix matrix = new BitMatrix(75, 4);
+    // Row 0: all unset
+    assertEquals(75, matrix.getNextSet(0, 0));
+    assertEquals(75, matrix.getNextSet(74, 0));
+    assertEquals(75, matrix.getNextSet(75, 0));
+    assertEquals(0, matrix.getNextUnset(0, 0));
+    assertEquals(31, matrix.getNextUnset(31, 0));
+    assertEquals(32, matrix.getNextUnset(32, 0));
+    assertEquals(74, matrix.getNextUnset(74, 0));
+    assertEquals(75, matrix.getNextUnset(75, 0));
+
+    // Row 1: specific runs spanning 32-bit word boundaries (bits 0..1, 31..33, 63..74)
+    matrix.setRegion(0, 1, 2, 1);
+    matrix.setRegion(31, 1, 3, 1);
+    matrix.setRegion(63, 1, 12, 1);
+    assertEquals(0, matrix.getNextSet(0, 1));
+    assertEquals(1, matrix.getNextSet(1, 1));
+    assertEquals(31, matrix.getNextSet(2, 1));
+    assertEquals(31, matrix.getNextSet(31, 1));
+    assertEquals(32, matrix.getNextSet(32, 1));
+    assertEquals(33, matrix.getNextSet(33, 1));
+    assertEquals(63, matrix.getNextSet(34, 1));
+    assertEquals(64, matrix.getNextSet(64, 1));
+    assertEquals(74, matrix.getNextSet(74, 1));
+    assertEquals(75, matrix.getNextSet(75, 1));
+
+    assertEquals(2, matrix.getNextUnset(0, 1));
+    assertEquals(2, matrix.getNextUnset(1, 1));
+    assertEquals(2, matrix.getNextUnset(2, 1));
+    assertEquals(34, matrix.getNextUnset(31, 1));
+    assertEquals(34, matrix.getNextUnset(32, 1));
+    assertEquals(34, matrix.getNextUnset(33, 1));
+    assertEquals(34, matrix.getNextUnset(34, 1));
+    assertEquals(75, matrix.getNextUnset(63, 1));
+    assertEquals(75, matrix.getNextUnset(74, 1));
+    assertEquals(75, matrix.getNextUnset(75, 1));
+
+    // Row 2: all set (test clamping at width < 32 * rowSize)
+    matrix.setRegion(0, 2, 75, 1);
+    assertEquals(0, matrix.getNextSet(0, 2));
+    assertEquals(74, matrix.getNextSet(74, 2));
+    assertEquals(75, matrix.getNextUnset(0, 2));
+    assertEquals(75, matrix.getNextUnset(32, 2));
+    assertEquals(75, matrix.getNextUnset(74, 2));
+  }
+
 }

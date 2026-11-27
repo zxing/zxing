@@ -471,21 +471,32 @@ public final class PDF417ScanningDecoder {
     int imageColumn = startColumn;
     int[] moduleBitCount = new int[8];
     int moduleNumber = 0;
-    int increment = leftToRight ? 1 : -1;
-    boolean previousPixelValue = leftToRight;
-    while ((leftToRight ? imageColumn < maxColumn : imageColumn >= minColumn) &&
-           moduleNumber < moduleBitCount.length) {
+    if (leftToRight) {
+      boolean lookingForBlack = true;
+      while (imageColumn < maxColumn && moduleNumber < moduleBitCount.length) {
+        int next = lookingForBlack ? image.getNextUnset(imageColumn, imageRow)
+                                   : image.getNextSet(imageColumn, imageRow);
+        if (next > maxColumn) {
+          next = maxColumn;
+        }
+        moduleBitCount[moduleNumber++] = next - imageColumn;
+        imageColumn = next;
+        lookingForBlack = !lookingForBlack;
+      }
+      return moduleNumber == moduleBitCount.length ? moduleBitCount : null;
+    }
+    boolean previousPixelValue = false;
+    while (imageColumn >= minColumn && moduleNumber < moduleBitCount.length) {
       if (image.get(imageColumn, imageRow) == previousPixelValue) {
         moduleBitCount[moduleNumber]++;
-        imageColumn += increment;
+        imageColumn--;
       } else {
         moduleNumber++;
         previousPixelValue = !previousPixelValue;
       }
     }
     if (moduleNumber == moduleBitCount.length ||
-        ((imageColumn == (leftToRight ? maxColumn : minColumn)) &&
-         moduleNumber == moduleBitCount.length - 1)) {
+        (imageColumn == minColumn && moduleNumber == moduleBitCount.length - 1)) {
       return moduleBitCount;
     }
     return null;

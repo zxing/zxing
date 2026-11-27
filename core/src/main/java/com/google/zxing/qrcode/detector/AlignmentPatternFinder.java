@@ -95,53 +95,36 @@ final class AlignmentPatternFinder {
     for (int iGen = 0; iGen < height; iGen++) {
       // Search from middle outwards
       int i = middleI + ((iGen & 0x01) == 0 ? (iGen + 1) / 2 : -((iGen + 1) / 2));
-      stateCount[0] = 0;
-      stateCount[1] = 0;
-      stateCount[2] = 0;
-      int j = startX;
-      // Burn off leading white pixels before anything else; if we start in the middle of
-      // a white run, it doesn't make sense to count its length, since we don't know if the
-      // white run continued to the left of the start point
-      while (j < maxJ && !image.get(j, i)) {
-        j++;
+      // Burn off leading white pixels and the first black run (no preceding complete white run)
+      int j = image.getNextSet(startX, i);
+      if (j >= maxJ) {
+        continue;
       }
-      int currentState = 0;
+      j = image.getNextUnset(j, i);
+      if (j >= maxJ) {
+        continue;
+      }
+      int next = Math.min(image.getNextSet(j, i), maxJ);
+      stateCount[0] = next - j;
+      j = next;
       while (j < maxJ) {
-        if (image.get(j, i)) {
-          // Black pixel
-          if (currentState == 1) { // Counting black pixels
-            stateCount[1]++;
-          } else { // Counting white pixels
-            if (currentState == 2) { // A winner?
-              if (foundPatternCross(stateCount)) { // Yes
-                AlignmentPattern confirmed = handlePossibleCenter(stateCount, i, j);
-                if (confirmed != null) {
-                  return confirmed;
-                }
-              }
-              stateCount[0] = stateCount[2];
-              stateCount[1] = 1;
-              stateCount[2] = 0;
-              currentState = 1;
-            } else {
-              stateCount[++currentState]++;
-            }
-          }
-        } else { // White pixel
-          if (currentState == 1) { // Counting black pixels
-            currentState++;
-          }
-          stateCount[currentState]++;
+        next = Math.min(image.getNextUnset(j, i), maxJ);
+        stateCount[1] = next - j;
+        j = next;
+        if (j >= maxJ) {
+          break;
         }
-        j++;
-      }
-      if (foundPatternCross(stateCount)) {
-        AlignmentPattern confirmed = handlePossibleCenter(stateCount, i, maxJ);
-        if (confirmed != null) {
-          return confirmed;
+        next = Math.min(image.getNextSet(j, i), maxJ);
+        stateCount[2] = next - j;
+        j = next;
+        if (foundPatternCross(stateCount)) {
+          AlignmentPattern confirmed = handlePossibleCenter(stateCount, i, j);
+          if (confirmed != null) {
+            return confirmed;
+          }
         }
+        stateCount[0] = stateCount[2];
       }
-
     }
 
     // Hmm, nothing we saw was observed and confirmed twice. If we had

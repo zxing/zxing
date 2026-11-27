@@ -96,71 +96,69 @@ public class FinderPatternFinder {
     boolean done = false;
     int[] stateCount = new int[5];
     for (int i = iSkip - 1; i < maxI && !done; i += iSkip) {
-      // Get a row of black/white values
-      doClearCounts(stateCount);
       int currentState = 0;
-      for (int j = 0; j < maxJ; j++) {
-        if (image.get(j, i)) {
-          // Black pixel
-          if ((currentState & 1) == 1) { // Counting white pixels
-            currentState++;
-          }
-          stateCount[currentState]++;
-        } else { // White pixel
-          if ((currentState & 1) == 0) { // Counting black pixels
-            if (currentState == 4) { // A winner?
-              if (foundPatternCross(stateCount)) { // Yes
-                boolean confirmed = handlePossibleCenter(stateCount, i, j);
-                if (confirmed) {
-                  // Start examining every other line. Checking each line turned out to be too
-                  // expensive and didn't improve performance.
-                  iSkip = 2;
-                  if (hasSkipped) {
-                    done = haveMultiplyConfirmedCenters();
-                  } else {
-                    int rowSkip = findRowSkip();
-                    if (rowSkip > stateCount[2]) {
-                      // Skip rows between row of lower confirmed center
-                      // and top of presumed third confirmed center
-                      // but back up a bit to get a full chance of detecting
-                      // it, entire width of center of finder pattern
-
-                      // Skip by rowSkip, but back off by stateCount[2] (size of last center
-                      // of pattern we saw) to be conservative, and also back off by iSkip which
-                      // is about to be re-added
-                      i += rowSkip - stateCount[2] - iSkip;
-                      j = maxJ - 1;
-                    }
-                  }
-                } else {
-                  doShiftCounts2(stateCount);
-                  currentState = 3;
-                  continue;
+      int j = image.getNextSet(0, i);
+      while (j < maxJ) {
+        int next = image.getNextUnset(j, i);
+        stateCount[currentState] = next - j;
+        j = next;
+        if (currentState == 4) {
+          if (j == maxJ) {
+            if (foundPatternCross(stateCount)) {
+              boolean confirmed = handlePossibleCenter(stateCount, i, maxJ);
+              if (confirmed) {
+                iSkip = stateCount[0];
+                if (hasSkipped) {
+                  // Found a third one
+                  done = haveMultiplyConfirmedCenters();
                 }
-                // Clear state to start looking again
-                currentState = 0;
-                doClearCounts(stateCount);
-              } else { // No, shift counts back by two
-                doShiftCounts2(stateCount);
-                currentState = 3;
               }
-            } else {
-              stateCount[++currentState]++;
             }
-          } else { // Counting white pixels
-            stateCount[currentState]++;
+            break;
           }
-        }
-      }
-      if (foundPatternCross(stateCount)) {
-        boolean confirmed = handlePossibleCenter(stateCount, i, maxJ);
-        if (confirmed) {
-          iSkip = stateCount[0];
-          if (hasSkipped) {
-            // Found a third one
-            done = haveMultiplyConfirmedCenters();
+          if (foundPatternCross(stateCount)) {
+            boolean confirmed = handlePossibleCenter(stateCount, i, j);
+            if (confirmed) {
+              // Start examining every other line. Checking each line turned out to be too
+              // expensive and didn't improve performance.
+              iSkip = 2;
+              if (hasSkipped) {
+                done = haveMultiplyConfirmedCenters();
+              } else {
+                int rowSkip = findRowSkip();
+                if (rowSkip > stateCount[2]) {
+                  // Skip rows between row of lower confirmed center
+                  // and top of presumed third confirmed center
+                  // but back up a bit to get a full chance of detecting
+                  // it, entire width of center of finder pattern
+
+                  // Skip by rowSkip, but back off by stateCount[2] (size of last center
+                  // of pattern we saw) to be conservative, and also back off by iSkip which
+                  // is about to be re-added
+                  i += rowSkip - stateCount[2] - iSkip;
+                  break;
+                }
+              }
+              // Clear state to start looking again
+              currentState = 0;
+              j = image.getNextSet(j, i);
+              continue;
+            }
           }
+          stateCount[0] = stateCount[2];
+          stateCount[1] = stateCount[3];
+          stateCount[2] = stateCount[4];
+          currentState = 3;
+        } else {
+          if (j == maxJ) {
+            break;
+          }
+          currentState++;
         }
+        next = image.getNextSet(j, i);
+        stateCount[currentState] = next - j;
+        j = next;
+        currentState++;
       }
     }
 
@@ -184,26 +182,29 @@ public class FinderPatternFinder {
    *         used by finder patterns to be considered a match
    */
   protected static boolean foundPatternCross(int[] stateCount) {
-    int totalModuleSize = 0;
-    for (int i = 0; i < 5; i++) {
-      int count = stateCount[i];
-      if (count == 0) {
-        return false;
-      }
-      totalModuleSize += count;
-    }
+    int c0 = stateCount[0];
+    int c1 = stateCount[1];
+    int c2 = stateCount[2];
+    int c3 = stateCount[3];
+    int c4 = stateCount[4];
+    int totalModuleSize = c0 + c1 + c2 + c3 + c4;
     if (totalModuleSize < 7) {
       return false;
     }
-    float moduleSize = totalModuleSize / 7.0f;
-    float maxVariance = moduleSize / 2.0f;
-    // Allow less than 50% variance from 1-1-3-1-1 proportions
-    return
-        Math.abs(moduleSize - stateCount[0]) < maxVariance &&
-        Math.abs(moduleSize - stateCount[1]) < maxVariance &&
-        Math.abs(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
-        Math.abs(moduleSize - stateCount[3]) < maxVariance &&
-        Math.abs(moduleSize - stateCount[4]) < maxVariance;
+    // Allow less than 50% variance from 1-1-3-1-1 proportions:
+    // |T / 7 - c| < T / 14  <=>  T < 14 * c < 3 * T  (and 3 * T < 14 * c2 < 9 * T).
+    // Any c <= 0 is automatically rejected since totalModuleSize >= 7.
+    int maxVariance3 = totalModuleSize * 3;
+    return inRange(c2, maxVariance3, maxVariance3 * 3) &&
+        inRange(c0, totalModuleSize, maxVariance3) &&
+        inRange(c1, totalModuleSize, maxVariance3) &&
+        inRange(c3, totalModuleSize, maxVariance3) &&
+        inRange(c4, totalModuleSize, maxVariance3);
+  }
+
+  private static boolean inRange(int count, int min, int max) {
+    int scaled = count * 14;
+    return scaled > min && scaled < max;
   }
 
   /**
