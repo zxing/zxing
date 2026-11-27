@@ -163,6 +163,51 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * Finds the next set bit in the given row at or after {@code fromX}.
+   *
+   * @param fromX first column to check (inclusive)
+   * @param y row to search
+   * @return column of first bit that is set at or beyond {@code fromX} in row {@code y},
+   *  or {@code width} if none are set
+   * @see #getNextUnset(int, int)
+   */
+  public int getNextSet(int fromX, int y) {
+    return getNext(fromX, y, 0);
+  }
+
+  /**
+   * Finds the next unset bit in the given row at or after {@code fromX}.
+   *
+   * @param fromX first column to check (inclusive)
+   * @param y row to search
+   * @return column of first bit that is unset at or beyond {@code fromX} in row {@code y},
+   *  or {@code width} if none are unset
+   * @see #getNextSet(int, int)
+   */
+  public int getNextUnset(int fromX, int y) {
+    return getNext(fromX, y, -1);
+  }
+
+  private int getNext(int fromX, int y, int xorMask) {
+    if (fromX >= width) {
+      return width;
+    }
+    int rowOffset = y * rowSize;
+    int wordIndex = fromX >>> 5;
+    int currentBits = bits[rowOffset + wordIndex] ^ xorMask;
+    // mask off lesser bits first
+    currentBits &= -(1 << (fromX & 0x1F));
+    while (currentBits == 0) {
+      if (++wordIndex == rowSize) {
+        return width;
+      }
+      currentBits = bits[rowOffset + wordIndex] ^ xorMask;
+    }
+    int result = (wordIndex << 5) + Integer.numberOfTrailingZeros(currentBits);
+    return Math.min(result, width);
+  }
+
+  /**
    * <p>Sets the given bit to true.</p>
    *
    * @param x The horizontal component (i.e. which column)

@@ -26,7 +26,6 @@ import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -100,7 +99,6 @@ public final class Code39Reader extends OneDReader {
       throws NotFoundException, ChecksumException, FormatException {
 
     int[] theCounters = counters;
-    Arrays.fill(theCounters, 0);
     StringBuilder result = decodeRowResult;
     result.setLength(0);
 
@@ -191,27 +189,27 @@ public final class Code39Reader extends OneDReader {
     boolean isWhite = false;
     int patternLength = counters.length;
 
-    for (int i = rowOffset; i < width; i++) {
-      if (row.get(i) != isWhite) {
-        counters[counterPosition]++;
-      } else {
-        if (counterPosition == patternLength - 1) {
-          // Look for whitespace before start pattern, >= 50% of width of start pattern
-          if (toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
-              row.isRange(Math.max(0, patternStart - ((i - patternStart) / 2)), patternStart, false)) {
-            return new int[]{patternStart, i};
-          }
-          patternStart += counters[0] + counters[1];
-          System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
-          counters[counterPosition - 1] = 0;
-          counters[counterPosition] = 0;
-          counterPosition--;
-        } else {
-          counterPosition++;
-        }
-        counters[counterPosition] = 1;
-        isWhite = !isWhite;
+    int i = rowOffset;
+    while (i < width) {
+      int next = isWhite ? row.getNextSet(i) : row.getNextUnset(i);
+      counters[counterPosition] = next - i;
+      if (next == width) {
+        break;
       }
+      i = next;
+      if (counterPosition == patternLength - 1) {
+        // Look for whitespace before start pattern, >= 50% of width of start pattern
+        if (toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
+            row.isRange(Math.max(0, patternStart - ((i - patternStart) / 2)), patternStart, false)) {
+          return new int[]{patternStart, i};
+        }
+        patternStart += counters[0] + counters[1];
+        System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
+        counterPosition--;
+      } else {
+        counterPosition++;
+      }
+      isWhite = !isWhite;
     }
     throw NotFoundException.getNotFoundInstance();
   }

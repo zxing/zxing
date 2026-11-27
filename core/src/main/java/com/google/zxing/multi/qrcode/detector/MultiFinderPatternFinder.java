@@ -239,38 +239,39 @@ public final class MultiFinderPatternFinder extends FinderPatternFinder {
 
     int[] stateCount = new int[5];
     for (int i = iSkip - 1; i < maxI; i += iSkip) {
-      // Get a row of black/white values
-      doClearCounts(stateCount);
       int currentState = 0;
-      for (int j = 0; j < maxJ; j++) {
-        if (image.get(j, i)) {
-          // Black pixel
-          if ((currentState & 1) == 1) { // Counting white pixels
-            currentState++;
-          }
-          stateCount[currentState]++;
-        } else { // White pixel
-          if ((currentState & 1) == 0) { // Counting black pixels
-            if (currentState == 4) { // A winner?
-              if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j)) { // Yes
-                // Clear state to start looking again
-                currentState = 0;
-                doClearCounts(stateCount);
-              } else { // No, shift counts back by two
-                doShiftCounts2(stateCount);
-                currentState = 3;
-              }
-            } else {
-              stateCount[++currentState]++;
+      int j = image.getNextSet(0, i);
+      while (j < maxJ) {
+        int next = image.getNextUnset(j, i);
+        stateCount[currentState] = next - j;
+        j = next;
+        if (currentState == 4) {
+          if (j == maxJ) {
+            if (foundPatternCross(stateCount)) {
+              handlePossibleCenter(stateCount, i, maxJ);
             }
-          } else { // Counting white pixels
-            stateCount[currentState]++;
+            break;
           }
+          if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j)) {
+            // Clear state to start looking again
+            currentState = 0;
+            j = image.getNextSet(j, i);
+            continue;
+          }
+          stateCount[0] = stateCount[2];
+          stateCount[1] = stateCount[3];
+          stateCount[2] = stateCount[4];
+          currentState = 3;
+        } else {
+          if (j == maxJ) {
+            break;
+          }
+          currentState++;
         }
-      } // for j=...
-
-      if (foundPatternCross(stateCount)) {
-        handlePossibleCenter(stateCount, i, maxJ);
+        next = image.getNextSet(j, i);
+        stateCount[currentState] = next - j;
+        j = next;
+        currentState++;
       }
     } // for i=iSkip-1 ...
     FinderPattern[][] patternInfo = selectMultipleBestPatterns();

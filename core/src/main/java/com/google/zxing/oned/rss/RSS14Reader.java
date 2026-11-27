@@ -276,45 +276,34 @@ public final class RSS14Reader extends AbstractRSSReader {
       throws NotFoundException {
 
     int[] counters = getDecodeFinderCounters();
-    counters[0] = 0;
-    counters[1] = 0;
-    counters[2] = 0;
-    counters[3] = 0;
 
     int width = row.getSize();
-    boolean isWhite = false;
-    int rowOffset = 0;
-    while (rowOffset < width) {
-      isWhite = !row.get(rowOffset);
-      if (rightFinderPattern == isWhite) {
-        // Will encounter white first when searching for right finder pattern
-        break;
-      }
-      rowOffset++;
-    }
+    boolean isWhite = rightFinderPattern;
+    // Will encounter white first when searching for right finder pattern
+    int rowOffset = rightFinderPattern ? row.getNextUnset(0) : row.getNextSet(0);
 
     int counterPosition = 0;
     int patternStart = rowOffset;
-    for (int x = rowOffset; x < width; x++) {
-      if (row.get(x) != isWhite) {
-        counters[counterPosition]++;
-      } else {
-        if (counterPosition == 3) {
-          if (isFinderPattern(counters)) {
-            return new int[]{patternStart, x};
-          }
-          patternStart += counters[0] + counters[1];
-          counters[0] = counters[2];
-          counters[1] = counters[3];
-          counters[2] = 0;
-          counters[3] = 0;
-          counterPosition--;
-        } else {
-          counterPosition++;
-        }
-        counters[counterPosition] = 1;
-        isWhite = !isWhite;
+    int x = rowOffset;
+    while (x < width) {
+      int next = isWhite ? row.getNextSet(x) : row.getNextUnset(x);
+      counters[counterPosition] = next - x;
+      if (next == width) {
+        break;
       }
+      x = next;
+      if (counterPosition == 3) {
+        if (isFinderPattern(counters)) {
+          return new int[]{patternStart, x};
+        }
+        patternStart += counters[0] + counters[1];
+        counters[0] = counters[2];
+        counters[1] = counters[3];
+        counterPosition--;
+      } else {
+        counterPosition++;
+      }
+      isWhite = !isWhite;
     }
     throw NotFoundException.getNotFoundInstance();
 

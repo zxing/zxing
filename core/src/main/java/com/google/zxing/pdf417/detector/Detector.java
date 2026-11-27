@@ -282,7 +282,6 @@ public final class Detector {
                                         int width,
                                         int[] pattern,
                                         int[] counters) {
-    Arrays.fill(counters, 0, counters.length, 0);
     int patternStart = column;
     int pixelDrift = 0;
 
@@ -290,33 +289,33 @@ public final class Detector {
     while (matrix.get(patternStart, row) && patternStart > 0 && pixelDrift++ < MAX_PIXEL_DRIFT) {
       patternStart--;
     }
+    patternStart = matrix.getNextSet(patternStart, row);
     int x = patternStart;
     int counterPosition = 0;
     int patternLength = pattern.length;
-    for (boolean isWhite = false; x < width; x++) {
-      boolean pixel = matrix.get(x, row);
-      if (pixel != isWhite) {
-        counters[counterPosition]++;
-      } else {
-        if (counterPosition == patternLength - 1) {
-          if (patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
-            return new int[] {patternStart, x};
-          }
-          patternStart += counters[0] + counters[1];
-          System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
-          counters[counterPosition - 1] = 0;
-          counters[counterPosition] = 0;
-          counterPosition--;
-        } else {
-          counterPosition++;
+    boolean isWhite = false;
+    while (x < width) {
+      int next = isWhite ? matrix.getNextSet(x, row) : matrix.getNextUnset(x, row);
+      counters[counterPosition] = next - x;
+      x = next;
+      if (x == width) {
+        if (counterPosition == patternLength - 1 &&
+            patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
+          return new int[] {patternStart, x - 1};
         }
-        counters[counterPosition] = 1;
-        isWhite = !isWhite;
+        break;
       }
-    }
-    if (counterPosition == patternLength - 1 &&
-        patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
-      return new int[] {patternStart, x - 1};
+      if (counterPosition == patternLength - 1) {
+        if (patternMatchVariance(counters, pattern) < MAX_AVG_VARIANCE) {
+          return new int[] {patternStart, x};
+        }
+        patternStart += counters[0] + counters[1];
+        System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
+        counterPosition--;
+      } else {
+        counterPosition++;
+      }
+      isWhite = !isWhite;
     }
     return null;
   }

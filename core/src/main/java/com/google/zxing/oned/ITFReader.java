@@ -236,13 +236,7 @@ public final class ITFReader extends OneDReader {
     // if there are not so many pixel at all let's try as many as possible
     quietCount = Math.min(quietCount, startPattern);
 
-    for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
-      if (row.get(i)) {
-        break;
-      }
-      quietCount--;
-    }
-    if (quietCount != 0) {
+    if (!row.isRange(startPattern - quietCount, startPattern, false)) {
       // Unable to find the necessary number of quiet zone pixels.
       throw NotFoundException.getNotFoundInstance();
     }
@@ -324,25 +318,25 @@ public final class ITFReader extends OneDReader {
 
     int counterPosition = 0;
     int patternStart = rowOffset;
-    for (int x = rowOffset; x < width; x++) {
-      if (row.get(x) != isWhite) {
-        counters[counterPosition]++;
-      } else {
-        if (counterPosition == patternLength - 1) {
-          if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE_2X) < MAX_AVG_VARIANCE) {
-            return new int[]{patternStart, x};
-          }
-          patternStart += counters[0] + counters[1];
-          System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
-          counters[counterPosition - 1] = 0;
-          counters[counterPosition] = 0;
-          counterPosition--;
-        } else {
-          counterPosition++;
-        }
-        counters[counterPosition] = 1;
-        isWhite = !isWhite;
+    int x = rowOffset;
+    while (x < width) {
+      int next = isWhite ? row.getNextSet(x) : row.getNextUnset(x);
+      counters[counterPosition] = next - x;
+      if (next == width) {
+        break;
       }
+      x = next;
+      if (counterPosition == patternLength - 1) {
+        if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE_2X) < MAX_AVG_VARIANCE) {
+          return new int[]{patternStart, x};
+        }
+        patternStart += counters[0] + counters[1];
+        System.arraycopy(counters, 2, counters, 0, counterPosition - 1);
+        counterPosition--;
+      } else {
+        counterPosition++;
+      }
+      isWhite = !isWhite;
     }
     throw NotFoundException.getNotFoundInstance();
   }
