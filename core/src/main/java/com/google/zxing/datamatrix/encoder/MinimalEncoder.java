@@ -731,6 +731,9 @@ public final class MinimalEncoder {
             }
           }
           break;
+        case FORCE_NONE:
+        default:
+          break;
       }
       for (int capacity : allCodewordCapacities) {
         if (capacity >= minimum) {
