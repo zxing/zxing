@@ -37,7 +37,8 @@ final class EdifactEncoder implements Encoder {
         context.writeCodewords(encodeToCodewords(buffer));
         buffer.delete(0, 4);
 
-        int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
+        int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode(),
+            context.isGs1());
         if (newMode != getEncodingMode()) {
           // Return to ASCII encodation, which will actually handle latch to new mode
           context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);

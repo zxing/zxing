@@ -16,9 +16,14 @@
 
 package com.google.zxing.qrcode.decoder;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.common.BitSourceBuilder;
+import com.google.zxing.common.DecoderResult;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Tests {@link DecodedBitStreamParser}.
@@ -104,6 +109,58 @@ public final class DecodedBitStreamParserTestCase extends Assert {
     String result = DecodedBitStreamParser.decode(builder.toByteArray(),
         Version.getVersionForNumber(1), null, null).getText();
     assertEquals("\u30a2", result);
+  }
+
+  @Test
+  public void testFNC1FirstPositionWithAndWithoutAssumeGS1() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x05, 4); // FNC1 in first position
+    builder.write(0x02, 4); // Alphanumeric mode
+    builder.write(6, 9);    // 6 chars: "A%B%%C" -> "A\u001dB%C"
+    // Alphanumeric codes: A=10, %=38, B=11, C=12
+    builder.write(10 * 45 + 38, 11); // "A%"
+    builder.write(11 * 45 + 38, 11); // "B%"
+    builder.write(38 * 45 + 12, 11); // "%C"
+    byte[] bytes = builder.toByteArray();
+
+    DecoderResult withoutHint = DecodedBitStreamParser.decode(bytes, Version.getVersionForNumber(1), null, null);
+    assertEquals("A\u001dB%C", withoutHint.getText());
+    assertEquals(3, withoutHint.getSymbologyModifier());
+
+    Map<DecodeHintType,?> gs1Hints = Collections.singletonMap(DecodeHintType.ASSUME_GS1, Boolean.TRUE);
+    DecoderResult withHint = DecodedBitStreamParser.decode(bytes, Version.getVersionForNumber(1), null, gs1Hints);
+    assertEquals("]Q3A\u001dB%C", withHint.getText());
+    assertEquals(3, withHint.getSymbologyModifier());
+  }
+
+  @Test
+  public void testFNC1FirstPositionWithECIAndAssumeGS1() throws Exception {
+    BitSourceBuilder builder = new BitSourceBuilder();
+    builder.write(0x07, 4); // ECI mode
+    builder.write(26, 8);   // ECI 26 = UTF-8
+    builder.write(0x05, 4); // FNC1 in first position
+    builder.write(0x04, 4); // Byte mode
+    builder.write(3, 8);    // 3 bytes: "A\u001dB"
+    builder.write('A', 8);
+    builder.write(0x1D, 8);
+    builder.write('B', 8);
+    byte[] bytes = builder.toByteArray();
+
+    Map<DecodeHintType,?> gs1Hints = Collections.singletonMap(DecodeHintType.ASSUME_GS1, Boolean.TRUE);
+    DecoderResult withHint = DecodedBitStreamParser.decode(bytes, Version.getVersionForNumber(1), null, gs1Hints);
+    assertEquals("]Q4A\u001dB", withHint.getText());
+    assertEquals(4, withHint.getSymbologyModifier());
+
+    // Non-GS1 QR code is not prefixed even when ASSUME_GS1 is supplied
+    BitSourceBuilder nonGs1 = new BitSourceBuilder();
+    nonGs1.write(0x04, 4);
+    nonGs1.write(2, 8);
+    nonGs1.write('A', 8);
+    nonGs1.write('B', 8);
+    DecoderResult plain = DecodedBitStreamParser.decode(
+        nonGs1.toByteArray(), Version.getVersionForNumber(1), null, gs1Hints);
+    assertEquals("AB", plain.getText());
+    assertEquals(1, plain.getSymbologyModifier());
   }
 
   // TODO definitely need more tests here

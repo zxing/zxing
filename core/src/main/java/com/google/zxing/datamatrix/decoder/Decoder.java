@@ -17,12 +17,15 @@
 package com.google.zxing.datamatrix.decoder;
 
 import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
+
+import java.util.Map;
 
 /**
  * <p>The main class which implements Data Matrix Code decoding -- as opposed to locating and extracting
@@ -48,7 +51,22 @@ public final class Decoder {
    * @throws ChecksumException if error correction fails
    */
   public DecoderResult decode(boolean[][] image) throws FormatException, ChecksumException {
-    return decode(BitMatrix.parse(image));
+    return decode(image, null);
+  }
+
+  /**
+   * <p>Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
+   * "true" is taken to mean a black module.</p>
+   *
+   * @param image booleans representing white/black Data Matrix Code modules
+   * @param hints decoding hints that should be used to influence decoding
+   * @return text and bytes encoded within the Data Matrix Code
+   * @throws FormatException if the Data Matrix Code cannot be decoded
+   * @throws ChecksumException if error correction fails
+   */
+  public DecoderResult decode(boolean[][] image, Map<DecodeHintType,?> hints)
+      throws FormatException, ChecksumException {
+    return decode(BitMatrix.parse(image), hints);
   }
 
   /**
@@ -61,6 +79,21 @@ public final class Decoder {
    * @throws ChecksumException if error correction fails
    */
   public DecoderResult decode(BitMatrix bits) throws FormatException, ChecksumException {
+    return decode(bits, null);
+  }
+
+  /**
+   * <p>Decodes a Data Matrix Code represented as a {@link BitMatrix}. A 1 or "true" is taken
+   * to mean a black module.</p>
+   *
+   * @param bits booleans representing white/black Data Matrix Code modules
+   * @param hints decoding hints that should be used to influence decoding
+   * @return text and bytes encoded within the Data Matrix Code
+   * @throws FormatException if the Data Matrix Code cannot be decoded
+   * @throws ChecksumException if error correction fails
+   */
+  public DecoderResult decode(BitMatrix bits, Map<DecodeHintType,?> hints)
+      throws FormatException, ChecksumException {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
@@ -93,7 +126,7 @@ public final class Decoder {
     }
 
     // Decode the contents of that stream of bytes
-    DecoderResult result = DecodedBitStreamParser.decode(resultBytes);
+    DecoderResult result = DecodedBitStreamParser.decode(resultBytes, hints);
     result.setErrorsCorrected(errorsCorrected);
     return result;
   }

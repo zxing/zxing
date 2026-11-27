@@ -33,8 +33,15 @@ final class ASCIIEncoder implements Encoder {
       context.pos += 2;
     } else {
       char c = context.getCurrentChar();
-      int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
-      if (newMode != getEncodingMode()) {
+      int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode(),
+          context.isGs1());
+      if (context.isFnc1(c) &&
+          newMode != HighLevelEncoder.C40_ENCODATION &&
+          newMode != HighLevelEncoder.TEXT_ENCODATION) {
+        // Base 256, X12, and EDIFACT cannot encode FNC1; emit FNC1 codeword in ASCII mode.
+        context.writeCodeword(HighLevelEncoder.FNC1);
+        context.pos++;
+      } else if (newMode != getEncodingMode()) {
         switch (newMode) {
           case HighLevelEncoder.BASE256_ENCODATION:
             context.writeCodeword(HighLevelEncoder.LATCH_TO_BASE256);

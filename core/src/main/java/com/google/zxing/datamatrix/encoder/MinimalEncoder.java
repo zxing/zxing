@@ -150,6 +150,9 @@ public final class MinimalEncoder {
    * @return An array of bytes representing the codewords of a minimal encoding.
    */
   static byte[] encode(String input, Charset priorityCharset, int fnc1, SymbolShapeHint shape, int macroId) {
+    if (fnc1 > 0 && !input.isEmpty() && input.charAt(0) == fnc1) {
+      input = input.substring(1);
+    }
     return encodeMinimally(new Input(input, priorityCharset, fnc1, shape, macroId)).getBytes();
   }
 
@@ -175,18 +178,22 @@ public final class MinimalEncoder {
         characterLength[0] = 0;
         return 0;
       }
-      char ci = input.charAt(i);
-      if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
-        thirdsCount++; //native
-      } else if (!isExtendedASCII(ci, input.getFNC1Character())) {
-        thirdsCount += 2; //shift
+      if (input.isFNC1(i)) {
+        thirdsCount += 2; // Shift 2 + 27 (FNC1)
       } else {
-        int asciiValue = ci & 0xff;
-        if (asciiValue >= 128 && (c40 && HighLevelEncoder.isNativeC40((char) (asciiValue - 128)) ||
-                                  !c40 && HighLevelEncoder.isNativeText((char) (asciiValue - 128)))) {
-          thirdsCount += 3; // shift, Upper shift
+        char ci = input.charAt(i);
+        if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
+          thirdsCount++; //native
+        } else if (!isExtendedASCII(ci, input.getFNC1Character())) {
+          thirdsCount += 2; //shift
         } else {
-          thirdsCount += 4; // shift, Upper shift, shift
+          int asciiValue = ci & 0xff;
+          if (asciiValue >= 128 && (c40 && HighLevelEncoder.isNativeC40((char) (asciiValue - 128)) ||
+                                    !c40 && HighLevelEncoder.isNativeText((char) (asciiValue - 128)))) {
+            thirdsCount += 3; // shift, Upper shift
+          } else {
+            thirdsCount += 4; // shift, Upper shift, shift
+          }
         }
       }
 
@@ -212,12 +219,12 @@ public final class MinimalEncoder {
     char ch = input.charAt(from);
     if (!afterFullEDF) { //not possible to unlatch a full EDF edge to something
                                                                  //else
-      if (HighLevelEncoder.isDigit(ch) && input.haveNCharacters(from, 2) &&
-          HighLevelEncoder.isDigit(input.charAt(from + 1))) {
+      if (!input.isFNC1(from) && HighLevelEncoder.isDigit(ch) && input.haveNCharacters(from, 2) &&
+          !input.isFNC1(from + 1) && HighLevelEncoder.isDigit(input.charAt(from + 1))) {
         // two digits ASCII encoded
         addEdge(edges, new Edge(input, Mode.ASCII, from, 2, previous));
       } else {
-        // one ASCII encoded character or an extended character via Upper Shift
+        // one ASCII encoded character, FNC1, or an extended character via Upper Shift
         addEdge(edges, new Edge(input, Mode.ASCII, from, 1, previous));
       }
 
@@ -229,14 +236,17 @@ public final class MinimalEncoder {
         }
       }
 
-      if (input.haveNCharacters(from,3) &&
-          HighLevelEncoder.isNativeX12(input.charAt(from)) &&
-          HighLevelEncoder.isNativeX12(input.charAt(from + 1)) &&
-          HighLevelEncoder.isNativeX12(input.charAt(from + 2))) {
+      if (input.haveNCharacters(from, 3) &&
+          !input.isFNC1(from) && HighLevelEncoder.isNativeX12(input.charAt(from)) &&
+          !input.isFNC1(from + 1) && HighLevelEncoder.isNativeX12(input.charAt(from + 1)) &&
+          !input.isFNC1(from + 2) && HighLevelEncoder.isNativeX12(input.charAt(from + 2))) {
         addEdge(edges, new Edge(input, Mode.X12, from, 3, previous));
       }
 
-      addEdge(edges, new Edge(input, Mode.B256, from, 1, previous));
+      // Base 256 encodes literal 8-bit bytes and cannot represent FNC1 codewords
+      if (!input.isFNC1(from)) {
+        addEdge(edges, new Edge(input, Mode.B256, from, 1, previous));
+      }
     }
 
     //We create 4 EDF edges,  with 1, 2 3 or 4 characters length. The fourth normally doesn't have a latch to ASCII
@@ -244,13 +254,15 @@ public final class MinimalEncoder {
     int i;
     for (i = 0; i < 3; i++) {
       int pos = from + i;
-      if (input.haveNCharacters(pos,1) && HighLevelEncoder.isNativeEDIFACT(input.charAt(pos))) {
+      if (input.haveNCharacters(pos, 1) && !input.isFNC1(pos) &&
+          HighLevelEncoder.isNativeEDIFACT(input.charAt(pos))) {
         addEdge(edges, new Edge(input, Mode.EDF, from, i + 1, previous));
       } else {
         break;
       }
     }
-    if (i == 3 && input.haveNCharacters(from, 4) && HighLevelEncoder.isNativeEDIFACT(input.charAt(from + 3))) {
+    if (i == 3 && input.haveNCharacters(from, 4) && !input.isFNC1(from + 3) &&
+        HighLevelEncoder.isNativeEDIFACT(input.charAt(from + 3))) {
       addEdge(edges, new Edge(input, Mode.EDF, from, 4, previous));
     }
   }
@@ -442,6 +454,9 @@ public final class MinimalEncoder {
      */
 
     int inputLength = input.length();
+    if (inputLength == 0) {
+      return new Result(input, null);
+    }
 
     // Array that represents vertices. There is a vertex for every character and mode.
     // The last dimension in the array below encodes the 6 modes ASCII, C40, TEXT, X12, EDF and B256
@@ -480,7 +495,7 @@ public final class MinimalEncoder {
     if (minimalJ < 0) {
       throw new IllegalStateException("Failed to encode \"" + input + "\"");
     }
-    return new Result(edges[inputLength][minimalJ]);
+    return new Result(input, edges[inputLength][minimalJ]);
   }
 
   /**
@@ -534,7 +549,9 @@ public final class MinimalEncoder {
       switch (mode) {
         case ASCII:
           size++;
-          if (input.isECI(fromPosition) || isExtendedASCII(input.charAt(fromPosition), input.getFNC1Character())) {
+          if (input.isECI(fromPosition) ||
+              (!input.isFNC1(fromPosition) &&
+               isExtendedASCII(input.charAt(fromPosition), input.getFNC1Character()))) {
             size++;
           }
           if (previousMode == Mode.C40 ||
@@ -645,6 +662,15 @@ public final class MinimalEncoder {
       return mode;
     }
 
+    private boolean isPlainDigit(int pos) {
+      return !input.isECI(pos) && !input.isFNC1(pos) && HighLevelEncoder.isDigit(input.charAt(pos));
+    }
+
+    private boolean isSingleCodewordASCII(int pos) {
+      return !input.isECI(pos) &&
+          (input.isFNC1(pos) || !isExtendedASCII(input.charAt(pos), input.getFNC1Character()));
+    }
+
     /** Peeks ahead and returns 1 if the postfix consists of exactly two digits, 2 if the postfix consists of exactly
      *  two consecutive digits and a non extended character or of 4 digits.
      *  Returns 0 in any other case
@@ -656,34 +682,27 @@ public final class MinimalEncoder {
         return 0;
       }
       if (length - from == 1) {
-        if (isExtendedASCII(input.charAt(from), input.getFNC1Character())) {
-          return 0;
-        }
-        return 1;
+        return isSingleCodewordASCII(from) ? 1 : 0;
       }
       if (length - from == 2) {
-        if (isExtendedASCII(input.charAt(from), input.getFNC1Character()) || isExtendedASCII(input.charAt(from + 1),
-            input.getFNC1Character())) {
+        if (!isSingleCodewordASCII(from) || !isSingleCodewordASCII(from + 1)) {
           return 0;
         }
-        if (HighLevelEncoder.isDigit(input.charAt(from)) && HighLevelEncoder.isDigit(input.charAt(from + 1))) {
+        if (isPlainDigit(from) && isPlainDigit(from + 1)) {
           return 1;
         }
         return 2;
       }
       if (length - from == 3) {
-        if (HighLevelEncoder.isDigit(input.charAt(from)) && HighLevelEncoder.isDigit(input.charAt(from + 1))
-            && !isExtendedASCII(input.charAt(from + 2), input.getFNC1Character())) {
+        if (isPlainDigit(from) && isPlainDigit(from + 1) && isSingleCodewordASCII(from + 2)) {
           return 2;
         }
-        if (HighLevelEncoder.isDigit(input.charAt(from + 1)) && HighLevelEncoder.isDigit(input.charAt(from + 2))
-            && !isExtendedASCII(input.charAt(from), input.getFNC1Character())) {
+        if (isPlainDigit(from + 1) && isPlainDigit(from + 2) && isSingleCodewordASCII(from)) {
           return 2;
         }
         return 0;
       }
-      if (HighLevelEncoder.isDigit(input.charAt(from)) && HighLevelEncoder.isDigit(input.charAt(from + 1))
-          && HighLevelEncoder.isDigit(input.charAt(from + 2)) && HighLevelEncoder.isDigit(input.charAt(from + 3))) {
+      if (isPlainDigit(from) && isPlainDigit(from + 1) && isPlainDigit(from + 2) && isPlainDigit(from + 3)) {
         return 2;
       }
       return 0;
@@ -693,7 +712,11 @@ public final class MinimalEncoder {
      * number of codewords.
      **/
     int getMinSymbolSize(int minimum) {
-      switch (input.getShapeHint()) {
+      return getMinSymbolSize(minimum, input.getShapeHint());
+    }
+
+    static int getMinSymbolSize(int minimum, SymbolShapeHint shapeHint) {
+      switch (shapeHint) {
         case FORCE_SQUARE:
           for (int capacity : squareCodewordCapacities) {
             if (capacity >= minimum) {
@@ -707,6 +730,9 @@ public final class MinimalEncoder {
               return capacity;
             }
           }
+          break;
+        case FORCE_NONE:
+        default:
           break;
       }
       for (int capacity : allCodewordCapacities) {
@@ -803,26 +829,31 @@ public final class MinimalEncoder {
     byte[] getC40Words(boolean c40, int fnc1) {
       List<Byte> c40Values = new ArrayList<>();
       for (int i = 0; i < characterLength; i++) {
+        if (input.isFNC1(fromPosition + i)) {
+          c40Values.add((byte) 1); // Shift 2
+          c40Values.add((byte) 27); // FNC1
+          continue;
+        }
         char ci = input.charAt(fromPosition + i);
         if (c40 && HighLevelEncoder.isNativeC40(ci) || !c40 && HighLevelEncoder.isNativeText(ci)) {
-          c40Values.add((byte) getC40Value(c40, ci, fnc1));
+          c40Values.add((byte) getC40Value(c40, ci, -1));
         } else if (!isExtendedASCII(ci, fnc1)) {
-          int shiftValue = getShiftValue(ci, c40, fnc1);
+          int shiftValue = getShiftValue(ci, c40, -1);
           c40Values.add((byte) shiftValue); //Shift[123]
-          c40Values.add((byte) getC40Value(c40, ci, fnc1));
+          c40Values.add((byte) getC40Value(c40, ci, -1));
         } else {
           char asciiValue = (char) ((ci & 0xff) - 128);
           if (c40 && HighLevelEncoder.isNativeC40(asciiValue) ||
               !c40 && HighLevelEncoder.isNativeText(asciiValue)) {
             c40Values.add((byte) 1); //Shift 2
             c40Values.add((byte) 30); //Upper Shift
-            c40Values.add((byte) getC40Value(c40, asciiValue, fnc1));
+            c40Values.add((byte) getC40Value(c40, asciiValue, -1));
           } else {
             c40Values.add((byte) 1); //Shift 2
             c40Values.add((byte) 30); //Upper Shift
-            int shiftValue = getShiftValue(asciiValue, c40, fnc1);
+            int shiftValue = getShiftValue(asciiValue, c40, -1);
             c40Values.add((byte) shiftValue); // Shift[123]
-            c40Values.add((byte) getC40Value(c40, asciiValue, fnc1));
+            c40Values.add((byte) getC40Value(c40, asciiValue, -1));
           }
         }
       }
@@ -916,12 +947,12 @@ public final class MinimalEncoder {
         case ASCII:
           if (input.isECI(fromPosition)) {
             return getBytes(241,input.getECIValue(fromPosition) + 1);
+          } else if (input.isFNC1(fromPosition)) {
+            return getBytes(232);
           } else if (isExtendedASCII(input.charAt(fromPosition), input.getFNC1Character())) {
             return getBytes(235,input.charAt(fromPosition) - 127);
           } else if (characterLength == 2) {
             return getBytes((input.charAt(fromPosition) - '0') * 10 + input.charAt(fromPosition + 1) - '0' + 130);
-          } else if (input.isFNC1(fromPosition)) {
-            return getBytes(232);
           } else {
             return getBytes(input.charAt(fromPosition) + 1);
           }
@@ -945,13 +976,13 @@ public final class MinimalEncoder {
 
     private final byte[] bytes;
 
-    Result(Edge solution) {
-      Input input = solution.input;
+    Result(Input input, Edge solution) {
       int size = 0;
       List<Byte> bytesAL = new ArrayList<>();
       List<Integer> randomizePostfixLength = new ArrayList<>();
       List<Integer> randomizeLengths = new ArrayList<>();
-      if ((solution.mode == Mode.C40 ||
+      if (solution != null &&
+          (solution.mode == Mode.C40 ||
            solution.mode == Mode.TEXT ||
            solution.mode == Mode.X12) &&
            solution.getEndMode() != Mode.ASCII) {
@@ -992,11 +1023,11 @@ public final class MinimalEncoder {
       for (int i = 0; i < randomizePostfixLength.size(); i++) {
         applyRandomPattern(bytesAL,bytesAL.size() - randomizePostfixLength.get(i), randomizeLengths.get(i));
       }
-      if (needsEDFUnlatch(solution, bytesAL.size())) {
+      if (solution != null && needsEDFUnlatch(solution, bytesAL.size())) {
         bytesAL.add((byte) (0x1f << 2)); // unlatch character followed by two zero bits
       }
       //add padding
-      int capacity = solution.getMinSymbolSize(bytesAL.size());
+      int capacity = Edge.getMinSymbolSize(bytesAL.size(), input.getShapeHint());
       if (bytesAL.size() < capacity) {
         bytesAL.add((byte) 129);
       }

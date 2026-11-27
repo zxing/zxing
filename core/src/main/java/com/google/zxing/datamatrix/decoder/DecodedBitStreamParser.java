@@ -16,6 +16,7 @@
 
 package com.google.zxing.datamatrix.decoder;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitSource;
 import com.google.zxing.common.DecoderResult;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -86,12 +88,17 @@ final class DecodedBitStreamParser {
   }
 
   static DecoderResult decode(byte[] bytes) throws FormatException {
+    return decode(bytes, null);
+  }
+
+  static DecoderResult decode(byte[] bytes, Map<DecodeHintType,?> hints) throws FormatException {
     BitSource bits = new BitSource(bytes);
     ECIStringBuilder result = new ECIStringBuilder(100);
     StringBuilder resultTrailer = new StringBuilder(0);
     List<byte[]> byteSegments = new ArrayList<>(1);
     Mode mode = Mode.ASCII_ENCODE;
     // Could look directly at 'bytes', if we're sure of not having to account for multi byte values
+    boolean structuredAppend = (bytes.length > 0 && (bytes[0] & 0xFF) == 233);
     boolean readerInit = (bytes.length > 0 && (bytes[0] & 0xFF) == 234);
     Set<Integer> fnc1Positions = new HashSet<>();
     int symbologyModifier;
@@ -129,33 +136,45 @@ final class DecodedBitStreamParser {
     if (resultTrailer.length() > 0) {
       result.appendCharacters(resultTrailer);
     }
+    boolean hasLeadingFNC1 = fnc1Positions.contains(0);
+    boolean hasGS1FNC1 = hasLeadingFNC1 || (structuredAppend && fnc1Positions.contains(4));
+    boolean hasIndustryFNC1 = fnc1Positions.contains(1) || (structuredAppend && fnc1Positions.contains(5));
     if (isECIencoded) {
       // Examples for this numbers can be found in this documentation of a hardware barcode scanner:
       // https://honeywellaidc.force.com/supportppr/s/article/List-of-barcode-symbology-AIM-Identifiers
-      if (fnc1Positions.contains(0) || fnc1Positions.contains(4)) {
+      if (hasGS1FNC1) {
         symbologyModifier = 5;
-      } else if (fnc1Positions.contains(1) || fnc1Positions.contains(5)) {
+      } else if (hasIndustryFNC1) {
         symbologyModifier = 6;
       } else {
         symbologyModifier = 4;
       }
     } else {
-      if (fnc1Positions.contains(0) || fnc1Positions.contains(4)) {
+      if (hasGS1FNC1) {
         symbologyModifier = 2;
-      } else if (fnc1Positions.contains(1) || fnc1Positions.contains(5)) {
+      } else if (hasIndustryFNC1) {
         symbologyModifier = 3;
       } else {
         symbologyModifier = 1;
       }
     }
 
+    String text = result.toString();
+    if (hasLeadingFNC1 && hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1)) {
+      text = "]d" + symbologyModifier + text.substring(1);
+    }
+
     DecoderResult res = new DecoderResult(bytes,
-                                          result.toString(),
+                                          text,
                                           byteSegments.isEmpty() ? null : byteSegments,
                                           null,
                                           symbologyModifier);
     res.setReaderInit(readerInit);
     return res;
+  }
+
+  private static void appendFNC1(ECIStringBuilder result) {
+    result.appendCharacters(new StringBuilder(1).append((char) 29));
   }
 
   /**
@@ -193,7 +212,7 @@ final class DecodedBitStreamParser {
             return Mode.BASE256_ENCODE;
           case 232: // FNC1
             fnc1positions.add(result.length());
-            result.append((char) 29); // translate as ASCII 29
+            appendFNC1(result); // translate as ASCII 29
             break;
           case 233: // Structured Append
             // Ignore for now
@@ -298,7 +317,7 @@ final class DecodedBitStreamParser {
               switch (cValue) {
                 case 27: // FNC1
                   fnc1positions.add(result.length());
-                  result.append((char) 29); // translate as ASCII 29
+                  appendFNC1(result); // translate as ASCII 29
                   break;
                 case 30: // Upper Shift
                   upperShift = true;
@@ -390,7 +409,7 @@ final class DecodedBitStreamParser {
               switch (cValue) {
                 case 27: // FNC1
                   fnc1positions.add(result.length());
-                  result.append((char) 29); // translate as ASCII 29
+                  appendFNC1(result); // translate as ASCII 29
                   break;
                 case 30: // Upper Shift
                   upperShift = true;

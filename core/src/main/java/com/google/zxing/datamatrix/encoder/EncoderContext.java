@@ -31,6 +31,7 @@ final class EncoderContext {
   private int newEncoding;
   private SymbolInfo symbolInfo;
   private int skipAtEnd;
+  private boolean gs1;
 
   EncoderContext(String msg) {
     //From this point on Strings are not Unicode anymore!
@@ -56,6 +57,18 @@ final class EncoderContext {
   public void setSizeConstraints(Dimension minSize, Dimension maxSize) {
     this.minSize = minSize;
     this.maxSize = maxSize;
+  }
+
+  void setGs1(boolean gs1) {
+    this.gs1 = gs1;
+  }
+
+  boolean isGs1() {
+    return gs1;
+  }
+
+  boolean isFnc1(char c) {
+    return gs1 && c == 0x1D;
   }
 
   public String getMessage() {

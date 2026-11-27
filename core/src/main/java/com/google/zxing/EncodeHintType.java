@@ -149,7 +149,9 @@ public enum EncodeHintType {
 
   /**
    * Specifies whether the data should be encoded to the GS1 standard (type {@link Boolean}, or "true" or "false"
-   * {@link String } value).
+   * {@link String } value). For Data Matrix (both standard and compact modes), ASCII 29 (GS) characters in the
+   * input represent FNC1 field separators, and a leading FNC1 codeword is prepended (without duplicating an
+   * existing leading GS).
    */
   GS1_FORMAT,
 

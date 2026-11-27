@@ -37,7 +37,8 @@ final class X12Encoder extends C40Encoder {
       if ((count % 3) == 0) {
         writeNextTriplet(context, buffer);
 
-        int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
+        int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode(),
+            context.isGs1());
         if (newMode != getEncodingMode()) {
           // Return to ASCII encodation, which will actually handle latch to new mode
           context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);

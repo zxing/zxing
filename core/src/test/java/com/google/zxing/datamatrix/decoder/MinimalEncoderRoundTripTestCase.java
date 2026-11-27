@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * Checks that the codewords of {@link MinimalEncoder} decode back to the input.
@@ -68,6 +69,56 @@ public final class MinimalEncoderRoundTripTestCase extends Assert {
     // A FNC1 inside C40 or Text data was written in the Shift 1 set, where 27 decodes as ESC instead of FNC1
     assertRoundTrip("ABCDEFGH\u001dIJKLMNOPQR", 29);
     assertRoundTrip("abcdefgh\u001dijklmnopqr", 29);
+  }
+
+  @Test
+  public void testFNC1NotEncodedAsLiteralByteInBase256() throws Exception {
+    // Extended ASCII around GS used to keep MinimalEncoder in Base 256 and emit literal 0x1D instead of FNC1 (232)
+    String input = "\u00e4\u00f6\u00fc\u00e4\u00f6\u00fc\u001d\u00e4\u00f6\u00fc\u00e4\u00f6\u00fc";
+    String codewords = assertRoundTrip(input, 29, SymbolShapeHint.FORCE_NONE);
+    byte[] bytes = codewords.getBytes(StandardCharsets.ISO_8859_1);
+    assertEquals(232, bytes[0] & 0xFF);
+    // Verify that the internal GS was encoded as FNC1 (codeword 232), not inside Base 256 byte segments
+    List<byte[]> segments = DecodedBitStreamParser.decode(bytes).getByteSegments();
+    if (segments != null) {
+      for (byte[] segment : segments) {
+        for (byte b : segment) {
+          assertNotEquals("FNC1 delimiter must not be encoded as literal 0x1D in Base 256", 0x1D, b & 0xFF);
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testExtendedAscii0x9DNotConflatedWithFNC1InC40AndText() throws Exception {
+    // 0x9D = 128 + 29; in C40/Text Upper Shift it must encode as Shift 1 + 29, not FNC1 (Shift 2 + 27)
+    assertRoundTrip("ABCDEFGH\u009dIJKLMNOPQR", 29);
+    assertRoundTrip("abcdefgh\u009dijklmnopqr", 29);
+  }
+
+  @Test
+  public void testFNC1WithUtf16BeEci() throws Exception {
+    // Multi-byte UTF-16BE characters separated by FNC1 must not be misaligned by the FNC1 separator
+    assertRoundTrip("\u4e2d\u6587\u4e2d\u6587\u001d\u4e2d\u6587\u4e2d\u6587", 29);
+  }
+
+  @Test
+  public void testLeadingGSNotDuplicatedOnRoundTrip() throws Exception {
+    String gs1Payload = "010123456789012810ABC\u001d17260101";
+    String firstPass = MinimalEncoder.encodeHighLevel(gs1Payload, null, 29, SymbolShapeHint.FORCE_NONE);
+    String decoded = DecodedBitStreamParser.decode(firstPass.getBytes(StandardCharsets.ISO_8859_1)).getText();
+    assertEquals("\u001d" + gs1Payload, decoded);
+
+    // Re-encoding the decoded string (which already begins with GS) must not emit a duplicate leading FNC1
+    String secondPass = MinimalEncoder.encodeHighLevel(decoded, null, 29, SymbolShapeHint.FORCE_NONE);
+    byte[] secondBytes = secondPass.getBytes(StandardCharsets.ISO_8859_1);
+    assertEquals(232, secondBytes[0] & 0xFF);
+    assertNotEquals(232, secondBytes[1] & 0xFF);
+    assertEquals(decoded, DecodedBitStreamParser.decode(secondBytes).getText());
+
+    // Single leading GS alone produces a single FNC1 codeword
+    String singleGs = MinimalEncoder.encodeHighLevel("\u001d", null, 29, SymbolShapeHint.FORCE_NONE);
+    assertEquals("\u001d", DecodedBitStreamParser.decode(singleGs.getBytes(StandardCharsets.ISO_8859_1)).getText());
   }
 
   @Test

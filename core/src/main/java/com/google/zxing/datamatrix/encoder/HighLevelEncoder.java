@@ -41,7 +41,7 @@ public final class HighLevelEncoder {
   /**
    * FNC1 Codeword
    */
-  //private static final char FNC1 = 232;
+  static final char FNC1 = 232;
   /**
    * Structured Append Codeword
    */
@@ -162,6 +162,28 @@ public final class HighLevelEncoder {
                                        Dimension minSize,
                                        Dimension maxSize,
                                        boolean forceC40) {
+    return encodeHighLevel(msg, shape, minSize, maxSize, forceC40, false);
+  }
+
+  /**
+   * Performs message encoding of a DataMatrix message using the algorithm described in annex P
+   * of ISO/IEC 16022:2000(E).
+   *
+   * @param msg      the message
+   * @param shape    requested shape. May be {@code SymbolShapeHint.FORCE_NONE},
+   *                 {@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.
+   * @param minSize  the minimum symbol size constraint or null for no constraint
+   * @param maxSize  the maximum symbol size constraint or null for no constraint
+   * @param forceC40 enforce C40 encoding
+   * @param gs1      whether to encode as GS1 DataMatrix (leading FNC1 and GS/0x1D as FNC1 separator)
+   * @return the encoded message (the char values range from 0 to 255)
+   */
+  public static String encodeHighLevel(String msg,
+                                       SymbolShapeHint shape,
+                                       Dimension minSize,
+                                       Dimension maxSize,
+                                       boolean forceC40,
+                                       boolean gs1) {
     //the codewords 0..255 are encoded as Unicode characters
     C40Encoder c40Encoder = new C40Encoder();
     Encoder[] encoders = {
@@ -172,6 +194,14 @@ public final class HighLevelEncoder {
     EncoderContext context = new EncoderContext(msg);
     context.setSymbolShape(shape);
     context.setSizeConstraints(minSize, maxSize);
+    context.setGs1(gs1);
+
+    if (gs1) {
+      context.writeCodeword(FNC1);
+      if (context.hasMoreCharacters() && context.getCurrentChar() == 0x1D) {
+        context.pos++;
+      }
+    }
 
     if (msg.startsWith(MACRO_05_HEADER) && msg.endsWith(MACRO_TRAILER)) {
       context.writeCodeword(MACRO_05);
@@ -185,7 +215,7 @@ public final class HighLevelEncoder {
 
     int encodingMode = ASCII_ENCODATION; //Default mode
 
-    if (forceC40) {
+    if (forceC40 && context.hasMoreCharacters()) {
       c40Encoder.encodeMaximal(context);
       encodingMode = context.getNewEncoding();
       context.resetEncoderSignal();
@@ -220,7 +250,11 @@ public final class HighLevelEncoder {
   }
 
   static int lookAheadTest(CharSequence msg, int startpos, int currentMode) {
-    int newMode = lookAheadTestIntern(msg, startpos, currentMode);
+    return lookAheadTest(msg, startpos, currentMode, false);
+  }
+
+  static int lookAheadTest(CharSequence msg, int startpos, int currentMode, boolean gs1) {
+    int newMode = lookAheadTestIntern(msg, startpos, currentMode, gs1);
     if (currentMode == X12_ENCODATION && newMode == X12_ENCODATION) {
       int endpos = Math.min(startpos + 3, msg.length());
       for (int i = startpos; i < endpos; i++) {
@@ -239,7 +273,7 @@ public final class HighLevelEncoder {
     return newMode;
   }
 
-  static int lookAheadTestIntern(CharSequence msg, int startpos, int currentMode) {
+  static int lookAheadTestIntern(CharSequence msg, int startpos, int currentMode, boolean gs1) {
     if (startpos >= msg.length()) {
       return currentMode;
     }
@@ -334,7 +368,7 @@ public final class HighLevelEncoder {
       }
 
       // step Q
-      if (isSpecialB256(c)) {
+      if (isSpecialB256(c, gs1)) {
         charCounts[BASE256_ENCODATION] += 4.0f;
       } else {
         charCounts[BASE256_ENCODATION]++;
@@ -455,8 +489,8 @@ public final class HighLevelEncoder {
     return ch >= ' ' && ch <= '^';
   }
 
-  private static boolean isSpecialB256(char ch) {
-    return false; //TODO NOT IMPLEMENTED YET!!!
+  private static boolean isSpecialB256(char ch, boolean gs1) {
+    return gs1 && ch == 0x1D;
   }
 
   /**

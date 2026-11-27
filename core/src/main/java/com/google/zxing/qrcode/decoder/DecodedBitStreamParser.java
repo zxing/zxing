@@ -60,11 +60,12 @@ final class DecodedBitStreamParser {
     int parityData = -1;
     int symbologyModifier;
 
+    boolean hasFNC1first = false;
+    boolean hasFNC1second = false;
+
     try {
       CharacterSetECI currentCharacterSetECI = null;
       boolean fc1InEffect = false;
-      boolean hasFNC1first = false;
-      boolean hasFNC1second = false;
       Mode mode;
       do {
         // While still another segment to read...
@@ -160,8 +161,13 @@ final class DecodedBitStreamParser {
       throw FormatException.getFormatInstance();
     }
 
+    String text = result.toString();
+    if (hasFNC1first && hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1)) {
+      text = "]Q" + symbologyModifier + text;
+    }
+
     return new DecoderResult(bytes,
-                             result.toString(),
+                             text,
                              byteSegments.isEmpty() ? null : byteSegments,
                              ecLevel == null ? null : ecLevel.toString(),
                              symbolSequence,
