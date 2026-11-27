@@ -25,6 +25,8 @@ import com.google.zxing.pdf417.PDF417Common;
  */
 final class PDF417CodewordDecoder {
 
+  // Flattened 1D table of [symbolIndex * BARS_IN_MODULE + barIndex] to keep all 2,787 rows
+  // contiguous in memory and avoid per-row pointer chasing in getClosestDecodedValue().
   private static final float[] RATIOS_TABLE =
       new float[PDF417Common.SYMBOL_TABLE.length * PDF417Common.BARS_IN_MODULE];
 
@@ -63,18 +65,22 @@ final class PDF417CodewordDecoder {
     int bitCountIndex = 0;
     int sumPreviousBits = 0;
     int bitValue = 0;
+    // Sample at the center of each of the 17 modules: (i + 0.5) * bitCountSum / 17 = (2*i + 1) * bitCountSum / 34.
+    // Cross-multiplying by 34 avoids float divisions and packs the 17-bit codeword directly without an int[8] array.
     int scale = 2 * PDF417Common.MODULES_IN_CODEWORD;
     for (int i = 0; i < PDF417Common.MODULES_IN_CODEWORD; i++) {
       if ((sumPreviousBits + moduleBitCount[bitCountIndex]) * scale <= (2 * i + 1) * bitCountSum) {
         sumPreviousBits += moduleBitCount[bitCountIndex];
         bitCountIndex++;
       }
+      // Even bar/space indices are black bars (1), odd indices are white spaces (0)
       bitValue = (bitValue << 1) | ((bitCountIndex & 1) ^ 1);
     }
     return bitValue;
   }
 
   private static int getClosestDecodedValue(int[] moduleBitCount, int bitCountSum) {
+    // Keep the 8 normalized bar/space ratios in locals to avoid a float[8] allocation and array loads in the scan loop.
     float r0 = 0.0f;
     float r1 = 0.0f;
     float r2 = 0.0f;
@@ -98,6 +104,8 @@ final class PDF417CodewordDecoder {
     int bestMatch = -1;
     float[] table = RATIOS_TABLE;
     int[] symbols = PDF417Common.SYMBOL_TABLE;
+    // Unrolled 8-bar squared-error scan: early-exit on the first 4 terms rejects most non-matching symbols
+    // immediately, while evaluating the final 4 terms branchlessly avoids branch mispredicts on close candidates.
     for (int j = 0, offset = 0; j < symbols.length; j++, offset += PDF417Common.BARS_IN_MODULE) {
       float diff = table[offset] - r0;
       float error = diff * diff;

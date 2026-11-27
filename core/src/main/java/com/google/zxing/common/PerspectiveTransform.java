@@ -97,6 +97,7 @@ public final class PerspectiveTransform {
     int maxI = points.length - 1; // points.length must be even
     float x = 0.5f;
     for (int i = 0; i < maxI; i += 2, x += 1.0f) {
+      // Multiply by reciprocal so we do 1 float division instead of 2 per grid point
       float invDenominator = 1.0f / (a13 * x + baseD);
       points[i] = (a11 * x + baseX) * invDenominator;
       points[i + 1] = (a12 * x + baseY) * invDenominator;

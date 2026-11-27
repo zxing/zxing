@@ -598,7 +598,8 @@ public final class PDF417ScanningDecoder {
   }
 
   private static int getCodewordBucketNumber(int codeword) {
-    // Computes (b0 - b2 + b4 - b6 + 9) % 9 over the 8 alternating bar/space run lengths of codeword
+    // Computes (b0 - b2 + b4 - b6 + 9) % 9 directly over the 8 alternating bar/space runs (b0..b7) without
+    // allocating an int[8]. Even indices are bars: i = 0, 4 have (i & 2) == 0 (+1) and i = 2, 6 have (i & 2) != 0 (-1).
     int sum = 9;
     int previousValue = 0;
     int i = 7;

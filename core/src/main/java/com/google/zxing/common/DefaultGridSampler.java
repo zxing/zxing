@@ -62,6 +62,8 @@ public final class DefaultGridSampler extends GridSampler {
       // sufficient to check the endpoints
       checkAndNudgePoints(image, points);
       try {
+        // Pack 32 sampled modules into each int word to write matrixBits once per word instead of per set bit.
+        // Java masks shift counts on int to (bit & 31), so (1 << bit) places each module at its bit offset in word.
         int rowOffset = y * rowSize;
         int word = 0;
         for (int x = 0, bit = 0; x < max; x += 2, bit++) {
