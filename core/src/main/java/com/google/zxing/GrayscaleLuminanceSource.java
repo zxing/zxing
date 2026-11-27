@@ -126,20 +126,28 @@ public class GrayscaleLuminanceSource extends LuminanceSource {
 
   @Override
   public LuminanceSource rotateCounterClockwise() {
-    byte[] rotated = new byte[luminances.length];
-    for (int y = 0; y < dataHeight; y++) {
-      for (int x = 0; x < dataWidth; x++) {
-        int i = (y * dataWidth) + x;
-        int x2 = y;
-        int y2 = dataWidth - 1 - x;
-        int j = (y2 * dataHeight) + x2;
-        rotated[j] = luminances[i];
+    byte[] src = this.luminances;
+    int srcWidth = this.dataWidth;
+    int srcHeight = this.dataHeight;
+    byte[] rotated = new byte[src.length];
+    int tileSize = 32;
+    for (int by = 0; by < srcHeight; by += tileSize) {
+      int maxY = Math.min(by + tileSize, srcHeight);
+      for (int bx = 0; bx < srcWidth; bx += tileSize) {
+        int maxX = Math.min(bx + tileSize, srcWidth);
+        for (int x = bx; x < maxX; x++) {
+          int dstRow = (srcWidth - 1 - x) * srcHeight;
+          int srcIdx = by * srcWidth + x;
+          for (int y = by; y < maxY; y++, srcIdx += srcWidth) {
+            rotated[dstRow + y] = src[srcIdx];
+          }
+        }
       }
     }
     int newWidth = getHeight();
     int newHeight = getWidth();
     int newLeft = top;
-    int newTop = dataWidth - (left + getWidth());
-    return new GrayscaleLuminanceSource(rotated, dataHeight, dataWidth, newLeft, newTop, newWidth, newHeight);
+    int newTop = srcWidth - (left + getWidth());
+    return new GrayscaleLuminanceSource(rotated, srcHeight, srcWidth, newLeft, newTop, newWidth, newHeight);
   }
 }

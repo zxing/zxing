@@ -208,6 +208,9 @@ public final class BitArrayTestCase extends Assert {
       int[] newBitsNew = newBitArray.getBitArray();
       assertTrue(arraysAreEqual(newBitsOriginal, newBitsNew, size / 32 + 1));
     }
+    BitArray empty = new BitArray();
+    empty.reverse();
+    assertEquals(0, empty.getSize());
   }
 
   @Test

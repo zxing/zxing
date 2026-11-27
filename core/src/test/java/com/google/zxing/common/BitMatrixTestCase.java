@@ -200,6 +200,68 @@ public final class BitMatrixTestCase extends Assert {
   }
 
   @Test
+  public void testRotateMultiTileAndEdgeDimensions() {
+    int[][] dims = {
+      {1, 1}, {1, 33}, {33, 1}, {32, 32}, {32, 65}, {65, 32}, {75, 41}, {100, 96}
+    };
+    for (int[] dim : dims) {
+      int w = dim[0];
+      int h = dim[1];
+      BitMatrix original = new BitMatrix(w, h);
+      for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+          if (((x * 37 + y * 17 + (x ^ y)) & 5) == 0) {
+            original.set(x, y);
+          }
+        }
+      }
+
+      BitMatrix r90 = original.clone();
+      r90.rotate(90);
+      assertEquals(h, r90.getWidth());
+      assertEquals(w, r90.getHeight());
+      for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+          assertEquals(original.get(x, y), r90.get(y, w - 1 - x));
+        }
+      }
+
+      BitMatrix r180 = original.clone();
+      r180.rotate(180);
+      assertEquals(w, r180.getWidth());
+      assertEquals(h, r180.getHeight());
+      for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+          assertEquals(original.get(x, y), r180.get(w - 1 - x, h - 1 - y));
+        }
+      }
+
+      BitMatrix r270 = original.clone();
+      r270.rotate(270);
+      assertEquals(h, r270.getWidth());
+      assertEquals(w, r270.getHeight());
+      for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+          assertEquals(original.get(x, y), r270.get(h - 1 - y, x));
+        }
+      }
+
+      // Check composition invariants and clean padding bits (via equals)
+      BitMatrix via90Then180 = r90.clone();
+      via90Then180.rotate180();
+      assertEquals(r270, via90Then180);
+
+      BitMatrix via180Then90 = r180.clone();
+      via180Then90.rotate90();
+      assertEquals(r270, via180Then90);
+
+      BitMatrix roundTrip = r270.clone();
+      roundTrip.rotate90();
+      assertEquals(original, roundTrip);
+    }
+  }
+
+  @Test
   public void testParse() {
     BitMatrix emptyMatrix = new BitMatrix(3, 3);
     BitMatrix fullMatrix = new BitMatrix(3, 3);
