@@ -70,8 +70,10 @@ public enum DecodeHintType {
 
   /**
    * Assume the barcode is being processed as a GS1 barcode, and modify behavior as needed.
-   * For example this affects FNC1 handling for Code 128 (aka GS1-128). Doesn't matter what it maps to;
-   * use {@link Boolean#TRUE}.
+   * For example this affects FNC1 handling for Code 128 (aka GS1-128), Data Matrix (GS1 DataMatrix),
+   * and QR Code (GS1 QR Code): when set, GS1 symbols are prefixed with their AIM symbology identifier
+   * ({@code ]C1}, {@code ]d2}/{@code ]d5}, {@code ]Q3}/{@code ]Q4}) and subsequent FNC1 separators are
+   * translated to ASCII 29 (GS). Doesn't matter what it maps to; use {@link Boolean#TRUE}.
    */
   ASSUME_GS1(Void.class),
 

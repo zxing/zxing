@@ -116,7 +116,7 @@ public class Code128WriterTestCase extends Assert {
   @Test
   public void testRoundtrip() throws Exception {
     String toEncode = "\u00f1" + "10958" + "\u00f1" + "17160526";
-    String expected = "1095817160526";
+    String expected = "10958\u001d17160526";
 
     BitMatrix encResult = encode(toEncode, false, expected);
 

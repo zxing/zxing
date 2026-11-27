@@ -29,11 +29,17 @@ final class Base256Encoder implements Encoder {
     buffer.append('\0'); //Initialize length field
     while (context.hasMoreCharacters()) {
       char c = context.getCurrentChar();
+      if (context.isFnc1(c)) {
+        // Base 256 cannot encode FNC1; return to ASCII so it is encoded as codeword 232.
+        context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+        break;
+      }
       buffer.append(c);
 
       context.pos++;
 
-      int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
+      int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode(),
+          context.isGs1());
       if (newMode != getEncodingMode()) {
         // Return to ASCII encodation, which will actually handle latch to new mode
         context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
@@ -41,6 +47,9 @@ final class Base256Encoder implements Encoder {
       }
     }
     int dataCount = buffer.length() - 1;
+    if (dataCount == 0) {
+      return;
+    }
     int lengthFieldSize = 1;
     int currentSize = context.getCodewordCount() + dataCount + lengthFieldSize;
     context.updateSymbolInfo(currentSize);

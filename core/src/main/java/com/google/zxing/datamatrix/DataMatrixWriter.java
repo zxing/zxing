@@ -87,11 +87,9 @@ public final class DataMatrixWriter implements Writer {
 
     boolean hasCompactionHint = hints != null && hints.containsKey(EncodeHintType.DATA_MATRIX_COMPACT) &&
         Boolean.parseBoolean(hints.get(EncodeHintType.DATA_MATRIX_COMPACT).toString());
+    boolean hasGS1FormatHint = hints != null && hints.containsKey(EncodeHintType.GS1_FORMAT) &&
+        Boolean.parseBoolean(hints.get(EncodeHintType.GS1_FORMAT).toString());
     if (hasCompactionHint) {
-
-      boolean hasGS1FormatHint = hints.containsKey(EncodeHintType.GS1_FORMAT) &&
-          Boolean.parseBoolean(hints.get(EncodeHintType.GS1_FORMAT).toString());
-
       Charset charset = null;
       boolean hasEncodingHint = hints.containsKey(EncodeHintType.CHARACTER_SET);
       if (hasEncodingHint) {
@@ -101,7 +99,7 @@ public final class DataMatrixWriter implements Writer {
     } else {
       boolean hasForceC40Hint = hints != null && hints.containsKey(EncodeHintType.FORCE_C40) &&
           Boolean.parseBoolean(hints.get(EncodeHintType.FORCE_C40).toString());
-      encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, hasForceC40Hint);
+      encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, hasForceC40Hint, hasGS1FormatHint);
     }
 
     SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.length(), shape, minSize, maxSize, true);

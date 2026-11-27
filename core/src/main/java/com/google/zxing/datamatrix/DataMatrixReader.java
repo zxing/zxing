@@ -66,11 +66,11 @@ public final class DataMatrixReader implements Reader {
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = extractPureBits(image.getBlackMatrix());
-      decoderResult = decoder.decode(bits);
+      decoderResult = decoder.decode(bits, hints);
       points = NO_POINTS;
     } else {
       DetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect();
-      decoderResult = decoder.decode(detectorResult.getBits());
+      decoderResult = decoder.decode(detectorResult.getBits(), hints);
       points = detectorResult.getPoints();
     }
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,

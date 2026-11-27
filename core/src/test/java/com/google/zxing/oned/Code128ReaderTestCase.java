@@ -106,6 +106,39 @@ public final class Code128ReaderTestCase extends Assert {
     assertEquals(Boolean.TRUE, result.getResultMetadata().get(ResultMetadataType.READER_INIT));
   }
 
+  @Test
+  public void testFNC1SeparatorTranslatedWithAndWithoutAssumeGS1() throws Exception {
+    String input = "\u00f1010123456789012810ABC\u00f117260101";
+    Result withoutHint = decode(input, null, false);
+    assertEquals("010123456789012810ABC\u001d17260101", withoutHint.getText());
+    assertEquals("]C1", withoutHint.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+
+    Result withHint = decode(input, null, true);
+    assertEquals("]C1010123456789012810ABC\u001d17260101", withHint.getText());
+    assertEquals("]C1", withHint.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+  }
+
+  @Test
+  public void testLeadingFNC1PreservesSymbologyModifierAcrossSubsequentFNC1() throws Exception {
+    // Leading FNC1 followed by 1 char and another FNC1 must stay ]C1 (not be overwritten to ]C2)
+    Result withoutHint = decode("\u00f1A\u00f1B", "B", false);
+    assertEquals("A\u001dB", withoutHint.getText());
+    assertEquals("]C1", withoutHint.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+
+    Result withHint = decode("\u00f1A\u00f1B", "B", true);
+    assertEquals("]C1A\u001dB", withHint.getText());
+    assertEquals("]C1", withHint.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+
+    // Second-position FNC1 (AIM industry standard) still yields ]C2
+    Result aimWithoutHint = decode("A\u00f1B", "B", false);
+    assertEquals("AB", aimWithoutHint.getText());
+    assertEquals("]C2", aimWithoutHint.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+
+    Result aimWithHint = decode("A\u00f1B", "B", true);
+    assertEquals("A\u001dB", aimWithHint.getText());
+    assertEquals("]C2", aimWithHint.getResultMetadata().get(ResultMetadataType.SYMBOLOGY_IDENTIFIER));
+  }
+
   private static Result decode(String input, String codeSet, boolean assumeGS1) throws Exception {
     Map<EncodeHintType,Object> encodeHints = new EnumMap<>(EncodeHintType.class);
     if (codeSet != null) {

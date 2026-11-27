@@ -16,12 +16,15 @@
 
 package com.google.zxing.datamatrix.decoder;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.DecoderResult;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author bbrown@google.com (Brian Brown)
@@ -177,6 +180,84 @@ public final class DecodedBitStreamParserTestCase extends Assert {
         // expected
       }
     }
+  }
+
+  @Test
+  public void testGS1FNC1WithAndWithoutAssumeGS1() throws Exception {
+    // 232 (FNC1), "01", "AB", 232 (FNC1), "17"
+    byte[] bytes = {
+        (byte) 232,
+        (byte) (1 + 130),
+        (byte) ('A' + 1), (byte) ('B' + 1),
+        (byte) 232,
+        (byte) (17 + 130)
+    };
+    DecoderResult withoutHint = DecodedBitStreamParser.decode(bytes);
+    assertEquals("\u001d01AB\u001d17", withoutHint.getText());
+    assertEquals(2, withoutHint.getSymbologyModifier());
+
+    Map<DecodeHintType,?> gs1Hints = Collections.singletonMap(DecodeHintType.ASSUME_GS1, Boolean.TRUE);
+    DecoderResult withHint = DecodedBitStreamParser.decode(bytes, gs1Hints);
+    assertEquals("]d201AB\u001d17", withHint.getText());
+    assertEquals(2, withHint.getSymbologyModifier());
+  }
+
+  @Test
+  public void testGS1FNC1WithECIAndAssumeGS1() throws Exception {
+    // 232 (FNC1), 241, 27 (ECI UTF-8), "café", 232 (FNC1), "17"
+    byte[] bytes = {
+        (byte) 232,
+        (byte) 241, (byte) 27,
+        (byte) ('c' + 1), (byte) ('a' + 1), (byte) ('f' + 1),
+        (byte) 235, (byte) (0xC3 - 127),
+        (byte) 235, (byte) (0xA9 - 127),
+        (byte) 232,
+        (byte) (17 + 130)
+    };
+    Map<DecodeHintType,?> gs1Hints = Collections.singletonMap(DecodeHintType.ASSUME_GS1, Boolean.TRUE);
+    DecoderResult withHint = DecodedBitStreamParser.decode(bytes, gs1Hints);
+    assertEquals("]d5caf\u00e9\u001d17", withHint.getText());
+    assertEquals(5, withHint.getSymbologyModifier());
+  }
+
+  @Test
+  public void testFNC1WithUtf16BeEciDoesNotCorruptBytes() throws Exception {
+    // 232 (FNC1), 241, 26 (ECI 25 = UTF-16BE), "中" (0x4E 0x2D), 232 (FNC1), "文" (0x65 0x87)
+    byte[] bytes = {
+        (byte) 232,
+        (byte) 241, (byte) 26,
+        (byte) (0x4E + 1), (byte) (0x2D + 1),
+        (byte) 232,
+        (byte) (0x65 + 1), (byte) 235, (byte) (0x87 - 127)
+    };
+    DecoderResult withoutHint = DecodedBitStreamParser.decode(bytes);
+    assertEquals("\u001d\u4e2d\u001d\u6587", withoutHint.getText());
+    assertEquals(5, withoutHint.getSymbologyModifier());
+
+    Map<DecodeHintType,?> gs1Hints = Collections.singletonMap(DecodeHintType.ASSUME_GS1, Boolean.TRUE);
+    DecoderResult withHint = DecodedBitStreamParser.decode(bytes, gs1Hints);
+    assertEquals("]d5\u4e2d\u001d\u6587", withHint.getText());
+    assertEquals(5, withHint.getSymbologyModifier());
+  }
+
+  @Test
+  public void testLiteralGSNotConflatedWithFNC1() throws Exception {
+    // Codeword 30 is literal ASCII 29 (GS), NOT FNC1 (232)
+    byte[] literalLeadingGS = {(byte) 30, (byte) ('A' + 1), (byte) ('B' + 1)};
+    Map<DecodeHintType,?> gs1Hints = Collections.singletonMap(DecodeHintType.ASSUME_GS1, Boolean.TRUE);
+    DecoderResult result = DecodedBitStreamParser.decode(literalLeadingGS, gs1Hints);
+    assertEquals("\u001dAB", result.getText());
+    assertEquals(1, result.getSymbologyModifier());
+
+    // Non-GS1 symbol with 4 data characters followed by FNC1 must not be treated as ]d2 without Structured Append
+    byte[] fnc1AtIndex4 = {
+        (byte) ('A' + 1), (byte) ('B' + 1), (byte) ('C' + 1), (byte) ('D' + 1),
+        (byte) 232,
+        (byte) ('E' + 1)
+    };
+    DecoderResult nonGs1 = DecodedBitStreamParser.decode(fnc1AtIndex4, gs1Hints);
+    assertEquals("ABCD\u001dE", nonGs1.getText());
+    assertEquals(1, nonGs1.getSymbologyModifier());
   }
 
   private static byte randomize255State(int value, int codewordPosition) {

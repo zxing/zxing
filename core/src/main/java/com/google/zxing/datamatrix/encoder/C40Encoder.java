@@ -31,7 +31,7 @@ class C40Encoder implements Encoder {
     while (context.hasMoreCharacters()) {
       char c = context.getCurrentChar();
       context.pos++;
-      lastCharSize = encodeChar(c, buffer);
+      lastCharSize = encodeChar(context, c, buffer);
       if (buffer.length() % 3 == 0) {
         backtrackStartPosition = context.pos;
         backtrackBufferLength = buffer.length();
@@ -65,7 +65,7 @@ class C40Encoder implements Encoder {
       char c = context.getCurrentChar();
       context.pos++;
 
-      int lastCharSize = encodeChar(c, buffer);
+      int lastCharSize = encodeChar(context, c, buffer);
 
       int unwritten = (buffer.length() / 3) * 2;
 
@@ -87,7 +87,8 @@ class C40Encoder implements Encoder {
 
       int count = buffer.length();
       if ((count % 3) == 0) {
-        int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode());
+        int newMode = HighLevelEncoder.lookAheadTest(context.getMessage(), context.pos, getEncodingMode(),
+            context.isGs1());
         if (newMode != getEncodingMode()) {
           // Return to ASCII encodation, which will actually handle latch to new mode
           context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
@@ -104,7 +105,7 @@ class C40Encoder implements Encoder {
     buffer.delete(count - lastCharSize, count);
     context.pos--;
     char c = context.getCurrentChar();
-    lastCharSize = encodeChar(c, removed);
+    lastCharSize = encodeChar(context, c, removed);
     context.resetSymbolInfo(); //Deal with possible reduction in symbol size
     return lastCharSize;
   }
@@ -156,6 +157,15 @@ class C40Encoder implements Encoder {
       throw new IllegalStateException("Unexpected case. Please report!");
     }
     context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);
+  }
+
+  final int encodeChar(EncoderContext context, char c, StringBuilder sb) {
+    if (context.isFnc1(c)) {
+      sb.append('\1'); // Shift 2 Set
+      sb.append('\u001b'); // FNC1 (27)
+      return 2;
+    }
+    return encodeChar(c, sb);
   }
 
   int encodeChar(char c, StringBuilder sb) {

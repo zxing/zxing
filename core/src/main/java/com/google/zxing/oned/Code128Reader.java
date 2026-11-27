@@ -240,6 +240,8 @@ public final class Code128Reader extends OneDReader {
     boolean convertFNC1 = hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1);
 
     int symbologyModifier = 0;
+    boolean hasLeadingFNC1 = false;
+    boolean hasSecondFNC1 = false;
     boolean readerInit = false;
 
     int[] startPatternInfo = findStartPattern(row);
@@ -278,6 +280,8 @@ public final class Code128Reader extends OneDReader {
     int multiplier = 0;
     int lastResultLength = 0;
     int lastSymbologyModifier = symbologyModifier;
+    boolean lastHasLeadingFNC1 = hasLeadingFNC1;
+    boolean lastHasSecondFNC1 = hasSecondFNC1;
     boolean lastReaderInit = readerInit;
     boolean upperMode = false;
     boolean shiftUpperMode = false;
@@ -299,6 +303,8 @@ public final class Code128Reader extends OneDReader {
       if (code != CODE_STOP) {
         lastResultLength = result.length();
         lastSymbologyModifier = symbologyModifier;
+        lastHasLeadingFNC1 = hasLeadingFNC1;
+        lastHasSecondFNC1 = hasSecondFNC1;
         lastReaderInit = readerInit;
         multiplier++;
         checksumTotal += multiplier * code;
@@ -338,20 +344,23 @@ public final class Code128Reader extends OneDReader {
           } else {
             switch (code) {
               case CODE_FNC_1:
-                if (result.length() == 0) { // FNC1 at first or second character determines the symbology
+                if (result.length() == 0 && !hasLeadingFNC1) {
+                  // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                  // is FNC1 then this is GS1-128.
+                  hasLeadingFNC1 = true;
                   symbologyModifier = 1;
-                } else if (result.length() == 1) {
-                  symbologyModifier = 2;
-                }
-                if (convertFNC1) {
-                  if (result.length() == 0) {
-                    // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                    // is FNC1 then this is GS1-128. We add the symbology identifier.
+                  if (convertFNC1) {
                     result.append("]C1");
-                  } else {
-                    // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                  }
+                } else if (result.length() == 1 && !hasLeadingFNC1 && !hasSecondFNC1) {
+                  hasSecondFNC1 = true;
+                  symbologyModifier = 2;
+                  if (convertFNC1) {
                     result.append((char) 29);
                   }
+                } else {
+                  // ISO/IEC 15417 4.3.4.3 / GS1 5.4.7.5: every subsequent FNC1 is returned as ASCII 29 (GS).
+                  result.append((char) 29);
                 }
                 break;
               case CODE_FNC_2:
@@ -398,20 +407,23 @@ public final class Code128Reader extends OneDReader {
           } else {
             switch (code) {
               case CODE_FNC_1:
-                if (result.length() == 0) { // FNC1 at first or second character determines the symbology
+                if (result.length() == 0 && !hasLeadingFNC1) {
+                  // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                  // is FNC1 then this is GS1-128.
+                  hasLeadingFNC1 = true;
                   symbologyModifier = 1;
-                } else if (result.length() == 1) {
-                  symbologyModifier = 2;
-                }
-                if (convertFNC1) {
-                  if (result.length() == 0) {
-                    // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                    // is FNC1 then this is GS1-128. We add the symbology identifier.
+                  if (convertFNC1) {
                     result.append("]C1");
-                  } else {
-                    // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                  }
+                } else if (result.length() == 1 && !hasLeadingFNC1 && !hasSecondFNC1) {
+                  hasSecondFNC1 = true;
+                  symbologyModifier = 2;
+                  if (convertFNC1) {
                     result.append((char) 29);
                   }
+                } else {
+                  // ISO/IEC 15417 4.3.4.3 / GS1 5.4.7.5: every subsequent FNC1 is returned as ASCII 29 (GS).
+                  result.append((char) 29);
                 }
                 break;
               case CODE_FNC_2:
@@ -456,20 +468,23 @@ public final class Code128Reader extends OneDReader {
           } else {
             switch (code) {
               case CODE_FNC_1:
-                if (result.length() == 0) { // FNC1 at first or second character determines the symbology
+                if (result.length() == 0 && !hasLeadingFNC1) {
+                  // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                  // is FNC1 then this is GS1-128.
+                  hasLeadingFNC1 = true;
                   symbologyModifier = 1;
-                } else if (result.length() == 1) {
-                  symbologyModifier = 2;
-                }
-                if (convertFNC1) {
-                  if (result.length() == 0) {
-                    // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                    // is FNC1 then this is GS1-128. We add the symbology identifier.
+                  if (convertFNC1) {
                     result.append("]C1");
-                  } else {
-                    // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                  }
+                } else if (result.length() == 1 && !hasLeadingFNC1 && !hasSecondFNC1) {
+                  hasSecondFNC1 = true;
+                  symbologyModifier = 2;
+                  if (convertFNC1) {
                     result.append((char) 29);
                   }
+                } else {
+                  // ISO/IEC 15417 4.3.4.3 / GS1 5.4.7.5: every subsequent FNC1 is returned as ASCII 29 (GS).
+                  result.append((char) 29);
                 }
                 break;
               case CODE_CODE_A:
@@ -521,6 +536,8 @@ public final class Code128Reader extends OneDReader {
     // Discard the checksum's text and function code effects.
     result.setLength(lastResultLength);
     symbologyModifier = lastSymbologyModifier;
+    hasLeadingFNC1 = lastHasLeadingFNC1;
+    hasSecondFNC1 = lastHasSecondFNC1;
     readerInit = lastReaderInit;
 
     float left = (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
