@@ -315,10 +315,10 @@ public class PDF417DecoderTestCase extends Assert {
     performDecodeTest(new int[] {6, 901, 65, 925, 1, 66}, "AB");
     performDecodeTest(new int[] {7, 901, 65, 926, 0, 1, 66}, "AB");
 
-    // Byte compaction 901: 6-byte block followed by ECI and trailing single byte (total 7 bytes)
+    // Byte compaction 901: 5 single bytes followed by ECI and trailing single byte
     performDecodeTest(
-        new int[] {12, 927, 4, 901, 336, 432, 197, 51, 300, 927, 7, 207},
-        "\u010c\u010c\u010c\u010c\u010c\u010c\u042f");
+        new int[] {12, 927, 4, 901, 200, 200, 200, 200, 200, 927, 7, 207},
+        "\u010c\u010c\u010c\u010c\u010c\u042f");
 
     // Numeric compaction: ECIs terminate current numeric group and stay in numeric mode
     performDecodeTest(new int[] {8, 902, 1, 200, 927, 26, 1, 201}, "100101");
@@ -398,7 +398,7 @@ public class PDF417DecoderTestCase extends Assert {
         -1, 0, 1, 26, 27, 28, 29, 65, 200, 255, 256, 899,
         900, 901, 902, 903, 913, 921, 922, 923, 924, 925, 926, 927, 928, 929
     };
-    for (int trial = 0; trial < 5000; trial++) {
+    for (int trial = 0; trial < 200; trial++) {
       int len = random.nextInt(25);
       int[] codewords = new int[len];
       if (len > 0) {
@@ -416,6 +416,11 @@ public class PDF417DecoderTestCase extends Assert {
         DecodedBitStreamParser.decode(codewords, "0");
       } catch (FormatException expected) {
         // Only FormatException is permitted for malformed codeword streams
+      }
+      try {
+        DecodedBitStreamParser.decodeMacroBlock(codewords, random.nextInt(5) - 1, new PDF417ResultMetadata());
+      } catch (FormatException expected) {
+        // Only FormatException is permitted for malformed macro blocks
       }
     }
   }

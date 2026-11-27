@@ -259,8 +259,7 @@ final class DecodedBitStreamParser {
       optionalFieldsStart = codeIndex + 1;
     }
 
-    boolean end = false;
-    while (codeIndex < maxLength && !end) {
+    while (codeIndex < maxLength) {
       switch (codewords[codeIndex]) {
         case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
           codeIndex++;
@@ -328,11 +327,9 @@ final class DecodedBitStreamParser {
           codeIndex++;
           resultMetadata.setLastSegment(true);
           codeIndex = consumePadCodewords(codewords, codeIndex, maxLength);
-          end = true;
           break;
         case TEXT_COMPACTION_MODE_LATCH:
           codeIndex = consumePadCodewords(codewords, codeIndex, maxLength);
-          end = true;
           break;
         default:
           throw FormatException.getFormatInstance();
@@ -673,7 +670,8 @@ final class DecodedBitStreamParser {
                  codeIndex < codewords[0] &&
                  codewords[codeIndex] < TEXT_COMPACTION_MODE_LATCH);
         if (count == 5 && (mode == BYTE_COMPACTION_MODE_LATCH_6 ||
-                           hasMoreByteCompactionData(codewords, codeIndex))) {
+                           codeIndex < codewords[0] &&
+                           codewords[codeIndex] < TEXT_COMPACTION_MODE_LATCH)) {
           for (int i = 0; i < 6; i++) {
             result.append((byte) (value >> (8 * (5 - i))));
           }
@@ -699,32 +697,6 @@ final class DecodedBitStreamParser {
     return codeIndex;
   }
 
-  private static boolean hasMoreByteCompactionData(int[] codewords, int codeIndex) {
-    int count = codewords[0];
-    while (codeIndex < count) {
-      int code = codewords[codeIndex];
-      if (code < TEXT_COMPACTION_MODE_LATCH) {
-        return true;
-      }
-      if (code == ECI_CHARSET || code == ECI_USER_DEFINED) {
-        if (codeIndex + 1 >= count || codewords[codeIndex + 1] >= TEXT_COMPACTION_MODE_LATCH) {
-          return false;
-        }
-        codeIndex += 2;
-      } else if (code == ECI_GENERAL_PURPOSE) {
-        if (codeIndex + 2 >= count ||
-            codewords[codeIndex + 1] >= TEXT_COMPACTION_MODE_LATCH ||
-            codewords[codeIndex + 2] >= TEXT_COMPACTION_MODE_LATCH) {
-          return false;
-        }
-        codeIndex += 3;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }
-
   /**
    * Numeric Compaction mode (see 5.4.4) permits efficient encoding of numeric data strings.
    *
@@ -735,44 +707,38 @@ final class DecodedBitStreamParser {
    */
   private static int numericCompaction(int[] codewords, int codeIndex, ECIStringBuilder result) throws FormatException {
     int count = 0;
-    boolean end = false;
-
     int[] numericCodewords = new int[MAX_NUMERIC_CODEWORDS];
 
-    while (codeIndex < codewords[0] && !end) {
+    while (codeIndex < codewords[0]) {
       int code = codewords[codeIndex++];
-      if (codeIndex == codewords[0]) {
-        end = true;
-      }
       if (code < TEXT_COMPACTION_MODE_LATCH) {
-        numericCodewords[count] = code;
-        count++;
-      } else if (code == NUMERIC_COMPACTION_MODE_LATCH) {
-        // Re-invoking Numeric Compaction mode (by using codeword 902
-        // while in Numeric Compaction mode) serves to terminate the
-        // current Numeric Compaction mode grouping as described in 5.4.4.2,
-        // and then to start a new grouping.
-        if (count > 0) {
+        numericCodewords[count++] = code;
+        if (count == MAX_NUMERIC_CODEWORDS) {
           result.append(decodeBase900toBase10(numericCodewords, count));
           count = 0;
         }
-        continue;
-      } else if (isECI(code)) {
-        if (count > 0) {
-          result.append(decodeBase900toBase10(numericCodewords, count));
-          count = 0;
-        }
-        codeIndex = processECI(code, codewords, codeIndex, result);
-        end = codeIndex >= codewords[0];
-        continue;
       } else {
-        codeIndex--;
-        end = true;
+        if (count > 0) {
+          result.append(decodeBase900toBase10(numericCodewords, count));
+          count = 0;
+        }
+        if (code == NUMERIC_COMPACTION_MODE_LATCH) {
+          // Re-invoking Numeric Compaction mode (by using codeword 902
+          // while in Numeric Compaction mode) serves to terminate the
+          // current Numeric Compaction mode grouping as described in 5.4.4.2,
+          // and then to start a new grouping.
+          continue;
+        }
+        if (isECI(code)) {
+          codeIndex = processECI(code, codewords, codeIndex, result);
+        } else {
+          codeIndex--;
+          break;
+        }
       }
-      if ((count % MAX_NUMERIC_CODEWORDS == 0 || end) && count > 0) {
-        result.append(decodeBase900toBase10(numericCodewords, count));
-        count = 0;
-      }
+    }
+    if (count > 0) {
+      result.append(decodeBase900toBase10(numericCodewords, count));
     }
     return codeIndex;
   }
