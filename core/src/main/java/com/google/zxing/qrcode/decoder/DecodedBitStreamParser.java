@@ -66,11 +66,15 @@ final class DecodedBitStreamParser {
     try {
       CharacterSetECI currentCharacterSetECI = null;
       boolean fc1InEffect = false;
+      boolean hasDataSegment = false;
       Mode mode;
       do {
         // While still another segment to read...
         if (bits.available() < 4) {
-          // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
+          // Per ISO/IEC 18004 Section 7.4.9, an abbreviated terminator (< 4 remaining bits) must be all zeros
+          if (bits.available() > 0 && bits.readBits(bits.available()) != 0) {
+            throw FormatException.getFormatInstance();
+          }
           mode = Mode.TERMINATOR;
         } else {
           mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
@@ -79,22 +83,37 @@ final class DecodedBitStreamParser {
           case TERMINATOR:
             break;
           case FNC1_FIRST_POSITION:
+            if (fc1InEffect || hasDataSegment) {
+              throw FormatException.getFormatInstance();
+            }
             hasFNC1first = true; // symbology detection
             // We do little with FNC1 except alter the parsed result a bit according to the spec
             fc1InEffect = true;
             break;
           case FNC1_SECOND_POSITION:
+            if (fc1InEffect || hasDataSegment) {
+              throw FormatException.getFormatInstance();
+            }
             hasFNC1second = true; // symbology detection
-            // We do little with FNC1 except alter the parsed result a bit according to the spec
             fc1InEffect = true;
+            decodeFNC1SecondPositionApplicationIndicator(bits, result);
             break;
           case STRUCTURED_APPEND:
+            if (symbolSequence != -1 || currentCharacterSetECI != null || fc1InEffect || hasDataSegment) {
+              throw FormatException.getFormatInstance();
+            }
             if (bits.available() < 16) {
               throw FormatException.getFormatInstance();
             }
             // sequence number and parity is added later to the result metadata
             // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
-            symbolSequence = bits.readBits(8);
+            int sequence = bits.readBits(8);
+            int position = sequence >>> 4;
+            int totalMinusOne = sequence & 0x0F;
+            if (totalMinusOne == 0 || position > totalMinusOne) {
+              throw FormatException.getFormatInstance();
+            }
+            symbolSequence = sequence;
             parityData = bits.readBits(8);
             break;
           case ECI:
@@ -109,10 +128,12 @@ final class DecodedBitStreamParser {
             // First handle Hanzi mode which does not start with character count
             // Chinese mode contains a sub set indicator right after mode indicator
             int subset = bits.readBits(4);
-            int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
-            if (subset == GB2312_SUBSET) {
-              decodeHanziSegment(bits, result, countHanzi);
+            if (subset != GB2312_SUBSET) {
+              throw FormatException.getFormatInstance();
             }
+            int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
+            decodeHanziSegment(bits, result, countHanzi);
+            hasDataSegment = true;
             break;
           default:
             // "Normal" QR code modes:
@@ -134,6 +155,7 @@ final class DecodedBitStreamParser {
               default:
                 throw FormatException.getFormatInstance();
             }
+            hasDataSegment = true;
             break;
         }
       } while (mode != Mode.TERMINATOR);
@@ -176,6 +198,33 @@ final class DecodedBitStreamParser {
   }
 
   /**
+   * See ISO/IEC 18004 Section 7.4.8.3 (FNC1 in second position).
+   * Immediately after the 4-bit mode indicator, an 8-bit Application Indicator encodes either a
+   * two-digit number (00..99, stored directly as 0..99) or a single ASCII letter (A..Z or a..z,
+   * stored as ASCII value + 100).
+   */
+  private static void decodeFNC1SecondPositionApplicationIndicator(BitSource bits,
+                                                                   StringBuilder result) throws FormatException {
+    if (bits.available() < 8) {
+      throw FormatException.getFormatInstance();
+    }
+    int appIndicator = bits.readBits(8);
+    if (appIndicator < 100) {
+      if (appIndicator < 10) {
+        result.append('0');
+      }
+      result.append(appIndicator);
+    } else {
+      int letter = appIndicator - 100;
+      if ((letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z')) {
+        result.append((char) letter);
+      } else {
+        throw FormatException.getFormatInstance();
+      }
+    }
+  }
+
+  /**
    * See specification GBT 18284-2000
    */
   private static void decodeHanziSegment(BitSource bits,
@@ -197,7 +246,14 @@ final class DecodedBitStreamParser {
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
       int twoBytes = bits.readBits(13);
-      int assembledTwoBytes = ((twoBytes / 0x060) << 8) | (twoBytes % 0x060);
+      int high = twoBytes / 0x060;
+      int low = twoBytes % 0x060;
+      // GB 2312 code ranges: 0xA1A1..0xAAFE (high 0x00..0x09) and 0xB0A1..0xFAFE (high 0x0A..0x54),
+      // with second byte in 0xA1..0xFE (low 0x00..0x5D).
+      if (high > 0x54 || low > 0x5D) {
+        throw FormatException.getFormatInstance();
+      }
+      int assembledTwoBytes = (high << 8) | low;
       if (assembledTwoBytes < 0x00A00) {
         // In the 0xA1A1 to 0xAAFE range
         assembledTwoBytes += 0x0A1A1;
@@ -241,8 +297,13 @@ final class DecodedBitStreamParser {
         // In the 0xE040 to 0xEBBF range
         assembledTwoBytes += 0x0C140;
       }
+      int lowByte = assembledTwoBytes & 0xFF;
+      // Shift_JIS trail bytes are 0x40..0x7E and 0x80..0xFC (ISO/IEC 18004 Section 7.4.6)
+      if (lowByte == 0x7F || lowByte > 0xFC) {
+        throw FormatException.getFormatInstance();
+      }
       buffer[offset] = (byte) (assembledTwoBytes >> 8);
-      buffer[offset + 1] = (byte) assembledTwoBytes;
+      buffer[offset + 1] = (byte) lowByte;
       offset += 2;
       count--;
     }
@@ -370,18 +431,26 @@ final class DecodedBitStreamParser {
   private static int parseECIValue(BitSource bits) throws FormatException {
     int firstByte = bits.readBits(8);
     if ((firstByte & 0x80) == 0) {
-      // just one byte
+      // just one byte (0..127)
       return firstByte & 0x7F;
     }
     if ((firstByte & 0xC0) == 0x80) {
-      // two bytes
+      // two bytes (128..16383)
       int secondByte = bits.readBits(8);
-      return ((firstByte & 0x3F) << 8) | secondByte;
+      int value = ((firstByte & 0x3F) << 8) | secondByte;
+      if (value < 128) {
+        throw FormatException.getFormatInstance();
+      }
+      return value;
     }
     if ((firstByte & 0xE0) == 0xC0) {
-      // three bytes
+      // three bytes (16384..999999)
       int secondThirdBytes = bits.readBits(16);
-      return ((firstByte & 0x1F) << 16) | secondThirdBytes;
+      int value = ((firstByte & 0x1F) << 16) | secondThirdBytes;
+      if (value < 16384 || value > 999999) {
+        throw FormatException.getFormatInstance();
+      }
+      return value;
     }
     throw FormatException.getFormatInstance();
   }

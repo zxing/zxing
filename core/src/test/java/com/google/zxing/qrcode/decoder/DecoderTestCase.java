@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -49,6 +50,48 @@ public final class DecoderTestCase extends Assert {
     assertErrorCorrectionLimit(2, ErrorCorrectionLevel.L, 4);
     // Version 3-L: d=15, p=1 -> max 7 errors
     assertErrorCorrectionLimit(3, ErrorCorrectionLevel.L, 7);
+  }
+
+  @Test
+  public void testInvalidDimensionsRejected() throws Exception {
+    Decoder decoder = new Decoder();
+    for (BitMatrix invalid : new BitMatrix[]{
+        new BitMatrix(20, 20),
+        new BitMatrix(22, 22),
+        new BitMatrix(21, 25),
+        new BitMatrix(181, 181),
+    }) {
+      try {
+        decoder.decode(invalid);
+        fail("Expected FormatException for " + invalid.getWidth() + 'x' + invalid.getHeight());
+      } catch (FormatException expected) {
+        // expected
+      }
+    }
+  }
+
+  @Test
+  public void testMirroredQRCodeDecode() throws Exception {
+    Decoder decoder = new Decoder();
+    for (int versionNumber : new int[]{1, 7}) {
+      String message = "MIRROR-V" + versionNumber;
+      Map<EncodeHintType, Object> hints = Collections.singletonMap(EncodeHintType.QR_VERSION, versionNumber);
+      QRCode qrCode = Encoder.encode(message, ErrorCorrectionLevel.M, hints);
+      BitMatrix original = toBitMatrix(qrCode.getMatrix());
+      int dim = original.getHeight();
+      BitMatrix mirrored = new BitMatrix(dim, dim);
+      for (int y = 0; y < dim; y++) {
+        for (int x = 0; x < dim; x++) {
+          if (original.get(x, y)) {
+            mirrored.set(y, x);
+          }
+        }
+      }
+      DecoderResult result = decoder.decode(mirrored);
+      assertEquals(message, result.getText());
+      assertTrue(result.getOther() instanceof QRCodeDecoderMetaData);
+      assertTrue(((QRCodeDecoderMetaData) result.getOther()).isMirrored());
+    }
   }
 
   private static void assertErrorCorrectionLimit(int versionNumber,

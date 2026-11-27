@@ -31,11 +31,11 @@ final class BitMatrixParser {
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
-   * @throws FormatException if dimension is not square, or not >= 21 and 1 mod 4
+   * @throws FormatException if dimension is not square, or not in [21, 177] and 1 mod 4
    */
   BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
     int dimension = bitMatrix.getHeight();
-    if (dimension < 21 || (dimension & 0x03) != 1 || bitMatrix.getWidth() != dimension) {
+    if (dimension < 21 || dimension > 177 || (dimension & 0x03) != 1 || bitMatrix.getWidth() != dimension) {
       throw FormatException.getFormatInstance();
     }
     this.bitMatrix = bitMatrix;
@@ -103,7 +103,8 @@ final class BitMatrixParser {
 
     int provisionalVersion = (dimension - 17) / 4;
     if (provisionalVersion <= 6) {
-      return Version.getVersionForNumber(provisionalVersion);
+      parsedVersion = Version.getVersionForNumber(provisionalVersion);
+      return parsedVersion;
     }
 
     // Read top-right version info: 3 wide by 6 tall
