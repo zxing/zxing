@@ -52,24 +52,32 @@ public final class DefaultGridSampler extends GridSampler {
       throw NotFoundException.getNotFoundInstance();
     }
     BitMatrix bits = new BitMatrix(dimensionX, dimensionY);
+    int[] matrixBits = bits.getBits();
+    int rowSize = bits.getRowSize();
     float[] points = new float[2 * dimensionX];
+    int max = points.length;
     for (int y = 0; y < dimensionY; y++) {
-      int max = points.length;
-      float iValue = y + 0.5f;
-      for (int x = 0; x < max; x += 2) {
-        points[x] = (float) (x / 2) + 0.5f;
-        points[x + 1] = iValue;
-      }
-      transform.transformPoints(points);
+      transform.transformRow(points, y + 0.5f);
       // Quick check to see if points transformed to something inside the image;
       // sufficient to check the endpoints
       checkAndNudgePoints(image, points);
       try {
-        for (int x = 0; x < max; x += 2) {
+        // Pack 32 sampled modules into each int word to write matrixBits once per word instead of per set bit.
+        // Java masks shift counts on int to (bit & 31), so (1 << bit) places each module at its bit offset in word.
+        int rowOffset = y * rowSize;
+        int word = 0;
+        for (int x = 0, bit = 0; x < max; x += 2, bit++) {
           if (image.get((int) points[x], (int) points[x + 1])) {
             // Black(-ish) pixel
-            bits.set(x / 2, y);
+            word |= 1 << bit;
           }
+          if ((bit & 31) == 31) {
+            matrixBits[rowOffset + (bit >>> 5)] = word;
+            word = 0;
+          }
+        }
+        if (word != 0) {
+          matrixBits[rowOffset + ((dimensionX - 1) >>> 5)] = word;
         }
       } catch (ArrayIndexOutOfBoundsException aioobe) {
         // This feels wrong, but, sometimes if the finder patterns are misidentified, the resulting

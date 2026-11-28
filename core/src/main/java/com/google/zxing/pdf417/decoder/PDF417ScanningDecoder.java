@@ -597,30 +597,26 @@ public final class PDF417ScanningDecoder {
     }
   }
 
-  private static int[] getBitCountForCodeword(int codeword) {
-    int[] result = new int[8];
+  private static int getCodewordBucketNumber(int codeword) {
+    // Computes (b0 - b2 + b4 - b6 + 9) % 9 directly over the 8 alternating bar/space runs (b0..b7) without
+    // allocating an int[8]. Even indices are bars: i = 0, 4 have (i & 2) == 0 (+1) and i = 2, 6 have (i & 2) != 0 (-1).
+    int sum = 9;
     int previousValue = 0;
-    int i = result.length - 1;
+    int i = 7;
     while (true) {
-      if ((codeword & 0x1) != previousValue) {
-        previousValue = codeword & 0x1;
-        i--;
-        if (i < 0) {
+      int bit = codeword & 0x1;
+      if (bit != previousValue) {
+        previousValue = bit;
+        if (--i < 0) {
           break;
         }
       }
-      result[i]++;
+      if ((i & 1) == 0) {
+        sum += (i & 2) == 0 ? 1 : -1;
+      }
       codeword >>= 1;
     }
-    return result;
-  }
-
-  private static int getCodewordBucketNumber(int codeword) {
-    return getCodewordBucketNumber(getBitCountForCodeword(codeword));
-  }
-
-  private static int getCodewordBucketNumber(int[] moduleBitCount) {
-    return (moduleBitCount[0] - moduleBitCount[2] + moduleBitCount[4] - moduleBitCount[6] + 9) % 9;
+    return sum % 9;
   }
 
   public static String toString(BarcodeValue[][] barcodeMatrix) {

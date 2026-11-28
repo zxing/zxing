@@ -36,7 +36,8 @@ public final class InvertedLuminanceSource extends LuminanceSource {
     row = delegate.getRow(y, row);
     int width = getWidth();
     for (int i = 0; i < width; i++) {
-      row[i] = (byte) (255 - (row[i] & 0xFF));
+      // Bitwise complement on a byte is identical to (byte) (255 - (b & 0xFF)) and auto-vectorizes cleanly
+      row[i] = (byte) ~row[i];
     }
     return row;
   }
@@ -47,7 +48,8 @@ public final class InvertedLuminanceSource extends LuminanceSource {
     int length = getWidth() * getHeight();
     byte[] invertedMatrix = new byte[length];
     for (int i = 0; i < length; i++) {
-      invertedMatrix[i] = (byte) (255 - (matrix[i] & 0xFF));
+      // Bitwise complement on a byte is identical to (byte) (255 - (b & 0xFF)) and auto-vectorizes cleanly
+      invertedMatrix[i] = (byte) ~matrix[i];
     }
     return invertedMatrix;
   }

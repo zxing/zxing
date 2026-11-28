@@ -83,6 +83,27 @@ public final class PerspectiveTransform {
     }
   }
 
+  /**
+   * Transforms a horizontal scanline of grid centers {@code (0.5, y), (1.5, y), ...} into {@code points},
+   * hoisting the constant {@code y}-dependent terms out of the inner loop.
+   */
+  void transformRow(float[] points, float y) {
+    float a11 = this.a11;
+    float a12 = this.a12;
+    float a13 = this.a13;
+    float baseX = this.a21 * y + this.a31;
+    float baseY = this.a22 * y + this.a32;
+    float baseD = this.a23 * y + this.a33;
+    int maxI = points.length - 1; // points.length must be even
+    float x = 0.5f;
+    for (int i = 0; i < maxI; i += 2, x += 1.0f) {
+      // Multiply by reciprocal so we do 1 float division instead of 2 per grid point
+      float invDenominator = 1.0f / (a13 * x + baseD);
+      points[i] = (a11 * x + baseX) * invDenominator;
+      points[i + 1] = (a12 * x + baseY) * invDenominator;
+    }
+  }
+
   public void transformPoints(float[] xValues, float[] yValues) {
     int n = xValues.length;
     for (int i = 0; i < n; i++) {

@@ -25,14 +25,17 @@ import com.google.zxing.pdf417.PDF417Common;
  */
 final class PDF417CodewordDecoder {
 
-  private static final float[][] RATIOS_TABLE =
-      new float[PDF417Common.SYMBOL_TABLE.length][PDF417Common.BARS_IN_MODULE];
+  // Flattened 1D table of [symbolIndex * BARS_IN_MODULE + barIndex] to keep all 2,787 rows
+  // contiguous in memory and avoid per-row pointer chasing in getClosestDecodedValue().
+  private static final float[] RATIOS_TABLE =
+      new float[PDF417Common.SYMBOL_TABLE.length * PDF417Common.BARS_IN_MODULE];
 
   static {
     // Pre-computes the symbol ratio table.
     for (int i = 0; i < PDF417Common.SYMBOL_TABLE.length; i++) {
       int currentSymbol = PDF417Common.SYMBOL_TABLE[i];
       int currentBit = currentSymbol & 0x1;
+      int rowBase = i * PDF417Common.BARS_IN_MODULE;
       for (int j = 0; j < PDF417Common.BARS_IN_MODULE; j++) {
         float size = 0.0f;
         while ((currentSymbol & 0x1) == currentBit) {
@@ -40,7 +43,8 @@ final class PDF417CodewordDecoder {
           currentSymbol >>= 1;
         }
         currentBit = currentSymbol & 0x1;
-        RATIOS_TABLE[i][PDF417Common.BARS_IN_MODULE - j - 1] = size / PDF417Common.MODULES_IN_CODEWORD;
+        RATIOS_TABLE[rowBase + PDF417Common.BARS_IN_MODULE - j - 1] =
+            size / PDF417Common.MODULES_IN_CODEWORD;
       }
     }
   }
@@ -49,69 +53,91 @@ final class PDF417CodewordDecoder {
   }
 
   static int getDecodedValue(int[] moduleBitCount) {
-    int decodedValue = getDecodedCodewordValue(sampleBitCounts(moduleBitCount));
-    if (decodedValue != -1) {
+    int bitCountSum = MathUtils.sum(moduleBitCount);
+    int decodedValue = sampleBitValue(moduleBitCount, bitCountSum);
+    if (PDF417Common.getCodeword(decodedValue) != -1) {
       return decodedValue;
     }
-    return getClosestDecodedValue(moduleBitCount);
+    return getClosestDecodedValue(moduleBitCount, bitCountSum);
   }
 
-  private static int[] sampleBitCounts(int[] moduleBitCount) {
-    float bitCountSum = MathUtils.sum(moduleBitCount);
-    int[] result = new int[PDF417Common.BARS_IN_MODULE];
+  private static int sampleBitValue(int[] moduleBitCount, int bitCountSum) {
     int bitCountIndex = 0;
     int sumPreviousBits = 0;
+    int bitValue = 0;
+    // Sample at the center of each of the 17 modules: (i + 0.5) * bitCountSum / 17 = (2*i + 1) * bitCountSum / 34.
+    // Cross-multiplying by 34 avoids float divisions and packs the 17-bit codeword directly without an int[8] array.
+    int scale = 2 * PDF417Common.MODULES_IN_CODEWORD;
     for (int i = 0; i < PDF417Common.MODULES_IN_CODEWORD; i++) {
-      float sampleIndex = 
-          bitCountSum / (2 * PDF417Common.MODULES_IN_CODEWORD) +
-          (i * bitCountSum) / PDF417Common.MODULES_IN_CODEWORD;
-      if (sumPreviousBits + moduleBitCount[bitCountIndex] <= sampleIndex) {
+      if ((sumPreviousBits + moduleBitCount[bitCountIndex]) * scale <= (2 * i + 1) * bitCountSum) {
         sumPreviousBits += moduleBitCount[bitCountIndex];
         bitCountIndex++;
       }
-      result[bitCountIndex]++;
+      // Even bar/space indices are black bars (1), odd indices are white spaces (0)
+      bitValue = (bitValue << 1) | ((bitCountIndex & 1) ^ 1);
     }
-    return result;
+    return bitValue;
   }
 
-  private static int getDecodedCodewordValue(int[] moduleBitCount) {
-    int decodedValue = getBitValue(moduleBitCount);
-    return PDF417Common.getCodeword(decodedValue) == -1 ? -1 : decodedValue;
-  }
-
-  private static int getBitValue(int[] moduleBitCount) {
-    long result = 0;
-    for (int i = 0; i < moduleBitCount.length; i++) {
-      for (int bit = 0; bit < moduleBitCount[i]; bit++) {
-        result = (result << 1) | (i % 2 == 0 ? 1 : 0);
-      }
-    }
-    return (int) result;
-  }
-
-  private static int getClosestDecodedValue(int[] moduleBitCount) {
-    int bitCountSum = MathUtils.sum(moduleBitCount);
-    float[] bitCountRatios = new float[PDF417Common.BARS_IN_MODULE];
+  private static int getClosestDecodedValue(int[] moduleBitCount, int bitCountSum) {
+    // Keep the 8 normalized bar/space ratios in locals to avoid a float[8] allocation and array loads in the scan loop.
+    float r0 = 0.0f;
+    float r1 = 0.0f;
+    float r2 = 0.0f;
+    float r3 = 0.0f;
+    float r4 = 0.0f;
+    float r5 = 0.0f;
+    float r6 = 0.0f;
+    float r7 = 0.0f;
     if (bitCountSum > 1) {
-      for (int i = 0; i < bitCountRatios.length; i++) {
-        bitCountRatios[i] = moduleBitCount[i] / (float) bitCountSum;
-      }
+      float sum = bitCountSum;
+      r0 = moduleBitCount[0] / sum;
+      r1 = moduleBitCount[1] / sum;
+      r2 = moduleBitCount[2] / sum;
+      r3 = moduleBitCount[3] / sum;
+      r4 = moduleBitCount[4] / sum;
+      r5 = moduleBitCount[5] / sum;
+      r6 = moduleBitCount[6] / sum;
+      r7 = moduleBitCount[7] / sum;
     }
     float bestMatchError = Float.MAX_VALUE;
     int bestMatch = -1;
-    for (int j = 0; j < RATIOS_TABLE.length; j++) {
-      float error = 0.0f;
-      float[] ratioTableRow = RATIOS_TABLE[j];
-      for (int k = 0; k < PDF417Common.BARS_IN_MODULE; k++) {
-        float diff = ratioTableRow[k] - bitCountRatios[k];
-        error += diff * diff;
-        if (error >= bestMatchError) {
-          break;
-        }
+    float[] table = RATIOS_TABLE;
+    int[] symbols = PDF417Common.SYMBOL_TABLE;
+    // Unrolled 8-bar squared-error scan: early-exit on the first 4 terms rejects most non-matching symbols
+    // immediately, while evaluating the final 4 terms branchlessly avoids branch mispredicts on close candidates.
+    for (int j = 0, offset = 0; j < symbols.length; j++, offset += PDF417Common.BARS_IN_MODULE) {
+      float diff = table[offset] - r0;
+      float error = diff * diff;
+      if (error >= bestMatchError) {
+        continue;
       }
+      diff = table[offset + 1] - r1;
+      error += diff * diff;
+      if (error >= bestMatchError) {
+        continue;
+      }
+      diff = table[offset + 2] - r2;
+      error += diff * diff;
+      if (error >= bestMatchError) {
+        continue;
+      }
+      diff = table[offset + 3] - r3;
+      error += diff * diff;
+      if (error >= bestMatchError) {
+        continue;
+      }
+      diff = table[offset + 4] - r4;
+      error += diff * diff;
+      diff = table[offset + 5] - r5;
+      error += diff * diff;
+      diff = table[offset + 6] - r6;
+      error += diff * diff;
+      diff = table[offset + 7] - r7;
+      error += diff * diff;
       if (error < bestMatchError) {
         bestMatchError = error;
-        bestMatch = PDF417Common.SYMBOL_TABLE[j];
+        bestMatch = symbols[j];
       }
     }
     return bestMatch;
